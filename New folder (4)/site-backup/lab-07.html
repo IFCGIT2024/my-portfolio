@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 7 Lab — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="lab-07">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-7-lab-counting-combinatorics-and-the-pigeonhole-principle">Module 7 – Lab: Counting, Combinatorics, and the Pigeonhole Principle</h1>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>In this lab you will implement combinatorial functions, generate permutations and combinations, build a combinatorics toolkit, and empirically demonstrate the pigeonhole principle through hash table collision experiments.</p>
+
+<p><strong>Prerequisites:</strong> Module 7 Classes 1–3 (Sum/Product Principles, Binomial Coefficients, Pigeonhole Principle)</p>
+
+<hr>
+
+<section class="slide" id="part-1-counting-principles-sum-and-product-rules">
+<h2>Part 1: Counting Principles (Sum and Product Rules)</h2>
+
+<h3 id="exercise-1-1-password-space-calculator">Exercise 1.1: Password Space Calculator</h3>
+
+<p>Write a method that computes the number of passwords of length $\ell$ from an alphabet of size $a$ using the product rule ($a^\ell$). Then compute using the sum rule how many passwords of length 1 through $\ell$ exist total.</p>
+
+<pre><code class="language-java">public static long passwordCount(int alphabetSize, int length)
+public static long totalPasswordsUpTo(int alphabetSize, int maxLength)</code></pre>
+
+<h3 id="exercise-1-2-inclusion-exclusion-counter">Exercise 1.2: Inclusion-Exclusion Counter</h3>
+
+<p>Given a universal set of integers $\{1,...,n\}$, count how many are divisible by $a$ <strong>or</strong> $b$:</p>
+
+<div class="katex-block">$|A \cup B| = |A| + |B| - |A \cap B|$</div>
+
+<p>where $A$ = multiples of $a$, $B$ = multiples of $b$, $A \cap B$ = multiples of $\text{lcm}(a,b)$.</p>
+
+<pre><code class="language-java">public static int countDivisibleByEither(int n, int a, int b)</code></pre>
+
+<p>Test: among $\{1,...,100\}$, how many are divisible by 3 or 5?</p>
+
+<h3 id="exercise-1-3-nested-loop-counter">Exercise 1.3: Nested Loop Counter</h3>
+
+<p>Implement a method that counts the total iterations of nested loops with given bounds. Connect to the product rule.</p>
+
+<pre><code class="language-java">// Count iterations: for i in [0,a) for j in [0,b) for k in [0,c)
+public static long nestedLoopCount(int a, int b, int c)</code></pre>
+
+<hr>
+
+<section class="slide" id="part-2-combinations-and-permutations">
+<h2>Part 2: Combinations and Permutations</h2>
+
+<h3 id="exercise-2-1-binomial-coefficient-three-ways">Exercise 2.1: Binomial Coefficient Three Ways</h3>
+
+<p>Implement $\binom{n}{k}$ using:</p>
+<ol>
+<li>Direct formula (loop, no full factorial)</li>
+<li>Pascal's triangle (DP)</li>
+<li>Recursive with memoization</li>
+</ol>
+
+<p>Verify all three agree for $0 \leq k \leq n \leq 20$.</p>
+
+<h3 id="exercise-2-2-generate-all-k-subsets">Exercise 2.2: Generate All k-Subsets</h3>
+
+<p>Write a backtracking method to generate all $k$-element subsets of $\{0, ..., n-1\}$. Verify the count equals $\binom{n}{k}$.</p>
+
+<h3 id="exercise-2-3-generate-permutations">Exercise 2.3: Generate Permutations</h3>
+
+<p>Write a method to generate all permutations of $\{0, ..., n-1\}$. Verify the count equals $n!$.</p>
+
+<h3 id="exercise-2-4-verify-identities">Exercise 2.4: Verify Identities</h3>
+
+<p>Write a verification method that checks:</p>
+<ul>
+<li>$\sum_{k=0}^n \binom{n}{k} = 2^n$ (for $n = 0, ..., 20$)</li>
+<li>Pascal's identity: $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$</li>
+<li>Symmetry: $\binom{n}{k} = \binom{n}{n-k}$</li>
+<li>Vandermonde: $\sum_{k=0}^r \binom{m}{k}\binom{n}{r-k} = \binom{m+n}{r}$</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="part-3-pigeonhole-principle-experiments">
+<h2>Part 3: Pigeonhole Principle Experiments</h2>
+
+<h3 id="exercise-3-1-hash-table-collision-detector">Exercise 3.1: Hash Table Collision Detector</h3>
+
+<p>Implement a hash table (array of booleans) of size $m$. Insert random keys and track:</p>
+<ul>
+<li>The key index at which the first collision occurs</li>
+<li>The total number of collisions after inserting all keys</li>
+</ul>
+
+<pre><code class="language-java">public static int firstCollisionIndex(int[] keys, int tableSize)
+public static int totalCollisions(int[] keys, int tableSize)</code></pre>
+
+<h3 id="exercise-3-2-birthday-paradox-simulator">Exercise 3.2: Birthday Paradox Simulator</h3>
+
+<p>Simulate the birthday problem:</p>
+<ol>
+<li>For $k = 1, ..., 60$, estimate $P(\text{collision})$ over 100,000 trials.</li>
+<li>Compare with the exact formula.</li>
+<li>Find the smallest $k$ where $P > 0.5$ both exactly and empirically.</li>
+</ol>
+
+<h3 id="exercise-3-3-generalized-php-load-balancing">Exercise 3.3: Generalized PHP Load Balancing</h3>
+
+<p>Distribute $n$ balls into $m$ bins randomly. Repeat 10,000 times. Report:</p>
+<ul>
+<li>Average max-load</li>
+<li>Observed max-load across all trials</li>
+<li>PHP lower bound: $\lceil n/m \rceil$</li>
+</ul>
+
+<p>Test with $(n,m) \in \{(10,3), (100,10), (1000,100)\}$.</p>
+
+<hr>
+
+<section class="slide" id="part-4-combinatorics-toolkit-integration">
+<h2>Part 4: Combinatorics Toolkit (Integration)</h2>
+
+<h3 id="exercise-4-1-unified-toolkit">Exercise 4.1: Unified Toolkit</h3>
+
+<p>Combine all functions into a single <code>CombinatoricsToolkit</code> class:</p>
+<ul>
+<li><code>factorial(n)</code></li>
+<li><code>binomial(n, k)</code></li>
+<li><code>permutations(n, k)</code></li>
+<li><code>inclusionExclusion(a, b, both)</code></li>
+<li><code>birthdayProbability(k, days)</code></li>
+<li><code>birthdayBound(m)</code></li>
+<li><code>generateCombinations(n, k)</code></li>
+<li><code>generatePermutations(n)</code></li>
+</ul>
+
+<h3 id="exercise-4-2-application-lottery-odds">Exercise 4.2: Application — Lottery Odds</h3>
+
+<p>Use your toolkit to compute:</p>
+<ul>
+<li>Probability of matching all 6 numbers from 49 ($1/\binom{49}{6}$)</li>
+<li>Probability of matching exactly 3 of 6 from 49</li>
+<li>Expected trials to first repeat in a sequence of random values from $\{1,...,m\}$</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="extension-challenges">
+<h2>Extension Challenges</h2>
+
+<p><strong>E1.</strong> Implement the inclusion-exclusion formula for 3 sets. Count integers in $\{1,...,1000\}$ divisible by 2, 3, or 5.</p>
+
+<p><strong>E2.</strong> Generate all permutations of a string with repeated characters (e.g., "AABB" has $4!/(2!2!) = 6$ distinct permutations). Handle duplicates.</p>
+
+<p><strong>E3.</strong> Implement a combinations iterator that generates the <em>next</em> combination lexicographically without storing all combinations in memory.</p>
+
+<hr>
+
+<section class="slide" id="starter-code">
+<h2>Starter Code</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class Module7Lab {
+
+    // ==================== Part 1: Counting ====================
+
+    public static long passwordCount(int alphabetSize, int length) {
+        // TODO: product rule: alphabetSize^length
+        return -1;
+    }
+
+    public static long totalPasswordsUpTo(int alphabetSize, int maxLength) {
+        // TODO: sum of passwordCount for lengths 1..maxLength
+        return -1;
+    }
+
+    public static int countDivisibleByEither(int n, int a, int b) {
+        // TODO: inclusion-exclusion: |A| + |B| - |A ∩ B|
+        // |A| = n/a, |B| = n/b, |A ∩ B| = n/lcm(a,b)
+        return -1;
+    }
+
+    public static int gcd(int a, int b) {
+        // TODO: Euclidean algorithm (from Module 1!)
+        return -1;
+    }
+
+    public static long nestedLoopCount(int a, int b, int c) {
+        // TODO: product rule
+        return -1;
+    }
+
+    // ==================== Part 2: Combinations &amp; Permutations ====================
+
+    public static long factorial(int n) {
+        // TODO
+        return -1;
+    }
+
+    public static long binomialDirect(int n, int k) {
+        // TODO: loop-based, no full factorial
+        return -1;
+    }
+
+    public static long binomialDP(int n, int k) {
+        // TODO: Pascal's triangle DP
+        return -1;
+    }
+
+    public static long binomialMemo(int n, int k, Map&lt;Long, Long&gt; memo) {
+        // TODO: recursive with memoization
+        // Key: encode (n,k) as n * 100000L + k or similar
+        return -1;
+    }
+
+    public static long permutations(int n, int k) {
+        // TODO
+        return -1;
+    }
+
+    public static List&lt;List&lt;Integer&gt;&gt; generateCombinations(int n, int k) {
+        // TODO: backtracking
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        return result;
+    }
+
+    public static List&lt;List&lt;Integer&gt;&gt; generatePermutations(int n) {
+        // TODO: swap-based
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        return result;
+    }
+
+    public static void verifyIdentities(int maxN) {
+        // TODO: check row sum, Pascal's identity, symmetry, Vandermonde
+    }
+
+    // ==================== Part 3: Pigeonhole ====================
+
+    public static int firstCollisionIndex(int[] keys, int tableSize) {
+        // TODO: return 1-based index of key causing first collision, or -1
+        return -1;
+    }
+
+    public static int totalCollisions(int[] keys, int tableSize) {
+        // TODO: count how many keys collide with an already-occupied slot
+        return -1;
+    }
+
+    public static double birthdayProbExact(int k, int days) {
+        // TODO: exact formula
+        return -1;
+    }
+
+    public static double birthdayProbMonteCarlo(int k, int days, int trials) {
+        // TODO: Monte Carlo simulation
+        return -1;
+    }
+
+    public static int[] simulateLoadBalancing(int n, int m, Random rng) {
+        // TODO: return array of bin counts
+        return new int[m];
+    }
+
+    // ==================== Part 4: Toolkit ====================
+
+    public static double birthdayBound(int m) {
+        // TODO: sqrt(pi * m / 2)
+        return -1;
+    }
+
+    // ==================== Main ====================
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 7 Lab ===\n");
+
+        // Part 1
+        System.out.println("--- Part 1: Counting ---");
+        System.out.println("Passwords (26 letters, length 4): " + passwordCount(26, 4));
+        System.out.println("Total passwords length 1-4: " + totalPasswordsUpTo(26, 4));
+        System.out.println("Divisible by 3 or 5 in {1..100}: " + countDivisibleByEither(100, 3, 5));
+        System.out.println("Nested loops (5,4,3): " + nestedLoopCount(5, 4, 3));
+
+        // Part 2
+        System.out.println("\n--- Part 2: Combinations ---");
+        System.out.println("C(10,3) direct: " + binomialDirect(10, 3));
+        System.out.println("C(10,3) DP: " + binomialDP(10, 3));
+        System.out.println("C(10,3) memo: " + binomialMemo(10, 3, new HashMap&lt;&gt;()));
+        System.out.println("P(5,3): " + permutations(5, 3));
+
+        List&lt;List&lt;Integer&gt;&gt; combs = generateCombinations(5, 3);
+        System.out.println("3-subsets of {0..4}: count=" + combs.size()
+                + " (expected " + binomialDirect(5, 3) + ")");
+
+        List&lt;List&lt;Integer&gt;&gt; perms = generatePermutations(4);
+        System.out.println("Permutations of {0..3}: count=" + perms.size()
+                + " (expected " + factorial(4) + ")");
+
+        verifyIdentities(20);
+        System.out.println("All identities verified!");
+
+        // Part 3
+        System.out.println("\n--- Part 3: Pigeonhole ---");
+        int m = 1000;
+        int[] randomKeys = new Random(42).ints(2000, 0, 1_000_000).toArray();
+        System.out.println("First collision at key #" + firstCollisionIndex(randomKeys, m));
+        System.out.println("Total collisions (2000 keys, 1000 slots): " + totalCollisions(randomKeys, m));
+
+        System.out.println("\nBirthday problem (365 days):");
+        for (int k : new int[]{10, 20, 23, 30, 50}) {
+            System.out.printf("k=%2d: exact=%.4f, MC=%.4f%n",
+                    k, birthdayProbExact(k, 365),
+                    birthdayProbMonteCarlo(k, 365, 100_000));
+        }
+
+        System.out.println("\nLoad balancing (100 tasks, 10 bins):");
+        Random rng = new Random(42);
+        int[] bins = simulateLoadBalancing(100, 10, rng);
+        System.out.println("Bin loads: " + Arrays.toString(bins));
+        System.out.println("Max load: " + Arrays.stream(bins).max().orElse(0)
+                + " (PHP bound: " + ((100 + 9) / 10) + ")");
+
+        // Part 4
+        System.out.println("\n--- Part 4: Toolkit ---");
+        System.out.printf("Birthday bound (m=1000): %.1f%n", birthdayBound(1000));
+        System.out.printf("Lottery 6/49: 1 in %,d%n", binomialDirect(49, 6));
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class Module7LabSolution {
+
+    // ==================== Part 1: Counting ====================
+
+    public static long passwordCount(int alphabetSize, int length) {
+        long result = 1;
+        for (int i = 0; i &lt; length; i++) result *= alphabetSize;
+        return result;
+    }
+
+    public static long totalPasswordsUpTo(int alphabetSize, int maxLength) {
+        long total = 0;
+        for (int len = 1; len &lt;= maxLength; len++) {
+            total += passwordCount(alphabetSize, len);
+        }
+        return total;
+    }
+
+    public static int gcd(int a, int b) {
+        while (b != 0) { int t = b; b = a % b; a = t; }
+        return a;
+    }
+
+    public static int countDivisibleByEither(int n, int a, int b) {
+        int lcm = a / gcd(a, b) * b;
+        return n / a + n / b - n / lcm;
+    }
+
+    public static long nestedLoopCount(int a, int b, int c) {
+        return (long) a * b * c;
+    }
+
+    // ==================== Part 2: Combinations &amp; Permutations ====================
+
+    public static long factorial(int n) {
+        long result = 1;
+        for (int i = 2; i &lt;= n; i++) result *= i;
+        return result;
+    }
+
+    public static long binomialDirect(int n, int k) {
+        if (k &lt; 0 || k &gt; n) return 0;
+        if (k == 0 || k == n) return 1;
+        if (k &gt; n - k) k = n - k;
+        long result = 1;
+        for (int i = 0; i &lt; k; i++) {
+            result = result * (n - i) / (i + 1);
+        }
+        return result;
+    }
+
+    public static long binomialDP(int n, int k) {
+        if (k &lt; 0 || k &gt; n) return 0;
+        long[][] dp = new long[n + 1][k + 1];
+        for (int i = 0; i &lt;= n; i++) {
+            dp[i][0] = 1;
+            for (int j = 1; j &lt;= Math.min(i, k); j++) {
+                dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+            }
+        }
+        return dp[n][k];
+    }
+
+    public static long binomialMemo(int n, int k, Map&lt;Long, Long&gt; memo) {
+        if (k &lt; 0 || k &gt; n) return 0;
+        if (k == 0 || k == n) return 1;
+        long key = (long) n * 100000 + k;
+        if (memo.containsKey(key)) return memo.get(key);
+        long result = binomialMemo(n - 1, k - 1, memo) + binomialMemo(n - 1, k, memo);
+        memo.put(key, result);
+        return result;
+    }
+
+    public static long permutations(int n, int k) {
+        long result = 1;
+        for (int i = 0; i &lt; k; i++) result *= (n - i);
+        return result;
+    }
+
+    public static List&lt;List&lt;Integer&gt;&gt; generateCombinations(int n, int k) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        combHelper(n, k, 0, new ArrayList&lt;&gt;(), result);
+        return result;
+    }
+
+    private static void combHelper(int n, int k, int start,
+                                    List&lt;Integer&gt; current,
+                                    List&lt;List&lt;Integer&gt;&gt; result) {
+        if (current.size() == k) {
+            result.add(new ArrayList&lt;&gt;(current));
+            return;
+        }
+        for (int i = start; i &lt; n; i++) {
+            current.add(i);
+            combHelper(n, k, i + 1, current, result);
+            current.remove(current.size() - 1);
+        }
+    }
+
+    public static List&lt;List&lt;Integer&gt;&gt; generatePermutations(int n) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        List&lt;Integer&gt; items = IntStream.range(0, n).boxed().collect(Collectors.toList());
+        permuteHelper(items, 0, result);
+        return result;
+    }
+
+    private static void permuteHelper(List&lt;Integer&gt; items, int idx,
+                                       List&lt;List&lt;Integer&gt;&gt; result) {
+        if (idx == items.size()) {
+            result.add(new ArrayList&lt;&gt;(items));
+            return;
+        }
+        for (int i = idx; i &lt; items.size(); i++) {
+            Collections.swap(items, idx, i);
+            permuteHelper(items, idx + 1, result);
+            Collections.swap(items, idx, i);
+        }
+    }
+
+    public static void verifyIdentities(int maxN) {
+        for (int n = 0; n &lt;= maxN; n++) {
+            // Row sum = 2^n
+            long rowSum = 0;
+            for (int k = 0; k &lt;= n; k++) rowSum += binomialDirect(n, k);
+            assert rowSum == (1L &lt;&lt; n) : "Row sum failed for n=" + n;
+
+            // Pascal's identity
+            for (int k = 1; k &lt; n; k++) {
+                assert binomialDirect(n, k) ==
+                        binomialDirect(n - 1, k - 1) + binomialDirect(n - 1, k);
+            }
+
+            // Symmetry
+            for (int k = 0; k &lt;= n; k++) {
+                assert binomialDirect(n, k) == binomialDirect(n, n - k);
+            }
+        }
+
+        // Vandermonde: sum_{k=0}^{r} C(m,k)*C(n,r-k) = C(m+n,r)
+        for (int m = 0; m &lt;= 10; m++) {
+            for (int nn = 0; nn &lt;= 10; nn++) {
+                for (int r = 0; r &lt;= m + nn &amp;&amp; r &lt;= 10; r++) {
+                    long lhs = 0;
+                    for (int k = 0; k &lt;= r; k++) {
+                        lhs += binomialDirect(m, k) * binomialDirect(nn, r - k);
+                    }
+                    assert lhs == binomialDirect(m + nn, r)
+                            : "Vandermonde failed for m=" + m + " n=" + nn + " r=" + r;
+                }
+            }
+        }
+    }
+
+    // ==================== Part 3: Pigeonhole ====================
+
+    public static int firstCollisionIndex(int[] keys, int tableSize) {
+        boolean[] occupied = new boolean[tableSize];
+        for (int i = 0; i &lt; keys.length; i++) {
+            int slot = Math.floorMod(keys[i], tableSize);
+            if (occupied[slot]) return i + 1;
+            occupied[slot] = true;
+        }
+        return -1;
+    }
+
+    public static int totalCollisions(int[] keys, int tableSize) {
+        boolean[] occupied = new boolean[tableSize];
+        int collisions = 0;
+        for (int key : keys) {
+            int slot = Math.floorMod(key, tableSize);
+            if (occupied[slot]) collisions++;
+            else occupied[slot] = true;
+        }
+        return collisions;
+    }
+
+    public static double birthdayProbExact(int k, int days) {
+        if (k &gt; days) return 1.0;
+        double pNoMatch = 1.0;
+        for (int i = 1; i &lt; k; i++) {
+            pNoMatch *= (days - i) / (double) days;
+        }
+        return 1.0 - pNoMatch;
+    }
+
+    public static double birthdayProbMonteCarlo(int k, int days, int trials) {
+        Random rng = new Random(42);
+        int hits = 0;
+        for (int t = 0; t &lt; trials; t++) {
+            Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+            boolean collision = false;
+            for (int i = 0; i &lt; k; i++) {
+                if (!seen.add(rng.nextInt(days))) {
+                    collision = true;
+                    break;
+                }
+            }
+            if (collision) hits++;
+        }
+        return (double) hits / trials;
+    }
+
+    public static int[] simulateLoadBalancing(int n, int m, Random rng) {
+        int[] bins = new int[m];
+        for (int i = 0; i &lt; n; i++) bins[rng.nextInt(m)]++;
+        return bins;
+    }
+
+    // ==================== Part 4: Toolkit ====================
+
+    public static double birthdayBound(int m) {
+        return Math.sqrt(Math.PI * m / 2.0);
+    }
+
+    // ==================== Main ====================
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 7 Lab Solution ===\n");
+
+        // Part 1
+        System.out.println("--- Part 1: Counting ---");
+        System.out.println("Passwords (26 letters, length 4): " + passwordCount(26, 4));
+        // 456976
+        System.out.println("Total passwords length 1-4: " + totalPasswordsUpTo(26, 4));
+        // 26 + 676 + 17576 + 456976 = 475254
+        System.out.println("Divisible by 3 or 5 in {1..100}: " + countDivisibleByEither(100, 3, 5));
+        // 33 + 20 - 6 = 47
+        System.out.println("Nested loops (5,4,3): " + nestedLoopCount(5, 4, 3));
+        // 60
+
+        // Part 2
+        System.out.println("\n--- Part 2: Combinations ---");
+        System.out.println("C(10,3) direct: " + binomialDirect(10, 3));  // 120
+        System.out.println("C(10,3) DP: " + binomialDP(10, 3));          // 120
+        System.out.println("C(10,3) memo: " + binomialMemo(10, 3, new HashMap&lt;&gt;())); // 120
+        System.out.println("P(5,3): " + permutations(5, 3));             // 60
+
+        List&lt;List&lt;Integer&gt;&gt; combs = generateCombinations(5, 3);
+        System.out.println("3-subsets of {0..4}: count=" + combs.size()
+                + " (expected " + binomialDirect(5, 3) + ")");
+
+        List&lt;List&lt;Integer&gt;&gt; perms = generatePermutations(4);
+        System.out.println("Permutations of {0..3}: count=" + perms.size()
+                + " (expected " + factorial(4) + ")");
+
+        verifyIdentities(20);
+        System.out.println("All identities verified (including Vandermonde)!");
+
+        // Part 3
+        System.out.println("\n--- Part 3: Pigeonhole ---");
+        int m = 1000;
+        int[] randomKeys = new Random(42).ints(2000, 0, 1_000_000).toArray();
+        System.out.println("First collision at key #" + firstCollisionIndex(randomKeys, m));
+        System.out.println("Total collisions (2000 keys, 1000 slots): " + totalCollisions(randomKeys, m));
+
+        System.out.println("\nBirthday problem (365 days):");
+        for (int k : new int[]{10, 20, 23, 30, 50}) {
+            System.out.printf("k=%2d: exact=%.4f, MC=%.4f%n",
+                    k, birthdayProbExact(k, 365),
+                    birthdayProbMonteCarlo(k, 365, 100_000));
+        }
+
+        System.out.println("\nLoad balancing (100 tasks, 10 bins):");
+        Random rng = new Random(42);
+        int[] bins = simulateLoadBalancing(100, 10, rng);
+        System.out.println("Bin loads: " + Arrays.toString(bins));
+        int maxLoad = Arrays.stream(bins).max().orElse(0);
+        System.out.println("Max load: " + maxLoad + " (PHP bound: " + ((100 + 9) / 10) + ")");
+
+        // Part 4
+        System.out.println("\n--- Part 4: Toolkit ---");
+        System.out.printf("Birthday bound (m=1000): %.1f%n", birthdayBound(1000));
+        System.out.printf("Lottery 6/49: 1 in %,d%n", binomialDirect(49, 6));
+        // 1 in 13,983,816
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="verification-checklist">
+<h2>Verification Checklist</h2>
+
+<table>
+<thead><tr>
+<th>Task</th>
+<th>Expected Output</th>
+<th>✓</th>
+</tr></thead><tbody>
+<tr>
+<td><code>passwordCount(26, 4)</code></td>
+<td>456976</td>
+<td></td>
+</tr>
+<tr>
+<td><code>totalPasswordsUpTo(26, 4)</code></td>
+<td>475254</td>
+<td></td>
+</tr>
+<tr>
+<td><code>countDivisibleByEither(100, 3, 5)</code></td>
+<td>47</td>
+<td></td>
+</tr>
+<tr>
+<td><code>nestedLoopCount(5, 4, 3)</code></td>
+<td>60</td>
+<td></td>
+</tr>
+<tr>
+<td><code>binomialDirect(10, 3)</code></td>
+<td>120</td>
+<td></td>
+</tr>
+<tr>
+<td><code>binomialDP(10, 3)</code></td>
+<td>120</td>
+<td></td>
+</tr>
+<tr>
+<td><code>binomialMemo(10, 3, ...)</code></td>
+<td>120</td>
+<td></td>
+</tr>
+<tr>
+<td><code>permutations(5, 3)</code></td>
+<td>60</td>
+<td></td>
+</tr>
+<tr>
+<td><code>generateCombinations(5, 3).size()</code></td>
+<td>10</td>
+<td></td>
+</tr>
+<tr>
+<td><code>generatePermutations(4).size()</code></td>
+<td>24</td>
+<td></td>
+</tr>
+<tr>
+<td>Identity verification passes</td>
+<td>No assertion errors</td>
+<td></td>
+</tr>
+<tr>
+<td>First collision found</td>
+<td>< 1000 (likely ~40)</td>
+<td></td>
+</tr>
+<tr>
+<td>Birthday k=23 exact</td>
+<td>≈ 0.5073</td>
+<td></td>
+</tr>
+<tr>
+<td>Max load (100, 10)</td>
+<td>≥ 10</td>
+<td></td>
+</tr>
+<tr>
+<td><code>birthdayBound(1000)</code></td>
+<td>≈ 39.6</td>
+<td></td>
+</tr>
+<tr>
+<td><code>binomialDirect(49, 6)</code></td>
+<td>13983816</td>
+<td></td>
+</tr>
+</tbody></table>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

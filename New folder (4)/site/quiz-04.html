@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4 Quiz — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="quiz-04">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+      <h1>Module 4: Practice Quiz</h1>
+      <p class="quiz-subtitle">Sets, Set Operations & Data Collections — Test your understanding with 12 multiple-choice questions.</p>
+      <div id="quiz-container" data-questions='[{"q":"The empty set ∅ is a subset of:","choices":["Only itself","Only non-empty sets","Every set","No set"],"answer":2,"explanation":"The empty set is a subset of every set (vacuous truth)."},{"q":"A ∪ B contains:","choices":["Elements in both A and B","Elements in A or B (or both)","Elements in A but not B","Elements in neither A nor B"],"answer":1,"explanation":"Union includes all elements that are in A, in B, or in both."},{"q":"A ∩ B contains:","choices":["Elements in both A and B","Elements in A or B","Elements in A but not B","All elements"],"answer":0,"explanation":"Intersection includes only elements that are in both A and B."},{"q":"De Morgan's Law for sets: (A ∪ B)ᶜ =","choices":["Aᶜ ∪ Bᶜ","Aᶜ ∩ Bᶜ","A ∩ B","(A ∩ B)ᶜ"],"answer":1,"explanation":"De Morgan's: the complement of a union is the intersection of complements."},{"q":"If |A| = 3, how many elements does the power set P(A) have?","choices":["3","6","8","9"],"answer":2,"explanation":"|P(A)| = 2^|A| = 2³ = 8."},{"q":"A \\ B (set difference) contains:","choices":["Elements in B but not A","Elements in both A and B","Elements in A but not B","The complement of A"],"answer":2,"explanation":"A \\ B = {x : x ∈ A and x ∉ B}."},{"q":"Two sets A and B are equal if:","choices":["They have the same size","A ⊆ B and B ⊆ A","A ∩ B = ∅","A ∪ B = A"],"answer":1,"explanation":"Set equality requires mutual inclusion: A ⊆ B and B ⊆ A."},{"q":"|A × B| where |A| = 3 and |B| = 4 equals:","choices":["7","12","64","81"],"answer":1,"explanation":"The Cartesian product has |A| × |B| = 3 × 4 = 12 elements."},{"q":"A partition of a set S requires:","choices":["All subsets are empty","Subsets are non-empty, pairwise disjoint, and cover S","Subsets overlap","Exactly two subsets"],"answer":1,"explanation":"A partition divides S into non-empty, non-overlapping subsets whose union is S."},{"q":"In Java, which best represents a mathematical set?","choices":["ArrayList","HashSet","int[]","String"],"answer":1,"explanation":"HashSet implements the Set interface — no duplicates, unordered, O(1) membership test."},{"q":"If A = {1, 2, 3} and B = {2, 3, 4}, what is A ∩ B?","choices":["{1, 4}","{2, 3}","{1, 2, 3, 4}","∅"],"answer":1,"explanation":"A ∩ B contains elements in both: {2, 3}."},{"q":"The element-chasing proof technique involves:","choices":["Picking an arbitrary element and tracking it through definitions","Checking all elements one by one","Using truth tables","Proof by contradiction"],"answer":0,"explanation":"Element-chasing: let x ∈ LHS, then show x ∈ RHS by applying definitions."}]'></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>

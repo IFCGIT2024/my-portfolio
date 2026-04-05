@@ -1,0 +1,12 @@
+# Documents & PDFs — not needed for the website
+*.pdf
+*.docx
+*.doc
+
+# Old/unused question files
+questions1.json
+questions2.json
+embedded_questions_temp.js
+
+# Redundant launcher (keeping .bat for Windows, .command for Mac)
+START_SERVER.ps1

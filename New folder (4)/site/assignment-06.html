@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 6 Assignment — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="assignment-06">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-6-assignment-induction-recursion-and-expression-evaluation">Module 6 – Assignment: Induction, Recursion and Expression Evaluation</h1>
+
+<p><strong>Integrative Assignment — Modules 5 & 6</strong></p>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>This assignment synthesizes functions and relations (Module 5) with induction and recursion (Module 6). You will:</p>
+<ul>
+<li>Prove summation and structural properties by induction.</li>
+<li>Implement an arithmetic expression evaluator.</li>
+<li>Prove by structural induction that the evaluator computes the correct value.</li>
+<li>Connect recursive definitions to function properties from Module 5.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="part-a-mathematical-proofs">
+<h2>Part A: Mathematical Proofs</h2>
+
+<p><strong>A1.</strong> Prove by mathematical induction: $\displaystyle\sum_{i=1}^{n} i(i+1) = \frac{n(n+1)(n+2)}{3}$ for all $n \geq 1$.</p>
+
+<p><strong>A2.</strong> Prove by strong induction: every integer $n \geq 2$ can be written as a product of primes.</p>
+
+<p><strong>A3.</strong> Define an arithmetic expression recursively:</p>
+<div class="katex-block">$E ::= n \mid (E + E) \mid (E \times E)$</div>
+
+<p>where $n$ is an integer literal. Define <code>eval(e)</code> by:</p>
+<ul>
+<li>$\text{eval}(n) = n$</li>
+<li>$\text{eval}(e_1 + e_2) = \text{eval}(e_1) + \text{eval}(e_2)$</li>
+<li>$\text{eval}(e_1 \times e_2) = \text{eval}(e_1) \times \text{eval}(e_2)$</li>
+</ul>
+
+<p>Prove by structural induction: <code>eval</code> is a well-defined function from expressions to integers (i.e., every expression has exactly one value).</p>
+
+<p><strong>A4.</strong> Prove by structural induction: in a full binary tree, $L = I + 1$ where $L$ = leaves and $I$ = internal nodes.</p>
+
+<p><strong>A5.</strong> Let $f: A \to B$ be a function. Define the relation $\sim_f$ on $A$ by $a_1 \sim_f a_2$ iff $f(a_1) = f(a_2)$ (from Module 5). Prove: $\sim_f$ has exactly $|\text{range}(f)|$ equivalence classes. Use induction on $|\text{range}(f)|$ (or a direct argument).</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-b-java-programming">
+<h2>Part B: Java Programming</h2>
+
+<h3 id="b1-arithmetic-expression-evaluator-35-points">B1: Arithmetic Expression Evaluator (35 points)</h3>
+
+<p>Implement a complete arithmetic expression system:</p>
+
+<pre><code class="language-java">public interface Expr {
+    int eval();
+    int size();           // total nodes in tree
+    int ops();            // number of operator nodes
+    int depth();          // max depth (IntLit has depth 0)
+    String toInfix();     // fully parenthesized infix
+    String toPostfix();   // postfix (RPN)
+}
+
+public class IntLit implements Expr { /* TODO */ }
+public class Add implements Expr { /* TODO */ }
+public class Mul implements Expr { /* TODO */ }
+public class Sub implements Expr { /* TODO */ }</code></pre>
+
+<p><strong>Requirements:</strong></p>
+<ol>
+<li>Build at least 5 different expression trees, including nested ones.</li>
+<li>For each, print <code>toInfix()</code>, <code>toPostfix()</code>, <code>eval()</code>, <code>size()</code>, <code>ops()</code>, <code>depth()</code>.</li>
+<li>Verify <code>size() == 2 * ops() + 1</code> for all.</li>
+<li>Verify <code>ops() &lt;= 2^depth() - 1</code> for all (when <code>ops() &gt; 0</code>).</li>
+</ol>
+
+<h3 id="b2-postfix-evaluator-20-points">B2: Postfix Evaluator (20 points)</h3>
+
+<pre><code class="language-java">public class PostfixEvaluator {
+    /**
+     * Evaluate a postfix expression string.
+     * Tokens separated by spaces. Numbers can be multi-digit or negative.
+     * Operators: +, -, *
+     * Example: "3 5 + 2 *" -&gt; 16
+     */
+    public static int evaluate(String postfix) { /* TODO */ }
+}</code></pre>
+
+<p>Build expression trees, convert to postfix with <code>toPostfix()</code>, then evaluate with <code>PostfixEvaluator.evaluate()</code>. Verify the results match <code>eval()</code>.</p>
+
+<h3 id="b3-recursive-and-iterative-computation-15-points">B3: Recursive and Iterative Computation (15 points)</h3>
+
+<pre><code class="language-java">public class RecursionComparison {
+
+    /**
+     * Compute sum 1+2+...+n three ways: iterative, recursive, formula.
+     * Time each for n = 10, 100, 1000, 10000.
+     */
+    public static void compareSums() { /* TODO */ }
+
+    /**
+     * Compute Fibonacci three ways: naive, iterative, memoized.
+     * Time each for n = 10, 20, 30, 35, 40.
+     */
+    public static void compareFib() { /* TODO */ }
+
+    /**
+     * Print a table showing results and timing.
+     */
+    public static void main(String[] args) { /* TODO */ }
+}</code></pre>
+
+<h3 id="b4-tree-properties-verifier-15-points">B4: Tree Properties Verifier (15 points)</h3>
+
+<pre><code class="language-java">public class TreeVerifier {
+
+    /**
+     * Build full binary trees of heights 0–8.
+     * For each, verify:
+     * - size == 2^(h+1) - 1
+     * - leaves == internal + 1
+     * - height == h
+     * - mirror preserves size and height
+     */
+    public static void verifyFullTreeProperties() { /* TODO */ }
+
+    /**
+     * Build a "degenerate" (linear) tree of n nodes.
+     * Verify: height == n - 1 and leaves == 1.
+     */
+    public static void verifyDegenerateTree(int n) { /* TODO */ }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="rubric">
+<h2>Rubric</h2>
+
+<table>
+<thead><tr>
+<th>Component</th>
+<th>Points</th>
+</tr></thead><tbody>
+<tr>
+<td>A1: Summation induction proof</td>
+<td>10</td>
+</tr>
+<tr>
+<td>A2: Strong induction prime factorization</td>
+<td>10</td>
+</tr>
+<tr>
+<td>A3: Structural induction eval well-defined</td>
+<td>12</td>
+</tr>
+<tr>
+<td>A4: Full binary tree L=I+1 proof</td>
+<td>10</td>
+</tr>
+<tr>
+<td>A5: Equivalence classes of $\sim_f$</td>
+<td>8</td>
+</tr>
+<tr>
+<td>B1: Expression evaluator (4 types, 6 methods)</td>
+<td>35</td>
+</tr>
+<tr>
+<td>B2: Postfix evaluator + round-trip test</td>
+<td>20</td>
+</tr>
+<tr>
+<td>B3: Recursive/iterative comparison with timing</td>
+<td>15</td>
+</tr>
+<tr>
+<td>B4: Tree property verification</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Code quality and documentation</td>
+<td>10</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>145</strong></td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<h3 id="part-a-solutions">Part A Solutions</h3>
+
+<p><strong>A1.</strong> <em>Base ($n = 1$):</em> $1 \cdot 2 = 2 = \frac{1 \cdot 2 \cdot 3}{3}$. ✓</p>
+
+<p><em>Inductive step:</em> Assume $\sum_{i=1}^k i(i+1) = \frac{k(k+1)(k+2)}{3}$.</p>
+
+<div class="katex-block">$\sum_{i=1}^{k+1} i(i+1) = \frac{k(k+1)(k+2)}{3} + (k+1)(k+2)$</div>
+<div class="katex-block">$= \frac{k(k+1)(k+2) + 3(k+1)(k+2)}{3} = \frac{(k+1)(k+2)(k+3)}{3}$</div>
+
+<p>This is the formula with $n = k+1$. ✓ $\blacksquare$</p>
+
+<p><strong>A2.</strong> <em>Base ($n=2$):</em> 2 is prime, product of one prime. ✓</p>
+
+<p><em>Inductive step:</em> Assume every $j$ with $2 \leq j \leq k$ is a product of primes.</p>
+
+<p>If $k+1$ is prime, done. If composite, $k+1 = ab$ with $2 \leq a, b \leq k$. By hypothesis, $a = p_1 \cdots p_s$ and $b = q_1 \cdots q_t$. So $k+1 = p_1 \cdots p_s q_1 \cdots q_t$. ✓ $\blacksquare$</p>
+
+<p><strong>A3.</strong> By structural induction on the expression $e$:</p>
+
+<p><em>Base:</em> $\text{eval}(n) = n$ is a single integer — well-defined. ✓</p>
+
+<p><em>Inductive step (Add):</em> Assume $\text{eval}(e_1)$ and $\text{eval}(e_2)$ are each well-defined integers. Then $\text{eval}(e_1 + e_2) = \text{eval}(e_1) + \text{eval}(e_2)$ is the sum of two integers, which is a unique integer. ✓</p>
+
+<p><em>Inductive step (Mul):</em> Similarly, $\text{eval}(e_1) \times \text{eval}(e_2)$ is a unique integer. ✓</p>
+
+<p>Since every expression is built by finitely many applications of these rules, <code>eval</code> assigns a unique integer to every expression. $\blacksquare$</p>
+
+<p><strong>A4.</strong> <em>Base:</em> Single node (leaf, no children). $L = 1, I = 0$. $L = I + 1$. ✓</p>
+
+<p><em>Inductive step:</em> $T = \text{Node}(v, T_L, T_R)$ where both subtrees are non-empty full trees. IH: $L_L = I_L + 1$ and $L_R = I_R + 1$.</p>
+
+<p>$L = L_L + L_R = (I_L + 1) + (I_R + 1) = I_L + I_R + 2 = (I_L + I_R + 1) + 1 = I + 1$. ✓ $\blacksquare$</p>
+
+<p><strong>A5.</strong> The equivalence classes of $\sim_f$ are exactly the fibers $f^{-1}(\{b\})$ for each $b \in \text{range}(f)$. Each fiber is non-empty (since $b \in \text{range}(f)$) and distinct $b$-values give disjoint fibers. So the number of classes equals $|\text{range}(f)|$. $\blacksquare$</p>
+
+<h3 id="part-b-solutions">Part B Solutions</h3>
+
+<p><strong>B1:</strong></p>
+<pre><code class="language-java">import java.util.*;
+
+public class ExpressionSystem {
+
+    interface Expr {
+        int eval();
+        int size();
+        int ops();
+        int depth();
+        String toInfix();
+        String toPostfix();
+    }
+
+    static class IntLit implements Expr {
+        final int value;
+        IntLit(int v) { value = v; }
+        public int eval() { return value; }
+        public int size() { return 1; }
+        public int ops() { return 0; }
+        public int depth() { return 0; }
+        public String toInfix() { return String.valueOf(value); }
+        public String toPostfix() { return String.valueOf(value); }
+    }
+
+    static class Add implements Expr {
+        final Expr left, right;
+        Add(Expr l, Expr r) { left = l; right = r; }
+        public int eval() { return left.eval() + right.eval(); }
+        public int size() { return left.size() + right.size() + 1; }
+        public int ops() { return left.ops() + right.ops() + 1; }
+        public int depth() { return 1 + Math.max(left.depth(), right.depth()); }
+        public String toInfix() { return "(" + left.toInfix() + " + " + right.toInfix() + ")"; }
+        public String toPostfix() { return left.toPostfix() + " " + right.toPostfix() + " +"; }
+    }
+
+    static class Mul implements Expr {
+        final Expr left, right;
+        Mul(Expr l, Expr r) { left = l; right = r; }
+        public int eval() { return left.eval() * right.eval(); }
+        public int size() { return left.size() + right.size() + 1; }
+        public int ops() { return left.ops() + right.ops() + 1; }
+        public int depth() { return 1 + Math.max(left.depth(), right.depth()); }
+        public String toInfix() { return "(" + left.toInfix() + " * " + right.toInfix() + ")"; }
+        public String toPostfix() { return left.toPostfix() + " " + right.toPostfix() + " *"; }
+    }
+
+    static class Sub implements Expr {
+        final Expr left, right;
+        Sub(Expr l, Expr r) { left = l; right = r; }
+        public int eval() { return left.eval() - right.eval(); }
+        public int size() { return left.size() + right.size() + 1; }
+        public int ops() { return left.ops() + right.ops() + 1; }
+        public int depth() { return 1 + Math.max(left.depth(), right.depth()); }
+        public String toInfix() { return "(" + left.toInfix() + " - " + right.toInfix() + ")"; }
+        public String toPostfix() { return left.toPostfix() + " " + right.toPostfix() + " -"; }
+    }
+
+    // Postfix evaluator
+    public static int evaluatePostfix(String postfix) {
+        Deque&lt;Integer&gt; stack = new ArrayDeque&lt;&gt;();
+        for (String token : postfix.split("\\s+")) {
+            switch (token) {
+                case "+": { int b = stack.pop(); int a = stack.pop(); stack.push(a + b); break; }
+                case "-": { int b = stack.pop(); int a = stack.pop(); stack.push(a - b); break; }
+                case "*": { int b = stack.pop(); int a = stack.pop(); stack.push(a * b); break; }
+                default: stack.push(Integer.parseInt(token));
+            }
+        }
+        return stack.pop();
+    }
+
+    public static void testExpr(Expr e) {
+        System.out.println("  Infix:   " + e.toInfix());
+        System.out.println("  Postfix: " + e.toPostfix());
+        System.out.println("  eval=" + e.eval() + "  size=" + e.size()
+                + "  ops=" + e.ops() + "  depth=" + e.depth());
+        assert e.size() == 2 * e.ops() + 1 : "size != 2*ops+1";
+        if (e.ops() &gt; 0) assert e.ops() &lt;= (1 &lt;&lt; e.depth()) - 1 : "ops &gt; 2^depth - 1";
+        // Round-trip postfix
+        int postfixResult = evaluatePostfix(e.toPostfix());
+        assert postfixResult == e.eval() : "Postfix mismatch!";
+        System.out.println("  Postfix eval matches: " + postfixResult);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== Expression Evaluator Assignment ===\n");
+
+        Expr[] exprs = {
+            new Add(new IntLit(3), new IntLit(5)),                          // 8
+            new Mul(new Add(new IntLit(3), new IntLit(5)),
+                    new Add(new IntLit(2), new IntLit(4))),                  // 48
+            new Sub(new Mul(new IntLit(10), new IntLit(3)), new IntLit(7)), // 23
+            new Add(new Mul(new IntLit(2), new IntLit(3)),
+                    new Mul(new IntLit(4), new IntLit(5))),                  // 26
+            new Mul(new Add(new Sub(new IntLit(10), new IntLit(3)),
+                            new IntLit(2)),
+                    new IntLit(4)),                                          // 36
+        };
+
+        for (int i = 0; i &lt; exprs.length; i++) {
+            System.out.println("Expression " + (i + 1) + ":");
+            testExpr(exprs[i]);
+            System.out.println();
+        }
+
+        System.out.println("All expression tests passed!");
+    }
+}</code></pre>
+
+</section>
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

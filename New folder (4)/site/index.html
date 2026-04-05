@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="index">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+
+      <div class="hero">
+        <h1>Discrete Math for CS</h1>
+        <p class="subtitle">by Mizel Cluett</p>
+        <p style="max-width:600px;margin:0 auto 2rem;color:var(--text-muted)">
+          A complete 30-class course bridging discrete mathematics, formal proof,
+          and Java programming. Every concept is presented with rigorous proofs
+          <em>and</em> runnable Java code.
+        </p>
+      </div>
+      <h2 style="text-align:center;border:none">Course Modules</h2>
+      <div class="module-grid">
+        <a class="module-card" href="module-01.html">
+          <div class="module-num">Module 1</div>
+          <h3>Integers, Definitions & Proofs</h3>
+          <p>Parity, divisibility, primes, GCD, direct proof and counterexample.</p>
+        </a>
+        <a class="module-card" href="module-02.html">
+          <div class="module-num">Module 2</div>
+          <h3>Remainders & Modular Arithmetic</h3>
+          <p>Quotient-remainder theorem, congruences, CRT, prime factorization.</p>
+        </a>
+        <a class="module-card" href="module-03.html">
+          <div class="module-num">Module 3</div>
+          <h3>Logic, Quantifiers & Programs</h3>
+          <p>Propositional logic, implication, quantifiers, Design by Contract.</p>
+        </a>
+        <a class="module-card" href="module-04.html">
+          <div class="module-num">Module 4</div>
+          <h3>Sets & Data Collections</h3>
+          <p>Set operations, power sets, partitions, De Morgan's laws for sets.</p>
+        </a>
+        <a class="module-card" href="module-05.html">
+          <div class="module-num">Module 5</div>
+          <h3>Functions, Relations & Mappings</h3>
+          <p>Domains, composition, injection, surjection, equivalence relations.</p>
+        </a>
+        <a class="module-card" href="module-06.html">
+          <div class="module-num">Module 6</div>
+          <h3>Induction & Recursion</h3>
+          <p>Weak, strong, and structural induction. Recursive definitions.</p>
+        </a>
+        <a class="module-card" href="module-07.html">
+          <div class="module-num">Module 7</div>
+          <h3>Counting & Finite Reasoning</h3>
+          <p>Counting principles, binomial coefficients, pigeonhole, probability.</p>
+        </a>
+        <a class="module-card" href="module-08.html">
+          <div class="module-num">Module 8</div>
+          <h3>Algorithms & Correctness</h3>
+          <p>Specifications, loop invariants, Hoare logic, termination proofs.</p>
+        </a>
+        <a class="module-card" href="module-09.html">
+          <div class="module-num">Module 9</div>
+          <h3>Trees, Complexity & Verification</h3>
+          <p>BSTs, heaps, Big-O, structural induction on trees, formal verification.</p>
+        </a>
+      </div>
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

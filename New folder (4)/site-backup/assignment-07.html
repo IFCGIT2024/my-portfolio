@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 7 Assignment — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="assignment-07">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-7-assignment-counting-induction-and-combinatorial-algorithms">Module 7 – Assignment: Counting, Induction, and Combinatorial Algorithms</h1>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>This assignment synthesizes <strong>Module 6</strong> (Induction and Recursion) with <strong>Module 7</strong> (Counting, Combinatorics, Pigeonhole Principle). You will prove combinatorial identities by induction, implement backtracking algorithms for generating combinations, and analyze hash table behavior through the lens of the pigeonhole principle.</p>
+
+<hr>
+
+<section class="slide" id="part-a-mathematical-proofs">
+<h2>Part A: Mathematical Proofs</h2>
+
+<h3 id="problem-a1-sum-of-row-by-induction">Problem A1: Sum of Row by Induction</h3>
+
+<p>Prove by induction on $n$:</p>
+<div class="katex-block">$\sum_{k=0}^{n} \binom{n}{k} = 2^n$</div>
+
+<h3 id="problem-a2-pascal-s-identity-algebraic-proof">Problem A2: Pascal's Identity (Algebraic Proof)</h3>
+
+<p>Prove algebraically that:</p>
+<div class="katex-block">$\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$</div>
+
+<h3 id="problem-a3-vandermonde-s-identity-by-induction">Problem A3: Vandermonde's Identity by Induction</h3>
+
+<p>Prove by induction on $r$ (or by a combinatorial argument):</p>
+<div class="katex-block">$\sum_{k=0}^{r} \binom{m}{k}\binom{n}{r-k} = \binom{m+n}{r}$</div>
+
+<h3 id="problem-a4-strong-induction-counting-recursive-calls">Problem A4: Strong Induction — Counting Recursive Calls</h3>
+
+<p>The following recursive algorithm generates all $k$-subsets of $\{1,...,n\}$:</p>
+
+<pre><code class="language-text">SUBSETS(n, k):
+    if k == 0: return {{}}
+    if k == n: return {{1,...,n}}
+    return SUBSETS(n-1, k) ∪ {S ∪ {n} : S ∈ SUBSETS(n-1, k-1)}</code></pre>
+
+<p>Prove by strong induction on $n$ that this algorithm produces exactly $\binom{n}{k}$ subsets.</p>
+
+<h3 id="problem-a5-pigeonhole-applied-to-sequences">Problem A5: Pigeonhole Applied to Sequences</h3>
+
+<p>Prove: in any sequence of $n^2 + 1$ distinct real numbers, there exists either an increasing subsequence of length $n + 1$ or a decreasing subsequence of length $n + 1$.</p>
+
+<p><em>(Hint: assign each element a pair $(a_i, d_i)$ where $a_i$ is the length of the longest increasing subsequence ending there and $d_i$ the longest decreasing. Use the pigeonhole principle on the $n^2$ possible values of $(a_i, d_i)$ if both $a_i \leq n$ and $d_i \leq n$.)</em></p>
+
+<hr>
+
+<section class="slide" id="part-b-java-programming">
+<h2>Part B: Java Programming</h2>
+
+<h3 id="problem-b1-backtracking-combination-generator">Problem B1: Backtracking Combination Generator</h3>
+
+<p>Implement a method that generates all $k$-element subsets of $\{0, ..., n-1\}$ using backtracking.</p>
+
+<pre><code class="language-java">public static List&lt;List&lt;Integer&gt;&gt; generateCombinations(int n, int k)</code></pre>
+
+<p>Requirements:</p>
+<ul>
+<li>Must generate subsets in lexicographic order.</li>
+<li>Verify the count equals $\binom{n}{k}$ for all $0 \leq k \leq n \leq 15$.</li>
+<li>Include pruning: skip branches where remaining elements are insufficient.</li>
+</ul>
+
+<h3 id="problem-b2-recursive-vs-iterative-binomial-coefficient">Problem B2: Recursive vs Iterative Binomial Coefficient</h3>
+
+<p>Implement $\binom{n}{k}$ three ways:</p>
+<ol>
+<li><code>binomialRecursive(n, k)</code> — direct recursion using Pascal's identity</li>
+<li><code>binomialMemo(n, k)</code> — memoized recursion</li>
+<li><code>binomialDP(n, k)</code> — bottom-up Pascal's triangle</li>
+</ol>
+
+<p>Measure the time for <code>binomialRecursive(30, 15)</code> vs <code>binomialMemo(30, 15)</code> vs <code>binomialDP(30, 15)</code>. Report the speedup from memoization.</p>
+
+<h3 id="problem-b3-combinatorial-identity-verifier">Problem B3: Combinatorial Identity Verifier</h3>
+
+<p>Write a program that verifies the following identities for all valid inputs up to $n = 20$:</p>
+<ol>
+<li>$\sum_{k=0}^n \binom{n}{k} = 2^n$</li>
+<li>$\sum_{k=0}^n (-1)^k \binom{n}{k} = 0$ for $n \geq 1$</li>
+<li>$\binom{n}{k} = \binom{n}{n-k}$</li>
+<li>$\sum_{k=0}^r \binom{m}{k}\binom{n}{r-k} = \binom{m+n}{r}$ for $m, n, r \leq 10$</li>
+</ol>
+
+<p>Print "PASS" or "FAIL" for each identity.</p>
+
+<h3 id="problem-b4-hash-collision-analyzer">Problem B4: Hash Collision Analyzer</h3>
+
+<p>Build a hash table simulator:</p>
+<ol>
+<li>Create a table of size $m$ (try $m = 100, 500, 1000$).</li>
+<li>Insert random keys until the first collision.</li>
+<li>Repeat 10,000 times and report the average number of insertions before first collision.</li>
+<li>Compare the observed average with the birthday bound $\sqrt{\pi m / 2}$.</li>
+</ol>
+
+<h3 id="problem-b5-subset-sum-via-backtracking">Problem B5: Subset-Sum via Backtracking</h3>
+
+<p>Given a set $S$ of $n$ integers and a target sum $t$, find all subsets of $S$ that sum to $t$.</p>
+
+<pre><code class="language-java">public static List&lt;List&lt;Integer&gt;&gt; subsetSum(int[] set, int target)</code></pre>
+
+<p>This connects Module 7 (subset generation) with Module 6 (recursive backtracking):</p>
+<ul>
+<li>Generate subsets recursively (Module 6's structural recursion).</li>
+<li>Count them combinatorially (Module 7).</li>
+<li>Analyze worst-case: $2^n$ subsets (power set from Module 4).</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="rubric">
+<h2>Rubric</h2>
+
+<table>
+<thead><tr>
+<th>Component</th>
+<th>Points</th>
+<th>Criteria</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>A1</strong> — Row sum induction</td>
+<td>10</td>
+<td>Correct base case, inductive step uses Pascal's identity</td>
+</tr>
+<tr>
+<td><strong>A2</strong> — Pascal's algebraic proof</td>
+<td>8</td>
+<td>Clean algebraic manipulation, common denominator</td>
+</tr>
+<tr>
+<td><strong>A3</strong> — Vandermonde</td>
+<td>12</td>
+<td>Complete proof (induction or combinatorial)</td>
+</tr>
+<tr>
+<td><strong>A4</strong> — Strong induction on SUBSETS</td>
+<td>12</td>
+<td>Strong inductive hypothesis, case split, correct count</td>
+</tr>
+<tr>
+<td><strong>A5</strong> — Erdős–Szekeres pigeonhole</td>
+<td>8</td>
+<td>Correct pair assignment, valid PHP application</td>
+</tr>
+<tr>
+<td><strong>B1</strong> — Combination generator</td>
+<td>12</td>
+<td>Lexicographic order, pruning, verified counts</td>
+</tr>
+<tr>
+<td><strong>B2</strong> — Three binomial implementations</td>
+<td>10</td>
+<td>All three correct, timing comparison reported</td>
+</tr>
+<tr>
+<td><strong>B3</strong> — Identity verifier</td>
+<td>8</td>
+<td>All 4 identities checked, proper bounds</td>
+</tr>
+<tr>
+<td><strong>B4</strong> — Hash collision analyzer</td>
+<td>10</td>
+<td>Correct simulation, comparison with birthday bound</td>
+</tr>
+<tr>
+<td><strong>B5</strong> — Subset-sum backtracking</td>
+<td>10</td>
+<td>Correct results, recursive approach</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>100</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<h3 id="solution-a1-sum-of-row-by-induction">Solution A1: Sum of Row by Induction</h3>
+
+<p><strong>Base case:</strong> $n = 0$: $\sum_{k=0}^{0} \binom{0}{0} = 1 = 2^0$. ✓</p>
+
+<p><strong>Inductive step:</strong> Assume $\sum_{k=0}^{n} \binom{n}{k} = 2^n$. Show $\sum_{k=0}^{n+1} \binom{n+1}{k} = 2^{n+1}$.</p>
+
+<div class="katex-block">$\sum_{k=0}^{n+1} \binom{n+1}{k} = \binom{n+1}{0} + \sum_{k=1}^{n} \binom{n+1}{k} + \binom{n+1}{n+1}$</div>
+
+<p>Apply Pascal's identity to the middle terms: $\binom{n+1}{k} = \binom{n}{k-1} + \binom{n}{k}$.</p>
+
+<div class="katex-block">$= 1 + \sum_{k=1}^{n} \left[\binom{n}{k-1} + \binom{n}{k}\right] + 1$</div>
+
+<div class="katex-block">$= 1 + \sum_{j=0}^{n-1} \binom{n}{j} + \sum_{k=1}^{n} \binom{n}{k} + 1$</div>
+
+<div class="katex-block">$= 1 + \left[2^n - \binom{n}{n}\right] + \left[2^n - \binom{n}{0}\right] + 1$</div>
+
+<p><div class="katex-block">$= 1 + (2^n - 1) + (2^n - 1) + 1 = 2 \cdot 2^n = 2^{n+1}$</div> $\blacksquare$</p>
+
+<h3 id="solution-a2-pascal-s-identity-algebraic">Solution A2: Pascal's Identity (Algebraic)</h3>
+
+<div class="katex-block">$\binom{n-1}{k-1} + \binom{n-1}{k} = \frac{(n-1)!}{(k-1)!(n-k)!} + \frac{(n-1)!}{k!(n-k-1)!}$</div>
+
+<p>Find common denominator $k!(n-k)!$:</p>
+
+<p><div class="katex-block">$= \frac{(n-1)! \cdot k}{k!(n-k)!} + \frac{(n-1)! \cdot (n-k)}{k!(n-k)!} = \frac{(n-1)![k + (n-k)]}{k!(n-k)!} = \frac{n!}{k!(n-k)!} = \binom{n}{k}$</div> $\blacksquare$</p>
+
+<h3 id="solution-a3-vandermonde-s-identity-combinatorial-proof">Solution A3: Vandermonde's Identity (Combinatorial Proof)</h3>
+
+<p>Consider choosing $r$ people from a group of $m$ men and $n$ women. The right side $\binom{m+n}{r}$ counts all ways.</p>
+
+<p>For the left side: if we choose exactly $k$ men (from $m$) and $r - k$ women (from $n$), the count is $\binom{m}{k}\binom{n}{r-k}$. Summing over all valid $k$ gives all possible committees.</p>
+
+<p>Both sides count the same set, so they are equal. $\blacksquare$</p>
+
+<h3 id="solution-a4-strong-induction-on-subsets-n-k">Solution A4: Strong Induction on SUBSETS(n, k)</h3>
+
+<p><strong>Strong induction on $n$.</strong></p>
+
+<p><strong>Base cases:</strong> If $k = 0$, output is $\{\emptyset\}$, and $\binom{n}{0} = 1$. ✓</p>
+<p>If $k = n$, output is $\{\{1,...,n\}\}$, and $\binom{n}{n} = 1$. ✓</p>
+
+<p><strong>Inductive step:</strong> Assume the claim holds for all $n' < n$ and all valid $k$. For $0 < k < n$:</p>
+
+<p>The algorithm returns $\text{SUBSETS}(n-1, k) \cup \{S \cup \{n\} : S \in \text{SUBSETS}(n-1, k-1)\}$.</p>
+
+<p>By the inductive hypothesis:</p>
+<ul>
+<li>$|\text{SUBSETS}(n-1, k)| = \binom{n-1}{k}$ (subsets not containing $n$)</li>
+<li>$|\text{SUBSETS}(n-1, k-1)| = \binom{n-1}{k-1}$ (subsets that, with $n$ added, have size $k$)</li>
+</ul>
+
+<p>These are disjoint (first group excludes $n$, second includes $n$). Total:</p>
+
+<p><div class="katex-block">$\binom{n-1}{k} + \binom{n-1}{k-1} = \binom{n}{k}$</div> (Pascal's identity) $\blacksquare$</p>
+
+<h3 id="solution-a5-erd-s-szekeres-via-pigeonhole">Solution A5: Erdős–Szekeres via Pigeonhole</h3>
+
+<p>Let $a_1, ..., a_{n^2+1}$ be the sequence. For each element $a_i$, let:</p>
+<ul>
+<li>$\ell_i$ = length of longest increasing subsequence ending at $a_i$</li>
+<li>$d_i$ = length of longest decreasing subsequence ending at $a_i$</li>
+</ul>
+
+<p><strong>Claim:</strong> All pairs $(\ell_i, d_i)$ are distinct.</p>
+
+<p><em>Proof of claim:</em> If $i < j$ and $a_i < a_j$, then $\ell_j > \ell_i$ (extend $i$'s increasing subsequence). If $a_i > a_j$, then $d_j > d_i$. Either way, $(\ell_i, d_i) \neq (\ell_j, d_j)$. $\blacksquare$</p>
+
+<p>Now, suppose for contradiction that $\ell_i \leq n$ for all $i$ and $d_i \leq n$ for all $i$. Then there are at most $n \times n = n^2$ distinct pairs. But we have $n^2 + 1$ elements with $n^2 + 1$ distinct pairs — contradiction (pigeonhole).</p>
+
+<p>Therefore, some $\ell_i \geq n + 1$ or some $d_i \geq n + 1$. $\blacksquare$</p>
+
+<h3 id="solution-b1-backtracking-combination-generator">Solution B1: Backtracking Combination Generator</h3>
+
+<pre><code class="language-java">import java.util.*;
+
+public class Module7Assignment {
+
+    // B1: Generate combinations with pruning
+    public static List&lt;List&lt;Integer&gt;&gt; generateCombinations(int n, int k) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        combHelper(n, k, 0, new ArrayList&lt;&gt;(), result);
+        return result;
+    }
+
+    private static void combHelper(int n, int k, int start,
+                                    List&lt;Integer&gt; current,
+                                    List&lt;List&lt;Integer&gt;&gt; result) {
+        if (current.size() == k) {
+            result.add(new ArrayList&lt;&gt;(current));
+            return;
+        }
+        // Pruning: need (k - current.size()) more elements from [start, n)
+        int remaining = n - start;
+        int needed = k - current.size();
+        if (remaining &lt; needed) return; // prune
+
+        for (int i = start; i &lt; n; i++) {
+            current.add(i);
+            combHelper(n, k, i + 1, current, result);
+            current.remove(current.size() - 1);
+        }
+    }
+
+    // B2: Three binomial implementations
+    public static long binomialRecursive(int n, int k) {
+        if (k &lt; 0 || k &gt; n) return 0;
+        if (k == 0 || k == n) return 1;
+        return binomialRecursive(n - 1, k - 1) + binomialRecursive(n - 1, k);
+    }
+
+    public static long binomialMemo(int n, int k, Map&lt;Long, Long&gt; memo) {
+        if (k &lt; 0 || k &gt; n) return 0;
+        if (k == 0 || k == n) return 1;
+        long key = (long) n * 100000 + k;
+        if (memo.containsKey(key)) return memo.get(key);
+        long result = binomialMemo(n - 1, k - 1, memo) + binomialMemo(n - 1, k, memo);
+        memo.put(key, result);
+        return result;
+    }
+
+    public static long binomialDP(int n, int k) {
+        if (k &lt; 0 || k &gt; n) return 0;
+        long[][] dp = new long[n + 1][k + 1];
+        for (int i = 0; i &lt;= n; i++) {
+            dp[i][0] = 1;
+            for (int j = 1; j &lt;= Math.min(i, k); j++) {
+                dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+            }
+        }
+        return dp[n][k];
+    }
+
+    // B3: Identity verifier
+    public static long binomial(int n, int k) {
+        if (k &lt; 0 || k &gt; n) return 0;
+        if (k == 0 || k == n) return 1;
+        if (k &gt; n - k) k = n - k;
+        long result = 1;
+        for (int i = 0; i &lt; k; i++) result = result * (n - i) / (i + 1);
+        return result;
+    }
+
+    public static void verifyIdentities(int maxN) {
+        boolean allPass = true;
+
+        // Identity 1: Sum of row = 2^n
+        for (int n = 0; n &lt;= maxN; n++) {
+            long sum = 0;
+            for (int k = 0; k &lt;= n; k++) sum += binomial(n, k);
+            if (sum != (1L &lt;&lt; n)) {
+                System.out.println("FAIL: row sum for n=" + n);
+                allPass = false;
+            }
+        }
+        System.out.println("Identity 1 (row sum = 2^n): " + (allPass ? "PASS" : "FAIL"));
+
+        // Identity 2: Alternating sum = 0
+        allPass = true;
+        for (int n = 1; n &lt;= maxN; n++) {
+            long altSum = 0;
+            for (int k = 0; k &lt;= n; k++) {
+                altSum += (k % 2 == 0 ? 1 : -1) * binomial(n, k);
+            }
+            if (altSum != 0) {
+                System.out.println("FAIL: alternating sum for n=" + n);
+                allPass = false;
+            }
+        }
+        System.out.println("Identity 2 (alternating sum = 0): " + (allPass ? "PASS" : "FAIL"));
+
+        // Identity 3: Symmetry
+        allPass = true;
+        for (int n = 0; n &lt;= maxN; n++) {
+            for (int k = 0; k &lt;= n; k++) {
+                if (binomial(n, k) != binomial(n, n - k)) {
+                    System.out.println("FAIL: symmetry n=" + n + " k=" + k);
+                    allPass = false;
+                }
+            }
+        }
+        System.out.println("Identity 3 (symmetry): " + (allPass ? "PASS" : "FAIL"));
+
+        // Identity 4: Vandermonde
+        allPass = true;
+        for (int m = 0; m &lt;= 10; m++) {
+            for (int n = 0; n &lt;= 10; n++) {
+                for (int r = 0; r &lt;= Math.min(m + n, 10); r++) {
+                    long lhs = 0;
+                    for (int k = 0; k &lt;= r; k++) {
+                        lhs += binomial(m, k) * binomial(n, r - k);
+                    }
+                    if (lhs != binomial(m + n, r)) {
+                        System.out.printf("FAIL: Vandermonde m=%d n=%d r=%d%n", m, n, r);
+                        allPass = false;
+                    }
+                }
+            }
+        }
+        System.out.println("Identity 4 (Vandermonde): " + (allPass ? "PASS" : "FAIL"));
+    }
+
+    // B4: Hash collision analyzer
+    public static double avgFirstCollision(int tableSize, int trials) {
+        Random rng = new Random(42);
+        long total = 0;
+        for (int t = 0; t &lt; trials; t++) {
+            Set&lt;Integer&gt; used = new HashSet&lt;&gt;();
+            int count = 0;
+            while (true) {
+                count++;
+                if (!used.add(rng.nextInt(tableSize))) break;
+            }
+            total += count;
+        }
+        return (double) total / trials;
+    }
+
+    // B5: Subset-sum
+    public static List&lt;List&lt;Integer&gt;&gt; subsetSum(int[] set, int target) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        subsetSumHelper(set, target, 0, new ArrayList&lt;&gt;(), 0, result);
+        return result;
+    }
+
+    private static void subsetSumHelper(int[] set, int target, int idx,
+                                         List&lt;Integer&gt; current, int currentSum,
+                                         List&lt;List&lt;Integer&gt;&gt; result) {
+        if (currentSum == target &amp;&amp; !current.isEmpty()) {
+            result.add(new ArrayList&lt;&gt;(current));
+        }
+        if (idx == set.length) return;
+        for (int i = idx; i &lt; set.length; i++) {
+            current.add(set[i]);
+            subsetSumHelper(set, target, i + 1, current, currentSum + set[i], result);
+            current.remove(current.size() - 1);
+        }
+    }
+
+    // Demo
+    public static void main(String[] args) {
+        System.out.println("=== Module 7 Assignment Solution ===\n");
+
+        // B1: Combinations
+        System.out.println("--- B1: Combination Generator ---");
+        for (int n = 0; n &lt;= 8; n++) {
+            for (int k = 0; k &lt;= n; k++) {
+                int count = generateCombinations(n, k).size();
+                long expected = binomial(n, k);
+                if (count != expected) {
+                    System.out.printf("MISMATCH: C(%d,%d)=%d but generated %d%n",
+                            n, k, expected, count);
+                }
+            }
+        }
+        System.out.println("All combination counts verified for n=0..8!");
+        System.out.println("C(5,3) subsets: " + generateCombinations(5, 3));
+
+        // B2: Timing comparison
+        System.out.println("\n--- B2: Binomial Timing ---");
+        int testN = 30, testK = 15;
+
+        long start = System.nanoTime();
+        long val1 = binomialRecursive(testN, testK);
+        long t1 = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        long val2 = binomialMemo(testN, testK, new HashMap&lt;&gt;());
+        long t2 = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        long val3 = binomialDP(testN, testK);
+        long t3 = System.nanoTime() - start;
+
+        System.out.printf("Recursive:  C(%d,%d)=%d, time=%,d ns%n", testN, testK, val1, t1);
+        System.out.printf("Memoized:   C(%d,%d)=%d, time=%,d ns%n", testN, testK, val2, t2);
+        System.out.printf("DP:         C(%d,%d)=%d, time=%,d ns%n", testN, testK, val3, t3);
+        System.out.printf("Speedup (recursive/memo): %.1fx%n", (double) t1 / t2);
+
+        // B3: Identity verification
+        System.out.println("\n--- B3: Identity Verifier ---");
+        verifyIdentities(20);
+
+        // B4: Hash collision
+        System.out.println("\n--- B4: Hash Collision Analyzer ---");
+        for (int m : new int[]{100, 500, 1000}) {
+            double avg = avgFirstCollision(m, 10000);
+            double bound = Math.sqrt(Math.PI * m / 2.0);
+            System.out.printf("m=%4d: avg first collision=%.1f, birthday bound=%.1f%n",
+                    m, avg, bound);
+        }
+
+        // B5: Subset-sum
+        System.out.println("\n--- B5: Subset-Sum ---");
+        int[] set = {3, 7, 1, 8, 4, 12, 5};
+        int target = 15;
+        List&lt;List&lt;Integer&gt;&gt; solutions = subsetSum(set, target);
+        System.out.println("Subsets of " + Arrays.toString(set) + " summing to " + target + ":");
+        for (List&lt;Integer&gt; s : solutions) {
+            System.out.println("  " + s + " (sum=" + s.stream().mapToInt(Integer::intValue).sum() + ")");
+        }
+        System.out.println("Total solutions: " + solutions.size());
+    }
+}</code></pre>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

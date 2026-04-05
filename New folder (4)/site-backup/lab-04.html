@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4 Lab — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="lab-04">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-4-lab-sets-set-operations-and-data-collections">Module 4 Lab: Sets, Set Operations and Data Collections</h1>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>In this lab you will implement core set operations in Java, generate power sets, create partitions, and verify set identities programmatically. The exercises connect set theory to earlier modules (divisibility, congruence) and to practical CS applications (state-space search, database-style queries).</p>
+
+<p><strong>Estimated Time:</strong> 90–120 minutes</p>
+
+<hr>
+
+<section class="slide" id="part-1-set-operations-library">
+<h2>Part 1: Set Operations Library</h2>
+
+<p>Implement a library of non-mutating set operations.</p>
+
+<h3 id="tasks">Tasks</h3>
+
+<ol>
+<li>Implement <code>&lt;T&gt; Set&lt;T&gt; union(Set&lt;T&gt; a, Set&lt;T&gt; b)</code> — returns $A \cup B$.</li>
+<li>Implement <code>&lt;T&gt; Set&lt;T&gt; intersection(Set&lt;T&gt; a, Set&lt;T&gt; b)</code> — returns $A \cap B$.</li>
+<li>Implement <code>&lt;T&gt; Set&lt;T&gt; difference(Set&lt;T&gt; a, Set&lt;T&gt; b)</code> — returns $A \setminus B$.</li>
+<li>Implement <code>&lt;T&gt; Set&lt;T&gt; symmetricDifference(Set&lt;T&gt; a, Set&lt;T&gt; b)</code> — returns $A \triangle B$.</li>
+<li>Implement <code>&lt;T&gt; Set&lt;T&gt; complement(Set&lt;T&gt; a, Set&lt;T&gt; universe)</code> — returns $\overline{A}$.</li>
+<li>Write a test method that verifies the inclusion-exclusion principle: $|A \cup B| = |A| + |B| - |A \cap B|$ for at least 5 pairs of sets.</li>
+</ol>
+
+<h3 id="verification-checklist">Verification Checklist</h3>
+<ul>
+<li>☐ All operations return new sets (no mutation of inputs)</li>
+<li>☐ Union of $\{1,2,3\}$ and $\{3,4,5\}$ = $\{1,2,3,4,5\}$</li>
+<li>☐ Intersection of $\{1,2,3\}$ and $\{3,4,5\}$ = $\{3\}$</li>
+<li>☐ Symmetric difference of $\{1,2,3\}$ and $\{3,4,5\}$ = $\{1,2,4,5\}$</li>
+<li>☐ Inclusion-exclusion verified for all test pairs</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="part-2-set-identity-verification">
+<h2>Part 2: Set Identity Verification</h2>
+
+<p>Verify fundamental set identities computationally.</p>
+
+<h3 id="tasks">Tasks</h3>
+
+<ol>
+<li>Generate random sets $A, B, C \subseteq \{1, \ldots, 20\}$ (at least 10 trials).</li>
+<li>For each trial, verify:</li>
+</ol>
+<ul>
+<li>Distributive: $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$</li>
+<li>Distributive: $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$</li>
+<li>De Morgan: $\overline{A \cup B} = \overline{A} \cap \overline{B}$</li>
+<li>De Morgan: $\overline{A \cap B} = \overline{A} \cup \overline{B}$</li>
+<li>Difference: $A \setminus (B \cup C) = (A \setminus B) \cap (A \setminus C)$</li>
+</ul>
+<ol>
+<li>Print pass/fail for each identity on each trial.</li>
+</ol>
+
+<h3 id="verification-checklist">Verification Checklist</h3>
+<ul>
+<li>☐ All 5 identities hold for all 10+ trials</li>
+<li>☐ Uses proper universe set for complement operations</li>
+<li>☐ Random sets have varying sizes</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="part-3-power-sets-and-subset-enumeration">
+<h2>Part 3: Power Sets and Subset Enumeration</h2>
+
+<p>Generate power sets and apply them to a combinatorial problem.</p>
+
+<h3 id="tasks">Tasks</h3>
+
+<ol>
+<li>Implement <code>Set&lt;Set&lt;Integer&gt;&gt; powerSet(List&lt;Integer&gt; elements)</code> using bit masks.</li>
+<li>Implement <code>Set&lt;Set&lt;Integer&gt;&gt; powerSetRecursive(List&lt;Integer&gt; elements)</code>.</li>
+<li>Verify both methods produce the same result for sets of sizes 0 through 5.</li>
+<li>Verify $|\mathcal{P}(A)| = 2^{|A|}$ for each test.</li>
+<li><strong>Subset sum:</strong> Given a set $S$ and target $t$, find all subsets of $S$ whose elements sum to $t$.</li>
+</ol>
+<ul>
+<li>Test with $S = \{1, 2, 3, 4, 5\}$, $t = 7$. Expected: $\{2,5\}$, $\{3,4\}$, $\{1,2,4\}$.</li>
+</ul>
+
+<h3 id="verification-checklist">Verification Checklist</h3>
+<ul>
+<li>☐ Both power set methods agree for sizes 0–5</li>
+<li>☐ $|\mathcal{P}(A)| = 2^{|A|}$ for each size</li>
+<li>☐ Subset sum finds all solutions for test case</li>
+<li>☐ Empty set appears in every power set</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="part-4-partitions-and-applications">
+<h2>Part 4: Partitions and Applications</h2>
+
+<p>Create partitions and verify their properties.</p>
+
+<h3 id="tasks">Tasks</h3>
+
+<ol>
+<li>Implement <code>Map&lt;Integer, Set&lt;Integer&gt;&gt; partitionByMod(Set&lt;Integer&gt; s, int m)</code>.</li>
+<li>Implement <code>boolean isPartition(Set&lt;T&gt; whole, Collection&lt;Set&lt;T&gt;&gt; parts)</code> that checks:</li>
+</ol>
+<ul>
+<li>Each part is non-empty</li>
+<li>Parts are pairwise disjoint</li>
+<li>Union of parts equals the whole set</li>
+</ul>
+<ol>
+<li>Partition $\{1, \ldots, 30\}$ by mod 2 (even/odd) and mod 5 (remainder classes).</li>
+<li>Partition $\{2, \ldots, 50\}$ into primes and composites.</li>
+<li>Verify all partitions using <code>isPartition</code>.</li>
+<li><strong>Connection to Module 2:</strong> verify that elements within the same congruence class satisfy $a \equiv b \pmod{m}$ for all pairs $a, b$ in the class.</li>
+</ol>
+
+<h3 id="verification-checklist">Verification Checklist</h3>
+<ul>
+<li>☐ <code>partitionByMod</code> creates correct classes</li>
+<li>☐ <code>isPartition</code> correctly validates partitions</li>
+<li>☐ Even/odd partition of $\{1..30\}$ verified</li>
+<li>☐ Mod 5 partition of $\{1..30\}$ verified</li>
+<li>☐ Prime/composite partition verified</li>
+<li>☐ Congruence within classes verified</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="extension-challenge">
+<h2>Extension Challenge</h2>
+
+<h3 id="state-space-search-with-sets">State-Space Search with Sets</h3>
+
+<p>Model a simple puzzle using set operations:</p>
+
+<p><strong>Puzzle:</strong> You have 3 switches, each ON or OFF. The state space is $\{0,1\}^3$ (the Cartesian product, 8 states). From any state, you can toggle one switch. Starting from state $(0,0,0)$, find all states reachable in exactly $k$ steps for $k = 0, 1, 2, 3$.</p>
+
+<ol>
+<li>Represent states as <code>Set&lt;List&lt;Integer&gt;&gt;</code>.</li>
+<li>Implement a <code>neighbors</code> function that generates states reachable by toggling one switch.</li>
+<li>Use set operations to compute reachable states level by level (BFS with sets).</li>
+<li>Verify that after 3 steps, all 8 states are reachable.</li>
+</ol>
+
+<hr>
+
+<section class="slide" id="starter-code">
+<h2>Starter Code</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.*;
+
+public class Module4Lab {
+
+    // ===== Part 1: Set Operations =====
+
+    public static &lt;T&gt; Set&lt;T&gt; union(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        // TODO: Return A ∪ B without mutating inputs
+        return null;
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; intersection(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        // TODO: Return A ∩ B
+        return null;
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; difference(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        // TODO: Return A \ B
+        return null;
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; symmetricDifference(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        // TODO: Return A △ B
+        return null;
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; complement(Set&lt;T&gt; a, Set&lt;T&gt; universe) {
+        // TODO: Return complement of A relative to universe
+        return null;
+    }
+
+    // ===== Part 2: Identity Verification =====
+
+    public static &lt;T&gt; boolean verifyDistributive1(Set&lt;T&gt; a, Set&lt;T&gt; b, Set&lt;T&gt; c) {
+        // TODO: Verify A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)
+        return false;
+    }
+
+    // ===== Part 3: Power Sets =====
+
+    public static Set&lt;Set&lt;Integer&gt;&gt; powerSet(List&lt;Integer&gt; elements) {
+        // TODO: Generate power set using bit masks
+        return null;
+    }
+
+    public static Set&lt;Set&lt;Integer&gt;&gt; powerSetRecursive(List&lt;Integer&gt; elements) {
+        // TODO: Generate power set recursively
+        return null;
+    }
+
+    public static List&lt;Set&lt;Integer&gt;&gt; subsetSum(List&lt;Integer&gt; elements, int target) {
+        // TODO: Find all subsets summing to target
+        return null;
+    }
+
+    // ===== Part 4: Partitions =====
+
+    public static Map&lt;Integer, Set&lt;Integer&gt;&gt; partitionByMod(Set&lt;Integer&gt; s, int m) {
+        // TODO: Partition s into congruence classes mod m
+        return null;
+    }
+
+    public static &lt;T&gt; boolean isPartition(Set&lt;T&gt; whole, Collection&lt;Set&lt;T&gt;&gt; parts) {
+        // TODO: Verify parts form a valid partition of whole
+        return false;
+    }
+
+    // ===== Helpers =====
+
+    public static boolean isPrime(int n) {
+        if (n &lt; 2) return false;
+        for (int i = 2; i * i &lt;= n; i++)
+            if (n % i == 0) return false;
+        return true;
+    }
+
+    // ===== Main =====
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 4 Lab ===\n");
+
+        // Part 1 tests
+        System.out.println("--- Part 1: Set Operations ---");
+        // TODO
+
+        // Part 2 tests
+        System.out.println("\n--- Part 2: Identity Verification ---");
+        // TODO
+
+        // Part 3 tests
+        System.out.println("\n--- Part 3: Power Sets ---");
+        // TODO
+
+        // Part 4 tests
+        System.out.println("\n--- Part 4: Partitions ---");
+        // TODO
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="complete-solution-key">
+<h2>Complete Solution Key</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class Module4LabSolution {
+
+    // ===== Part 1: Set Operations =====
+
+    public static &lt;T&gt; Set&lt;T&gt; union(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;(a);
+        result.addAll(b);
+        return result;
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; intersection(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;(a);
+        result.retainAll(b);
+        return result;
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; difference(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;(a);
+        result.removeAll(b);
+        return result;
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; symmetricDifference(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        return union(difference(a, b), difference(b, a));
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; complement(Set&lt;T&gt; a, Set&lt;T&gt; universe) {
+        return difference(universe, a);
+    }
+
+    // ===== Part 2: Identity Verification =====
+
+    public static &lt;T&gt; boolean verifyDistributive1(Set&lt;T&gt; a, Set&lt;T&gt; b, Set&lt;T&gt; c) {
+        return intersection(a, union(b, c))
+                .equals(union(intersection(a, b), intersection(a, c)));
+    }
+
+    public static &lt;T&gt; boolean verifyDistributive2(Set&lt;T&gt; a, Set&lt;T&gt; b, Set&lt;T&gt; c) {
+        return union(a, intersection(b, c))
+                .equals(intersection(union(a, b), union(a, c)));
+    }
+
+    public static &lt;T&gt; boolean verifyDeMorgan1(Set&lt;T&gt; a, Set&lt;T&gt; b, Set&lt;T&gt; u) {
+        return complement(union(a, b), u)
+                .equals(intersection(complement(a, u), complement(b, u)));
+    }
+
+    public static &lt;T&gt; boolean verifyDeMorgan2(Set&lt;T&gt; a, Set&lt;T&gt; b, Set&lt;T&gt; u) {
+        return complement(intersection(a, b), u)
+                .equals(union(complement(a, u), complement(b, u)));
+    }
+
+    public static &lt;T&gt; boolean verifyDiffDist(Set&lt;T&gt; a, Set&lt;T&gt; b, Set&lt;T&gt; c) {
+        return difference(a, union(b, c))
+                .equals(intersection(difference(a, b), difference(a, c)));
+    }
+
+    // ===== Part 3: Power Sets =====
+
+    public static Set&lt;Set&lt;Integer&gt;&gt; powerSet(List&lt;Integer&gt; elements) {
+        int n = elements.size();
+        Set&lt;Set&lt;Integer&gt;&gt; result = new HashSet&lt;&gt;();
+        for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {
+            Set&lt;Integer&gt; subset = new HashSet&lt;&gt;();
+            for (int i = 0; i &lt; n; i++) {
+                if ((mask &amp; (1 &lt;&lt; i)) != 0) subset.add(elements.get(i));
+            }
+            result.add(subset);
+        }
+        return result;
+    }
+
+    public static Set&lt;Set&lt;Integer&gt;&gt; powerSetRecursive(List&lt;Integer&gt; elements) {
+        Set&lt;Set&lt;Integer&gt;&gt; result = new HashSet&lt;&gt;();
+        if (elements.isEmpty()) {
+            result.add(new HashSet&lt;&gt;());
+            return result;
+        }
+        int first = elements.get(0);
+        Set&lt;Set&lt;Integer&gt;&gt; rest = powerSetRecursive(elements.subList(1, elements.size()));
+        for (Set&lt;Integer&gt; s : rest) {
+            result.add(new HashSet&lt;&gt;(s));
+            Set&lt;Integer&gt; withFirst = new HashSet&lt;&gt;(s);
+            withFirst.add(first);
+            result.add(withFirst);
+        }
+        return result;
+    }
+
+    public static List&lt;Set&lt;Integer&gt;&gt; subsetSum(List&lt;Integer&gt; elements, int target) {
+        List&lt;Set&lt;Integer&gt;&gt; solutions = new ArrayList&lt;&gt;();
+        int n = elements.size();
+        for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {
+            Set&lt;Integer&gt; subset = new HashSet&lt;&gt;();
+            int sum = 0;
+            for (int i = 0; i &lt; n; i++) {
+                if ((mask &amp; (1 &lt;&lt; i)) != 0) {
+                    subset.add(elements.get(i));
+                    sum += elements.get(i);
+                }
+            }
+            if (sum == target) solutions.add(subset);
+        }
+        return solutions;
+    }
+
+    // ===== Part 4: Partitions =====
+
+    public static Map&lt;Integer, Set&lt;Integer&gt;&gt; partitionByMod(Set&lt;Integer&gt; s, int m) {
+        Map&lt;Integer, Set&lt;Integer&gt;&gt; result = new TreeMap&lt;&gt;();
+        for (int i = 0; i &lt; m; i++) result.put(i, new TreeSet&lt;&gt;());
+        for (int x : s) result.get(Math.floorMod(x, m)).add(x);
+        result.entrySet().removeIf(e -&gt; e.getValue().isEmpty());
+        return result;
+    }
+
+    public static &lt;T&gt; boolean isPartition(Set&lt;T&gt; whole, Collection&lt;Set&lt;T&gt;&gt; parts) {
+        List&lt;Set&lt;T&gt;&gt; list = new ArrayList&lt;&gt;(parts);
+        for (int i = 0; i &lt; list.size(); i++) {
+            if (list.get(i).isEmpty()) return false;
+            for (int j = i + 1; j &lt; list.size(); j++) {
+                Set&lt;T&gt; inter = new HashSet&lt;&gt;(list.get(i));
+                inter.retainAll(list.get(j));
+                if (!inter.isEmpty()) return false;
+            }
+        }
+        Set&lt;T&gt; all = new HashSet&lt;&gt;();
+        for (Set&lt;T&gt; part : parts) all.addAll(part);
+        return all.equals(whole);
+    }
+
+    // ===== Helpers =====
+
+    public static boolean isPrime(int n) {
+        if (n &lt; 2) return false;
+        for (int i = 2; i * i &lt;= n; i++)
+            if (n % i == 0) return false;
+        return true;
+    }
+
+    static Set&lt;Integer&gt; randomSubset(int max, Random rng) {
+        Set&lt;Integer&gt; s = new HashSet&lt;&gt;();
+        for (int i = 1; i &lt;= max; i++) {
+            if (rng.nextBoolean()) s.add(i);
+        }
+        return s;
+    }
+
+    // ===== Main =====
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 4 Lab Solution ===\n");
+
+        // --- Part 1 ---
+        System.out.println("--- Part 1: Set Operations ---");
+        Set&lt;Integer&gt; a = new HashSet&lt;&gt;(Arrays.asList(1, 2, 3));
+        Set&lt;Integer&gt; b = new HashSet&lt;&gt;(Arrays.asList(3, 4, 5));
+        System.out.println("A = " + a + ", B = " + b);
+        System.out.println("Union: " + union(a, b));
+        System.out.println("Intersection: " + intersection(a, b));
+        System.out.println("Difference: " + difference(a, b));
+        System.out.println("Symmetric Diff: " + symmetricDifference(a, b));
+
+        // Inclusion-exclusion
+        for (int trial = 0; trial &lt; 5; trial++) {
+            Set&lt;Integer&gt; x = randomSubset(10, new Random(trial));
+            Set&lt;Integer&gt; y = randomSubset(10, new Random(trial + 100));
+            int lhs = union(x, y).size();
+            int rhs = x.size() + y.size() - intersection(x, y).size();
+            System.out.println("  IE trial " + trial + ": " + (lhs == rhs));
+        }
+
+        // --- Part 2 ---
+        System.out.println("\n--- Part 2: Identity Verification ---");
+        Set&lt;Integer&gt; u = IntStream.rangeClosed(1, 20).boxed().collect(Collectors.toSet());
+        Random rng = new Random(42);
+        boolean allPassed = true;
+        for (int trial = 0; trial &lt; 10; trial++) {
+            Set&lt;Integer&gt; ra = randomSubset(20, rng);
+            Set&lt;Integer&gt; rb = randomSubset(20, rng);
+            Set&lt;Integer&gt; rc = randomSubset(20, rng);
+            boolean d1 = verifyDistributive1(ra, rb, rc);
+            boolean d2 = verifyDistributive2(ra, rb, rc);
+            boolean dm1 = verifyDeMorgan1(ra, rb, u);
+            boolean dm2 = verifyDeMorgan2(ra, rb, u);
+            boolean dd = verifyDiffDist(ra, rb, rc);
+            if (!(d1 &amp;&amp; d2 &amp;&amp; dm1 &amp;&amp; dm2 &amp;&amp; dd)) allPassed = false;
+            System.out.printf("  Trial %d: D1=%b D2=%b DM1=%b DM2=%b DD=%b%n",
+                    trial, d1, d2, dm1, dm2, dd);
+        }
+        System.out.println("All identities passed: " + allPassed);
+
+        // --- Part 3 ---
+        System.out.println("\n--- Part 3: Power Sets ---");
+        for (int size = 0; size &lt;= 5; size++) {
+            List&lt;Integer&gt; elems = IntStream.rangeClosed(1, size)
+                    .boxed().collect(Collectors.toList());
+            Set&lt;Set&lt;Integer&gt;&gt; ps1 = powerSet(elems);
+            Set&lt;Set&lt;Integer&gt;&gt; ps2 = powerSetRecursive(elems);
+            boolean match = ps1.equals(ps2);
+            boolean sizeOk = ps1.size() == (1 &lt;&lt; size);
+            System.out.printf("  n=%d: |P|=%d, expected=%d, methods match=%b%n",
+                    size, ps1.size(), 1 &lt;&lt; size, match);
+        }
+
+        // Subset sum
+        List&lt;Integer&gt; items = Arrays.asList(1, 2, 3, 4, 5);
+        List&lt;Set&lt;Integer&gt;&gt; solutions = subsetSum(items, 7);
+        System.out.println("Subsets of {1..5} summing to 7: " + solutions);
+
+        // --- Part 4 ---
+        System.out.println("\n--- Part 4: Partitions ---");
+        Set&lt;Integer&gt; nums = IntStream.rangeClosed(1, 30).boxed().collect(Collectors.toSet());
+
+        // Mod 2 (even/odd)
+        Map&lt;Integer, Set&lt;Integer&gt;&gt; mod2 = partitionByMod(nums, 2);
+        System.out.println("Mod 2 partition: " + mod2);
+        System.out.println("Valid? " + isPartition(nums, mod2.values()));
+
+        // Mod 5
+        Map&lt;Integer, Set&lt;Integer&gt;&gt; mod5 = partitionByMod(nums, 5);
+        System.out.println("Mod 5 partition: " + mod5);
+        System.out.println("Valid? " + isPartition(nums, mod5.values()));
+
+        // Primes vs composites
+        Set&lt;Integer&gt; range = IntStream.rangeClosed(2, 50).boxed().collect(Collectors.toSet());
+        Set&lt;Integer&gt; primes = new TreeSet&lt;&gt;();
+        Set&lt;Integer&gt; composites = new TreeSet&lt;&gt;();
+        for (int n : range) {
+            if (isPrime(n)) primes.add(n); else composites.add(n);
+        }
+        System.out.println("Primes: " + primes);
+        System.out.println("Composites: " + composites);
+        System.out.println("Valid? " + isPartition(range, Arrays.asList(primes, composites)));
+
+        // Verify congruence within classes
+        boolean congOk = true;
+        for (var entry : mod5.entrySet()) {
+            int r = entry.getKey();
+            for (int x : entry.getValue()) {
+                if (Math.floorMod(x, 5) != r) { congOk = false; break; }
+            }
+        }
+        System.out.println("Congruence within classes verified: " + congOk);
+
+        System.out.println("\n=== All tests complete! ===");
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="verification-checklist-complete">
+<h2>Verification Checklist (Complete)</h2>
+
+<table>
+<thead><tr>
+<th>Part</th>
+<th>Check</th>
+<th>Expected</th>
+</tr></thead><tbody>
+<tr>
+<td>1</td>
+<td>Union $\{1,2,3\} \cup \{3,4,5\}$</td>
+<td>$\{1,2,3,4,5\}$</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Intersection $\{1,2,3\} \cap \{3,4,5\}$</td>
+<td>$\{3\}$</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Inclusion-exclusion</td>
+<td>5 trials pass</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Both distributive laws</td>
+<td>10 trials pass</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Both De Morgan's laws</td>
+<td>10 trials pass</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Difference distribution</td>
+<td>10 trials pass</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Power set sizes</td>
+<td>$2^n$ for $n = 0..5$</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Both methods agree</td>
+<td>true for all sizes</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Subset sum for target 7</td>
+<td>3 solutions found</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Mod 2 partition valid</td>
+<td>true</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Mod 5 partition valid</td>
+<td>true</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Prime/composite partition valid</td>
+<td>true</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Congruence within classes</td>
+<td>true</td>
+</tr>
+</tbody></table>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

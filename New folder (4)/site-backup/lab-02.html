@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 2 Lab — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="lab-02">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-2-lab-modular-arithmetic-and-factorization">Module 2 – Lab: Modular Arithmetic and Factorization</h1>
+
+<section class="slide" id="lab-overview">
+<h2>Lab Overview</h2>
+
+<p><strong>Duration:</strong> ~90 minutes  </p>
+<p><strong>Prerequisites:</strong> Module 2 Classes 1–3  </p>
+<p><strong>Deliverables:</strong> A working Java file <code>Module2Lab.java</code> with all methods implemented and tested.</p>
+
+<p>In this lab you will implement modular arithmetic operations, verify the quotient-remainder theorem, build a CRT solver, and create a prime factorization tool — connecting each piece of code to its mathematical foundation.</p>
+
+<hr>
+
+<section class="slide" id="part-1-quotient-remainder-operations-20-min">
+<h2>Part 1: Quotient-Remainder Operations (20 min)</h2>
+
+<h3 id="exercise-1-1-mathematical-vs-java-remainder">Exercise 1.1: Mathematical vs. Java Remainder</h3>
+
+<p>Write a method <code>int mathMod(int n, int d)</code> that always returns the mathematical remainder in $[0, d)$, even for negative $n$.</p>
+
+<p>Test with: $n \in \{-17, -7, 0, 13, 25\}$ and $d \in \{3, 5, 7\}$.</p>
+
+<p>For each test, print: <code>n</code>, <code>d</code>, Java's <code>n % d</code>, your <code>mathMod(n, d)</code>, and verify $n = d \cdot q + r$ with $0 \leq r < d$.</p>
+
+<h3 id="exercise-1-2-digit-extraction">Exercise 1.2: Digit Extraction</h3>
+
+<p>Write a method <code>int[] digits(int n, int base)</code> that returns the digits of $n$ in the given base (least significant first).</p>
+
+<p>Algorithm: Repeatedly apply the quotient-remainder theorem — divide $n$ by <code>base</code>, the remainder is the next digit, the quotient becomes the new $n$.</p>
+
+<p>Test: <code>digits(255, 2)</code> should give <code>{1,1,1,1,1,1,1,1}</code> (binary), <code>digits(255, 16)</code> gives <code>{15, 15}</code> (hex).</p>
+
+<h3 id="exercise-1-3-base-conversion">Exercise 1.3: Base Conversion</h3>
+
+<p>Write <code>String toBaseString(int n, int base)</code> that converts $n$ to a string in the given base (using characters <code>0-9</code>, <code>A-Z</code> for digits above 9).</p>
+
+<p>Test: <code>toBaseString(255, 16)</code> → <code>"FF"</code>, <code>toBaseString(42, 2)</code> → <code>"101010"</code>.</p>
+
+<hr>
+
+<section class="slide" id="part-2-congruence-and-modular-arithmetic-25-min">
+<h2>Part 2: Congruence and Modular Arithmetic (25 min)</h2>
+
+<h3 id="exercise-2-1-congruence-checker">Exercise 2.1: Congruence Checker</h3>
+
+<p>Write <code>boolean isCongruent(int a, int b, int m)</code>.</p>
+
+<h3 id="exercise-2-2-modular-arithmetic-table">Exercise 2.2: Modular Arithmetic Table</h3>
+
+<p>Write a method that prints the addition and multiplication tables for $\mathbb{Z}_m$. Test with $m = 5$ and $m = 7$.</p>
+
+<h3 id="exercise-2-3-finding-units">Exercise 2.3: Finding Units</h3>
+
+<p>Write a method <code>List&lt;Integer&gt; findUnits(int m)</code> that returns all invertible elements of $\mathbb{Z}_m$. Verify that the count equals Euler's totient $\phi(m)$ for $m = 2, \ldots, 50$.</p>
+
+<h3 id="exercise-2-4-modular-inverse">Exercise 2.4: Modular Inverse</h3>
+
+<p>Write <code>int modInverse(int a, int m)</code> using the extended Euclidean algorithm. Verify: for every unit $a$ in $\mathbb{Z}_m$, <code>(a * modInverse(a, m)) % m == 1</code>.</p>
+
+<hr>
+
+<section class="slide" id="part-3-chinese-remainder-theorem-20-min">
+<h2>Part 3: Chinese Remainder Theorem (20 min)</h2>
+
+<h3 id="exercise-3-1-two-congruence-crt-solver">Exercise 3.1: Two-Congruence CRT Solver</h3>
+
+<p>Implement <code>int crt2(int a, int m, int b, int n)</code> that solves $x \equiv a \pmod{m}$, $x \equiv b \pmod{n}$ when $\gcd(m, n) = 1$. Return $x \in [0, mn)$.</p>
+
+<p>Test cases:</p>
+<table>
+<thead><tr>
+<th>$a$</th>
+<th>$m$</th>
+<th>$b$</th>
+<th>$n$</th>
+<th>Expected $x \bmod mn$</th>
+</tr></thead><tbody>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>3</td>
+<td>5</td>
+<td>8</td>
+</tr>
+<tr>
+<td>1</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>13</td>
+</tr>
+<tr>
+<td>0</td>
+<td>7</td>
+<td>5</td>
+<td>11</td>
+<td>49</td>
+</tr>
+</tbody></table>
+
+<h3 id="exercise-3-2-multi-modulus-crt">Exercise 3.2: Multi-Modulus CRT</h3>
+
+<p>Extend to <code>int crtMultiple(int[] a, int[] m)</code>. Solve Sunzi's problem: $x \equiv 2 \pmod{3}$, $x \equiv 3 \pmod{5}$, $x \equiv 2 \pmod{7}$. Expected: $x = 23$.</p>
+
+<h3 id="exercise-3-3-crt-verification">Exercise 3.3: CRT Verification</h3>
+
+<p>For all pairs $(m, n)$ with $\gcd(m, n) = 1$ and $2 \leq m, n \leq 20$, and all $(a, b)$ with $0 \leq a < m, 0 \leq b < n$: verify that <code>crt2(a, m, b, n)</code> satisfies both congruences.</p>
+
+<hr>
+
+<section class="slide" id="part-4-prime-factorization-25-min">
+<h2>Part 4: Prime Factorization (25 min)</h2>
+
+<h3 id="exercise-4-1-trial-division-factorizer">Exercise 4.1: Trial Division Factorizer</h3>
+
+<p>Implement <code>Map&lt;Integer, Integer&gt; factorize(int n)</code> returning a map from primes to exponents. Verify for $n = 2, \ldots, 10000$ that:</p>
+<ul>
+<li>Every key is prime.</li>
+<li>The product of all $p^e$ equals $n$.</li>
+</ul>
+
+<h3 id="exercise-4-2-gcd-and-lcm-from-factorizations">Exercise 4.2: GCD and LCM from Factorizations</h3>
+
+<p>Given two factorization maps, compute GCD (min exponents) and LCM (max exponents). Verify against the direct <code>gcd</code> function for 1000 random pairs.</p>
+
+<h3 id="exercise-4-3-perfect-power-detector">Exercise 4.3: Perfect Power Detector</h3>
+
+<p>Write <code>boolean isPerfectPower(int n)</code> — returns true if $n = a^k$ for some $a \geq 2, k \geq 2$. Use the factorization: $n$ is a perfect power iff the GCD of all exponents is $\geq 2$.</p>
+
+<p>Test: $8, 27, 64, 125, 256$ → all true; $12, 18, 20, 100$ → except 100 = $10^2$, so 100 → true and others false.</p>
+
+<hr>
+
+<section class="slide" id="extension-challenges">
+<h2>Extension Challenges</h2>
+
+<h3 id="challenge-a-modular-exponentiation-by-repeated-squaring">Challenge A: Modular Exponentiation by Repeated Squaring</h3>
+
+<p>Implement <code>long modPow(long base, long exp, long mod)</code> using the binary method. Verify Fermat's Little Theorem for all primes $p \leq 100$ and all $1 \leq a < p$.</p>
+
+<h3 id="challenge-b-simplified-rsa">Challenge B: Simplified RSA</h3>
+
+<p>Choose small primes $p, q$ (e.g., 61, 53). Compute $n = pq$, $\phi(n)$, choose $e$ coprime to $\phi(n)$, compute $d = e^{-1} \bmod \phi(n)$. Encrypt and decrypt a short numeric message.</p>
+
+<h3 id="challenge-c-prime-factor-distribution">Challenge C: Prime Factor Distribution</h3>
+
+<p>For each $n$ from 2 to $10^6$, count the number of prime factors (with multiplicity). Compute the average. (Theoretical answer: this approaches $\ln \ln n + M$ where $M \approx 0.2615$ is the Mertens constant.)</p>
+
+<hr>
+
+<section class="slide" id="starter-code">
+<h2>Starter Code</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class Module2Lab {
+
+    // ========== Part 1: Quotient-Remainder ==========
+
+    public static int mathMod(int n, int d) {
+        // TODO: return mathematical remainder in [0, d)
+        return -1;
+    }
+
+    public static int[] digits(int n, int base) {
+        // TODO: return digits of n in given base (least significant first)
+        return new int[0];
+    }
+
+    public static String toBaseString(int n, int base) {
+        // TODO: convert n to string in given base
+        return "";
+    }
+
+    // ========== Part 2: Congruence ==========
+
+    public static boolean isCongruent(int a, int b, int m) {
+        // TODO
+        return false;
+    }
+
+    public static void printModTable(int m, String op) {
+        // TODO: print addition (op="+") or multiplication (op="*") table for Z_m
+    }
+
+    public static List&lt;Integer&gt; findUnits(int m) {
+        // TODO: return list of invertible elements in Z_m
+        return new ArrayList&lt;&gt;();
+    }
+
+    public static int modInverse(int a, int m) {
+        // TODO: compute modular inverse using extended GCD
+        return -1;
+    }
+
+    // ========== Part 3: CRT ==========
+
+    public static int crt2(int a, int m, int b, int n) {
+        // TODO: solve x ≡ a (mod m), x ≡ b (mod n) with gcd(m,n) = 1
+        return -1;
+    }
+
+    public static int crtMultiple(int[] remainders, int[] moduli) {
+        // TODO: generalize CRT to multiple congruences
+        return -1;
+    }
+
+    // ========== Part 4: Factorization ==========
+
+    public static Map&lt;Integer, Integer&gt; factorize(int n) {
+        // TODO: return prime factorization as map {prime → exponent}
+        return new TreeMap&lt;&gt;();
+    }
+
+    public static boolean isPerfectPower(int n) {
+        // TODO: return true if n = a^k for some a,k &gt;= 2
+        return false;
+    }
+
+    // ========== Helpers ==========
+
+    public static int gcd(int a, int b) {
+        a = Math.abs(a); b = Math.abs(b);
+        while (b != 0) { int r = a % b; a = b; b = r; }
+        return a;
+    }
+
+    public static int[] extendedGcd(int a, int b) {
+        if (b == 0) return new int[]{a, 1, 0};
+        int[] r = extendedGcd(b, a % b);
+        return new int[]{r[0], r[2], r[1] - (a / b) * r[2]};
+    }
+
+    public static boolean isPrime(int n) {
+        if (n &lt; 2) return false;
+        for (int d = 2; d * d &lt;= n; d++) if (n % d == 0) return false;
+        return true;
+    }
+
+    // ========== Main ==========
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 2 Lab ===\n");
+
+        // Part 1 tests
+        System.out.println("--- Part 1: Quotient-Remainder ---");
+        int[] testN = {-17, -7, 0, 13, 25};
+        int[] testD = {3, 5, 7};
+        for (int n : testN) {
+            for (int d : testD) {
+                int r = mathMod(n, d);
+                int q = (n - r) / d;
+                System.out.printf("  %3d = %d × %2d + %d%n", n, d, q, r);
+            }
+        }
+        System.out.println("  digits(255, 2)  = " + Arrays.toString(digits(255, 2)));
+        System.out.println("  toBase(255, 16) = " + toBaseString(255, 16));
+
+        // Part 2 tests
+        System.out.println("\n--- Part 2: Congruence ---");
+        System.out.println("  38 ≡ 14 (mod 8)? " + isCongruent(38, 14, 8));
+        printModTable(5, "+");
+        System.out.println("  Units of Z_12: " + findUnits(12));
+
+        // Part 3 tests
+        System.out.println("\n--- Part 3: CRT ---");
+        System.out.println("  x≡2(mod3), x≡3(mod5): x = " + crt2(2, 3, 3, 5));
+        System.out.println("  Sunzi: x = " +
+            crtMultiple(new int[]{2, 3, 2}, new int[]{3, 5, 7}));
+
+        // Part 4 tests
+        System.out.println("\n--- Part 4: Factorization ---");
+        for (int n : new int[]{84, 2520, 97, 1000}) {
+            System.out.println("  " + n + " = " + factorize(n));
+        }
+        System.out.println("  isPerfectPower(64) = " + isPerfectPower(64));
+        System.out.println("  isPerfectPower(12) = " + isPerfectPower(12));
+
+        System.out.println("\n=== Lab Complete ===");
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class Module2LabSolution {
+
+    // ========== Part 1 ==========
+
+    public static int mathMod(int n, int d) {
+        return Math.floorMod(n, d);
+    }
+
+    public static int[] digits(int n, int base) {
+        if (n == 0) return new int[]{0};
+        n = Math.abs(n);
+        List&lt;Integer&gt; ds = new ArrayList&lt;&gt;();
+        while (n &gt; 0) {
+            ds.add(n % base);
+            n /= base;
+        }
+        return ds.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    public static String toBaseString(int n, int base) {
+        if (n == 0) return "0";
+        boolean neg = n &lt; 0;
+        n = Math.abs(n);
+        StringBuilder sb = new StringBuilder();
+        while (n &gt; 0) {
+            int d = n % base;
+            sb.append(d &lt; 10 ? (char)('0' + d) : (char)('A' + d - 10));
+            n /= base;
+        }
+        if (neg) sb.append('-');
+        return sb.reverse().toString();
+    }
+
+    // ========== Part 2 ==========
+
+    public static boolean isCongruent(int a, int b, int m) {
+        return Math.floorMod(a - b, m) == 0;
+    }
+
+    public static void printModTable(int m, String op) {
+        System.out.printf("  %s table for Z_%d:%n", op, m);
+        System.out.printf("  %s |", "  ");
+        for (int j = 0; j &lt; m; j++) System.out.printf(" %2d", j);
+        System.out.println();
+        System.out.print("  ---+");
+        for (int j = 0; j &lt; m; j++) System.out.print("---");
+        System.out.println();
+        for (int i = 0; i &lt; m; i++) {
+            System.out.printf("  %2d |", i);
+            for (int j = 0; j &lt; m; j++) {
+                int val = op.equals("+") ? (i + j) % m : (i * j) % m;
+                System.out.printf(" %2d", val);
+            }
+            System.out.println();
+        }
+    }
+
+    public static List&lt;Integer&gt; findUnits(int m) {
+        List&lt;Integer&gt; units = new ArrayList&lt;&gt;();
+        for (int a = 1; a &lt; m; a++) {
+            if (gcd(a, m) == 1) units.add(a);
+        }
+        return units;
+    }
+
+    public static int modInverse(int a, int m) {
+        a = Math.floorMod(a, m);
+        int[] r = extendedGcd(a, m);
+        if (r[0] != 1) throw new ArithmeticException(a + " not invertible mod " + m);
+        return Math.floorMod(r[1], m);
+    }
+
+    // ========== Part 3 ==========
+
+    public static int crt2(int a, int m, int b, int n) {
+        int[] bez = extendedGcd(m, n);
+        if (bez[0] != 1) throw new IllegalArgumentException("Moduli not coprime");
+        long x = (long) a * n * bez[2] + (long) b * m * bez[1];
+        return (int) Math.floorMod(x, (long) m * n);
+    }
+
+    public static int crtMultiple(int[] remainders, int[] moduli) {
+        int x = remainders[0], mod = moduli[0];
+        for (int i = 1; i &lt; remainders.length; i++) {
+            x = crt2(x, mod, remainders[i], moduli[i]);
+            mod *= moduli[i];
+        }
+        return Math.floorMod(x, mod);
+    }
+
+    // ========== Part 4 ==========
+
+    public static Map&lt;Integer, Integer&gt; factorize(int n) {
+        Map&lt;Integer, Integer&gt; factors = new TreeMap&lt;&gt;();
+        for (int d = 2; (long) d * d &lt;= n; d++) {
+            while (n % d == 0) { factors.merge(d, 1, Integer::sum); n /= d; }
+        }
+        if (n &gt; 1) factors.merge(n, 1, Integer::sum);
+        return factors;
+    }
+
+    public static boolean isPerfectPower(int n) {
+        if (n &lt; 4) return false;
+        var factors = factorize(n);
+        int g = 0;
+        for (int e : factors.values()) g = gcd(g, e);
+        return g &gt;= 2;
+    }
+
+    // ========== Helpers ==========
+
+    public static int gcd(int a, int b) {
+        a = Math.abs(a); b = Math.abs(b);
+        while (b != 0) { int r = a % b; a = b; b = r; }
+        return a;
+    }
+
+    public static int[] extendedGcd(int a, int b) {
+        if (b == 0) return new int[]{a, 1, 0};
+        int[] r = extendedGcd(b, a % b);
+        return new int[]{r[0], r[2], r[1] - (a / b) * r[2]};
+    }
+
+    public static boolean isPrime(int n) {
+        if (n &lt; 2) return false;
+        for (int d = 2; d * d &lt;= n; d++) if (n % d == 0) return false;
+        return true;
+    }
+
+    // ========== Verification ==========
+
+    public static void runAllVerifications() {
+        // Verify quotient-remainder
+        for (int n = -1000; n &lt;= 1000; n++) {
+            for (int d = 1; d &lt;= 20; d++) {
+                int r = mathMod(n, d);
+                int q = (n - r) / d;
+                assert n == d * q + r &amp;&amp; r &gt;= 0 &amp;&amp; r &lt; d;
+            }
+        }
+        System.out.println("  Quotient-remainder verified.");
+
+        // Verify CRT
+        for (int m = 2; m &lt;= 15; m++) {
+            for (int n = 2; n &lt;= 15; n++) {
+                if (gcd(m, n) != 1) continue;
+                for (int a = 0; a &lt; m; a++) {
+                    for (int b = 0; b &lt; n; b++) {
+                        int x = crt2(a, m, b, n);
+                        assert x % m == a &amp;&amp; x % n == b;
+                    }
+                }
+            }
+        }
+        System.out.println("  CRT verified.");
+
+        // Verify factorization
+        for (int k = 2; k &lt;= 10000; k++) {
+            var f = factorize(k);
+            int product = 1;
+            for (var e : f.entrySet()) {
+                assert isPrime(e.getKey());
+                for (int i = 0; i &lt; e.getValue(); i++) product *= e.getKey();
+            }
+            assert product == k;
+        }
+        System.out.println("  Factorization verified for 2..10000.");
+
+        // Verify units count = totient
+        for (int m = 2; m &lt;= 50; m++) {
+            int totient = 0;
+            for (int a = 1; a &lt; m; a++) if (gcd(a, m) == 1) totient++;
+            assert findUnits(m).size() == totient;
+        }
+        System.out.println("  Units count verified.");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 2 Lab Solution ===\n");
+
+        System.out.println("--- Part 1 ---");
+        System.out.println("  toBase(255, 16) = " + toBaseString(255, 16));
+        System.out.println("  toBase(42, 2)   = " + toBaseString(42, 2));
+        System.out.println("  digits(255, 2)  = " + Arrays.toString(digits(255, 2)));
+
+        System.out.println("\n--- Part 2 ---");
+        printModTable(5, "+");
+        System.out.println("  Units of Z_12: " + findUnits(12));
+        System.out.println("  Inverse of 5 mod 12: " + modInverse(5, 12));
+
+        System.out.println("\n--- Part 3 ---");
+        System.out.println("  CRT(2,3,3,5) = " + crt2(2, 3, 3, 5));
+        System.out.println("  Sunzi: " + crtMultiple(new int[]{2,3,2}, new int[]{3,5,7}));
+
+        System.out.println("\n--- Part 4 ---");
+        System.out.println("  factorize(2520) = " + factorize(2520));
+        System.out.println("  isPerfectPower(64) = " + isPerfectPower(64));
+        System.out.println("  isPerfectPower(12) = " + isPerfectPower(12));
+
+        System.out.println("\n--- Verification ---");
+        runAllVerifications();
+
+        System.out.println("\n=== All Done ===");
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="verification-checklist">
+<h2>Verification Checklist</h2>
+
+<ul>
+<li>☐ <code>mathMod</code> returns values in $[0, d)$ for all tested inputs including negative $n$</li>
+<li>☐ <code>digits</code> and <code>toBaseString</code> produce correct results for bases 2, 8, 10, 16</li>
+<li>☐ <code>isCongruent</code> handles negative inputs correctly</li>
+<li>☐ Mod tables for $\mathbb{Z}_5$ are correct</li>
+<li>☐ <code>findUnits</code> count matches $\phi(m)$ for $m = 2, \ldots, 50$</li>
+<li>☐ <code>modInverse(a, m) * a % m == 1</code> for all units</li>
+<li>☐ CRT solver produces correct results for all test cases</li>
+<li>☐ CRT verification passes for coprime moduli up to 15</li>
+<li>☐ <code>factorize</code> produces valid factorizations for $n = 2, \ldots, 10000$</li>
+<li>☐ <code>isPerfectPower</code> correctly identifies perfect powers</li>
+</ul>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

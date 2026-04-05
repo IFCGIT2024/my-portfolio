@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 8 Quiz — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="quiz-08">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+      <h1>Module 8: Practice Quiz</h1>
+      <p class="quiz-subtitle">Algorithms, Loop Invariants & Correctness — Test your understanding with 12 multiple-choice questions.</p>
+      <div id="quiz-container" data-questions='[{"q":"A Hoare triple {P} C {Q} means:","choices":["P is always true","If P holds before C and C terminates, then Q holds after","Q implies P","C always terminates"],"answer":1,"explanation":"{P} C {Q}: if precondition P is true and command C executes, postcondition Q holds."},{"q":"A loop invariant must be true:","choices":["Only at the start of the loop","Only at the end of the loop","Before, during, and after each iteration","Only when the loop terminates"],"answer":2,"explanation":"A loop invariant holds at initialization, is maintained by each iteration, and holds at termination."},{"q":"Partial correctness means:","choices":["The program sometimes produces the right answer","IF the program terminates, it produces the correct result","The program always terminates","The program is mostly correct"],"answer":1,"explanation":"Partial correctness: correctness assuming termination. Total correctness = partial correctness + termination."},{"q":"A variant function (decrementing function) proves:","choices":["Correctness","Termination","Invariance","Completeness"],"answer":1,"explanation":"A variant function decreases each iteration and is bounded below, proving the loop must terminate."},{"q":"The loop invariant for binary search typically states:","choices":["The array is sorted","If the target exists, it is in a[lo..hi]","lo = hi","The target is found"],"answer":1,"explanation":"Binary search invariant: if the target is in the array, it is within the current search range [lo, hi]."},{"q":"Total correctness = partial correctness +","choices":["Efficiency","Termination","Testing","Documentation"],"answer":1,"explanation":"Total correctness requires both correct results (partial) and guaranteed termination."},{"q":"In Java, assert statements are enabled with:","choices":["-debug","-ea","-assertions","-verbose"],"answer":1,"explanation":"Run Java with -ea (enable assertions) to activate assert checks."},{"q":"For selection sort, a valid loop invariant after iteration i is:","choices":["a[0..i-1] is sorted and contains the i smallest elements","The array is fully sorted","a[i] is the maximum","No elements have been swapped"],"answer":0,"explanation":"After i iterations, a[0..i-1] contains the i smallest elements in sorted order."},{"q":"The variant for binary search is:","choices":["lo","hi","hi - lo","mid"],"answer":2,"explanation":"hi - lo decreases each iteration (the search space shrinks) and is bounded below by 0."},{"q":"Design by Contract was pioneered by:","choices":["Alan Turing","Bertrand Meyer","Edsger Dijkstra","Tony Hoare"],"answer":1,"explanation":"Bertrand Meyer introduced Design by Contract with the Eiffel language."},{"q":"To prove a sorting algorithm correct, you typically need:","choices":["Only test cases","A loop invariant showing the sorted portion grows","Proof that n is finite","A recursive definition"],"answer":1,"explanation":"Correctness proof for sorting requires an invariant showing a[0..i] is sorted and contains the right elements."},{"q":"The Halting Problem shows that:","choices":["All programs terminate","No program terminates","It is undecidable whether an arbitrary program halts","Termination can always be proved"],"answer":2,"explanation":"Turing proved there is no general algorithm to decide if an arbitrary program halts."}]'></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>

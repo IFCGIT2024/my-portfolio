@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 8 — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="module-08">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<div id="class-1" class="class-section">
+<h1 id="module-8-class-1-specifications-preconditions-and-postconditions">Module 8 – Class 1: Specifications, Preconditions and Postconditions</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define preconditions, postconditions, and specifications for methods.</li>
+<li>Distinguish partial correctness from total correctness.</li>
+<li>Write Hoare triples $\{P\}\ C\ \{Q\}$.</li>
+<li>Encode pre/postconditions in Java using assertions and documentation.</li>
+<li>Connect specifications to Module 3's logical reasoning and Design by Contract.</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="what-is-a-specification">What Is a Specification?</h3>
+
+<p>A <strong>specification</strong> describes <em>what</em> a method does without saying <em>how</em>. It consists of:</p>
+
+<ul>
+<li><strong>Precondition</strong> ($P$): What must be true <em>before</em> the method executes.</li>
+<li><strong>Postcondition</strong> ($Q$): What will be true <em>after</em> the method executes (assuming the precondition held).</li>
+</ul>
+
+<h3 id="hoare-triples">Hoare Triples</h3>
+
+<p>A <strong>Hoare triple</strong> $\{P\}\ C\ \{Q\}$ means:</p>
+
+<blockquote>
+<p>If $P$ holds before executing $C$, and $C$ terminates, then $Q$ holds afterward.</p>
+</blockquote>
+
+<p>This is <strong>partial correctness</strong>. <strong>Total correctness</strong> additionally requires that $C$ terminates whenever $P$ holds. We write $[P]\ C\ [Q]$ for total correctness (some notations use curly braces for both).</p>
+
+<h3 id="examples-of-specifications">Examples of Specifications</h3>
+
+<table>
+<thead><tr>
+<th>Method</th>
+<th>Precondition</th>
+<th>Postcondition</th>
+</tr></thead><tbody>
+<tr>
+<td><code>max(int[] a)</code></td>
+<td><code>a.length &gt;= 1</code></td>
+<td>Returns the largest element of <code>a</code></td>
+</tr>
+<tr>
+<td><code>binarySearch(int[] a, int k)</code></td>
+<td><code>a</code> is sorted</td>
+<td>Returns index of <code>k</code> or <code>-1</code></td>
+</tr>
+<tr>
+<td><code>sqrt(double x)</code></td>
+<td><code>x &gt;= 0</code></td>
+<td>Returns $y$ such that $y^2 = x$</td>
+</tr>
+<tr>
+<td><code>gcd(int a, int b)</code></td>
+<td><code>a &gt;= 0, b &gt; 0</code></td>
+<td>Returns $\gcd(a,b)$</td>
+</tr>
+</tbody></table>
+
+<h3 id="partial-vs-total-correctness">Partial vs Total Correctness</h3>
+
+<ul>
+<li><strong>Partial correctness:</strong> <em>If</em> the program terminates, the result is correct.</li>
+<li><strong>Total correctness:</strong> The program <em>always</em> terminates and the result is correct.</li>
+</ul>
+
+<p>Total correctness = partial correctness + termination.</p>
+
+<h3 id="design-by-contract">Design by Contract</h3>
+
+<p><strong>Bertrand Meyer</strong> (1986) formalized this as Design by Contract (DbC):</p>
+<ul>
+<li>The <strong>caller</strong> is responsible for satisfying preconditions.</li>
+<li>The <strong>method</strong> is responsible for establishing postconditions.</li>
+<li><strong>Class invariants</strong> must hold before and after every public method.</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$\{P\}\ C\ \{Q\}$</td>
+<td>Hoare triple: partial correctness</td>
+</tr>
+<tr>
+<td>$[P]\ C\ [Q]$</td>
+<td>Total correctness</td>
+</tr>
+<tr>
+<td><code>requires</code></td>
+<td>Precondition annotation</td>
+</tr>
+<tr>
+<td><code>ensures</code></td>
+<td>Postcondition annotation</td>
+</tr>
+<tr>
+<td><code>invariant</code></td>
+<td>Class or loop invariant</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-maximum-of-an-array">Example 1: Maximum of an Array</h3>
+
+<p><strong>Specification:</strong></p>
+
+<pre><code class="language-text">requires: a.length &gt;= 1
+ensures:  result == max element of a</code></pre>
+
+<p><strong>Hoare triple:</strong> $\{a.\text{length} \geq 1\}\ \texttt{max(a)}\ \{r = \max(a)\}$</p>
+
+<p><strong>Java implementation with assertions:</strong></p>
+
+<pre><code class="language-java">public static int max(int[] a) {
+    assert a.length &gt;= 1 : "Precondition: non-empty array";
+    int result = a[0];
+    for (int i = 1; i &lt; a.length; i++) {
+        if (a[i] &gt; result) result = a[i];
+    }
+    // Postcondition: result is the maximum
+    return result;
+}</code></pre>
+
+<p><strong>Correctness argument:</strong> The loop invariant is "result = max(a[0..i-1])." After the loop, $i = a.\text{length}$, so result = max(a[0..n-1]).</p>
+
+<h3 id="example-2-array-contains">Example 2: Array Contains</h3>
+
+<p><strong>Specification:</strong></p>
+
+<pre><code class="language-text">requires: a is not null
+ensures:  result == true iff x appears in a</code></pre>
+
+<pre><code class="language-java">public static boolean contains(int[] a, int x) {
+    assert a != null : "Precondition: array not null";
+    for (int i = 0; i &lt; a.length; i++) {
+        if (a[i] == x) return true;
+    }
+    return false;
+}</code></pre>
+
+<p><strong>Loop invariant:</strong> At the start of iteration $i$: $x \notin \{a[0], \ldots, a[i-1]\}$.</p>
+
+<h3 id="example-3-count-occurrences">Example 3: Count Occurrences</h3>
+
+<pre><code class="language-text">requires: a is not null
+ensures:  result == |{i : 0 &lt;= i &lt; a.length and a[i] == x}|</code></pre>
+
+<pre><code class="language-java">public static int countOccurrences(int[] a, int x) {
+    assert a != null;
+    int count = 0;
+    for (int i = 0; i &lt; a.length; i++) {
+        if (a[i] == x) count++;
+    }
+    return count;
+}</code></pre>
+
+<p><strong>Loop invariant:</strong> count = $|\{j : 0 \leq j < i \text{ and } a[j] = x\}|$.</p>
+
+<h3 id="example-4-gcd-specification">Example 4: GCD Specification</h3>
+
+<pre><code class="language-text">requires: a &gt;= 0 and b &gt; 0
+ensures:  result == gcd(a, b) and result &gt; 0</code></pre>
+
+<pre><code class="language-java">public static int gcd(int a, int b) {
+    assert a &gt;= 0 &amp;&amp; b &gt; 0 : "Precondition";
+    while (b != 0) {
+        int r = a % b;
+        a = b;
+        b = r;
+    }
+    return a;
+}</code></pre>
+
+<p><strong>Invariant:</strong> $\gcd(\text{original } a, \text{original } b) = \gcd(a, b)$ at each iteration. (From Module 1!)</p>
+
+<h3 id="example-5-factorial">Example 5: Factorial</h3>
+
+<pre><code class="language-text">requires: n &gt;= 0
+ensures:  result == n!</code></pre>
+
+<pre><code class="language-java">public static long factorial(int n) {
+    assert n &gt;= 0 : "Precondition: non-negative";
+    long result = 1;
+    for (int i = 2; i &lt;= n; i++) {
+        result *= i;
+    }
+    return result;
+}</code></pre>
+
+<p><strong>Loop invariant:</strong> At the start of iteration $i$: result = $(i-1)!$.</p>
+
+<hr>
+
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="proving-partial-correctness-with-hoare-logic">Proving Partial Correctness with Hoare Logic</h3>
+
+<p>To prove $\{P\}\ C\ \{Q\}$:</p>
+
+<ol>
+<li><strong>Identify the invariant</strong> $I$ for each loop.</li>
+<li><strong>Initialization:</strong> Show $P \Rightarrow I$ before the loop starts.</li>
+<li><strong>Maintenance:</strong> Show $\{I \wedge \text{guard}\}\ \text{body}\ \{I\}$ — the invariant is preserved.</li>
+<li><strong>Termination:</strong> When the loop guard is false, show $I \wedge \neg\text{guard} \Rightarrow Q$.</li>
+</ol>
+
+<p>This mirrors <strong>mathematical induction</strong> (Module 6):</p>
+<ul>
+<li>Initialization = base case</li>
+<li>Maintenance = inductive step</li>
+<li>Termination = final conclusion</li>
+</ul>
+
+<h3 id="sequential-composition-rule">Sequential Composition Rule</h3>
+
+<div class="katex-block">$\frac{\{P\}\ C_1\ \{R\} \quad \{R\}\ C_2\ \{Q\}}{\{P\}\ C_1; C_2\ \{Q\}}$</div>
+
+<p>Chain method calls: the postcondition of the first becomes the precondition of the second.</p>
+
+<hr>
+
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class SpecificationLibrary {
+
+    // --- max with full specification ---
+
+    /**
+     * @requires a.length &gt;= 1
+     * @ensures result == maximum element of a
+     */
+    public static int max(int[] a) {
+        assert a != null &amp;&amp; a.length &gt;= 1 : "Pre: non-empty array";
+        int result = a[0];
+        // Invariant: result == max(a[0..i-1])
+        for (int i = 1; i &lt; a.length; i++) {
+            if (a[i] &gt; result) result = a[i];
+            // Invariant maintained: result == max(a[0..i])
+        }
+        // Post: result == max(a[0..n-1])
+        return result;
+    }
+
+    // --- contains with specification ---
+
+    /**
+     * @requires a != null
+     * @ensures result == true iff x is in a
+     */
+    public static boolean contains(int[] a, int x) {
+        assert a != null : "Pre: non-null array";
+        // Invariant: x not in a[0..i-1]
+        for (int i = 0; i &lt; a.length; i++) {
+            if (a[i] == x) return true;
+        }
+        // Post: x not in a[0..n-1], so result = false
+        return false;
+    }
+
+    // --- countOccurrences ---
+
+    /**
+     * @requires a != null
+     * @ensures result == number of times x appears in a
+     */
+    public static int countOccurrences(int[] a, int x) {
+        assert a != null;
+        int count = 0;
+        // Invariant: count == |{j : 0 &lt;= j &lt; i, a[j] == x}|
+        for (int i = 0; i &lt; a.length; i++) {
+            if (a[i] == x) count++;
+        }
+        return count;
+    }
+
+    // --- isSorted ---
+
+    /**
+     * @requires a != null
+     * @ensures result == true iff a is sorted in non-decreasing order
+     */
+    public static boolean isSorted(int[] a) {
+        assert a != null;
+        // Invariant: a[0..i-1] is sorted
+        for (int i = 1; i &lt; a.length; i++) {
+            if (a[i] &lt; a[i - 1]) return false;
+        }
+        return true;
+    }
+
+    // --- sum ---
+
+    /**
+     * @requires a != null
+     * @ensures result == sum of all elements in a
+     */
+    public static long sum(int[] a) {
+        assert a != null;
+        long result = 0;
+        // Invariant: result == sum(a[0..i-1])
+        for (int i = 0; i &lt; a.length; i++) {
+            result += a[i];
+        }
+        return result;
+    }
+
+    // --- indexOf ---
+
+    /**
+     * @requires a != null
+     * @ensures result == first index where a[result]==x, or -1 if not found
+     */
+    public static int indexOf(int[] a, int x) {
+        assert a != null;
+        // Invariant: x not in a[0..i-1]
+        for (int i = 0; i &lt; a.length; i++) {
+            if (a[i] == x) return i;
+        }
+        return -1;
+    }
+
+    // --- Verification harness: check postconditions at runtime ---
+
+    public static void verifyMax(int[] a) {
+        int result = max(a);
+        // Check postcondition
+        for (int x : a) assert result &gt;= x : "max is not &gt;= all elements";
+        boolean found = false;
+        for (int x : a) if (x == result) found = true;
+        assert found : "max is not in the array";
+        System.out.println("max(" + Arrays.toString(a) + ") = " + result + " ✓");
+    }
+
+    public static void verifyContains(int[] a, int x, boolean expected) {
+        boolean result = contains(a, x);
+        assert result == expected : "contains mismatch";
+        System.out.println("contains(" + Arrays.toString(a) + ", " + x + ") = "
+                + result + " ✓");
+    }
+
+    // --- Demo ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Specification Library ===\n");
+
+        // Verify max
+        verifyMax(new int[]{3, 7, 1, 9, 4});
+        verifyMax(new int[]{-5, -2, -8});
+        verifyMax(new int[]{42});
+
+        // Verify contains
+        verifyContains(new int[]{3, 7, 1, 9, 4}, 7, true);
+        verifyContains(new int[]{3, 7, 1, 9, 4}, 5, false);
+
+        // Count occurrences
+        int[] data = {1, 2, 3, 2, 1, 2};
+        System.out.println("\ncountOccurrences(" + Arrays.toString(data) + ", 2) = "
+                + countOccurrences(data, 2));
+
+        // isSorted
+        System.out.println("isSorted([1,2,3,4]) = " + isSorted(new int[]{1, 2, 3, 4}));
+        System.out.println("isSorted([1,3,2,4]) = " + isSorted(new int[]{1, 3, 2, 4}));
+
+        // sum
+        System.out.println("sum([1,2,3,4,5]) = " + sum(new int[]{1, 2, 3, 4, 5}));
+
+        // indexOf
+        System.out.println("indexOf([10,20,30], 20) = " + indexOf(new int[]{10, 20, 30}, 20));
+        System.out.println("indexOf([10,20,30], 40) = " + indexOf(new int[]{10, 20, 30}, 40));
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>C.A.R. Hoare</strong> (1969) published "An Axiomatic Basis for Computer Programming," introducing <strong>Hoare logic</strong> — a formal system for reasoning about program correctness using triples $\{P\}\ C\ \{Q\}$.</p>
+
+<p><strong>Edsger W. Dijkstra</strong> later developed <strong>weakest precondition</strong> calculus (1975), which computes the weakest precondition $\text{wp}(C, Q)$ such that executing $C$ establishes $Q$.</p>
+
+<p><strong>Bertrand Meyer</strong> (1986) coined <strong>Design by Contract</strong> with the Eiffel programming language, embedding preconditions and postconditions directly into code.</p>
+
+<p>Java's <code>assert</code> statement (added in Java 1.4) and tools like <strong>JML</strong> (Java Modeling Language) bring these ideas into practice.</p>
+
+<hr>
+
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> What is the difference between a precondition and a postcondition?</p>
+
+<p><strong>A2.</strong> Explain partial correctness vs total correctness with an example.</p>
+
+<p><strong>A3.</strong> Write a Hoare triple for <code>int abs(int x)</code>.</p>
+
+<p><strong>A4.</strong> How does a specification differ from an implementation?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Given method <code>max(int[] a)</code>, state the loop invariant and prove initialization, maintenance, and termination.</p>
+
+<p><strong>B2.</strong> Prove partial correctness of <code>contains(int[] a, int x)</code> using a loop invariant.</p>
+
+<p><strong>B3.</strong> Write a Hoare triple for sequential composition: <code>int m = max(a); boolean b = contains(a, m);</code>. What does the combined postcondition guarantee?</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Implement <code>countOccurrences(int[] a, int x)</code> with documented preconditions, postconditions, and a loop invariant.</p>
+
+<p><strong>C2.</strong> Implement <code>isSorted(int[] a)</code> and write a verification harness that checks the postcondition.</p>
+
+<p><strong>C3.</strong> Add <code>assert</code> statements to an existing method to enforce its preconditions. Test that violations are caught.</p>
+
+<hr>
+
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Write a Hoare triple for each:</p>
+<p>(a) <code>int min(int[] a)</code> (b) <code>boolean allPositive(int[] a)</code> (c) <code>int gcd(int a, int b)</code></p>
+
+<p><strong>DM2.</strong> Prove: if $\{P\}\ C_1\ \{R\}$ and $\{R\}\ C_2\ \{Q\}$, then $\{P\}\ C_1; C_2\ \{Q\}$ (sequential composition rule).</p>
+
+<p><strong>DM3.</strong> A method has precondition $x > 0$ and postcondition $r > 0$. The body is <code>r = x * x</code>. Prove the Hoare triple.</p>
+
+<p><strong>DM4.</strong> Define what it means for a loop invariant to be <em>inductive</em>. Explain the analogy with mathematical induction (Module 6).</p>
+
+<p><strong>DM5.</strong> If a method is partially correct but not totally correct, give a concrete example showing what can go wrong.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement <code>int min(int[] a)</code> with <code>@requires</code>, <code>@ensures</code>, loop invariant, and runtime assertion checks.</p>
+
+<p><strong>JP2.</strong> Implement <code>int secondMax(int[] a)</code> where <code>a.length &gt;= 2</code>. State the loop invariant. Verify the postcondition.</p>
+
+<p><strong>JP3.</strong> Implement <code>boolean isPalindrome(String s)</code>. Write the specification and loop invariant.</p>
+
+<p><strong>JP4.</strong> Write a verification harness that tests <code>countOccurrences</code> against a brute-force oracle.</p>
+
+<p><strong>JP5.</strong> Implement <code>int[] reverseArray(int[] a)</code>. Precondition: <code>a != null</code>. Postcondition: <code>result[i] == a[n-1-i]</code> for all $i$.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Module 3 introduced Hoare triples informally. Now formalize: rewrite three method specs from Module 3's lab using $\{P\}\ C\ \{Q\}$ notation.</p>
+
+<p><strong>BR2.</strong> Module 1's GCD method has invariant $\gcd(a_{\text{orig}}, b_{\text{orig}}) = \gcd(a, b)$. Show that this is exactly a Hoare-logic loop invariant. State initialization, maintenance, and termination.</p>
+
+<hr>
+
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong></p>
+<p>(a) $\{a.\text{length} \geq 1\}\ \texttt{min(a)}\ \{r \leq a[i] \text{ for all } i \text{ and } r \in a\}$</p>
+<p>(b) $\{a \neq \text{null}\}\ \texttt{allPositive(a)}\ \{r \Leftrightarrow \forall i \in [0, a.\text{length}): a[i] > 0\}$</p>
+<p>(c) $\{a \geq 0 \wedge b > 0\}\ \texttt{gcd(a,b)}\ \{r = \gcd(a,b)\}$</p>
+
+<p><strong>DM3.</strong> Assume $x > 0$. The body sets $r = x^2$. Since $x > 0$, $x^2 > 0$, so $r > 0$. $\blacksquare$</p>
+
+<p><strong>DM4.</strong> A loop invariant $I$ is <em>inductive</em> if:</p>
+<ol>
+<li>$I$ holds before the first iteration (initialization = base case).</li>
+<li>If $I$ holds before an iteration and the guard is true, then $I$ holds after (maintenance = inductive step).</li>
+<li>When the guard becomes false, $I$ implies the postcondition (conclusion).</li>
+</ol>
+
+<p>This exactly mirrors induction: base case, inductive step, and final conclusion.</p>
+
+<p><strong>DM5.</strong> Consider: <code>while (true) { }</code> with precondition <code>true</code> and postcondition <code>true</code>. Partially correct (vacuously — it never terminates), but not totally correct.</p>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP2:</strong></p>
+<pre><code class="language-java">public static int secondMax(int[] a) {
+    assert a.length &gt;= 2;
+    int max1 = Math.max(a[0], a[1]);
+    int max2 = Math.min(a[0], a[1]);
+    // Invariant: max1 &gt;= max2, and max1,max2 are the
+    // two largest values in a[0..i-1]
+    for (int i = 2; i &lt; a.length; i++) {
+        if (a[i] &gt; max1) {
+            max2 = max1;
+            max1 = a[i];
+        } else if (a[i] &gt; max2) {
+            max2 = a[i];
+        }
+    }
+    return max2;
+}</code></pre>
+
+</div>
+<hr>
+<div id="class-2" class="class-section">
+<h1 id="module-8-class-2-loop-invariants-in-sorting-and-searching">Module 8 – Class 2: Loop Invariants in Sorting and Searching</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define and identify loop invariants for iterative algorithms.</li>
+<li>Prove initialization, maintenance, and termination for loop invariants.</li>
+<li>Apply loop invariants to binary search, selection sort, and insertion sort.</li>
+<li>Annotate Java code with invariant assertions.</li>
+<li>Connect loop invariants to mathematical induction (Module 6).</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="what-is-a-loop-invariant">What Is a Loop Invariant?</h3>
+
+<p>A <strong>loop invariant</strong> is a condition that:</p>
+<ol>
+<li>Is <strong>true before the first iteration</strong> (initialization).</li>
+<li><strong>Remains true</strong> after each iteration (maintenance).</li>
+<li>Combined with the loop's exit condition, <strong>implies the postcondition</strong> (termination).</li>
+</ol>
+
+<h3 id="the-three-steps">The Three Steps</h3>
+
+<table>
+<thead><tr>
+<th>Step</th>
+<th>Question</th>
+<th>Analogy to Induction</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Initialization</strong></td>
+<td>Is $I$ true before the loop starts?</td>
+<td>Base case</td>
+</tr>
+<tr>
+<td><strong>Maintenance</strong></td>
+<td>If $I$ and the guard are true, is $I$ true after one iteration?</td>
+<td>Inductive step</td>
+</tr>
+<tr>
+<td><strong>Termination</strong></td>
+<td>When the guard is false, does $I \wedge \neg\text{guard} \Rightarrow Q$?</td>
+<td>Final conclusion</td>
+</tr>
+</tbody></table>
+
+<h3 id="why-invariants-matter">Why Invariants Matter</h3>
+
+<p>Invariants capture <em>what progress the loop has made</em>. They are the bridge between the precondition and the postcondition.</p>
+
+<hr>
+
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<p>For a loop <code>while (B) { S; }</code> with invariant $I$:</p>
+
+<div class="katex-block">$\frac{\{I \wedge B\}\ S\ \{I\}}{\{I\}\ \texttt{while (B) \{ S; \}}\ \{I \wedge \neg B\}}$</div>
+
+<p>This is the <strong>Hoare loop rule</strong>.</p>
+
+<hr>
+
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-linear-search">Example 1: Linear Search</h3>
+
+<pre><code class="language-java">public static int linearSearch(int[] a, int key) {
+    for (int i = 0; i &lt; a.length; i++) {
+        if (a[i] == key) return i;
+    }
+    return -1;
+}</code></pre>
+
+<p><strong>Invariant:</strong> At the start of iteration $i$: $\texttt{key} \notin \{a[0], \ldots, a[i-1]\}$.</p>
+
+<ul>
+<li><strong>Initialization:</strong> $i = 0$, the set $\{a[0], \ldots, a[-1]\}$ is empty, so $\texttt{key}$ is trivially not in it. ✓</li>
+<li><strong>Maintenance:</strong> If $a[i] \neq \texttt{key}$, then $\texttt{key} \notin \{a[0], \ldots, a[i]\}$. ✓</li>
+<li><strong>Termination:</strong> If the loop ends without returning, $i = a.\text{length}$, so $\texttt{key} \notin a$, and we return $-1$. ✓</li>
+</ul>
+
+<h3 id="example-2-binary-search">Example 2: Binary Search</h3>
+
+<pre><code class="language-java">public static int binarySearch(int[] a, int key) {
+    int lo = 0, hi = a.length - 1;
+    while (lo &lt;= hi) {
+        int mid = lo + (hi - lo) / 2;  // avoids overflow
+        if (a[mid] == key) return mid;
+        else if (a[mid] &lt; key) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}</code></pre>
+
+<p><strong>Precondition:</strong> <code>a</code> is sorted in non-decreasing order.</p>
+
+<p><strong>Invariant:</strong> If <code>key</code> is in <code>a</code>, then <code>key</code> is in <code>a[lo..hi]</code>.</p>
+
+<ul>
+<li><strong>Initialization:</strong> $lo = 0$, $hi = n-1$. If <code>key</code> is in <code>a</code>, it's in <code>a[0..n-1]</code>. ✓</li>
+<li><strong>Maintenance:</strong> </li>
+<li>If <code>a[mid] &lt; key</code>, then <code>key</code> cannot be in <code>a[lo..mid]</code> (array is sorted), so <code>lo = mid + 1</code> preserves the invariant.</li>
+<li>If <code>a[mid] &gt; key</code>, then <code>key</code> cannot be in <code>a[mid..hi]</code>, so <code>hi = mid - 1</code> preserves it.</li>
+<li>If <code>a[mid] == key</code>, we return immediately.</li>
+<li><strong>Termination:</strong> When <code>lo &gt; hi</code>, the range is empty. Combined with the invariant: if <code>key</code> were in <code>a</code>, it would be in an empty range — contradiction. So <code>key</code> is not in <code>a</code>, and we return $-1$. ✓</li>
+</ul>
+
+<p><strong>Variant function:</strong> $hi - lo + 1$ (decreases each iteration, bounded below by 0).</p>
+
+<h3 id="example-3-selection-sort">Example 3: Selection Sort</h3>
+
+<pre><code class="language-java">public static void selectionSort(int[] a) {
+    for (int i = 0; i &lt; a.length - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j &lt; a.length; j++) {
+            if (a[j] &lt; a[minIdx]) minIdx = j;
+        }
+        int temp = a[i]; a[i] = a[minIdx]; a[minIdx] = temp;
+    }
+}</code></pre>
+
+<p><strong>Outer loop invariant:</strong> At the start of iteration $i$:</p>
+<ol>
+<li>$a[0..i-1]$ is sorted.</li>
+<li>Every element in $a[0..i-1]$ is $\leq$ every element in $a[i..n-1]$.</li>
+<li>$a[0..i-1]$ contains the $i$ smallest elements of the original array.</li>
+</ol>
+
+<p><strong>Inner loop invariant:</strong> $a[\texttt{minIdx}] = \min(a[i..j-1])$.</p>
+
+<ul>
+<li><strong>Initialization (outer):</strong> $i = 0$, $a[0..-1]$ is empty — trivially sorted and minimal. ✓</li>
+<li><strong>Maintenance (outer):</strong> After finding the minimum of $a[i..n-1]$ and swapping it to position $i$, the invariant extends to $a[0..i]$. ✓</li>
+<li><strong>Termination (outer):</strong> When $i = n-1$, $a[0..n-2]$ is sorted and contains the $n-1$ smallest elements, so $a[n-1]$ is the largest. The entire array is sorted. ✓</li>
+</ul>
+
+<h3 id="example-4-insertion-sort">Example 4: Insertion Sort</h3>
+
+<pre><code class="language-java">public static void insertionSort(int[] a) {
+    for (int i = 1; i &lt; a.length; i++) {
+        int key = a[i];
+        int j = i - 1;
+        while (j &gt;= 0 &amp;&amp; a[j] &gt; key) {
+            a[j + 1] = a[j];
+            j--;
+        }
+        a[j + 1] = key;
+    }
+}</code></pre>
+
+<p><strong>Outer loop invariant:</strong> At the start of iteration $i$: $a[0..i-1]$ is a sorted permutation of the original first $i$ elements.</p>
+
+<ul>
+<li><strong>Initialization:</strong> $i = 1$, $a[0..0]$ is trivially sorted. ✓</li>
+<li><strong>Maintenance:</strong> The inner loop shifts elements right to make room, inserting <code>key</code> in its correct position. After insertion, $a[0..i]$ is sorted. ✓</li>
+<li><strong>Termination:</strong> When $i = n$, $a[0..n-1]$ is sorted. ✓</li>
+</ul>
+
+<h3 id="example-5-summation">Example 5: Summation</h3>
+
+<pre><code class="language-java">public static long sum(int[] a) {
+    long s = 0;
+    for (int i = 0; i &lt; a.length; i++) {
+        s += a[i];
+    }
+    return s;
+}</code></pre>
+
+<p><strong>Invariant:</strong> $s = \sum_{j=0}^{i-1} a[j]$.</p>
+
+<ul>
+<li><strong>Initialization:</strong> $i = 0$, $s = 0 = \sum_{j=0}^{-1} a[j]$. ✓</li>
+<li><strong>Maintenance:</strong> $s + a[i] = \sum_{j=0}^{i} a[j]$. ✓</li>
+<li><strong>Termination:</strong> $i = n$, $s = \sum_{j=0}^{n-1} a[j]$. ✓</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="finding-the-right-invariant">Finding the Right Invariant</h3>
+
+<p>The key insight: the invariant should describe <strong>partial progress</strong> toward the postcondition.</p>
+
+<p><strong>Strategy:</strong> Replace the constant bound in the postcondition with the loop variable.</p>
+<ul>
+<li>Postcondition: "result = max of a[0..n-1]" → Invariant: "result = max of a[0..i-1]"</li>
+<li>Postcondition: "a is sorted" → Invariant: "a[0..i-1] is sorted and minimal"</li>
+</ul>
+
+<h3 id="invariant-termination-correctness">Invariant + Termination = Correctness</h3>
+
+<p>This is the <strong>fundamental theorem of loop correctness</strong>:</p>
+
+<div class="katex-block">$(\text{Initialization} \wedge \text{Maintenance} \wedge \text{Termination}) \Rightarrow \{P\}\ \texttt{loop}\ \{Q\}$</div>
+
+<hr>
+
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class LoopInvariantLibrary {
+
+    // --- Linear Search with invariant assertions ---
+
+    public static int linearSearch(int[] a, int key) {
+        assert a != null;
+        for (int i = 0; i &lt; a.length; i++) {
+            // Invariant: key not in a[0..i-1]
+            if (a[i] == key) return i;
+        }
+        // Post: key not in a
+        return -1;
+    }
+
+    // --- Binary Search with invariant assertions ---
+
+    public static int binarySearch(int[] a, int key) {
+        assert a != null;
+        assert isSorted(a) : "Pre: array must be sorted";
+        int lo = 0, hi = a.length - 1;
+        // Invariant: if key is in a, then key is in a[lo..hi]
+        while (lo &lt;= hi) {
+            int mid = lo + (hi - lo) / 2;
+            assert lo &gt;= 0 &amp;&amp; hi &lt; a.length;
+            assert lo &lt;= mid &amp;&amp; mid &lt;= hi;
+            if (a[mid] == key) return mid;
+            else if (a[mid] &lt; key) lo = mid + 1;
+            else hi = mid - 1;
+        }
+        // Post: key not in a
+        return -1;
+    }
+
+    // --- Selection Sort with invariant assertions ---
+
+    public static void selectionSort(int[] a) {
+        assert a != null;
+        for (int i = 0; i &lt; a.length - 1; i++) {
+            // Invariant: a[0..i-1] sorted and contains smallest i elements
+            assert isSortedUpTo(a, i);
+            assert allSmallerOrEqual(a, i);
+
+            int minIdx = i;
+            for (int j = i + 1; j &lt; a.length; j++) {
+                if (a[j] &lt; a[minIdx]) minIdx = j;
+            }
+            // Inner post: a[minIdx] == min(a[i..n-1])
+            int temp = a[i];
+            a[i] = a[minIdx];
+            a[minIdx] = temp;
+        }
+        assert isSorted(a) : "Post: array is sorted";
+    }
+
+    // --- Insertion Sort with invariant assertions ---
+
+    public static void insertionSort(int[] a) {
+        assert a != null;
+        for (int i = 1; i &lt; a.length; i++) {
+            // Invariant: a[0..i-1] is sorted
+            assert isSortedUpTo(a, i);
+            int key = a[i];
+            int j = i - 1;
+            while (j &gt;= 0 &amp;&amp; a[j] &gt; key) {
+                a[j + 1] = a[j];
+                j--;
+            }
+            a[j + 1] = key;
+        }
+        assert isSorted(a) : "Post: array is sorted";
+    }
+
+    // --- Invariant checker helpers ---
+
+    public static boolean isSorted(int[] a) {
+        for (int i = 1; i &lt; a.length; i++) {
+            if (a[i] &lt; a[i - 1]) return false;
+        }
+        return true;
+    }
+
+    private static boolean isSortedUpTo(int[] a, int end) {
+        for (int i = 1; i &lt; end; i++) {
+            if (a[i] &lt; a[i - 1]) return false;
+        }
+        return true;
+    }
+
+    private static boolean allSmallerOrEqual(int[] a, int boundary) {
+        for (int i = 0; i &lt; boundary; i++) {
+            for (int j = boundary; j &lt; a.length; j++) {
+                if (a[i] &gt; a[j]) return false;
+            }
+        }
+        return true;
+    }
+
+    // --- Demo ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Loop Invariant Library ===\n");
+
+        // Linear search
+        int[] data = {5, 3, 8, 1, 9, 2, 7};
+        System.out.println("linearSearch(data, 9) = " + linearSearch(data, 9));
+        System.out.println("linearSearch(data, 6) = " + linearSearch(data, 6));
+
+        // Binary search (needs sorted array)
+        int[] sorted = {1, 3, 5, 7, 9, 11, 13};
+        System.out.println("binarySearch(sorted, 7) = " + binarySearch(sorted, 7));
+        System.out.println("binarySearch(sorted, 6) = " + binarySearch(sorted, 6));
+
+        // Selection sort
+        int[] arr1 = {64, 25, 12, 22, 11};
+        selectionSort(arr1);
+        System.out.println("selectionSort: " + Arrays.toString(arr1));
+
+        // Insertion sort
+        int[] arr2 = {64, 25, 12, 22, 11};
+        insertionSort(arr2);
+        System.out.println("insertionSort: " + Arrays.toString(arr2));
+
+        // Timing comparison
+        Random rng = new Random(42);
+        int n = 5000;
+        int[] big1 = rng.ints(n, 0, 100000).toArray();
+        int[] big2 = Arrays.copyOf(big1, big1.length);
+
+        long start = System.nanoTime();
+        selectionSort(big1);
+        long selTime = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        insertionSort(big2);
+        long insTime = System.nanoTime() - start;
+
+        System.out.printf("\nSorting %d elements:%n", n);
+        System.out.printf("Selection sort: %,d ns%n", selTime);
+        System.out.printf("Insertion sort: %,d ns%n", insTime);
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Robert W. Floyd</strong> (1967) introduced the idea of attaching assertions to program points. <strong>Tony Hoare</strong> (1969) formalized loop invariants in his axiomatic approach to program correctness.</p>
+
+<p>The use of loop invariants in algorithm textbooks was popularized by <strong>Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and Clifford Stein</strong> (CLRS), who systematically present invariants for every sorting and searching algorithm.</p>
+
+<p><strong>Edsger Dijkstra</strong> emphasized that invariants should be <em>discovered simultaneously with the algorithm</em>, not retrofitted: "the invariant is not a property of the loop; it is the core of its design."</p>
+
+<hr>
+
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> What are the three properties of a loop invariant?</p>
+
+<p><strong>A2.</strong> State the invariant for binary search and explain why the array must be sorted.</p>
+
+<p><strong>A3.</strong> How is the maintenance step of a loop invariant analogous to the inductive step in a proof by induction?</p>
+
+<p><strong>A4.</strong> Can a loop have more than one invariant? Give an example.</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove the correctness of selection sort using its loop invariant (all three steps).</p>
+
+<p><strong>B2.</strong> Prove the correctness of insertion sort using its loop invariant.</p>
+
+<p><strong>B3.</strong> Derive a loop invariant for bubble sort and prove its correctness.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Implement binary search with <code>assert</code> statements checking the invariant at each iteration.</p>
+
+<p><strong>C2.</strong> Implement insertion sort and add assertion-based invariant checking.</p>
+
+<p><strong>C3.</strong> Write a method that takes a sorting function and an array, runs the sort, and verifies the postcondition (sorted + permutation of original).</p>
+
+<hr>
+
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> State the loop invariant for linear search. Prove initialization, maintenance, and that the postcondition follows.</p>
+
+<p><strong>DM2.</strong> In binary search, the variant function is $V = hi - lo + 1$. Prove: (a) $V \geq 0$ throughout. (b) $V$ decreases each iteration. (c) When $V < 1$, the loop terminates.</p>
+
+<p><strong>DM3.</strong> Selection sort performs $\sum_{i=0}^{n-2}(n-i-1) = \frac{n(n-1)}{2}$ comparisons. Prove this using the summation formula from Module 6.</p>
+
+<p><strong>DM4.</strong> Derive the loop invariant for computing the product $\prod_{j=0}^{n-1} a[j]$.</p>
+
+<p><strong>DM5.</strong> Prove: if a loop maintains an invariant $I$ and terminates with guard $\neg B$, then $I \wedge \neg B$ holds. Explain why this is the postcondition.</p>
+
+<p><strong>DM6.</strong> State invariants for both the inner and outer loops of bubble sort. Prove that after pass $i$, the last $i$ elements are in their final positions.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement selection sort with full invariant assertions (check after each swap that a[0..i] is sorted and minimal).</p>
+
+<p><strong>JP2.</strong> Implement binary search. Test with sorted arrays of various sizes. Verify correctness by checking that if <code>binarySearch</code> returns <code>idx &gt;= 0</code>, then <code>a[idx] == key</code>.</p>
+
+<p><strong>JP3.</strong> Implement bubble sort with assertions. Count the total comparisons and swaps.</p>
+
+<p><strong>JP4.</strong> Write a generic invariant checker: a method <code>checkInvariant(int[] a, int i, Predicate)</code> that asserts the invariant at each step.</p>
+
+<p><strong>JP5.</strong> Implement a verified <code>reverseArray</code> method with loop invariant: at step $i$, <code>result[0..i-1]</code> = reverse of <code>a[n-i..n-1]</code>.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Module 6: loop invariants mirror induction. Display the parallel explicitly for <code>sum(int[] a)</code>: write the induction proof that $s = \sum_{j=0}^{i-1} a[j]$ alongside the loop.</p>
+
+<p><strong>BR2.</strong> Module 7: selection sort makes $\frac{n(n-1)}{2}$ comparisons (product rule: the inner loop runs $n-1, n-2, \ldots, 1$ times). Prove this count using Module 7's counting principles.</p>
+
+<hr>
+
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> Invariant: key $\notin$ a[0..i-1].</p>
+<ul>
+<li>Init: $i = 0$, a[0..-1] = $\emptyset$. ✓</li>
+<li>Maint: If we don't return, $a[i] \neq$ key, so key $\notin$ a[0..i]. ✓</li>
+<li>Term: $i = n$, key $\notin$ a. Return $-1$. ✓</li>
+</ul>
+
+<p><strong>DM2.</strong> (a) $lo \leq hi + 1$ by loop guard, so $V = hi - lo + 1 \geq 0$. (b) Each iteration either increases $lo$ or decreases $hi$ (or both via return), so $V$ decreases by $\geq 1$. (c) When $V < 1$, $hi < lo$, guard fails. ✓</p>
+
+<p><strong>DM3.</strong> $\sum_{i=0}^{n-2}(n-1-i) = \sum_{k=1}^{n-1} k = \frac{(n-1)n}{2}$. By Module 6 summation formula. ✓</p>
+
+<p><strong>DM4.</strong> Invariant: $p = \prod_{j=0}^{i-1} a[j]$. Init: $p = 1$ (empty product). Maint: $p \cdot a[i] = \prod_{j=0}^{i} a[j]$. Term: $p = \prod_{j=0}^{n-1} a[j]$. ✓</p>
+
+<p><strong>DM6.</strong> After pass $i$ of bubble sort, the largest $i$ elements are in positions $a[n-i..n-1]$ and are sorted. The inner loop compares adjacent elements and bubbles the maximum to the end.</p>
+
+</div>
+<hr>
+<div id="class-3" class="class-section">
+<h1 id="module-8-class-3-termination-and-variant-functions">Module 8 – Class 3: Termination and Variant Functions</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define variant functions (decrementing functions) for loops and recursion.</li>
+<li>Prove termination of iterative and recursive algorithms.</li>
+<li>Combine loop invariants with variant functions to achieve total correctness.</li>
+<li>Apply variant functions to binary search, Euclidean algorithm, and sorting.</li>
+<li>Connect termination to Module 6's well-ordering and recursive descent.</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="the-termination-problem">The Termination Problem</h3>
+
+<p>Partial correctness tells us: <em>if</em> the program terminates, the result is correct. But how do we know it terminates? We need a <strong>variant function</strong>.</p>
+
+<h3 id="variant-functions">Variant Functions</h3>
+
+<p>A <strong>variant function</strong> (or <strong>decrementing function</strong>, or <strong>bound function</strong>) is a function $V$ from the program state to the integers such that:</p>
+
+<ol>
+<li>$V \geq 0$ whenever the loop guard is true.</li>
+<li>$V$ decreases by at least 1 with each iteration.</li>
+</ol>
+
+<p>Since $V$ is a non-negative integer that strictly decreases, the loop must terminate in at most $V_0$ iterations (where $V_0$ is the initial value).</p>
+
+<h3 id="total-correctness">Total Correctness</h3>
+
+<div class="katex-block">$\text{Total correctness} = \text{Partial correctness} + \text{Termination}$</div>
+
+<div class="katex-block">$[\text{Pre}]\ C\ [\text{Post}] \iff \{Pre\}\ C\ \{Post\} + C \text{ terminates when Pre holds}$</div>
+
+<h3 id="finding-variant-functions">Finding Variant Functions</h3>
+
+<table>
+<thead><tr>
+<th>Algorithm</th>
+<th>Variant Function</th>
+<th>Why It Works</th>
+</tr></thead><tbody>
+<tr>
+<td>Linear search</td>
+<td>$n - i$</td>
+<td>$i$ increases by 1 each step</td>
+</tr>
+<tr>
+<td>Binary search</td>
+<td>$hi - lo + 1$</td>
+<td>Range shrinks each step</td>
+</tr>
+<tr>
+<td>Euclidean algorithm</td>
+<td>$b$</td>
+<td>Remainder $<$ divisor</td>
+</tr>
+<tr>
+<td>Selection sort</td>
+<td>$n - i$</td>
+<td>Outer index increases</td>
+</tr>
+<tr>
+<td>Insertion sort</td>
+<td>$n - i$</td>
+<td>Outer index increases</td>
+</tr>
+<tr>
+<td>Fibonacci recursion</td>
+<td>$n$</td>
+<td>Argument decreases</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$V$</td>
+<td>Variant function</td>
+</tr>
+<tr>
+<td>$V(\sigma)$</td>
+<td>Value of variant in state $\sigma$</td>
+</tr>
+<tr>
+<td>$V(\sigma) \geq 0$</td>
+<td>Non-negativity condition</td>
+</tr>
+<tr>
+<td>$V(\sigma') < V(\sigma)$</td>
+<td>Strict decrease after one step</td>
+</tr>
+</tbody></table>
+
+<p><strong>Hoare loop rule with termination:</strong></p>
+
+<div class="katex-block">$\frac{\{I \wedge B \wedge V = v\}\ S\ \{I \wedge V < v\} \quad I \wedge B \Rightarrow V \geq 0}{\{I\}\ \texttt{while (B) \{ S; \}}\ \{I \wedge \neg B\}} \text{ (total)}$</div>
+
+<hr>
+
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-euclidean-algorithm-termination">Example 1: Euclidean Algorithm Termination</h3>
+
+<pre><code class="language-java">public static int gcd(int a, int b) {
+    while (b != 0) {
+        int r = a % b;
+        a = b;
+        b = r;
+    }
+    return a;
+}</code></pre>
+
+<p><strong>Variant:</strong> $V = b$.</p>
+
+<p><strong>Proof:</strong></p>
+<ol>
+<li><strong>$V \geq 0$:</strong> The loop guard ensures $b \neq 0$, and since we start with $b > 0$ (precondition) and the remainder $r = a \bmod b$ satisfies $0 \leq r < b$, after the swap $b_{\text{new}} = r \geq 0$. Actually when $r = 0$, the loop exits on the next check.</li>
+<li><strong>$V$ decreases:</strong> $b_{\text{new}} = r = a \bmod b < b = V_{\text{old}}$. So $V$ strictly decreases.</li>
+<li><strong>Bounded below:</strong> $V \geq 0$ always (remainders are non-negative).</li>
+</ol>
+
+<p>Therefore the loop terminates. Combined with the invariant $\gcd(a_0, b_0) = \gcd(a, b)$:</p>
+
+<div class="katex-block">$\text{Total correctness of GCD.}\ \blacksquare$</div>
+
+<h3 id="example-2-binary-search-termination">Example 2: Binary Search Termination</h3>
+
+<p><strong>Variant:</strong> $V = hi - lo + 1$.</p>
+
+<ol>
+<li><strong>$V \geq 0$:</strong> The loop guard is $lo \leq hi$, so $V = hi - lo + 1 \geq 1 > 0$.</li>
+<li><strong>$V$ decreases:</strong> In each iteration:</li>
+</ol>
+<ul>
+<li>If $a[\text{mid}] <$ key: $lo_{\text{new}} = \text{mid} + 1 > lo$, so $V$ decreases.</li>
+<li>If $a[\text{mid}] >$ key: $hi_{\text{new}} = \text{mid} - 1 < hi$, so $V$ decreases.</li>
+<li>If $a[\text{mid}] =$ key: we return (loop exits).</li>
+</ul>
+<ol>
+<li><strong>Bounded below:</strong> $V$ is an integer $\geq 1$ during the loop.</li>
+</ol>
+
+<p>Maximum iterations: $\lfloor \log_2 n \rfloor + 1$, since $V$ halves (approximately) each iteration. $\blacksquare$</p>
+
+<h3 id="example-3-selection-sort-termination">Example 3: Selection Sort Termination</h3>
+
+<p><strong>Outer variant:</strong> $V_{\text{outer}} = n - 1 - i$. Starts at $n - 2$, decreases by 1 each outer iteration.</p>
+
+<p><strong>Inner variant:</strong> $V_{\text{inner}} = n - j$. Starts at $n - (i+1)$, decreases by 1 each inner iteration.</p>
+
+<p>Both are non-negative integers that decrease. Total comparisons:</p>
+
+<div class="katex-block">$\sum_{i=0}^{n-2} (n-1-i) = \frac{n(n-1)}{2} = O(n^2)$</div>
+
+<h3 id="example-4-recursive-fibonacci-termination">Example 4: Recursive Fibonacci Termination</h3>
+
+<pre><code class="language-java">public static long fib(int n) {
+    if (n &lt;= 1) return n;
+    return fib(n - 1) + fib(n - 2);
+}</code></pre>
+
+<p><strong>Variant:</strong> $V(n) = n$.</p>
+
+<ol>
+<li>Base case: $n \leq 1$ — no recursive call.</li>
+<li>Recursive case: calls $\text{fib}(n-1)$ and $\text{fib}(n-2)$. Both arguments are $< n$ and $\geq 0$.</li>
+<li>By well-ordering of natural numbers, the recursion terminates.</li>
+</ol>
+
+<p>(Note: this proves <em>termination</em>, not efficiency. The time complexity is $O(2^n)$ — exponential!)</p>
+
+<h3 id="example-5-while-loop-with-non-obvious-variant">Example 5: While Loop with Non-Obvious Variant</h3>
+
+<pre><code class="language-java">public static int mysteryLoop(int n) {
+    int x = n;
+    int y = 0;
+    while (x &gt; 0) {
+        x = x - 1;
+        y = y + x;
+    }
+    return y;
+}</code></pre>
+
+<p><strong>Variant:</strong> $V = x$. Starts at $n$, decreases by 1 each iteration, bounded below by 0.</p>
+
+<p><strong>Invariant:</strong> $y = \sum_{k=x}^{n-1} k = \frac{n(n-1)}{2} - \frac{x(x-1)}{2}$.</p>
+
+<p>At termination ($x = 0$): $y = \frac{n(n-1)}{2}$.</p>
+
+<hr>
+
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="well-ordering-and-termination">Well-Ordering and Termination</h3>
+
+<p>The <strong>well-ordering principle</strong> (every non-empty set of natural numbers has a least element) is the foundation of termination proofs. A variant function maps program states to $\mathbb{N}$ and establishes that the sequence of states is well-ordered and decreasing — hence finite.</p>
+
+<h3 id="recursive-termination">Recursive Termination</h3>
+
+<p>For recursive functions, the variant is typically the argument(s):</p>
+<ul>
+<li><strong>Structural recursion on trees:</strong> size or height decreases.</li>
+<li><strong>Numerical recursion:</strong> argument decreases toward the base case.</li>
+<li><strong>Mutual recursion:</strong> use a <em>joint</em> variant function.</li>
+</ul>
+
+<h3 id="non-termination-detection">Non-Termination Detection</h3>
+
+<p>If no variant function exists, the program may not terminate. The classic non-terminating program:</p>
+
+<pre><code class="language-java">while (true) { } // V = ??? No bounded decreasing quantity</code></pre>
+
+<p>The <strong>Halting Problem</strong> (Turing, 1936) shows that no algorithm can determine termination for all programs. But for <em>specific</em> programs, we can often find variant functions.</p>
+
+<hr>
+
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class TerminationLibrary {
+
+    // --- GCD with variant tracking ---
+
+    public static int gcd(int a, int b) {
+        assert a &gt;= 0 &amp;&amp; b &gt; 0 : "Pre: a &gt;= 0, b &gt; 0";
+        int steps = 0;
+        System.out.printf("GCD(%d, %d):%n", a, b);
+        while (b != 0) {
+            int variant = b; // variant function value
+            int r = a % b;
+            System.out.printf("  step %d: a=%d, b=%d, r=%d, V=%d%n",
+                    ++steps, a, b, r, variant);
+            a = b;
+            b = r;
+            assert b &lt; variant : "Variant must decrease";
+            assert b &gt;= 0 : "Variant must be non-negative";
+        }
+        System.out.printf("  Terminated after %d steps. gcd = %d%n", steps, a);
+        return a;
+    }
+
+    // --- Binary search with variant tracking ---
+
+    public static int binarySearch(int[] arr, int key) {
+        assert arr != null;
+        int lo = 0, hi = arr.length - 1;
+        int steps = 0;
+        while (lo &lt;= hi) {
+            int variant = hi - lo + 1;
+            int mid = lo + (hi - lo) / 2;
+            steps++;
+            System.out.printf("  step %d: lo=%d, hi=%d, mid=%d, V=%d%n",
+                    steps, lo, hi, mid, variant);
+            if (arr[mid] == key) {
+                System.out.printf("  Found at index %d after %d steps%n", mid, steps);
+                return mid;
+            } else if (arr[mid] &lt; key) {
+                lo = mid + 1;
+            } else {
+                hi = mid - 1;
+            }
+            int newVariant = hi - lo + 1;
+            assert newVariant &lt; variant : "Variant must decrease";
+        }
+        System.out.printf("  Not found after %d steps%n", steps);
+        return -1;
+    }
+
+    // --- Insertion sort with step counting ---
+
+    public static int[] insertionSort(int[] a) {
+        int[] arr = Arrays.copyOf(a, a.length);
+        int comparisons = 0;
+        int shifts = 0;
+        for (int i = 1; i &lt; arr.length; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            // Inner variant: j + 1 (decreases each inner step)
+            while (j &gt;= 0 &amp;&amp; arr[j] &gt; key) {
+                arr[j + 1] = arr[j];
+                j--;
+                comparisons++;
+                shifts++;
+            }
+            comparisons++; // the failing comparison
+            arr[j + 1] = key;
+        }
+        System.out.printf("Insertion sort (%d elements): %d comparisons, %d shifts%n",
+                a.length, comparisons, shifts);
+        return arr;
+    }
+
+    // --- Recursive function with variant ---
+
+    /**
+     * Compute n! recursively.
+     * Variant: n. Decreases by 1 each call. Base: n &lt;= 1.
+     */
+    public static long factorialRecursive(int n, int depth) {
+        assert n &gt;= 0 : "Variant non-negative";
+        System.out.printf("%sV=%d: factorial(%d)%n",
+                "  ".repeat(depth), n, n);
+        if (n &lt;= 1) return 1;
+        return n * factorialRecursive(n - 1, depth + 1);
+    }
+
+    // --- Collatz conjecture: no proven variant! ---
+
+    /**
+     * Collatz sequence: n -&gt; n/2 if even, 3n+1 if odd.
+     * Conjectured to always reach 1, but NOT PROVEN.
+     * We cannot give a variant function!
+     */
+    public static int collatzSteps(int n) {
+        assert n &gt;= 1;
+        int steps = 0;
+        System.out.printf("Collatz(%d): ", n);
+        while (n != 1) {
+            System.out.printf("%d -&gt; ", n);
+            if (n % 2 == 0) n = n / 2;
+            else n = 3 * n + 1;
+            steps++;
+        }
+        System.out.printf("1 (%d steps)%n", steps);
+        return steps;
+    }
+
+    // --- Total correctness proof template ---
+
+    /**
+     * Exponentiation by repeated squaring.
+     * Pre: n &gt;= 0
+     * Post: result == base^exp
+     * Invariant: result * base^exp == base_orig^exp_orig
+     * Variant: exp
+     */
+    public static long power(long base, int exp) {
+        assert exp &gt;= 0;
+        long result = 1;
+        long b = base;
+        int e = exp;
+        // Invariant: result * b^e == base^exp
+        while (e &gt; 0) {
+            assert e &gt;= 0 : "Variant non-negative";
+            if (e % 2 == 1) {
+                result *= b;
+            }
+            b *= b;
+            e /= 2;
+            // Variant e has decreased (integer division by 2)
+        }
+        // Post: e == 0, so result * b^0 = result = base^exp
+        return result;
+    }
+
+    // --- Demo ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Termination Library ===\n");
+
+        // GCD with variant tracking
+        gcd(1071, 462);    // 5 steps
+        System.out.println();
+        gcd(610, 377);     // Fibonacci numbers: many steps
+
+        // Binary search with variant
+        System.out.println("\n--- Binary Search ---");
+        int[] sorted = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91};
+        binarySearch(sorted, 23);
+        binarySearch(sorted, 50);
+
+        // Insertion sort with step counting
+        System.out.println("\n--- Insertion Sort ---");
+        int[] data = {64, 25, 12, 22, 11, 90, 45};
+        int[] result = insertionSort(data);
+        System.out.println("Sorted: " + Arrays.toString(result));
+
+        // Recursive factorial with variant
+        System.out.println("\n--- Recursive Factorial ---");
+        long fact = factorialRecursive(6, 0);
+        System.out.println("6! = " + fact);
+
+        // Collatz: no variant function known!
+        System.out.println("\n--- Collatz (no proven termination!) ---");
+        collatzSteps(27);
+
+        // Power with variant
+        System.out.println("\n--- Power (repeated squaring) ---");
+        System.out.println("2^10 = " + power(2, 10));
+        System.out.println("3^7 = " + power(3, 7));
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Alan Turing</strong> (1936) proved the <strong>Halting Problem</strong> is undecidable: no algorithm can determine, for every program and input, whether the program terminates. This means we cannot automate termination proofs in general.</p>
+
+<p><strong>Robert W. Floyd</strong> (1967) introduced the use of <strong>well-founded orderings</strong> (a generalization of variant functions) for proving termination.</p>
+
+<p><strong>Edsger Dijkstra</strong> (1976) systematized <strong>variant functions</strong> (which he called "bound functions") in <em>A Discipline of Programming</em>. His approach: design the invariant and the variant together with the loop.</p>
+
+<p>The <strong>Collatz conjecture</strong> (1937) — that the sequence $n \to n/2$ (even) or $n \to 3n+1$ (odd) always reaches 1 — remains one of the most famous open problems. No variant function is known!</p>
+
+<hr>
+
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> What is a variant function? What two properties must it have?</p>
+
+<p><strong>A2.</strong> Why can't <code>while (true) { }</code> have a variant function?</p>
+
+<p><strong>A3.</strong> What is the variant function for binary search? How does it relate to $O(\log n)$ complexity?</p>
+
+<p><strong>A4.</strong> Explain the difference between partial correctness and total correctness.</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove that the Euclidean algorithm terminates using $V = b$ as the variant.</p>
+
+<p><strong>B2.</strong> Prove termination of insertion sort using appropriate variant functions for both loops.</p>
+
+<p><strong>B3.</strong> Provide a variant function for <code>power(base, exp)</code> (repeated squaring). Prove it terminates.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Add variant-tracking print statements to the GCD algorithm. Run on Fibonacci pairs ($F_{n+1}, F_n$) and observe the number of steps.</p>
+
+<p><strong>C2.</strong> Implement the Collatz sequence. Print each step. Try to find a variant function (you won't succeed — this is an open problem!).</p>
+
+<p><strong>C3.</strong> Implement repeated squaring for <code>power(base, exp)</code>. Assert the variant decreases.</p>
+
+<hr>
+
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Define "variant function." State the two conditions it must satisfy.</p>
+
+<p><strong>DM2.</strong> Prove the Euclidean algorithm terminates. What is the maximum number of steps for inputs $<n$? (Answer: $O(\log n)$ — the number of steps is at most $5 \cdot \lfloor \log_{10} \min(a,b) \rfloor$, Lamé's theorem.)</p>
+
+<p><strong>DM3.</strong> For a while loop with guard $i < n$ and body $i = i + 2$, state a variant function and prove termination. For which starting values of $i$ does it actually terminate?</p>
+
+<p><strong>DM4.</strong> Explain why the Halting Problem means we can never have a universal variant-function finder.</p>
+
+<p><strong>DM5.</strong> Give an example of a partial correctness proof where the program does not terminate. Is the Hoare triple still valid?</p>
+
+<p><strong>DM6.</strong> For repeated squaring: if $e_0$ is the initial exponent, how many iterations until termination? Prove: $\lfloor \log_2 e_0 \rfloor + 1$.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement GCD with step-counting. Test on Fibonacci consecutive pairs ($F_n, F_{n-1}$) for $n = 5, 10, 20, 30$. Report step counts.</p>
+
+<p><strong>JP2.</strong> Implement binary search with variant tracking. For an array of size 1,000,000, verify the search takes at most $\lceil \log_2 1{,}000{,}000 \rceil = 20$ steps.</p>
+
+<p><strong>JP3.</strong> Implement the Collatz conjecture: print the sequence for $n = 1, ..., 100$. Track the maximum sequence length.</p>
+
+<p><strong>JP4.</strong> Write a <code>totalCorrectnessChecker</code> method that, given a sorting function, verifies:</p>
+<p>   (a) The output is sorted (partial correctness).</p>
+<p>   (b) The output is a permutation of the input.</p>
+<p>   (c) The function terminated (trivially true if we got a result).</p>
+
+<p><strong>JP5.</strong> Implement repeated squaring with variant assertion. Compute $2^{32}$, $3^{20}$, $7^{15}$ and verify against <code>Math.pow</code>.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Module 6: Prove by strong induction that the Euclidean algorithm terminates. Frame the proof using the well-ordering of $\mathbb{N}$ and connect to the variant function.</p>
+
+<p><strong>BR2.</strong> Module 7: The number of iterations of binary search is $\leq \lfloor \log_2 n \rfloor + 1$. This is a counting argument: the range $[lo, hi]$ halves each time. Connect this to the product rule: after $k$ halvings, $n / 2^k \leq 1$, so $k \geq \log_2 n$.</p>
+
+<p><strong>BR3.</strong> Module 1: The GCD loop maintains the invariant $\gcd(a_0, b_0) = \gcd(a, b)$ (Module 1, Class 3). The variant $V = b$ proves termination. Together, these give total correctness.</p>
+
+<hr>
+
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> A variant function $V: \text{State} \to \mathbb{Z}$ satisfies:</p>
+<p>(i) $V \geq 0$ whenever the loop guard is true.</p>
+<p>(ii) $V$ strictly decreases each iteration ($V_{\text{after}} < V_{\text{before}}$).</p>
+
+<p><strong>DM2.</strong> Variant: $V = b$. $b_{\text{new}} = a \bmod b < b$, so $V$ decreases. Since $V \geq 0$ and is an integer, termination follows. By Lamé's theorem (1844), the Euclidean algorithm on inputs $< n$ takes at most $\lfloor 2.078 \ln n + 0.6723 \rfloor \approx 5 \log_{10} n$ steps. The worst case is consecutive Fibonacci numbers. $\blacksquare$</p>
+
+<p><strong>DM3.</strong> Variant: $V = n - i$ (for even $n - i$). The loop increments $i$ by 2 each time. If $(n - i_0)$ is positive and even, the loop terminates in $(n - i_0)/2$ steps. If $(n - i_0)$ is odd, it may skip past (depends on comparison type).</p>
+
+<p>Strictly: for <code>int i = 0; while (i &lt; n) { i += 2; }</code>, the variant is $\lceil (n - i) / 2 \rceil$. The loop terminates for all $n \geq 0$. $\blacksquare$</p>
+
+<p><strong>DM5.</strong> The Hoare triple $\{x > 0\}\ \texttt{while(true)\{\}}\ \{x < 0\}$ is valid! Partial correctness is vacuously true: the program never terminates, so the postcondition "holds" trivially (there's no terminating execution to violate it).</p>
+
+<p><strong>DM6.</strong> The variant is $e$. Each iteration: $e_{\text{new}} = \lfloor e / 2 \rfloor$. After $k$ iterations: $e_k = \lfloor e_0 / 2^k \rfloor$. The loop exits when $e = 0$: $\lfloor e_0 / 2^k \rfloor = 0 \Leftrightarrow 2^k > e_0 \Leftrightarrow k > \log_2 e_0$. So iterations $= \lfloor \log_2 e_0 \rfloor + 1$. $\blacksquare$</p>
+
+</div>
+<hr>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

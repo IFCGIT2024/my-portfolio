@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 9 Assignment — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="assignment-09">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-9-capstone-assignment-verified-data-structure">Module 9 – Capstone Assignment: Verified Data Structure</h1>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>This capstone assignment synthesizes Modules 7–9 and draws on proof techniques from the entire course. You will choose a data structure, specify it formally, implement it in Java, prove its correctness and analyze its complexity, and reflect on the role of formal verification in software engineering.</p>
+
+<p><strong>This assignment replaces a final exam project. Treat it as a portfolio piece.</strong></p>
+
+<hr>
+
+<section class="slide" id="requirements">
+<h2>Requirements</h2>
+
+<h3 id="step-1-choose-a-data-structure">Step 1: Choose a Data Structure</h3>
+
+<p>Pick <strong>one</strong> of the following:</p>
+
+<table>
+<thead><tr>
+<th>Option</th>
+<th>Data Structure</th>
+<th>Key Operations</th>
+</tr></thead><tbody>
+<tr>
+<td>A</td>
+<td>Balanced BST (AVL or Red-Black)</td>
+<td>insert, delete, search, rebalance</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Min-Heap / Priority Queue</td>
+<td>insert, extractMin, buildHeap, heapSort</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Hash Table (separate chaining)</td>
+<td>put, get, delete, resize</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Graph (adjacency list) + BFS/DFS</td>
+<td>addEdge, bfs, dfs, shortestPath</td>
+</tr>
+</tbody></table>
+
+<h3 id="step-2-formal-specification-20-points">Step 2: Formal Specification (20 points)</h3>
+
+<p>Write a complete specification for your data structure:</p>
+
+<ol>
+<li><strong>Data invariant:</strong> State the structural invariant (e.g., BST ordering, heap property, load factor bound).</li>
+<li><strong>Preconditions and postconditions</strong> for each operation (Hoare-triple style, Module 8).</li>
+<li><strong>Representation function:</strong> How does the Java implementation represent the abstract data type?</li>
+</ol>
+
+<h3 id="step-3-java-implementation-30-points">Step 3: Java Implementation (30 points)</h3>
+
+<p>Implement the data structure in Java with:</p>
+
+<ol>
+<li>All core operations from the table above.</li>
+<li><strong>Assertions</strong> that check the data invariant after each mutating operation.</li>
+<li><strong>Clean code:</strong> meaningful names, appropriate access modifiers, no unnecessary coupling.</li>
+<li>A <code>main</code> method that demonstrates all operations and runs the verification suite.</li>
+</ol>
+
+<h3 id="step-4-correctness-proofs-30-points">Step 4: Correctness Proofs (30 points)</h3>
+
+<p>Provide written proofs for at least <strong>three</strong> of the following (choose those relevant to your data structure):</p>
+
+<ol>
+<li><strong>Insert preserves the invariant</strong> (structural induction or loop invariant).</li>
+<li><strong>Delete preserves the invariant</strong> (case analysis + induction).</li>
+<li><strong>Search is correct</strong> (returns the right answer; loop invariant or recursion).</li>
+<li><strong>Rebalance / resize preserves the invariant</strong> (for AVL rotation, heap sift, hash resize).</li>
+<li><strong>Termination</strong> of each operation (state the variant function).</li>
+</ol>
+
+<p>Each proof should use the techniques from this course:</p>
+<ul>
+<li>Direct proof (Module 1)</li>
+<li>Contradiction / contrapositive (Module 3)</li>
+<li>Structural induction (Module 6)</li>
+<li>Loop invariants + Hoare triples (Module 8)</li>
+</ul>
+
+<h3 id="step-5-complexity-analysis-10-points">Step 5: Complexity Analysis (10 points)</h3>
+
+<ol>
+<li>State the time complexity of each operation (Big-O).</li>
+<li><strong>Prove</strong> at least one complexity claim rigorously (e.g., BST search is $O(h)$; heap insert is $O(\log n)$; hash table amortized $O(1)$ with good load factor).</li>
+<li>Include <strong>empirical measurements</strong>: time operations for $n = 1000, 5000, 10000, 50000, 100000$. Does the measured growth match the theoretical bound?</li>
+</ol>
+
+<h3 id="step-6-counting-and-combinatorics-connection-5-points">Step 6: Counting and Combinatorics Connection (5 points)</h3>
+
+<p>Connect your data structure to a counting problem from Module 7:</p>
+
+<table>
+<thead><tr>
+<th>If you chose...</th>
+<th>Counting connection</th>
+</tr></thead><tbody>
+<tr>
+<td>BST</td>
+<td>Number of distinct BSTs with $n$ keys = Catalan number $C_n$</td>
+</tr>
+<tr>
+<td>Heap</td>
+<td>Number of distinct heaps with values $\{1, ..., n\}$</td>
+</tr>
+<tr>
+<td>Hash table</td>
+<td>Expected collisions via birthday problem (Module 7 Class 3)</td>
+</tr>
+<tr>
+<td>Graph</td>
+<td>Number of spanning trees, or number of paths of length $k$</td>
+</tr>
+</tbody></table>
+
+<p>Compute or implement the relevant counting formula.</p>
+
+<h3 id="step-7-reflection-5-points">Step 7: Reflection (5 points)</h3>
+
+<p>Write a 1–2 page reflection addressing:</p>
+
+<ol>
+<li>How do the proof techniques from this course (direct proof, induction, invariants, specifications) form a foundation for formal verification?</li>
+<li>What would it take to verify your implementation in a tool like Dafny or Coq?</li>
+<li>What are the practical limits of formal verification in real software engineering?</li>
+</ol>
+
+<hr>
+
+<section class="slide" id="rubric">
+<h2>Rubric</h2>
+
+<table>
+<thead><tr>
+<th>Component</th>
+<th>Points</th>
+<th>Criteria</th>
+</tr></thead><tbody>
+<tr>
+<td>Specification</td>
+<td>20</td>
+<td>Invariant, pre/post for all ops, representation function</td>
+</tr>
+<tr>
+<td>Implementation</td>
+<td>30</td>
+<td>Correct, assertions, clean code, demo</td>
+</tr>
+<tr>
+<td>Proofs</td>
+<td>30</td>
+<td>3+ rigorous proofs, correct technique, clear presentation</td>
+</tr>
+<tr>
+<td>Complexity</td>
+<td>10</td>
+<td>Big-O stated, 1+ proved, empirical data</td>
+</tr>
+<tr>
+<td>Counting</td>
+<td>5</td>
+<td>Correct counting connection, computed/implemented</td>
+</tr>
+<tr>
+<td>Reflection</td>
+<td>5</td>
+<td>Thoughtful, connects course themes, specific examples</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>100</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<h3 id="option-b-min-heap-complete-example">Option B: Min-Heap (Complete Example)</h3>
+
+<h4>Specification</h4>
+
+<p><strong>Data invariant (Heap Property):</strong></p>
+<p>For all indices $1 \leq i < n$: $\text{data}[\lfloor(i-1)/2\rfloor] \leq \text{data}[i]$.</p>
+
+<p>Equivalently: every node's value is $\leq$ its children's values.</p>
+
+<p><strong>Complete binary tree invariant:</strong> Elements occupy indices $0, 1, ..., n-1$ with no gaps.</p>
+
+<p><strong>Representation function:</strong> Abstract priority queue $\{(v_0, v_1, ..., v_{n-1})\}$ where $v_0$ is the minimum ↔ Java <code>int[] data</code> with <code>data[0] = min</code>.</p>
+
+<p><strong>Operations:</strong></p>
+
+<table>
+<thead><tr>
+<th>Operation</th>
+<th>Pre</th>
+<th>Post</th>
+</tr></thead><tbody>
+<tr>
+<td><code>insert(x)</code></td>
+<td>heap invariant holds, size $= n$</td>
+<td>heap invariant holds, size $= n + 1$, $x$ is in the heap</td>
+</tr>
+<tr>
+<td><code>extractMin()</code></td>
+<td>heap invariant holds, size $> 0$</td>
+<td>returns old <code>data[0]</code>, size decremented, heap invariant holds</td>
+</tr>
+<tr>
+<td><code>peek()</code></td>
+<td>size $> 0$</td>
+<td>returns <code>data[0]</code> (the minimum)</td>
+</tr>
+<tr>
+<td><code>buildHeap(a)</code></td>
+<td>$a$ is any array</td>
+<td>heap invariant holds, multiset of elements preserved</td>
+</tr>
+</tbody></table>
+
+<h4>Implementation</h4>
+
+<pre><code class="language-java">import java.util.*;
+
+public class CapstoneHeap {
+
+    private int[] data;
+    private int size;
+
+    public CapstoneHeap(int capacity) {
+        data = new int[capacity];
+        size = 0;
+    }
+
+    // --- Invariant Check ---
+    public boolean checkInvariant() {
+        for (int i = 1; i &lt; size; i++) {
+            if (data[i] &lt; data[(i - 1) / 2]) return false;
+        }
+        return true;
+    }
+
+    // --- Insert ---
+    public void insert(int value) {
+        // Pre: checkInvariant()
+        if (size == data.length) data = Arrays.copyOf(data, data.length * 2);
+        data[size] = value;
+        bubbleUp(size);
+        size++;
+        assert checkInvariant() : "Invariant violated after insert";
+        // Post: checkInvariant(), size increased by 1, value is in heap
+    }
+
+    private void bubbleUp(int i) {
+        // Loop invariant: heap property holds everywhere except
+        // possibly between data[i] and data[parent(i)]
+        // Variant: i (decreases each iteration, bounded below by 0)
+        while (i &gt; 0 &amp;&amp; data[i] &lt; data[(i - 1) / 2]) {
+            swap(i, (i - 1) / 2);
+            i = (i - 1) / 2;
+        }
+    }
+
+    // --- Extract Min ---
+    public int extractMin() {
+        // Pre: size &gt; 0, checkInvariant()
+        if (size == 0) throw new NoSuchElementException("Heap is empty");
+        int min = data[0];
+        size--;
+        data[0] = data[size];
+        siftDown(0);
+        assert checkInvariant() : "Invariant violated after extractMin";
+        // Post: returns old minimum, size decreased by 1, checkInvariant()
+        return min;
+    }
+
+    private void siftDown(int i) {
+        // Loop invariant: heap property holds everywhere except
+        // possibly between data[i] and its children
+        // Variant: floor(log2(size)) - floor(log2(i+1)) (depth remaining)
+        while (2 * i + 1 &lt; size) {
+            int smallest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+            if (left &lt; size &amp;&amp; data[left] &lt; data[smallest]) smallest = left;
+            if (right &lt; size &amp;&amp; data[right] &lt; data[smallest]) smallest = right;
+            if (smallest == i) break;
+            swap(i, smallest);
+            i = smallest;
+        }
+    }
+
+    // --- Peek ---
+    public int peek() {
+        if (size == 0) throw new NoSuchElementException("Heap is empty");
+        return data[0];
+    }
+
+    // --- Build Heap ---
+    public void buildHeap(int[] values) {
+        data = Arrays.copyOf(values, Math.max(values.length, 16));
+        size = values.length;
+        // Sift down from last internal node to root
+        for (int i = size / 2 - 1; i &gt;= 0; i--) {
+            siftDown(i);
+        }
+        assert checkInvariant() : "Invariant violated after buildHeap";
+    }
+
+    // --- Heap Sort ---
+    public static int[] heapSort(int[] values) {
+        CapstoneHeap h = new CapstoneHeap(values.length);
+        h.buildHeap(Arrays.copyOf(values, values.length));
+        int[] result = new int[values.length];
+        for (int i = 0; i &lt; result.length; i++) {
+            result[i] = h.extractMin();
+        }
+        // Sorting invariant: result[0..i-1] is sorted and contains
+        // the i smallest elements
+        return result;
+    }
+
+    public int size() { return size; }
+
+    private void swap(int i, int j) {
+        int tmp = data[i]; data[i] = data[j]; data[j] = tmp;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(Arrays.copyOf(data, size));
+    }
+
+    // ========== DEMO AND VERIFICATION ==========
+
+    public static void main(String[] args) {
+        System.out.println("=== Capstone: Verified Min-Heap ===\n");
+
+        // Basic operations
+        CapstoneHeap heap = new CapstoneHeap(16);
+        int[] values = {42, 17, 8, 31, 5, 23, 12, 3, 19, 27};
+        System.out.println("--- Insert ---");
+        for (int v : values) {
+            heap.insert(v);
+            System.out.printf("  insert(%d): %s  invariant=%b%n", v, heap, heap.checkInvariant());
+        }
+
+        System.out.println("\n--- Extract ---");
+        while (heap.size() &gt; 0) {
+            System.out.printf("  extractMin() = %d  remaining: %s%n", heap.extractMin(), heap);
+        }
+
+        // BuildHeap
+        System.out.println("\n--- BuildHeap ---");
+        heap.buildHeap(new int[]{9, 7, 5, 3, 1, 8, 6, 4, 2, 0});
+        System.out.println("  Result: " + heap + "  invariant=" + heap.checkInvariant());
+
+        // HeapSort
+        System.out.println("\n--- HeapSort ---");
+        int[] unsorted = {42, 17, 8, 31, 5, 23, 12, 3};
+        System.out.println("  Input:  " + Arrays.toString(unsorted));
+        System.out.println("  Sorted: " + Arrays.toString(heapSort(unsorted)));
+
+        // Complexity measurement
+        System.out.println("\n--- Complexity ---");
+        Random rng = new Random(42);
+        int[] sizes = {1000, 5000, 10000, 50000, 100000};
+        System.out.println("    n    |  insert (ns/op) | extract (ns/op)");
+        System.out.println("---------+-----------------+----------------");
+        for (int n : sizes) {
+            CapstoneHeap h = new CapstoneHeap(n);
+            // Measure insert
+            long start = System.nanoTime();
+            for (int i = 0; i &lt; n; i++) h.insert(rng.nextInt(n * 10));
+            long insertTime = System.nanoTime() - start;
+            // Measure extract
+            start = System.nanoTime();
+            while (h.size() &gt; 0) h.extractMin();
+            long extractTime = System.nanoTime() - start;
+            System.out.printf("%7d  |  %,13d  |  %,13d%n",
+                    n, insertTime / n, extractTime / n);
+        }
+
+        // Counting connection: number of distinct heaps
+        System.out.println("\n--- Counting: Distinct Heaps ---");
+        System.out.println("Number of distinct min-heaps on {1,...,n}:");
+        for (int n = 1; n &lt;= 10; n++) {
+            System.out.printf("  n=%2d: %d%n", n, countHeaps(n));
+        }
+    }
+
+    // Number of distinct min-heaps on {1,...,n}
+    // The root must be 1. Distribute remaining n-1 into left (size l)
+    // and right (size r) subtrees of a complete tree.
+    // f(n) = C(n-1, l) * f(l) * f(r) where l,r are subtree sizes
+    static long countHeaps(int n) {
+        if (n &lt;= 1) return 1;
+        long[] dp = new long[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i &lt;= n; i++) {
+            int l = leftSubtreeSize(i);
+            int r = i - 1 - l;
+            dp[i] = binomial(i - 1, l) * dp[l] * dp[r];
+        }
+        return dp[n];
+    }
+
+    // For a complete binary tree with n nodes, size of left subtree
+    static int leftSubtreeSize(int n) {
+        if (n &lt;= 1) return 0;
+        int h = (int) (Math.log(n) / Math.log(2)); // height
+        int maxLastLevel = (int) Math.pow(2, h);    // max nodes at last level
+        int actualLastLevel = n - ((int) Math.pow(2, h) - 1);
+        int leftLastLevel = Math.min(actualLastLevel, maxLastLevel / 2);
+        return (int) Math.pow(2, h - 1) - 1 + leftLastLevel;
+    }
+
+    static long binomial(int n, int k) {
+        if (k &gt; n) return 0;
+        if (k == 0 || k == n) return 1;
+        long result = 1;
+        k = Math.min(k, n - k);
+        for (int i = 0; i &lt; k; i++) {
+            result = result * (n - i) / (i + 1);
+        }
+        return result;
+    }
+}</code></pre>
+
+<h4>Correctness Proofs</h4>
+
+<p><strong>Proof 1: Insert preserves the heap invariant.</strong></p>
+
+<p><em>Pre:</em> Heap property holds for indices $0, ..., n-1$.</p>
+
+<p><em>Operation:</em> Place new element at index $n$. Call bubbleUp($n$).</p>
+
+<p><em>Loop invariant for bubbleUp:</em> The heap property holds for all parent-child pairs except possibly $(\text{parent}(i), i)$, where $i$ is the current position of the new element.</p>
+
+<p><em>Init:</em> Before the loop, the only possible violation is between $\text{data}[n]$ and $\text{data}[\text{parent}(n)]$.</p>
+
+<p><em>Maintenance:</em> If $\text{data}[i] < \text{data}[\text{parent}(i)]$, we swap. After the swap:</p>
+<ul>
+<li>The old parent's value moves to $i$, restoring the heap property between $i$ and $i$'s children (since the parent was $\leq$ both its old children, and the new child at $i$ is the old parent ≥ the new child's children).</li>
+<li>The only new possible violation is between $\text{parent}(i)$ (now holding the new element) and $\text{parent}(\text{parent}(i))$.</li>
+</ul>
+
+<p><em>Variant:</em> $i$ decreases each iteration ($\text{parent}(i) < i$ for $i > 0$). Bounded below by 0.</p>
+
+<p><em>Termination:</em> Loop exits when $i = 0$ or $\text{data}[i] \geq \text{data}[\text{parent}(i)]$. In both cases, the heap property is fully restored. $\blacksquare$</p>
+
+<p><strong>Proof 2: ExtractMin returns the minimum and preserves the invariant.</strong></p>
+
+<p><em>Pre:</em> Heap property holds, size $> 0$.</p>
+
+<p><em>Claim:</em> <code>data[0]</code> is the minimum.</p>
+
+<p><em>Proof:</em> By induction on the path from any node to the root: each node's value $\geq$ its parent's $\geq$ ... $\geq$ root. So root is minimum.</p>
+
+<p><em>After extracting:</em> We place <code>data[size-1]</code> at index 0 and call siftDown(0).</p>
+
+<p><em>Loop invariant for siftDown:</em> Heap property holds everywhere except possibly between $\text{data}[i]$ and its children.</p>
+
+<p><em>Maintenance:</em> We find the smallest of $\{i, \text{left}(i), \text{right}(i)\}$. If it's not $i$, we swap with the smallest child. After the swap, the heap property holds at the old position $i$, and the possible violation moves down one level.</p>
+
+<p><em>Variant:</em> Distance from $i$ to the bottom. Decreases each step.</p>
+
+<p><em>Termination:</em> The loop exits when $i$ is a leaf or $\text{data}[i] \leq$ both children. Heap property fully restored. $\blacksquare$</p>
+
+<p><strong>Proof 3: BuildHeap produces a valid heap in $O(n)$ time.</strong></p>
+
+<p><em>Correctness:</em> Process nodes from index $\lfloor n/2 \rfloor - 1$ down to 0. After processing node $i$, the subtree rooted at $i$ is a valid heap (by induction: its children's subtrees were already valid).</p>
+
+<p><em>Time complexity:</em> At height $k$ (measured from bottom), there are at most $\lceil n / 2^{k+1} \rceil$ nodes, each requiring $O(k)$ work for siftDown. Total:</p>
+
+<div class="katex-block">$\sum_{k=0}^{\lfloor \log_2 n \rfloor} \frac{n}{2^{k+1}} \cdot k \leq \frac{n}{2} \sum_{k=0}^{\infty} \frac{k}{2^k} = \frac{n}{2} \cdot 2 = n$</div>
+
+<p>So buildHeap is $O(n)$. $\blacksquare$</p>
+
+<h4>Complexity Analysis</h4>
+
+<table>
+<thead><tr>
+<th>Operation</th>
+<th>Time</th>
+<th>Why</th>
+</tr></thead><tbody>
+<tr>
+<td>insert</td>
+<td>$O(\log n)$</td>
+<td>bubbleUp traverses at most $h = \lfloor \log_2 n \rfloor$ levels</td>
+</tr>
+<tr>
+<td>extractMin</td>
+<td>$O(\log n)$</td>
+<td>siftDown traverses at most $h$ levels</td>
+</tr>
+<tr>
+<td>peek</td>
+<td>$O(1)$</td>
+<td>Direct array access</td>
+</tr>
+<tr>
+<td>buildHeap</td>
+<td>$O(n)$</td>
+<td>Proved above</td>
+</tr>
+<tr>
+<td>heapSort</td>
+<td>$O(n \log n)$</td>
+<td>$n$ extractMin operations, each $O(\log n)$</td>
+</tr>
+</tbody></table>
+
+<h4>Counting Connection</h4>
+
+<p>The number of distinct min-heaps on $\{1, ..., n\}$ with a fixed complete binary tree shape is computed by <code>countHeaps(n)</code>. This uses the recursive formula:</p>
+
+<div class="katex-block">$f(n) = \binom{n-1}{l} \cdot f(l) \cdot f(r)$</div>
+
+<p>where $l$ and $r$ are the sizes of the left and right subtrees. The root must be 1 (minimum). We choose which $l$ of the remaining $n-1$ elements go left.</p>
+
+<p>First values: $f(1) = 1, f(2) = 1, f(3) = 1, f(4) = 3, f(5) = 8, f(6) = 20, f(7) = 80$.</p>
+
+<h4>Reflection (Key Points)</h4>
+
+<ol>
+<li><strong>Course foundations → formal verification:</strong> Direct proofs establish base facts. Induction (weak, strong, structural) proves properties of recursive structures. Loop invariants prove iterative algorithms correct. Specifications (pre/post) define what "correct" means. Together, these form exactly what tools like Dafny and Coq formalize.</li>
+</ol>
+
+<ol>
+<li><strong>Verification in Dafny:</strong> Dafny uses <code>requires</code> (pre), <code>ensures</code> (post), <code>invariant</code> (loop invariant), <code>decreases</code> (variant) — exactly the concepts from Module 8. The proofs we wrote by hand would become machine-checked annotations.</li>
+</ol>
+
+<ol>
+<li><strong>Practical limits:</strong> Full verification is expensive (10×–100× development time). Most practical for safety-critical systems (avionics, medical devices, cryptographic libraries). For typical software, Design by Contract + thorough testing is more cost-effective.</li>
+</ol>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

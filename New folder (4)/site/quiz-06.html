@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 6 Quiz — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="quiz-06">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+      <h1>Module 6: Practice Quiz</h1>
+      <p class="quiz-subtitle">Induction, Recursion & Recursive Definitions — Test your understanding with 11 multiple-choice questions.</p>
+      <div id="quiz-container" data-questions='[{"q":"The Principle of Mathematical Induction has two steps:","choices":["Hypothesis and conclusion","Base case and inductive step","Assumption and proof","Definition and theorem"],"answer":1,"explanation":"PMI: prove the base case (P(0) or P(1)), then prove P(k) → P(k+1)."},{"q":"In the inductive step, you assume P(k) is true. This assumption is called:","choices":["The base case","The inductive hypothesis","The conclusion","The contradiction"],"answer":1,"explanation":"The inductive hypothesis is the assumption that P(k) holds."},{"q":"Strong induction differs from weak induction in that:","choices":["It doesn't need a base case","You assume P(j) for ALL j ≤ k, not just P(k)","It only works for even numbers","It proves existence, not universality"],"answer":1,"explanation":"Strong induction assumes P(j) for all j from the base case up to k."},{"q":"The Fibonacci sequence is defined by F(0) = 0, F(1) = 1, and:","choices":["F(n) = F(n-1) + F(n-2)","F(n) = 2F(n-1)","F(n) = F(n-1) × F(n-2)","F(n) = n + F(n-1)"],"answer":0,"explanation":"Fibonacci: each term is the sum of the two preceding terms."},{"q":"The recursive definition of n! is:","choices":["0! = 1, n! = n × (n-1)!","0! = 0, n! = n + (n-1)!","1! = 1, n! = n²","n! = n × n"],"answer":0,"explanation":"Factorial: base case 0! = 1, recursive case n! = n × (n-1)!."},{"q":"Structural induction is used to prove properties of:","choices":["Integers only","Recursively defined structures like trees","Real numbers","Sets only"],"answer":1,"explanation":"Structural induction proves properties of recursively defined structures (trees, lists, expressions)."},{"q":"Prove: 1 + 2 + ... + n = n(n+1)/2. In the inductive step, you add (k+1) to:","choices":["k(k+1)/2","k²","(k+1)(k+2)/2","k!"],"answer":0,"explanation":"Assume Σᵢ₌₁ᵏ i = k(k+1)/2, then add (k+1) to both sides."},{"q":"The Towers of Hanoi with n disks requires how many moves?","choices":["n","n²","2ⁿ - 1","n!"],"answer":2,"explanation":"T(n) = 2T(n-1) + 1, which solves to T(n) = 2ⁿ - 1."},{"q":"In Java, what prevents infinite recursion?","choices":["A loop","A base case","An import statement","A constructor"],"answer":1,"explanation":"Every recursive method needs a base case that stops recursion."},{"q":"Which proof technique would you use to prove a property of all binary trees?","choices":["Direct proof","Proof by contradiction","Structural induction","Truth table"],"answer":2,"explanation":"Binary trees are recursively defined, so structural induction is the natural technique."},{"q":"A recursive set definition requires:","choices":["Only a recursive rule","Only a base element","Base element(s) and recursive rule(s)","An explicit formula"],"answer":2,"explanation":"A recursive definition needs base elements and rules for building new elements."}]'></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>

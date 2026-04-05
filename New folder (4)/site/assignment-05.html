@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 Assignment — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="assignment-05">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-5-assignment-functions-relations-and-social-network-modeling">Module 5 – Assignment: Functions, Relations and Social-Network Modeling</h1>
+
+<p><strong>Integrative Assignment — Modules 4 & 5</strong></p>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>This assignment synthesizes sets (Module 4) with functions and relations (Module 5). You will:</p>
+<ul>
+<li>Prove properties of functions and relations.</li>
+<li>Model a small social network as a relation.</li>
+<li>Implement surjective and injective mapping functions.</li>
+<li>Compute equivalence classes and verify partitions.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="part-a-mathematical-proofs">
+<h2>Part A: Mathematical Proofs</h2>
+
+<p><strong>A1.</strong> Let $f: \mathbb{Z} \to \mathbb{Z}$ be defined by $f(n) = 3n - 5$. Prove $f$ is injective. Is $f$ surjective? Prove or disprove.</p>
+
+<p><strong>A2.</strong> Let $R$ be a relation on $\mathbb{Z}$ defined by $aRb$ iff $3 \mid (a - b)$. Prove $R$ is an equivalence relation.</p>
+
+<p><strong>A3.</strong> Prove: if $f: A \to B$ is surjective and $g: B \to C$ is surjective, then $g \circ f: A \to C$ is surjective.</p>
+
+<p><strong>A4.</strong> Let $R_1$ and $R_2$ be equivalence relations on $A$. Prove $R_1 \cap R_2$ is an equivalence relation. Give a counterexample showing $R_1 \cup R_2$ need not be an equivalence relation.</p>
+
+<p><strong>A5.</strong> Prove: if $f: A \to B$ is bijective, then $f^{-1}: B \to A$ is also bijective.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-b-java-programming">
+<h2>Part B: Java Programming</h2>
+
+<h3 id="b1-social-network-relation-30-points">B1: Social Network Relation (30 points)</h3>
+
+<p>Model a small social network of 15 people (numbered 0–14) as a relation.</p>
+
+<pre><code class="language-java">public class SocialNetwork {
+
+    /**
+     * Build the "friends" relation: a symmetric, reflexive relation.
+     * Add at least 20 friendship edges (not counting reflexive/symmetric copies).
+     * Return the set of all (a,b) pairs.
+     */
+    public static Set&lt;List&lt;Integer&gt;&gt; buildFriendsRelation() { /* TODO */ }
+
+    /**
+     * Check if the relation is an equivalence relation.
+     */
+    public static boolean isEquivalenceRelation(Set&lt;Integer&gt; domain,
+                                                 Set&lt;List&lt;Integer&gt;&gt; pairs) { /* TODO */ }
+
+    /**
+     * Compute the transitive closure to get "connected" relation.
+     */
+    public static Set&lt;List&lt;Integer&gt;&gt; transitiveClosure(
+            Set&lt;List&lt;Integer&gt;&gt; pairs) { /* TODO */ }
+
+    /**
+     * Compute all equivalence classes (connected components).
+     */
+    public static Set&lt;Set&lt;Integer&gt;&gt; connectedComponents(Set&lt;Integer&gt; domain,
+            Set&lt;List&lt;Integer&gt;&gt; closedPairs) { /* TODO */ }
+
+    /**
+     * Verify the classes form a partition of domain
+     * (Module 4: pairwise disjoint, union = domain).
+     */
+    public static boolean isPartition(Set&lt;Integer&gt; domain,
+            Set&lt;Set&lt;Integer&gt;&gt; classes) { /* TODO */ }
+}</code></pre>
+
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Create at least 3 distinct connected components.</li>
+<li>Print each component with its members.</li>
+<li>Verify the partition property.</li>
+</ul>
+
+<h3 id="b2-mapping-functions-20-points">B2: Mapping Functions (20 points)</h3>
+
+<pre><code class="language-java">public class MappingAnalysis {
+
+    /**
+     * Build a Map&lt;Integer, Integer&gt; for f(x) = (5x + 7) % 26 on {0..25}.
+     * Test if injective, surjective, bijective.
+     */
+    public static void analyzeAffineMap() { /* TODO */ }
+
+    /**
+     * Build a Map&lt;String, Integer&gt; mapping student names to their
+     * "name hash" (sum of character values % 10).
+     * Find collisions. Compute fibers.
+     */
+    public static void analyzeNameHash() { /* TODO */ }
+
+    /**
+     * Build two bijective maps (e.g., two Caesar ciphers with different shifts).
+     * Compose them. Verify the composition is bijective.
+     * Compute the inverse of the composition and verify it equals
+     * f^{-1} ∘ g^{-1} (note the order swap!).
+     */
+    public static void compositionInverseDemo() { /* TODO */ }
+}</code></pre>
+
+<h3 id="b3-divisor-relation-analysis-15-points">B3: Divisor Relation Analysis (15 points)</h3>
+
+<pre><code class="language-java">public class DivisorRelation {
+
+    /**
+     * Build the divisibility relation on {1..n}.
+     * Verify it is a partial order.
+     * Compute the set of minimal elements (a is minimal if no b &lt; a with b|a).
+     * Compute the set of maximal elements.
+     * Connect to Module 1 (divisors) and Module 4 (sets of divisors).
+     */
+    public static void analyzeDivisibility(int n) { /* TODO */ }
+}</code></pre>
+
+<h3 id="b4-equivalence-relation-from-function-15-points">B4: Equivalence Relation from Function (15 points)</h3>
+
+<p><strong>Key theorem:</strong> Every function $f: A \to B$ induces an equivalence relation $\sim_f$ on $A$ defined by $a_1 \sim_f a_2$ iff $f(a_1) = f(a_2)$. The equivalence classes are the fibers of $f$.</p>
+
+<pre><code class="language-java">public class FunctionEquivalence {
+
+    /**
+     * Given a Map&lt;A, B&gt;, build the induced equivalence relation.
+     * Return the set of all (a1, a2) pairs where f(a1) = f(a2).
+     */
+    public static &lt;A, B&gt; Set&lt;List&lt;A&gt;&gt; inducedRelation(Map&lt;A, B&gt; f) { /* TODO */ }
+
+    /**
+     * Verify the induced relation is an equivalence relation.
+     * Compute its equivalence classes.
+     * Verify the classes equal the fibers of f.
+     */
+    public static &lt;A, B&gt; void verifyFiberPartition(Map&lt;A, B&gt; f,
+            Set&lt;A&gt; domain) { /* TODO */ }
+}</code></pre>
+
+<p>Test with $f(n) = n \bmod 4$ on $\{0, \ldots, 15\}$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="rubric">
+<h2>Rubric</h2>
+
+<table>
+<thead><tr>
+<th>Component</th>
+<th>Points</th>
+</tr></thead><tbody>
+<tr>
+<td>A1: Injection proof + surjectivity determination</td>
+<td>10</td>
+</tr>
+<tr>
+<td>A2: Equivalence relation proof (3 properties)</td>
+<td>10</td>
+</tr>
+<tr>
+<td>A3: Surjectivity composition proof</td>
+<td>8</td>
+</tr>
+<tr>
+<td>A4: Intersection proof + union counterexample</td>
+<td>12</td>
+</tr>
+<tr>
+<td>A5: Bijection inverse proof</td>
+<td>10</td>
+</tr>
+<tr>
+<td>B1: Social network (relation, closure, components, partition)</td>
+<td>30</td>
+</tr>
+<tr>
+<td>B2: Mapping analysis (affine, hash, composition)</td>
+<td>20</td>
+</tr>
+<tr>
+<td>B3: Divisibility partial order</td>
+<td>15</td>
+</tr>
+<tr>
+<td>B4: Function-induced equivalence relation</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Code quality and documentation</td>
+<td>10</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>140</strong></td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<h3 id="part-a-solutions">Part A Solutions</h3>
+
+<p><strong>A1.</strong> <em>Injective:</em> $3x_1 - 5 = 3x_2 - 5 \implies 3x_1 = 3x_2 \implies x_1 = x_2$. ✓</p>
+
+<p><em>Not surjective over $\mathbb{Z}$:</em> $y = 0$ requires $3n = 5$, so $n = 5/3 \notin \mathbb{Z}$. More generally, $f$ hits only integers congruent to $1 \pmod{3}$ (since $3n - 5 \equiv -5 \equiv 1 \pmod{3}$). $\blacksquare$</p>
+
+<p><strong>A2.</strong> $aRb \iff 3 \mid (a - b)$, i.e., $a \equiv b \pmod{3}$.</p>
+<ul>
+<li><em>Reflexive:</em> $a - a = 0$ and $3 \mid 0$. ✓</li>
+<li><em>Symmetric:</em> $3 \mid (a-b) \implies a - b = 3k \implies b - a = 3(-k) \implies 3 \mid (b-a)$. ✓</li>
+<li><em>Transitive:</em> $3 \mid (a-b)$ and $3 \mid (b-c)$ $\implies$ $a - c = (a-b)+(b-c) = 3k + 3l = 3(k+l)$ $\implies$ $3 \mid (a-c)$. ✓</li>
+</ul>
+
+<p>$R$ is an equivalence relation. $\blacksquare$</p>
+
+<p><strong>A3.</strong> Let $c \in C$. Since $g$ is surjective, $\exists b \in B: g(b) = c$. Since $f$ is surjective, $\exists a \in A: f(a) = b$. Then $(g \circ f)(a) = g(f(a)) = g(b) = c$. Since $c$ was arbitrary, $g \circ f$ is surjective. $\blacksquare$</p>
+
+<p><strong>A4.</strong> <em>Intersection:</em> Let $R = R_1 \cap R_2$.</p>
+<ul>
+<li><em>Reflexive:</em> $aR_1a$ and $aR_2a$ (both reflexive), so $aRa$. ✓</li>
+<li><em>Symmetric:</em> $aRb \implies aR_1b$ and $aR_2b \implies bR_1a$ and $bR_2a \implies bRa$. ✓</li>
+<li><em>Transitive:</em> $aRb$ and $bRc$ $\implies$ $aR_1b, bR_1c$ (so $aR_1c$) and $aR_2b, bR_2c$ (so $aR_2c$) $\implies$ $aRc$. ✓</li>
+</ul>
+
+<p><em>Union counterexample:</em> On $\{1,2,3\}$: $R_1 = \{(1,1),(2,2),(3,3),(1,2),(2,1)\}$ (equiv classes $\{1,2\}, \{3\}$) and $R_2 = \{(1,1),(2,2),(3,3),(2,3),(3,2)\}$ (equiv classes $\{1\}, \{2,3\}$). $R_1 \cup R_2$ contains $(1,2)$ and $(2,3)$ but NOT $(1,3)$. So it is not transitive. $\blacksquare$</p>
+
+<p><strong>A5.</strong> Let $f: A \to B$ be bijective with inverse $f^{-1}: B \to A$.</p>
+
+<p><em>$f^{-1}$ is injective:</em> Assume $f^{-1}(b_1) = f^{-1}(b_2) = a$. Then $f(a) = b_1$ and $f(a) = b_2$, so $b_1 = b_2$. ✓</p>
+
+<p><em>$f^{-1}$ is surjective:</em> Let $a \in A$. Then $b = f(a) \in B$ and $f^{-1}(b) = a$. So $a$ has a preimage. ✓ $\blacksquare$</p>
+
+<h3 id="part-b-solutions">Part B Solutions</h3>
+
+<p><strong>B1:</strong></p>
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class SocialNetworkSolution {
+
+    public static Set&lt;List&lt;Integer&gt;&gt; buildFriendsRelation() {
+        Set&lt;List&lt;Integer&gt;&gt; friends = new HashSet&lt;&gt;();
+        // 3 clusters: {0-4}, {5-9}, {10-14} with inter-cluster gaps
+        int[][] edges = {
+            {0,1},{0,2},{1,3},{2,4},{3,4},         // cluster A
+            {5,6},{5,7},{6,8},{7,9},{8,9},         // cluster B
+            {10,11},{10,12},{11,13},{12,14},{13,14}, // cluster C
+            // a few more within clusters
+            {0,3},{1,4},{5,8},{6,9},{10,13}
+        };
+        Set&lt;Integer&gt; people = IntStream.range(0, 15).boxed().collect(Collectors.toSet());
+
+        // Symmetric + reflexive
+        for (int p : people) friends.add(Arrays.asList(p, p));
+        for (int[] e : edges) {
+            friends.add(Arrays.asList(e[0], e[1]));
+            friends.add(Arrays.asList(e[1], e[0]));
+        }
+        return friends;
+    }
+
+    public static boolean isReflexive(Set&lt;Integer&gt; domain, Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        for (int a : domain) {
+            if (!pairs.contains(Arrays.asList(a, a))) return false;
+        }
+        return true;
+    }
+
+    public static boolean isSymmetric(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        for (List&lt;Integer&gt; p : pairs) {
+            if (!pairs.contains(Arrays.asList(p.get(1), p.get(0)))) return false;
+        }
+        return true;
+    }
+
+    public static boolean isTransitive(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        for (List&lt;Integer&gt; ab : pairs) {
+            for (List&lt;Integer&gt; bc : pairs) {
+                if (ab.get(1).equals(bc.get(0))) {
+                    if (!pairs.contains(Arrays.asList(ab.get(0), bc.get(1)))) return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean isEquivalenceRelation(Set&lt;Integer&gt; domain,
+                                                 Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        return isReflexive(domain, pairs) &amp;&amp; isSymmetric(pairs) &amp;&amp; isTransitive(pairs);
+    }
+
+    public static Set&lt;List&lt;Integer&gt;&gt; transitiveClosure(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        Set&lt;List&lt;Integer&gt;&gt; closed = new HashSet&lt;&gt;(pairs);
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            Set&lt;List&lt;Integer&gt;&gt; toAdd = new HashSet&lt;&gt;();
+            for (List&lt;Integer&gt; ab : closed) {
+                for (List&lt;Integer&gt; bc : closed) {
+                    if (ab.get(1).equals(bc.get(0))) {
+                        List&lt;Integer&gt; ac = Arrays.asList(ab.get(0), bc.get(1));
+                        if (!closed.contains(ac)) {
+                            toAdd.add(ac);
+                            changed = true;
+                        }
+                    }
+                }
+            }
+            closed.addAll(toAdd);
+        }
+        return closed;
+    }
+
+    public static Set&lt;Set&lt;Integer&gt;&gt; connectedComponents(Set&lt;Integer&gt; domain,
+                                                         Set&lt;List&lt;Integer&gt;&gt; closedPairs) {
+        Set&lt;Set&lt;Integer&gt;&gt; classes = new HashSet&lt;&gt;();
+        for (int a : domain) {
+            Set&lt;Integer&gt; cls = new TreeSet&lt;&gt;();
+            for (int x : domain) {
+                if (closedPairs.contains(Arrays.asList(x, a))) cls.add(x);
+            }
+            classes.add(cls);
+        }
+        return classes;
+    }
+
+    public static boolean isPartition(Set&lt;Integer&gt; domain,
+                                       Set&lt;Set&lt;Integer&gt;&gt; classes) {
+        // Non-empty and pairwise disjoint
+        Set&lt;Integer&gt; union = new HashSet&lt;&gt;();
+        for (Set&lt;Integer&gt; cls : classes) {
+            if (cls.isEmpty()) return false;
+            for (Set&lt;Integer&gt; other : classes) {
+                if (cls != other) {
+                    Set&lt;Integer&gt; inter = new HashSet&lt;&gt;(cls);
+                    inter.retainAll(other);
+                    if (!inter.isEmpty()) return false;
+                }
+            }
+            union.addAll(cls);
+        }
+        return union.equals(domain);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== Social Network Assignment ===\n");
+
+        Set&lt;Integer&gt; people = IntStream.range(0, 15).boxed().collect(Collectors.toSet());
+        Set&lt;List&lt;Integer&gt;&gt; friends = buildFriendsRelation();
+
+        System.out.println("Before closure:");
+        System.out.println("  Reflexive: " + isReflexive(people, friends));
+        System.out.println("  Symmetric: " + isSymmetric(friends));
+        System.out.println("  Transitive: " + isTransitive(friends));
+
+        Set&lt;List&lt;Integer&gt;&gt; closed = transitiveClosure(friends);
+        System.out.println("\nAfter closure:");
+        System.out.println("  Equivalence relation: " + isEquivalenceRelation(people, closed));
+
+        Set&lt;Set&lt;Integer&gt;&gt; components = connectedComponents(people, closed);
+        System.out.println("\nConnected components (" + components.size() + "):");
+        for (Set&lt;Integer&gt; comp : components) {
+            System.out.println("  " + comp);
+        }
+        System.out.println("Partition: " + isPartition(people, components));
+    }
+}</code></pre>
+
+<p><strong>B4:</strong></p>
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class FunctionEquivalenceSolution {
+
+    public static &lt;A, B&gt; Set&lt;List&lt;A&gt;&gt; inducedRelation(Map&lt;A, B&gt; f) {
+        Set&lt;List&lt;A&gt;&gt; pairs = new HashSet&lt;&gt;();
+        for (Map.Entry&lt;A, B&gt; e1 : f.entrySet()) {
+            for (Map.Entry&lt;A, B&gt; e2 : f.entrySet()) {
+                if (Objects.equals(e1.getValue(), e2.getValue())) {
+                    List&lt;A&gt; pair = new ArrayList&lt;&gt;();
+                    pair.add(e1.getKey());
+                    pair.add(e2.getKey());
+                    pairs.add(pair);
+                }
+            }
+        }
+        return pairs;
+    }
+
+    public static &lt;A, B&gt; Set&lt;Set&lt;A&gt;&gt; fibers(Map&lt;A, B&gt; f) {
+        Map&lt;B, Set&lt;A&gt;&gt; fiberMap = new HashMap&lt;&gt;();
+        for (Map.Entry&lt;A, B&gt; entry : f.entrySet()) {
+            fiberMap.computeIfAbsent(entry.getValue(), k -&gt; new TreeSet&lt;&gt;((Comparator&lt;A&gt;)
+                    (a, b) -&gt; a.toString().compareTo(b.toString())));
+            fiberMap.get(entry.getValue()).add(entry.getKey());
+        }
+        return new HashSet&lt;&gt;(fiberMap.values());
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== Function-Induced Equivalence ===\n");
+
+        // f(n) = n mod 4 on {0..15}
+        Map&lt;Integer, Integer&gt; f = new HashMap&lt;&gt;();
+        Set&lt;Integer&gt; domain = new TreeSet&lt;&gt;();
+        for (int i = 0; i &lt;= 15; i++) {
+            f.put(i, i % 4);
+            domain.add(i);
+        }
+
+        Set&lt;List&lt;Integer&gt;&gt; rel = (Set&lt;List&lt;Integer&gt;&gt;)(Set&lt;?&gt;)inducedRelation(f);
+        System.out.println("f(n) = n mod 4 on {0..15}");
+        System.out.println("Relation size: " + rel.size() + " pairs");
+
+        // Verify equivalence
+        boolean refl = domain.stream().allMatch(a -&gt; rel.contains(Arrays.asList(a, a)));
+        boolean sym = rel.stream().allMatch(p -&gt; rel.contains(Arrays.asList(p.get(1), p.get(0))));
+        System.out.println("Reflexive: " + refl);
+        System.out.println("Symmetric: " + sym);
+
+        // Compute fibers
+        Set&lt;Set&lt;Integer&gt;&gt; fiberSets = (Set&lt;Set&lt;Integer&gt;&gt;)(Set&lt;?&gt;)fibers(f);
+        System.out.println("\nFibers (= equivalence classes):");
+        for (Set&lt;Integer&gt; fib : fiberSets) {
+            System.out.println("  " + fib);
+        }
+        // Expected: {0,4,8,12}, {1,5,9,13}, {2,6,10,14}, {3,7,11,15}
+    }
+}</code></pre>
+
+</section>
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

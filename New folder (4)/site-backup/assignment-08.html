@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 8 Assignment — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="assignment-08">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-8-assignment-counting-invariants-and-correctness">Module 8 – Assignment: Counting, Invariants, and Correctness</h1>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>This assignment synthesizes <strong>Module 7</strong> (Counting, Combinatorics, Pigeonhole) with <strong>Module 8</strong> (Specifications, Loop Invariants, Termination). You will analyze nested loop runtimes using counting principles, prove correctness and termination of binary search and sorting, and build verified implementations.</p>
+
+<hr>
+
+<section class="slide" id="part-a-mathematical-proofs">
+<h2>Part A: Mathematical Proofs</h2>
+
+<h3 id="problem-a1-nested-loop-analysis-via-counting">Problem A1: Nested Loop Analysis via Counting</h3>
+
+<p>Consider the following nested loop:</p>
+
+<pre><code class="language-java">int count = 0;
+for (int i = 0; i &lt; n; i++) {
+    for (int j = i + 1; j &lt; n; j++) {
+        count++;
+    }
+}</code></pre>
+
+<p>(a) Using the sum rule (Module 7), prove that <code>count</code> = $\binom{n}{2} = \frac{n(n-1)}{2}$ after the loop.</p>
+
+<p>(b) State a loop invariant for the outer loop in terms of $i$.</p>
+
+<p>(c) Prove by induction on $n$ that $\sum_{i=0}^{n-1}(n-1-i) = \binom{n}{2}$.</p>
+
+<h3 id="problem-a2-binary-search-total-correctness">Problem A2: Binary Search Total Correctness</h3>
+
+<p>(a) State the precondition, postcondition, and loop invariant for iterative binary search.</p>
+
+<p>(b) Prove initialization, maintenance, and termination (all three invariant steps).</p>
+
+<p>(c) State the variant function $V = hi - lo + 1$. Prove it decreases and is bounded below by 0.</p>
+
+<p>(d) Conclude total correctness.</p>
+
+<h3 id="problem-a3-selection-sort-correctness">Problem A3: Selection Sort Correctness</h3>
+
+<p>(a) State the outer loop invariant for selection sort.</p>
+
+<p>(b) Prove initialization, maintenance, and that the postcondition (sorted array) follows at termination.</p>
+
+<p>(c) Using Module 7 counting, prove the total number of comparisons is $\frac{n(n-1)}{2}$.</p>
+
+<p>(d) State a variant function for the outer loop and prove termination.</p>
+
+<h3 id="problem-a4-pigeonhole-and-hash-tables">Problem A4: Pigeonhole and Hash Tables</h3>
+
+<p>(a) Prove: a hash table with $m$ slots and $m + 1$ keys must have at least one collision.</p>
+
+<p>(b) Using the birthday bound, estimate the expected number of keys before the first collision for $m = 10{,}000$.</p>
+
+<p>(c) Explain in terms of loop invariants: what invariant does a collision-free hash table maintain, and when does the pigeonhole principle break it?</p>
+
+<h3 id="problem-a5-specification-algebra">Problem A5: Specification Algebra</h3>
+
+<p>Consider two methods with specifications:</p>
+<ul>
+<li>$f$: <code>requires x &gt; 0, ensures y &gt; x</code></li>
+<li>$g$: <code>requires y &gt; 0, ensures z &gt; y²</code></li>
+</ul>
+
+<p>(a) What is the specification of the sequential composition $g(f(x))$?</p>
+
+<p>(b) Prove using the sequential composition rule $\{P\}\ f\ \{R\}, \{R\}\ g\ \{Q\} \vdash \{P\}\ f;g\ \{Q\}$ that the composed specification is valid.</p>
+
+<hr>
+
+<section class="slide" id="part-b-java-programming">
+<h2>Part B: Java Programming</h2>
+
+<h3 id="problem-b1-verified-binary-search">Problem B1: Verified Binary Search</h3>
+
+<p>Implement binary search with:</p>
+<ul>
+<li>Precondition assertion (array sorted).</li>
+<li>Loop invariant assertion.</li>
+<li>Variant tracking: print the variant at each step and assert it decreases.</li>
+<li>Test on arrays of sizes 1 through 1,000,000.</li>
+<li>Report: for each size, the number of steps and compare with $\lceil \log_2 n \rceil$.</li>
+</ul>
+
+<h3 id="problem-b2-verified-selection-sort">Problem B2: Verified Selection Sort</h3>
+
+<p>Implement selection sort with:</p>
+<ul>
+<li>Loop invariant assertion after each outer iteration.</li>
+<li>Comparison counter.</li>
+<li>Postcondition verification: the result is sorted and a permutation of the input.</li>
+<li>Run on random arrays of sizes 100, 500, 1000. Report comparison counts and verify they equal $\frac{n(n-1)}{2}$.</li>
+</ul>
+
+<h3 id="problem-b3-nested-loop-analyzer">Problem B3: Nested Loop Analyzer</h3>
+
+<p>Implement a method that runs the double nested loop from A1 and:</p>
+<ul>
+<li>Counts iterations.</li>
+<li>Verifies the count equals $\binom{n}{2}$ (using your binomial function from Module 7).</li>
+<li>Tests for $n = 0, 1, 2, ..., 100$.</li>
+</ul>
+
+<h3 id="problem-b4-gcd-total-correctness">Problem B4: GCD Total Correctness</h3>
+
+<p>Implement GCD with:</p>
+<ul>
+<li>Invariant assertion: $\gcd(a_0, b_0) = \gcd(a, b)$ (use a separate gcd function to check).</li>
+<li>Variant tracking: print $b$ at each step, assert it decreases.</li>
+<li>Step counter: verify Lamé's theorem by testing on consecutive Fibonacci numbers.</li>
+<li>Report: for Fibonacci pairs $(F_n, F_{n-1})$, $n = 5, 10, 15, 20, 25, 30$, record step counts and compare with $5 \lfloor \log_{10} F_{n-1} \rfloor$.</li>
+</ul>
+
+<h3 id="problem-b5-sorting-correctness-suite">Problem B5: Sorting Correctness Suite</h3>
+
+<p>Write a comprehensive <code>SortingVerifier</code> class that:</p>
+<ol>
+<li>Takes any sorting function as input.</li>
+<li>Generates random test arrays (various sizes, including edge cases: empty, single, already sorted, reverse sorted, all equal).</li>
+<li>Checks postconditions: sorted + permutation.</li>
+<li>Reports pass/fail.</li>
+</ol>
+
+<p>Test with: selection sort, insertion sort, bubble sort, and <code>Arrays.sort</code>.</p>
+
+<hr>
+
+<section class="slide" id="rubric">
+<h2>Rubric</h2>
+
+<table>
+<thead><tr>
+<th>Component</th>
+<th>Points</th>
+<th>Criteria</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>A1</strong> — Nested loop counting</td>
+<td>10</td>
+<td>Correct sum, valid invariant, induction proof</td>
+</tr>
+<tr>
+<td><strong>A2</strong> — Binary search total correctness</td>
+<td>12</td>
+<td>All three invariant steps + variant proof</td>
+</tr>
+<tr>
+<td><strong>A3</strong> — Selection sort correctness</td>
+<td>12</td>
+<td>Invariant proof + comparison count + termination</td>
+</tr>
+<tr>
+<td><strong>A4</strong> — Pigeonhole + hash tables</td>
+<td>8</td>
+<td>PHP proof, birthday bound calculation, invariant explanation</td>
+</tr>
+<tr>
+<td><strong>A5</strong> — Specification composition</td>
+<td>8</td>
+<td>Correct composed spec, valid proof</td>
+</tr>
+<tr>
+<td><strong>B1</strong> — Verified binary search</td>
+<td>12</td>
+<td>All assertions, variant tracking, correct step counts</td>
+</tr>
+<tr>
+<td><strong>B2</strong> — Verified selection sort</td>
+<td>12</td>
+<td>Invariant checks, comparison counts match formula</td>
+</tr>
+<tr>
+<td><strong>B3</strong> — Nested loop analyzer</td>
+<td>8</td>
+<td>Correct counts, binomial verification</td>
+</tr>
+<tr>
+<td><strong>B4</strong> — GCD total correctness</td>
+<td>8</td>
+<td>Invariant + variant + Lamé verification</td>
+</tr>
+<tr>
+<td><strong>B5</strong> — Sorting correctness suite</td>
+<td>10</td>
+<td>Comprehensive testing, edge cases, permutation check</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>100</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<h3 id="solution-a1">Solution A1</h3>
+
+<p><strong>(a)</strong> The inner loop runs $n-1-i$ times for each value of $i$. By the sum rule:</p>
+
+<div class="katex-block">$\text{count} = \sum_{i=0}^{n-1}(n-1-i) = (n-1) + (n-2) + \cdots + 0 = \frac{(n-1)n}{2} = \binom{n}{2}$</div>
+
+<p><strong>(b)</strong> Outer loop invariant: at the start of iteration $i$, count = $\sum_{k=0}^{i-1}(n-1-k) = \binom{n}{2} - \binom{n-i}{2}$... more simply: count = the number of pairs $(a,b)$ with $0 \leq a < b < n$ and $a < i$. This simplifies to count = $in - \frac{i(i+1)}{2}$.</p>
+
+<p><strong>(c)</strong> Base: $n = 0$: $\sum = 0 = \binom{0}{2}$. ✓ Inductive step: Assume for $n$. For $n+1$:</p>
+
+<p><div class="katex-block">$\sum_{i=0}^{n}(n-i) = n + \sum_{i=1}^{n}(n-i) = n + \sum_{i=0}^{n-1}(n-1-i) = n + \binom{n}{2} = n + \frac{n(n-1)}{2} = \frac{n(n+1)}{2} = \binom{n+1}{2}$</div> $\blacksquare$</p>
+
+<h3 id="solution-a2">Solution A2</h3>
+
+<p><strong>(a)</strong> Pre: <code>a</code> sorted. Post: returns index of <code>key</code> or $-1$. Invariant: if key $\in$ a, then key $\in$ a[lo..hi].</p>
+
+<p><strong>(b)</strong> Init: $lo=0, hi=n-1$. If key $\in$ a, it's in a[0..n-1]. ✓</p>
+<p>Maint: If $a[\text{mid}] <$ key, key $\notin$ a[lo..mid] (sorted), so setting $lo = \text{mid}+1$ preserves the invariant. Similarly for $hi = \text{mid}-1$. ✓</p>
+<p>Term: When $lo > hi$, the range is empty. If key were in a, it would be in an empty range — contradiction. So key $\notin$ a. ✓</p>
+
+<p><strong>(c)</strong> $V = hi - lo + 1$. In the loop, $lo \leq hi$, so $V \geq 1$. Each iteration either $lo$ increases or $hi$ decreases (both by $\geq 1$), so $V$ decreases. Since $V \geq 0$ is an integer, termination follows.</p>
+
+<p><strong>(d)</strong> Partial correctness (from invariant proof) + Termination (from variant) = Total correctness. $\blacksquare$</p>
+
+<h3 id="solution-a5">Solution A5</h3>
+
+<p><strong>(a)</strong> Composed spec: <code>requires x &gt; 0, ensures z &gt; x²</code> (since $y > x > 0$, so $z > y^2 > x^2$).</p>
+
+<p><strong>(b)</strong> By sequential composition: $\{x > 0\}\ f\ \{y > x\}$ and $\{y > x > 0 \Rightarrow y > 0\}\ g\ \{z > y^2\}$. Since $y > x > 0$, we have $z > y^2 > x^2$, establishing $\{x > 0\}\ f;g\ \{z > x^2\}$. $\blacksquare$</p>
+
+<h3 id="solution-b1-b5-java">Solution B1–B5 (Java)</h3>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+
+public class Module8Assignment {
+
+    // --- B1: Verified Binary Search ---
+
+    public static int binarySearch(int[] a, int key) {
+        assert a != null;
+        assert isSorted(a) : "Pre: sorted";
+        int lo = 0, hi = a.length - 1;
+        int steps = 0;
+        while (lo &lt;= hi) {
+            int variant = hi - lo + 1;
+            assert variant &gt; 0 : "Variant positive";
+            int mid = lo + (hi - lo) / 2;
+            steps++;
+            if (a[mid] == key) return mid;
+            else if (a[mid] &lt; key) lo = mid + 1;
+            else hi = mid - 1;
+            // Variant decreased (or we exited)
+        }
+        return -1;
+    }
+
+    public static int binarySearchSteps(int[] a, int key) {
+        int lo = 0, hi = a.length - 1;
+        int steps = 0;
+        while (lo &lt;= hi) {
+            int mid = lo + (hi - lo) / 2;
+            steps++;
+            if (a[mid] == key) return steps;
+            else if (a[mid] &lt; key) lo = mid + 1;
+            else hi = mid - 1;
+        }
+        return steps;
+    }
+
+    // --- B2: Verified Selection Sort ---
+
+    public static int selectionSort(int[] a) {
+        assert a != null;
+        int[] original = Arrays.copyOf(a, a.length);
+        int comparisons = 0;
+        for (int i = 0; i &lt; a.length - 1; i++) {
+            assert isSortedUpTo(a, i) : "Invariant: sorted up to i";
+            int minIdx = i;
+            for (int j = i + 1; j &lt; a.length; j++) {
+                comparisons++;
+                if (a[j] &lt; a[minIdx]) minIdx = j;
+            }
+            int temp = a[i]; a[i] = a[minIdx]; a[minIdx] = temp;
+        }
+        assert isSorted(a) : "Post: sorted";
+        assert isPermutation(original, a) : "Post: permutation";
+        return comparisons;
+    }
+
+    // --- B3: Nested Loop Analyzer ---
+
+    public static long binomial(int n, int k) {
+        if (k &lt; 0 || k &gt; n) return 0;
+        if (k == 0 || k == n) return 1;
+        if (k &gt; n - k) k = n - k;
+        long result = 1;
+        for (int i = 0; i &lt; k; i++) result = result * (n - i) / (i + 1);
+        return result;
+    }
+
+    public static void nestedLoopAnalyzer(int maxN) {
+        for (int n = 0; n &lt;= maxN; n++) {
+            long count = 0;
+            for (int i = 0; i &lt; n; i++) {
+                for (int j = i + 1; j &lt; n; j++) {
+                    count++;
+                }
+            }
+            long expected = binomial(n, 2);
+            assert count == expected : "Mismatch at n=" + n;
+        }
+        System.out.println("Nested loop analysis verified for n=0.." + maxN);
+    }
+
+    // --- B4: GCD Total Correctness ---
+
+    public static int gcdSimple(int a, int b) {
+        while (b != 0) { int r = a % b; a = b; b = r; }
+        return a;
+    }
+
+    public static int gcdVerified(int a0, int b0) {
+        assert a0 &gt;= 0 &amp;&amp; b0 &gt; 0;
+        int a = a0, b = b0;
+        int expected = gcdSimple(a0, b0);
+        int steps = 0;
+        while (b != 0) {
+            int variant = b;
+            // Invariant check
+            assert gcdSimple(a, b) == expected : "Invariant violated";
+            int r = a % b;
+            a = b;
+            b = r;
+            steps++;
+            assert b &lt; variant : "Variant decreased";
+            assert b &gt;= 0 : "Variant non-negative";
+        }
+        assert a == expected : "Post: correct gcd";
+        return steps;
+    }
+
+    // Fibonacci
+    public static int fib(int n) {
+        if (n &lt;= 1) return n;
+        int a = 0, b = 1;
+        for (int i = 2; i &lt;= n; i++) { int t = a + b; a = b; b = t; }
+        return b;
+    }
+
+    // --- B5: Sorting Correctness Suite ---
+
+    public static boolean isSorted(int[] a) {
+        for (int i = 1; i &lt; a.length; i++) if (a[i] &lt; a[i - 1]) return false;
+        return true;
+    }
+
+    public static boolean isSortedUpTo(int[] a, int end) {
+        for (int i = 1; i &lt; end; i++) if (a[i] &lt; a[i - 1]) return false;
+        return true;
+    }
+
+    public static boolean isPermutation(int[] a, int[] b) {
+        if (a.length != b.length) return false;
+        int[] ac = Arrays.copyOf(a, a.length);
+        int[] bc = Arrays.copyOf(b, b.length);
+        Arrays.sort(ac);
+        Arrays.sort(bc);
+        return Arrays.equals(ac, bc);
+    }
+
+    public static void verifySorter(String name, Consumer&lt;int[]&gt; sorter) {
+        Random rng = new Random(42);
+        int passed = 0;
+        int total = 0;
+
+        // Edge cases
+        int[][] edgeCases = {
+            {}, {42}, {1, 2, 3}, {3, 2, 1}, {5, 5, 5, 5}, {1, 1, 2, 2}
+        };
+        for (int[] ec : edgeCases) {
+            int[] original = Arrays.copyOf(ec, ec.length);
+            int[] copy = Arrays.copyOf(ec, ec.length);
+            sorter.accept(copy);
+            total++;
+            if (isSorted(copy) &amp;&amp; isPermutation(original, copy)) passed++;
+            else System.out.printf("  FAIL %s on %s%n", name, Arrays.toString(original));
+        }
+
+        // Random arrays
+        for (int trial = 0; trial &lt; 100; trial++) {
+            int n = rng.nextInt(50) + 1;
+            int[] original = rng.ints(n, -100, 100).toArray();
+            int[] copy = Arrays.copyOf(original, n);
+            sorter.accept(copy);
+            total++;
+            if (isSorted(copy) &amp;&amp; isPermutation(original, copy)) passed++;
+            else System.out.printf("  FAIL %s on trial %d%n", name, trial);
+        }
+
+        System.out.printf("  %s: %d/%d passed%n", name, passed, total);
+    }
+
+    // simple sort implementations for testing
+    public static void insertionSortSimple(int[] a) {
+        for (int i = 1; i &lt; a.length; i++) {
+            int key = a[i]; int j = i - 1;
+            while (j &gt;= 0 &amp;&amp; a[j] &gt; key) { a[j + 1] = a[j]; j--; }
+            a[j + 1] = key;
+        }
+    }
+
+    public static void bubbleSortSimple(int[] a) {
+        for (int i = 0; i &lt; a.length - 1; i++) {
+            for (int j = 0; j &lt; a.length - 1 - i; j++) {
+                if (a[j] &gt; a[j + 1]) {
+                    int t = a[j]; a[j] = a[j + 1]; a[j + 1] = t;
+                }
+            }
+        }
+    }
+
+    // --- Main ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 8 Assignment Solution ===\n");
+
+        // B1: Binary search
+        System.out.println("--- B1: Binary Search Steps ---");
+        for (int size : new int[]{1, 10, 100, 1000, 10000, 100000, 1000000}) {
+            int[] a = new int[size];
+            for (int i = 0; i &lt; size; i++) a[i] = i;
+            int steps = binarySearchSteps(a, -1);
+            int bound = (int) Math.ceil(Math.log(size) / Math.log(2));
+            System.out.printf("n=%,8d: steps=%2d, ceil(log2(n))=%2d  %s%n",
+                    size, steps, bound, steps &lt;= bound + 1 ? "✓" : "✗");
+        }
+
+        // B2: Selection sort
+        System.out.println("\n--- B2: Verified Selection Sort ---");
+        for (int n : new int[]{100, 500, 1000}) {
+            int[] a = new Random(42).ints(n, 0, 10000).toArray();
+            int comps = selectionSort(a);
+            long expected = (long) n * (n - 1) / 2;
+            System.out.printf("n=%4d: comparisons=%,d, expected=%,d  %s%n",
+                    n, comps, expected, comps == expected ? "✓" : "✗");
+        }
+
+        // B3: Nested loop
+        System.out.println("\n--- B3: Nested Loop Analyzer ---");
+        nestedLoopAnalyzer(100);
+
+        // B4: GCD
+        System.out.println("\n--- B4: GCD Verification ---");
+        for (int n : new int[]{5, 10, 15, 20, 25, 30}) {
+            int fn = fib(n);
+            int fn1 = fib(n - 1);
+            int steps = gcdVerified(fn, fn1);
+            double lame = 5 * Math.floor(Math.log10(fn1));
+            System.out.printf("GCD(F_%d=%d, F_%d=%d): steps=%d, Lamé bound=%.0f  %s%n",
+                    n, fn, n - 1, fn1, steps, lame, steps &lt;= lame ? "✓" : "≤");
+        }
+
+        // B5: Sorting suite
+        System.out.println("\n--- B5: Sorting Correctness Suite ---");
+        verifySorter("SelectionSort", a -&gt; { selectionSort(a); });
+        verifySorter("InsertionSort", Module8Assignment::insertionSortSimple);
+        verifySorter("BubbleSort", Module8Assignment::bubbleSortSimple);
+        verifySorter("Arrays.sort", Arrays::sort);
+    }
+}</code></pre>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

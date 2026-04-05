@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 9 Quiz — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="quiz-09">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+      <h1>Module 9: Practice Quiz</h1>
+      <p class="quiz-subtitle">Trees, Complexity & Verification — Test your understanding with 13 multiple-choice questions.</p>
+      <div id="quiz-container" data-questions='[{"q":"A binary tree is recursively defined as:","choices":["An array of nodes","Empty, or a node with left and right subtrees","A linked list with two pointers","A graph with no cycles"],"answer":1,"explanation":"Recursive definition: a binary tree is either empty or a node with two binary subtree children."},{"q":"In a full binary tree with I internal nodes, the number of leaves L is:","choices":["I","I + 1","2I","I - 1"],"answer":1,"explanation":"Full binary tree theorem: L = I + 1."},{"q":"The BST property requires:","choices":["Left child \u003c parent \u003c right child (for all descendants)","All nodes are balanced","The tree is complete","Every node has exactly two children"],"answer":0,"explanation":"BST invariant: all values in the left subtree \u003c root \u003c all values in the right subtree."},{"q":"In-order traversal of a valid BST produces:","choices":["Random order","Reverse sorted order","Sorted (ascending) order","Level order"],"answer":2,"explanation":"In-order traversal visits left, root, right — producing ascending order for a BST."},{"q":"A balanced BST with n nodes has height:","choices":["O(n)","O(log n)","O(n²)","O(1)"],"answer":1,"explanation":"Balanced trees guarantee height O(log n), enabling efficient operations."},{"q":"A min-heap guarantees:","choices":["The root is the maximum","The root is the minimum","The tree is a BST","All leaves are at the same level"],"answer":1,"explanation":"In a min-heap, every node ≤ its children, so the root is the overall minimum."},{"q":"f(n) = O(g(n)) means:","choices":["f grows faster than g","f grows at most as fast as g (up to a constant)","f = g","f grows slower than g"],"answer":1,"explanation":"O(g(n)): there exist c, n₀ such that f(n) ≤ c·g(n) for all n ≥ n₀."},{"q":"The time complexity of heap insert is:","choices":["O(1)","O(log n)","O(n)","O(n log n)"],"answer":1,"explanation":"Insert places at the bottom and bubbles up — at most O(log n) swaps."},{"q":"Build-heap from an array of n elements runs in:","choices":["O(n log n)","O(n)","O(n²)","O(log n)"],"answer":1,"explanation":"Bottom-up build-heap is O(n), not O(n log n), due to the geometric sum of sift-down costs."},{"q":"BST delete of a node with two children replaces it with:","choices":["Its parent","Its in-order successor (or predecessor)","The root","A null node"],"answer":1,"explanation":"Replace with the in-order successor (smallest value in the right subtree) to maintain BST property."},{"q":"Formal verification differs from testing in that:","choices":["It is faster","It covers all possible inputs mathematically","It requires less expertise","It uses random inputs"],"answer":1,"explanation":"Formal verification proves correctness for ALL inputs, whereas testing checks only specific cases."},{"q":"A degenerate (linked-list) BST has height:","choices":["O(log n)","O(n)","O(1)","O(n²)"],"answer":1,"explanation":"A degenerate BST is essentially a linked list with height n - 1 = O(n)."},{"q":"The number of structurally distinct binary trees with n nodes is:","choices":["n!","2ⁿ","The n-th Catalan number","n²"],"answer":2,"explanation":"The n-th Catalan number Cₙ = C(2n,n)/(n+1) counts distinct binary tree shapes."}]'></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>

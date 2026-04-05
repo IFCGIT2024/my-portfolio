@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrange Proof Steps</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .ordering-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 968px) {
+            .ordering-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .steps-column {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            min-height: 400px;
+        }
+
+        .steps-column h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .proof-step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .proof-step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .proof-step.selected {
+            border-color: #667eea;
+            background: #e8ecff;
+        }
+
+        .proof-step.correct {
+            border-color: #28a745;
+            background: #d4edda;
+            cursor: default;
+        }
+
+        .proof-step.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .proof-step.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .ordered-step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #28a745;
+            position: relative;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .remove-step {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .remove-step:hover {
+            background: #c82333;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .check-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .check-btn:hover:not(:disabled) {
+            background: #218838;
+            box-shadow: 0 3px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .reset-btn {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .reset-btn:hover {
+            background: #e0a800;
+        }
+
+        .new-problem-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .new-problem-btn:hover {
+            background: #5568d3;
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-message {
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .result-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+            display: block;
+        }
+
+        .result-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+            display: block;
+        }
+
+        .problem-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .problem-select-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .problem-select-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .problem-select-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #6c757d;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .instruction-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .instruction-box h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .instruction-box p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Arrange Proof Steps</h1>
+            <p class="subtitle">Practice proof structure by ordering steps correctly</p>
+        </header>
+
+        <button onclick="window.location.href='index.html'" class="back-btn">← Back to Home</button>
+
+        <div class="instruction-box">
+            <h3>📝 How to Practice:</h3>
+            <p>1. Select a proof type below</p>
+            <p>2. Click on scrambled steps on the left in the correct order</p>
+            <p>3. They'll appear on the right as you build your proof</p>
+            <p>4. Click "Check Answer" when you're ready!</p>
+            <p>5. Remove steps by clicking the × button if needed</p>
+        </div>
+
+        <div class="problem-selector">
+            <button class="problem-select-btn" onclick="selectProofType('recursive')">Recursive Proof</button>
+            <button class="problem-select-btn" onclick="selectProofType('direct')">Direct Proof</button>
+            <button class="problem-select-btn" onclick="selectProofType('contrapositive')">Contrapositive</button>
+            <button class="problem-select-btn" onclick="selectProofType('contradiction')">Contradiction</button>
+            <button class="problem-select-btn" onclick="selectProofType('induction')">Induction</button>
+        </div>
+
+        <div id="difficultySelector" style="display: none; text-align: center; margin: 20px 0;">
+            <p style="font-weight: bold; margin-bottom: 10px;">Select Difficulty:</p>
+            <button class="problem-select-btn" onclick="filterByDifficulty('easy')">Easy</button>
+            <button class="problem-select-btn" onclick="filterByDifficulty('medium')">Medium</button>
+            <button class="problem-select-btn" onclick="filterByDifficulty('hard')">Hard</button>
+            <button class="problem-select-btn" onclick="filterByDifficulty('all')" style="background: #667eea; color: white;">All Levels</button>
+        </div>
+
+        <div id="problemStatement" style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="color: #667eea; margin: 0;">Problem:</h3>
+                <span id="difficultyBadge" style="padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9em;"></span>
+            </div>
+            <p id="problemText" style="font-size: 1.1em; line-height: 1.6;"></p>
+        </div>
+
+        <div id="resultMessage" class="result-message"></div>
+
+        <div class="ordering-container" id="orderingContainer" style="display: none;">
+            <div class="steps-column">
+                <h3>Scrambled Steps</h3>
+                <div id="scrambledSteps"></div>
+            </div>
+            
+            <div class="steps-column">
+                <h3>Your Proof (in order)</h3>
+                <div id="orderedSteps">
+                    <div class="empty-message">Click steps on the left to build your proof →</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-buttons" id="controlButtons" style="display: none;">
+            <button class="control-btn check-btn" onclick="checkAnswer()" id="checkBtn">Check Answer</button>
+            <button class="control-btn reset-btn" onclick="resetOrder()">Reset Order</button>
+            <button class="control-btn new-problem-btn" onclick="newProblem()">New Problem</button>
+        </div>
+
+        <div id="solutionBox" style="display: none; background: #e8f5e9; border: 2px solid #28a745; border-radius: 10px; padding: 25px; margin: 20px 0;">
+            <h3 style="color: #28a745; margin-bottom: 15px;">✓ Correct Solution:</h3>
+            <div id="solutionSteps"></div>
+        </div>
+    </div>
+
+    <script src="arrange-proofs.js"></script>
+</body>
+</html>

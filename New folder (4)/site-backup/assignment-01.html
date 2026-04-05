@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 Assignment — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="assignment-01">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-1-assignment-integers-definitions-and-proofs">Module 1 – Assignment: Integers, Definitions and Proofs</h1>
+
+<section class="slide" id="assignment-overview">
+<h2>Assignment Overview</h2>
+
+<p><strong>Due:</strong> End of Module 1  </p>
+<p><strong>Weight:</strong> Module assignment (combined math + programming)  </p>
+<p><strong>Format:</strong> Submit a single PDF for proofs and a <code>.java</code> file for code  </p>
+
+<p>This assignment tests your ability to write direct proofs, construct counterexamples, implement number-theoretic algorithms in Java, and connect the two. You will prove properties of parity, divisibility, and the Euclidean algorithm, and you will write Java code that verifies and applies these results.</p>
+
+<hr>
+
+<section class="slide" id="part-a-mathematical-proofs-50-points">
+<h2>Part A: Mathematical Proofs (50 points)</h2>
+
+<p>Write clean, formal proofs for each problem. Follow the direct proof template from class:</p>
+<ol>
+<li>State what is given (hypotheses).</li>
+<li>Unpack definitions into equations.</li>
+<li>Perform algebraic manipulation.</li>
+<li>Identify the integer witness.</li>
+<li>State the conclusion.</li>
+</ol>
+
+<h3 id="problem-a1-8-points-parity-proofs">Problem A1 (8 points) — Parity Proofs</h3>
+
+<p><strong>(a)</strong> Prove: If $a$ is odd and $b$ is even, then $a \cdot b$ is even.</p>
+
+<p><strong>(b)</strong> Prove: For any integer $n$, the expression $n^2 + 3n + 6$ is even.  </p>
+<p><em>(Hint: consider two cases — $n$ even and $n$ odd. Or factor cleverly.)</em></p>
+
+<h3 id="problem-a2-8-points-counterexamples">Problem A2 (8 points) — Counterexamples</h3>
+
+<p>For each false claim, provide a specific counterexample and explain why it disproves the claim.</p>
+
+<p><strong>(a)</strong> "If $a + b$ is even, then $a$ and $b$ are both even."</p>
+
+<p><strong>(b)</strong> "If $n^2$ is divisible by 4, then $n$ is divisible by 4."</p>
+
+<p><strong>(c)</strong> "If $a \mid bc$, then $a \mid b$ or $a \mid c$."</p>
+
+<h3 id="problem-a3-10-points-divisibility-proofs">Problem A3 (10 points) — Divisibility Proofs</h3>
+
+<p><strong>(a)</strong> Prove: If $a \mid b$ and $a \mid c$, then $a \mid (3b - 7c)$.</p>
+
+<p><strong>(b)</strong> Prove: For any integer $n$, the product $n(n+1)(2n+1)$ is divisible by 6.  </p>
+<p><em>(Hint: among $n, n+1, 2n+1$, analyze divisibility by 2 and 3 separately.)</em></p>
+
+<h3 id="problem-a4-12-points-euclidean-algorithm">Problem A4 (12 points) — Euclidean Algorithm</h3>
+
+<p><strong>(a)</strong> Compute $\gcd(546, 234)$ by hand, showing each step of the Euclidean algorithm.</p>
+
+<p><strong>(b)</strong> Using back-substitution on your steps from (a), find integers $x$ and $y$ such that $\gcd(546, 234) = 546x + 234y$. Verify your answer.</p>
+
+<p><strong>(c)</strong> Prove that the Euclidean algorithm terminates for any inputs $a > 0, b \geq 0$. Identify the variant function and explain why it guarantees termination.</p>
+
+<h3 id="problem-a5-12-points-fundamental-theorem-of-arithmetic-small-case">Problem A5 (12 points) — Fundamental Theorem of Arithmetic (Small Case)</h3>
+
+<p>The <strong>Fundamental Theorem of Arithmetic</strong> states: every integer $n > 1$ can be written as a product of prime numbers, and this factorization is unique (up to the order of primes).</p>
+
+<p><strong>(a)</strong> Prove the <em>existence</em> part for $n \leq 100$ using strong induction:  </p>
+<ul>
+<li>Base case: 2 is prime, so it is its own factorization.  </li>
+<li>Inductive step: assume every integer $k$ with $2 \leq k < n$ has a prime factorization. Show that $n$ does too, by considering whether $n$ is prime or composite.</li>
+</ul>
+
+<p><strong>(b)</strong> Sketch the proof of <em>uniqueness</em> for the case $n = 120 = 2^3 \times 3 \times 5$. Suppose $120 = p_1^{e_1} \cdots p_k^{e_k}$ is another prime factorization. Use Euclid's Lemma ($p \mid ab \Rightarrow p \mid a \text{ or } p \mid b$) to argue that the primes must be the same.</p>
+
+<hr>
+
+<section class="slide" id="part-b-java-programming-50-points">
+<h2>Part B: Java Programming (50 points)</h2>
+
+<p>All code should be in a file called <code>Module1Assignment.java</code>. Include comments that reference the mathematical definitions and theorems.</p>
+
+<h3 id="problem-b1-10-points-prime-factorization-verifier">Problem B1 (10 points) — Prime Factorization Verifier</h3>
+
+<p>Write a method <code>List&lt;Integer&gt; primeFactors(int n)</code> that returns the prime factorization of $n$ as a list of prime factors (with repetition).</p>
+
+<p>Write a test method <code>verifyFTA()</code> that:</p>
+<ol>
+<li>For each $n$ from 2 to 100, computes <code>primeFactors(n)</code>.</li>
+<li>Asserts that every factor in the list is prime.</li>
+<li>Asserts that the product of all factors equals $n$.</li>
+<li>Prints the factorization: e.g., <code>84 = 2 × 2 × 3 × 7</code>.</li>
+</ol>
+
+<h3 id="problem-b2-10-points-gcd-with-correctness-checks">Problem B2 (10 points) — GCD with Correctness Checks</h3>
+
+<p>Implement:</p>
+
+<pre><code class="language-java">public static int gcd(int a, int b)</code></pre>
+
+<p>Then write a verification method that for all $a, b$ with $1 \leq a, b \leq 200$:</p>
+<ol>
+<li>Asserts $\gcd(a, b) \mid a$ and $\gcd(a, b) \mid b$.</li>
+<li>Asserts there is no larger common divisor (i.e., for every $d > \gcd(a,b)$, either $d \nmid a$ or $d \nmid b$).</li>
+<li>Asserts $\gcd(a, b) = \gcd(b, a)$ (commutativity).</li>
+</ol>
+
+<h3 id="problem-b3-10-points-b-zout-s-identity">Problem B3 (10 points) — Bézout's Identity</h3>
+
+<p>Implement the extended Euclidean algorithm:</p>
+
+<pre><code class="language-java">public static int[] extendedGcd(int a, int b)
+// Returns {gcd, x, y} where a*x + b*y = gcd</code></pre>
+
+<p>Verify for all pairs $(a, b)$ with $1 \leq a, b \leq 100$ that:</p>
+<div class="katex-block">$a \cdot x + b \cdot y = \gcd(a, b)$</div>
+
+<h3 id="problem-b4-10-points-essay-code-modular-arithmetic-and-hashing">Problem B4 (10 points) — Essay + Code: Modular Arithmetic and Hashing</h3>
+
+<p>Write a Java method that implements a simple hash function:</p>
+
+<pre><code class="language-java">public static int simpleHash(String key, int tableSize) {
+    int hash = 0;
+    for (char c : key.toCharArray()) {
+        hash = (hash + c) % tableSize;
+    }
+    return hash;
+}</code></pre>
+
+<p>Then:</p>
+<ol>
+<li>Hash 20 different words into a table of size 7. Print the bucket for each word.</li>
+<li>Count how many collisions occur (different keys mapping to the same bucket).</li>
+<li>Repeat with a prime table size (7) and a non-prime table size (8). Which produces fewer collisions?</li>
+</ol>
+
+<p>Write a short paragraph (5–8 sentences) explaining:</p>
+<ul>
+<li>How hashing uses the remainder operator (connecting to divisibility).</li>
+<li>Why prime table sizes tend to distribute keys more evenly.</li>
+<li>What the pigeonhole principle tells us about collisions when the number of keys exceeds the table size.</li>
+</ul>
+
+<h3 id="problem-b5-10-points-comprehensive-integration">Problem B5 (10 points) — Comprehensive Integration</h3>
+
+<p>Write a program that:</p>
+<ol>
+<li>Finds all <strong>twin prime</strong> pairs $(p, p+2)$ up to 1000.</li>
+<li>For each pair, computes $\gcd(p, p+2)$ and asserts it equals 1.</li>
+<li>For each pair, verifies Bézout's identity: finds $x, y$ such that $px + (p+2)y = 1$.</li>
+<li>Prints each pair along with the Bézout coefficients.</li>
+</ol>
+
+<hr>
+
+<section class="slide" id="rubric">
+<h2>Rubric</h2>
+
+<table>
+<thead><tr>
+<th>Component</th>
+<th>Points</th>
+<th>Criteria</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>A1</strong> Parity proofs</td>
+<td>8</td>
+<td>Correct proof structure, proper use of definitions, valid algebra</td>
+</tr>
+<tr>
+<td><strong>A2</strong> Counterexamples</td>
+<td>8</td>
+<td>Specific examples given, clear explanation of why they disprove the claim</td>
+</tr>
+<tr>
+<td><strong>A3</strong> Divisibility proofs</td>
+<td>10</td>
+<td>Complete direct proofs with all witnesses identified as integers</td>
+</tr>
+<tr>
+<td><strong>A4</strong> Euclidean algorithm</td>
+<td>12</td>
+<td>Correct hand computation, valid back-substitution, clear termination argument</td>
+</tr>
+<tr>
+<td><strong>A5</strong> FTA proof</td>
+<td>12</td>
+<td>Strong induction structure, correct base/inductive cases, uniqueness sketch</td>
+</tr>
+<tr>
+<td><strong>B1</strong> Prime factorization</td>
+<td>10</td>
+<td>Correct implementation, all assertions pass, output formatted</td>
+</tr>
+<tr>
+<td><strong>B2</strong> GCD verification</td>
+<td>10</td>
+<td>All three properties verified, no assertion failures</td>
+</tr>
+<tr>
+<td><strong>B3</strong> Extended GCD</td>
+<td>10</td>
+<td>Correct implementation, Bézout identity verified for all pairs</td>
+</tr>
+<tr>
+<td><strong>B4</strong> Hashing essay</td>
+<td>10</td>
+<td>Working hash code, collision counts, thoughtful essay connecting math to code</td>
+</tr>
+<tr>
+<td><strong>B5</strong> Integration</td>
+<td>10</td>
+<td>Correct twin prime finder, gcd and Bézout verified, clean output</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<h3 id="part-a-solutions">Part A Solutions</h3>
+
+<p><strong>A1(a) Solution.</strong> Let $a = 2m+1$ and $b = 2n$. Then $ab = (2m+1)(2n) = 2n(2m+1) = 2(n(2m+1))$. Since $n(2m+1) \in \mathbb{Z}$, $ab$ is even. $\blacksquare$</p>
+
+<p><strong>A1(b) Solution.</strong> <em>Case 1:</em> $n = 2k$ (even). Then $n^2 + 3n + 6 = 4k^2 + 6k + 6 = 2(2k^2 + 3k + 3)$, which is even.  </p>
+<p><em>Case 2:</em> $n = 2k+1$ (odd). Then $n^2 + 3n + 6 = (2k+1)^2 + 3(2k+1) + 6 = 4k^2 + 4k + 1 + 6k + 3 + 6 = 4k^2 + 10k + 10 = 2(2k^2 + 5k + 5)$, which is even.   $\blacksquare$</p>
+
+<p><strong>A2(a) Solution.</strong> Counterexample: $a = 3, b = 5$. Then $a + b = 8$ is even, but neither 3 nor 5 is even. $\blacksquare$</p>
+
+<p><strong>A2(b) Solution.</strong> Counterexample: $n = 2$. Then $n^2 = 4$ and $4 \mid 4$, but $4 \nmid 2$. $\blacksquare$</p>
+
+<p><strong>A2(c) Solution.</strong> Counterexample: $a = 6, b = 2, c = 3$. Then $bc = 6$ and $6 \mid 6$, but $6 \nmid 2$ and $6 \nmid 3$. $\blacksquare$</p>
+
+<p><strong>A3(a) Solution.</strong> Since $a \mid b$, write $b = am$. Since $a \mid c$, write $c = an$. Then $3b - 7c = 3am - 7an = a(3m - 7n)$. Since $3m - 7n \in \mathbb{Z}$, $a \mid (3b - 7c)$. $\blacksquare$</p>
+
+<p><strong>A3(b) Solution.</strong> <em>Divisibility by 2:</em> Among $n$ and $n+1$, one is even, so $2 \mid n(n+1)$, hence $2 \mid n(n+1)(2n+1)$.  </p>
+<p><em>Divisibility by 3:</em> Consider $n \bmod 3$:</p>
+<ul>
+<li>If $n \equiv 0$: $3 \mid n$.</li>
+<li>If $n \equiv 1$: $2n+1 = 2(1)+1 = 3$, so $3 \mid (2n+1)$.</li>
+<li>If $n \equiv 2$: $n+1 \equiv 0$, so $3 \mid (n+1)$.</li>
+</ul>
+
+<p>In all cases, $3 \mid n(n+1)(2n+1)$. Since $\gcd(2,3) = 1$ and both divide the product, $6 \mid n(n+1)(2n+1)$. $\blacksquare$</p>
+
+<p><strong>A4(a) Solution.</strong></p>
+<div class="katex-block">$546 = 234 \times 2 + 78$</div>
+<div class="katex-block">$234 = 78 \times 3 + 0$</div>
+<p>$\gcd(546, 234) = 78$.</p>
+
+<p><strong>A4(b) Solution.</strong> From step 1: $78 = 546 - 234 \times 2$. So $x = 1, y = -2$.  </p>
+<p>Check: $546(1) + 234(-2) = 546 - 468 = 78$. ✓</p>
+
+<p><strong>A4(c) Solution.</strong> The variant function is $b$ (the second argument). At each step, $b_{\text{new}} = a \bmod b$, and $0 \leq a \bmod b < b$, so $b$ strictly decreases. Since $b$ is a non-negative integer that strictly decreases each iteration, it must eventually reach 0, and the loop terminates. $\blacksquare$</p>
+
+<p><strong>A5(a) Solution.</strong> <em>Base case:</em> $n = 2$ is prime, so its prime factorization is just $\{2\}$.  </p>
+<p><em>Inductive step:</em> Assume every integer $k$ with $2 \leq k < n$ has a prime factorization. Consider $n$:</p>
+<ul>
+<li>If $n$ is prime, its factorization is $\{n\}$.</li>
+<li>If $n$ is composite, then $n = ab$ with $2 \leq a, b < n$. By the inductive hypothesis, $a$ and $b$ have prime factorizations. Combining them gives a prime factorization of $n$. $\blacksquare$</li>
+</ul>
+
+<p><strong>A5(b) Solution.</strong> Suppose $120 = p_1^{e_1} \cdots p_k^{e_k}$. Since $2 \mid 120$, by Euclid's Lemma, $2$ must divide some $p_i^{e_i}$, and since $p_i$ is prime, $p_i = 2$. Dividing out all factors of 2 leaves $15 = 3 \times 5$. Similarly, 3 must appear, and 5 must appear. The exponents are forced by how many times each prime divides 120.</p>
+
+<h3 id="part-b-solutions">Part B Solutions</h3>
+
+<p><strong>B1 Solution.</strong></p>
+<pre><code class="language-java">import java.util.*;
+
+public class Module1Assignment {
+
+    public static List&lt;Integer&gt; primeFactors(int n) {
+        List&lt;Integer&gt; factors = new ArrayList&lt;&gt;();
+        for (int d = 2; d * d &lt;= n; d++) {
+            while (n % d == 0) { factors.add(d); n /= d; }
+        }
+        if (n &gt; 1) factors.add(n);
+        return factors;
+    }
+
+    public static boolean isPrime(int n) {
+        if (n &lt; 2) return false;
+        for (int d = 2; d * d &lt;= n; d++) {
+            if (n % d == 0) return false;
+        }
+        return true;
+    }
+
+    public static int gcd(int a, int b) {
+        a = Math.abs(a); b = Math.abs(b);
+        while (b != 0) { int r = a % b; a = b; b = r; }
+        return a;
+    }
+
+    public static int[] extendedGcd(int a, int b) {
+        if (b == 0) return new int[]{a, 1, 0};
+        int[] r = extendedGcd(b, a % b);
+        return new int[]{r[0], r[2], r[1] - (a / b) * r[2]};
+    }
+
+    public static void verifyFTA() {
+        System.out.println("--- B1: Prime Factorization ---");
+        for (int n = 2; n &lt;= 100; n++) {
+            List&lt;Integer&gt; factors = primeFactors(n);
+            int product = 1;
+            for (int f : factors) {
+                assert isPrime(f) : f + " is not prime";
+                product *= f;
+            }
+            assert product == n : "Product mismatch for " + n;
+
+            // Pretty print
+            StringBuilder sb = new StringBuilder();
+            sb.append(n).append(" = ");
+            for (int i = 0; i &lt; factors.size(); i++) {
+                if (i &gt; 0) sb.append(" × ");
+                sb.append(factors.get(i));
+            }
+            System.out.println("  " + sb);
+        }
+        System.out.println("  FTA verified for 2..100\n");
+    }
+
+    public static void verifyGCD() {
+        System.out.println("--- B2: GCD Verification ---");
+        for (int a = 1; a &lt;= 200; a++) {
+            for (int b = 1; b &lt;= 200; b++) {
+                int g = gcd(a, b);
+                assert a % g == 0 : "gcd doesn't divide a";
+                assert b % g == 0 : "gcd doesn't divide b";
+                assert gcd(a, b) == gcd(b, a) : "not commutative";
+                // No larger common divisor
+                for (int d = g + 1; d &lt;= Math.min(a, b); d++) {
+                    assert !(a % d == 0 &amp;&amp; b % d == 0) :
+                        d + " is a larger common divisor of " + a + "," + b;
+                }
+            }
+        }
+        System.out.println("  GCD properties verified for 1..200\n");
+    }
+
+    public static void verifyBezout() {
+        System.out.println("--- B3: Bézout's Identity ---");
+        for (int a = 1; a &lt;= 100; a++) {
+            for (int b = 1; b &lt;= 100; b++) {
+                int[] r = extendedGcd(a, b);
+                assert a * r[1] + b * r[2] == r[0] :
+                    "Bézout failed for " + a + "," + b;
+            }
+        }
+        System.out.println("  Bézout verified for a,b in [1,100]\n");
+    }
+
+    public static int simpleHash(String key, int tableSize) {
+        int hash = 0;
+        for (char c : key.toCharArray()) {
+            hash = (hash + c) % tableSize;
+        }
+        return hash;
+    }
+
+    public static void hashExperiment() {
+        System.out.println("--- B4: Hash Experiment ---");
+        String[] words = {"apple", "banana", "cherry", "date", "elderberry",
+            "fig", "grape", "honeydew", "kiwi", "lemon", "mango", "nectarine",
+            "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine",
+            "ugli", "vanilla"};
+
+        for (int tableSize : new int[]{7, 8}) {
+            Map&lt;Integer, List&lt;String&gt;&gt; buckets = new HashMap&lt;&gt;();
+            for (String w : words) {
+                int h = simpleHash(w, tableSize);
+                buckets.computeIfAbsent(h, k -&gt; new ArrayList&lt;&gt;()).add(w);
+            }
+            int collisions = 0;
+            for (var entry : buckets.entrySet()) {
+                if (entry.getValue().size() &gt; 1)
+                    collisions += entry.getValue().size() - 1;
+            }
+            System.out.printf("  Table size %d (%s): %d collisions%n",
+                tableSize, isPrime(tableSize) ? "prime" : "non-prime", collisions);
+            for (var entry : buckets.entrySet()) {
+                System.out.printf("    Bucket %d: %s%n",
+                    entry.getKey(), entry.getValue());
+            }
+        }
+        System.out.println();
+    }
+
+    public static void twinPrimesAndBezout() {
+        System.out.println("--- B5: Twin Primes + Bézout ---");
+        List&lt;Integer&gt; primes = new ArrayList&lt;&gt;();
+        for (int n = 2; n &lt;= 1000; n++) {
+            if (isPrime(n)) primes.add(n);
+        }
+
+        int count = 0;
+        for (int i = 0; i &lt; primes.size() - 1; i++) {
+            int p = primes.get(i);
+            int q = primes.get(i + 1);
+            if (q - p == 2) {
+                assert gcd(p, q) == 1 : "Twin primes not coprime!";
+                int[] r = extendedGcd(p, q);
+                assert p * r[1] + q * r[2] == 1;
+                System.out.printf("  (%d, %d): %d×(%d) + %d×(%d) = 1%n",
+                    p, q, p, r[1], q, r[2]);
+                count++;
+            }
+        }
+        System.out.println("  Twin prime pairs found: " + count + "\n");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("==============================");
+        System.out.println(" MODULE 1 ASSIGNMENT SOLUTION ");
+        System.out.println("==============================\n");
+
+        verifyFTA();
+        verifyGCD();
+        verifyBezout();
+        hashExperiment();
+        twinPrimesAndBezout();
+
+        System.out.println("=== ALL CHECKS PASSED ===");
+    }
+}</code></pre>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

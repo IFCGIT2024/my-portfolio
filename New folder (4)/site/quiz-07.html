@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 7 Quiz — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="quiz-07">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+      <h1>Module 7: Practice Quiz</h1>
+      <p class="quiz-subtitle">Counting, Growth & Finite Reasoning — Test your understanding with 12 multiple-choice questions.</p>
+      <div id="quiz-container" data-questions='[{"q":"The multiplication principle states: if task A has m outcomes and task B has n outcomes, the total is:","choices":["m + n","m × n","m!","mⁿ"],"answer":1,"explanation":"When tasks are sequential and independent, multiply the number of outcomes."},{"q":"The addition principle applies when choices are:","choices":["Sequential","Mutually exclusive","Overlapping","Independent"],"answer":1,"explanation":"The addition principle applies when the sets of outcomes are disjoint."},{"q":"P(n, k) = n!/(n-k)! counts:","choices":["Combinations","Permutations","Partitions","Subsets"],"answer":1,"explanation":"P(n, k) counts ordered arrangements of k items from n."},{"q":"C(n, k) = n! / (k!(n-k)!) counts:","choices":["Ordered selections","Unordered selections (combinations)","Permutations","Sequences"],"answer":1,"explanation":"C(n, k) counts the number of ways to choose k items from n without regard to order."},{"q":"C(5, 2) equals:","choices":["20","10","5","25"],"answer":1,"explanation":"C(5,2) = 5! / (2! × 3!) = 120 / (2 × 6) = 10."},{"q":"Pascal's identity: C(n, k) =","choices":["C(n-1, k-1) + C(n-1, k)","C(n-1, k-1) × C(n-1, k)","C(n, k-1) + C(n, k+1)","2 × C(n-1, k)"],"answer":0,"explanation":"Pascal's identity: C(n,k) = C(n-1,k-1) + C(n-1,k)."},{"q":"The Pigeonhole Principle says: if n+1 pigeons go into n holes, then:","choices":["Every hole has exactly one pigeon","At least one hole has at least 2 pigeons","Some holes are empty","n must equal 1"],"answer":1,"explanation":"If more objects than containers, at least one container has ≥ 2 objects."},{"q":"The Birthday Problem: approximately how many people needed for a \u003e50% chance of a shared birthday?","choices":["183","365","23","50"],"answer":2,"explanation":"With just 23 people, the probability of at least one shared birthday exceeds 50%."},{"q":"|A ∪ B| = |A| + |B| - |A ∩ B| is called:","choices":["De Morgan's Law","Inclusion-Exclusion Principle","Pigeonhole Principle","Binomial Theorem"],"answer":1,"explanation":"Inclusion-exclusion corrects for double-counting of overlapping elements."},{"q":"The Binomial Theorem expands (x + y)ⁿ as:","choices":["xⁿ + yⁿ","Σ C(n,k) xᵏ yⁿ⁻ᵏ","n × (x + y)","x^n × y^n"],"answer":1,"explanation":"(x + y)ⁿ = Σₖ₌₀ⁿ C(n,k) xᵏ yⁿ⁻ᵏ."},{"q":"How many subsets does a set of size n have?","choices":["n","n²","2ⁿ","n!"],"answer":2,"explanation":"Each element is either in or out of a subset: 2 choices per element, so 2ⁿ total."},{"q":"A hash table with m slots and n keys expects collisions when:","choices":["n \u003e m","n \u003e √m (approximately)","n \u003e m²","n = 1"],"answer":1,"explanation":"By the birthday paradox, collisions are likely when n ≈ √m."}]'></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>

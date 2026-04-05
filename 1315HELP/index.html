@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proof Practice Exams</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Proof Practice Exams</h1>
+            <p class="subtitle">Master the fundamentals of mathematical proofs</p>
+        </header>
+
+        <!-- Home Screen -->
+        <div id="homeScreen" class="screen active">
+            <div class="menu-section">
+                <h2>🎯 Interactive Learning</h2>
+                <p>Learn proof structure by arranging steps in the correct order</p>
+                <div class="button-grid">
+                    <button onclick="window.location.href='arrange-proofs.html'" class="menu-btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        📝 Arrange Proof Steps
+                    </button>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <h2>Practice by Proof Type</h2>
+                <div class="button-grid">
+                    <button onclick="showProofType('recursive')" class="menu-btn">Recursive Proofs</button>
+                    <button onclick="showProofType('direct')" class="menu-btn">Direct Proofs</button>
+                    <button onclick="showProofType('contrapositive')" class="menu-btn">Contrapositive Proofs</button>
+                    <button onclick="showProofType('contradiction')" class="menu-btn">Proof by Contradiction</button>
+                    <button onclick="showProofType('induction')" class="menu-btn">Proof by Induction</button>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <h2>Practice Tests</h2>
+                <p>Each test contains one problem of each type</p>
+                <div class="button-grid">
+                    <button onclick="startTest(1)" class="test-btn">Practice Test 1</button>
+                    <button onclick="startTest(2)" class="test-btn">Practice Test 2</button>
+                    <button onclick="startTest(3)" class="test-btn">Practice Test 3</button>
+                    <button onclick="startTest(4)" class="test-btn">Practice Test 4</button>
+                    <button onclick="startTest(5)" class="test-btn">Practice Test 5</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Proof Type Screen -->
+        <div id="proofTypeScreen" class="screen">
+            <button onclick="goHome()" class="back-btn">← Back to Home</button>
+            <h2 id="proofTypeTitle"></h2>
+            <div id="proofTypeProblems" class="problem-list"></div>
+        </div>
+
+        <!-- Test Screen -->
+        <div id="testScreen" class="screen">
+            <button onclick="goHome()" class="back-btn">← Back to Home</button>
+            <h2 id="testTitle"></h2>
+            <div class="test-info">
+                <p>Problem <span id="currentProblem">1</span> of <span id="totalProblems">5</span></p>
+                <p class="proof-type-label" id="currentProofType"></p>
+            </div>
+            <div id="problemContent" class="problem-content"></div>
+            <div class="navigation-buttons">
+                <button onclick="previousProblem()" id="prevBtn" class="nav-btn">← Previous</button>
+                <button onclick="toggleSolution()" id="solutionBtn" class="nav-btn solution-btn">Show Solution</button>
+                <button onclick="nextProblem()" id="nextBtn" class="nav-btn">Next →</button>
+            </div>
+        </div>
+
+        <!-- Individual Problem View -->
+        <div id="problemScreen" class="screen">
+            <button onclick="backToProofType()" class="back-btn">← Back</button>
+            <h2 id="individualProofTitle"></h2>
+            <div id="individualProblemContent" class="problem-content"></div>
+            <div class="navigation-buttons">
+                <button onclick="toggleIndividualSolution()" id="individualSolutionBtn" class="nav-btn solution-btn">Show Solution</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

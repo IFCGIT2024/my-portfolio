@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 Lab — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="lab-03">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-3-lab-logic-quantifiers-and-program-reasoning">Module 3 Lab: Logic, Quantifiers and Program Reasoning</h1>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>In this lab you will build a small library of logical tests in Java, implement universal and existential checks over arrays, and use assertions to enforce preconditions and postconditions. By the end, you will have a concrete toolkit that bridges propositional logic, quantified reasoning, and program verification.</p>
+
+<p><strong>Estimated Time:</strong> 90–120 minutes</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-1-truth-table-engine">
+<h2>Part 1: Truth Table Engine</h2>
+
+<p>Build a reusable truth table evaluator for propositional logic formulas.</p>
+
+<h3 id="tasks">Tasks</h3>
+
+<ol>
+<li>Implement <code>boolean[][] allCombinations(int n)</code> that generates all $2^n$ truth-value rows for $n$ variables.</li>
+<li>Implement <code>printTruthTable(String[] varNames, boolean[][] rows, boolean[] results)</code>.</li>
+<li>Implement standard connective methods:</li>
+</ol>
+<ul>
+<li><code>boolean and(boolean p, boolean q)</code></li>
+<li><code>boolean or(boolean p, boolean q)</code></li>
+<li><code>boolean not(boolean p)</code></li>
+<li><code>boolean implies(boolean p, boolean q)</code></li>
+<li><code>boolean iff(boolean p, boolean q)</code></li>
+</ul>
+<ol>
+<li>Use the engine to print truth tables for:</li>
+</ol>
+<ul>
+<li>$p \rightarrow q$ vs. $\neg p \vee q$ (expect identical columns)</li>
+<li>De Morgan: $\neg(p \wedge q)$ vs. $\neg p \vee \neg q$</li>
+<li>$(p \rightarrow q) \wedge (q \rightarrow r) \rightarrow (p \rightarrow r)$ (hypothetical syllogism — should be a tautology)</li>
+</ul>
+
+<h3 id="verification-checklist">Verification Checklist</h3>
+<ul>
+<li>☐ <code>allCombinations(2)</code> produces 4 rows: FF, FT, TF, TT</li>
+<li>☐ Implication and its equivalent produce identical result columns</li>
+<li>☐ De Morgan equivalences verified</li>
+<li>☐ Hypothetical syllogism shown as tautology (all results true)</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="part-2-universal-and-existential-checks">
+<h2>Part 2: Universal and Existential Checks</h2>
+
+<p>Implement quantifier-based reasoning over arrays using Java's <code>Predicate&lt;Integer&gt;</code>.</p>
+
+<h3 id="tasks">Tasks</h3>
+
+<ol>
+<li>Implement <code>boolean forAll(int[] arr, Predicate&lt;Integer&gt; p)</code> — returns true if $p(x)$ holds for every element $x$.</li>
+<li>Implement <code>boolean exists(int[] arr, Predicate&lt;Integer&gt; p)</code> — returns true if $p(x)$ holds for at least one $x$.</li>
+<li>Implement <code>Optional&lt;Integer&gt; findWitness(int[] arr, Predicate&lt;Integer&gt; p)</code> — returns the first element satisfying $p$.</li>
+<li>Implement <code>Optional&lt;Integer&gt; findCounterexample(int[] arr, Predicate&lt;Integer&gt; p)</code> — returns the first element falsifying $p$.</li>
+<li>Test with the following:</li>
+</ol>
+<ul>
+<li><code>forAll({2,4,6,8}, isEven)</code> → true</li>
+<li><code>exists({1,3,5,7}, isEven)</code> → false</li>
+<li><code>findCounterexample({2,4,5,8}, isEven)</code> → Optional[5]</li>
+<li><code>forAll({2,3,5,7}, isPrime)</code> → true</li>
+<li><code>exists({4,6,8,10}, isPrime)</code> → false</li>
+</ul>
+
+<ol>
+<li>Verify De Morgan for quantifiers: <code>forAll(arr, p)</code> should equal <code>!exists(arr, not(p))</code>.</li>
+</ol>
+
+<h3 id="verification-checklist">Verification Checklist</h3>
+<ul>
+<li>☐ All five test cases produce correct results</li>
+<li>☐ De Morgan equivalence for quantifiers holds on at least 3 test arrays</li>
+<li>☐ <code>findWitness</code> and <code>findCounterexample</code> return correct elements</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="part-3-design-by-contract">
+<h2>Part 3: Design by Contract</h2>
+
+<p>Annotate and verify methods using <code>@requires</code>/<code>@ensures</code> comments and <code>assert</code> statements.</p>
+
+<h3 id="tasks">Tasks</h3>
+
+<ol>
+<li>Implement <code>int binarySearch(int[] arr, int key)</code>:</li>
+</ol>
+<ul>
+<li><code>@requires arr != null &amp;&amp; isSorted(arr)</code></li>
+<li><code>@ensures (result == -1 &amp;&amp; key not in arr) || arr[result] == key</code></li>
+<li>Add <code>assert isSorted(arr)</code> at the start</li>
+<li>Add <code>assert</code> to verify postcondition before each <code>return</code></li>
+</ul>
+
+<ol>
+<li>Implement <code>void selectionSort(int[] arr)</code>:</li>
+</ol>
+<ul>
+<li><code>@requires arr != null</code></li>
+<li><code>@ensures isSorted(arr) &amp;&amp; arr is a permutation of original</code></li>
+<li>Add loop invariant assertion: after iteration $i$, <code>arr[0..i]</code> is sorted and contains the $i+1$ smallest elements</li>
+</ul>
+
+<ol>
+<li>Implement <code>int max(int[] arr)</code>:</li>
+</ol>
+<ul>
+<li><code>@requires arr != null &amp;&amp; arr.length &gt;= 1</code></li>
+<li><code>@ensures result &gt;= arr[i] for all i, and exists j: result == arr[j]</code></li>
+<li>Verify postcondition explicitly after computation</li>
+</ul>
+
+<ol>
+<li>Run all methods with assertions enabled (<code>-ea</code>) and verify no assertion failures.</li>
+</ol>
+
+<h3 id="verification-checklist">Verification Checklist</h3>
+<ul>
+<li>☐ Binary search works for found and not-found cases</li>
+<li>☐ Selection sort correctly sorts at least 5 test arrays</li>
+<li>☐ Max method postcondition verified on at least 3 test arrays</li>
+<li>☐ All assertions pass with <code>-ea</code> flag</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="part-4-inference-rules-applied-to-code-extension">
+<h2>Part 4: Inference Rules Applied to Code (Extension)</h2>
+
+<p>Combine logical reasoning with program verification.</p>
+
+<h3 id="tasks">Tasks</h3>
+
+<ol>
+<li>Write a method <code>boolean containsPrime(int[] arr)</code> with specification:</li>
+</ol>
+<ul>
+<li><code>@requires arr != null</code></li>
+<li><code>@ensures returns true iff exists i: isPrime(arr[i])</code></li>
+</ul>
+
+<ol>
+<li>Using modus ponens, reason about this call:</li>
+</ol>
+<p>   <pre><code class="language-java">   int[] data = {4, 6, 7, 8};
+   boolean result = containsPrime(data);</code></pre></p>
+<ul>
+<li>Premise 1: The method satisfies its specification (P → Q)</li>
+<li>Premise 2: arr contains 7, which is prime (P)</li>
+<li>Conclusion: result == true (Q)</li>
+</ul>
+<p>   Write a comment block proving this.</p>
+
+<ol>
+<li>Write a method <code>int gcdWithInvariant(int a, int b)</code> that prints the loop invariant value at each step.</li>
+</ol>
+
+<ol>
+<li><strong>Challenge:</strong> Write a method <code>int[] merge(int[] a, int[] b)</code> that merges two sorted arrays with full invariant tracking. At each step of the merge loop, assert:</li>
+</ol>
+<ul>
+<li><code>result[0..k-1]</code> is sorted</li>
+<li>All elements placed so far come from <code>a[0..i-1]</code> and <code>b[0..j-1]</code></li>
+<li><code>k == i + j</code></li>
+</ul>
+
+<h3 id="verification-checklist">Verification Checklist</h3>
+<ul>
+<li>☐ <code>containsPrime</code> correct for arrays with and without primes</li>
+<li>☐ Modus ponens reasoning written in comments</li>
+<li>☐ GCD invariant printed matches gcd(orig_a, orig_b) at each step</li>
+<li>☐ Merge invariant assertions all pass</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="starter-code">
+<h2>Starter Code</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.function.Predicate;
+
+public class Module3Lab {
+
+    // ===== Part 1: Truth Table Engine =====
+
+    public static boolean[][] allCombinations(int n) {
+        // TODO: Generate all 2^n rows of n boolean values
+        return null;
+    }
+
+    public static void printTruthTable(String[] varNames,
+                                       boolean[][] rows,
+                                       boolean[] results,
+                                       String formula) {
+        // TODO: Print a formatted truth table
+    }
+
+    public static boolean implies(boolean p, boolean q) {
+        // TODO
+        return false;
+    }
+
+    public static boolean iff(boolean p, boolean q) {
+        // TODO
+        return false;
+    }
+
+    // ===== Part 2: Universal and Existential Checks =====
+
+    public static boolean forAll(int[] arr, Predicate&lt;Integer&gt; p) {
+        // TODO: Return true iff p holds for every element
+        return false;
+    }
+
+    public static boolean exists(int[] arr, Predicate&lt;Integer&gt; p) {
+        // TODO: Return true iff p holds for at least one element
+        return false;
+    }
+
+    public static Optional&lt;Integer&gt; findWitness(int[] arr,
+                                                 Predicate&lt;Integer&gt; p) {
+        // TODO: Return first element where p is true
+        return Optional.empty();
+    }
+
+    public static Optional&lt;Integer&gt; findCounterexample(int[] arr,
+                                                        Predicate&lt;Integer&gt; p) {
+        // TODO: Return first element where p is false
+        return Optional.empty();
+    }
+
+    // ===== Part 3: Design by Contract =====
+
+    /**
+     * @requires arr != null &amp;&amp; isSorted(arr)
+     * @ensures (result == -1 &amp;&amp; key not in arr) || arr[result] == key
+     */
+    public static int binarySearch(int[] arr, int key) {
+        // TODO: Implement with precondition and postcondition assertions
+        return -1;
+    }
+
+    /**
+     * @requires arr != null
+     * @ensures isSorted(arr) &amp;&amp; arr is a permutation of original
+     */
+    public static void selectionSort(int[] arr) {
+        // TODO: Implement with loop invariant assertions
+    }
+
+    /**
+     * @requires arr != null &amp;&amp; arr.length &gt;= 1
+     * @ensures result &gt;= arr[i] for all i, and exists j: arr[j] == result
+     */
+    public static int max(int[] arr) {
+        // TODO: Implement with postcondition verification
+        return 0;
+    }
+
+    // ===== Part 4: Inference Rules Applied =====
+
+    /**
+     * @requires arr != null
+     * @ensures returns true iff exists i: isPrime(arr[i])
+     */
+    public static boolean containsPrime(int[] arr) {
+        // TODO
+        return false;
+    }
+
+    public static int gcdWithInvariant(int a, int b) {
+        // TODO: Print invariant at each step
+        return 0;
+    }
+
+    // ===== Helpers =====
+
+    public static boolean isPrime(int n) {
+        if (n &lt; 2) return false;
+        for (int i = 2; i * i &lt;= n; i++) {
+            if (n % i == 0) return false;
+        }
+        return true;
+    }
+
+    public static boolean isEven(int n) { return n % 2 == 0; }
+
+    public static boolean isSorted(int[] arr) {
+        for (int i = 0; i &lt; arr.length - 1; i++) {
+            if (arr[i] &gt; arr[i + 1]) return false;
+        }
+        return true;
+    }
+
+    public static boolean isSorted(int[] arr, int from, int to) {
+        for (int i = from; i &lt; to - 1; i++) {
+            if (arr[i] &gt; arr[i + 1]) return false;
+        }
+        return true;
+    }
+
+    // ===== Main (run with -ea) =====
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 3 Lab ===\n");
+
+        // Part 1 tests
+        System.out.println("--- Part 1: Truth Tables ---");
+        // TODO: Print truth tables here
+
+        // Part 2 tests
+        System.out.println("\n--- Part 2: Quantifiers ---");
+        int[] evens = {2, 4, 6, 8};
+        int[] odds  = {1, 3, 5, 7};
+        int[] mixed = {2, 4, 5, 8};
+        // TODO: Test forAll, exists, findWitness, findCounterexample
+
+        // Part 3 tests
+        System.out.println("\n--- Part 3: Design by Contract ---");
+        int[] sorted = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91};
+        // TODO: Test binarySearch, selectionSort, max
+
+        // Part 4 tests
+        System.out.println("\n--- Part 4: Inference Rules ---");
+        // TODO: Test containsPrime, gcdWithInvariant
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="complete-solution-key">
+<h2>Complete Solution Key</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.function.Predicate;
+
+public class Module3LabSolution {
+
+    // ===== Part 1: Truth Table Engine =====
+
+    public static boolean[][] allCombinations(int n) {
+        int rows = 1 &lt;&lt; n;  // 2^n
+        boolean[][] combos = new boolean[rows][n];
+        for (int r = 0; r &lt; rows; r++) {
+            for (int c = 0; c &lt; n; c++) {
+                // bit (n-1-c) of r gives column c
+                combos[r][c] = ((r &gt;&gt; (n - 1 - c)) &amp; 1) == 1;
+            }
+        }
+        return combos;
+    }
+
+    public static void printTruthTable(String[] varNames,
+                                       boolean[][] rows,
+                                       boolean[] results,
+                                       String formula) {
+        // Header
+        for (String v : varNames) System.out.printf("%-6s", v);
+        System.out.printf("| %-10s%n", formula);
+        int width = varNames.length * 6 + formula.length() + 4;
+        System.out.println("-".repeat(width));
+
+        // Rows
+        for (int r = 0; r &lt; rows.length; r++) {
+            for (boolean val : rows[r]) System.out.printf("%-6s", val ? "T" : "F");
+            System.out.printf("| %-10s%n", results[r] ? "T" : "F");
+        }
+        System.out.println();
+    }
+
+    public static boolean implies(boolean p, boolean q) { return !p || q; }
+    public static boolean iff(boolean p, boolean q) { return p == q; }
+
+    // ===== Part 2: Universal and Existential Checks =====
+
+    public static boolean forAll(int[] arr, Predicate&lt;Integer&gt; p) {
+        for (int x : arr) {
+            if (!p.test(x)) return false;
+        }
+        return true;
+    }
+
+    public static boolean exists(int[] arr, Predicate&lt;Integer&gt; p) {
+        for (int x : arr) {
+            if (p.test(x)) return true;
+        }
+        return false;
+    }
+
+    public static Optional&lt;Integer&gt; findWitness(int[] arr, Predicate&lt;Integer&gt; p) {
+        for (int x : arr) {
+            if (p.test(x)) return Optional.of(x);
+        }
+        return Optional.empty();
+    }
+
+    public static Optional&lt;Integer&gt; findCounterexample(int[] arr, Predicate&lt;Integer&gt; p) {
+        for (int x : arr) {
+            if (!p.test(x)) return Optional.of(x);
+        }
+        return Optional.empty();
+    }
+
+    // ===== Part 3: Design by Contract =====
+
+    /**
+     * @requires arr != null &amp;&amp; isSorted(arr)
+     * @ensures (result == -1 &amp;&amp; key not in arr) || arr[result] == key
+     */
+    public static int binarySearch(int[] arr, int key) {
+        assert arr != null : "Precondition: arr must not be null";
+        assert isSorted(arr) : "Precondition: arr must be sorted";
+
+        int lo = 0, hi = arr.length - 1;
+
+        while (lo &lt;= hi) {
+            int mid = lo + (hi - lo) / 2;
+            if (arr[mid] == key) {
+                assert arr[mid] == key;  // postcondition
+                return mid;
+            }
+            if (arr[mid] &lt; key) lo = mid + 1;
+            else hi = mid - 1;
+        }
+        // key not found — verify by linear scan (debug only)
+        for (int x : arr) assert x != key : "Postcondition violated: key in arr but not found";
+        return -1;
+    }
+
+    /**
+     * @requires arr != null
+     * @ensures isSorted(arr) &amp;&amp; arr is a permutation of original
+     */
+    public static void selectionSort(int[] arr) {
+        assert arr != null;
+        for (int i = 0; i &lt; arr.length - 1; i++) {
+            int minIdx = i;
+            for (int j = i + 1; j &lt; arr.length; j++) {
+                if (arr[j] &lt; arr[minIdx]) minIdx = j;
+            }
+            int temp = arr[i]; arr[i] = arr[minIdx]; arr[minIdx] = temp;
+            assert isSorted(arr, 0, i + 2) : "Invariant: arr[0.." + (i+1) + "] sorted";
+        }
+        assert isSorted(arr) : "Postcondition: arr is fully sorted";
+    }
+
+    /**
+     * @requires arr != null &amp;&amp; arr.length &gt;= 1
+     * @ensures result &gt;= arr[i] for all i, and exists j: arr[j] == result
+     */
+    public static int max(int[] arr) {
+        assert arr != null &amp;&amp; arr.length &gt;= 1 : "Precondition: non-empty array";
+        int result = arr[0];
+        for (int i = 1; i &lt; arr.length; i++) {
+            if (arr[i] &gt; result) result = arr[i];
+        }
+        // Verify postcondition
+        for (int x : arr) assert result &gt;= x : "Postcondition: result &gt;= all elements";
+        boolean found = false;
+        for (int x : arr) if (x == result) { found = true; break; }
+        assert found : "Postcondition: result is an element of arr";
+        return result;
+    }
+
+    // ===== Part 4: Inference Rules Applied =====
+
+    /**
+     * @requires arr != null
+     * @ensures returns true iff exists i: isPrime(arr[i])
+     */
+    public static boolean containsPrime(int[] arr) {
+        assert arr != null;
+        for (int x : arr) {
+            if (isPrime(x)) return true;
+        }
+        return false;
+    }
+
+    /*
+     * Modus ponens reasoning for containsPrime({4, 6, 7, 8}):
+     *
+     * Premise 1 (P → Q): The method satisfies its specification:
+     *   "If arr contains a prime, then containsPrime returns true."
+     *
+     * Premise 2 (P): arr = {4, 6, 7, 8} contains 7, which is prime
+     *   (since 7 &gt; 1 and has no divisors other than 1 and 7).
+     *
+     * Conclusion (Q): By modus ponens, containsPrime({4, 6, 7, 8}) returns true.
+     */
+
+    public static int gcdWithInvariant(int a, int b) {
+        assert a &gt;= 0 &amp;&amp; b &gt;= 0 : "Precondition: non-negative inputs";
+        int origA = a, origB = b;
+        System.out.printf("  Computing gcd(%d, %d)%n", a, b);
+
+        while (b != 0) {
+            System.out.printf("    a=%d, b=%d | invariant: gcd(%d,%d)=gcd(%d,%d) | variant: b=%d%n",
+                    a, b, a, b, origA, origB, b);
+            int r = a % b;
+            a = b;
+            b = r;
+        }
+        System.out.printf("    Result: gcd(%d, %d) = %d%n", origA, origB, a);
+        return a;
+    }
+
+    // ===== Helpers =====
+
+    public static boolean isPrime(int n) {
+        if (n &lt; 2) return false;
+        for (int i = 2; i * i &lt;= n; i++) {
+            if (n % i == 0) return false;
+        }
+        return true;
+    }
+
+    public static boolean isEven(int n) { return n % 2 == 0; }
+
+    public static boolean isSorted(int[] arr) {
+        return isSorted(arr, 0, arr.length);
+    }
+
+    public static boolean isSorted(int[] arr, int from, int to) {
+        for (int i = from; i &lt; to - 1; i++) {
+            if (arr[i] &gt; arr[i + 1]) return false;
+        }
+        return true;
+    }
+
+    // ===== Main =====
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 3 Lab Solution ===\n");
+
+        // --- Part 1: Truth Tables ---
+        System.out.println("--- Part 1: Truth Tables ---");
+        boolean[][] rows2 = allCombinations(2);
+        String[] pq = {"p", "q"};
+
+        // p → q
+        boolean[] implResults = new boolean[4];
+        for (int r = 0; r &lt; 4; r++)
+            implResults[r] = implies(rows2[r][0], rows2[r][1]);
+        printTruthTable(pq, rows2, implResults, "p → q");
+
+        // ¬p ∨ q (should match)
+        boolean[] equivResults = new boolean[4];
+        for (int r = 0; r &lt; 4; r++)
+            equivResults[r] = !rows2[r][0] || rows2[r][1];
+        printTruthTable(pq, rows2, equivResults, "¬p ∨ q");
+
+        System.out.println("p→q ≡ ¬p∨q ? " + Arrays.equals(implResults, equivResults));
+
+        // De Morgan: ¬(p ∧ q) vs ¬p ∨ ¬q
+        boolean[] dm1 = new boolean[4], dm2 = new boolean[4];
+        for (int r = 0; r &lt; 4; r++) {
+            dm1[r] = !(rows2[r][0] &amp;&amp; rows2[r][1]);
+            dm2[r] = !rows2[r][0] || !rows2[r][1];
+        }
+        System.out.println("De Morgan ¬(p∧q) ≡ ¬p∨¬q ? " + Arrays.equals(dm1, dm2));
+
+        // Hypothetical syllogism with 3 variables
+        boolean[][] rows3 = allCombinations(3);
+        boolean[] hs = new boolean[8];
+        for (int r = 0; r &lt; 8; r++) {
+            boolean p = rows3[r][0], q = rows3[r][1], rv = rows3[r][2];
+            hs[r] = implies(implies(p, q) &amp;&amp; implies(q, rv), implies(p, rv));
+        }
+        boolean tautology = true;
+        for (boolean b : hs) if (!b) { tautology = false; break; }
+        System.out.println("Hypothetical syllogism is tautology? " + tautology);
+
+        // --- Part 2: Quantifiers ---
+        System.out.println("\n--- Part 2: Quantifiers ---");
+        Predicate&lt;Integer&gt; even = n -&gt; n % 2 == 0;
+        Predicate&lt;Integer&gt; prime = n -&gt; isPrime(n);
+
+        int[] evens = {2, 4, 6, 8};
+        int[] odds  = {1, 3, 5, 7};
+        int[] mixed = {2, 4, 5, 8};
+        int[] primes = {2, 3, 5, 7};
+        int[] composites = {4, 6, 8, 10};
+
+        System.out.println("forAll(evens, even) = " + forAll(evens, even));        // true
+        System.out.println("exists(odds, even) = " + exists(odds, even));           // false
+        System.out.println("findCounterexample(mixed, even) = " +
+                findCounterexample(mixed, even));                                    // Optional[5]
+        System.out.println("forAll(primes, prime) = " + forAll(primes, prime));     // true
+        System.out.println("exists(composites, prime) = " + exists(composites, prime)); // false
+
+        // De Morgan for quantifiers: forAll(arr, p) == !exists(arr, not(p))
+        Predicate&lt;Integer&gt; notEven = n -&gt; !even.test(n);
+        System.out.println("\nDe Morgan: forAll(evens, even) == !exists(evens, notEven) ? "
+                + (forAll(evens, even) == !exists(evens, notEven)));
+        System.out.println("De Morgan: forAll(mixed, even) == !exists(mixed, notEven) ? "
+                + (forAll(mixed, even) == !exists(mixed, notEven)));
+        System.out.println("De Morgan: forAll(odds, even) == !exists(odds, notEven) ? "
+                + (forAll(odds, even) == !exists(odds, notEven)));
+
+        // --- Part 3: Design by Contract ---
+        System.out.println("\n--- Part 3: Design by Contract ---");
+        int[] sorted = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91};
+        System.out.println("binarySearch(sorted, 23) = " + binarySearch(sorted, 23));
+        System.out.println("binarySearch(sorted, 50) = " + binarySearch(sorted, 50));
+
+        int[] toSort = {64, 25, 12, 22, 11};
+        System.out.println("Before sort: " + Arrays.toString(toSort));
+        selectionSort(toSort);
+        System.out.println("After sort:  " + Arrays.toString(toSort));
+
+        int[] data = {3, 7, 2, 9, 4, 6, 1};
+        System.out.println("max(" + Arrays.toString(data) + ") = " + max(data));
+
+        // --- Part 4: Inference Rules ---
+        System.out.println("\n--- Part 4: Inference Rules ---");
+        int[] test1 = {4, 6, 7, 8};
+        int[] test2 = {4, 6, 8, 10};
+        System.out.println("containsPrime({4,6,7,8}) = " + containsPrime(test1));
+        System.out.println("containsPrime({4,6,8,10}) = " + containsPrime(test2));
+
+        gcdWithInvariant(48, 18);
+        gcdWithInvariant(252, 105);
+
+        System.out.println("\n=== All tests passed! ===");
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="verification-checklist-complete">
+<h2>Verification Checklist (Complete)</h2>
+
+<table>
+<thead><tr>
+<th>Part</th>
+<th>Check</th>
+<th>Expected</th>
+</tr></thead><tbody>
+<tr>
+<td>1</td>
+<td><code>allCombinations(2)</code> produces 4 rows</td>
+<td>FF, FT, TF, TT</td>
+</tr>
+<tr>
+<td>1</td>
+<td>$p \rightarrow q \equiv \neg p \vee q$</td>
+<td>All rows match</td>
+</tr>
+<tr>
+<td>1</td>
+<td>De Morgan verified</td>
+<td>All rows match</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Hypothetical syllogism is tautology</td>
+<td>All true</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>forAll({2,4,6,8}, even)</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>exists({1,3,5,7}, even)</code></td>
+<td>false</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>findCounterexample({2,4,5,8}, even)</code></td>
+<td>Optional[5]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>De Morgan for quantifiers</td>
+<td>3 tests pass</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Binary search finds 23</td>
+<td>index 5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Binary search misses 50</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Selection sort</td>
+<td>sorted array</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Max postcondition</td>
+<td>verified</td>
+</tr>
+<tr>
+<td>4</td>
+<td>containsPrime with prime present</td>
+<td>true</td>
+</tr>
+<tr>
+<td>4</td>
+<td>containsPrime without prime</td>
+<td>false</td>
+</tr>
+<tr>
+<td>4</td>
+<td>GCD invariant at each step</td>
+<td>matches gcd(orig)</td>
+</tr>
+</tbody></table>
+
+</section>
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

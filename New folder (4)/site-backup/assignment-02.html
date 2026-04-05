@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 2 Assignment — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="assignment-02">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-2-assignment-remainders-modular-arithmetic-and-factorization">Module 2 – Assignment: Remainders, Modular Arithmetic and Factorization</h1>
+
+<section class="slide" id="assignment-overview">
+<h2>Assignment Overview</h2>
+
+<p><strong>Due:</strong> End of Module 2  </p>
+<p><strong>Weight:</strong> Integrative assignment (synthesizes Modules 1–2)  </p>
+<p><strong>Format:</strong> PDF for proofs + <code>Module2Assignment.java</code> for code  </p>
+
+<p>This integrative assignment synthesizes Modules 1 and 2. You will prove divisibility theorems, implement modular arithmetic functions, connect the quotient-remainder theorem to hashing, and write an essay on how modular arithmetic is used in real systems.</p>
+
+<hr>
+
+<section class="slide" id="part-a-mathematical-proofs-50-points">
+<h2>Part A: Mathematical Proofs (50 points)</h2>
+
+<h3 id="problem-a1-10-points-quotient-remainder-applications">Problem A1 (10 points) — Quotient-Remainder Applications</h3>
+
+<p><strong>(a)</strong> Prove: For any integer $n$, $n^2 \bmod 3 \in \{0, 1\}$.</p>
+
+<p><strong>(b)</strong> Prove: For any odd integer $n$, $n^2 \equiv 1 \pmod{8}$.</p>
+
+<h3 id="problem-a2-10-points-divisibility-and-congruence">Problem A2 (10 points) — Divisibility and Congruence</h3>
+
+<p><strong>(a)</strong> Prove the cancellation law: if $\gcd(c, m) = 1$ and $ac \equiv bc \pmod{m}$, then $a \equiv b \pmod{m}$.</p>
+
+<p><strong>(b)</strong> Give a counterexample showing that cancellation can fail when $\gcd(c, m) > 1$.</p>
+
+<h3 id="problem-a3-10-points-modular-arithmetic-properties">Problem A3 (10 points) — Modular Arithmetic Properties</h3>
+
+<p><strong>(a)</strong> Prove: $(a + b) \bmod m = ((a \bmod m) + (b \bmod m)) \bmod m$.</p>
+
+<p><strong>(b)</strong> Prove: $(a \cdot b) \bmod m = ((a \bmod m) \cdot (b \bmod m)) \bmod m$.</p>
+
+<p><strong>(c)</strong> Use these properties to compute $17^{50} \bmod 7$ by hand (reduce $17 \bmod 7$ first, then use patterns).</p>
+
+<h3 id="problem-a4-10-points-chinese-remainder-theorem">Problem A4 (10 points) — Chinese Remainder Theorem</h3>
+
+<p><strong>(a)</strong> Prove the CRT for the general case: if $\gcd(m, n) = 1$, the system $x \equiv a \pmod{m}$, $x \equiv b \pmod{n}$ has a unique solution modulo $mn$.</p>
+
+<p><strong>(b)</strong> Solve: $x \equiv 5 \pmod{7}$, $x \equiv 3 \pmod{11}$, $x \equiv 8 \pmod{13}$.</p>
+
+<h3 id="problem-a5-10-points-synthesis-irrationality-via-fta">Problem A5 (10 points) — Synthesis: Irrationality via FTA</h3>
+
+<p>Prove that $\sqrt{6}$ is irrational using the Fundamental Theorem of Arithmetic.</p>
+
+<p><em>(Hint: If $\sqrt{6} = p/q$, then $6q^2 = p^2$. Count the number of times primes 2 and 3 appear in each side.)</em></p>
+
+<hr>
+
+<section class="slide" id="part-b-java-programming-50-points">
+<h2>Part B: Java Programming (50 points)</h2>
+
+<h3 id="problem-b1-10-points-modular-arithmetic-library">Problem B1 (10 points) — Modular Arithmetic Library</h3>
+
+<p>Implement a class with the following static methods:</p>
+<ul>
+<li><code>int mod(int a, int m)</code> — mathematical mod (always in $[0, m)$).</li>
+<li><code>int modAdd(int a, int b, int m)</code> — modular addition.</li>
+<li><code>int modMul(int a, int b, int m)</code> — modular multiplication (use <code>long</code> to avoid overflow).</li>
+<li><code>int modPow(int base, int exp, int m)</code> — modular exponentiation by repeated squaring.</li>
+<li><code>int modInverse(int a, int m)</code> — modular inverse via extended GCD.</li>
+</ul>
+
+<p>Verify: for $m = 7$ and all $1 \leq a < 7$, <code>modMul(a, modInverse(a, 7), 7) == 1</code>.</p>
+
+<h3 id="problem-b2-10-points-hashing-analysis">Problem B2 (10 points) — Hashing Analysis</h3>
+
+<p>Implement a hash function <code>int hash(String key, int tableSize)</code> that sums the character values modulo <code>tableSize</code>.</p>
+
+<p>Test with these 30 words:</p>
+<pre><code class="language-text">apple banana cherry date elderberry fig grape honeydew kiwi lemon
+mango nectarine orange papaya quince raspberry strawberry tangerine
+ugli vanilla watermelon xigua yakifruit zucchini almond blueberry
+cashew dragonfruit eggplant fennel</code></pre>
+
+<ol>
+<li>Hash all 30 words into a table of size 7 (prime). Print each bucket.</li>
+<li>Hash all 30 words into a table of size 8 (non-prime). Print each bucket.</li>
+<li>For each table size, count: total collisions, max bucket size, number of empty buckets.</li>
+<li>Repeat for table sizes 11, 13, 16, 20.</li>
+</ol>
+
+<h3 id="problem-b3-10-points-crt-application-secret-splitting">Problem B3 (10 points) — CRT Application: Secret Splitting</h3>
+
+<p>Implement a simple secret-sharing scheme using CRT:</p>
+<ol>
+<li>Choose a secret integer $S$ (e.g., $S = 42$).</li>
+<li>Choose three pairwise coprime moduli (e.g., $m_1 = 7, m_2 = 11, m_3 = 13$).</li>
+<li>Compute shares: $s_1 = S \bmod m_1$, $s_2 = S \bmod m_2$, $s_3 = S \bmod m_3$.</li>
+<li>Reconstruct $S$ from the three shares using CRT.</li>
+<li>Verify that removing any one share makes reconstruction impossible (there are multiple solutions modulo $m_i \cdot m_j$ for any two moduli).</li>
+</ol>
+
+<h3 id="problem-b4-10-points-prime-factorization-and-number-theoretic-functions">Problem B4 (10 points) — Prime Factorization and Number-Theoretic Functions</h3>
+
+<p>Implement:</p>
+<ul>
+<li><code>Map&lt;Integer, Integer&gt; factorize(int n)</code> — prime factorization.</li>
+<li><code>int numDivisors(int n)</code> — number of divisors using the formula $\tau(n) = \prod (e_i + 1)$.</li>
+<li><code>int sumDivisors(int n)</code> — sum of divisors using the formula $\sigma(n) = \prod \frac{p_i^{e_i+1} - 1}{p_i - 1}$.</li>
+<li><code>boolean isPerfect(int n)</code> — checks if $\sigma(n) = 2n$ (perfect number).</li>
+</ul>
+
+<p>Find all perfect numbers up to 10000. Print each along with its factorization and divisor sum.</p>
+
+<h3 id="problem-b5-10-points-essay-modular-arithmetic-in-computing">Problem B5 (10 points) — Essay: Modular Arithmetic in Computing</h3>
+
+<p>Write a short essay (15–25 sentences) explaining how modular arithmetic is used in three of the following areas. For each area, describe the mathematical principle, give a concrete example, and explain why it works.</p>
+
+<ol>
+<li><strong>Hash tables</strong> — how <code>key % tableSize</code> distributes keys; why prime sizes help.</li>
+<li><strong>Checksums</strong> — ISBN-13, Luhn algorithm, or CRC.</li>
+<li><strong>Cryptography</strong> — RSA key generation, encryption, and decryption.</li>
+<li><strong>Circular data structures</strong> — ring buffers, round-robin scheduling.</li>
+<li><strong>Calendar calculations</strong> — Zeller's congruence, day-of-week algorithms.</li>
+</ol>
+
+<hr>
+
+<section class="slide" id="rubric">
+<h2>Rubric</h2>
+
+<table>
+<thead><tr>
+<th>Component</th>
+<th>Points</th>
+<th>Criteria</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>A1</strong> QR applications</td>
+<td>10</td>
+<td>Correct case analysis, valid proof structure</td>
+</tr>
+<tr>
+<td><strong>A2</strong> Cancellation law</td>
+<td>10</td>
+<td>Correct proof using Euclid's Lemma; valid counterexample</td>
+</tr>
+<tr>
+<td><strong>A3</strong> Modular properties</td>
+<td>10</td>
+<td>Complete proofs; correct hand computation</td>
+</tr>
+<tr>
+<td><strong>A4</strong> CRT</td>
+<td>10</td>
+<td>Rigorous existence/uniqueness proof; correct solution to system</td>
+</tr>
+<tr>
+<td><strong>A5</strong> Irrationality</td>
+<td>10</td>
+<td>Correct use of FTA; clear contradiction argument</td>
+</tr>
+<tr>
+<td><strong>B1</strong> Mod library</td>
+<td>10</td>
+<td>All methods correct; overflow handled; verification passes</td>
+</tr>
+<tr>
+<td><strong>B2</strong> Hashing</td>
+<td>10</td>
+<td>Correct implementation; complete analysis; thoughtful comparison</td>
+</tr>
+<tr>
+<td><strong>B3</strong> Secret splitting</td>
+<td>10</td>
+<td>CRT reconstruction works; non-reconstructability demonstrated</td>
+</tr>
+<tr>
+<td><strong>B4</strong> Factorization</td>
+<td>10</td>
+<td>Correct formulas; perfect numbers found; clean output</td>
+</tr>
+<tr>
+<td><strong>B5</strong> Essay</td>
+<td>10</td>
+<td>Three areas covered; mathematical connection clear; concrete examples</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<h3 id="part-a-solutions">Part A Solutions</h3>
+
+<p><strong>A1(a).</strong> Any integer $n$ has $n \bmod 3 \in \{0, 1, 2\}$. Compute $n^2 \bmod 3$ for each:</p>
+<ul>
+<li>$n \equiv 0$: $n^2 \equiv 0$.</li>
+<li>$n \equiv 1$: $n^2 \equiv 1$.</li>
+<li>$n \equiv 2$: $n^2 \equiv 4 \equiv 1$.</li>
+</ul>
+<p>So $n^2 \bmod 3 \in \{0, 1\}$. $\blacksquare$</p>
+
+<p><strong>A1(b).</strong> Let $n = 2k + 1$ (odd). Then $n^2 = 4k^2 + 4k + 1 = 4k(k+1) + 1$. Since one of $k, k+1$ is even, $k(k+1)$ is even, say $k(k+1) = 2j$. So $n^2 = 8j + 1 \equiv 1 \pmod{8}$. $\blacksquare$</p>
+
+<p><strong>A2(a).</strong> $ac \equiv bc \pmod{m}$ means $m \mid c(a - b)$. Since $\gcd(c, m) = 1$, by Euclid's Lemma $m \mid (a - b)$, so $a \equiv b \pmod{m}$. $\blacksquare$</p>
+
+<p><strong>A2(b).</strong> $2 \cdot 3 \equiv 2 \cdot 6 \pmod{6}$ (both are $\equiv 0$), but $3 \not\equiv 6 \pmod{6}$ since $6 - 3 = 3$ and $6 \nmid 3$. Here $\gcd(2, 6) = 2 \neq 1$.</p>
+
+<p><strong>A3(a).</strong> Write $a = mq_1 + r_1$ and $b = mq_2 + r_2$ where $r_1 = a \bmod m, r_2 = b \bmod m$. Then $a + b = m(q_1 + q_2) + (r_1 + r_2)$. The remainder of $a + b$ divided by $m$ equals $(r_1 + r_2) \bmod m$. $\blacksquare$</p>
+
+<p><strong>A3(b).</strong> Similarly, $ab = (mq_1 + r_1)(mq_2 + r_2) = m(mq_1 q_2 + q_1 r_2 + q_2 r_1) + r_1 r_2$, so $ab \bmod m = (r_1 r_2) \bmod m$. $\blacksquare$</p>
+
+<p><strong>A3(c).</strong> $17 \equiv 3 \pmod{7}$. Powers of 3 mod 7: $3^1 = 3$, $3^2 = 2$, $3^3 = 6$, $3^4 = 4$, $3^5 = 5$, $3^6 = 1$. Period is 6. $50 = 6 \times 8 + 2$, so $3^{50} \equiv 3^2 = 2 \pmod{7}$. $\blacksquare$</p>
+
+<p><strong>A4(a).</strong> <em>Existence:</em> Let $ms + nt = 1$ (Bézout). Set $x = ant + bms$. Then $x \equiv a \cdot nt \equiv a \cdot 1 = a \pmod{m}$ (since $ms \equiv 0$, $nt \equiv 1 \pmod{m}$). Similarly $x \equiv b \pmod{n}$.</p>
+<p><em>Uniqueness:</em> If $x_1, x_2$ both satisfy the system, then $m \mid (x_1 - x_2)$ and $n \mid (x_1 - x_2)$. Since $\gcd(m,n) = 1$, $mn \mid (x_1 - x_2)$. $\blacksquare$</p>
+
+<p><strong>A4(b).</strong> Solve pairwise:</p>
+<ul>
+<li>$x \equiv 5 \pmod{7}$, $x \equiv 3 \pmod{11}$: $7s + 11t = 1$ gives $s = -3, t = 2$. $x = 5 \cdot 11 \cdot 2 + 3 \cdot 7 \cdot (-3) = 110 - 63 = 47 \pmod{77}$.</li>
+<li>$x \equiv 47 \pmod{77}$, $x \equiv 8 \pmod{13}$: $77s + 13t = 1$ gives $s = -1, t = 6$. $x = 47 \cdot 13 \cdot 6 + 8 \cdot 77 \cdot (-1) = 3666 - 616 = 3050 \equiv 47 \pmod{1001}$. Wait, let me recompute: $3050 \bmod 1001 = 3050 - 3 \times 1001 = 3050 - 3003 = 47$.</li>
+</ul>
+<p>Check: $47 \bmod 7 = 5$ ✓, $47 \bmod 11 = 3$ ✓, $47 \bmod 13 = 8$ ✓.</p>
+
+<p>Answer: $x \equiv 47 \pmod{1001}$.</p>
+
+<p><strong>A5.</strong> Suppose $\sqrt{6} = p/q$ with $\gcd(p, q) = 1$. Then $6q^2 = p^2$.</p>
+
+<p>Consider the exponent of 2 in each side's prime factorization:</p>
+<ul>
+<li>Left: $6 = 2 \cdot 3$, so the exponent of 2 in $6q^2$ is $1 + 2v_2(q)$ (odd).</li>
+<li>Right: the exponent of 2 in $p^2$ is $2v_2(p)$ (even).</li>
+</ul>
+
+<p>An odd number cannot equal an even number. Contradiction. $\blacksquare$</p>
+
+<h3 id="part-b-solutions">Part B Solutions</h3>
+
+<p><strong>B1.</strong></p>
+<pre><code class="language-java">public class ModArithmetic {
+    public static int mod(int a, int m) { return Math.floorMod(a, m); }
+
+    public static int modAdd(int a, int b, int m) {
+        return mod(mod(a, m) + mod(b, m), m);
+    }
+
+    public static int modMul(int a, int b, int m) {
+        return (int)(((long) mod(a,m) * mod(b,m)) % m);
+    }
+
+    public static int modPow(int base, int exp, int m) {
+        long result = 1, b = mod(base, m);
+        while (exp &gt; 0) {
+            if (exp % 2 == 1) result = (result * b) % m;
+            b = (b * b) % m;
+            exp /= 2;
+        }
+        return (int) result;
+    }
+
+    public static int modInverse(int a, int m) {
+        int[] r = extendedGcd(mod(a, m), m);
+        if (r[0] != 1) throw new ArithmeticException("No inverse");
+        return mod(r[1], m);
+    }
+
+    static int[] extendedGcd(int a, int b) {
+        if (b == 0) return new int[]{a, 1, 0};
+        int[] r = extendedGcd(b, a % b);
+        return new int[]{r[0], r[2], r[1] - (a/b)*r[2]};
+    }
+}</code></pre>
+
+<p><strong>B2.</strong></p>
+<pre><code class="language-java">public static void hashAnalysis() {
+    String[] words = {"apple","banana","cherry","date","elderberry",
+        "fig","grape","honeydew","kiwi","lemon","mango","nectarine",
+        "orange","papaya","quince","raspberry","strawberry","tangerine",
+        "ugli","vanilla","watermelon","xigua","yakifruit","zucchini",
+        "almond","blueberry","cashew","dragonfruit","eggplant","fennel"};
+
+    for (int tableSize : new int[]{7, 8, 11, 13, 16, 20}) {
+        Map&lt;Integer, List&lt;String&gt;&gt; buckets = new TreeMap&lt;&gt;();
+        for (String w : words) {
+            int h = 0;
+            for (char c : w.toCharArray()) h = (h + c) % tableSize;
+            buckets.computeIfAbsent(h, k -&gt; new ArrayList&lt;&gt;()).add(w);
+        }
+        int collisions = 0, maxBucket = 0, empty = tableSize - buckets.size();
+        for (var entry : buckets.values()) {
+            if (entry.size() &gt; 1) collisions += entry.size() - 1;
+            maxBucket = Math.max(maxBucket, entry.size());
+        }
+        System.out.printf("Table size %d: collisions=%d, max=%d, empty=%d%n",
+            tableSize, collisions, maxBucket, empty);
+    }
+}</code></pre>
+
+<p><strong>B3.</strong></p>
+<pre><code class="language-java">public static void secretSplitting() {
+    int secret = 42;
+    int[] moduli = {7, 11, 13};  // pairwise coprime, product = 1001
+    int[] shares = new int[3];
+    for (int i = 0; i &lt; 3; i++) shares[i] = secret % moduli[i];
+    System.out.printf("Secret: %d, Shares: %d, %d, %d%n",
+        secret, shares[0], shares[1], shares[2]);
+
+    // Reconstruct from all 3
+    int recovered = crtMultiple(shares, moduli);
+    System.out.println("Recovered: " + recovered);
+    assert recovered == secret;
+
+    // Show that 2 shares are insufficient (multiple solutions)
+    System.out.println("With only shares 1,2 (mod 7,11):");
+    int x = crt2(shares[0], 7, shares[1], 11);  // solution mod 77
+    System.out.printf("  x ≡ %d (mod 77) — but %d and %d both satisfy this%n",
+        x, x, x + 77);
+    // Both x and x+77 satisfy the first two congruences but may differ mod 13
+}</code></pre>
+
+<p><strong>B4.</strong></p>
+<pre><code class="language-java">public static int numDivisors(int n) {
+    var f = factorize(n);
+    int count = 1;
+    for (int e : f.values()) count *= (e + 1);
+    return count;
+}
+
+public static int sumDivisors(int n) {
+    var f = factorize(n);
+    int sum = 1;
+    for (var entry : f.entrySet()) {
+        int p = entry.getKey(), e = entry.getValue();
+        int term = 0;
+        for (int i = 0; i &lt;= e; i++) term += (int) Math.pow(p, i);
+        sum *= term;
+    }
+    return sum;
+}
+
+public static void findPerfectNumbers() {
+    for (int n = 2; n &lt;= 10000; n++) {
+        if (sumDivisors(n) == 2 * n) {
+            System.out.printf("  %d = %s, σ(%d) = %d%n",
+                n, factorize(n), n, sumDivisors(n));
+        }
+    }
+    // Expected: 6, 28, 496, 8128
+}</code></pre>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 6 — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="module-06">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<div id="class-1" class="class-section">
+<h1 id="module-6-class-1-principle-of-mathematical-induction">Module 6 – Class 1: Principle of Mathematical Induction</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>State the principle of mathematical induction (PMI).</li>
+<li>Identify and verify the base case and inductive step.</li>
+<li>Use induction to prove summation formulas and divisibility results.</li>
+<li>Connect induction to loops and recursion in Java.</li>
+<li>Implement iterative and recursive versions of the same computation, relating each to the proof structure.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="the-principle-of-mathematical-induction">The Principle of Mathematical Induction</h3>
+
+<p>To prove a statement $P(n)$ for all integers $n \geq n_0$:</p>
+
+<ol>
+<li><strong>Base case:</strong> Prove $P(n_0)$.</li>
+<li><strong>Inductive step:</strong> Assume $P(k)$ for some $k \geq n_0$ (<strong>inductive hypothesis</strong>). Prove $P(k+1)$.</li>
+</ol>
+
+<p>If both succeed, then $P(n)$ holds for all $n \geq n_0$.</p>
+
+<h3 id="the-domino-analogy">The Domino Analogy</h3>
+
+<p>Induction is like an infinite row of dominos:</p>
+<ul>
+<li>Push the first domino (base case).</li>
+<li>Show that if any domino falls, the next one falls too (inductive step).</li>
+<li>Conclusion: all dominos fall.</li>
+</ul>
+
+<h3 id="why-induction-works">Why Induction Works</h3>
+
+<p>PMI is an axiom of the natural numbers (Peano's fifth axiom). It captures the idea that every natural number can be reached from 0 by repeatedly adding 1.</p>
+
+<h3 id="connection-to-computation">Connection to Computation</h3>
+
+<table>
+<thead><tr>
+<th>Induction Component</th>
+<th>Loop Version</th>
+<th>Recursion Version</th>
+</tr></thead><tbody>
+<tr>
+<td>Base case $P(n_0)$</td>
+<td>Initialization before loop</td>
+<td>Base case in recursion</td>
+</tr>
+<tr>
+<td>Inductive hypothesis $P(k)$</td>
+<td>Loop invariant at iteration $k$</td>
+<td>Recursive call result</td>
+</tr>
+<tr>
+<td>Inductive step $P(k) \to P(k+1)$</td>
+<td>Loop body</td>
+<td>Recursive case</td>
+</tr>
+<tr>
+<td>Conclusion $\forall n \geq n_0, P(n)$</td>
+<td>Postcondition after loop</td>
+<td>Correctness for all inputs</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<div class="katex-block">$\left[\,P(n_0) \;\wedge\; \bigl(\forall k \geq n_0:\; P(k) \to P(k+1)\bigr)\,\right] \implies \forall n \geq n_0:\; P(n)$</div>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-sum-of-first-inlinemath_13-natural-numbers">Example 1: Sum of First $n$ Natural Numbers</h3>
+
+<p><strong>Claim:</strong> $\displaystyle\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$ for all $n \geq 1$.</p>
+
+<p><strong>Proof by induction.</strong></p>
+
+<p><em>Base case ($n = 1$):</em> $\sum_{i=1}^{1} i = 1 = \frac{1 \cdot 2}{2}$. ✓</p>
+
+<p><em>Inductive step:</em> Assume $\sum_{i=1}^{k} i = \frac{k(k+1)}{2}$ for some $k \geq 1$.</p>
+
+<div class="katex-block">$\sum_{i=1}^{k+1} i = \left(\sum_{i=1}^{k} i\right) + (k+1) = \frac{k(k+1)}{2} + (k+1) = \frac{k(k+1) + 2(k+1)}{2} = \frac{(k+1)(k+2)}{2}$</div>
+
+<p>This is $\frac{(k+1)((k+1)+1)}{2}$, which is $P(k+1)$. ✓ $\blacksquare$</p>
+
+<h3 id="example-2-sum-of-squares">Example 2: Sum of Squares</h3>
+
+<p><strong>Claim:</strong> $\displaystyle\sum_{i=1}^{n} i^2 = \frac{n(n+1)(2n+1)}{6}$ for all $n \geq 1$.</p>
+
+<p><em>Base case ($n = 1$):</em> $1 = \frac{1 \cdot 2 \cdot 3}{6} = 1$. ✓</p>
+
+<p><em>Inductive step:</em> Assume the formula holds for $k$. Then:</p>
+<div class="katex-block">$\sum_{i=1}^{k+1} i^2 = \frac{k(k+1)(2k+1)}{6} + (k+1)^2 = \frac{k(k+1)(2k+1) + 6(k+1)^2}{6}$</div>
+<div class="katex-block">$= \frac{(k+1)[k(2k+1) + 6(k+1)]}{6} = \frac{(k+1)(2k^2 + 7k + 6)}{6} = \frac{(k+1)(k+2)(2k+3)}{6}$</div>
+
+<p>This is the formula with $n = k+1$. ✓ $\blacksquare$</p>
+
+<h3 id="example-3-divisibility">Example 3: Divisibility</h3>
+
+<p><strong>Claim:</strong> $n^3 - n$ is divisible by 3 for all $n \geq 0$.</p>
+
+<p><em>Base case ($n = 0$):</em> $0^3 - 0 = 0$, and $3 \mid 0$. ✓</p>
+
+<p><em>Inductive step:</em> Assume $3 \mid (k^3 - k)$.</p>
+<div class="katex-block">$(k+1)^3 - (k+1) = k^3 + 3k^2 + 3k + 1 - k - 1 = (k^3 - k) + 3k^2 + 3k = (k^3 - k) + 3(k^2 + k)$</div>
+
+<p>By the inductive hypothesis, $3 \mid (k^3 - k)$. Clearly $3 \mid 3(k^2 + k)$. So $3$ divides their sum. ✓ $\blacksquare$</p>
+
+<h3 id="example-4-power-of-2">Example 4: Power of 2</h3>
+
+<p><strong>Claim:</strong> $2^n > n$ for all $n \geq 1$.</p>
+
+<p><em>Base case ($n = 1$):</em> $2^1 = 2 > 1$. ✓</p>
+
+<p><em>Inductive step:</em> Assume $2^k > k$ for some $k \geq 1$.</p>
+<div class="katex-block">$2^{k+1} = 2 \cdot 2^k > 2k = k + k \geq k + 1$</div>
+
+<p>(since $k \geq 1$). So $2^{k+1} > k + 1$. ✓ $\blacksquare$</p>
+
+<h3 id="example-5-geometric-sum">Example 5: Geometric Sum</h3>
+
+<p><strong>Claim:</strong> $\displaystyle\sum_{i=0}^{n} r^i = \frac{r^{n+1} - 1}{r - 1}$ for $r \neq 1$ and all $n \geq 0$.</p>
+
+<p><em>Base case ($n = 0$):</em> $r^0 = 1 = \frac{r - 1}{r - 1}$. ✓</p>
+
+<p><em>Inductive step:</em> Assume the formula for $k$:</p>
+<div class="katex-block">$\sum_{i=0}^{k+1} r^i = \frac{r^{k+1} - 1}{r-1} + r^{k+1} = \frac{r^{k+1} - 1 + r^{k+1}(r-1)}{r-1} = \frac{r^{k+2} - 1}{r-1}$</div>
+
+<p>✓ $\blacksquare$</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="the-induction-template">The Induction Template</h3>
+
+<ol>
+<li><strong>State</strong> the predicate $P(n)$ clearly.</li>
+<li><strong>Base case:</strong> Substitute $n = n_0$ and verify directly.</li>
+<li><strong>Inductive hypothesis:</strong> "Assume $P(k)$ holds for some $k \geq n_0$."</li>
+<li><strong>Inductive step:</strong> Start from $P(k+1)$'s left side, manipulate to use $P(k)$.</li>
+<li><strong>Conclude:</strong> By PMI, $P(n)$ holds for all $n \geq n_0$.</li>
+</ol>
+
+<h3 id="common-mistakes">Common Mistakes</h3>
+
+<ul>
+<li><strong>Forgetting the base case.</strong> The step alone is not enough.</li>
+<li><strong>Not using the hypothesis.</strong> If you prove $P(k+1)$ without assuming $P(k)$, you have a direct proof, not induction.</li>
+<li><strong>Wrong base case.</strong> If $P(n)$ is for $n \geq 2$, verify $P(2)$, not $P(1)$.</li>
+<li><strong>Falling into circularity.</strong> Never assume what you want to prove.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class InductionLibrary {
+
+    // --- Summation Functions ---
+
+    /**
+     * Iterative sum: 1 + 2 + ... + n.
+     * Loop invariant: after iteration i, sum = i(i+1)/2.
+     * consider O(n) vs O(1) complexity
+     */
+    public static long sumIterative(int n) {
+        long sum = 0;
+        for (int i = 1; i &lt;= n; i++) {
+            sum += i;
+            // Invariant: sum == i * (i + 1) / 2
+        }
+        return sum;
+    }
+
+    /**
+     * Recursive sum: mirrors the inductive proof.
+     * Base case: sum(0) = 0.
+     * Recursive case: sum(n) = sum(n-1) + n.
+     */
+    public static long sumRecursive(int n) {
+        if (n &lt;= 0) return 0;       // Base case
+        return sumRecursive(n - 1) + n;  // Inductive step
+    }
+
+    /**
+     * Closed-form formula (direct computation).
+     * This is what the proof establishes.
+     */
+    public static long sumFormula(int n) {
+        return (long) n * (n + 1) / 2;
+    }
+
+    // --- Sum of Squares ---
+
+    public static long sumSquaresIterative(int n) {
+        long sum = 0;
+        for (int i = 1; i &lt;= n; i++) {
+            sum += (long) i * i;
+        }
+        return sum;
+    }
+
+    public static long sumSquaresFormula(int n) {
+        return (long) n * (n + 1) * (2 * n + 1) / 6;
+    }
+
+    // --- Divisibility: n^3 - n divisible by 3 ---
+
+    public static boolean cubeMinusNDivisibleBy3(int n) {
+        long val = (long) n * n * n - n;
+        return val % 3 == 0;
+    }
+
+    // --- Geometric Sum ---
+
+    public static double geometricSumIterative(double r, int n) {
+        double sum = 0;
+        for (int i = 0; i &lt;= n; i++) {
+            sum += Math.pow(r, i);
+        }
+        return sum;
+    }
+
+    public static double geometricSumFormula(double r, int n) {
+        if (Math.abs(r - 1.0) &lt; 1e-10) return n + 1;
+        return (Math.pow(r, n + 1) - 1) / (r - 1);
+    }
+
+    // --- Factorial ---
+
+    /**
+     * Iterative factorial.
+     * Loop invariant: after iteration i, result = i!
+     */
+    public static long factorialIterative(int n) {
+        long result = 1;
+        for (int i = 2; i &lt;= n; i++) {
+            result *= i;
+            // Invariant: result == i!
+        }
+        return result;
+    }
+
+    /**
+     * Recursive factorial: mirrors induction.
+     * Base case: 0! = 1.
+     * Inductive step: n! = n * (n-1)!
+     */
+    public static long factorialRecursive(int n) {
+        if (n &lt;= 1) return 1;
+        return n * factorialRecursive(n - 1);
+    }
+
+    // --- Verification: Check formula against computation ---
+
+    /**
+     * For each n from 1 to max, verify formula matches iterative sum.
+     * This is empirical verification — the proof provides certainty.
+     */
+    public static void verifyFormulas(int max) {
+        System.out.println("Verifying formulas for n = 1 to " + max + "...");
+        for (int n = 1; n &lt;= max; n++) {
+            // Sum of first n naturals
+            assert sumIterative(n) == sumFormula(n)
+                    : "Sum formula failed at n=" + n;
+
+            // Sum of squares
+            assert sumSquaresIterative(n) == sumSquaresFormula(n)
+                    : "Sum-of-squares formula failed at n=" + n;
+
+            // n^3 - n divisible by 3
+            assert cubeMinusNDivisibleBy3(n)
+                    : "n^3-n not divisible by 3 at n=" + n;
+
+            // Geometric sum (r=2)
+            double iterGeo = geometricSumIterative(2.0, n);
+            double formGeo = geometricSumFormula(2.0, n);
+            assert Math.abs(iterGeo - formGeo) &lt; 1e-6
+                    : "Geometric sum failed at n=" + n;
+        }
+        System.out.println("All formulas verified!");
+    }
+
+    // --- Power of 2 &gt; n ---
+
+    public static void verifyPowerOf2(int max) {
+        System.out.println("Verifying 2^n &gt; n for n = 1 to " + max + "...");
+        for (int n = 1; n &lt;= max; n++) {
+            long pow = 1L &lt;&lt; n; // 2^n using bit shift
+            assert pow &gt; n : "2^n &gt; n failed at n=" + n;
+        }
+        System.out.println("Verified!");
+    }
+
+    // --- Demonstration ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Induction Library ===\n");
+
+        System.out.println("Sum of 1..100:");
+        System.out.println("  Iterative: " + sumIterative(100));
+        System.out.println("  Recursive: " + sumRecursive(100));
+        System.out.println("  Formula:   " + sumFormula(100));
+
+        System.out.println("\nSum of squares 1..10:");
+        System.out.println("  Iterative: " + sumSquaresIterative(10));
+        System.out.println("  Formula:   " + sumSquaresFormula(10));
+
+        System.out.println("\n10! = " + factorialIterative(10));
+        System.out.println("10! = " + factorialRecursive(10));
+
+        System.out.println("\nGeometric sum r=2, n=10:");
+        System.out.println("  Iterative: " + geometricSumIterative(2.0, 10));
+        System.out.println("  Formula:   " + geometricSumFormula(2.0, 10));
+        // 2^11 - 1 = 2047
+
+        System.out.println();
+        verifyFormulas(1000);
+        verifyPowerOf2(60);
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Blaise Pascal</strong> (1654) and <strong>Pierre de Fermat</strong> used induction implicitly in their study of combinatorial identities and number theory. <strong>Giuseppe Peano</strong> (1889) made induction an explicit axiom in his axiomatization of the natural numbers. The Peano axioms remain the foundation of arithmetic.</p>
+
+<p>The connection between induction and recursion was made rigorous by <strong>Kurt Gödel</strong> (1931) and <strong>Stephen Kleene</strong> (1936) through primitive recursive functions, laying the groundwork for theoretical computer science.</p>
+
+<p><strong>Gauss</strong> (age ~10, ca. 1787) famously computed $1 + 2 + \cdots + 100 = 5050$ by the pairing trick: write the sum forwards and backwards, pair terms to get $n+1$ each, giving $\frac{n(n+1)}{2}$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> What are the two components of an induction proof? What role does each play?</p>
+
+<p><strong>A2.</strong> True or false: "If the inductive step works, the theorem is proved even without a base case."</p>
+
+<p><strong>A3.</strong> How does a <code>for</code> loop from 1 to $n$ mirror an induction proof?</p>
+
+<p><strong>A4.</strong> What goes wrong if we try to prove "$2^n > n^2$ for all $n \geq 1$" by induction? (Hint: check the base case.)</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove by induction: $\displaystyle\sum_{i=1}^{n} (2i - 1) = n^2$.</p>
+
+<p><strong>B2.</strong> Prove by induction: $3 \mid (4^n - 1)$ for all $n \geq 1$.</p>
+
+<p><strong>B3.</strong> Prove by induction: $\displaystyle\sum_{i=0}^{n} 2^i = 2^{n+1} - 1$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write both iterative and recursive methods for $\sum_{i=1}^n i^2$. Verify they agree for $n = 1$ to 100.</p>
+
+<p><strong>C2.</strong> Write a method that checks $3 \mid (n^3 - n)$ for all $n$ from 0 to 10000.</p>
+
+<p><strong>C3.</strong> Implement factorial iteratively with a loop invariant comment. Add an assertion checking the invariant.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Prove by induction: $\displaystyle\sum_{i=1}^{n} i^3 = \left(\frac{n(n+1)}{2}\right)^2$.</p>
+
+<p><strong>DM2.</strong> Prove by induction: $n! > 2^n$ for all $n \geq 4$.</p>
+
+<p><strong>DM3.</strong> Prove by induction: for all $n \geq 1$, $\displaystyle\sum_{i=1}^{n} \frac{1}{i(i+1)} = \frac{n}{n+1}$.</p>
+
+<p><strong>DM4.</strong> Prove by induction: $6 \mid n(n+1)(n+2)$ for all $n \geq 0$.</p>
+
+<p><strong>DM5.</strong> Prove: $1 + 2 + 4 + \cdots + 2^{n-1} = 2^n - 1$ (geometric sum with $r = 2$).</p>
+
+<p><strong>DM6.</strong> Prove by induction: the number of subsets of a set with $n$ elements is $2^n$. (Connect to Module 4, power sets.)</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement <code>sumFormula(n)</code>, <code>sumIterative(n)</code>, and <code>sumRecursive(n)</code>. Verify all three agree for $n = 1$ to 10000.</p>
+
+<p><strong>JP2.</strong> Implement <code>factorialIterative(n)</code> and <code>factorialRecursive(n)</code>. Add loop invariant comments and assertions.</p>
+
+<p><strong>JP3.</strong> Write a method <code>boolean isDivisibleBy(long n, int d)</code> and use it to verify $6 \mid n(n+1)(n+2)$ for $n = 0$ to 1000.</p>
+
+<p><strong>JP4.</strong> Implement iterative and recursive geometric sum. Compare with the formula for various $r$ and $n$.</p>
+
+<p><strong>JP5.</strong> Write a method that, given $n$, returns the minimum $k$ such that $2^k > n$. Test it and explain the connection to $\lceil \log_2(n+1) \rceil$.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> From Module 1: prove that the GCD algorithm terminates using the well-ordering principle (every non-empty set of non-negative integers has a least element). Then show how the well-ordering principle follows from PMI, and vice versa.</p>
+
+<p><strong>BR2.</strong> From Module 4: prove $|\mathcal{P}(A)| = 2^{|A|}$ by induction on $|A|$. Connect to the bit-mask power set generation from Module 4, Class 3.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> <em>Base ($n=1$):</em> $1^3 = 1 = (1 \cdot 2/2)^2 = 1$. ✓</p>
+
+<p><em>Inductive step:</em> Assume $\sum_{i=1}^k i^3 = \left(\frac{k(k+1)}{2}\right)^2$.</p>
+
+<div class="katex-block">$\sum_{i=1}^{k+1} i^3 = \frac{k^2(k+1)^2}{4} + (k+1)^3 = \frac{k^2(k+1)^2 + 4(k+1)^3}{4} = \frac{(k+1)^2(k^2 + 4k + 4)}{4} = \frac{(k+1)^2(k+2)^2}{4}$</div>
+
+<p>$= \left(\frac{(k+1)(k+2)}{2}\right)^2$. ✓ $\blacksquare$</p>
+
+<p><strong>DM2.</strong> <em>Base ($n=4$):</em> $4! = 24 > 16 = 2^4$. ✓</p>
+
+<p><em>Inductive step:</em> Assume $k! > 2^k$ for $k \geq 4$.</p>
+<p>$(k+1)! = (k+1) \cdot k! > (k+1) \cdot 2^k \geq 2 \cdot 2^k = 2^{k+1}$ (since $k+1 \geq 5 > 2$). ✓ $\blacksquare$</p>
+
+<p><strong>DM4.</strong> <em>Base ($n=0$):</em> $0 \cdot 1 \cdot 2 = 0$, and $6 \mid 0$. ✓</p>
+
+<p><em>Inductive step:</em> Assume $6 \mid k(k+1)(k+2)$.</p>
+<p>$(k+1)(k+2)(k+3) = k(k+1)(k+2) + 3(k+1)(k+2)$.</p>
+
+<p>By hypothesis, $6 \mid k(k+1)(k+2)$. Also, $(k+1)(k+2)$ is the product of two consecutive integers, so one is even, meaning $2 \mid (k+1)(k+2)$. Thus $6 \mid 3(k+1)(k+2)$. So $6$ divides the sum. ✓ $\blacksquare$</p>
+
+<p><strong>DM6.</strong> <em>Base ($n=0$):</em> $|\mathcal{P}(\emptyset)| = |\{\emptyset\}| = 1 = 2^0$. ✓</p>
+
+<p><em>Inductive step:</em> Let $|A| = k$ with $|\mathcal{P}(A)| = 2^k$. Let $A' = A \cup \{x\}$ where $x \notin A$, so $|A'| = k+1$. Every subset of $A'$ either contains $x$ or doesn't. Subsets not containing $x$ are exactly the subsets of $A$: there are $2^k$. Subsets containing $x$ are of the form $S \cup \{x\}$ for $S \subseteq A$: there are $2^k$. Total: $2^k + 2^k = 2^{k+1}$. ✓ $\blacksquare$</p>
+
+</section>
+</div>
+<hr>
+<div id="class-2" class="class-section">
+<h1 id="module-6-class-2-strong-induction-and-recursive-definitions">Module 6 – Class 2: Strong Induction and Recursive Definitions</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>State and apply the principle of strong induction.</li>
+<li>Distinguish strong induction from ordinary induction.</li>
+<li>Write recursive definitions (sequences, sets, functions).</li>
+<li>Prove properties of recursively defined objects.</li>
+<li>Implement recursive functions in Java and prove their correctness/termination.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="strong-induction">Strong Induction</h3>
+
+<p><strong>Ordinary induction</strong> assumes $P(k)$ to prove $P(k+1)$.</p>
+
+<p><strong>Strong induction</strong> assumes $P(n_0), P(n_0+1), \ldots, P(k)$ to prove $P(k+1)$.</p>
+
+<p>Formally, to prove $P(n)$ for all $n \geq n_0$:</p>
+<ol>
+<li><strong>Base case(s):</strong> Prove $P(n_0)$ (and possibly $P(n_0+1), \ldots, P(n_0 + j)$).</li>
+<li><strong>Inductive step:</strong> Assume $P(n_0), P(n_0+1), \ldots, P(k)$ for some $k$. Prove $P(k+1)$.</li>
+</ol>
+
+<p>Strong induction is logically equivalent to ordinary induction but sometimes more natural.</p>
+
+<h3 id="when-to-use-strong-induction">When to Use Strong Induction</h3>
+
+<ul>
+<li>When the proof of $P(k+1)$ requires $P(j)$ for some $j < k$ (not just $P(k)$).</li>
+<li>Divide-and-conquer algorithms: proving correctness when the problem splits into subproblems of varying size.</li>
+<li>Proving unique factorization: factoring $n$ uses factorizations of divisors less than $n$.</li>
+</ul>
+
+<h3 id="recursive-definitions">Recursive Definitions</h3>
+
+<p>A <strong>recursive definition</strong> specifies:</p>
+<ol>
+<li><strong>Base case(s):</strong> Explicitly define the object for small inputs.</li>
+<li><strong>Recursive case:</strong> Define the object in terms of smaller instances.</li>
+</ol>
+
+<table>
+<thead><tr>
+<th>Object</th>
+<th>Base</th>
+<th>Recursive Rule</th>
+</tr></thead><tbody>
+<tr>
+<td>$n!$</td>
+<td>$0! = 1$</td>
+<td>$n! = n \cdot (n-1)!$</td>
+</tr>
+<tr>
+<td>$F_n$ (Fibonacci)</td>
+<td>$F_0 = 0, F_1 = 1$</td>
+<td>$F_n = F_{n-1} + F_{n-2}$</td>
+</tr>
+<tr>
+<td>$\sum_{i=1}^n a_i$</td>
+<td>$\sum_{i=1}^{1} a_i = a_1$</td>
+<td>$\sum_{i=1}^{n} a_i = \left(\sum_{i=1}^{n-1} a_i\right) + a_n$</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<p><strong>Strong Induction Principle:</strong></p>
+
+<div class="katex-block">$\left[\,P(n_0) \;\wedge\; \bigl(\forall k \geq n_0:\; \bigl(P(n_0) \wedge \cdots \wedge P(k)\bigr) \to P(k+1)\bigr)\,\right] \implies \forall n \geq n_0:\; P(n)$</div>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-every-integer-inlinemath_26-has-a-prime-factor">Example 1: Every Integer $> 1$ Has a Prime Factor</h3>
+
+<p><strong>Claim:</strong> Every integer $n > 1$ has a prime factor.</p>
+
+<p><strong>Proof by strong induction on $n$.</strong></p>
+
+<p><em>Base case ($n = 2$):</em> 2 is prime, so it is its own prime factor. ✓</p>
+
+<p><em>Inductive step:</em> Assume every integer $j$ with $2 \leq j \leq k$ has a prime factor.</p>
+
+<p>Consider $k + 1$. If $k + 1$ is prime, it is its own prime factor. ✓</p>
+
+<p>If $k + 1$ is composite, then $k + 1 = ab$ where $2 \leq a, b \leq k$. By the inductive hypothesis, $a$ has a prime factor $p$. Since $p \mid a$ and $a \mid (k+1)$, we have $p \mid (k+1)$ (by transitivity of divisibility, Module 1). ✓ $\blacksquare$</p>
+
+<h3 id="example-2-fundamental-theorem-of-arithmetic-existence">Example 2: Fundamental Theorem of Arithmetic (Existence)</h3>
+
+<p><strong>Claim:</strong> Every integer $n > 1$ can be written as a product of primes.</p>
+
+<p><strong>Proof by strong induction.</strong></p>
+
+<p><em>Base case ($n = 2$):</em> $2$ is prime, so it is a product of one prime. ✓</p>
+
+<p><em>Inductive step:</em> Assume every integer $j$ with $2 \leq j \leq k$ has a prime factorization.</p>
+
+<p>If $k+1$ is prime, it is a product of one prime. ✓</p>
+
+<p>If $k+1$ is composite, then $k+1 = ab$ with $2 \leq a, b \leq k$. By hypothesis, both $a$ and $b$ have prime factorizations. Concatenating them gives a prime factorization of $k+1$. ✓ $\blacksquare$</p>
+
+<h3 id="example-3-fibonacci-numbers">Example 3: Fibonacci Numbers</h3>
+
+<p><strong>Claim:</strong> $F_n < 2^n$ for all $n \geq 0$.</p>
+
+<p><em>Base cases:</em> $F_0 = 0 < 1 = 2^0$. $F_1 = 1 < 2 = 2^1$. ✓</p>
+
+<p><em>Inductive step:</em> Assume $F_j < 2^j$ for all $j \leq k$ where $k \geq 1$.</p>
+
+<div class="katex-block">$F_{k+1} = F_k + F_{k-1} < 2^k + 2^{k-1} = 2^{k-1}(2 + 1) = 3 \cdot 2^{k-1} < 4 \cdot 2^{k-1} = 2^{k+1}$</div>
+
+<p>✓ $\blacksquare$</p>
+
+<h3 id="example-4-euclidean-algorithm-terminates-module-1-connection">Example 4: Euclidean Algorithm Terminates (Module 1 Connection)</h3>
+
+<p><strong>Claim:</strong> <code>gcd(a, b)</code> terminates for all $a \geq 0, b \geq 0$ with $a + b > 0$.</p>
+
+<p><strong>Proof by strong induction on $b$.</strong></p>
+
+<p><em>Base case ($b = 0$):</em> The algorithm returns $a$ immediately. ✓</p>
+
+<p><em>Inductive step:</em> Assume the algorithm terminates for all inputs with second argument $< k+1$. The algorithm computes $r = a \bmod (k+1)$, where $0 \leq r < k+1$, then calls <code>gcd(k+1, r)</code>. Since $r < k+1$, the inductive hypothesis applies, so this call terminates. ✓ $\blacksquare$</p>
+
+<h3 id="example-5-recursive-definition-and-proof-towers-of-hanoi">Example 5: Recursive Definition and Proof — Towers of Hanoi</h3>
+
+<p><strong>Recursive definition:</strong> $T(n) =$ minimum number of moves to transfer $n$ disks.</p>
+<ul>
+<li>$T(1) = 1$</li>
+<li>$T(n) = 2T(n-1) + 1$ for $n > 1$</li>
+</ul>
+
+<p><strong>Claim:</strong> $T(n) = 2^n - 1$.</p>
+
+<p><em>Base ($n = 1$):</em> $T(1) = 1 = 2^1 - 1$. ✓</p>
+
+<p><em>Inductive step:</em> $T(k+1) = 2T(k) + 1 = 2(2^k - 1) + 1 = 2^{k+1} - 1$. ✓ $\blacksquare$</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="choosing-between-ordinary-and-strong-induction">Choosing Between Ordinary and Strong Induction</h3>
+
+<ul>
+<li><strong>Ordinary induction:</strong> Sufficient when $P(k+1)$ follows from $P(k)$ alone. Simpler.</li>
+<li><strong>Strong induction:</strong> Necessary when the step requires $P(j)$ for arbitrary $j < k+1$. Common in divisibility, factorization, and divide-and-conquer arguments.</li>
+</ul>
+
+<h3 id="verifying-recursive-definitions-are-well-defined">Verifying Recursive Definitions Are Well-Defined</h3>
+
+<p>A recursive definition is well-defined if:</p>
+<ol>
+<li>Every input eventually reduces to a base case.</li>
+<li>The recursive cases do not create circular dependencies.</li>
+</ol>
+
+<p>This parallels proving termination of recursive functions.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class StrongInductionLibrary {
+
+    // --- Fibonacci ---
+
+    /**
+     * Naive recursive Fibonacci.
+     * Correctness: by definition F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2).
+     * Warning: exponential time! O(2^n).
+     */
+    public static long fibRecursive(int n) {
+        if (n &lt;= 0) return 0;
+        if (n == 1) return 1;
+        return fibRecursive(n - 1) + fibRecursive(n - 2);
+    }
+
+    /**
+     * Iterative Fibonacci with loop invariant.
+     * Invariant: after iteration i, prev = F(i-1), curr = F(i).
+     * O(n) time, O(1) space.
+     */
+    public static long fibIterative(int n) {
+        if (n &lt;= 0) return 0;
+        long prev = 0, curr = 1;
+        for (int i = 2; i &lt;= n; i++) {
+            long next = prev + curr;
+            prev = curr;
+            curr = next;
+            // Invariant: prev == F(i-1), curr == F(i)
+        }
+        return curr;
+    }
+
+    /**
+     * Memoized Fibonacci using dynamic programming.
+     * O(n) time, O(n) space.
+     */
+    public static long fibMemoized(int n) {
+        if (n &lt;= 0) return 0;
+        long[] dp = new long[n + 1];
+        dp[0] = 0;
+        dp[1] = 1;
+        for (int i = 2; i &lt;= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+    // --- Prime Factorization (Strong Induction) ---
+
+    /**
+     * Recursive prime factorization.
+     * Base: if n is prime, return [n].
+     * Recursive: find smallest factor d &gt; 1, return [d] + factor(n/d).
+     *
+     * Correctness: By strong induction on n.
+     * Termination: n/d &lt; n, so the argument strictly decreases.
+     */
+    public static List&lt;Integer&gt; primeFactors(int n) {
+        List&lt;Integer&gt; factors = new ArrayList&lt;&gt;();
+        primeFactorsHelper(n, factors);
+        return factors;
+    }
+
+    private static void primeFactorsHelper(int n, List&lt;Integer&gt; factors) {
+        if (n &lt;= 1) return;
+        // Find smallest divisor &gt; 1
+        for (int d = 2; d * d &lt;= n; d++) {
+            if (n % d == 0) {
+                factors.add(d);
+                primeFactorsHelper(n / d, factors);
+                return;
+            }
+        }
+        // n is prime
+        factors.add(n);
+    }
+
+    // --- Towers of Hanoi ---
+
+    /**
+     * Recursive Hanoi: move n disks from 'from' to 'to' using 'aux'.
+     * T(n) = 2^n - 1 moves.
+     */
+    public static int hanoi(int n, String from, String to, String aux) {
+        if (n == 0) return 0;
+        int moves = 0;
+        moves += hanoi(n - 1, from, aux, to);
+        System.out.println("  Move disk " + n + " from " + from + " to " + to);
+        moves += 1;
+        moves += hanoi(n - 1, aux, to, from);
+        return moves;
+    }
+
+    // --- Recurrence: T(n) = 2T(n/2) + n ---
+
+    /**
+     * Simulates merge sort recurrence.
+     * By strong induction / master theorem: T(n) = O(n log n).
+     */
+    public static int mergeSortWork(int n) {
+        if (n &lt;= 1) return 0;
+        return 2 * mergeSortWork(n / 2) + n;
+    }
+
+    // --- Verification ---
+
+    public static void verifyFibBound(int max) {
+        System.out.println("Verifying F(n) &lt; 2^n...");
+        for (int n = 0; n &lt;= max; n++) {
+            long fib = fibIterative(n);
+            long pow = 1L &lt;&lt; n;
+            assert fib &lt; pow : "F(" + n + ") = " + fib + " &gt;= 2^" + n;
+        }
+        System.out.println("Verified up to n = " + max);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== Strong Induction Library ===\n");
+
+        // Fibonacci
+        System.out.println("Fibonacci:");
+        for (int n = 0; n &lt;= 15; n++) {
+            System.out.printf("  F(%d) = %d (iter=%d, memo=%d)%n",
+                    n, fibRecursive(n), fibIterative(n), fibMemoized(n));
+        }
+
+        // Prime factorization
+        System.out.println("\nPrime factorization (strong induction):");
+        int[] testNums = {2, 12, 60, 97, 360, 1001};
+        for (int n : testNums) {
+            System.out.println("  " + n + " = " + primeFactors(n));
+        }
+
+        // Towers of Hanoi
+        System.out.println("\nTowers of Hanoi (n=3):");
+        int moves = hanoi(3, "A", "C", "B");
+        System.out.println("  Total moves: " + moves + " (expected: " + ((1 &lt;&lt; 3) - 1) + ")");
+
+        // Merge sort recurrence
+        System.out.println("\nMerge sort work:");
+        for (int n : new int[]{1, 2, 4, 8, 16, 32, 64}) {
+            System.out.println("  T(" + n + ") = " + mergeSortWork(n));
+        }
+
+        System.out.println();
+        verifyFibBound(60);
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Strong induction</strong> appears implicitly in Euclid's proof of the infinitude of primes and his fundamental result that every integer can be factored into primes.</p>
+
+<p>The <strong>Fibonacci sequence</strong> was introduced by Leonardo of Pisa (Fibonacci) in <em>Liber Abaci</em> (1202) as a model of rabbit population growth. It appears in countless natural phenomena, and the ratio $F_{n+1}/F_n$ converges to the golden ratio $\phi = \frac{1+\sqrt{5}}{2}$.</p>
+
+<p>The <strong>Towers of Hanoi</strong> puzzle was invented by Édouard Lucas (1883). The recurrence $T(n) = 2T(n-1)+1$ is one of the simplest nontrivial recurrences, and its analysis illustrates the power of induction applied to recursive definitions.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> What is the difference between ordinary induction and strong induction?</p>
+
+<p><strong>A2.</strong> Why does the proof that "every integer > 1 has a prime factor" require strong induction?</p>
+
+<p><strong>A3.</strong> Give a recursive definition of $n!$ with base case and recursive case.</p>
+
+<p><strong>A4.</strong> Why does a recursive function need a base case?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Use strong induction to prove: every integer $n \geq 2$ is either prime or a product of primes.</p>
+
+<p><strong>B2.</strong> Prove by induction: $F_n \geq \phi^{n-2}$ for $n \geq 1$, where $\phi = \frac{1+\sqrt{5}}{2}$.</p>
+
+<p><strong>B3.</strong> Prove: if $T(1) = 1$ and $T(n) = 2T(n-1) + 1$, then $T(n) = 2^n - 1$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Implement Fibonacci iteratively and recursively. Time the naive recursive version for $n = 40$ and the iterative for $n = 40$. Observe the difference.</p>
+
+<p><strong>C2.</strong> Implement recursive prime factorization. Verify the product of factors equals $n$.</p>
+
+<p><strong>C3.</strong> Implement Towers of Hanoi. Verify the move count equals $2^n - 1$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Prove by strong induction: every integer $n \geq 12$ can be expressed as $4a + 5b$ for non-negative integers $a, b$. (Hint: base cases $n = 12, 13, 14, 15$.)</p>
+
+<p><strong>DM2.</strong> Prove by strong induction: the Euclidean algorithm terminates in at most $2\lfloor\log_2(\min(a,b))\rfloor + 1$ steps.</p>
+
+<p><strong>DM3.</strong> Prove: $F_1 + F_3 + F_5 + \cdots + F_{2n-1} = F_{2n}$ for all $n \geq 1$.</p>
+
+<p><strong>DM4.</strong> Define $a_1 = 1, a_2 = 3$, and $a_n = a_{n-1} + 2a_{n-2}$ for $n \geq 3$. Prove by strong induction: $a_n = 2^n + (-1)^n$ divided by 3. (Actually $a_n = \frac{2^n - (-1)^n}{3}$.)</p>
+
+<p><strong>DM5.</strong> Use strong induction to prove: a binary tree with $n$ nodes has $n - 1$ edges. (Preview of Module 9.)</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement three Fibonacci methods: naive recursive, iterative, memoized. Compare timing for $n = 30, 35, 40, 45$.</p>
+
+<p><strong>JP2.</strong> Implement <code>primeFactors(n)</code> recursively. Verify: (a) all factors are prime, (b) their product equals $n$.</p>
+
+<p><strong>JP3.</strong> Implement the recurrence $a_n = a_{n-1} + 2a_{n-2}$ with $a_1 = 1, a_2 = 3$. Verify the closed form $a_n = \frac{2^n - (-1)^n}{3}$ for $n = 1$ to 30.</p>
+
+<p><strong>JP4.</strong> Implement Towers of Hanoi. Count moves and verify $= 2^n - 1$. Print the sequence of moves for $n = 4$.</p>
+
+<p><strong>JP5.</strong> Implement <code>int stageCoins(int n)</code> that computes the minimum number of coins (denominations 1, 5, 10, 25) to make change for $n$ cents, using recursion with memoization.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> From Module 2: the Fundamental Theorem of Arithmetic says every $n > 1$ has a unique prime factorization. Prove uniqueness by strong induction (harder than existence). Connect to Module 2's factorization code.</p>
+
+<p><strong>BR2.</strong> From Module 5: prove that the number of functions from an $n$-element set to a 2-element set is $2^n$ using induction. Connect to Module 4's power set result ($|\mathcal{P}(A)| = 2^{|A|}$) by showing a bijection between subsets and characteristic functions.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> <em>Base cases:</em> $12 = 4(3), 13 = 4(2)+5(1), 14 = 4(1)+5(2), 15 = 5(3)$. ✓</p>
+
+<p><em>Inductive step:</em> Assume all integers from 12 to $k$ can be expressed. For $k+1 \geq 16$: since $k+1 - 4 \geq 12$, by hypothesis $k-3 = 4a + 5b$. Then $k+1 = 4(a+1) + 5b$. ✓ $\blacksquare$</p>
+
+<p><strong>DM3.</strong> <em>Base ($n=1$):</em> $F_1 = 1 = F_2$. ✓</p>
+
+<p><em>Inductive step:</em> Assume $F_1 + F_3 + \cdots + F_{2k-1} = F_{2k}$.</p>
+
+<p>$F_1 + F_3 + \cdots + F_{2k+1} = F_{2k} + F_{2k+1} = F_{2k+2} = F_{2(k+1)}$. ✓ $\blacksquare$</p>
+
+<p><strong>DM5.</strong> A tree with 1 node has 0 edges = $1 - 1$. ✓ For a tree with $k+1$ nodes, removing a leaf gives a tree with $k$ nodes and $k-1$ edges (by hypothesis). Adding the leaf back adds exactly 1 edge. Total: $k - 1 + 1 = k = (k+1) - 1$. ✓ $\blacksquare$</p>
+
+</section>
+</div>
+<hr>
+<div id="class-3" class="class-section">
+<h1 id="module-6-class-3-recursive-sets-and-structural-induction">Module 6 – Class 3: Recursive Sets and Structural Induction</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define sets and data structures recursively (arithmetic expressions, binary trees).</li>
+<li>Apply structural induction to prove properties of recursively defined objects.</li>
+<li>Connect structural induction to recursive program correctness.</li>
+<li>Implement recursive data structures in Java and prove properties about them.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="recursively-defined-sets">Recursively Defined Sets</h3>
+
+<p>A set $S$ is <strong>recursively defined</strong> by:</p>
+<ol>
+<li><strong>Basis:</strong> Specify initial elements in $S$.</li>
+<li><strong>Recursive rule:</strong> Specify how to build new elements from existing ones.</li>
+<li><strong>Closure:</strong> $S$ contains only elements obtained by finitely many applications of the basis and rules.</li>
+</ol>
+
+<h3 id="example-arithmetic-expressions">Example: Arithmetic Expressions</h3>
+
+<div class="katex-block">$E ::= n \mid (E + E) \mid (E \times E)$</div>
+
+<ul>
+<li><strong>Basis:</strong> Any integer $n$ is an expression.</li>
+<li><strong>Recursive rules:</strong> If $e_1, e_2$ are expressions, so are $(e_1 + e_2)$ and $(e_1 \times e_2)$.</li>
+</ul>
+
+<h3 id="example-binary-trees">Example: Binary Trees</h3>
+
+<div class="katex-block">$T ::= \text{null} \mid \text{Node}(v, T, T)$</div>
+
+<ul>
+<li><strong>Basis:</strong> <code>null</code> is a binary tree (the empty tree).</li>
+<li><strong>Recursive rule:</strong> If $T_L$ and $T_R$ are binary trees and $v$ is a value, then $\text{Node}(v, T_L, T_R)$ is a binary tree.</li>
+</ul>
+
+<h3 id="structural-induction">Structural Induction</h3>
+
+<p>To prove a property $P$ holds for all elements of a recursively defined set:</p>
+
+<ol>
+<li><strong>Base case(s):</strong> Prove $P$ for each basis element.</li>
+<li><strong>Inductive step:</strong> For each recursive rule, assume $P$ holds for the sub-components (inductive hypothesis). Prove $P$ for the new element.</li>
+</ol>
+
+<p>Structural induction generalizes mathematical induction from natural numbers to arbitrary recursively defined structures.</p>
+
+<h3 id="the-pattern">The Pattern</h3>
+
+<table>
+<thead><tr>
+<th>Mathematical Induction</th>
+<th>Structural Induction</th>
+</tr></thead><tbody>
+<tr>
+<td>Prove for $n_0$</td>
+<td>Prove for basis elements</td>
+</tr>
+<tr>
+<td>Assume $P(k)$, prove $P(k+1)$</td>
+<td>Assume $P$ for sub-structures, prove $P$ for composite</td>
+</tr>
+<tr>
+<td>Works on $\mathbb{N}$</td>
+<td>Works on any recursive definition</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<p>For binary trees with the definition $T ::= \text{null} \mid \text{Node}(v, L, R)$:</p>
+
+<div class="katex-block">$\left[P(\text{null}) \;\wedge\; \forall v, L, R:\; (P(L) \wedge P(R)) \to P(\text{Node}(v, L, R))\right] \implies \forall T:\; P(T)$</div>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-full-binary-tree-theorem">Example 1: Full Binary Tree Theorem</h3>
+
+<p><strong>Claim:</strong> In a non-empty full binary tree (every node has 0 or 2 children), the number of leaves $L$ equals the number of internal nodes $I$ plus one: $L = I + 1$.</p>
+
+<p><strong>Proof by structural induction.</strong></p>
+
+<p><em>Base case:</em> A single node (no children). $L = 1, I = 0$. $1 = 0 + 1$. ✓</p>
+
+<p><em>Inductive step:</em> A full binary tree $T = \text{Node}(v, T_L, T_R)$ where both $T_L, T_R$ are non-empty full binary trees (since the root has 2 children).</p>
+
+<p>By hypothesis: $L_L = I_L + 1$ and $L_R = I_R + 1$.</p>
+
+<p>For $T$: $L = L_L + L_R$ (leaves come from subtrees), $I = I_L + I_R + 1$ (internal nodes of subtrees plus root).</p>
+
+<div class="katex-block">$L = (I_L + 1) + (I_R + 1) = I_L + I_R + 2 = (I_L + I_R + 1) + 1 = I + 1$</div>
+
+<p>✓ $\blacksquare$</p>
+
+<h3 id="example-2-size-of-an-expression-tree">Example 2: Size of an Expression Tree</h3>
+
+<p>Define $\text{size}(e)$ recursively:</p>
+<ul>
+<li>$\text{size}(n) = 1$ for any integer $n$.</li>
+<li>$\text{size}(e_1 \oplus e_2) = \text{size}(e_1) + \text{size}(e_2) + 1$ for $\oplus \in \{+, \times\}$.</li>
+</ul>
+
+<p><strong>Claim:</strong> $\text{size}(e) = 2 \cdot \text{ops}(e) + 1$, where $\text{ops}(e)$ is the number of operations.</p>
+
+<p><em>Base:</em> $\text{size}(n) = 1, \text{ops}(n) = 0$. $1 = 2(0) + 1$. ✓</p>
+
+<p><em>Inductive step:</em> $\text{size}(e_1 \oplus e_2) = \text{size}(e_1) + \text{size}(e_2) + 1 = (2\text{ops}(e_1)+1) + (2\text{ops}(e_2)+1) + 1 = 2(\text{ops}(e_1) + \text{ops}(e_2) + 1) + 1 = 2\text{ops}(e_1 \oplus e_2) + 1$. ✓ $\blacksquare$</p>
+
+<h3 id="example-3-evaluator-correctness">Example 3: Evaluator Correctness</h3>
+
+<p>Define <code>eval</code> on expression trees:</p>
+
+<pre><code class="language-text">eval(IntLit(n)) = n
+eval(Add(e1, e2)) = eval(e1) + eval(e2)
+eval(Mul(e1, e2)) = eval(e1) * eval(e2)</code></pre>
+
+<p><strong>Claim:</strong> <code>eval</code> computes the standard mathematical value of the expression.</p>
+
+<p>This follows directly from structural induction: the base case agrees with the math, and each recursive case combines results correctly because addition and multiplication on Java <code>int</code> match the mathematical operations (within overflow bounds). $\blacksquare$</p>
+
+<h3 id="example-4-number-of-nodes-in-a-binary-tree">Example 4: Number of Nodes in a Binary Tree</h3>
+
+<p><strong>Claim:</strong> <code>size(null) = 0</code> and <code>size(Node(v, L, R)) = 1 + size(L) + size(R)</code> correctly returns the number of nodes.</p>
+
+<p><em>Base:</em> <code>size(null) = 0</code>. An empty tree has 0 nodes. ✓</p>
+
+<p><em>Inductive step:</em> Assume <code>size(L)</code> returns the node count of $L$ and <code>size(R)</code> returns the node count of $R$. Then <code>1 + size(L) + size(R)</code> counts the root plus all nodes in the subtrees. ✓ $\blacksquare$</p>
+
+<h3 id="example-5-height-and-node-count">Example 5: Height and Node Count</h3>
+
+<p><strong>Claim:</strong> A binary tree of height $h$ has at most $2^{h+1} - 1$ nodes.</p>
+
+<p><em>Base ($h = 0$):</em> A tree of height 0 is a single node: $1 \leq 2^1 - 1 = 1$. ✓</p>
+
+<p><em>Inductive step:</em> A tree of height $h+1$ has a root with subtrees of height $\leq h$. By hypothesis, each subtree has $\leq 2^{h+1} - 1$ nodes. Total: $\leq 1 + 2(2^{h+1} - 1) = 2^{h+2} - 1$. ✓ $\blacksquare$</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="the-structural-induction-template">The Structural Induction Template</h3>
+
+<ol>
+<li><strong>Identify</strong> the recursively defined set/structure.</li>
+<li><strong>State</strong> the property $P$ to prove.</li>
+<li><strong>Base case(s):</strong> Verify $P$ for each basis element.</li>
+<li><strong>Inductive step:</strong> For each constructor/rule, assume $P$ for sub-components, prove for the whole.</li>
+<li><strong>Conclude:</strong> By structural induction.</li>
+</ol>
+
+<h3 id="common-pitfall-missing-constructors">Common Pitfall: Missing Constructors</h3>
+
+<p>If the recursive definition has multiple rules (e.g., <code>Add</code> and <code>Mul</code>), the inductive step must handle <strong>each</strong> rule separately.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class StructuralInductionLibrary {
+
+    // ===== Arithmetic Expression Trees =====
+
+    interface Expr {
+        int eval();
+        int size();
+        int ops();
+        String toInfix();
+    }
+
+    static class IntLit implements Expr {
+        final int value;
+        IntLit(int value) { this.value = value; }
+
+        public int eval() { return value; }
+        public int size() { return 1; }
+        public int ops() { return 0; }
+        public String toInfix() { return String.valueOf(value); }
+    }
+
+    static class Add implements Expr {
+        final Expr left, right;
+        Add(Expr left, Expr right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        public int eval() { return left.eval() + right.eval(); }
+        public int size() { return left.size() + right.size() + 1; }
+        public int ops() { return left.ops() + right.ops() + 1; }
+        public String toInfix() {
+            return "(" + left.toInfix() + " + " + right.toInfix() + ")";
+        }
+    }
+
+    static class Mul implements Expr {
+        final Expr left, right;
+        Mul(Expr left, Expr right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        public int eval() { return left.eval() * right.eval(); }
+        public int size() { return left.size() + right.size() + 1; }
+        public int ops() { return left.ops() + right.ops() + 1; }
+        public String toInfix() {
+            return "(" + left.toInfix() + " * " + right.toInfix() + ")";
+        }
+    }
+
+    // ===== Binary Tree =====
+
+    static class TreeNode {
+        int value;
+        TreeNode left, right;
+        TreeNode(int value) { this.value = value; }
+        TreeNode(int value, TreeNode left, TreeNode right) {
+            this.value = value;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    /**
+     * Size: number of nodes.
+     * Correctness by structural induction (Example 4 above).
+     */
+    static int size(TreeNode root) {
+        if (root == null) return 0;
+        return 1 + size(root.left) + size(root.right);
+    }
+
+    /**
+     * Height: length of longest root-to-leaf path.
+     * Height of empty tree is -1 (convention).
+     */
+    static int height(TreeNode root) {
+        if (root == null) return -1;
+        return 1 + Math.max(height(root.left), height(root.right));
+    }
+
+    /**
+     * Count leaves.
+     * In a full binary tree: leaves = internal + 1.
+     */
+    static int countLeaves(TreeNode root) {
+        if (root == null) return 0;
+        if (root.left == null &amp;&amp; root.right == null) return 1;
+        return countLeaves(root.left) + countLeaves(root.right);
+    }
+
+    /**
+     * Count internal nodes (nodes with at least one child).
+     */
+    static int countInternal(TreeNode root) {
+        if (root == null) return 0;
+        if (root.left == null &amp;&amp; root.right == null) return 0;
+        return 1 + countInternal(root.left) + countInternal(root.right);
+    }
+
+    /**
+     * Check if a tree is full (every node has 0 or 2 children).
+     */
+    static boolean isFull(TreeNode root) {
+        if (root == null) return true;
+        boolean hasLeft = root.left != null;
+        boolean hasRight = root.right != null;
+        if (hasLeft != hasRight) return false; // exactly one child
+        return isFull(root.left) &amp;&amp; isFull(root.right);
+    }
+
+    /**
+     * Build a complete full binary tree of given height.
+     */
+    static TreeNode buildFullTree(int height, int[] counter) {
+        if (height &lt; 0) return null;
+        TreeNode node = new TreeNode(counter[0]++);
+        if (height &gt; 0) {
+            node.left = buildFullTree(height - 1, counter);
+            node.right = buildFullTree(height - 1, counter);
+        }
+        return node;
+    }
+
+    /**
+     * Inorder traversal.
+     */
+    static List&lt;Integer&gt; inorder(TreeNode root) {
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        inorderHelper(root, result);
+        return result;
+    }
+
+    private static void inorderHelper(TreeNode root, List&lt;Integer&gt; result) {
+        if (root == null) return;
+        inorderHelper(root.left, result);
+        result.add(root.value);
+        inorderHelper(root.right, result);
+    }
+
+    // ===== Demonstration =====
+
+    public static void main(String[] args) {
+        System.out.println("=== Structural Induction Library ===\n");
+
+        // --- Expression Trees ---
+        // (3 + 5) * (2 + 4) = 8 * 6 = 48
+        Expr expr = new Mul(
+                new Add(new IntLit(3), new IntLit(5)),
+                new Add(new IntLit(2), new IntLit(4))
+        );
+        System.out.println("Expression: " + expr.toInfix());
+        System.out.println("  eval = " + expr.eval());
+        System.out.println("  size = " + expr.size());
+        System.out.println("  ops  = " + expr.ops());
+        System.out.println("  size == 2*ops + 1? " + (expr.size() == 2 * expr.ops() + 1));
+
+        // --- Binary Trees ---
+        System.out.println("\nFull binary tree (height 3):");
+        TreeNode tree = buildFullTree(3, new int[]{1});
+        System.out.println("  Size:     " + size(tree));
+        System.out.println("  Height:   " + height(tree));
+        System.out.println("  Leaves:   " + countLeaves(tree));
+        System.out.println("  Internal: " + countInternal(tree));
+        System.out.println("  Full:     " + isFull(tree));
+        System.out.println("  L = I+1?  " + (countLeaves(tree) == countInternal(tree) + 1));
+        System.out.println("  Inorder:  " + inorder(tree));
+
+        // Verify properties for full trees of various heights
+        System.out.println("\nVerifying full binary tree properties:");
+        for (int h = 0; h &lt;= 6; h++) {
+            TreeNode t = buildFullTree(h, new int[]{1});
+            int s = size(t);
+            int leaves = countLeaves(t);
+            int internal = countInternal(t);
+            int expectedNodes = (1 &lt;&lt; (h + 1)) - 1; // 2^(h+1) - 1
+            System.out.printf("  h=%d: nodes=%d (exp %d), leaves=%d, internal=%d, L=I+1? %b%n",
+                    h, s, expectedNodes, leaves, internal, leaves == internal + 1);
+            assert s == expectedNodes;
+            assert leaves == internal + 1;
+        }
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Structural induction</strong> emerged from the formalization of recursive definitions in <strong>mathematical logic</strong> and <strong>formal language theory</strong> in the 20th century. <strong>Stephen Kleene</strong> and <strong>Alonzo Church</strong> studied recursive functions in the 1930s, laying the groundwork for both recursion theory and programming.</p>
+
+<p><strong>Context-free grammars</strong> (Chomsky, 1956) define languages recursively, and proofs about parse trees use structural induction. Every compiler course relies on these ideas.</p>
+
+<p>The connection between recursive data structures and structural induction was made explicit in <strong>type theory</strong> (Martin-Löf, 1970s), where induction principles are automatically generated from data type definitions — a practice now common in proof assistants like Coq, Agda, and Lean.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> How does structural induction differ from mathematical induction on $\mathbb{N}$?</p>
+
+<p><strong>A2.</strong> Give the recursive definition of a binary tree.</p>
+
+<p><strong>A3.</strong> For the expression $(3 + (5 \times 2))$, draw the tree and compute <code>eval</code>, <code>size</code>, and <code>ops</code>.</p>
+
+<p><strong>A4.</strong> Why do we need a base case for <code>null</code> trees?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove by structural induction: in any binary tree, the number of <code>null</code> pointers is one more than the number of nodes.</p>
+
+<p><strong>B2.</strong> Prove: <code>eval(Mul(e1, e2)) = eval(e1) * eval(e2)</code> correctly computes the product for all expressions $e_1, e_2$.</p>
+
+<p><strong>B3.</strong> Prove: a full binary tree of height $h$ has exactly $2^{h+1} - 1$ nodes.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Implement the <code>Expr</code> interface with <code>IntLit</code>, <code>Add</code>, and <code>Mul</code>. Add a <code>Sub</code> variant.</p>
+
+<p><strong>C2.</strong> Write <code>countLeaves</code> and <code>countInternal</code> for binary trees. Verify $L = I + 1$ on full trees.</p>
+
+<p><strong>C3.</strong> Implement a method that builds an expression tree from a postfix string (e.g., <code>"3 5 + 2 *"</code>) and evaluates it.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Give a recursive definition of the set of all balanced parentheses strings. Prove by structural induction that every string in the set has equal numbers of <code>(</code> and <code>)</code>.</p>
+
+<p><strong>DM2.</strong> Prove by structural induction: the number of <code>null</code> children in a binary tree with $n$ nodes is $n + 1$.</p>
+
+<p><strong>DM3.</strong> Define the <strong>depth</strong> of an expression: $\text{depth}(n) = 0$, $\text{depth}(e_1 \oplus e_2) = 1 + \max(\text{depth}(e_1), \text{depth}(e_2))$. Prove: $\text{ops}(e) \leq 2^{\text{depth}(e)} - 1$.</p>
+
+<p><strong>DM4.</strong> Prove by structural induction: the <strong>mirror</strong> of a binary tree (swap left and right at every node) preserves the number of nodes.</p>
+
+<p><strong>DM5.</strong> Prove: $\text{height}(T) \leq \text{size}(T) - 1$ for every non-empty binary tree $T$.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement <code>Expr</code> with <code>IntLit</code>, <code>Add</code>, <code>Mul</code>, <code>Sub</code>, <code>Div</code>. Add <code>eval()</code>, <code>size()</code>, <code>toInfix()</code>, <code>toPostfix()</code>.</p>
+
+<p><strong>JP2.</strong> Build a postfix expression evaluator using a stack. Verify it matches <code>eval()</code> on the tree.</p>
+
+<p><strong>JP3.</strong> Implement <code>mirror(TreeNode root)</code> that returns a new tree with left/right swapped. Verify <code>size(mirror(T)) == size(T)</code> and <code>height(mirror(T)) == height(T)</code>.</p>
+
+<p><strong>JP4.</strong> Implement <code>isBalanced(TreeNode root)</code> that returns true iff the heights of left and right subtrees differ by at most 1, recursively. Test on balanced and unbalanced trees.</p>
+
+<p><strong>JP5.</strong> Write a method that generates all binary trees with $n$ nodes (Catalan number enumeration). Count them and verify the count matches the $n$-th Catalan number $C_n = \frac{1}{n+1}\binom{2n}{n}$.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> From Module 4: the power set of an $n$-element set has $2^n$ elements (proved by induction in Class 1). Structural induction on a binary tree of decisions ($\in / \notin$) gives an alternative proof: each path from root to leaf corresponds to a subset.</p>
+
+<p><strong>BR2.</strong> From Module 5: functions from $A$ to $\{0,1\}$ correspond bijectively to subsets of $A$. Express this correspondence using expression trees: an expression <code>(x_1 AND x_2) OR (NOT x_3)</code> defines a subset of $\{0,1\}^3$ via its truth set. Implement and evaluate.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> Recursive definition: (i) $\varepsilon$ (empty string) is balanced. (ii) If $s$ is balanced, then $(s)$ is balanced. (iii) If $s_1, s_2$ are balanced, then $s_1 s_2$ is balanced.</p>
+
+<p>Proof: <em>Base:</em> $\varepsilon$ has 0 <code>(</code>s and 0 <code>)</code>s. ✓ <em>Rule (ii):</em> If $s$ has equal <code>(</code> and <code>)</code>, then $(s)$ adds one of each. ✓ <em>Rule (iii):</em> If $s_1$ and $s_2$ each have equal <code>(</code> and <code>)</code>, so does $s_1 s_2$. ✓ $\blacksquare$</p>
+
+<p><strong>DM2.</strong> <em>Base:</em> <code>null</code> tree has 0 nodes and 1 null child (itself). $0 + 1 = 1$. ✓</p>
+
+<p><em>Inductive step:</em> $\text{Node}(v, L, R)$ has $n = 1 + n_L + n_R$ nodes. By hypothesis, $L$ has $n_L + 1$ null children and $R$ has $n_R + 1$. The full tree has $n_L + 1 + n_R + 1 = n_L + n_R + 2 = (1 + n_L + n_R) + 1 = n + 1$. ✓ $\blacksquare$</p>
+
+<p><strong>DM4.</strong> <em>Base:</em> <code>mirror(null) = null</code>. Both have 0 nodes. ✓</p>
+
+<p><em>Inductive step:</em> <code>mirror(Node(v, L, R)) = Node(v, mirror(R), mirror(L))</code>. By hypothesis, <code>size(mirror(L)) = size(L)</code> and <code>size(mirror(R)) = size(R)</code>. So <code>size(mirror(T)) = 1 + size(mirror(R)) + size(mirror(L)) = 1 + size(R) + size(L) = size(T)</code>. ✓ $\blacksquare$</p>
+
+</section>
+</div>
+<hr>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

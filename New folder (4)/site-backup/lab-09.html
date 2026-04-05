@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 9 Lab — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="lab-09">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-9-lab-trees-heaps-and-verified-data-structures">Module 9 – Lab: Trees, Heaps and Verified Data Structures</h1>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>In this lab you will implement a BST and a min-heap from scratch, verify their invariants with assertions and structural-induction-style checks, and connect tree properties to complexity. This lab draws on proof techniques from the entire course.</p>
+
+<p><strong>Estimated time:</strong> 3 hours</p>
+
+<hr>
+
+<section class="slide" id="part-1-binary-search-tree">
+<h2>Part 1: Binary Search Tree</h2>
+
+<p>Build a complete BST class with insert, search, delete, and traversal.</p>
+
+<h3 id="exercises">Exercises</h3>
+
+<ol>
+<li>Implement <code>insert(int key)</code> — recursive, returns new root.</li>
+<li>Implement <code>search(int key)</code> — returns <code>true</code>/<code>false</code>.</li>
+<li>Implement <code>delete(int key)</code> — handle leaf, one-child, and two-child cases.</li>
+<li>Implement <code>inOrder()</code> — return a <code>List&lt;Integer&gt;</code>.</li>
+<li>After each insert and delete, assert: (a) <code>isValidBST()</code> returns <code>true</code>; (b) <code>inOrder()</code> is sorted.</li>
+<li>Insert the values 50, 30, 70, 20, 40, 60, 80. Print in-order. Delete 30 and 70. Print in-order again.</li>
+</ol>
+
+<h3 id="extension">Extension</h3>
+
+<ol>
+<li>Implement <code>findKthSmallest(int k)</code> using in-order traversal.</li>
+<li>Implement <code>rangeSearch(int lo, int hi)</code> — return all keys in $[lo, hi]$.</li>
+</ol>
+
+<hr>
+
+<section class="slide" id="part-2-min-heap-and-priority-queue">
+<h2>Part 2: Min-Heap and Priority Queue</h2>
+
+<p>Build a min-heap backed by an array.</p>
+
+<h3 id="exercises">Exercises</h3>
+
+<ol>
+<li>Implement <code>insert(int value)</code> with bubble-up.</li>
+<li>Implement <code>extractMin()</code> with sift-down.</li>
+<li>Implement <code>checkHeapInvariant()</code> — verify $\text{data}[i] \leq \text{data}[2i+1]$ and $\text{data}[i] \leq \text{data}[2i+2]$ for all valid indices.</li>
+<li>After each insert and extractMin, assert the heap invariant holds.</li>
+<li>Insert values [42, 17, 8, 31, 5, 23, 12, 3]. Print the array after each insertion.</li>
+<li>Extract all values and verify you get them in ascending order.</li>
+</ol>
+
+<h3 id="extension">Extension</h3>
+
+<ol>
+<li>Implement <code>buildHeap(int[] values)</code> using the $O(n)$ bottom-up algorithm (sift-down from $\lfloor n/2 \rfloor - 1$ to 0).</li>
+<li>Implement <code>heapSort(int[] values)</code> using your heap.</li>
+</ol>
+
+<hr>
+
+<section class="slide" id="part-3-tree-property-verification">
+<h2>Part 3: Tree Property Verification</h2>
+
+<p>Verify the full binary tree theorem and balanced tree properties from Class 2.</p>
+
+<h3 id="exercises">Exercises</h3>
+
+<ol>
+<li>Build full binary trees of heights 0–8. For each, verify:</li>
+</ol>
+<ul>
+<li>$L = I + 1$</li>
+<li>$N = 2I + 1$</li>
+<li>$N = 2^{h+1} - 1$</li>
+</ul>
+<ol>
+<li>Build balanced BSTs from sorted arrays of sizes 1–127. For each, verify:</li>
+</ol>
+<ul>
+<li><code>isBalanced()</code> returns <code>true</code></li>
+<li>Height $\leq \lfloor \log_2 n \rfloor$</li>
+</ul>
+<ol>
+<li>Build a degenerate tree with 100 nodes. Verify height = 99 and <code>isBalanced()</code> = false.</li>
+</ol>
+
+<hr>
+
+<section class="slide" id="part-4-complexity-measurement">
+<h2>Part 4: Complexity Measurement</h2>
+
+<h3 id="exercises">Exercises</h3>
+
+<ol>
+<li>Build balanced BSTs of sizes $n = 1000, 5000, 10000, 50000, 100000$.</li>
+<li>For each, time 10,000 random searches. Record average time per search.</li>
+<li>Print a table showing $n$, height, and average search time.</li>
+<li>Observe: does the growth pattern match $O(\log n)$?</li>
+</ol>
+
+<h3 id="extension">Extension</h3>
+
+<ol>
+<li>Compare BST search time with Java's <code>Arrays.binarySearch</code> on the same data.</li>
+<li>Compare heap extractMin sequence timing with <code>Collections.sort</code>.</li>
+</ol>
+
+<hr>
+
+<section class="slide" id="starter-code">
+<h2>Starter Code</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class Module9Lab {
+
+    // ========== TreeNode ==========
+    static class TreeNode {
+        int value;
+        TreeNode left, right;
+        TreeNode(int v) { this.value = v; }
+        TreeNode(int v, TreeNode l, TreeNode r) {
+            this.value = v; this.left = l; this.right = r;
+        }
+    }
+
+    // ========== BST ==========
+
+    public static TreeNode bstInsert(TreeNode t, int key) {
+        // TODO: Implement recursive BST insert
+        return t;
+    }
+
+    public static boolean bstSearch(TreeNode t, int key) {
+        // TODO: Implement recursive BST search
+        return false;
+    }
+
+    public static TreeNode bstDelete(TreeNode t, int key) {
+        // TODO: Implement BST delete (leaf, one child, two children)
+        return t;
+    }
+
+    public static TreeNode findMin(TreeNode t) {
+        // TODO: Find minimum node
+        return t;
+    }
+
+    public static List&lt;Integer&gt; inOrder(TreeNode t) {
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        // TODO: Fill result with in-order traversal
+        return result;
+    }
+
+    public static boolean isValidBST(TreeNode t) {
+        // TODO: Validate BST invariant
+        return false;
+    }
+
+    public static int height(TreeNode t) {
+        // TODO
+        return -1;
+    }
+
+    public static int countLeaves(TreeNode t) {
+        // TODO
+        return 0;
+    }
+
+    public static int countInternal(TreeNode t) {
+        // TODO
+        return 0;
+    }
+
+    public static int size(TreeNode t) {
+        // TODO
+        return 0;
+    }
+
+    public static boolean isFull(TreeNode t) {
+        // TODO
+        return false;
+    }
+
+    public static boolean isBalanced(TreeNode t) {
+        // TODO
+        return false;
+    }
+
+    public static TreeNode buildFull(int height) {
+        // TODO: Build a full binary tree of given height
+        return null;
+    }
+
+    public static TreeNode buildBalancedBST(int[] sorted, int lo, int hi) {
+        // TODO: Build balanced BST from sorted array
+        return null;
+    }
+
+    // ========== MIN-HEAP ==========
+
+    static class MinHeap {
+        private int[] data;
+        private int size;
+
+        public MinHeap(int capacity) {
+            data = new int[capacity];
+            size = 0;
+        }
+
+        public int size() { return size; }
+
+        public void insert(int value) {
+            // TODO: Insert and bubble up
+        }
+
+        public int extractMin() {
+            // TODO: Extract root and sift down
+            return -1;
+        }
+
+        private void bubbleUp(int i) {
+            // TODO
+        }
+
+        private void siftDown(int i) {
+            // TODO
+        }
+
+        public boolean checkHeapInvariant() {
+            // TODO: Verify parent &lt;= children for all nodes
+            return false;
+        }
+
+        private int parent(int i) { return (i - 1) / 2; }
+        private int leftChild(int i) { return 2 * i + 1; }
+        private int rightChild(int i) { return 2 * i + 2; }
+
+        private void swap(int i, int j) {
+            int tmp = data[i]; data[i] = data[j]; data[j] = tmp;
+        }
+
+        @Override
+        public String toString() {
+            return Arrays.toString(Arrays.copyOf(data, size));
+        }
+    }
+
+    // ========== MAIN ==========
+
+    public static void main(String[] args) {
+        // Part 1: BST
+        System.out.println("=== Part 1: BST ===");
+        TreeNode bst = null;
+        int[] keys = {50, 30, 70, 20, 40, 60, 80};
+        for (int k : keys) {
+            bst = bstInsert(bst, k);
+            assert isValidBST(bst) : "BST invariant violated after insert " + k;
+        }
+        System.out.println("In-order: " + inOrder(bst));
+        bst = bstDelete(bst, 30);
+        bst = bstDelete(bst, 70);
+        System.out.println("After deleting 30,70: " + inOrder(bst));
+        assert isValidBST(bst) : "BST invariant violated after delete";
+
+        // Part 2: Min-Heap
+        System.out.println("\n=== Part 2: Min-Heap ===");
+        MinHeap heap = new MinHeap(16);
+        int[] vals = {42, 17, 8, 31, 5, 23, 12, 3};
+        for (int v : vals) {
+            heap.insert(v);
+            assert heap.checkHeapInvariant() : "Heap invariant violated after insert " + v;
+            System.out.println("  After insert " + v + ": " + heap);
+        }
+        System.out.println("Extract in order:");
+        int prev = Integer.MIN_VALUE;
+        while (heap.size() &gt; 0) {
+            int min = heap.extractMin();
+            assert min &gt;= prev : "Not in ascending order!";
+            prev = min;
+            System.out.println("  " + min);
+        }
+
+        // Part 3: Tree Properties
+        System.out.println("\n=== Part 3: Tree Properties ===");
+        for (int h = 0; h &lt;= 8; h++) {
+            TreeNode full = buildFull(h);
+            int n = size(full);
+            int l = countLeaves(full);
+            int i = countInternal(full);
+            assert l == i + 1 : "L != I+1";
+            assert n == 2 * i + 1 : "N != 2I+1";
+            System.out.printf("h=%d: N=%d, L=%d, I=%d%n", h, n, l, i);
+        }
+
+        // Part 4: Complexity
+        System.out.println("\n=== Part 4: Complexity ===");
+        Random rng = new Random(42);
+        int[] sizes = {1000, 5000, 10000, 50000, 100000};
+        System.out.println("    n    | height |  avg search (ns)");
+        System.out.println("---------+--------+-----------------");
+        for (int n : sizes) {
+            int[] sorted = new int[n];
+            for (int j = 0; j &lt; n; j++) sorted[j] = j;
+            TreeNode balanced = buildBalancedBST(sorted, 0, n - 1);
+            long start = System.nanoTime();
+            for (int j = 0; j &lt; 10000; j++) {
+                bstSearch(balanced, rng.nextInt(n));
+            }
+            long elapsed = System.nanoTime() - start;
+            System.out.printf("%7d  |   %3d  |  %,d%n", n, height(balanced), elapsed / 10000);
+        }
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class Module9LabSolution {
+
+    static class TreeNode {
+        int value;
+        TreeNode left, right;
+        TreeNode(int v) { this.value = v; }
+        TreeNode(int v, TreeNode l, TreeNode r) {
+            this.value = v; this.left = l; this.right = r;
+        }
+    }
+
+    // ========== BST ==========
+
+    public static TreeNode bstInsert(TreeNode t, int key) {
+        if (t == null) return new TreeNode(key);
+        if (key &lt; t.value) t.left = bstInsert(t.left, key);
+        else if (key &gt; t.value) t.right = bstInsert(t.right, key);
+        return t;
+    }
+
+    public static boolean bstSearch(TreeNode t, int key) {
+        if (t == null) return false;
+        if (key &lt; t.value) return bstSearch(t.left, key);
+        if (key &gt; t.value) return bstSearch(t.right, key);
+        return true;
+    }
+
+    public static TreeNode bstDelete(TreeNode t, int key) {
+        if (t == null) return null;
+        if (key &lt; t.value) {
+            t.left = bstDelete(t.left, key);
+        } else if (key &gt; t.value) {
+            t.right = bstDelete(t.right, key);
+        } else {
+            if (t.left == null) return t.right;
+            if (t.right == null) return t.left;
+            TreeNode successor = findMin(t.right);
+            t.value = successor.value;
+            t.right = bstDelete(t.right, successor.value);
+        }
+        return t;
+    }
+
+    public static TreeNode findMin(TreeNode t) {
+        while (t.left != null) t = t.left;
+        return t;
+    }
+
+    public static List&lt;Integer&gt; inOrder(TreeNode t) {
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        inOrderHelper(t, result);
+        return result;
+    }
+
+    private static void inOrderHelper(TreeNode t, List&lt;Integer&gt; result) {
+        if (t == null) return;
+        inOrderHelper(t.left, result);
+        result.add(t.value);
+        inOrderHelper(t.right, result);
+    }
+
+    public static boolean isValidBST(TreeNode t) {
+        return isValidBST(t, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    private static boolean isValidBST(TreeNode t, int min, int max) {
+        if (t == null) return true;
+        if (t.value &lt;= min || t.value &gt;= max) return false;
+        return isValidBST(t.left, min, t.value)
+            &amp;&amp; isValidBST(t.right, t.value, max);
+    }
+
+    public static int height(TreeNode t) {
+        if (t == null) return -1;
+        return 1 + Math.max(height(t.left), height(t.right));
+    }
+
+    public static int countLeaves(TreeNode t) {
+        if (t == null) return 0;
+        if (t.left == null &amp;&amp; t.right == null) return 1;
+        return countLeaves(t.left) + countLeaves(t.right);
+    }
+
+    public static int countInternal(TreeNode t) {
+        if (t == null) return 0;
+        if (t.left == null &amp;&amp; t.right == null) return 0;
+        return 1 + countInternal(t.left) + countInternal(t.right);
+    }
+
+    public static int size(TreeNode t) {
+        if (t == null) return 0;
+        return 1 + size(t.left) + size(t.right);
+    }
+
+    public static boolean isFull(TreeNode t) {
+        if (t == null) return true;
+        if (t.left == null &amp;&amp; t.right == null) return true;
+        if (t.left == null || t.right == null) return false;
+        return isFull(t.left) &amp;&amp; isFull(t.right);
+    }
+
+    public static boolean isBalanced(TreeNode t) {
+        return balancedHeight(t) != -2;
+    }
+
+    private static int balancedHeight(TreeNode t) {
+        if (t == null) return -1;
+        int lh = balancedHeight(t.left);
+        if (lh == -2) return -2;
+        int rh = balancedHeight(t.right);
+        if (rh == -2) return -2;
+        if (Math.abs(lh - rh) &gt; 1) return -2;
+        return 1 + Math.max(lh, rh);
+    }
+
+    public static TreeNode buildFull(int h) {
+        if (h &lt; 0) return null;
+        if (h == 0) return new TreeNode(0);
+        return new TreeNode(0, buildFull(h - 1), buildFull(h - 1));
+    }
+
+    public static TreeNode buildBalancedBST(int[] sorted, int lo, int hi) {
+        if (lo &gt; hi) return null;
+        int mid = lo + (hi - lo) / 2;
+        return new TreeNode(sorted[mid],
+                buildBalancedBST(sorted, lo, mid - 1),
+                buildBalancedBST(sorted, mid + 1, hi));
+    }
+
+    // ========== MIN-HEAP ==========
+
+    static class MinHeap {
+        private int[] data;
+        private int size;
+
+        public MinHeap(int capacity) {
+            data = new int[capacity];
+            size = 0;
+        }
+
+        public int size() { return size; }
+
+        public int peek() {
+            if (size == 0) throw new NoSuchElementException();
+            return data[0];
+        }
+
+        public void insert(int value) {
+            if (size == data.length) data = Arrays.copyOf(data, data.length * 2);
+            data[size] = value;
+            bubbleUp(size);
+            size++;
+        }
+
+        public int extractMin() {
+            if (size == 0) throw new NoSuchElementException();
+            int min = data[0];
+            size--;
+            data[0] = data[size];
+            siftDown(0);
+            return min;
+        }
+
+        private void bubbleUp(int i) {
+            while (i &gt; 0 &amp;&amp; data[i] &lt; data[parent(i)]) {
+                swap(i, parent(i));
+                i = parent(i);
+            }
+        }
+
+        private void siftDown(int i) {
+            while (leftChild(i) &lt; size) {
+                int smallest = i;
+                int left = leftChild(i);
+                int right = rightChild(i);
+                if (left &lt; size &amp;&amp; data[left] &lt; data[smallest]) smallest = left;
+                if (right &lt; size &amp;&amp; data[right] &lt; data[smallest]) smallest = right;
+                if (smallest == i) break;
+                swap(i, smallest);
+                i = smallest;
+            }
+        }
+
+        public boolean checkHeapInvariant() {
+            for (int i = 1; i &lt; size; i++) {
+                if (data[i] &lt; data[parent(i)]) return false;
+            }
+            return true;
+        }
+
+        public void buildHeap(int[] values) {
+            data = Arrays.copyOf(values, Math.max(values.length, 16));
+            size = values.length;
+            for (int i = size / 2 - 1; i &gt;= 0; i--) {
+                siftDown(i);
+            }
+        }
+
+        public static int[] heapSort(int[] values) {
+            MinHeap h = new MinHeap(values.length);
+            h.buildHeap(Arrays.copyOf(values, values.length));
+            int[] result = new int[values.length];
+            for (int i = 0; i &lt; result.length; i++) {
+                result[i] = h.extractMin();
+            }
+            return result;
+        }
+
+        private int parent(int i) { return (i - 1) / 2; }
+        private int leftChild(int i) { return 2 * i + 1; }
+        private int rightChild(int i) { return 2 * i + 2; }
+
+        private void swap(int i, int j) {
+            int tmp = data[i]; data[i] = data[j]; data[j] = tmp;
+        }
+
+        @Override
+        public String toString() {
+            return Arrays.toString(Arrays.copyOf(data, size));
+        }
+    }
+
+    // ========== MAIN ==========
+
+    public static void main(String[] args) {
+        // Part 1: BST
+        System.out.println("=== Part 1: BST ===");
+        TreeNode bst = null;
+        int[] keys = {50, 30, 70, 20, 40, 60, 80};
+        for (int k : keys) {
+            bst = bstInsert(bst, k);
+            assert isValidBST(bst) : "BST invariant violated after insert " + k;
+        }
+        System.out.println("In-order: " + inOrder(bst));
+        System.out.println("Height: " + height(bst));
+        System.out.println("Valid BST? " + isValidBST(bst));
+
+        bst = bstDelete(bst, 30);
+        System.out.println("After delete 30: " + inOrder(bst));
+        assert isValidBST(bst);
+        bst = bstDelete(bst, 70);
+        System.out.println("After delete 70: " + inOrder(bst));
+        assert isValidBST(bst);
+
+        // findKthSmallest
+        List&lt;Integer&gt; sorted = inOrder(bst);
+        System.out.println("3rd smallest: " + sorted.get(2));
+
+        // rangeSearch
+        System.out.print("Range [25,65]: ");
+        for (int v : sorted) {
+            if (v &gt;= 25 &amp;&amp; v &lt;= 65) System.out.print(v + " ");
+        }
+        System.out.println();
+
+        // Part 2: Min-Heap
+        System.out.println("\n=== Part 2: Min-Heap ===");
+        MinHeap heap = new MinHeap(16);
+        int[] vals = {42, 17, 8, 31, 5, 23, 12, 3};
+        for (int v : vals) {
+            heap.insert(v);
+            assert heap.checkHeapInvariant() : "Heap invariant violated";
+            System.out.println("  After insert " + v + ": " + heap);
+        }
+
+        System.out.println("Extract in order:");
+        int prev = Integer.MIN_VALUE;
+        while (heap.size() &gt; 0) {
+            int min = heap.extractMin();
+            assert min &gt;= prev : "Not ascending!";
+            assert heap.checkHeapInvariant() : "Heap invariant violated after extract";
+            prev = min;
+            System.out.println("  " + min);
+        }
+
+        // Extension: buildHeap + heapSort
+        System.out.println("\nHeapSort [42,17,8,31,5,23,12,3]:");
+        System.out.println("  " + Arrays.toString(MinHeap.heapSort(vals)));
+
+        // Part 3: Tree Properties
+        System.out.println("\n=== Part 3: Tree Properties ===");
+        for (int h = 0; h &lt;= 8; h++) {
+            TreeNode full = buildFull(h);
+            int n = size(full);
+            int l = countLeaves(full);
+            int internal = countInternal(full);
+            assert l == internal + 1 : "L != I+1";
+            assert n == 2 * internal + 1 : "N != 2I+1";
+            assert n == (int) Math.pow(2, h + 1) - 1 : "N != 2^(h+1)-1";
+            System.out.printf("h=%d: N=%d, L=%d, I=%d, L=I+1? %b%n",
+                    h, n, l, internal, l == internal + 1);
+        }
+
+        System.out.println("\nBalanced BST verification:");
+        for (int n = 1; n &lt;= 127; n += 2) {
+            int[] arr = new int[n];
+            for (int i = 0; i &lt; n; i++) arr[i] = i;
+            TreeNode balanced = buildBalancedBST(arr, 0, n - 1);
+            assert isBalanced(balanced) : "Not balanced for n=" + n;
+            int h = height(balanced);
+            int maxH = (int) (Math.log(n) / Math.log(2));
+            System.out.printf("n=%3d: h=%d, floor(log2(n))=%d, balanced=%b%n",
+                    n, h, maxH, isBalanced(balanced));
+        }
+
+        // Part 4: Complexity
+        System.out.println("\n=== Part 4: Complexity ===");
+        Random rng = new Random(42);
+        int[] sizes = {1000, 5000, 10000, 50000, 100000};
+        System.out.println("    n    | height |  avg search (ns)");
+        System.out.println("---------+--------+-----------------");
+        for (int n : sizes) {
+            int[] arr = new int[n];
+            for (int j = 0; j &lt; n; j++) arr[j] = j;
+            TreeNode balanced = buildBalancedBST(arr, 0, n - 1);
+            // Warm up
+            for (int j = 0; j &lt; 1000; j++) bstSearch(balanced, rng.nextInt(n));
+            // Measure
+            long start = System.nanoTime();
+            for (int j = 0; j &lt; 10000; j++) {
+                bstSearch(balanced, rng.nextInt(n));
+            }
+            long elapsed = System.nanoTime() - start;
+            System.out.printf("%7d  |   %3d  |  %,d%n", n, height(balanced), elapsed / 10000);
+        }
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="verification-checklist">
+<h2>Verification Checklist</h2>
+
+<ul>
+<li>☐ BST insert preserves BST invariant (assert after each insert)</li>
+<li>☐ BST delete preserves BST invariant (all three cases tested)</li>
+<li>☐ In-order traversal always produces sorted output</li>
+<li>☐ Heap invariant holds after every insert and extractMin</li>
+<li>☐ Extracting all elements from heap produces ascending order</li>
+<li>☐ Full tree L = I + 1 verified for heights 0–8</li>
+<li>☐ Balanced BST has height ≤ floor(log₂ n) for all tested sizes</li>
+<li>☐ Complexity measurements show O(log n) growth pattern</li>
+<li>☐ All assertions pass with <code>-ea</code> flag</li>
+</ul>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RE Investment Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════════ -->
+<header class="app-header">
+    <div class="header-inner">
+        <div class="logo">
+            <span class="logo-icon">🏠</span>
+            <span>RE <span class="logo-accent">Analyzer</span></span>
+        </div>
+        <nav class="tab-nav" role="tablist">
+            <button class="tab-btn active" data-tab="analyze"     role="tab">Analyze</button>
+            <button class="tab-btn"        data-tab="projections" role="tab">Projections</button>
+            <button class="tab-btn"        data-tab="target"      role="tab">Target Calc</button>
+            <button class="tab-btn"        data-tab="compare"     role="tab">Compare</button>
+            <button class="tab-btn"        data-tab="saved"       role="tab">Saved Deals</button>
+            <button class="tab-btn"        data-tab="tests"       role="tab" style="display:none">🧪 Tests</button>
+        </nav>
+        <div class="header-actions">
+            <button id="loadSampleBtn" class="btn btn-secondary">Load Sample</button>
+            <button id="saveDealBtn"   class="btn btn-primary">Save Deal</button>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 1: ANALYZE
+═══════════════════════════════════════════════════ -->
+<section id="tab-analyze" class="tab-content active" role="tabpanel">
+    <div class="analyze-layout">
+
+        <!-- ── INPUTS PANEL ─────────────────────────── -->
+        <div id="inputsPanel">
+
+            <!-- Property Info -->
+            <div class="input-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">📋 Property Info</span>
+                    <span class="section-toggle">▲</span>
+                </div>
+                <div class="section-body">
+                    <div class="field">
+                        <label for="dealName">Deal Name / Nickname</label>
+                        <input type="text" id="dealName" placeholder="e.g. 123 Oak St Duplex">
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="purchasePrice">Purchase Price</label>
+                            <div class="input-wrap">
+                                <span class="prefix">$</span>
+                                <input type="number" id="purchasePrice" class="has-prefix" placeholder="350,000" min="0">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="arv">ARV (After Repair)</label>
+                            <div class="input-wrap">
+                                <span class="prefix">$</span>
+                                <input type="number" id="arv" class="has-prefix" placeholder="380,000" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="rehabCosts">Rehab Costs</label>
+                            <div class="input-wrap">
+                                <span class="prefix">$</span>
+                                <input type="number" id="rehabCosts" class="has-prefix" placeholder="0" min="0">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="closingCosts">Closing Costs</label>
+                            <div class="input-wrap">
+                                <span class="prefix">$</span>
+                                <input type="number" id="closingCosts" class="has-prefix" placeholder="7,000" min="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financing -->
+            <div class="input-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">🏦 Financing</span>
+                    <span class="section-toggle">▲</span>
+                </div>
+                <div class="section-body">
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="downPaymentPct">Down Payment</label>
+                            <div class="input-wrap">
+                                <input type="number" id="downPaymentPct" class="has-suffix" placeholder="25" min="0" max="100" value="25">
+                                <span class="suffix">%</span>
+                            </div>
+                            <div class="preview-text" id="downPaymentAmt"></div>
+                        </div>
+                        <div class="field">
+                            <label>Loan Amount</label>
+                            <div class="loan-display">Loan: <strong id="loanAmountDisplay">–</strong></div>
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="interestRate">Interest Rate</label>
+                            <div class="input-wrap">
+                                <input type="number" id="interestRate" class="has-suffix" placeholder="7.0" min="0" max="30" step="0.125" value="7.0">
+                                <span class="suffix">%</span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="loanTermYears">Loan Term</label>
+                            <select id="loanTermYears">
+                                <option value="30" selected>30 Years</option>
+                                <option value="20">20 Years</option>
+                                <option value="15">15 Years</option>
+                                <option value="10">10 Years</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="originationFee">Origination / Points Fee</label>
+                        <div class="input-wrap">
+                            <input type="number" id="originationFee" class="has-suffix" placeholder="1" min="0" max="10" step="0.25" value="1">
+                            <span class="suffix">% of loan</span>
+                        </div>
+                        <span class="hint">Typical: 0.5–2%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Income -->
+            <div class="input-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">💵 Income</span>
+                    <span class="section-toggle">▲</span>
+                </div>
+                <div class="section-body">
+                    <div class="field">
+                        <label for="monthlyGrossRent">Monthly Gross Rent</label>
+                        <div class="input-wrap">
+                            <span class="prefix">$</span>
+                            <input type="number" id="monthlyGrossRent" class="has-prefix" placeholder="2,500" min="0">
+                        </div>
+                        <span class="hint">Total rent from all units before vacancies</span>
+                    </div>
+                    <div class="field">
+                        <label for="otherMonthlyIncome">Other Monthly Income</label>
+                        <div class="input-wrap">
+                            <span class="prefix">$</span>
+                            <input type="number" id="otherMonthlyIncome" class="has-prefix" placeholder="0" min="0" value="0">
+                        </div>
+                        <span class="hint">Parking, storage, laundry, etc.</span>
+                    </div>
+                    <div class="field">
+                        <label for="occupancyRate">Occupancy Rate</label>
+                        <div class="input-wrap">
+                            <input type="number" id="occupancyRate" class="has-suffix" placeholder="95" min="0" max="100" value="95">
+                            <span class="suffix">%</span>
+                        </div>
+                        <span class="hint">Typical: 90–97% for stabilized rentals</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operating Expenses -->
+            <div class="input-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">📊 Operating Expenses</span>
+                    <span class="section-toggle">▲</span>
+                </div>
+                <div class="section-body">
+                    <div class="field">
+                        <label>Property Management</label>
+                        <div class="mode-row">
+                            <select id="propMgmtMode">
+                                <option value="pct">% of rent</option>
+                                <option value="flat">$/mo flat</option>
+                            </select>
+                            <div class="field" id="propMgmtPctGroup">
+                                <div class="input-wrap">
+                                    <input type="number" id="propMgmtPct" class="has-suffix" placeholder="10" min="0" max="30">
+                                    <span class="suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="field" id="propMgmtFlatGroup" style="display:none">
+                                <div class="input-wrap">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="propMgmtFlat" class="has-prefix" placeholder="200" min="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="annualTaxes">Property Taxes <span class="hint">(annual)</span></label>
+                            <div class="input-wrap">
+                                <span class="prefix">$</span>
+                                <input type="number" id="annualTaxes" class="has-prefix" placeholder="4,800" min="0">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="annualInsurance">Insurance <span class="hint">(annual)</span></label>
+                            <div class="input-wrap">
+                                <span class="prefix">$</span>
+                                <input type="number" id="annualInsurance" class="has-prefix" placeholder="1,800" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Maintenance &amp; Repairs</label>
+                        <div class="mode-row">
+                            <select id="maintenanceMode">
+                                <option value="pct">% of rent</option>
+                                <option value="flat">$/mo flat</option>
+                            </select>
+                            <div class="field" id="maintenancePctGroup">
+                                <div class="input-wrap">
+                                    <input type="number" id="maintenancePct" class="has-suffix" placeholder="5" min="0" max="30">
+                                    <span class="suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="field" id="maintenanceFlatGroup" style="display:none">
+                                <div class="input-wrap">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="maintenanceFlat" class="has-prefix" placeholder="150" min="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="monthlyUtilities">Utilities <span class="hint">(/mo)</span></label>
+                            <div class="input-wrap">
+                                <span class="prefix">$</span>
+                                <input type="number" id="monthlyUtilities" class="has-prefix" placeholder="0" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="monthlyHOA">HOA <span class="hint">(/mo)</span></label>
+                            <div class="input-wrap">
+                                <span class="prefix">$</span>
+                                <input type="number" id="monthlyHOA" class="has-prefix" placeholder="0" min="0" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="vacancyPct">Vacancy Allowance</label>
+                        <div class="input-wrap">
+                            <input type="number" id="vacancyPct" class="has-suffix" placeholder="5" min="0" max="50" value="5">
+                            <span class="suffix">% of rent</span>
+                        </div>
+                        <span class="hint">Typical: 5–10%</span>
+                    </div>
+                    <div class="field">
+                        <label>CapEx Reserve</label>
+                        <div class="mode-row">
+                            <select id="capexMode">
+                                <option value="pct">% of rent</option>
+                                <option value="flat">$/yr flat</option>
+                            </select>
+                            <div class="field" id="capexPctGroup">
+                                <div class="input-wrap">
+                                    <input type="number" id="capexPct" class="has-suffix" placeholder="5" min="0" max="30">
+                                    <span class="suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="field" id="capexFlatGroup" style="display:none">
+                                <div class="input-wrap">
+                                    <span class="prefix">$</span>
+                                    <input type="number" id="capexFlat" class="has-prefix" placeholder="1,500" min="0">
+                                </div>
+                            </div>
+                        </div>
+                        <span class="hint">Roof, HVAC, appliances — typical 5–10% of rent</span>
+                    </div>
+                    <div class="field">
+                        <label for="advertisingAnnual">Advertising / Leasing <span class="hint">(annual)</span></label>
+                        <div class="input-wrap">
+                            <span class="prefix">$</span>
+                            <input type="number" id="advertisingAnnual" class="has-prefix" placeholder="200" min="0" value="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projection Settings -->
+            <div class="input-section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <span class="section-title">📈 Projection Settings</span>
+                    <span class="section-toggle">▲</span>
+                </div>
+                <div class="section-body">
+                    <div class="field">
+                        <label for="holdingYears">Holding Period</label>
+                        <div class="input-wrap">
+                            <input type="number" id="holdingYears" class="has-suffix" placeholder="10" min="1" max="30" value="10">
+                            <span class="suffix">years</span>
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="rentGrowthPct">Annual Rent Growth</label>
+                            <div class="input-wrap">
+                                <input type="number" id="rentGrowthPct" class="has-suffix" placeholder="3" min="0" max="20" step="0.5" value="3">
+                                <span class="suffix">%</span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="expenseGrowthPct">Annual Expense Growth</label>
+                            <div class="input-wrap">
+                                <input type="number" id="expenseGrowthPct" class="has-suffix" placeholder="3" min="0" max="20" step="0.5" value="3">
+                                <span class="suffix">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="appreciationPct">Annual Appreciation</label>
+                        <div class="input-wrap">
+                            <input type="number" id="appreciationPct" class="has-suffix" placeholder="3" min="0" max="20" step="0.5" value="3">
+                            <span class="suffix">%</span>
+                        </div>
+                        <span class="hint">US historical average ≈ 3-4%</span>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /#inputsPanel -->
+
+        <!-- ── RESULTS PANEL ────────────────────────── -->
+        <div class="results-panel">
+
+            <!-- Deal Score Banner -->
+            <div id="dealScoreBanner" class="deal-score-banner">
+                <div class="score-display">
+                    <div class="score-ring">
+                        <span class="score-number score-number" style="color:var(--text-3)">–</span>
+                        <span class="score-max">/100</span>
+                    </div>
+                    <div class="score-text">
+                        <div class="score-label" style="color:var(--text-2)">Enter a deal to begin</div>
+                        <div class="score-sub">Overall Deal Score</div>
+                    </div>
+                </div>
+                <div class="target-badge target-miss">Enter inputs above</div>
+            </div>
+
+            <!-- Metric Cards -->
+            <div id="metricsGrid" class="metrics-grid">
+                <!-- populated by JS -->
+            </div>
+
+            <!-- Expense Breakdown -->
+            <div class="expense-section">
+                <div class="expense-section-header">Expense Breakdown</div>
+                <div class="expense-layout">
+                    <div class="expense-chart-wrap">
+                        <canvas id="chartExpenseBreakdown"></canvas>
+                    </div>
+                    <div class="expense-table-wrap">
+                        <table class="expense-table">
+                            <thead>
+                                <tr>
+                                    <th>Expense</th>
+                                    <th>Monthly</th>
+                                    <th>Annual</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenseDetail">
+                                <tr><td colspan="3" class="no-data">Enter expenses to see breakdown</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warnings -->
+            <div id="warnings" class="warnings-list"></div>
+
+        </div><!-- /.results-panel -->
+    </div><!-- /.analyze-layout -->
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 2: PROJECTIONS
+═══════════════════════════════════════════════════ -->
+<section id="tab-projections" class="tab-content" role="tabpanel">
+
+    <div id="projSummary" class="proj-summary">
+        <div class="proj-stat"><span>Loaded from Analyze tab</span><strong style="color:var(--text-3)">–</strong></div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card"><canvas id="chartCashFlow"></canvas></div>
+        <div class="chart-card"><canvas id="chartIncExp"></canvas></div>
+        <div class="chart-card"><canvas id="chartEquity"></canvas></div>
+        <div class="chart-card"><canvas id="chartCoC"></canvas></div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-card-header">
+            <span>Year-by-Year Detail</span>
+            <span class="text-muted">Projections use inputs from the Analyze tab</span>
+        </div>
+        <div class="proj-table-wrap">
+            <table class="proj-table">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Gross Income</th>
+                        <th>Op. Expenses</th>
+                        <th>NOI</th>
+                        <th>Debt Service</th>
+                        <th>Cash Flow</th>
+                        <th>Prop. Value</th>
+                        <th>Loan Balance</th>
+                        <th>Equity</th>
+                        <th>CoC %</th>
+                    </tr>
+                </thead>
+                <tbody id="projTableBody">
+                    <tr><td colspan="10" class="no-data">Switch to Analyze tab, enter a deal, then come back here.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 3: TARGET CALCULATOR
+═══════════════════════════════════════════════════ -->
+<section id="tab-target" class="tab-content" role="tabpanel">
+    <div class="target-layout">
+        <h2>🎯 Target Return Calculator</h2>
+        <p>Set your target Cash-on-Cash return, then let the tool reverse-calculate what one key variable needs to be to achieve it — using all other inputs from the Analyze tab.</p>
+
+        <div class="target-form">
+            <div class="field-row-3">
+                <div class="field">
+                    <label for="targetCoc">Target CoC Return</label>
+                    <div class="input-wrap">
+                        <input type="number" id="targetCoc" class="has-suffix" value="15" min="1" max="100" step="0.5">
+                        <span class="suffix">%</span>
+                    </div>
+                    <span class="hint">Recommended: 15%</span>
+                </div>
+                <div class="field">
+                    <label for="solveFor">Solve For</label>
+                    <select id="solveFor">
+                        <option value="purchasePrice">Max Purchase Price</option>
+                        <option value="monthlyGrossRent">Min Monthly Rent</option>
+                        <option value="interestRate">Max Interest Rate</option>
+                        <option value="downPaymentPct">Min Down Payment %</option>
+                    </select>
+                    <span class="hint">Which variable to calculate</span>
+                </div>
+                <div class="field" style="justify-content:flex-end">
+                    <label>&nbsp;</label>
+                    <button id="runTargetCalc" class="btn btn-primary" style="width:100%;height:38px">Calculate →</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="targetResult" class="target-result"></div>
+
+        <p class="target-note">
+            <strong>How it works:</strong> All other inputs are taken directly from your current Analyze tab entries.
+            The solver uses binary search (300 iterations) to find the exact value that produces your target CoC.
+            After finding the value, you can click "Apply to Form" to load it directly into the Analyze tab.
+        </p>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 4: COMPARE
+═══════════════════════════════════════════════════ -->
+<section id="tab-compare" class="tab-content" role="tabpanel">
+
+    <div class="compare-slots">
+        <div class="slot-card">
+            <div class="slot-chip slot-empty" id="compSlot0Chip"></div>
+            <span class="slot-name" id="compSlot0Label">Empty Slot</span>
+            <button class="btn btn-sm btn-danger" id="compSlot0Remove" style="display:none" title="Remove">✕</button>
+        </div>
+        <div class="slot-card">
+            <div class="slot-chip slot-empty" id="compSlot1Chip"></div>
+            <span class="slot-name" id="compSlot1Label">Empty Slot</span>
+            <button class="btn btn-sm btn-danger" id="compSlot1Remove" style="display:none" title="Remove">✕</button>
+        </div>
+        <div class="slot-card">
+            <div class="slot-chip slot-empty" id="compSlot2Chip"></div>
+            <span class="slot-name" id="compSlot2Label">Empty Slot</span>
+            <button class="btn btn-sm btn-danger" id="compSlot2Remove" style="display:none" title="Remove">✕</button>
+        </div>
+    </div>
+
+    <div class="comp-actions">
+        <button id="addCurrentComp" class="btn btn-secondary">+ Add Current Deal</button>
+        <span class="text-muted" style="align-self:center">or load a saved deal from the Saved Deals tab → click "+ Compare"</span>
+    </div>
+
+    <div class="comp-container" id="comparisonGrid">
+        <p class="no-data">Load at least one deal into a slot above to see the comparison.</p>
+    </div>
+
+    <div class="radar-wrap hidden" id="radarWrap">
+        <canvas id="chartRadar"></canvas>
+    </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 5: SAVED DEALS
+═══════════════════════════════════════════════════ -->
+<section id="tab-saved" class="tab-content" role="tabpanel">
+
+    <div class="saved-header">
+        <h2>Saved Deals</h2>
+        <div class="saved-actions">
+            <button id="exportBtn" class="btn btn-secondary">⬇ Export JSON</button>
+            <label class="btn btn-secondary" style="cursor:pointer" title="Import saved deals from a JSON file">
+                ⬆ Import JSON
+                <input type="file" id="importInput" accept=".json" style="display:none">
+            </label>
+        </div>
+    </div>
+
+    <div id="savedDealsList" class="saved-deals-list">
+        <p class="no-data">No saved deals yet. Go to the Analyze tab, enter a deal, and click "Save Deal".</p>
+    </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 6: TESTS (hidden, accessed via ?test=true)
+═══════════════════════════════════════════════════ -->
+<section id="tab-tests" class="tab-content" role="tabpanel">
+    <div style="max-width:800px;margin:0 auto">
+        <h2 style="margin-bottom:1rem">Formula Test Suite</h2>
+        <p style="color:var(--text-2);margin-bottom:1.5rem;font-size:0.88rem">
+            These tests verify every financial formula in the app against known correct values.
+            Access this page by adding <code style="background:var(--bg-elevated);padding:0.1rem 0.4rem;border-radius:4px">?test=true</code> to the URL.
+            All tests must pass before relying on the numbers.
+        </p>
+        <div id="testContainer">Running tests…</div>
+    </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════
+     SCRIPTS — must load in order
+═══════════════════════════════════════════════════ -->
+<script src="js/calculator.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/comparison.js"></script>
+<script src="js/tests.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+// ─── Collapsible sections ─────────────────────────────────────────────────────
+function toggleSection(header) {
+    const body  = header.nextElementSibling;
+    const arrow = header.querySelector('.section-toggle');
+    const collapsed = body.classList.toggle('collapsed');
+    if (arrow) arrow.textContent = collapsed ? '▼' : '▲';
+}
+</script>
+
+</body>
+</html>

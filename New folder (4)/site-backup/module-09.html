@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 9 — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="module-09">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<div id="class-1" class="class-section">
+<h1 id="module-9-class-1-binary-trees-and-recursion">Module 9 – Class 1: Binary Trees and Recursion</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define binary trees recursively as a data structure.</li>
+<li>Implement a <code>TreeNode</code> class in Java with recursive methods.</li>
+<li>Prove properties of tree algorithms by structural induction (Module 6).</li>
+<li>Implement and analyze recursive traversals (preorder, inorder, postorder).</li>
+<li>Connect trees to expression evaluation (Module 6 Class 3) and recursion.</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="recursive-definition">Recursive Definition</h3>
+
+<p>A <strong>binary tree</strong> is either:</p>
+<ol>
+<li><strong>Empty</strong> (null), or</li>
+<li>A <strong>node</strong> with a value, a left subtree, and a right subtree.</li>
+</ol>
+
+<div class="katex-block">$\text{Tree} ::= \texttt{null} \mid \text{Node}(\text{value}, \text{left}, \text{right})$</div>
+
+<p>This is a <strong>recursively defined structure</strong> (Module 6 Class 3).</p>
+
+<h3 id="terminology">Terminology</h3>
+
+<table>
+<thead><tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Root</strong></td>
+<td>The topmost node</td>
+</tr>
+<tr>
+<td><strong>Leaf</strong></td>
+<td>A node with no children (both subtrees are null)</td>
+</tr>
+<tr>
+<td><strong>Internal node</strong></td>
+<td>A node with at least one child</td>
+</tr>
+<tr>
+<td><strong>Height</strong></td>
+<td>Longest path from root to a leaf (empty tree has height $-1$)</td>
+</tr>
+<tr>
+<td><strong>Size</strong></td>
+<td>Total number of nodes</td>
+</tr>
+<tr>
+<td><strong>Depth</strong></td>
+<td>Distance from the root to a node</td>
+</tr>
+</tbody></table>
+
+<h3 id="traversal-orders">Traversal Orders</h3>
+
+<table>
+<thead><tr>
+<th>Order</th>
+<th>Pattern</th>
+<th>Use Case</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Preorder</strong></td>
+<td>Root → Left → Right</td>
+<td>Copy a tree, prefix expressions</td>
+</tr>
+<tr>
+<td><strong>Inorder</strong></td>
+<td>Left → Root → Right</td>
+<td>Sorted order in BST</td>
+</tr>
+<tr>
+<td><strong>Postorder</strong></td>
+<td>Left → Right → Root</td>
+<td>Evaluate expression trees, delete</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$T$</td>
+<td>A binary tree</td>
+</tr>
+<tr>
+<td>$T.val$</td>
+<td>Value at the root</td>
+</tr>
+<tr>
+<td>$T.L$, $T.R$</td>
+<td>Left and right subtrees</td>
+</tr>
+<tr>
+<td>$|T|$</td>
+<td>Size (number of nodes)</td>
+</tr>
+<tr>
+<td>$h(T)$</td>
+<td>Height</td>
+</tr>
+<tr>
+<td>$L(T)$</td>
+<td>Number of leaves</td>
+</tr>
+<tr>
+<td>$I(T)$</td>
+<td>Number of internal nodes</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-size-by-structural-induction">Example 1: Size by Structural Induction</h3>
+
+<p><strong>Claim:</strong> <code>size(T)</code> returns $|T|$.</p>
+
+<pre><code class="language-java">public int size() {
+    int ls = (left == null) ? 0 : left.size();
+    int rs = (right == null) ? 0 : right.size();
+    return 1 + ls + rs;
+}</code></pre>
+
+<p><strong>Proof by structural induction:</strong></p>
+<ul>
+<li><strong>Base:</strong> Empty tree (null): size returns 0. $|null| = 0$. ✓</li>
+<li><strong>Inductive step:</strong> Assume <code>left.size()</code> = $|T.L|$ and <code>right.size()</code> = $|T.R|$. Then <code>size()</code> = $1 + |T.L| + |T.R| = |T|$. ✓ $\blacksquare$</li>
+</ul>
+
+<h3 id="example-2-height">Example 2: Height</h3>
+
+<pre><code class="language-java">public int height() {
+    int lh = (left == null) ? -1 : left.height();
+    int rh = (right == null) ? -1 : right.height();
+    return 1 + Math.max(lh, rh);
+}</code></pre>
+
+<p><strong>Structural induction:</strong> Base: single node (both children null): $1 + \max(-1, -1) = 0$. ✓</p>
+<p>Inductive: $h(T) = 1 + \max(h(T.L), h(T.R))$, matching the definition.</p>
+
+<h3 id="example-3-counting-leaves">Example 3: Counting Leaves</h3>
+
+<pre><code class="language-java">public int countLeaves() {
+    if (left == null &amp;&amp; right == null) return 1;
+    int ll = (left == null) ? 0 : left.countLeaves();
+    int rl = (right == null) ? 0 : right.countLeaves();
+    return ll + rl;
+}</code></pre>
+
+<h3 id="example-4-inorder-traversal">Example 4: Inorder Traversal</h3>
+
+<pre><code class="language-java">public void inorder(List&lt;Integer&gt; result) {
+    if (left != null) left.inorder(result);
+    result.add(value);
+    if (right != null) right.inorder(result);
+}</code></pre>
+
+<p>For a BST, inorder traversal produces sorted output.</p>
+
+<h3 id="example-5-expression-tree-evaluation-module-6-callback">Example 5: Expression Tree Evaluation (Module 6 Callback)</h3>
+
+<pre><code class="language-text">       *
+      / \
+     +   3
+    / \
+   2   5</code></pre>
+
+<p>Postorder: 2, 5, +, 3, * → $(2 + 5) \times 3 = 21$.</p>
+
+<hr>
+
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="structural-induction-on-trees">Structural Induction on Trees</h3>
+
+<p>To prove property $P(T)$ for all binary trees $T$:</p>
+
+<ol>
+<li><strong>Base case:</strong> Prove $P(\text{null})$ (or $P(\text{leaf})$).</li>
+<li><strong>Inductive step:</strong> Assume $P(T.L)$ and $P(T.R)$. Prove $P(T)$.</li>
+</ol>
+
+<p>This parallels recursion: the base case is the simplest tree; the inductive step combines results from subtrees.</p>
+
+<h3 id="size-height-relationship">Size-Height Relationship</h3>
+
+<p><strong>Theorem:</strong> For any binary tree $T$ with $n$ nodes and height $h$:</p>
+
+<div class="katex-block">$h + 1 \leq n \leq 2^{h+1} - 1$</div>
+
+<ul>
+<li>Left bound: a path of $h + 1$ nodes (degenerate tree).</li>
+<li>Right bound: a complete binary tree (all levels full).</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class TreeNode {
+    int value;
+    TreeNode left;
+    TreeNode right;
+
+    public TreeNode(int value) {
+        this.value = value;
+    }
+
+    public TreeNode(int value, TreeNode left, TreeNode right) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+    }
+
+    // --- Size ---
+    public int size() {
+        int ls = (left == null) ? 0 : left.size();
+        int rs = (right == null) ? 0 : right.size();
+        return 1 + ls + rs;
+    }
+
+    // --- Height ---
+    public int height() {
+        int lh = (left == null) ? -1 : left.height();
+        int rh = (right == null) ? -1 : right.height();
+        return 1 + Math.max(lh, rh);
+    }
+
+    // --- Count Leaves ---
+    public int countLeaves() {
+        if (left == null &amp;&amp; right == null) return 1;
+        int ll = (left == null) ? 0 : left.countLeaves();
+        int rl = (right == null) ? 0 : right.countLeaves();
+        return ll + rl;
+    }
+
+    // --- Count Internal Nodes ---
+    public int countInternal() {
+        if (left == null &amp;&amp; right == null) return 0;
+        int li = (left == null) ? 0 : left.countInternal();
+        int ri = (right == null) ? 0 : right.countInternal();
+        return 1 + li + ri;
+    }
+
+    // --- Traversals ---
+    public List&lt;Integer&gt; preorder() {
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        preorderHelper(result);
+        return result;
+    }
+    private void preorderHelper(List&lt;Integer&gt; result) {
+        result.add(value);
+        if (left != null) left.preorderHelper(result);
+        if (right != null) right.preorderHelper(result);
+    }
+
+    public List&lt;Integer&gt; inorder() {
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        inorderHelper(result);
+        return result;
+    }
+    private void inorderHelper(List&lt;Integer&gt; result) {
+        if (left != null) left.inorderHelper(result);
+        result.add(value);
+        if (right != null) right.inorderHelper(result);
+    }
+
+    public List&lt;Integer&gt; postorder() {
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        postorderHelper(result);
+        return result;
+    }
+    private void postorderHelper(List&lt;Integer&gt; result) {
+        if (left != null) left.postorderHelper(result);
+        if (right != null) right.postorderHelper(result);
+        result.add(value);
+    }
+
+    // --- Is Full Binary Tree ---
+    public boolean isFull() {
+        if (left == null &amp;&amp; right == null) return true;
+        if (left == null || right == null) return false;
+        return left.isFull() &amp;&amp; right.isFull();
+    }
+
+    // --- Mirror ---
+    public TreeNode mirror() {
+        TreeNode ml = (right == null) ? null : right.mirror();
+        TreeNode mr = (left == null) ? null : left.mirror();
+        return new TreeNode(value, ml, mr);
+    }
+
+    // --- Build full binary tree of given height ---
+    public static TreeNode buildFull(int height) {
+        if (height &lt; 0) return null;
+        if (height == 0) return new TreeNode(0);
+        TreeNode left = buildFull(height - 1);
+        TreeNode right = buildFull(height - 1);
+        return new TreeNode(0, left, right);
+    }
+
+    // --- Pretty print ---
+    public void print(String prefix, boolean isLeft) {
+        if (right != null) right.print(prefix + (isLeft ? "│   " : "    "), false);
+        System.out.println(prefix + (isLeft ? "└── " : "┌── ") + value);
+        if (left != null) left.print(prefix + (isLeft ? "    " : "│   "), true);
+    }
+
+    // --- Demo ---
+    public static void main(String[] args) {
+        System.out.println("=== Binary Trees ===\n");
+
+        // Build a sample tree:
+        //        1
+        //       / \
+        //      2   3
+        //     / \   \
+        //    4   5   6
+        TreeNode tree = new TreeNode(1,
+                new TreeNode(2, new TreeNode(4), new TreeNode(5)),
+                new TreeNode(3, null, new TreeNode(6)));
+
+        tree.print("", false);
+
+        System.out.println("\nSize: " + tree.size());           // 6
+        System.out.println("Height: " + tree.height());         // 2
+        System.out.println("Leaves: " + tree.countLeaves());    // 3
+        System.out.println("Internal: " + tree.countInternal());// 3
+
+        System.out.println("\nPreorder:  " + tree.preorder());  // [1,2,4,5,3,6]
+        System.out.println("Inorder:   " + tree.inorder());    // [4,2,5,1,3,6]
+        System.out.println("Postorder: " + tree.postorder());  // [4,5,2,6,3,1]
+
+        System.out.println("\nIs full? " + tree.isFull());      // false
+
+        // Full binary tree
+        TreeNode full = buildFull(3);
+        System.out.println("\nFull tree (height 3):");
+        full.print("", false);
+        System.out.println("Size: " + full.size());             // 15 = 2^4 - 1
+        System.out.println("Leaves: " + full.countLeaves());    // 8 = 2^3
+        System.out.println("Internal: " + full.countInternal());// 7
+        System.out.println("L = I + 1? " + (full.countLeaves() == full.countInternal() + 1));
+
+        // Mirror
+        System.out.println("\nMirror:");
+        tree.mirror().print("", false);
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Arthur Cayley</strong> (1857) was among the first to study tree structures mathematically, counting the number of labeled trees on $n$ vertices ($n^{n-2}$, Cayley's formula).</p>
+
+<p>Binary trees became central in computer science through <strong>Donald Knuth's</strong> <em>The Art of Computer Programming</em> (1968), where he systematized traversal algorithms and their analysis.</p>
+
+<p><strong>Expression trees</strong> connect to Module 6's structural induction and recursion — evaluating an expression tree is one of the oldest examples of structural recursion in programming.</p>
+
+<hr>
+
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> Give the recursive definition of a binary tree.</p>
+
+<p><strong>A2.</strong> What are the three traversal orders? For each, state which visits the root first/second/last.</p>
+
+<p><strong>A3.</strong> What is the height of a tree with a single node? An empty tree?</p>
+
+<p><strong>A4.</strong> For a full binary tree of height 3, how many nodes, leaves, and internal nodes are there?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove by structural induction: <code>size(T)</code> returns $|T|$.</p>
+
+<p><strong>B2.</strong> Prove: for a full binary tree, $L = I + 1$ (leaves = internal nodes + 1).</p>
+
+<p><strong>B3.</strong> Prove: $h + 1 \leq |T| \leq 2^{h+1} - 1$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Implement <code>size()</code>, <code>height()</code>, <code>countLeaves()</code> recursively.</p>
+
+<p><strong>C2.</strong> Implement all three traversals and verify on a sample tree.</p>
+
+<p><strong>C3.</strong> Implement <code>buildFull(height)</code> and verify $|T| = 2^{h+1} - 1$.</p>
+
+<hr>
+
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Define a binary tree recursively. State the base case and the recursive case.</p>
+
+<p><strong>DM2.</strong> Prove by structural induction: for every binary tree $T$, $|T| = L(T) + I(T)$.</p>
+
+<p><strong>DM3.</strong> Prove by structural induction: for a full binary tree, $L(T) = I(T) + 1$.</p>
+
+<p><strong>DM4.</strong> Prove: the number of null pointers in a binary tree with $n$ nodes is $n + 1$.</p>
+
+<p><strong>DM5.</strong> Prove: inorder traversal of a BST visits nodes in sorted order.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement <code>TreeNode</code> with size, height, countLeaves, countInternal, and all three traversals.</p>
+
+<p><strong>JP2.</strong> Implement <code>buildFull(height)</code> and verify: size = $2^{h+1} - 1$, leaves = $2^h$, $L = I + 1$.</p>
+
+<p><strong>JP3.</strong> Implement <code>mirror(TreeNode root)</code> that returns a mirror image. Prove by structural induction that <code>mirror(mirror(T)) == T</code>.</p>
+
+<p><strong>JP4.</strong> Implement <code>isBalanced(TreeNode root)</code>: a tree is balanced if for every node, the heights of left and right subtrees differ by at most 1.</p>
+
+<p><strong>JP5.</strong> Build a tree from preorder and inorder traversal lists. Verify by comparing the tree's traversals with the originals.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Module 6 Class 3 defined expressions recursively ($E ::= n \mid E + E \mid E \times E$). Show that expression trees are binary trees where leaves are numbers and internal nodes are operators.</p>
+
+<p><strong>BR2.</strong> Module 8: traversal algorithms have loop invariants (for iterative versions). State the invariant for an iterative inorder traversal using a stack.</p>
+
+<hr>
+
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="dm3-solution-full-binary-tree-theorem">DM3 Solution: Full Binary Tree Theorem</h3>
+
+<p><strong>Proof by structural induction on $T$.</strong></p>
+
+<p><strong>Base:</strong> A single node (leaf). $L = 1$, $I = 0$. $L = I + 1 = 1$. ✓</p>
+
+<p><strong>Inductive step:</strong> Let $T$ have root with left subtree $T_L$ and right subtree $T_R$ (both non-empty, since $T$ is full).</p>
+
+<p>By inductive hypothesis: $L(T_L) = I(T_L) + 1$ and $L(T_R) = I(T_R) + 1$.</p>
+
+<div class="katex-block">$L(T) = L(T_L) + L(T_R) = (I(T_L) + 1) + (I(T_R) + 1)$</div>
+<div class="katex-block">$I(T) = I(T_L) + I(T_R) + 1 \text{ (root is internal)}$</div>
+<p><div class="katex-block">$L(T) = I(T_L) + I(T_R) + 2 = I(T) + 1$</div> $\blacksquare$</p>
+
+<h3 id="dm4-solution-null-pointers">DM4 Solution: Null Pointers</h3>
+
+<p>Each node has 2 pointers. Total pointers: $2n$. Each non-null pointer points to exactly one node (there are $n - 1$ such pointers, since every node except the root is pointed to by its parent). Null pointers: $2n - (n-1) = n + 1$. $\blacksquare$</p>
+
+</div>
+<hr>
+<div id="class-2" class="class-section">
+<h1 id="module-9-class-2-properties-of-full-and-balanced-binary-trees">Module 9 – Class 2: Properties of Full and Balanced Binary Trees</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Prove the full binary tree theorem ($L = I + 1$) and total node count ($N = 2I + 1$).</li>
+<li>Define balanced binary trees and analyze their height bounds.</li>
+<li>Implement methods to check fullness and balance.</li>
+<li>Connect tree properties to complexity analysis ($O(\log n)$ vs $O(n)$).</li>
+<li>Apply structural induction and counting (Modules 6–7) to tree theorems.</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="full-binary-trees">Full Binary Trees</h3>
+
+<p>A binary tree is <strong>full</strong> if every node has either 0 or 2 children. No node has exactly one child.</p>
+
+<p><strong>Fundamental properties of a full binary tree:</strong></p>
+
+<table>
+<thead><tr>
+<th>Property</th>
+<th>Formula</th>
+</tr></thead><tbody>
+<tr>
+<td>Leaves</td>
+<td>$L = I + 1$</td>
+</tr>
+<tr>
+<td>Total nodes</td>
+<td>$N = 2I + 1 = 2L - 1$</td>
+</tr>
+<tr>
+<td>Internal nodes</td>
+<td>$I = L - 1 = (N - 1) / 2$</td>
+</tr>
+</tbody></table>
+
+<h3 id="complete-binary-trees">Complete Binary Trees</h3>
+
+<p>A binary tree is <strong>complete</strong> if every level except possibly the last is full, and the last level is filled from left to right.</p>
+
+<p>For a complete binary tree of height $h$:</p>
+<div class="katex-block">$2^h \leq N \leq 2^{h+1} - 1$</div>
+
+<h3 id="balanced-binary-trees">Balanced Binary Trees</h3>
+
+<p>A binary tree is <strong>balanced</strong> (height-balanced) if for every node, the heights of the left and right subtrees differ by at most 1:</p>
+
+<div class="katex-block">$|h(T.L) - h(T.R)| \leq 1 \quad \text{for all nodes}$</div>
+
+<h3 id="height-bounds">Height Bounds</h3>
+
+<table>
+<thead><tr>
+<th>Tree type</th>
+<th>Height bound</th>
+<th>Search time</th>
+</tr></thead><tbody>
+<tr>
+<td>Degenerate (linked list)</td>
+<td>$h = n - 1$</td>
+<td>$O(n)$</td>
+</tr>
+<tr>
+<td>Balanced</td>
+<td>$h = O(\log n)$</td>
+<td>$O(\log n)$</td>
+</tr>
+<tr>
+<td>Complete</td>
+<td>$h = \lfloor \log_2 n \rfloor$</td>
+<td>$O(\log n)$</td>
+</tr>
+<tr>
+<td>Full, height $h$</td>
+<td>$n = 2^{h+1} - 1$</td>
+<td>$O(\log n)$</td>
+</tr>
+</tbody></table>
+
+<p><strong>Key insight:</strong> Balancing a BST keeps height $O(\log n)$, ensuring efficient operations.</p>
+
+<hr>
+
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Symbol</th>
+<th>Definition</th>
+</tr></thead><tbody>
+<tr>
+<td>$L(T)$</td>
+<td>Number of leaves in tree $T$</td>
+</tr>
+<tr>
+<td>$I(T)$</td>
+<td>Number of internal nodes</td>
+</tr>
+<tr>
+<td>$N(T)$</td>
+<td>Total nodes = $L(T) + I(T)$</td>
+</tr>
+<tr>
+<td>$h(T)$</td>
+<td>Height of tree $T$</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-full-binary-tree-theorem-inlinemath_25">Example 1: Full Binary Tree Theorem ($L = I + 1$)</h3>
+
+<p><strong>Proof by structural induction.</strong></p>
+
+<p><strong>Base:</strong> Single node: $L = 1, I = 0, L = I + 1$. ✓</p>
+
+<p><strong>Inductive step:</strong> $T$ has root with children $T_L, T_R$ (both non-empty since $T$ is full).</p>
+
+<p>By IH: $L(T_L) = I(T_L) + 1$ and $L(T_R) = I(T_R) + 1$.</p>
+
+<div class="katex-block">$L(T) = L(T_L) + L(T_R) = (I(T_L) + 1) + (I(T_R) + 1) = I(T_L) + I(T_R) + 2$</div>
+
+<div class="katex-block">$I(T) = I(T_L) + I(T_R) + 1$</div>
+
+<p><div class="katex-block">$L(T) = I(T) + 1$</div> $\blacksquare$</p>
+
+<h3 id="example-2-total-nodes-inlinemath_33">Example 2: Total Nodes = $2I + 1$</h3>
+
+<div class="katex-block">$N = L + I = (I + 1) + I = 2I + 1$</div>
+
+<p>Equivalently: $N = 2L - 1$.</p>
+
+<h3 id="example-3-height-bound-for-balanced-trees">Example 3: Height Bound for Balanced Trees</h3>
+
+<p><strong>Claim:</strong> A balanced binary tree with $n$ nodes has height $h \leq 1.44 \log_2(n+1)$.</p>
+
+<p><strong>Sketch:</strong> Let $N(h)$ be the minimum number of nodes in a balanced tree of height $h$. Then:</p>
+
+<div class="katex-block">$N(h) = N(h-1) + N(h-2) + 1$</div>
+
+<p>This is similar to Fibonacci! In fact, $N(h) = F_{h+2} - 1$ where $F$ is the Fibonacci sequence. Since $F_k \approx \phi^k / \sqrt{5}$, we get $n \geq \phi^h / \sqrt{5}$, giving $h = O(\log_\phi n) = O(1.44 \log_2 n)$.</p>
+
+<h3 id="example-4-complete-binary-tree-node-count">Example 4: Complete Binary Tree Node Count</h3>
+
+<p>A complete binary tree of height $h = 3$ has between $2^3 = 8$ and $2^4 - 1 = 15$ nodes.</p>
+
+<p>A complete binary tree with $n = 10$ nodes has height $h = \lfloor \log_2 10 \rfloor = 3$.</p>
+
+<h3 id="example-5-verifying-properties-computationally">Example 5: Verifying Properties Computationally</h3>
+
+<p>For a full tree of height 4:</p>
+<ul>
+<li>$N = 2^5 - 1 = 31$</li>
+<li>$L = 2^4 = 16$</li>
+<li>$I = 15$</li>
+<li>$L = I + 1$? $16 = 15 + 1$. ✓</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="structural-induction-on-trees-revisited">Structural Induction on Trees (Revisited)</h3>
+
+<p>For full binary trees, the induction is cleaner because every internal node has exactly two children. The inductive step always has two subtrees to work with.</p>
+
+<h3 id="counting-nodes-by-level">Counting Nodes by Level</h3>
+
+<p>For a complete binary tree: level $k$ has $2^k$ nodes (for $0 \leq k < h$), and level $h$ has between 1 and $2^h$ nodes. Total:</p>
+
+<div class="katex-block">$\sum_{k=0}^{h-1} 2^k + \text{(last level)} = 2^h - 1 + \text{(last level)}$</div>
+
+<p>This uses the geometric series from Module 6.</p>
+
+<hr>
+
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class TreeProperties {
+
+    static class TreeNode {
+        int value;
+        TreeNode left, right;
+
+        TreeNode(int v) { this.value = v; }
+        TreeNode(int v, TreeNode l, TreeNode r) {
+            this.value = v; this.left = l; this.right = r;
+        }
+    }
+
+    // --- Size ---
+    public static int size(TreeNode t) {
+        if (t == null) return 0;
+        return 1 + size(t.left) + size(t.right);
+    }
+
+    // --- Height ---
+    public static int height(TreeNode t) {
+        if (t == null) return -1;
+        return 1 + Math.max(height(t.left), height(t.right));
+    }
+
+    // --- Count Leaves ---
+    public static int countLeaves(TreeNode t) {
+        if (t == null) return 0;
+        if (t.left == null &amp;&amp; t.right == null) return 1;
+        return countLeaves(t.left) + countLeaves(t.right);
+    }
+
+    // --- Count Internal Nodes ---
+    public static int countInternal(TreeNode t) {
+        if (t == null) return 0;
+        if (t.left == null &amp;&amp; t.right == null) return 0;
+        return 1 + countInternal(t.left) + countInternal(t.right);
+    }
+
+    // --- Is Full ---
+    public static boolean isFull(TreeNode t) {
+        if (t == null) return true; // empty tree is vacuously full
+        if (t.left == null &amp;&amp; t.right == null) return true;
+        if (t.left == null || t.right == null) return false;
+        return isFull(t.left) &amp;&amp; isFull(t.right);
+    }
+
+    // --- Is Balanced ---
+    public static boolean isBalanced(TreeNode t) {
+        return balancedHeight(t) != -2;
+    }
+
+    // Returns height if balanced, -2 if not
+    private static int balancedHeight(TreeNode t) {
+        if (t == null) return -1;
+        int lh = balancedHeight(t.left);
+        if (lh == -2) return -2;
+        int rh = balancedHeight(t.right);
+        if (rh == -2) return -2;
+        if (Math.abs(lh - rh) &gt; 1) return -2;
+        return 1 + Math.max(lh, rh);
+    }
+
+    // --- Is Complete ---
+    public static boolean isComplete(TreeNode t) {
+        if (t == null) return true;
+        Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
+        queue.add(t);
+        boolean seenNull = false;
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            if (node == null) {
+                seenNull = true;
+            } else {
+                if (seenNull) return false;
+                queue.add(node.left);
+                queue.add(node.right);
+            }
+        }
+        return true;
+    }
+
+    // --- Build Full Tree ---
+    public static TreeNode buildFull(int height) {
+        if (height &lt; 0) return null;
+        if (height == 0) return new TreeNode(0);
+        return new TreeNode(0, buildFull(height - 1), buildFull(height - 1));
+    }
+
+    // --- Build Balanced BST from Sorted Array ---
+    public static TreeNode buildBalancedBST(int[] sorted, int lo, int hi) {
+        if (lo &gt; hi) return null;
+        int mid = lo + (hi - lo) / 2;
+        return new TreeNode(sorted[mid],
+                buildBalancedBST(sorted, lo, mid - 1),
+                buildBalancedBST(sorted, mid + 1, hi));
+    }
+
+    // --- Verify Full Binary Tree Theorem ---
+    public static void verifyFullTreeTheorem(int maxHeight) {
+        for (int h = 0; h &lt;= maxHeight; h++) {
+            TreeNode t = buildFull(h);
+            int n = size(t);
+            int l = countLeaves(t);
+            int i = countInternal(t);
+            assert l == i + 1 : "L != I+1 for h=" + h;
+            assert n == 2 * i + 1 : "N != 2I+1 for h=" + h;
+            assert n == (int) Math.pow(2, h + 1) - 1 : "N != 2^(h+1)-1";
+            assert l == (int) Math.pow(2, h) : "L != 2^h";
+            System.out.printf("h=%d: N=%d, L=%d, I=%d, L=I+1? %b, N=2I+1? %b%n",
+                    h, n, l, i, l == i + 1, n == 2 * i + 1);
+        }
+    }
+
+    // --- Demo ---
+    public static void main(String[] args) {
+        System.out.println("=== Tree Properties ===\n");
+
+        // Full tree verification
+        System.out.println("--- Full Binary Tree Theorem ---");
+        verifyFullTreeTheorem(6);
+
+        // Balanced BST
+        System.out.println("\n--- Balanced BST ---");
+        int[] sorted = {1, 3, 5, 7, 9, 11, 13, 15};
+        TreeNode bst = buildBalancedBST(sorted, 0, sorted.length - 1);
+        System.out.println("Size: " + size(bst));
+        System.out.println("Height: " + height(bst));
+        System.out.println("Balanced? " + isBalanced(bst));
+        System.out.println("Full? " + isFull(bst));
+        System.out.println("Complete? " + isComplete(bst));
+
+        // Degenerate tree (linked list)
+        System.out.println("\n--- Degenerate Tree ---");
+        TreeNode degenerate = new TreeNode(1,
+                new TreeNode(2, new TreeNode(3, new TreeNode(4), null), null), null);
+        System.out.println("Size: " + size(degenerate));
+        System.out.println("Height: " + height(degenerate));
+        System.out.println("Balanced? " + isBalanced(degenerate));
+
+        // Height vs size comparison
+        System.out.println("\n--- Height Comparison ---");
+        for (int h = 0; h &lt;= 10; h++) {
+            TreeNode full = buildFull(h);
+            System.out.printf("Full tree h=%2d: n=%5d, balanced=%b%n",
+                    h, size(full), isBalanced(full));
+        }
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>AVL trees</strong> (Adelson-Velsky and Landis, 1962) were the first self-balancing binary search trees. Their balance condition (height difference $\leq 1$) guarantees $O(\log n)$ operations.</p>
+
+<p><strong>Red-black trees</strong> (Rudolf Bayer, 1972; given this name by Guibas and Sedgewick, 1978) use a coloring scheme to maintain approximate balance, guaranteeing height $\leq 2 \log_2(n + 1)$.</p>
+
+<p>The <strong>full binary tree theorem</strong> ($L = I + 1$) appears in virtually every data structures textbook and is a classic exercise in structural induction.</p>
+
+<hr>
+
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> Define full, complete, and balanced binary trees. Give an example of each.</p>
+
+<p><strong>A2.</strong> For a full binary tree with 15 nodes, how many leaves and internal nodes?</p>
+
+<p><strong>A3.</strong> What is the maximum and minimum height of a binary tree with 100 nodes?</p>
+
+<p><strong>A4.</strong> Why does height $O(\log n)$ matter for BST operations?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove $L = I + 1$ for full binary trees by structural induction.</p>
+
+<p><strong>B2.</strong> Prove: a complete binary tree of height $h$ has between $2^h$ and $2^{h+1} - 1$ nodes.</p>
+
+<p><strong>B3.</strong> Prove: the minimum number of nodes in a balanced tree of height $h$ satisfies $N(h) = N(h-1) + N(h-2) + 1$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Implement <code>isFull</code>, <code>isBalanced</code>, <code>isComplete</code> for binary trees.</p>
+
+<p><strong>C2.</strong> Build a full binary tree of height $h$ and verify $N = 2^{h+1} - 1$.</p>
+
+<p><strong>C3.</strong> Build a balanced BST from a sorted array and verify $h = O(\log n)$.</p>
+
+<hr>
+
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Prove: in a full binary tree, $N = 2L - 1$.</p>
+
+<p><strong>DM2.</strong> Prove: a binary tree with $n$ nodes has $n + 1$ null pointers.</p>
+
+<p><strong>DM3.</strong> Prove: for a complete binary tree of height $h$, the number of nodes at level $k$ ($0 \leq k < h$) is exactly $2^k$.</p>
+
+<p><strong>DM4.</strong> Show: the minimum number of nodes in a balanced tree of height $h$ is $N(h) = F_{h+3} - 1$ (where $F$ is Fibonacci). Verify for $h = 0, ..., 5$.</p>
+
+<p><strong>DM5.</strong> Prove by induction: a full binary tree of height $h$ has exactly $2^h$ leaves.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement all tree property methods: size, height, countLeaves, countInternal, isFull, isBalanced, isComplete.</p>
+
+<p><strong>JP2.</strong> Build full trees of heights 0–10 and verify all properties of the full binary tree theorem.</p>
+
+<p><strong>JP3.</strong> Build balanced BSTs from sorted arrays of sizes 1, 3, 7, 15, 31, 63, 127. Verify heights are optimal.</p>
+
+<p><strong>JP4.</strong> Create a degenerate (linked-list) tree with $n$ nodes. Compare its height with a balanced tree of the same size.</p>
+
+<p><strong>JP5.</strong> Implement <code>buildMinBalanced(int h)</code> that constructs a balanced tree with the <em>minimum</em> number of nodes for height $h$. Verify it matches $F_{h+3} - 1$.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Module 7: The number of binary trees with $n$ nodes is the $n$-th Catalan number $C_n = \frac{1}{n+1}\binom{2n}{n}$. Compute $C_n$ for $n = 0, ..., 10$ using your binomial function from Module 7.</p>
+
+<p><strong>BR2.</strong> Module 6: The proof of $L = I + 1$ uses structural induction, which you first learned in Module 6 Class 3. Compare the technique here with the expression tree proof from that class.</p>
+
+<hr>
+
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="dm1-solution">DM1 Solution</h3>
+
+<p>$N = L + I$. By the full binary tree theorem, $L = I + 1$. So $N = (I + 1) + I = 2I + 1 = 2(L - 1) + 1 = 2L - 1$. $\blacksquare$</p>
+
+<h3 id="dm2-solution">DM2 Solution</h3>
+
+<p>Each of the $n$ nodes has 2 pointers (left, right). Total pointers: $2n$. Each non-root node is pointed to by exactly one parent pointer. Parent pointers used: $n - 1$. Null pointers: $2n - (n - 1) = n + 1$. $\blacksquare$</p>
+
+<h3 id="dm5-solution">DM5 Solution</h3>
+
+<p><strong>Base:</strong> $h = 0$: a single node is a leaf. $L = 1 = 2^0$. ✓</p>
+
+<p><strong>Inductive step:</strong> Assume a full binary tree of height $h$ has $2^h$ leaves. A full tree of height $h + 1$ has a root whose left and right subtrees are full trees of height $\leq h$. In a <em>full</em> tree of height exactly $h + 1$, at least one subtree has height $h$. If both are full trees of height $h$, then $L = 2^h + 2^h = 2^{h+1}$. ✓ $\blacksquare$</p>
+
+<p>(Note: more precisely, a "perfect" binary tree of height $h$ has all leaves at level $h$; a "full" tree only requires every node to have 0 or 2 children. For perfect trees, $L = 2^h$ exactly.)</p>
+
+</div>
+<hr>
+<div id="class-3" class="class-section">
+<h1 id="module-9-class-3-applications-complexity-and-formal-verification">Module 9 – Class 3: Applications, Complexity and Formal Verification</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Implement and prove correctness of BST insert, search, and delete.</li>
+<li>Understand heap structure and prove the heap property is maintained by insert/extract.</li>
+<li>Connect tree height to Big-O complexity for core operations.</li>
+<li>Survey formal verification tools and their role in software engineering.</li>
+<li>Synthesize proof techniques from the entire course (Modules 1–9).</li>
+</ul>
+
+<hr>
+
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="binary-search-trees-bst">Binary Search Trees (BST)</h3>
+
+<p>A BST is a binary tree where for every node $v$:</p>
+<ul>
+<li>All values in $v.\text{left}$ are less than $v.\text{value}$</li>
+<li>All values in $v.\text{right}$ are greater than $v.\text{value}$</li>
+</ul>
+
+<p><strong>Operations and worst-case time:</strong></p>
+
+<table>
+<thead><tr>
+<th>Operation</th>
+<th>Balanced BST</th>
+<th>Degenerate BST</th>
+</tr></thead><tbody>
+<tr>
+<td>Search</td>
+<td>$O(\log n)$</td>
+<td>$O(n)$</td>
+</tr>
+<tr>
+<td>Insert</td>
+<td>$O(\log n)$</td>
+<td>$O(n)$</td>
+</tr>
+<tr>
+<td>Delete</td>
+<td>$O(\log n)$</td>
+<td>$O(n)$</td>
+</tr>
+<tr>
+<td>Min/Max</td>
+<td>$O(\log n)$</td>
+<td>$O(n)$</td>
+</tr>
+</tbody></table>
+
+<h3 id="heaps-and-priority-queues">Heaps and Priority Queues</h3>
+
+<p>A <strong>min-heap</strong> is a complete binary tree where every node's value is $\leq$ its children's values:</p>
+
+<div class="katex-block">$v.\text{value} \leq v.\text{left}.\text{value} \quad \text{and} \quad v.\text{value} \leq v.\text{right}.\text{value}$</div>
+
+<p><strong>Array representation:</strong> For node at index $i$ (0-based):</p>
+<ul>
+<li>Left child: $2i + 1$</li>
+<li>Right child: $2i + 2$</li>
+<li>Parent: $\lfloor(i - 1) / 2\rfloor$</li>
+</ul>
+
+<table>
+<thead><tr>
+<th>Operation</th>
+<th>Time</th>
+</tr></thead><tbody>
+<tr>
+<td>Insert</td>
+<td>$O(\log n)$</td>
+</tr>
+<tr>
+<td>Extract-min</td>
+<td>$O(\log n)$</td>
+</tr>
+<tr>
+<td>Peek-min</td>
+<td>$O(1)$</td>
+</tr>
+<tr>
+<td>Build heap</td>
+<td>$O(n)$</td>
+</tr>
+</tbody></table>
+
+<h3 id="big-o-notation">Big-O Notation</h3>
+
+<div class="katex-block">$f(n) = O(g(n)) \iff \exists c > 0, n_0 \geq 0 : \forall n \geq n_0, f(n) \leq c \cdot g(n)$</div>
+
+<p><strong>Common complexity classes:</strong></p>
+
+<div class="katex-block">$O(1) \subset O(\log n) \subset O(n) \subset O(n \log n) \subset O(n^2) \subset O(2^n)$</div>
+
+<h3 id="formal-verification">Formal Verification</h3>
+
+<p><strong>Formal verification</strong> uses mathematical proof to guarantee software correctness — <em>not just testing</em>. Key approaches:</p>
+
+<ol>
+<li><strong>Model checking</strong>: Exhaustive state-space exploration (finite systems)</li>
+<li><strong>Theorem proving</strong>: Interactive/automated provers (Coq, Isabelle, Lean)</li>
+<li><strong>Static analysis</strong>: Automated approximation of program behavior</li>
+<li><strong>Design by Contract</strong>: Runtime assertions as lightweight verification (Module 3, 8)</li>
+</ol>
+
+<hr>
+
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Symbol</th>
+<th>Definition</th>
+</tr></thead><tbody>
+<tr>
+<td>$O(f(n))$</td>
+<td>Asymptotic upper bound</td>
+</tr>
+<tr>
+<td>$\Omega(f(n))$</td>
+<td>Asymptotic lower bound</td>
+</tr>
+<tr>
+<td>$\Theta(f(n))$</td>
+<td>Tight bound ($O$ and $\Omega$ simultaneously)</td>
+</tr>
+<tr>
+<td>BST invariant</td>
+<td>$\forall v \in T: (\forall u \in T_L(v): u < v) \land (\forall w \in T_R(v): w > v)$</td>
+</tr>
+<tr>
+<td>Heap invariant</td>
+<td>$\forall v \in T: v \leq v.\text{left} \land v \leq v.\text{right}$</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-bst-insert-correctness">Example 1: BST Insert Correctness</h3>
+
+<p><strong>Claim:</strong> Inserting a value $x$ into a valid BST produces a valid BST.</p>
+
+<p><strong>Proof by structural induction on the BST.</strong></p>
+
+<p><strong>Base:</strong> Empty tree → single node $x$ → valid BST. ✓</p>
+
+<p><strong>Inductive step:</strong> Let $T$ be a valid BST with root $r$.</p>
+<ul>
+<li>If $x < r$: by IH, inserting $x$ into $T_L$ produces a valid BST. The new $T_L$' contains only values $< r$ (since $T_L$ did, and $x < r$). So the full tree is a valid BST. ✓</li>
+<li>If $x > r$: symmetric argument on $T_R$. ✓</li>
+<li>If $x = r$: depends on policy (ignore, update, or allow duplicates).</li>
+</ul>
+
+<p>$\blacksquare$</p>
+
+<h3 id="example-2-heap-insert-bubble-up">Example 2: Heap Insert (Bubble Up)</h3>
+
+<p><strong>Claim:</strong> After inserting at the end of the array and bubbling up, the min-heap property is restored.</p>
+
+<p><strong>Proof outline:</strong></p>
+<ol>
+<li>Place new element at position $n$ (next available in complete tree).</li>
+<li>While element is less than its parent, swap with parent.</li>
+<li><strong>Loop invariant:</strong> The heap property holds everywhere except possibly between the current node and its parent.</li>
+<li><strong>Termination:</strong> On each swap, the element moves to a lower index ($\lfloor(i-1)/2\rfloor < i$). Terminates at index 0.</li>
+<li>At termination, either the element is $\geq$ its parent, or it's at the root. Either way, the heap property is fully restored.</li>
+</ol>
+
+<p>$\blacksquare$</p>
+
+<h3 id="example-3-big-o-proof-for-bst-search">Example 3: Big-O Proof for BST Search</h3>
+
+<p><strong>Claim:</strong> BST search is $O(h)$ where $h$ is the tree height.</p>
+
+<p><strong>Proof:</strong> Each comparison moves the search one level down. The tree has $h + 1$ levels. At most $h + 1$ comparisons are made. So search is $O(h)$.</p>
+
+<p>For a balanced BST: $h = O(\log n)$, so search is $O(\log n)$.</p>
+<p>For a degenerate BST: $h = n - 1$, so search is $O(n)$.</p>
+
+<h3 id="example-4-build-heap-is-inlinemath_57">Example 4: Build-Heap is $O(n)$</h3>
+
+<p>The naive analysis gives $O(n \log n)$ (call siftDown $n/2$ times, each $O(\log n)$). But a tighter analysis uses the observation that most nodes are near the bottom:</p>
+
+<div class="katex-block">$\sum_{k=0}^{h} \frac{n}{2^{k+1}} \cdot k = O(n) \sum_{k=0}^{\infty} \frac{k}{2^{k+1}} = O(n)$</div>
+
+<p>This is an application of the sum formula techniques from Module 6.</p>
+
+<h3 id="example-5-formal-verification-of-inlinecode_0">Example 5: Formal Verification of <code>reverseArray</code></h3>
+
+<p>Using Hoare logic (Module 8), we can verify array reversal:</p>
+
+<p><strong>Specification:</strong></p>
+<ul>
+<li><strong>Pre:</strong> $a$ is an array of length $n$, $a_0 = A$</li>
+<li><strong>Post:</strong> $a[i] = A[n - 1 - i]$ for all $0 \leq i < n$</li>
+</ul>
+
+<p><strong>Loop invariant:</strong> At iteration $j$:</p>
+<ul>
+<li>$a[i] = A[n - 1 - i]$ for $0 \leq i < j$</li>
+<li>$a[n - 1 - i] = A[i]$ for $0 \leq i < j$</li>
+<li>$a[i] = A[i]$ for $j \leq i \leq n - 1 - j$</li>
+</ul>
+
+<p><strong>Variant:</strong> $\lfloor n/2 \rfloor - j$ (decreases each iteration, bounded below by 0).</p>
+
+<hr>
+
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="course-proof-techniques-synthesis">Course Proof Techniques Synthesis</h3>
+
+<table>
+<thead><tr>
+<th>Module</th>
+<th>Proof Technique</th>
+<th>Used in Trees</th>
+</tr></thead><tbody>
+<tr>
+<td>1</td>
+<td>Direct proof, counterexample</td>
+<td>Proving a tree is <em>not</em> balanced</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Modular arithmetic</td>
+<td>Array-based heap indexing</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Contrapositive, contradiction</td>
+<td>If not balanced, height $\neq O(\log n)$</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Element-chasing for sets</td>
+<td>Proving correctness of tree-to-set operations</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Function composition</td>
+<td>Tree traversal = composition of recursive calls</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Induction: weak, strong, structural</td>
+<td>All tree proofs</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Counting, pigeonhole</td>
+<td>Catalan numbers, number of tree shapes</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Loop invariants, termination</td>
+<td>Iterative tree operations, heap operations</td>
+</tr>
+<tr>
+<td>9</td>
+<td>All of the above!</td>
+<td>BST/heap correctness</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class TreeApplications {
+
+    // ========== BST ==========
+
+    static class TreeNode {
+        int value;
+        TreeNode left, right;
+        TreeNode(int v) { this.value = v; }
+        TreeNode(int v, TreeNode l, TreeNode r) {
+            this.value = v; this.left = l; this.right = r;
+        }
+    }
+
+    // --- BST Search ---
+    public static TreeNode bstSearch(TreeNode t, int key) {
+        if (t == null) return null;
+        if (key &lt; t.value) return bstSearch(t.left, key);
+        if (key &gt; t.value) return bstSearch(t.right, key);
+        return t;
+    }
+
+    // --- BST Insert ---
+    public static TreeNode bstInsert(TreeNode t, int key) {
+        if (t == null) return new TreeNode(key);
+        if (key &lt; t.value) t.left = bstInsert(t.left, key);
+        else if (key &gt; t.value) t.right = bstInsert(t.right, key);
+        // key == t.value: no duplicates
+        return t;
+    }
+
+    // --- BST Delete ---
+    public static TreeNode bstDelete(TreeNode t, int key) {
+        if (t == null) return null;
+        if (key &lt; t.value) {
+            t.left = bstDelete(t.left, key);
+        } else if (key &gt; t.value) {
+            t.right = bstDelete(t.right, key);
+        } else {
+            // Found node to delete
+            if (t.left == null) return t.right;
+            if (t.right == null) return t.left;
+            // Two children: replace with in-order successor
+            TreeNode successor = findMin(t.right);
+            t.value = successor.value;
+            t.right = bstDelete(t.right, successor.value);
+        }
+        return t;
+    }
+
+    public static TreeNode findMin(TreeNode t) {
+        while (t.left != null) t = t.left;
+        return t;
+    }
+
+    // --- BST Validity Check ---
+    public static boolean isValidBST(TreeNode t) {
+        return isValidBST(t, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
+    private static boolean isValidBST(TreeNode t, int min, int max) {
+        if (t == null) return true;
+        if (t.value &lt;= min || t.value &gt;= max) return false;
+        return isValidBST(t.left, min, t.value)
+            &amp;&amp; isValidBST(t.right, t.value, max);
+    }
+
+    // --- In-Order Traversal (should be sorted for BST) ---
+    public static List&lt;Integer&gt; inOrder(TreeNode t) {
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        inOrderHelper(t, result);
+        return result;
+    }
+
+    private static void inOrderHelper(TreeNode t, List&lt;Integer&gt; result) {
+        if (t == null) return;
+        inOrderHelper(t.left, result);
+        result.add(t.value);
+        inOrderHelper(t.right, result);
+    }
+
+    // --- Height ---
+    public static int height(TreeNode t) {
+        if (t == null) return -1;
+        return 1 + Math.max(height(t.left), height(t.right));
+    }
+
+    // ========== MIN-HEAP ==========
+
+    static class MinHeap {
+        private int[] data;
+        private int size;
+
+        public MinHeap(int capacity) {
+            data = new int[capacity];
+            size = 0;
+        }
+
+        public int size() { return size; }
+
+        public int peek() {
+            if (size == 0) throw new NoSuchElementException("Heap is empty");
+            return data[0];
+        }
+
+        public void insert(int value) {
+            if (size == data.length) {
+                data = Arrays.copyOf(data, data.length * 2);
+            }
+            data[size] = value;
+            bubbleUp(size);
+            size++;
+            assert checkHeapInvariant() : "Heap invariant violated after insert";
+        }
+
+        public int extractMin() {
+            if (size == 0) throw new NoSuchElementException("Heap is empty");
+            int min = data[0];
+            size--;
+            data[0] = data[size];
+            siftDown(0);
+            assert checkHeapInvariant() : "Heap invariant violated after extractMin";
+            return min;
+        }
+
+        private void bubbleUp(int i) {
+            // Invariant: heap property holds everywhere except
+            // possibly between data[i] and data[parent(i)]
+            while (i &gt; 0 &amp;&amp; data[i] &lt; data[parent(i)]) {
+                swap(i, parent(i));
+                i = parent(i);
+            }
+            // Post: heap property fully restored
+        }
+
+        private void siftDown(int i) {
+            // Variant: distance from i to bottom level (decreases each step)
+            while (leftChild(i) &lt; size) {
+                int smallest = i;
+                int left = leftChild(i);
+                int right = rightChild(i);
+                if (left &lt; size &amp;&amp; data[left] &lt; data[smallest]) smallest = left;
+                if (right &lt; size &amp;&amp; data[right] &lt; data[smallest]) smallest = right;
+                if (smallest == i) break;
+                swap(i, smallest);
+                i = smallest;
+            }
+        }
+
+        private int parent(int i) { return (i - 1) / 2; }
+        private int leftChild(int i) { return 2 * i + 1; }
+        private int rightChild(int i) { return 2 * i + 2; }
+
+        private void swap(int i, int j) {
+            int tmp = data[i]; data[i] = data[j]; data[j] = tmp;
+        }
+
+        // Verify heap invariant
+        public boolean checkHeapInvariant() {
+            for (int i = 1; i &lt; size; i++) {
+                if (data[i] &lt; data[parent(i)]) return false;
+            }
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return Arrays.toString(Arrays.copyOf(data, size));
+        }
+    }
+
+    // ========== BIG-O COMPLEXITY MEASUREMENT ==========
+
+    public static void measureBSTComplexity() {
+        System.out.println("--- BST Operation Timing ---\n");
+        int[] sizes = {1000, 10000, 100000};
+        Random rng = new Random(42);
+
+        for (int n : sizes) {
+            // Balanced BST (from sorted array)
+            int[] sorted = new int[n];
+            for (int i = 0; i &lt; n; i++) sorted[i] = i;
+            TreeNode balanced = buildBalanced(sorted, 0, n - 1);
+
+            // Degenerate BST (insert in order)
+            TreeNode degenerate = null;
+            int degN = Math.min(n, 10000); // cap to avoid stack overflow
+            for (int i = 0; i &lt; degN; i++) {
+                degenerate = bstInsert(degenerate, i);
+            }
+
+            // Search timing
+            long start = System.nanoTime();
+            for (int i = 0; i &lt; 1000; i++) {
+                bstSearch(balanced, rng.nextInt(n));
+            }
+            long balancedTime = System.nanoTime() - start;
+
+            System.out.printf("n=%6d | Balanced BST h=%d, 1000 searches: %,d ns%n",
+                    n, height(balanced), balancedTime);
+        }
+    }
+
+    private static TreeNode buildBalanced(int[] sorted, int lo, int hi) {
+        if (lo &gt; hi) return null;
+        int mid = lo + (hi - lo) / 2;
+        return new TreeNode(sorted[mid],
+                buildBalanced(sorted, lo, mid - 1),
+                buildBalanced(sorted, mid + 1, hi));
+    }
+
+    // ========== FORMAL VERIFICATION DEMO ==========
+
+    // Verified reverseArray with loop invariant and variant
+    public static void reverseArray(int[] a) {
+        int n = a.length;
+        // Pre: a is a valid array
+        int[] original = Arrays.copyOf(a, n); // ghost variable for verification
+        for (int j = 0; j &lt; n / 2; j++) {
+            // Invariant: a[i] = original[n-1-i] for 0 &lt;= i &lt; j
+            //            a[n-1-i] = original[i] for 0 &lt;= i &lt; j
+            //            a[i] = original[i] for j &lt;= i &lt;= n-1-j
+            // Variant: n/2 - j
+            int tmp = a[j];
+            a[j] = a[n - 1 - j];
+            a[n - 1 - j] = tmp;
+            // Check invariant
+            for (int i = 0; i &lt;= j; i++) {
+                assert a[i] == original[n - 1 - i] : "Invariant violated at i=" + i;
+                assert a[n - 1 - i] == original[i] : "Invariant violated (mirror)";
+            }
+        }
+        // Post: a[i] = original[n-1-i] for all i
+        for (int i = 0; i &lt; n; i++) {
+            assert a[i] == original[n - 1 - i] : "Postcondition violated";
+        }
+    }
+
+    // ========== DEMO ==========
+
+    public static void main(String[] args) {
+        System.out.println("=== Trees, Complexity and Verification ===\n");
+
+        // BST Demo
+        System.out.println("--- BST Operations ---");
+        TreeNode bst = null;
+        int[] keys = {50, 30, 70, 20, 40, 60, 80};
+        for (int k : keys) bst = bstInsert(bst, k);
+        System.out.println("In-order: " + inOrder(bst));
+        System.out.println("Valid BST? " + isValidBST(bst));
+        System.out.println("Height: " + height(bst));
+
+        System.out.println("Search 40: " + (bstSearch(bst, 40) != null));
+        System.out.println("Search 99: " + (bstSearch(bst, 99) != null));
+
+        bst = bstDelete(bst, 30);
+        System.out.println("After delete 30: " + inOrder(bst));
+        System.out.println("Still valid BST? " + isValidBST(bst));
+
+        // Min-Heap Demo
+        System.out.println("\n--- Min-Heap ---");
+        MinHeap heap = new MinHeap(16);
+        int[] vals = {42, 17, 8, 31, 5, 23, 12, 3};
+        for (int v : vals) {
+            heap.insert(v);
+            System.out.println("  Inserted " + v + ": " + heap);
+        }
+        System.out.println("Extracting in order:");
+        while (heap.size() &gt; 0) {
+            System.out.println("  " + heap.extractMin());
+        }
+
+        // Big-O Measurement
+        System.out.println("\n--- Complexity Measurement ---");
+        measureBSTComplexity();
+
+        // Verified Reverse
+        System.out.println("\n--- Verified reverseArray ---");
+        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8};
+        System.out.println("Before: " + Arrays.toString(arr));
+        reverseArray(arr);
+        System.out.println("After:  " + Arrays.toString(arr));
+
+        // Formal Verification Survey
+        System.out.println("\n--- Formal Verification Tools ---");
+        System.out.println("Tool          | Type             | Language");
+        System.out.println("Coq           | Theorem prover   | Gallina");
+        System.out.println("Isabelle/HOL  | Theorem prover   | Isar");
+        System.out.println("Lean          | Theorem prover   | Lean");
+        System.out.println("Dafny         | Auto verifier    | Dafny");
+        System.out.println("SPARK/Ada     | Design by Contract| Ada subset");
+        System.out.println("JML           | Spec language    | Java");
+        System.out.println("TLA+          | Model checker    | TLA+");
+        System.out.println("\nIn this course, we used a lightweight form of");
+        System.out.println("verification: Hoare logic + assertions in Java.");
+    }
+}</code></pre>
+
+<hr>
+
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Binary search trees</strong> date to the late 1950s (Conway and Berners-Lee, 1959). The problem of balancing them has driven decades of innovation: AVL trees (1962), red-black trees (1978), splay trees (1985), and treaps (1989).</p>
+
+<p><strong>Heaps</strong> were introduced by J.W.J. Williams in 1964 alongside heapsort. The elegant array representation and the $O(n)$ build-heap algorithm make them a textbook favorite.</p>
+
+<p><strong>Big-O notation</strong> was introduced by Paul Bachmann (1894) and made standard by Edmund Landau. Donald Knuth popularized it in computer science.</p>
+
+<p><strong>Formal verification</strong> has a rich history: Floyd-Hoare logic (1969), Dijkstra's weakest precondition calculus (1975), and modern provers like Coq (used to verify the C compiler CompCert) and seL4 (a verified OS microkernel).</p>
+
+<hr>
+
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> What is the BST invariant? Why does in-order traversal produce sorted output?</p>
+
+<p><strong>A2.</strong> Describe the difference between a BST and a heap. Can a heap be used for sorted output?</p>
+
+<p><strong>A3.</strong> Explain why balanced BST search is $O(\log n)$ while degenerate BST search is $O(n)$.</p>
+
+<p><strong>A4.</strong> What does formal verification guarantee that testing cannot?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove BST insert preserves the BST invariant by structural induction.</p>
+
+<p><strong>B2.</strong> Prove heap bubble-up terminates and restores the heap property.</p>
+
+<p><strong>B3.</strong> Prove: $f(n) = 3n^2 + 5n + 7$ is $O(n^2)$. Find explicit $c$ and $n_0$.</p>
+
+<p><strong>B4.</strong> State the loop invariant for BST search. Prove correctness.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Implement BST insert, search, and delete. Verify with in-order traversal.</p>
+
+<p><strong>C2.</strong> Implement a min-heap with insert and extractMin. Verify the heap invariant with assertions.</p>
+
+<p><strong>C3.</strong> Time BST search for balanced vs degenerate trees of increasing size. Plot or display the results.</p>
+
+<hr>
+
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Prove that in-order traversal of a valid BST produces values in ascending order (by structural induction).</p>
+
+<p><strong>DM2.</strong> Prove: $5n^3 + 2n^2 + n = O(n^3)$. Exhibit $c$ and $n_0$.</p>
+
+<p><strong>DM3.</strong> Prove: bubble-up in a min-heap terminates (state the variant function) and restores the heap invariant (state and verify the loop invariant).</p>
+
+<p><strong>DM4.</strong> Prove: build-heap is $O(n)$, not $O(n \log n)$. Use the sum $\sum_{k=0}^{h} k \cdot 2^{h-k}$.</p>
+
+<p><strong>DM5.</strong> Prove: BST delete preserves the BST invariant (consider all three cases: leaf, one child, two children).</p>
+
+<p><strong>DM6.</strong> Starting from the Hoare triple framework (Module 8), write the full specification for <code>bstSearch(t, key)</code> including precondition, postcondition, and loop/recursion variant.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement a complete BST with insert, search, delete, findMin, findMax, inOrder. Verify that in-order output is always sorted.</p>
+
+<p><strong>JP2.</strong> Implement a min-heap with invariant checking. Show it can function as a priority queue.</p>
+
+<p><strong>JP3.</strong> Implement heapsort using your min-heap. Prove a sorting invariant.</p>
+
+<p><strong>JP4.</strong> Measure and compare search times for balanced BST, degenerate BST, and <code>Arrays.binarySearch</code> on the same sorted data.</p>
+
+<p><strong>JP5.</strong> Implement a verified <code>reverseArray</code> with assertions checking the loop invariant and postcondition. Run with <code>-ea</code> to enable assertions.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Module 8 + 9: Write the complete Hoare-logic correctness proof for <code>heapInsert</code>: precondition, loop invariant, variant, postcondition.</p>
+
+<p><strong>BR2.</strong> Modules 6–9 Synthesis: The number of structurally distinct BSTs with $n$ keys is the $n$-th Catalan number (Module 7 bridge). Use structural induction (Module 6) to prove the recurrence $C_n = \sum_{i=0}^{n-1} C_i \cdot C_{n-1-i}$. Then implement it in Java and verify against the closed form $C_n = \frac{1}{n+1}\binom{2n}{n}$.</p>
+
+<p><strong>BR3.</strong> Reflection: Write a one-page essay on the role of formal verification in software engineering. How do the proof techniques from this course (direct proof, induction, loop invariants, specifications) form a foundation for tools like Coq or Dafny?</p>
+
+<hr>
+
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="dm1-solution">DM1 Solution</h3>
+
+<p><strong>Claim:</strong> In-order traversal of a valid BST produces values in ascending order.</p>
+
+<p><strong>Proof by structural induction.</strong></p>
+
+<p><strong>Base:</strong> Empty tree produces empty list. ✓ Single node produces [v]. ✓</p>
+
+<p><strong>Inductive step:</strong> BST $T$ with root $r$, left subtree $T_L$, right subtree $T_R$. By BST invariant: all values in $T_L < r < $ all values in $T_R$.</p>
+
+<p>By IH: inOrder($T_L$) is ascending and inOrder($T_R$) is ascending.</p>
+
+<p>inOrder($T$) = inOrder($T_L$) ++ [$r$] ++ inOrder($T_R$).</p>
+
+<ul>
+<li>inOrder($T_L$) is ascending (by IH).</li>
+<li>Last element of inOrder($T_L$) $< r$ (by BST invariant).</li>
+<li>$r <$ first element of inOrder($T_R$) (by BST invariant).</li>
+<li>inOrder($T_R$) is ascending (by IH).</li>
+</ul>
+
+<p>Therefore inOrder($T$) is ascending. $\blacksquare$</p>
+
+<h3 id="dm2-solution">DM2 Solution</h3>
+
+<p>We need $c, n_0$ such that $5n^3 + 2n^2 + n \leq cn^3$ for all $n \geq n_0$.</p>
+
+<p>For $n \geq 1$: $n \leq n^3$ and $n^2 \leq n^3$. So $5n^3 + 2n^2 + n \leq 5n^3 + 2n^3 + n^3 = 8n^3$.</p>
+
+<p>Choose $c = 8, n_0 = 1$. $\blacksquare$</p>
+
+<h3 id="jp2-solution-sketch">JP2 Solution Sketch</h3>
+
+<pre><code class="language-java">MinHeap pq = new MinHeap(16);
+// Priority queue usage: process tasks by priority
+pq.insert(5);  // low priority task
+pq.insert(1);  // highest priority
+pq.insert(3);
+while (pq.size() &gt; 0) {
+    System.out.println("Processing priority: " + pq.extractMin());
+}
+// Output: 1, 3, 5  (ascending order = highest priority first)</code></pre>
+
+</div>
+<hr>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

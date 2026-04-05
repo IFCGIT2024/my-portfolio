@@ -1,0 +1,371 @@
+Discrete Mathematics and Proof for Computer Science in Java
+This redesign outlines a 30‑class, 9‑module course that introduces discrete mathematics through the lens of programming and proof. Each module spans three classes. Every class follows the same nine‑step template:
+Mathematical concept – describe the object or theorem.
+Plain language meaning – say what it actually means.
+Formal notation – show how mathematics writes it.
+Java translation – show how a program would represent or compute it.
+Worked example – demonstrate with numbers and code.
+Computational use – explain why the idea matters in CS.
+Proof method – identify the appropriate proof technique.
+Correctness reasoning – connect the proof to algorithm correctness.
+Historical note – briefly situate the idea in mathematical history.
+Throughout the course, students are always translating between symbolic statements and Java programs. Proofs justify that code works, and programs illustrate abstract mathematics. Each module ends with a lab (coding exercises) and an assignment (combined mathematical and programming tasks) that reinforce the module’s topics. Four longer assignments (Modules 2, 4, 6, 8) synthesize the preceding material. The course culminates in a capstone project in Module 9 where students prove and implement a non‑trivial data structure algorithm.
+Section I – Arithmetic, divisibility and logic (Modules 1–3)
+Module 1 – Integers, definitions and proofs
+Overview. Students encounter integers, parity and divisibility as concrete objects. Definitions anchor their understanding of even/odd and prime numbers. The focus is on direct proofs and counterexamples. They see that variables in mathematics correspond to integer variables in Java, and they develop simple Boolean tests for number‑theoretic properties.
+Class 1: Parity and variables
+Concept: integers, even/odd definitions. A number is even if it can be written as 2·k and odd if it can be written as 2·k + 1.
+Meaning: even numbers have remainder 0 when divided by 2; odd numbers have remainder 1.
+Notation: write a∈ℤ to mean a is an integer; write a is even to mean ∃k∈ℤ such that a=2k.
+Java translation: declare int a; for an integer. The test a % 2 == 0 checks evenness; a % 2 == 1 checks oddness.
+Worked example: prove that the sum of two even numbers is even. Let a=2m and b=2n; then a+b=2(m+n) which is even. In Java, students write a method boolean isEven(int x) and a test harness that checks sample inputs.
+Computational use: parity is used for checksums and table indexing; it is the simplest example of a hash function.
+Proof method: direct proof from definitions. Students also learn how to disprove false claims with counterexamples.
+Correctness reasoning: when a Java condition checks evenness, the reasoning uses the definition of divisibility by 2.
+Historical note: Euclid’s Elements established parity and geometric proofs; this idea dates back to Greek arithmetic.
+Practice problems: prove that the product of two odd integers is odd; disprove “every odd integer is prime” by giving a counterexample. Implement boolean isOdd(int n) and test it.
+Class 2: Divisibility relations
+Concept: divisibility and transitivity. We write a|b (read “a divides b”) if ∃k∈ℤ with b=a·k. The divisibility relation is transitive – if a|b and b|c then a|c.
+Meaning: if a divides b then b is a multiple of a. Transitivity means that if b is a multiple of a and c is a multiple of b, then c is a multiple of a.
+Notation: express assumptions as equations b=a·m and c=b·n with m,n∈ℤ. The conclusion becomes c=a·k where k=mn.
+Java translation: implement boolean divides(int a, int b) that returns b % a == 0. Compose calls to check transitivity in code.
+Worked example: formal proof: let b=am and c=bn with m,n∈ℤ. Then c=(am)n = a(mn), and since mn is an integer, a|c[1].
+Computational use: divisibility supports modular arithmetic, cryptography and hashing.
+Proof method: direct proof from the definition of divisibility. Students practice writing proofs using algebraic substitutions and the closure of integers under multiplication.
+Correctness reasoning: a Java method testing a|b uses remainder arithmetic; the proof shows that this test is sound and complete.
+Historical note: the notation a|b and the systematic study of divisibility emerged in the 19th century but the underlying reasoning goes back to Euclid.
+Practice problems: prove that if a divides both b and c, then a divides any linear combination b·x + c·y. Write a Java method that tests whether three integers satisfy a given divisibility relation.
+Class 3: Primes and the Euclidean algorithm
+Concept: prime and composite numbers. Review the Euclidean algorithm for computing the greatest common divisor (gcd).
+Meaning: a prime has exactly two positive divisors (1 and itself); a composite has additional divisors. The gcd of a and b is the largest integer dividing both. The Euclidean algorithm repeatedly applies the relation gcd(a,b)=gcd(b, a mod b) until a remainder 0 is reached.
+Notation: write gcd(a,b); express the division step a = b·q + r with 0 ≤ r < b.
+Java translation: implement
+int gcd(int a, int b) {
+    while (b != 0) {
+        int r = a % b;
+        a = b;
+        b = r;
+    }
+    return a;
+}
+Worked example: compute gcd(1071,462): iterate 1071=2·462+147, then 462=3·147+21, then 147=7·21+0; the gcd is 21[2].
+Computational use: the gcd underlies key algorithms in cryptography and rational arithmetic.
+Proof method: prove correctness using the invariant that gcd(a,b)=gcd(b,r) after each division step and show that the remainders form a strictly decreasing sequence that terminates[2].
+Correctness reasoning: use a loop invariant in the Java code: at the start of each iteration, gcd(oldA,oldB) = gcd(a,b). After termination (b==0), a is the gcd.
+Historical note: Euclid (ca. 300 BC) described this algorithm. It is one of the earliest documented algorithms and proof techniques.
+Practice problems: prove that gcd(a,b) divides any linear combination ax + by. Write a Java program that lists all primes up to 100 and uses the Euclidean algorithm to compute gcds. The module assignment asks students to implement the gcd function, prove its correctness and analyze its termination.
+Module 1 lab and assignment
+Lab: implement isEven, isOdd, divides, and gcd in Java; write unit tests. Explore negative numbers and zero.
+Assignment: write direct proofs for parity and divisibility properties; use counterexamples to disprove statements. Use the Euclidean algorithm to prove the Fundamental Theorem of Arithmetic for small integers (unique prime factorization) and write Java code that verifies prime factorization for numbers ≤ 100.
+Module 2 – Remainders, modular arithmetic and prime factorization
+Overview. Building on definitions and divisibility, students study quotient–remainder results and modular arithmetic. They learn to perform arithmetic in congruence classes and apply these ideas to hashing, cyclic arrays and checksums.
+Class 1: Quotient–remainder theorem
+Concept: the quotient–remainder theorem: for any integers n and d>0, there exist unique integers q and r such that n = d·q + r and 0 ≤ r < d.
+Meaning: any integer can be divided by d to yield a quotient and remainder.
+Notation: write n mod d for the remainder; express congruence a ≡ b (mod m) when m divides a-b.
+Java translation: use int q = n / d; int r = n % d;.
+Worked example: for n=13 and d=5, q=2 and r=3. Confirm that 13 = 5·2 + 3. Implement a method that returns the quotient and remainder as a pair.
+Computational use: remainder arithmetic appears in hashing functions, parity checks, cyclic buffers and indexing.
+Proof method: existence and uniqueness follow from the division algorithm; students outline a proof by subtracting multiples of d from n until the remainder lies in [0,d).
+Correctness reasoning: connect the quotient–remainder theorem to the correctness of Java’s % operator. Show that a%b returns a value in the correct range for positive b and discuss language‑specific differences for negative operands.
+Historical note: the idea of modular arithmetic appears in Chinese remainder theorem (Sunzi, 3rd century) and was formalized by Gauss.
+Practice problems: compute n mod d for various negative and positive inputs; write a method that returns (q,r) pairs; prove uniqueness of q and r using contradiction.
+Class 2: Modular arithmetic and congruence classes
+Concept: congruence modulo m. Two integers are congruent mod m if they leave the same remainder when divided by m.
+Meaning: a ≡ b (mod m) means m divides a - b.
+Notation: write [a]_m for the equivalence class of all integers congruent to a modulo m.
+Java translation: compute a % m to represent the canonical element of the class.
+Worked example: show that 14 ≡ 2 (mod 4) and 14 ≡ 2 (mod 6). Write a Java function that groups a list of integers by their remainder mod m.
+Computational use: congruence classes partition the integers and form the basis of hashing, cyclic redundancy checks and cryptography.
+Proof method: prove basic properties: reflexive (a ≡ a (mod m)), symmetric and transitive; show that addition and multiplication respect congruence.
+Correctness reasoning: use modular reasoning to verify code that wraps indices around a circular buffer. Prove that (i + 1) mod n iterates through all positions exactly once.
+Historical note: Gauss’s Disquisitiones Arithmeticae introduced systematic notation for modular arithmetic.
+Practice problems: prove that if a ≡ b (mod m) and c ≡ d (mod m) then a + c ≡ b + d (mod m) and ac ≡ bd (mod m). Write a Java method that returns all numbers between 0 and 100 that are congruent to 3 modulo 7.
+Class 3: Primes, factorization and simple cryptography
+Concept: prime factorization, the Chinese Remainder Theorem and applications.
+Meaning: every integer greater than 1 factors uniquely into primes; congruence classes can be combined using the Chinese Remainder Theorem.
+Notation: factor n as p1^e1 · p2^e2 · … and express CRT solutions.
+Java translation: implement a method to factor integers into primes (trial division); write a method that solves x ≡ a (mod m) and x ≡ b (mod n) when m and n are coprime.
+Worked example: factor 84 as 2²·3·7; solve x ≡ 2 (mod 3) and x ≡ 3 (mod 5) to get x ≡ 8 (mod 15).
+Computational use: prime factorization underlies RSA encryption; CRT is used for Chinese calendar algorithms and multi‑modulus computations.
+Proof method: use induction on n to show unique factorization. Prove CRT correctness by constructive proof using Bézout coefficients.
+Correctness reasoning: write tests verifying that your factorization code always produces primes and that recombining remainders yields a consistent solution.
+Historical note: unique factorization was implicitly known to Euclid; CRT appears in a 3rd‑century Chinese text.
+Module 2 lab and assignment: implement modular arithmetic functions and prime factorization. Prove properties of congruence and factorization. The assignment synthesizes Modules 1–2: students implement modular arithmetic functions in Java, prove divisibility theorems, and write a short essay on how modular arithmetic is used in hashing.
+Module 3 – Logic, quantifiers and program reasoning
+Overview. Logic becomes the language for specifications and conditions. Students translate between quantified statements and Java code. They learn proof by contraposition and contradiction and apply logic to reason about program correctness.
+Class 1: Propositional logic and truth tables
+Concept: propositions, logical connectives (¬, ∧, ∨, →) and truth tables.
+Meaning: each proposition is either true or false. Compound statements combine propositions with logical operators.
+Notation: use letters (P, Q) to represent statements; write P ∧ Q, P ∨ Q, P → Q, ¬P.
+Java translation: Boolean variables, &&, ||, !, -> (if then) through conditionals.
+Worked example: build truth tables for P → Q and ¬P ∨ Q. Show that they match. Write a Java method that takes booleans p and q and returns the value of ( !p || q ).
+Computational use: programmers use logical operators in conditionals and assertions. Understanding truth tables helps avoid logic errors.
+Proof method: verifying tautologies by truth table; using truth tables to check equivalence.
+Correctness reasoning: show that if an assertion assert !(p && !q) is satisfied when p implies q, then the program cannot reach an invalid state.
+Historical note: Aristotle’s syllogisms laid foundations; modern truth tables emerged from Boolean algebra.
+Practice problems: prove De Morgan’s laws by constructing truth tables; write Java code to evaluate compound conditions and compare with manual evaluations.
+Class 2: Implication, contraposition and quantifiers
+Concept: implication (if P then Q), converse, contrapositive, biconditional; universal (∀) and existential (∃) quantifiers.
+Meaning: P → Q is false only when P is true and Q is false; its contrapositive ¬Q → ¬P is logically equivalent; the converse Q → P is generally not.
+Notation: use ∀x P(x) and ∃x P(x). Negate quantified statements by pushing negations inside.
+Java translation: if (P) { assert(Q); } expresses an implication. Universal statements correspond to loops checking every element; existential statements correspond to loops searching for a witness.
+Worked example: prove the statement “if a number is divisible by 4, then it is even” by contraposition: assume a is not even (odd), show it cannot be divisible by 4. In Java, test that a % 4 == 0 implies a % 2 == 0.
+Computational use: quantifiers guide search and iteration; existential quantifiers translate to return true upon finding a witness.
+Proof method: prove implications by direct proof, contraposition and contradiction; negate quantified statements correctly.
+Correctness reasoning: identify preconditions and postconditions in methods; state loop invariants using quantifiers (e.g., “∀i<k, arr[i] ≤ currentMax”).
+Historical note: formal quantifiers were introduced by Frege and refined by Hilbert in the late 19th century.
+Practice problems: write the negation of “for all integers x, if x² is even then x is even”. Prove that the contrapositive of this statement is equivalent. Write a Java method to test whether every element of an array satisfies a predicate.
+Class 3: Logical reasoning in programs
+Concept: inference rules (modus ponens, modus tollens), predicates and assertions in programs.
+Meaning: logical reasoning determines whether conclusions follow from premises. Assertions are run‑time checks of logical conditions.
+Notation: inference rules are written as P, P→Q ⊢ Q; predicates denote Boolean‑valued properties.
+Java translation: use assert statements to encode expected invariants; custom exceptions to signal assertion failures.
+Worked example: write an assert that ensures an array is sorted before calling binary search; then reason using modus ponens that if the assertion passes and the invariant holds, the result is valid.
+Computational use: assertions aid debugging and documentation; they encode preconditions and postconditions.
+Proof method: proof by contradiction and logical inference; prove that no execution path violates the assertions.
+Correctness reasoning: annotate methods with @requires and @ensures comments; show that program code turns preconditions into postconditions using logic.
+Historical note: Hoare logic (1969) formalized triples {P} C {Q}; this class introduces its spirit informally.
+Module 3 lab and assignment: write a small library of logical tests in Java, implement universal and existential checks over arrays, and use assertions to enforce preconditions. Prove logical equivalences and negate quantified statements. The assignment synthesizes Modules 1–3 by having students specify, code and prove correctness of a method that tests whether an array contains a prime number.
+Section II – Sets, functions and recursion (Modules 4–6)
+Module 4 – Sets, set operations and data collections
+Overview. Students transition from arithmetic to formal structures. Sets become collections; operations on sets map directly to operations on Java collections. Proofs about sets use element‑chasing and double inclusion. The lab emphasizes implementing set operations and exploring state spaces.
+Class 1: Sets and membership
+Concept: sets are collections of distinct elements. Definitions: membership (x∈A), empty set, subset (A⊆B), equality (A=B).
+Meaning: a subset contains only elements that also belong to another set. Equality of sets requires mutual inclusion.
+Notation: curly braces {}, membership symbol ∈, subset ⊆.
+Java translation: represent sets as Set<T>; membership via set.contains(x).
+Worked example: implement a method boolean isSubset(Set<A>, Set<B>) that returns true if every element of A is in B. Prove the fact that A ∩ B ⊆ A by taking an arbitrary x∈A∩B and showing x∈A. Translate this to code that filters the intersection of two sets, then check that each element came from A.
+Computational use: sets model collections of permissible states, user permissions and search spaces.
+Proof method: element‑chasing; showing x ∈ A and x ∈ B implies x ∈ A.
+Correctness reasoning: verify that your isSubset method correctly implements double inclusion.
+Historical note: Cantor formalized set theory in the late 19th century.
+Practice problems: prove that if A⊆B and B⊆A then A=B. Write Java methods to compute unions and intersections and verify that (A∩B)⊆A holds in code.
+Class 2: Set operations and distributive laws
+Concept: union (A ∪ B), intersection (A ∩ B), difference (A \ B), complement and Cartesian product.
+Meaning: the union contains all elements in either set; the intersection contains only elements common to both sets[3].
+Notation: A ∪ B, A ∩ B, A × B.
+Java translation: implement set union with new HashSet<>(A) followed by addAll(B). Intersection uses retainAll(). Cartesian products correspond to nested loops generating pairs.
+Worked example: prove the distributive law A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C) by showing inclusion in both directions. Then write a Java method that verifies the identity by constructing each side for specific sets.
+Computational use: set operations underlie database queries, permission systems and state transitions.
+Proof method: double inclusion; case analysis.
+Correctness reasoning: ensure Java implementations handle duplicates appropriately and return new sets rather than mutating inputs.
+Historical note: set algebra parallels Boolean algebra; the distributive laws were formalized by Boole.
+Practice problems: prove that A\(B∪C) = (A\B) ∩ (A\C); write code to compute Cartesian products and discuss runtime.
+Class 3: Power sets, indexed families and partitions
+Concept: the power set P(A) is the set of all subsets of A; an indexed family of sets generalizes the notion of a collection of sets; a partition of A is a family of disjoint subsets whose union is A.
+Meaning: power sets represent all possible selections; partitions represent equivalence classes.
+Notation: P(A); {A_i | i∈I} for an indexed family; partitions satisfy A_i ∩ A_j = ∅ when i≠j and ⋃_{i∈I} A_i = A.
+Java translation: generate the power set using recursion or bit masks; represent indexed families as Map<Index, Set<?>>; represent partitions as List<Set<?>>.
+Worked example: build the power set of {1,2,3}; implement a method that partitions a set of integers into even and odd subsets.
+Computational use: power sets appear in subset enumeration and backtracking algorithms; partitions model equivalence classes and connected components.
+Proof method: use induction to prove that a set with n elements has 2^n subsets. Show that equivalence classes form a partition.
+Correctness reasoning: verify that your power‑set generator returns all subsets without duplicates.
+Historical note: Cantor used power sets to compare sizes of infinite sets; partitions appear in group theory and combinatorics.
+Module 4 lab and assignment: write Java methods to perform set operations, generate power sets and create partitions. Prove set identities and the size of power sets. The assignment synthesizes Modules 3–4: students implement a state‑space search using set operations and prove that the search explores each state exactly once.
+Module 5 – Functions, relations and mappings
+Overview. Functions and relations formalize data transformations and connections. Students learn to identify domains and codomains, check properties like injectivity and surjectivity, and translate these ideas into Java methods. They also study relations (reflexive, symmetric, transitive) and partial orders.
+Class 1: Functions and domains
+Concept: a function is a rule that assigns each input exactly one output[4]. It has a domain (inputs), codomain (allowable outputs) and range (actual outputs).
+Meaning: the key property of a function is that each input has a single output.
+Notation: write f : X → Y to denote a function f with domain X and codomain Y[4].
+Java translation: Java methods are functions. For example, int f(int x) { return x*x + 3; } maps integers to integers. The parameter list defines the domain, and the return type defines the codomain.
+Worked example: implement f(n) = 3n; discuss domain ℤ and codomain ℤ; show that its range is multiples of 3.
+Computational use: functions model data transformations, hashing, encryption and mapping from keys to values.
+Proof method: to show a rule is a function, demonstrate that every input is assigned exactly one output; to prove equality of functions, show they give the same output for every input.
+Correctness reasoning: ensure Java methods handle all valid inputs; document preconditions.
+Historical note: the modern concept of a function as a set of ordered pairs with unique first components emerged in the 19th century.
+Practice problems: determine the domain, codomain and range of various Java methods; decide whether given rules define functions. Write a method that takes a list of pairs and checks whether it defines a function.
+Class 2: Relations and properties
+Concept: a relation on a set A is a subset of A×A. It can have properties: reflexive (aRa for all a), symmetric (aRb implies bRa), transitive (aRb and bRc implies aRc), antisymmetric (aRb and bRa implies a=b). An equivalence relation is reflexive, symmetric and transitive; a partial order is reflexive, antisymmetric and transitive.
+Meaning: relations describe connections between elements.
+Notation: write (a,b)∈R to mean a is related to b; or write aRb.
+Java translation: implement a relation as boolean relates(A a, A b) or as a Set<Pair<A,B>>.
+Worked example: define a relation R on the set {1,2,3} by aRb iff a ≤ b. Show that R is reflexive, transitive and antisymmetric (a partial order). Write Java code that checks these properties by iterating over all pairs.
+Computational use: relations model graphs (edges between vertices), parent–child links in trees, and dependencies in build systems.
+Proof method: show each property by chasing elements; find counterexamples when a property fails.
+Correctness reasoning: verify that code checking reflexivity (!relation.contains(a,a) implies failure) matches the mathematical definition.
+Historical note: relations were formalized by Peano and Schröder; partial orders underpin lattice theory.
+Practice problems: determine whether given relations are equivalence relations or partial orders; partition the set into equivalence classes. Implement a method to compute the transitive closure of a relation.
+Class 3: Injective, surjective and bijective functions
+Concept: a function is surjective (onto) if every element of the codomain is an image of some element of the domain[5]; it is injective (one‑to‑one) if no two distinct inputs map to the same output[6]; a bijection is both.
+Meaning: surjective functions cover the entire codomain; injective functions have unique images; bijections establish a perfect pairing between domain and codomain.
+Notation: use arrow diagrams and two‑line notation to illustrate functions[7].
+Java translation: check surjectivity by ensuring that each element of the codomain appears as a return value; check injectivity by ensuring no output is repeated.
+Worked example: consider f: ℤ → ℤ defined by f(n)=3n. It is injective but not surjective (odd numbers are not in its range)[7]. Show this in Java by mapping a range of inputs and collecting outputs.
+Computational use: injections are invertible on their images; surjections ensure coverage; bijections correspond to permutations and key–value lookups.
+Proof method: to prove injectivity, assume f(x1)=f(x2) and show x1=x2; to prove surjectivity, for each y in the codomain find an x in the domain such that f(x)=y.
+Correctness reasoning: when implementing hash functions or compression schemes, checking injectivity prevents collisions; verifying surjectivity ensures that decoding always finds a preimage.
+Historical note: terms like injection, surjection and bijection were coined in the early 20th century; they became central in set theory.
+Module 5 lab and assignment: implement Java methods to check whether a given function (represented as a Map) is injective, surjective or bijective. Prove that the composition of injective functions is injective. Write code to compose two functions and compute inverses when possible. The assignment synthesizes Modules 4–5 by asking students to model a small social network as a relation, compute its properties, and implement surjective and injective mapping functions.
+Module 6 – Induction, recursion and recursive definitions
+Overview. Students learn the principle of mathematical induction and its strong form. They see how induction mirrors recursion in code. They also study recursively defined sequences and sets and prove properties of recursive programs.
+Class 1: Principle of mathematical induction
+Concept: the principle of mathematical induction states that to prove a statement P(n) for all natural numbers, it suffices to prove a base case and an inductive step[8].
+Meaning: induction is like falling dominos: push the first domino (base case) and show that if one domino falls then the next falls (inductive step)[9].
+Notation: state P(1); assume P(k) for some k≥1; then prove P(k+1).
+Java translation: induction corresponds to loops or recursion: the base case corresponds to the initial value; the inductive step corresponds to iteration or recursive call.
+Worked example: prove the formula for the sum of the first n natural numbers: 1+2+…+n = n(n+1)/2. Direct proof: write two copies of the sum in opposite order and pair terms to get 2·T(n) = n(n+1)[10]; or prove by induction: show it holds for n=1 and that assuming it holds for n=k implies it holds for n=k+1. Implement a Java method that computes the sum iteratively and recursively.
+Computational use: induction proves correctness and termination of loops and recursion.
+Proof method: induction and strong induction.
+Correctness reasoning: show that recursive methods satisfy base case and that each recursive call decreases the argument, ensuring termination.
+Historical note: forms of induction appear in ancient Greek proofs; formal articulation came from Fermat and Pascal and was systematized by Peano.
+Practice problems: prove by induction that n^3 - n is divisible by 3; show by induction that 2^n > n for all n ≥ 1; implement code computing factorial and prove its correctness using induction on n.
+Class 2: Strong induction and recursive definitions
+Concept: strong induction assumes that a statement holds for all values up to k and uses this to prove it for k+1. Recursive definitions define objects in terms of smaller instances of themselves.
+Meaning: sometimes the inductive step requires hypotheses about multiple preceding cases.
+Notation: to prove P(n) for n ≥ b, show P(b), and assume P(b),… ,P(k) to prove P(k+1).
+Java translation: implement recurrence relations and recursive functions in code.
+Worked example: prove that every integer greater than 1 can be factored into primes using strong induction: to factor n, find a non‑trivial divisor d; by induction hypothesis, both d and n/d have prime factorizations, which combine to factor n. Write a recursive Java method for prime factorization.
+Computational use: strong induction is used to prove correctness of divide‑and‑conquer algorithms and recurrence relations.
+Proof method: strong induction; structural induction on recursively defined structures.
+Correctness reasoning: show that recursive functions eventually hit the base case and that each recursive call reduces the input.
+Historical note: strong induction dates back to Euclid’s proof of the infinitude of primes; it was explicitly named in modern logic.
+Practice problems: prove the Euclidean algorithm terminates using strong induction; implement the Fibonacci sequence recursively and iteratively and prove that the recursive version yields the same sequence by induction.
+Class 3: Recursive sets and structural induction
+Concept: recursively defined sets (e.g., arithmetic expressions, binary trees) and structural induction.
+Meaning: define the base elements and the rules for generating larger elements.
+Notation: specify E ::= n | (E + E) | (E * E) for arithmetic expressions; define a binary tree as either empty or a node with left and right subtrees.
+Java translation: represent a binary tree as a class Node with fields value, left and right; represent expressions as objects with subclasses for numbers and operations.
+Worked example: prove that the number of leaves in a full binary tree with I internal nodes is I+1[11] using structural induction: a single node (no children) has one leaf (itself). For a larger tree, removing two leaf children from an internal node reduces both internal nodes and leaves by 1, preserving L = I+1[11]. Implement methods to compute the size and number of leaves recursively in Java.
+Computational use: structural induction is the foundation for reasoning about recursive data structures and their algorithms.
+Proof method: structural induction parallels recursion: base cases correspond to simplest structures; inductive steps correspond to constructors.
+Correctness reasoning: prove that recursive functions on trees (such as counting nodes or evaluating expressions) are correct by structural induction on the data structure.
+Historical note: structural induction emerged from formal language theory and recursion theory in the 20th century.
+Module 6 lab and assignment: write Java programs implementing recursive definitions (factorial, Fibonacci, binary tree traversal). Use induction to prove correctness and termination. The assignment synthesizes Modules 5–6 by having students implement an arithmetic expression evaluator and prove by structural induction that it computes the correct value.
+Section III – Counting, algorithms and data structures (Modules 7–9)
+Module 7 – Counting, growth and finite reasoning
+Overview. Counting helps students reason about finite structures and algorithmic complexity. They learn the sum and product rules, permutations, combinations, binomial coefficients and the pigeonhole principle. They connect nested loops to counting principles and relate counting arguments to algorithm growth.
+Class 1: Sum and product principles
+Concept: the rule of product (multiplication principle) states that if there are a ways to do one thing and b ways to do another, then there are a·b ways to do both[12]. The rule of sum (addition principle) states that if a task can be done in a ways or in b ways (with no overlap), there are a+b ways to do it.
+Meaning: count choices by decomposing complex processes into sequential or disjoint stages.
+Notation: for disjoint sets A and B, |A ∪ B| = |A| + |B|; for sets X and Y, |X × Y| = |X| · |Y|.
+Java translation: nested loops correspond to the product rule; conditional branches correspond to the sum rule. For example, a loop over i (0..m−1) inside a loop over j (0..n−1) generates m·n pairs.
+Worked example: count the number of 4‑digit PINs with digits 0–9 (10 choices) — by product rule, there are 10⁴. Write code that iterates through all 4‑digit strings.
+Computational use: counting principles help predict the size of search spaces and the complexity of brute‑force algorithms.
+Proof method: combinatorial reasoning.
+Correctness reasoning: ensure that nested loops indeed generate every combination exactly once; relate the number of iterations to the product of loop bounds.
+Historical note: counting methods date back to Indian mathematics and were formalized by combinatorialists such as Pascal.
+Practice problems: compute the number of ways to choose a 5‑digit string composed of letters and digits; implement nested loops to generate all possible license plates with 3 letters followed by 3 digits.
+Class 2: Binomial coefficients, permutations and combinations
+Concept: permutations count ordered arrangements of n distinct objects; combinations count unordered selections; binomial coefficients count combinations and satisfy identities such as Pascal’s rule.
+Meaning: n! counts the number of permutations of n distinct objects; C(n,k) = n! / (k!(n–k)!) counts ways to choose k objects; the binomial theorem expands (x+y)^n using binomial coefficients.
+Notation: P(n,k) and C(n,k), n!, –.
+Java translation: implement factorial iteratively and recursively; write methods computing C(n,k) using loops and dynamic programming; implement generation of combinations.
+Worked example: compute C(5,2)=10; write Java code using a nested loop to list all 2‑element subsets of {1,2,3,4,5}.
+Computational use: permutations and combinations model scheduling, key spaces and arrangement algorithms; dynamic programming for binomial coefficients illustrates re‑use of computations.
+Proof method: combinatorial proofs; induction on n to derive Pascal’s identity.
+Correctness reasoning: verify that code for computing binomial coefficients correctly handles boundary cases and avoids overflow; relate recursion to dynamic programming for efficiency.
+Historical note: factorial notation and combinatorial numbers originate from Hindu mathematics; Pascal’s triangle popularized them in Europe.
+Practice problems: prove Pascal’s identity C(n,k)=C(n−1,k−1)+C(n−1,k) by counting subsets containing a fixed element; write a Java function computing permutations of a string and analyze its time complexity.
+Class 3: Pigeonhole principle and simple probability
+Concept: the pigeonhole principle: if n items are placed into m containers and n > m, at least one container holds more than one item[13].
+Meaning: there is no injective mapping from a larger domain into a smaller codomain[13].
+Notation: express as n > m ⇒ ∃ a container with ≥ 2 items.
+Java translation: implement a simple hash table with m buckets and insert n keys; if n > m, collisions must occur.
+Worked example: with three socks (pigeons) and two colors (holes), at least two socks must be the same color[13]. Write code that, given a list of integers and a small set of buckets, demonstrates collisions.
+Computational use: hashing, load balancing, birthday paradox, error detection.
+Proof method: direct counting argument.
+Correctness reasoning: apply the pigeonhole principle to prove that any hash function with fewer buckets than keys must produce collisions; use it to reason about the average case of hashing.
+Historical note: although versions appeared in 17th‑century works, Dirichlet popularized the principle in 1834[14].
+Module 7 lab and assignment: implement combinatorial functions and enumerators in Java. Use loops to generate permutations and combinations. Write a program that inserts keys into a small hash table and empirically demonstrates the pigeonhole principle. The assignment synthesizes Modules 6–7 by asking students to use strong induction to prove combinatorial identities and implement a backtracking solution for generating combinations.
+Module 8 – Algorithms, loop invariants and correctness
+Overview. This module turns the proof techniques into algorithmic reasoning. Students learn how to specify and verify iterative algorithms using loop invariants and variant functions. They practice proving correctness and termination of programs such as searching and sorting.
+Class 1: Specifications, preconditions and postconditions
+Concept: a specification of a method includes a precondition (what must hold before execution) and a postcondition (what will hold after execution). Partial correctness means that if the precondition holds and the algorithm terminates, then the postcondition holds. Total correctness adds termination.
+Meaning: specifications describe what code should do for all inputs.
+Notation: write requires P and ensures Q in comments or use Hoare triples {P} C {Q}.
+Java translation: encode preconditions via assert or explicit checks; postconditions via returned values and invariants.
+Worked example: specify a method int max(int[] arr) with precondition “arr has length ≥ 1” and postcondition “returns the maximum element of arr”. Prove partial correctness using a loop invariant: before each iteration, currentMax is the maximum of the elements examined so far.
+Computational use: specifications help debug and verify programs; they are used in design by contract.
+Proof method: use invariants to show partial correctness; prove termination separately.
+Correctness reasoning: the invariant holds initially (currentMax = arr[0]), is preserved by each iteration, and at the end the loop has examined all elements, so currentMax is the maximum.
+Historical note: Hoare introduced program correctness logic; the design‑by‑contract paradigm extends it.
+Practice problems: write specifications for boolean contains(int[] arr, int x) and int countOccurrences(int[] arr, int x). Derive appropriate loop invariants.
+Class 2: Loop invariants in sorting and searching
+Concept: a loop invariant is a condition that holds before and after each iteration of a loop[15]. A good loop invariant satisfies initialization, maintenance and termination[16].
+Meaning: invariants capture the progress of a loop and allow us to prove correctness.
+Notation: define invariants as predicates over loop variables. For example, in selection sort, “the first i elements are sorted and contain the smallest i elements of the array”[17].
+Java translation: annotate loops with comments stating the invariant; optionally use assert statements to check it at run time.
+Worked example: analyze the iterative binary search. Define the invariant: the target key k lies in the subarray a[l..r] and a is sorted[18]. Prove the three steps: (1) Establishment: at the start, l=0 and r=n-1, so k∈a[l..r][19]; (2) Preservation: the update rules preserve the invariant[20]; (3) Postcondition: when the loop terminates (l ≥ r), the invariant implies that k is at position l[21]. Discuss termination using the decreasing range r - l[22].
+Computational use: invariants explain why algorithms work and help avoid off‑by‑one errors.
+Proof method: loop invariant proofs mirror induction: base case, inductive step, and final step.
+Correctness reasoning: confirm that invariants precisely capture the algorithm’s goal; check that terminating conditions guarantee the postcondition.
+Historical note: loop invariants reflect ideas from Hoare logic and Dijkstra’s weakest precondition reasoning.
+Practice problems: derive invariants for linear search (k not found implies it is not in the array), selection sort, insertion sort and bubble sort. Implement these algorithms in Java and annotate the invariants. Use assertions to catch violations.
+Class 3: Termination and variant functions
+Concept: variant functions (also called decrementing functions) ensure termination by associating a non‑negative integer with each loop iteration and showing it decreases. Total correctness requires proving both partial correctness and termination.
+Meaning: if a loop is governed by a variable that decreases each iteration and cannot decrease indefinitely, the loop must terminate.
+Notation: define a variant V(i) such that V(i) ≥ 0 and V(i+1) < V(i).
+Java translation: identify loop variables such as r - l in binary search or n - i in sorting as variants.
+Worked example: revisit the Euclidean algorithm; the variant is the remainder b, which decreases at each step and is always non‑negative[2]. For insertion sort, the variant can be the number of unsorted elements.
+Computational use: termination arguments are crucial for avoiding infinite loops and proving total correctness.
+Proof method: combine invariants with variant functions: prove that the invariant is maintained and that the variant decreases until the loop guard fails.
+Correctness reasoning: show that for binary search the range size r - l decreases until l > r, guaranteeing termination[22].
+Historical note: termination proofs appear implicitly in Euclid’s algorithm; explicit variant functions were popularized by Floyd and Dijkstra.
+Module 8 lab and assignment: implement searching and sorting algorithms in Java, annotate them with invariants and variants, and write formal correctness proofs. The assignment synthesizes Modules 7–8 by asking students to analyze nested loops’ runtimes using counting principles and to prove termination and correctness of binary search and selection sort.
+Module 9 – Trees, recursion, complexity and formal verification
+Overview. The final module brings all the pieces together. Students study tree data structures, prove structural properties, analyze complexity and reflect on the role of proof in computer science. They also see a glimpse of formal verification beyond simple proofs.
+Class 1: Binary trees and recursion
+Concept: a binary tree is either empty or a node with a value and two children. A full binary tree has either zero or two children at every internal node.
+Meaning: binary trees model hierarchical data (e.g., expression trees, file systems).
+Notation: define Tree ::= null | Node(value, left, right).
+Java translation: implement a TreeNode class with int value; TreeNode left; TreeNode right;.
+Worked example: write recursive methods size(TreeNode root) and height(TreeNode root). Prove by structural induction that size(root) returns the number of nodes in the tree.
+Computational use: recursive traversal (preorder, inorder, postorder) underlies expression evaluation, search trees and many algorithms.
+Proof method: structural induction on the tree.
+Correctness reasoning: base case: an empty tree has size 0; inductive step: size(node)=1 + size(node.left) + size(node.right).
+Historical note: tree structures appear in Cayley’s work in the 19th century and became central in data structures.
+Practice problems: implement inorder traversal and prove that it visits nodes in sorted order in a binary search tree (BST). Write a method to count leaves and verify that the number of leaves is one more than the number of internal nodes in a full binary tree[11].
+Class 2: Properties of full and balanced binary trees
+Concept: in a non‑empty full binary tree T, the number of leaves L equals the number of internal nodes I plus one (L=I+1)[11]; the total number of nodes is 2I+1[23]. Height and balanced trees are defined.
+Meaning: these relationships constrain tree shapes and drive complexity analyses.
+Notation: use L for leaves, I for internal nodes, N for total nodes.
+Java translation: write methods to compute I, L and check whether a tree is full or balanced.
+Worked example: prove the full binary tree theorem by structural induction[11]. Show that for a balanced binary search tree of height h, the number of nodes is at most 2^{h+1}-1. Implement a balanced BST insertion in Java and analyze its height.
+Computational use: understanding tree properties helps analyze algorithm complexity (O(log n) vs O(n)).
+Proof method: structural induction and recurrence relations.
+Correctness reasoning: ensure that isFull and isBalanced methods correctly classify trees; prove their correctness by induction on the height.
+Historical note: balanced trees (AVL, red–black) were invented in the 1960s; their proofs of height bounds rely on induction.
+Practice problems: prove that a complete binary tree of height h has between 2^h and 2^{h+1}-1 nodes. Write code that constructs a full binary tree of given height and verify the node counts.
+Class 3: Applications, complexity and formal verification
+Concept: binary search trees (BST), tree traversal algorithms, heaps and priority queues. Correctness proofs for insertion, deletion and search; introduction to complexity classes and Big‑O notation. Brief overview of formal verification and automated proof tools.
+Meaning: data structures must satisfy invariants (BST property: left subtree ≤ root ≤ right subtree). Complexity analysis predicts performance; formal verification scales proof to larger software.
+Notation: Big‑O (O(n), O(log n)), invariants like “for every node, all keys in the left subtree are smaller than the node’s key”.
+Java translation: implement BST insertion and search; implement a heap and its operations; use recursion.
+Worked example: implement insertBST(TreeNode root, int key) and prove by structural induction that the BST property holds after insertion. Analyze the worst‑case height of a BST. Discuss how balancing improves complexity.
+Computational use: balanced search trees and heaps enable efficient search, insert and delete operations. Formal verification tools like JML or Dafny can automatically check assertions against implementations.
+Proof method: combine invariants, induction and loop invariants; sketch the idea of inductive proof of program correctness using a theorem prover.
+Correctness reasoning: annotate BST methods with invariants; use induction to prove that operations preserve the tree’s order. Discuss how to reason about complexity by counting operations.
+Historical note: Knuth formalized Big‑O notation; Hoare logic and later tools (e.g., Coq, Isabelle) provide machine‑checked proofs.
+Module 9 lab and capstone assignment: implement a BST or heap, write insertion and deletion methods, and prove correctness using structural induction and loop invariants. Use counting arguments to determine complexity. The final assignment synthesizes Modules 7–9: students choose a data structure (e.g., balanced BST, heap or priority queue), specify it, implement it in Java, and produce a complete proof of correctness and complexity. They also write a brief reflection on the role of formal verification in software engineering.
+Major assessments and course rhythm
+Module labs (9 total): weekly, coding‑focused, due at the end of each module. Labs reinforce new concepts through small programs and tests. They are graded on correctness and documentation.
+Module assignments (9 total): each module ends with an assignment that combines mathematical proofs with coding tasks. Assignments for Modules 2, 4, 6 and 8 are integrative, summarizing the previous two modules.
+Capstone project: in Module 9, students implement a non‑trivial data structure or algorithm, specify it formally, and write a detailed correctness proof.
+Midterm and final exams: the midterm covers Sections I–II; the final exam covers Sections II–III and emphasizes proof strategy selection and application to code.
+Conclusion
+This 30‑class course uses a proof‑driven, code‑connected approach to discrete mathematics. Every definition, theorem and proof is grounded in a concrete Java representation. Students learn to read and write mathematical statements, translate them into programs, and prove that their code does what it is supposed to do. Historical notes highlight the development of ideas from Euclid to modern verification. By the end of the course, students not only know discrete mathematics but also understand why it matters for computer science and how to apply it to writing correct and efficient software.
+
+[1] If a | b and b | c, then a|c. | ChiliMath
+https://www.chilimath.com/lessons/basic-math-proofs/if-a-divides-b-and-b-divides-c-then-a-divides-c/
+[2] Euclidean algorithm - Wikipedia
+https://en.wikipedia.org/wiki/Euclidean_algorithm
+[3] What is the meaning of intersection of two sets? - Answers
+https://math.answers.com/math-and-arithmetic/What_is_the_meaning_of_intersection_of_two_sets
+[4] [5] [6] [7] Functions
+https://discrete.openmathbooks.org/dmoi2/sec_intro-functions.html
+[8] [9] Principle of Mathematical Induction - GeeksforGeeks
+https://www.geeksforgeeks.org/maths/principle-of-mathematical-induction/
+[10] Proof that T(n)=n(n+1)/2
+https://r-knott.surrey.ac.uk/runsums/triNbproof.html
+[11] [23] Full Binary Tree - GeeksforGeeks
+https://www.geeksforgeeks.org/dsa/full-binary-tree/
+[12] Rule of product - Wikipedia
+https://en.wikipedia.org/wiki/Rule_of_product
+[13] [14] Pigeonhole principle - Wikipedia
+https://en.wikipedia.org/wiki/Pigeonhole_principle
+[15] [16] [17] Loop Invariant Condition with Examples - GeeksforGeeks
+https://www.geeksforgeeks.org/dsa/loop-invariant-condition-examples-sorting-algorithms/
+[18] [19] [20] [21] [22] www.cs.cornell.edu
+https://www.cs.cornell.edu/courses/cs2112/2015fa/lectures/lec_loopinv/

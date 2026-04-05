@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4 Assignment — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="assignment-04">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-4-assignment-sets-set-operations-and-data-collections">Module 4 Assignment: Sets, Set Operations and Data Collections</h1>
+
+<p><strong>Integrative Assignment — Modules 3–4</strong></p>
+
+<p>This assignment synthesizes logic and quantifiers (Module 3) with set theory (Module 4). You will implement a state-space search using set operations, prove set identities, and demonstrate that search explores each state exactly once.</p>
+
+<p><strong>Due:</strong> End of Module 4</p>
+
+<hr>
+
+<section class="slide" id="part-a-mathematical-proofs">
+<h2>Part A: Mathematical Proofs</h2>
+
+<h3 id="problem-a1-set-identity-proofs-20-points">Problem A1: Set Identity Proofs (20 points)</h3>
+
+<p>Prove each identity using element-chasing (double inclusion):</p>
+
+<p>(a) $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$ (distributive law)</p>
+
+<p>(b) $\overline{A \cap B} = \overline{A} \cup \overline{B}$ (De Morgan's law for sets)</p>
+
+<p>(c) $A \setminus (B \cap C) = (A \setminus B) \cup (A \setminus C)$</p>
+
+<h3 id="problem-a2-power-set-properties-15-points">Problem A2: Power Set Properties (15 points)</h3>
+
+<p>(a) Prove by induction: $|\mathcal{P}(A)| = 2^{|A|}$ for finite sets.</p>
+
+<p>(b) Prove: $\mathcal{P}(A \cap B) = \mathcal{P}(A) \cap \mathcal{P}(B)$.</p>
+
+<p>(c) Prove or disprove: $\mathcal{P}(A \cup B) = \mathcal{P}(A) \cup \mathcal{P}(B)$.</p>
+
+<h3 id="problem-a3-partitions-and-equivalence-15-points">Problem A3: Partitions and Equivalence (15 points)</h3>
+
+<p>(a) Prove that the congruence classes $[0]_m, [1]_m, \ldots, [m-1]_m$ form a partition of $\mathbb{Z}$.</p>
+
+<p>(b) Let $f: A \rightarrow B$ be a function. Define $A_b = \{a \in A \mid f(a) = b\}$. Prove that the collection $\{A_b \mid b \in \text{range}(f)\}$ is a partition of $A$.</p>
+
+<p>(c) Explain the connection between (a) and (b): identify the function $f$ whose induced partition matches the congruence classes.</p>
+
+<h3 id="problem-a4-logic-meets-sets-15-points">Problem A4: Logic Meets Sets (15 points)</h3>
+
+<p>(a) Show that De Morgan's laws for sets follow logically from De Morgan's laws for propositional logic (Module 3). Specifically, translate the set proof into a logical argument using membership predicates.</p>
+
+<p>(b) Express the distributive law $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$ as a logical tautology. Verify it using a truth table.</p>
+
+<p>(c) State the negation of: "$\forall x \in A$, $x \in B \cup C$." Interpret this in terms of sets.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-b-java-programming">
+<h2>Part B: Java Programming</h2>
+
+<h3 id="problem-b1-state-space-search-with-sets-30-points">Problem B1: State-Space Search with Sets (30 points)</h3>
+
+<p>Implement a breadth-first state-space search using set operations.</p>
+
+<p><strong>Problem:</strong> Given a set of $n$ binary switches (each ON=1 or OFF=0), the state space is $\{0,1\}^n$. From state $s$, you can reach a new state by toggling exactly one switch. Starting from state $(0, 0, \ldots, 0)$, explore all reachable states.</p>
+
+<pre><code class="language-java">/**
+ * @requires n &gt;= 1
+ * @ensures returns a map from step count k to the set of states
+ *          first reachable at step k (BFS layers)
+ */
+public static Map&lt;Integer, Set&lt;List&lt;Integer&gt;&gt;&gt; bfsLayers(int n)</code></pre>
+
+<p>Requirements:</p>
+<ol>
+<li>Represent states as <code>List&lt;Integer&gt;</code> (e.g., <code>[0, 1, 0]</code>).</li>
+<li>Use set operations: the set of states at layer $k+1$ is <code>neighbors(layer_k) \ visited</code>.</li>
+<li>Verify that the total number of states discovered equals $2^n$ (for small $n$: 2, 3, 4).</li>
+<li>For $n = 3$, verify:</li>
+</ol>
+<ul>
+<li>Layer 0: $\{(0,0,0)\}$ — 1 state</li>
+<li>Layer 1: 3 states (toggle one switch)</li>
+<li>Layer 2: 3 states (toggle two different switches)</li>
+<li>Layer 3: 1 state $\{(1,1,1)\}$</li>
+</ul>
+<ol>
+<li><strong>Prove (in comments):</strong> The search visits each state exactly once. Use set difference to argue that <code>visited</code> grows monotonically and no state appears in two layers.</li>
+</ol>
+
+<h3 id="problem-b2-divisor-set-operations-20-points">Problem B2: Divisor Set Operations (20 points)</h3>
+
+<p>Using the divisor set from Module 1 and set operations from Module 4:</p>
+
+<pre><code class="language-java">public static Set&lt;Integer&gt; divisorSet(int n)</code></pre>
+
+<ol>
+<li>Implement and verify: $D(\gcd(a,b)) = D(a) \cap D(b)$ for $1 \leq a, b \leq 50$.</li>
+<li>Implement and verify: $D(\text{lcm}(a,b)) = D(a) \cup D(b)$ for $1 \leq a, b \leq 50$.</li>
+<li>Explain why these identities hold (connect to the definitions of GCD and LCM).</li>
+<li>Use these identities to compute GCD and LCM without Euclid's algorithm (by set intersection/union of divisors and taking the max).</li>
+</ol>
+
+<h3 id="problem-b3-set-based-predicate-evaluation-15-points">Problem B3: Set-Based Predicate Evaluation (15 points)</h3>
+
+<p>Connect Module 3's quantifiers to Module 4's sets:</p>
+
+<ol>
+<li>Implement: <code>&lt;T&gt; Set&lt;T&gt; filter(Set&lt;T&gt; s, Predicate&lt;T&gt; p)</code> = $\{x \in S \mid P(x)\}$.</li>
+<li>Show that <code>forAll(s, p)</code> (Module 3) equals <code>filter(s, p).equals(s)</code>.</li>
+<li>Show that <code>exists(s, p)</code> equals <code>!filter(s, p).isEmpty()</code>.</li>
+<li>Use <code>filter</code> to build:</li>
+</ol>
+<ul>
+<li>The set of primes in $\{1, \ldots, 100\}$</li>
+<li>The set of perfect squares in $\{1, \ldots, 100\}$</li>
+<li>Their intersection (primes that are perfect squares — should be empty for $n > 1$)</li>
+</ul>
+
+<h3 id="problem-b4-power-set-application-truth-table-enumeration-15-points">Problem B4: Power Set Application — Truth Table Enumeration (15 points)</h3>
+
+<p>Show that truth table generation (Module 3, Class 1) is equivalent to power set generation:</p>
+
+<ol>
+<li>Generate $\mathcal{P}(\{p, q, r\})$ — each subset represents the variables set to TRUE.</li>
+<li>For each subset, evaluate a formula (e.g., $(p \rightarrow q) \wedge (q \rightarrow r) \rightarrow (p \rightarrow r)$).</li>
+<li>Show this produces the same truth table as Module 3's <code>allCombinations</code> approach.</li>
+<li>Explain the bijection: a subset $S \subseteq \{p, q, r\}$ corresponds to the row where exactly the variables in $S$ are true.</li>
+</ol>
+
+<hr>
+
+</section>
+<section class="slide" id="rubric">
+<h2>Rubric</h2>
+
+<table>
+<thead><tr>
+<th>Component</th>
+<th>Points</th>
+<th>Criteria</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>A1</strong> Set identity proofs</td>
+<td>20</td>
+<td>Correct double inclusion, all three identities</td>
+</tr>
+<tr>
+<td><strong>A2</strong> Power set properties</td>
+<td>15</td>
+<td>Induction, correct proof/disproof</td>
+</tr>
+<tr>
+<td><strong>A3</strong> Partitions</td>
+<td>15</td>
+<td>Both proofs, connection to congruence</td>
+</tr>
+<tr>
+<td><strong>A4</strong> Logic meets sets</td>
+<td>15</td>
+<td>Translation between logic and sets, truth table</td>
+</tr>
+<tr>
+<td><strong>B1</strong> State-space search</td>
+<td>30</td>
+<td>Correct BFS, layer counts, uniqueness proof</td>
+</tr>
+<tr>
+<td><strong>B2</strong> Divisor sets</td>
+<td>20</td>
+<td>Both identities verified, explanation</td>
+</tr>
+<tr>
+<td><strong>B3</strong> Predicate evaluation</td>
+<td>15</td>
+<td>filter + quantifier equivalences + examples</td>
+</tr>
+<tr>
+<td><strong>B4</strong> Truth table connection</td>
+<td>15</td>
+<td>Power set / truth table bijection demonstrated</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>145</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<h3 id="solution-a1">Solution A1</h3>
+
+<p><strong>(a)</strong> See Module 4, Class 2, Example 1 for complete proof. $\blacksquare$</p>
+
+<p><strong>(b)</strong> ($\subseteq$): Let $x \in \overline{A \cap B}$. Then $x \notin A \cap B$, so $\neg(x \in A \wedge x \in B)$. By De Morgan (logic): $x \notin A$ or $x \notin B$. So $x \in \overline{A}$ or $x \in \overline{B}$, giving $x \in \overline{A} \cup \overline{B}$.</p>
+
+<p>($\supseteq$): Let $x \in \overline{A} \cup \overline{B}$. Then $x \notin A$ or $x \notin B$. So $\neg(x \in A \wedge x \in B)$, i.e., $x \notin A \cap B$, giving $x \in \overline{A \cap B}$. $\blacksquare$</p>
+
+<p><strong>(c)</strong> ($\subseteq$): Let $x \in A \setminus (B \cap C)$. Then $x \in A$ and $x \notin B \cap C$. So $x \notin B$ or $x \notin C$.</p>
+<ul>
+<li>If $x \notin B$: $x \in A \setminus B \subseteq (A \setminus B) \cup (A \setminus C)$.</li>
+<li>If $x \notin C$: $x \in A \setminus C \subseteq (A \setminus B) \cup (A \setminus C)$.</li>
+</ul>
+
+<p>($\supseteq$): Let $x \in (A \setminus B) \cup (A \setminus C)$.</p>
+<ul>
+<li>If $x \in A \setminus B$: $x \in A, x \notin B$, so $x \notin B \cap C$, giving $x \in A \setminus (B \cap C)$.</li>
+<li>If $x \in A \setminus C$: similarly. $\blacksquare$</li>
+</ul>
+
+<h3 id="solution-a2">Solution A2</h3>
+
+<p><strong>(c)</strong> False. Counterexample: $A = \{1\}, B = \{2\}$. Then $\{1,2\} \in \mathcal{P}(A \cup B)$ but $\{1,2\} \notin \mathcal{P}(A) \cup \mathcal{P}(B)$.</p>
+
+<h3 id="solution-a3">Solution A3</h3>
+
+<p><strong>(c)</strong> The function is $f: \mathbb{Z} \rightarrow \{0, 1, \ldots, m-1\}$ defined by $f(n) = n \bmod m$. The fiber $A_r = \{n \in \mathbb{Z} \mid f(n) = r\}$ is exactly the congruence class $[r]_m$. Part (b) shows this is a partition; part (a) proved the same thing directly.</p>
+
+<h3 id="solution-a4">Solution A4</h3>
+
+<p><strong>(b)</strong> The distributive law translates to: $(P_A \wedge (P_B \vee P_C)) \leftrightarrow ((P_A \wedge P_B) \vee (P_A \wedge P_C))$ where $P_X$ means "$x \in X$". Truth table:</p>
+
+<table>
+<thead><tr>
+<th>$P_A$</th>
+<th>$P_B$</th>
+<th>$P_C$</th>
+<th>LHS</th>
+<th>RHS</th>
+<th>LHS ↔ RHS</th>
+</tr></thead><tbody>
+<tr>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+</tr>
+<tr>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+</tr>
+<tr>
+<td>F</td>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+</tr>
+<tr>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+</tr>
+<tr>
+<td>T</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+<td>T</td>
+</tr>
+<tr>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+</tr>
+<tr>
+<td>T</td>
+<td>T</td>
+<td>F</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+</tr>
+<tr>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+<td>T</td>
+</tr>
+</tbody></table>
+
+<p>Tautology confirmed. ✓</p>
+
+<h3 id="solution-b1">Solution B1</h3>
+
+<pre><code class="language-java">public static Map&lt;Integer, Set&lt;List&lt;Integer&gt;&gt;&gt; bfsLayers(int n) {
+    Map&lt;Integer, Set&lt;List&lt;Integer&gt;&gt;&gt; layers = new TreeMap&lt;&gt;();
+    Set&lt;List&lt;Integer&gt;&gt; visited = new HashSet&lt;&gt;();
+
+    // Initial state: all zeros
+    List&lt;Integer&gt; start = new ArrayList&lt;&gt;(Collections.nCopies(n, 0));
+    Set&lt;List&lt;Integer&gt;&gt; currentLayer = new HashSet&lt;&gt;();
+    currentLayer.add(start);
+    visited.add(new ArrayList&lt;&gt;(start));
+    layers.put(0, currentLayer);
+
+    int step = 0;
+    while (!currentLayer.isEmpty()) {
+        step++;
+        Set&lt;List&lt;Integer&gt;&gt; nextLayer = new HashSet&lt;&gt;();
+        for (List&lt;Integer&gt; state : currentLayer) {
+            for (int i = 0; i &lt; n; i++) {
+                List&lt;Integer&gt; neighbor = new ArrayList&lt;&gt;(state);
+                neighbor.set(i, 1 - neighbor.get(i));  // toggle
+                if (!visited.contains(neighbor)) {
+                    nextLayer.add(neighbor);
+                    visited.add(neighbor);
+                }
+            }
+        }
+        if (!nextLayer.isEmpty()) {
+            layers.put(step, nextLayer);
+        }
+        currentLayer = nextLayer;
+    }
+
+    /*
+     * Correctness argument:
+     * - visited is monotonically growing (we only add, never remove).
+     * - A state enters nextLayer only if it's NOT in visited.
+     * - Therefore no state appears in two layers.
+     * - Every state in {0,1}^n is reachable (any state can be reached
+     *   from (0,...,0) by toggling switches one at a time).
+     * - Total states = 2^n, and we discover all of them.
+     */
+    return layers;
+}
+
+// Verification for n=3
+Map&lt;Integer, Set&lt;List&lt;Integer&gt;&gt;&gt; layers = bfsLayers(3);
+assert layers.get(0).size() == 1;  // (0,0,0)
+assert layers.get(1).size() == 3;  // toggle 1 switch
+assert layers.get(2).size() == 3;  // toggle 2 switches
+assert layers.get(3).size() == 1;  // (1,1,1)
+int total = layers.values().stream().mapToInt(Set::size).sum();
+assert total == 8;  // 2^3</code></pre>
+
+<h3 id="solution-b2">Solution B2</h3>
+
+<pre><code class="language-java">public static Set&lt;Integer&gt; divisorSet(int n) {
+    Set&lt;Integer&gt; result = new TreeSet&lt;&gt;();
+    for (int d = 1; d &lt;= n; d++)
+        if (n % d == 0) result.add(d);
+    return result;
+}
+
+public static int gcd(int a, int b) {
+    while (b != 0) { int r = a % b; a = b; b = r; }
+    return a;
+}
+
+// Verify D(gcd(a,b)) = D(a) ∩ D(b)
+for (int a = 1; a &lt;= 50; a++) {
+    for (int b = 1; b &lt;= 50; b++) {
+        int g = gcd(a, b);
+        assert divisorSet(g).equals(intersection(divisorSet(a), divisorSet(b)));
+    }
+}
+
+// Verify D(lcm(a,b)) = D(a) ∪ D(b)
+for (int a = 1; a &lt;= 50; a++) {
+    for (int b = 1; b &lt;= 50; b++) {
+        int lcm = a / gcd(a, b) * b;
+        assert divisorSet(lcm).equals(union(divisorSet(a), divisorSet(b)));
+    }
+}
+
+/*
+ * Why these hold:
+ * gcd(a,b) is the largest d dividing both a and b.
+ * D(gcd) = common divisors of a and b = D(a) ∩ D(b).
+ *
+ * lcm(a,b) is the smallest positive integer divisible by both a and b.
+ * D(lcm) = divisors of either a or b (or both) = D(a) ∪ D(b).
+ *
+ * GCD/LCM via sets:
+ * gcd(a,b) = max(D(a) ∩ D(b))
+ * lcm(a,b) = max(D(a) ∪ D(b)) [when D(a)∪D(b) = D(lcm)]
+ * More precisely: lcm = min { m &gt; 0 | D(a) ∪ D(b) ⊆ D(m) }
+ */</code></pre>
+
+<h3 id="solution-b3">Solution B3</h3>
+
+<pre><code class="language-java">public static &lt;T&gt; Set&lt;T&gt; filter(Set&lt;T&gt; s, java.util.function.Predicate&lt;T&gt; p) {
+    Set&lt;T&gt; result = new HashSet&lt;&gt;();
+    for (T x : s) if (p.test(x)) result.add(x);
+    return result;
+}
+
+// forAll(s, p) ≡ filter(s, p).equals(s)
+Set&lt;Integer&gt; s = Set.of(2, 4, 6, 8);
+Predicate&lt;Integer&gt; isEven = n -&gt; n % 2 == 0;
+assert filter(s, isEven).equals(s);  // all even → forAll = true
+
+// exists(s, p) ≡ !filter(s, p).isEmpty()
+Set&lt;Integer&gt; s2 = Set.of(1, 3, 5, 7);
+assert filter(s2, isEven).isEmpty();  // no even → exists = false
+
+// Build interesting sets
+Set&lt;Integer&gt; universe = IntStream.rangeClosed(1, 100).boxed()
+        .collect(Collectors.toSet());
+Set&lt;Integer&gt; primes = filter(universe, n -&gt; isPrime(n));
+Set&lt;Integer&gt; squares = filter(universe, n -&gt; {
+    int r = (int) Math.round(Math.sqrt(n));
+    return r * r == n;
+});
+Set&lt;Integer&gt; primeSquares = intersection(primes, squares);
+// primeSquares should be empty (no prime &gt; 1 is a perfect square)
+System.out.println("Prime squares: " + primeSquares);</code></pre>
+
+</section>
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

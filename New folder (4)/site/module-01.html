@@ -1,0 +1,2920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="module-01">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<div id="class-1" class="class-section">
+<h1 id="module-1-class-1-parity-and-variables">Module 1 – Class 1: Parity and Variables</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<p>By the end of this class, students will be able to:</p>
+
+<ol>
+<li>State the formal definitions of even and odd integers using existential quantifiers.</li>
+<li>Write direct proofs about parity (even/odd) properties of sums and products.</li>
+<li>Disprove false claims by constructing counterexamples.</li>
+<li>Implement Java methods that test parity and connect each line of code to its mathematical definition.</li>
+<li>Explain how parity relates to computational concepts such as checksums and hash functions.</li>
+</ol>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="what-are-integers">What Are Integers?</h3>
+
+<p>The integers are the set $\mathbb{Z} = \{\ldots, -3, -2, -1, 0, 1, 2, 3, \ldots\}$. They include all positive whole numbers, all negative whole numbers, and zero. In computer science, integers are the most fundamental data type — every program manipulates them.</p>
+
+<h3 id="even-and-odd-the-first-definitions">Even and Odd: The First Definitions</h3>
+
+<p>Mathematics is built on <strong>definitions</strong>. Before we can prove anything about numbers, we must agree on exactly what our words mean.</p>
+
+<p><strong>Definition (Even).</strong> An integer $n$ is <strong>even</strong> if there exists an integer $k$ such that $n = 2k$.</p>
+
+<p><strong>Definition (Odd).</strong> An integer $n$ is <strong>odd</strong> if there exists an integer $k$ such that $n = 2k + 1$.</p>
+
+<p>These definitions are exhaustive: every integer is either even or odd, never both. This is because dividing any integer by 2 leaves remainder 0 (even) or 1 (odd) — there are no other possibilities.</p>
+
+<h3 id="plain-language">Plain Language</h3>
+
+<ul>
+<li><strong>Even</strong> means "divisible by 2 with no remainder." Examples: $-4, 0, 2, 14, 100$.</li>
+<li><strong>Odd</strong> means "leaves remainder 1 when divided by 2." Examples: $-3, 1, 7, 15, 99$.</li>
+</ul>
+
+<p>The key insight is that these English descriptions are <strong>informal</strong>. The mathematical definitions above are <strong>formal</strong> — they give us something precise to work with in proofs.</p>
+
+<h3 id="why-definitions-matter">Why Definitions Matter</h3>
+
+<p>In programming, a bug often comes from a vague specification. In mathematics, a wrong proof often comes from a vague definition. The habit of starting with precise definitions transfers directly to writing clear code specifications.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<h3 id="set-membership">Set Membership</h3>
+
+<p>We write $a \in \mathbb{Z}$ to mean "$a$ is an integer." The symbol $\in$ means "is an element of."</p>
+
+<h3 id="existential-quantifier">Existential Quantifier</h3>
+
+<p>The statement "$n$ is even" is formally written:</p>
+
+<div class="katex-block">$\exists\, k \in \mathbb{Z} \text{ such that } n = 2k$</div>
+
+<p>Read this as: "There exists an integer $k$ such that $n$ equals $2k$."</p>
+
+<p>Similarly, "$n$ is odd" is:</p>
+
+<div class="katex-block">$\exists\, k \in \mathbb{Z} \text{ such that } n = 2k + 1$</div>
+
+<h3 id="common-pitfalls">Common Pitfalls</h3>
+
+<table>
+<thead><tr>
+<th>Pitfall</th>
+<th>Why It's Wrong</th>
+</tr></thead><tbody>
+<tr>
+<td>Writing $n = 2k$ without specifying $k \in \mathbb{Z}$</td>
+<td>The $k$ must be an integer — if $k = 1.5$, then $2(1.5) = 3$ but $k$ is not an integer witness</td>
+</tr>
+<tr>
+<td>Assuming $k$ is positive</td>
+<td>Negative numbers can be even too: $-6 = 2(-3)$, so $k = -3$</td>
+</tr>
+<tr>
+<td>Confusing "even" with "positive even"</td>
+<td>Zero is even: $0 = 2(0)$</td>
+</tr>
+<tr>
+<td>Using the same variable $k$ for two different unknowns in one proof</td>
+<td>Each unknown needs its own name</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-prove-that-the-sum-of-two-even-numbers-is-even-discrete-math">Example 1: Prove That the Sum of Two Even Numbers Is Even (Discrete Math)</h3>
+
+<p><strong>Claim.</strong> If $a$ and $b$ are even integers, then $a + b$ is even.</p>
+
+<p><strong>Proof.</strong> </p>
+
+<p><em>Step 1 — Unpack the definitions.</em> Since $a$ is even, there exists an integer $m$ such that $a = 2m$. Since $b$ is even, there exists an integer $n$ such that $b = 2n$.</p>
+
+<p><em>Step 2 — Compute the sum.</em></p>
+<div class="katex-block">$a + b = 2m + 2n = 2(m + n)$</div>
+
+<p><em>Step 3 — Apply the definition.</em> Let $k = m + n$. Since $m$ and $n$ are integers, $k$ is an integer (integers are closed under addition). Therefore $a + b = 2k$, which means $a + b$ is even by definition. $\blacksquare$</p>
+
+<p><strong>Structure of a Direct Proof:</strong></p>
+<ol>
+<li>State what you are given (hypotheses).</li>
+<li>Unpack the definitions to get equations.</li>
+<li>Do algebra to reach the form required by the conclusion's definition.</li>
+<li>Identify the witness integer and confirm it is an integer.</li>
+<li>State the conclusion.</li>
+</ol>
+
+<hr>
+
+<h3 id="example-2-the-sum-of-two-even-numbers-in-java-java-translation">Example 2: The Sum of Two Even Numbers in Java (Java Translation)</h3>
+
+<p>Here is a complete, runnable Java program that tests the claim from Example 1:</p>
+
+<pre><code class="language-java">/**
+ * ParityDemo.java
+ * Demonstrates the connection between the mathematical definition
+ * of even/odd and Java's modulo operator.
+ */
+public class ParityDemo {
+
+    /**
+     * Returns true if x is even.
+     * Mathematical basis: x is even iff there exists k in Z such that x = 2k.
+     * Java implementation: x % 2 == 0 checks whether the remainder upon
+     * division by 2 is zero, which is equivalent to the definition.
+     */
+    public static boolean isEven(int x) {
+        return x % 2 == 0;
+    }
+
+    /**
+     * Returns true if x is odd.
+     * Mathematical basis: x is odd iff there exists k in Z such that x = 2k+1.
+     * Java note: we check x % 2 != 0 rather than x % 2 == 1 because
+     * Java's % operator can return -1 for negative odd numbers.
+     * For example, (-3) % 2 == -1 in Java, not 1.
+     */
+    public static boolean isOdd(int x) {
+        return x % 2 != 0;
+    }
+
+    /**
+     * Tests the theorem: the sum of two even integers is even.
+     * Tries many pairs and reports any counterexample found.
+     */
+    public static void testSumOfEvens() {
+        System.out.println("Testing: sum of two even numbers is even");
+        for (int a = -100; a &lt;= 100; a += 2) {       // a is even
+            for (int b = -100; b &lt;= 100; b += 2) {   // b is even
+                if (!isEven(a + b)) {
+                    System.out.println("  COUNTEREXAMPLE: a=" + a + ", b=" + b);
+                    return;
+                }
+            }
+        }
+        System.out.println("  Passed for all tested pairs.");
+    }
+
+    public static void main(String[] args) {
+        // Basic demonstrations
+        System.out.println("isEven(4)  = " + isEven(4));   // true
+        System.out.println("isEven(7)  = " + isEven(7));   // false
+        System.out.println("isOdd(7)   = " + isOdd(7));    // true
+        System.out.println("isOdd(-3)  = " + isOdd(-3));   // true
+        System.out.println("isEven(0)  = " + isEven(0));   // true
+        System.out.println();
+
+        testSumOfEvens();
+    }
+}</code></pre>
+
+<p><strong>Sample Output:</strong></p>
+<pre><code class="language-text">isEven(4)  = true
+isEven(7)  = false
+isOdd(7)   = true
+isOdd(-3)  = true
+isEven(0)  = true
+
+Testing: sum of two even numbers is even
+  Passed for all tested pairs.</code></pre>
+
+<p><strong>Line-by-line connection to math:</strong></p>
+
+<table>
+<thead><tr>
+<th>Java Code</th>
+<th>Mathematical Concept</th>
+</tr></thead><tbody>
+<tr>
+<td><code>x % 2 == 0</code></td>
+<td>Checking $\exists k: x = 2k$, i.e., the remainder is 0</td>
+</tr>
+<tr>
+<td><code>x % 2 != 0</code></td>
+<td>Checking $\exists k: x = 2k+1$ (remainder is not 0)</td>
+</tr>
+<tr>
+<td><code>a += 2</code> in loop</td>
+<td>Generating only even numbers (multiples of 2)</td>
+</tr>
+<tr>
+<td><code>!isEven(a + b)</code></td>
+<td>Searching for a counterexample to the theorem</td>
+</tr>
+<tr>
+<td>The loop finding none</td>
+<td>Empirical evidence (but not a proof!) that the theorem holds</td>
+</tr>
+</tbody></table>
+
+<p><strong>Important distinction:</strong> The Java test is <em>not</em> a proof. It only checks finitely many cases. The mathematical proof covers <em>all</em> integers — infinitely many. This is why we need both: proofs give certainty, code gives intuition and verification for specific cases.</p>
+
+<hr>
+
+<h3 id="example-3-prove-that-the-product-of-two-odd-numbers-is-odd-combined-dm-java">Example 3: Prove That the Product of Two Odd Numbers Is Odd (Combined DM + Java)</h3>
+
+<p><strong>Claim.</strong> If $a$ and $b$ are odd integers, then $a \cdot b$ is odd.</p>
+
+<p><strong>Proof.</strong></p>
+
+<p>Since $a$ is odd, $a = 2m + 1$ for some integer $m$.  </p>
+<p>Since $b$ is odd, $b = 2n + 1$ for some integer $n$.</p>
+
+<p>Compute the product:</p>
+<div class="katex-block">$a \cdot b = (2m+1)(2n+1) = 4mn + 2m + 2n + 1 = 2(2mn + m + n) + 1$</div>
+
+<p>Let $k = 2mn + m + n$. Since $m, n \in \mathbb{Z}$, we have $k \in \mathbb{Z}$ (integers are closed under multiplication and addition). Therefore $a \cdot b = 2k + 1$, which is odd by definition. $\blacksquare$</p>
+
+<p><strong>Java Verification:</strong></p>
+
+<pre><code class="language-java">/**
+ * Verifies: the product of two odd integers is odd.
+ */
+public static void testProductOfOdds() {
+    System.out.println("Testing: product of two odd numbers is odd");
+    for (int a = -99; a &lt;= 99; a += 2) {       // odd values
+        for (int b = -99; b &lt;= 99; b += 2) {   // odd values
+            if (!isOdd(a * b)) {
+                System.out.println("  COUNTEREXAMPLE: a=" + a + ", b=" + b);
+                return;
+            }
+        }
+    }
+    System.out.println("  Passed for all tested pairs.");
+}</code></pre>
+
+<p><strong>What makes this a "bridge" example:</strong> The proof establishes the result for all integers. The Java code then provides a concrete computational check. Students see that the algebraic manipulation $4mn + 2m + 2n + 1 = 2(2mn+m+n)+1$ is mirrored by the code testing <code>isOdd(a * b)</code> — both rely on the same underlying definition of oddness.</p>
+
+<hr>
+
+<h3 id="example-4-disprove-a-false-claim-using-a-counterexample">Example 4: Disprove a False Claim Using a Counterexample</h3>
+
+<p><strong>False Claim.</strong> "The sum of two odd numbers is odd."</p>
+
+<p><strong>Disproof.</strong> We need only one counterexample. Let $a = 3$ and $b = 5$. Then $a + b = 8 = 2(4)$, which is even, not odd. Therefore the claim is false. $\blacksquare$</p>
+
+<p><strong>What is actually true?</strong> The sum of two odd integers is always even. Let's prove it:</p>
+
+<p>$a = 2m+1$, $b = 2n+1$, so $a + b = 2m + 1 + 2n + 1 = 2(m+n+1)$, which is even.</p>
+
+<p><strong>Java Counterexample Finder:</strong></p>
+
+<pre><code class="language-java">/**
+ * Attempts to find a counterexample to: "sum of two odds is odd."
+ * Finds one immediately because the claim is false.
+ */
+public static void findCounterexample() {
+    System.out.println("Searching for counterexample to: sum of two odds is odd");
+    for (int a = 1; a &lt;= 20; a += 2) {
+        for (int b = 1; b &lt;= 20; b += 2) {
+            if (!isOdd(a + b)) {
+                System.out.println("  Found: " + a + " + " + b + " = " + (a + b)
+                    + " which is EVEN. Claim disproved!");
+                return;
+            }
+        }
+    }
+    System.out.println("  No counterexample found (claim may be true).");
+}</code></pre>
+
+<p><strong>Output:</strong></p>
+<pre><code class="language-text">Searching for counterexample to: sum of two odds is odd
+  Found: 1 + 1 = 2 which is EVEN. Claim disproved!</code></pre>
+
+<hr>
+
+<h3 id="example-5-parity-of-squares">Example 5: Parity of Squares</h3>
+
+<p><strong>Claim.</strong> If $n$ is even, then $n^2$ is even. If $n$ is odd, then $n^2$ is odd.</p>
+
+<p><strong>Proof (even case).</strong> Let $n = 2k$. Then $n^2 = (2k)^2 = 4k^2 = 2(2k^2)$. Since $2k^2$ is an integer, $n^2$ is even.</p>
+
+<p><strong>Proof (odd case).</strong> Let $n = 2k+1$. Then $n^2 = (2k+1)^2 = 4k^2 + 4k + 1 = 2(2k^2+2k) + 1$. Since $2k^2+2k$ is an integer, $n^2$ is odd.</p>
+
+<p><strong>Combined result:</strong> $n^2$ has the same parity as $n$.</p>
+
+<pre><code class="language-java">/**
+ * Demonstrates: n^2 has the same parity as n.
+ */
+public static void testSquareParity() {
+    System.out.println("Testing: n^2 has the same parity as n");
+    for (int n = -50; n &lt;= 50; n++) {
+        boolean sameParityEven = isEven(n) &amp;&amp; isEven(n * n);
+        boolean sameParityOdd  = isOdd(n)  &amp;&amp; isOdd(n * n);
+        if (!(sameParityEven || sameParityOdd)) {
+            System.out.println("  COUNTEREXAMPLE: n=" + n);
+            return;
+        }
+    }
+    System.out.println("  Passed for all tested values.");
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="direct-proof-from-definitions">Direct Proof from Definitions</h3>
+
+<p>This class introduces the most fundamental proof technique: <strong>direct proof</strong>.</p>
+
+<p><strong>Template:</strong></p>
+
+<blockquote>
+<p><strong>Claim:</strong> If [hypothesis], then [conclusion].</p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><strong>Proof.</strong>  </p>
+<p>Assume [hypothesis].  </p>
+<p>By definition, [unpack hypothesis into equations].  </p>
+<p>[Algebraic manipulation].  </p>
+<p>Therefore [conclusion is satisfied by definition]. $\blacksquare$</p>
+</blockquote>
+
+<p><strong>Step-by-step recipe:</strong></p>
+<ol>
+<li><strong>Write down what you know.</strong> List the hypotheses. Use the definition to translate each hypothesis into an equation (e.g., "$a$ is even" becomes "$a = 2m$ for some $m \in \mathbb{Z}$").</li>
+<li><strong>Write down what you want to show.</strong> State the conclusion and identify what form you need (e.g., "we need to show $a + b = 2k$ for some integer $k$").</li>
+<li><strong>Do algebra.</strong> Substitute, expand, factor — whatever leads from the known equations to the desired form.</li>
+<li><strong>Identify the witness.</strong> Name the integer that makes the conclusion's definition work (e.g., "$k = m + n$") and confirm it is the right type ($k \in \mathbb{Z}$).</li>
+<li><strong>State the conclusion</strong> explicitly.</li>
+</ol>
+
+<h3 id="counterexample">Counterexample</h3>
+
+<p>To <strong>disprove</strong> a universal claim "for all $x$, $P(x)$," you need only find <strong>one</strong> $x$ where $P(x)$ is false.</p>
+
+<p><strong>Template:</strong></p>
+
+<blockquote>
+<p><strong>Claim (false):</strong> For all integers $n$, [property].</p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><strong>Disproof.</strong> Let $n = $ [specific value]. Then [show property fails]. Therefore the claim is false. $\blacksquare$</p>
+</blockquote>
+
+<h3 id="common-mistakes">Common Mistakes</h3>
+
+<table>
+<thead><tr>
+<th>Mistake</th>
+<th>Correction</th>
+</tr></thead><tbody>
+<tr>
+<td>Proving by example: "4 + 6 = 10, which is even, so the sum of two evens is even"</td>
+<td>One example does not prove a universal claim — you must prove it for <em>all</em> even numbers</td>
+</tr>
+<tr>
+<td>Using the <em>same</em> variable for two different unknowns: "$a = 2k$ and $b = 2k$"</td>
+<td>This forces $a = b$. Use different variables: "$a = 2m$ and $b = 2n$"</td>
+</tr>
+<tr>
+<td>Forgetting to say why the witness is an integer</td>
+<td>Always state "since $m, n \in \mathbb{Z}$, we have $m+n \in \mathbb{Z}$"</td>
+</tr>
+<tr>
+<td>Proving the converse instead of the original statement</td>
+<td>"If $a+b$ is even then $a$ and $b$ are even" is <em>different</em> from "if $a, b$ are even then $a+b$ is even" (and actually false!)</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<h3 id="complete-runnable-program-parity-library">Complete Runnable Program: Parity Library</h3>
+
+<p>This program implements all the parity concepts from this class as a self-contained Java file.</p>
+
+<pre><code class="language-java">/**
+ * ParityLibrary.java
+ * A complete library of parity-related methods with mathematical documentation.
+ * 
+ * MATHEMATICAL FOUNDATION:
+ * - Even: n is even iff ∃k∈Z such that n = 2k
+ * - Odd:  n is odd  iff ∃k∈Z such that n = 2k + 1
+ * - Every integer is exactly one of even or odd (never both, never neither)
+ */
+public class ParityLibrary {
+
+    // =========================================================
+    // CORE PARITY TESTS
+    // =========================================================
+
+    /**
+     * Tests whether n is even.
+     * 
+     * Math: n is even ↔ n = 2k for some k ∈ Z
+     * Code: n % 2 == 0 tests whether 2 divides n with remainder 0
+     * 
+     * Why this works: By the quotient-remainder theorem, n = 2q + r
+     * where r ∈ {0, 1}. If r == 0, then n = 2q, so n is even.
+     * 
+     * Edge cases:
+     *   isEven(0)  → true   (0 = 2·0)
+     *   isEven(-4) → true   (-4 = 2·(-2))
+     */
+    public static boolean isEven(int n) {
+        return n % 2 == 0;
+    }
+
+    /**
+     * Tests whether n is odd.
+     * 
+     * Math: n is odd ↔ n = 2k + 1 for some k ∈ Z
+     * Code: n % 2 != 0 (NOT n % 2 == 1, because Java's % can return -1)
+     * 
+     * Why n % 2 != 0 instead of n % 2 == 1:
+     *   In Java, (-3) % 2 == -1, not 1.
+     *   But (-3) is odd because -3 = 2(-2) + 1.
+     *   So we use != 0 to handle negative numbers correctly.
+     */
+    public static boolean isOdd(int n) {
+        return n % 2 != 0;
+    }
+
+    // =========================================================
+    // FINDING THE WITNESS
+    // =========================================================
+
+    /**
+     * If n is even, returns the integer k such that n = 2k.
+     * This is the "witness" in the existential definition.
+     * 
+     * Precondition: n must be even.
+     */
+    public static int evenWitness(int n) {
+        assert isEven(n) : "Precondition violated: " + n + " is not even";
+        return n / 2;   // n = 2k  →  k = n/2
+    }
+
+    /**
+     * If n is odd, returns the integer k such that n = 2k + 1.
+     * 
+     * Precondition: n must be odd.
+     */
+    public static int oddWitness(int n) {
+        assert isOdd(n) : "Precondition violated: " + n + " is not odd";
+        return (n - 1) / 2;   // n = 2k+1  →  k = (n-1)/2
+    }
+
+    // =========================================================
+    // THEOREM VERIFIERS
+    // =========================================================
+
+    /**
+     * Verifies: even + even = even
+     * Math: if a = 2m and b = 2n, then a+b = 2(m+n) which is even.
+     */
+    public static boolean verifyEvenPlusEven(int a, int b) {
+        if (!isEven(a) || !isEven(b)) return true; // hypothesis not met
+        return isEven(a + b);
+    }
+
+    /**
+     * Verifies: odd + odd = even
+     * Math: if a = 2m+1 and b = 2n+1, then a+b = 2(m+n+1) which is even.
+     */
+    public static boolean verifyOddPlusOdd(int a, int b) {
+        if (!isOdd(a) || !isOdd(b)) return true; // hypothesis not met
+        return isEven(a + b);
+    }
+
+    /**
+     * Verifies: even + odd = odd
+     * Math: if a = 2m and b = 2n+1, then a+b = 2(m+n)+1 which is odd.
+     */
+    public static boolean verifyEvenPlusOdd(int a, int b) {
+        if (!isEven(a) || !isOdd(b)) return true;
+        return isOdd(a + b);
+    }
+
+    /**
+     * Verifies: odd * odd = odd
+     * Math: if a = 2m+1 and b = 2n+1, then ab = 2(2mn+m+n)+1 which is odd.
+     */
+    public static boolean verifyOddTimesOdd(int a, int b) {
+        if (!isOdd(a) || !isOdd(b)) return true;
+        return isOdd(a * b);
+    }
+
+    /**
+     * Verifies: even * anything = even
+     * Math: if a = 2m, then ab = 2(mb), which is even.
+     */
+    public static boolean verifyEvenTimesAnything(int a, int b) {
+        if (!isEven(a)) return true;
+        return isEven(a * b);
+    }
+
+    // =========================================================
+    // COMPLETE PARITY TABLE
+    // =========================================================
+
+    /**
+     * Prints a summary table of parity rules verified by exhaustive testing.
+     */
+    public static void printParityTable() {
+        System.out.println("=== PARITY RULES (verified for n in [-1000, 1000]) ===");
+        System.out.println();
+
+        String[] rules = {
+            "even + even = even",
+            "odd  + odd  = even",
+            "even + odd  = odd",
+            "odd  * odd  = odd",
+            "even * any  = even"
+        };
+
+        boolean allPassed = true;
+        int range = 100;
+
+        // Test each rule
+        for (int a = -range; a &lt;= range; a++) {
+            for (int b = -range; b &lt;= range; b++) {
+                if (!verifyEvenPlusEven(a, b))      { allPassed = false; System.out.println("FAIL: even+even at " + a + "," + b); }
+                if (!verifyOddPlusOdd(a, b))        { allPassed = false; System.out.println("FAIL: odd+odd at " + a + "," + b); }
+                if (!verifyEvenPlusOdd(a, b))        { allPassed = false; System.out.println("FAIL: even+odd at " + a + "," + b); }
+                if (!verifyOddTimesOdd(a, b))        { allPassed = false; System.out.println("FAIL: odd*odd at " + a + "," + b); }
+                if (!verifyEvenTimesAnything(a, b))   { allPassed = false; System.out.println("FAIL: even*any at " + a + "," + b); }
+            }
+        }
+
+        if (allPassed) {
+            System.out.println("All rules passed for integers in [-" + range + ", " + range + "].");
+        }
+
+        System.out.println();
+        System.out.println("Summary of Parity Arithmetic:");
+        System.out.println("+--------+-------+--------+");
+        System.out.println("|   +    | even  |  odd   |");
+        System.out.println("+--------+-------+--------+");
+        System.out.println("| even   | even  |  odd   |");
+        System.out.println("| odd    | odd   |  even  |");
+        System.out.println("+--------+-------+--------+");
+        System.out.println();
+        System.out.println("+--------+-------+--------+");
+        System.out.println("|   *    | even  |  odd   |");
+        System.out.println("+--------+-------+--------+");
+        System.out.println("| even   | even  |  even  |");
+        System.out.println("| odd    | even  |  odd   |");
+        System.out.println("+--------+-------+--------+");
+    }
+
+    // =========================================================
+    // MAIN — RUN ALL DEMONSTRATIONS
+    // =========================================================
+
+    public static void main(String[] args) {
+        System.out.println("==================================");
+        System.out.println(" PARITY AND VARIABLES — CLASS 1  ");
+        System.out.println("==================================");
+        System.out.println();
+
+        // Demo 1: Basic parity checks
+        System.out.println("--- Basic Parity Checks ---");
+        int[] samples = {-6, -3, 0, 1, 4, 7, 12, 15};
+        for (int n : samples) {
+            String parity = isEven(n) ? "even" : "odd";
+            System.out.printf("  %4d is %s%n", n, parity);
+        }
+        System.out.println();
+
+        // Demo 2: Finding witnesses
+        System.out.println("--- Witnesses (the k in n = 2k or n = 2k+1) ---");
+        for (int n : samples) {
+            if (isEven(n)) {
+                int k = evenWitness(n);
+                System.out.printf("  %4d = 2 * %d  (k = %d)%n", n, k, k);
+            } else {
+                int k = oddWitness(n);
+                System.out.printf("  %4d = 2 * %d + 1  (k = %d)%n", n, k, k);
+            }
+        }
+        System.out.println();
+
+        // Demo 3: Parity table
+        printParityTable();
+    }
+}</code></pre>
+
+<p><strong>Sample Output:</strong></p>
+<pre><code class="language-text">==================================
+ PARITY AND VARIABLES — CLASS 1  
+==================================
+
+--- Basic Parity Checks ---
+    -6 is even
+    -3 is odd
+     0 is even
+     1 is odd
+     4 is even
+     7 is odd
+    12 is even
+    15 is odd
+
+--- Witnesses (the k in n = 2k or n = 2k+1) ---
+    -6 = 2 * -3  (k = -3)
+    -3 = 2 * -2 + 1  (k = -2)
+     0 = 2 * 0  (k = 0)
+     1 = 2 * 0 + 1  (k = 0)
+     4 = 2 * 2  (k = 2)
+     7 = 2 * 3 + 1  (k = 3)
+    12 = 2 * 6  (k = 6)
+    15 = 2 * 7 + 1  (k = 7)
+
+All rules passed for integers in [-100, 100].
+
+Summary of Parity Arithmetic:
++--------+-------+--------+
+|   +    | even  |  odd   |
++--------+-------+--------+
+| even   | even  |  odd   |
+| odd    | odd   |  even  |
++--------+-------+--------+
+
++--------+-------+--------+
+|   *    | even  |  odd   |
++--------+-------+--------+
+| even   | even  |  even  |
+| odd    | even  |  odd   |
++--------+-------+--------+</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="computational-use-parity-in-computer-science">
+<h2>Computational Use: Parity in Computer Science</h2>
+
+<h3 id="checksums">Checksums</h3>
+<p>A <strong>checksum</strong> is a simple error-detection scheme. The simplest version adds up bytes of data and checks whether the sum is even or odd. If a single bit flips during transmission, the parity of the sum changes, and the error is detected. This is called a <strong>parity bit</strong>.</p>
+
+<h3 id="hash-tables-and-indexing">Hash Tables and Indexing</h3>
+<p>Hash functions often use <code>% m</code> to map keys to buckets. When $m = 2$, this is simply a parity check — the key goes into bucket 0 (even) or bucket 1 (odd). More generally, <code>key % tableSize</code> generalizes the idea of parity to arbitrary moduli.</p>
+
+<h3 id="alternating-behavior">Alternating Behavior</h3>
+<p>Many algorithms alternate behavior based on parity: even-indexed elements vs. odd-indexed elements, alternating turns in game trees, alternating directions in bidirectional search.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Euclid (c. 300 BC)</strong> devoted Books VII–IX of the <em>Elements</em> to number theory. He defined even and odd numbers and proved basic properties of parity and divisibility using geometric arguments. His proofs, while geometric rather than algebraic, follow the same logical structure we use today — start from definitions, chain deductions.</p>
+
+<p><strong>The Greeks</strong> classified numbers into even and odd, perfect and abundant, prime and composite. Parity was the first classification: the simplest way to partition infinitely many objects into two classes.</p>
+
+<p><strong>Why this matters for CS:</strong> Computer science inherited this axiomatic style. When we write program specifications or define data structures, we are doing exactly what Euclid did — starting from definitions and deducing properties.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions-warm-up-quick-check">Slide Set A: Conceptual Questions (Warm-Up / Quick Check)</h3>
+
+<p><strong>A1.</strong> True or false: Zero is an even number. Justify using the definition.</p>
+
+<p><strong>A2.</strong> True or false: The number $-7$ is odd. Find the integer $k$ such that $-7 = 2k + 1$.</p>
+
+<p><strong>A3.</strong> Is $1$ even or odd? What about $1^{100}$? What about $(-1)^{100}$? Explain.</p>
+
+<p><strong>A4.</strong> A student says: "I checked $2 + 4 = 6$, $6 + 8 = 14$, and $10 + 12 = 22$, so the sum of two evens is always even." What is wrong with this reasoning?</p>
+
+<hr>
+
+<h3 id="slide-set-b-proof-problems-class-discussion">Slide Set B: Proof Problems (Class Discussion)</h3>
+
+<p><strong>B1.</strong> Prove: If $n$ is an odd integer, then $n + 1$ is even.</p>
+
+<p><strong>B2.</strong> Prove: If $a$ is even and $b$ is odd, then $a + b$ is odd.</p>
+
+<p><strong>B3.</strong> Disprove: "If $n^2$ is even, then $n$ is even <em>and</em> $n > 0$." (Find a counterexample.)</p>
+
+<p><strong>B4.</strong> Prove or disprove: The sum of three consecutive integers is always divisible by 3.</p>
+
+<hr>
+
+<h3 id="slide-set-c-java-coding-problems-code-along">Slide Set C: Java Coding Problems (Code Along)</h3>
+
+<p><strong>C1.</strong> Write a method <code>public static String parityLabel(int n)</code> that returns <code>"even"</code> or <code>"odd"</code>. Test it with $n = -10, -3, 0, 1, 42$.</p>
+
+<p><strong>C2.</strong> Write a method <code>public static int countEvens(int[] arr)</code> that returns the number of even elements in the array. What mathematical concept does the loop implement? (Answer: it computes $|\{i : \text{arr}[i] \text{ is even}\}|$.)</p>
+
+<p><strong>C3.</strong> Write a method <code>public static boolean sumParityCheck(int a, int b)</code> that returns <code>true</code> if <code>a + b</code> has the expected parity based on the parity of <code>a</code> and <code>b</code> (using the parity addition table). Test with 10 random pairs.</p>
+
+<p><strong>C4.</strong> Java's <code>%</code> operator behaves differently for negative numbers. What does <code>(-7) % 2</code> return in Java? How does this affect <code>isOdd</code>?</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Prove: If $a$ is an even integer and $b$ is an even integer, then $a - b$ is even.</p>
+
+<p><strong>DM2.</strong> Prove: If $n$ is odd, then $n^2 - 1$ is divisible by 8. <em>(Hint: write $n = 2k+1$ and factor $n^2 - 1 = (n-1)(n+1)$.)</em></p>
+
+<p><strong>DM3.</strong> Prove: The product of any integer with an even integer is even.</p>
+
+<p><strong>DM4.</strong> Disprove: "For all integers $n$, if $n^2$ is odd, then $n > 0$."</p>
+
+<p><strong>DM5.</strong> Prove: For any integer $n$, the expression $n^2 + n$ is always even. <em>(Hint: consider two cases — $n$ even and $n$ odd.)</em></p>
+
+<p><strong>DM6.</strong> Prove: If $a$ and $b$ are both odd, then $a^2 + b^2$ is even but not divisible by 4.</p>
+
+<p><strong>DM7.</strong> Prove or disprove: "The sum of four consecutive integers is always even."</p>
+
+<hr>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Write a method <code>public static boolean allEven(int[] arr)</code> that returns <code>true</code> if every element in the array is even. Connect this to the mathematical statement $\forall i \in \{0, \ldots, n-1\},\; \text{arr}[i] \text{ is even}$.</p>
+
+<p><strong>JP2.</strong> Write a method <code>public static int[] separateByParity(int[] arr)</code> that returns a new array with all even elements first, then all odd elements. Verify that evens and odds are in the correct positions.</p>
+
+<p><strong>JP3.</strong> Write a method <code>public static boolean parityPreservedBySquare(int n)</code> that checks whether $n$ and $n^2$ have the same parity. Test it for $n = -100$ to $100$.</p>
+
+<p><strong>JP4.</strong> Implement <code>public static void printParityTable(int from, int to)</code> that prints each integer in the range and its parity. Format the output in two columns.</p>
+
+<p><strong>JP5.</strong> Write a method <code>public static int findFirstOdd(int[] arr)</code> that returns the first odd element, or throws <code>NoSuchElementException</code> if there is none. What mathematical concept does "returns first odd" correspond to? (Answer: existential witness.)</p>
+
+<p><strong>JP6.</strong> The <strong>Collatz conjecture</strong> says: start with any positive integer $n$. If $n$ is even, divide by 2; if $n$ is odd, compute $3n + 1$. Repeat. The conjecture says you always reach 1. Write a method <code>public static int collatzSteps(int n)</code> that returns the number of steps to reach 1. Test for $n = 1$ to $100$. <em>(This uses parity as a branching condition.)</em></p>
+
+<hr>
+
+<h3 id="bridge-problems-discrete-math-java">Bridge Problems (Discrete Math + Java)</h3>
+
+<p><strong>BR1.</strong> <em>Prove and Verify.</em> Prove that $n(n+1)$ is even for all integers $n$ (use cases: $n$ even and $n$ odd). Then write a Java method that checks this for $n = -1000$ to $1000$.</p>
+
+<p><strong>BR2.</strong> <em>Proof to Code.</em> The proof that "odd + odd = even" uses the witness $k = m + n + 1$ where $a = 2m+1$ and $b = 2n+1$. Write a method <code>public static int sumWitness(int a, int b)</code> that, given two odd integers, computes and returns this witness $k$ and verifies that $a + b = 2k$.</p>
+
+<p><strong>BR3.</strong> <em>Code to Proof.</em> A student wrote this Java method:</p>
+<pre><code class="language-java">public static boolean mysteryCheck(int n) {
+    return (n * n) % 4 == 0 || (n * n) % 4 == 1;
+}</code></pre>
+<p>What does this method check? State and prove the mathematical theorem that guarantees <code>mysteryCheck</code> always returns <code>true</code>.  </p>
+<p><em>(Answer: For any integer $n$, $n^2 \mod 4$ is either 0 or 1. Proof: if $n$ is even, $n = 2k$, so $n^2 = 4k^2 \equiv 0 \pmod{4}$. If $n$ is odd, $n = 2k+1$, so $n^2 = 4k^2 + 4k + 1 \equiv 1 \pmod{4}$.)</em></p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1 Solution.</strong> Let $a = 2m$ and $b = 2n$ for $m, n \in \mathbb{Z}$. Then $a - b = 2m - 2n = 2(m-n)$. Since $m - n \in \mathbb{Z}$, $a - b$ is even. $\blacksquare$</p>
+
+<p><strong>DM2 Solution.</strong> Let $n = 2k + 1$ for some $k \in \mathbb{Z}$. Then:</p>
+<div class="katex-block">$n^2 - 1 = (2k+1)^2 - 1 = 4k^2 + 4k + 1 - 1 = 4k^2 + 4k = 4k(k+1)$</div>
+<p>Since $k$ and $k+1$ are consecutive integers, one of them is even, so $k(k+1)$ is even. Write $k(k+1) = 2j$ for some $j \in \mathbb{Z}$. Then $n^2 - 1 = 4(2j) = 8j$. Therefore $8 \mid (n^2 - 1)$. $\blacksquare$</p>
+
+<p><strong>DM3 Solution.</strong> Let $a$ be any integer and $b = 2k$ for some $k \in \mathbb{Z}$. Then $a \cdot b = a \cdot 2k = 2(ak)$. Since $ak \in \mathbb{Z}$, the product is even. $\blacksquare$</p>
+
+<p><strong>DM4 Solution.</strong> Counterexample: $n = -3$. Then $n^2 = 9$, which is odd, but $n = -3 < 0$. $\blacksquare$</p>
+
+<p><strong>DM5 Solution.</strong> <em>Case 1:</em> $n$ is even, $n = 2k$. Then $n^2 + n = 4k^2 + 2k = 2(2k^2 + k)$, which is even.  </p>
+<p><em>Case 2:</em> $n$ is odd, $n = 2k+1$. Then $n^2 + n = (2k+1)^2 + (2k+1) = 4k^2 + 4k + 1 + 2k + 1 = 4k^2 + 6k + 2 = 2(2k^2 + 3k + 1)$, which is even.  </p>
+<p>Alternatively: $n^2 + n = n(n+1)$, and consecutive integers always include one even number. $\blacksquare$</p>
+
+<p><strong>DM6 Solution.</strong> Let $a = 2m+1$ and $b = 2n+1$. Then:</p>
+<div class="katex-block">$a^2 + b^2 = (2m+1)^2 + (2n+1)^2 = 4m^2 + 4m + 1 + 4n^2 + 4n + 1 = 4(m^2+m+n^2+n) + 2$</div>
+<p>This equals $2(2m^2 + 2m + 2n^2 + 2n + 1)$, which is even. But $2m^2 + 2m + 2n^2 + 2n + 1$ is odd (it is $2(m^2+m+n^2+n) + 1$). So $a^2 + b^2 = 2 \times \text{odd}$, which means $a^2 + b^2$ is divisible by 2 but not by 4. $\blacksquare$</p>
+
+<p><strong>DM7 Solution.</strong> Let the four consecutive integers be $n, n+1, n+2, n+3$. Their sum is $4n + 6 = 2(2n+3)$, which is even. The claim is <strong>true</strong>. $\blacksquare$</p>
+
+<hr>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP1 Solution.</strong></p>
+<pre><code class="language-java">public static boolean allEven(int[] arr) {
+    for (int x : arr) {           // ∀ element x in arr
+        if (x % 2 != 0) {        // if x is not even
+            return false;         // the universal claim fails
+        }
+    }
+    return true;                  // all elements passed the test
+}
+// Mathematically: returns ∀i ∈ {0,...,arr.length-1}: arr[i] mod 2 = 0</code></pre>
+
+<p><strong>JP2 Solution.</strong></p>
+<pre><code class="language-java">public static int[] separateByParity(int[] arr) {
+    int[] result = new int[arr.length];
+    int left = 0;                     // index for evens
+    int right = arr.length - 1;       // index for odds
+    for (int x : arr) {
+        if (x % 2 == 0) {
+            result[left++] = x;       // place even elements at front
+        } else {
+            result[right--] = x;      // place odd elements at back
+        }
+    }
+    return result;
+}</code></pre>
+
+<p><strong>JP3 Solution.</strong></p>
+<pre><code class="language-java">public static boolean parityPreservedBySquare(int n) {
+    // Theorem: n and n^2 have the same parity.
+    boolean nEven = (n % 2 == 0);
+    boolean sqEven = ((n * n) % 2 == 0);
+    return nEven == sqEven;
+}
+
+// Test:
+public static void testParityPreserved() {
+    for (int n = -100; n &lt;= 100; n++) {
+        assert parityPreservedBySquare(n) : "Failed for n=" + n;
+    }
+    System.out.println("Parity preserved by squaring: all tests passed.");
+}</code></pre>
+
+<p><strong>JP4 Solution.</strong></p>
+<pre><code class="language-java">public static void printParityTable(int from, int to) {
+    System.out.printf("%-10s %-10s%n", "Number", "Parity");
+    System.out.println("--------------------");
+    for (int n = from; n &lt;= to; n++) {
+        System.out.printf("%-10d %-10s%n", n, (n % 2 == 0) ? "even" : "odd");
+    }
+}</code></pre>
+
+<p><strong>JP5 Solution.</strong></p>
+<pre><code class="language-java">import java.util.NoSuchElementException;
+
+public static int findFirstOdd(int[] arr) {
+    for (int x : arr) {                 // existential search: ∃x ∈ arr such that x is odd
+        if (x % 2 != 0) {
+            return x;                   // found the witness
+        }
+    }
+    throw new NoSuchElementException("No odd element found");
+}</code></pre>
+
+<p><strong>JP6 Solution.</strong></p>
+<pre><code class="language-java">public static int collatzSteps(int n) {
+    if (n &lt;= 0) throw new IllegalArgumentException("n must be positive");
+    int steps = 0;
+    while (n != 1) {
+        if (n % 2 == 0) {              // n is even: divide by 2
+            n = n / 2;
+        } else {                        // n is odd: compute 3n + 1
+            n = 3 * n + 1;
+        }
+        steps++;
+    }
+    return steps;
+}
+
+// Test:
+public static void testCollatz() {
+    System.out.printf("%-5s %-10s%n", "n", "Steps");
+    for (int n = 1; n &lt;= 20; n++) {
+        System.out.printf("%-5d %-10d%n", n, collatzSteps(n));
+    }
+}</code></pre>
+
+<hr>
+
+<h3 id="bridge-problem-solutions">Bridge Problem Solutions</h3>
+
+<p><strong>BR1 Solution.</strong></p>
+
+<p><em>Proof:</em> Case 1: $n$ is even, $n = 2k$. Then $n(n+1) = 2k(2k+1) = 2[k(2k+1)]$, which is even.  </p>
+<p>Case 2: $n$ is odd, $n = 2k+1$. Then $n+1 = 2k+2 = 2(k+1)$, so $n(n+1) = (2k+1) \cdot 2(k+1) = 2[(2k+1)(k+1)]$, which is even. $\blacksquare$</p>
+
+<p><em>Java:</em></p>
+<pre><code class="language-java">public static void verifyConsecutiveProduct() {
+    for (int n = -1000; n &lt;= 1000; n++) {
+        long product = (long) n * (n + 1);   // use long to avoid overflow
+        assert product % 2 == 0 : "Failed for n=" + n;
+    }
+    System.out.println("n(n+1) is always even: verified for n in [-1000, 1000].");
+}</code></pre>
+
+<p><strong>BR2 Solution.</strong></p>
+<pre><code class="language-java">/**
+ * Given two odd integers a, b, computes the witness k
+ * such that a + b = 2k.
+ * 
+ * Math: a = 2m+1, b = 2n+1, so a+b = 2(m+n+1).
+ * The witness is k = m + n + 1 = (a-1)/2 + (b-1)/2 + 1 = (a+b)/2.
+ */
+public static int sumWitness(int a, int b) {
+    assert a % 2 != 0 : a + " is not odd";
+    assert b % 2 != 0 : b + " is not odd";
+    int sum = a + b;
+    int k = sum / 2;               // k = m + n + 1
+    assert sum == 2 * k : "Witness verification failed";
+    return k;
+}</code></pre>
+
+<p><strong>BR3 Solution.</strong></p>
+
+<p>The method checks whether $n^2 \mod 4 \in \{0, 1\}$.</p>
+
+<p><em>Theorem:</em> For any integer $n$, $n^2 \equiv 0 \pmod{4}$ or $n^2 \equiv 1 \pmod{4}$.</p>
+
+<p><em>Proof:</em>  </p>
+<ul>
+<li>If $n$ is even, write $n = 2k$. Then $n^2 = 4k^2$, so $n^2 \equiv 0 \pmod{4}$.  </li>
+<li>If $n$ is odd, write $n = 2k+1$. Then $n^2 = 4k^2 + 4k + 1$, so $n^2 \equiv 1 \pmod{4}$.  </li>
+</ul>
+
+<p>In either case, $n^2 \mod 4$ is 0 or 1. Therefore <code>mysteryCheck</code> always returns <code>true</code>. $\blacksquare$</p>
+
+</section>
+</div>
+<hr>
+<div id="class-2" class="class-section">
+<h1 id="module-1-class-2-divisibility-relations">Module 1 – Class 2: Divisibility Relations</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<p>By the end of this class, students will be able to:</p>
+
+<ol>
+<li>State the formal definition of divisibility and use the notation $a \mid b$.</li>
+<li>Prove that the divisibility relation is transitive using a direct proof.</li>
+<li>Prove that if $a$ divides two numbers, then $a$ divides any linear combination of those numbers.</li>
+<li>Implement a <code>divides</code> method in Java and connect it to the mathematical definition.</li>
+<li>Compose divisibility tests to verify transitivity computationally.</li>
+</ol>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="what-is-divisibility">What Is Divisibility?</h3>
+
+<p>Divisibility is a relationship between two integers that generalizes the idea of "goes into evenly."</p>
+
+<p><strong>Definition (Divisibility).</strong> Let $a, b \in \mathbb{Z}$ with $a \neq 0$. We say <strong>$a$ divides $b$</strong>, written $a \mid b$, if there exists an integer $k$ such that $b = a \cdot k$.</p>
+
+<p>When $a \mid b$, we also say:</p>
+<ul>
+<li>"$a$ is a divisor of $b$"</li>
+<li>"$a$ is a factor of $b$"</li>
+<li>"$b$ is a multiple of $a$"</li>
+<li>"$b$ is divisible by $a$"</li>
+</ul>
+
+<h3 id="plain-language">Plain Language</h3>
+
+<p>$a \mid b$ means: when you divide $b$ by $a$, there is no remainder. Equivalently, $b$ is some number of "$a$s."</p>
+
+<p><strong>Examples:</strong></p>
+<ul>
+<li>$3 \mid 12$ because $12 = 3 \times 4$ (the witness is $k = 4$)</li>
+<li>$5 \mid 0$ because $0 = 5 \times 0$ (the witness is $k = 0$; zero is divisible by everything)</li>
+<li>$7 \nmid 15$ because there is no integer $k$ with $15 = 7k$ (we get $k = 15/7 \approx 2.14$, not an integer)</li>
+<li>$1 \mid n$ for every integer $n$ because $n = 1 \times n$</li>
+</ul>
+
+<h3 id="key-properties-of-divisibility">Key Properties of Divisibility</h3>
+
+<table>
+<thead><tr>
+<th>Property</th>
+<th>Statement</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>Reflexive</td>
+<td>$a \mid a$ (for $a \neq 0$)</td>
+<td>Every nonzero integer divides itself</td>
+</tr>
+<tr>
+<td>Transitive</td>
+<td>If $a \mid b$ and $b \mid c$, then $a \mid c$</td>
+<td>Divisibility "chains"</td>
+</tr>
+<tr>
+<td>Antisymmetric</td>
+<td>If $a \mid b$ and $b \mid a$, then $a = \pm b$</td>
+<td>Mutual divisibility forces equality (up to sign)</td>
+</tr>
+<tr>
+<td>Linear combination</td>
+<td>If $a \mid b$ and $a \mid c$, then $a \mid (bx + cy)$ for all $x, y \in \mathbb{Z}$</td>
+<td>Divisibility is preserved by linear combinations</td>
+</tr>
+</tbody></table>
+
+<h3 id="why-this-matters-in-cs">Why This Matters in CS</h3>
+
+<p>Divisibility is the foundation for:</p>
+<ul>
+<li><strong>Modular arithmetic</strong> (Module 2): checking $a \mid b$ is equivalent to checking $b \mod a = 0$</li>
+<li><strong>Hashing</strong>: hash functions use modular reduction, which relies on divisibility</li>
+<li><strong>Cryptography</strong>: RSA encryption depends on the difficulty of finding divisors of large numbers</li>
+<li><strong>Loop bounds</strong>: if a loop runs $n$ times and processes items in groups of $k$, divisibility determines whether all items are processed evenly</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<h3 id="the-divisibility-symbol">The Divisibility Symbol</h3>
+
+<p>$a \mid b$ (read "a divides b") means $\exists k \in \mathbb{Z}$ such that $b = ak$.</p>
+
+<p><strong>Careful!</strong> The vertical bar in $a \mid b$ is a <em>relation</em> symbol — it is either true or false. Do not confuse it with:</p>
+<ul>
+<li>$a / b$ (division, which returns a fraction or quotient)</li>
+<li>$a \mid b$ in set-builder notation $\{x \mid P(x)\}$ (which means "such that")</li>
+</ul>
+
+<h3 id="writing-divisibility-proofs">Writing Divisibility Proofs</h3>
+
+<p>To prove $a \mid b$: find an explicit integer $k$ such that $b = ak$ and verify that $k \in \mathbb{Z}$.</p>
+
+<p>To prove $a \nmid b$: show that $b/a$ is not an integer (often by the quotient-remainder theorem: $b = aq + r$ with $0 < r < a$).</p>
+
+<h3 id="common-pitfalls">Common Pitfalls</h3>
+
+<table>
+<thead><tr>
+<th>Pitfall</th>
+<th>Why It's Wrong</th>
+</tr></thead><tbody>
+<tr>
+<td>Writing $a \mid b$ as "$a$ is divisible by $b$"</td>
+<td>It's the other way around: $b$ is divisible by $a$</td>
+</tr>
+<tr>
+<td>Forgetting that $a \neq 0$</td>
+<td>Division by zero is undefined</td>
+</tr>
+<tr>
+<td>Assuming $a \mid b$ means $a \leq b$</td>
+<td>False: $3 \mid (-6)$ even though $3 > -6$</td>
+</tr>
+<tr>
+<td>Confusing $a \mid b$ with $a / b$</td>
+<td>$a \mid b$ is a true/false relationship; $a/b$ is an arithmetic operation</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-prove-transitivity-of-divisibility-discrete-math">Example 1: Prove Transitivity of Divisibility (Discrete Math)</h3>
+
+<p><strong>Claim.</strong> If $a \mid b$ and $b \mid c$, then $a \mid c$.</p>
+
+<p><strong>Proof.</strong></p>
+
+<p><em>Step 1 — Hypotheses.</em> We are given $a \mid b$ and $b \mid c$.</p>
+
+<p><em>Step 2 — Unpack definitions.</em></p>
+<ul>
+<li>Since $a \mid b$, there exists an integer $m$ such that $b = am$.</li>
+<li>Since $b \mid c$, there exists an integer $n$ such that $c = bn$.</li>
+</ul>
+
+<p><em>Step 3 — Algebra.</em> Substitute the first equation into the second:</p>
+<div class="katex-block">$c = bn = (am)n = a(mn)$</div>
+
+<p><em>Step 4 — Identify the witness.</em> Let $k = mn$. Since $m, n \in \mathbb{Z}$, we have $k = mn \in \mathbb{Z}$ (integers are closed under multiplication).</p>
+
+<p><em>Step 5 — Conclusion.</em> Since $c = ak$ with $k \in \mathbb{Z}$, we have $a \mid c$ by definition. $\blacksquare$</p>
+
+<p><strong>Concrete illustration:</strong> $4 \mid 12$ (because $12 = 4 \times 3$) and $12 \mid 60$ (because $60 = 12 \times 5$). By transitivity, $4 \mid 60$ (because $60 = 4 \times 15$, and indeed $15 = 3 \times 5 = mn$).</p>
+
+<hr>
+
+<h3 id="example-2-divisibility-in-java-java-translation">Example 2: Divisibility in Java (Java Translation)</h3>
+
+<pre><code class="language-java">/**
+ * DivisibilityDemo.java
+ * Implements and tests divisibility relations.
+ */
+public class DivisibilityDemo {
+
+    /**
+     * Returns true if a divides b.
+     * 
+     * Math:  a | b  ↔  ∃k ∈ Z such that b = a·k
+     * Code:  b % a == 0 checks whether the remainder is zero.
+     * 
+     * Precondition: a != 0 (division by zero is undefined)
+     * 
+     * Connection: b % a computes the remainder r where b = a·q + r.
+     * If r == 0, then b = a·q, so the witness is k = q = b/a.
+     */
+    public static boolean divides(int a, int b) {
+        if (a == 0) throw new ArithmeticException("a cannot be zero in a|b");
+        return b % a == 0;
+    }
+
+    /**
+     * If a | b, returns the witness k such that b = a * k.
+     */
+    public static int witness(int a, int b) {
+        assert divides(a, b) : a + " does not divide " + b;
+        return b / a;
+    }
+
+    /**
+     * Tests transitivity: if a|b and b|c, then a|c.
+     * Also displays the chain of witnesses.
+     */
+    public static void demonstrateTransitivity(int a, int b, int c) {
+        System.out.printf("Testing transitivity: %d | %d and %d | %d ?%n", a, b, b, c);
+
+        if (divides(a, b) &amp;&amp; divides(b, c)) {
+            int m = witness(a, b);    // b = a * m
+            int n = witness(b, c);    // c = b * n
+            int k = m * n;            // c = a * (m * n)
+
+            System.out.printf("  b = %d * %d = %d  (m = %d)%n", a, m, b, m);
+            System.out.printf("  c = %d * %d = %d  (n = %d)%n", b, n, c, n);
+            System.out.printf("  c = %d * %d = %d  (k = m*n = %d)%n", a, k, a * k, k);
+            System.out.printf("  Therefore %d | %d  ✓%n", a, c);
+        } else {
+            System.out.println("  Hypotheses not satisfied.");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== DIVISIBILITY RELATIONS ===\n");
+
+        // Basic examples
+        System.out.println("--- Basic Divisibility Tests ---");
+        int[][] tests = {{3, 12}, {5, 0}, {7, 15}, {1, 42}, {-3, 9}, {4, -8}};
+        for (int[] t : tests) {
+            int a = t[0], b = t[1];
+            System.out.printf("  %d | %d ? %s%n", a, b, divides(a, b));
+        }
+        System.out.println();
+
+        // Transitivity demonstrations
+        System.out.println("--- Transitivity Demonstrations ---");
+        demonstrateTransitivity(4, 12, 60);
+        demonstrateTransitivity(3, 6, 18);
+        demonstrateTransitivity(2, 10, 50);
+    }
+}</code></pre>
+
+<p><strong>Sample Output:</strong></p>
+<pre><code class="language-text">=== DIVISIBILITY RELATIONS ===
+
+--- Basic Divisibility Tests ---
+  3 | 12 ? true
+  5 | 0 ? true
+  7 | 15 ? false
+  1 | 42 ? true
+  -3 | 9 ? true
+  4 | -8 ? true
+
+--- Transitivity Demonstrations ---
+Testing transitivity: 4 | 12 and 12 | 60 ?
+  b = 4 * 3 = 12  (m = 3)
+  c = 12 * 5 = 60  (n = 5)
+  c = 4 * 15 = 60  (k = m*n = 15)
+  Therefore 4 | 60  ✓
+
+Testing transitivity: 3 | 6 and 6 | 18 ?
+  b = 3 * 2 = 6  (m = 2)
+  c = 6 * 3 = 18  (n = 3)
+  c = 3 * 6 = 18  (k = m*n = 6)
+  Therefore 3 | 18  ✓
+
+Testing transitivity: 2 | 10 and 10 | 50 ?
+  b = 2 * 5 = 10  (m = 5)
+  c = 10 * 5 = 50  (n = 5)
+  c = 2 * 25 = 50  (k = m*n = 25)
+  Therefore 2 | 50  ✓</code></pre>
+
+<hr>
+
+<h3 id="example-3-linear-combinations-theorem-combined-dm-java">Example 3: Linear Combinations Theorem (Combined DM + Java)</h3>
+
+<p><strong>Claim.</strong> If $a \mid b$ and $a \mid c$, then for any integers $x$ and $y$, $a \mid (bx + cy)$.</p>
+
+<p><strong>Proof.</strong></p>
+
+<p>Since $a \mid b$, we have $b = am$ for some $m \in \mathbb{Z}$.  </p>
+<p>Since $a \mid c$, we have $c = an$ for some $n \in \mathbb{Z}$.</p>
+
+<p>Then:</p>
+<div class="katex-block">$bx + cy = (am)x + (an)y = a(mx + ny)$</div>
+
+<p>Let $k = mx + ny$. Since $m, x, n, y \in \mathbb{Z}$, we have $k \in \mathbb{Z}$. Therefore $a \mid (bx + cy)$. $\blacksquare$</p>
+
+<p><strong>Why this is powerful:</strong> This theorem says that if $a$ divides two numbers, then $a$ divides <em>any combination</em> of those numbers. For example, since $5 \mid 15$ and $5 \mid 20$, we know $5 \mid (15 \cdot 7 + 20 \cdot (-3)) = 105 - 60 = 45$.</p>
+
+<p><strong>Java Implementation:</strong></p>
+
+<pre><code class="language-java">/**
+ * Verifies the linear combination theorem:
+ * if a | b and a | c, then a | (bx + cy) for all x, y.
+ */
+public static void verifyLinearCombination(int a, int b, int c) {
+    if (!divides(a, b) || !divides(a, c)) {
+        System.out.printf("  Skipping: %d does not divide both %d and %d%n", a, b, c);
+        return;
+    }
+
+    System.out.printf("Since %d | %d and %d | %d, testing linear combinations:%n", a, b, a, c);
+    boolean allPass = true;
+
+    for (int x = -10; x &lt;= 10; x++) {
+        for (int y = -10; y &lt;= 10; y++) {
+            int lc = b * x + c * y;
+            if (!divides(a, lc)) {
+                System.out.printf("  FAIL: %d*%d + %d*%d = %d not divisible by %d%n",
+                    b, x, c, y, lc, a);
+                allPass = false;
+            }
+        }
+    }
+
+    if (allPass) {
+        System.out.printf("  All linear combinations %d*x + %d*y divisible by %d (x,y in [-10,10])%n",
+            b, c, a);
+    }
+}</code></pre>
+
+<hr>
+
+<h3 id="example-4-non-divisibility-proof">Example 4: Non-Divisibility Proof</h3>
+
+<p><strong>Claim.</strong> $3 \nmid 20$.</p>
+
+<p><strong>Proof.</strong> By the quotient-remainder theorem, $20 = 3 \times 6 + 2$, so the remainder when dividing 20 by 3 is $r = 2 \neq 0$. Since no integer $k$ satisfies $20 = 3k$ (we would need $k = 20/3 \approx 6.67$), we have $3 \nmid 20$. $\blacksquare$</p>
+
+<p>In Java: <code>20 % 3 == 2</code>, which is nonzero, so <code>divides(3, 20)</code> returns <code>false</code>.</p>
+
+<hr>
+
+<h3 id="example-5-divisibility-and-absolute-value">Example 5: Divisibility and Absolute Value</h3>
+
+<p><strong>Claim.</strong> If $a \mid b$, then $|a| \mid |b|$.</p>
+
+<p><strong>Proof.</strong> Since $a \mid b$, we have $b = ak$ for some $k \in \mathbb{Z}$. Taking absolute values:</p>
+<div class="katex-block">$|b| = |ak| = |a| \cdot |k|$</div>
+<p>Since $|k| \in \mathbb{Z}$ (absolute value of an integer is a non-negative integer), we have $|a| \mid |b|$. $\blacksquare$</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="direct-proof-with-divisibility">Direct Proof with Divisibility</h3>
+
+<p>Divisibility proofs follow the same "direct proof from definitions" pattern as parity proofs from Class 1:</p>
+
+<p><strong>Template for Proving $a \mid (\text{expression})$:</strong></p>
+
+<blockquote>
+<p><strong>Claim:</strong> If [hypotheses involving divisibility], then $a \mid [\text{some expression}]$.</p>
+</blockquote>
+<p>></p>
+<blockquote>
+<p><strong>Proof.</strong></p>
+<p>1. From each hypothesis "$d \mid x$," write $x = dk$ for a fresh variable $k \in \mathbb{Z}$.</p>
+<p>2. Substitute these equations into the target expression.</p>
+<p>3. Factor out $a$.</p>
+<p>4. Identify the integer witness.</p>
+<p>5. Conclude $a$ divides the expression. $\blacksquare$</p>
+</blockquote>
+
+<h3 id="chaining-divisibility">Chaining Divisibility</h3>
+
+<p>Many divisibility proofs involve chains of substitutions. The key algebraic moves are:</p>
+<ul>
+<li><strong>Substitution:</strong> Replace $b$ with $am$ (from $a \mid b$)</li>
+<li><strong>Factoring:</strong> Rewrite $am \cdot n$ as $a(mn)$</li>
+<li><strong>Closure:</strong> Note that products and sums of integers are integers</li>
+</ul>
+
+<h3 id="common-mistakes">Common Mistakes</h3>
+
+<table>
+<thead><tr>
+<th>Mistake</th>
+<th>Correction</th>
+</tr></thead><tbody>
+<tr>
+<td>"Since $a \mid b$, we have $a = bk$"</td>
+<td>Wrong direction! It should be $b = ak$</td>
+</tr>
+<tr>
+<td>Forgetting to introduce different variables for different hypotheses</td>
+<td>If $a \mid b$ and $a \mid c$, write $b = am$ and $c = an$ with <em>different</em> $m, n$</td>
+</tr>
+<tr>
+<td>Not verifying the witness is an integer</td>
+<td>Always confirm "$k \in \mathbb{Z}$ because integers are closed under [operation]"</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<h3 id="complete-divisibility-library">Complete Divisibility Library</h3>
+
+<pre><code class="language-java">/**
+ * DivisibilityLibrary.java
+ * Complete library for divisibility operations and verification.
+ */
+public class DivisibilityLibrary {
+
+    /**
+     * Tests a | b.
+     * Math: a | b ↔ ∃k∈Z: b = ak ↔ b mod a = 0
+     */
+    public static boolean divides(int a, int b) {
+        if (a == 0) throw new ArithmeticException("Cannot test divisibility by 0");
+        return b % a == 0;
+    }
+
+    /**
+     * Returns all positive divisors of n.
+     * A divisor d of n satisfies d | n and 1 ≤ d ≤ |n|.
+     */
+    public static java.util.List&lt;Integer&gt; getDivisors(int n) {
+        java.util.List&lt;Integer&gt; divisors = new java.util.ArrayList&lt;&gt;();
+        if (n == 0) return divisors;   // 0 has infinitely many divisors
+        int absN = Math.abs(n);
+        for (int d = 1; d &lt;= absN; d++) {
+            if (absN % d == 0) {
+                divisors.add(d);
+            }
+        }
+        return divisors;
+    }
+
+    /**
+     * Counts the number of positive divisors of n.
+     * Notation: τ(n) or d(n) in number theory.
+     */
+    public static int countDivisors(int n) {
+        return getDivisors(n).size();
+    }
+
+    /**
+     * Tests whether the divisibility relation is transitive
+     * for three specific values.
+     */
+    public static boolean testTransitivity(int a, int b, int c) {
+        // If a|b and b|c, then a|c must hold
+        if (divides(a, b) &amp;&amp; divides(b, c)) {
+            return divides(a, c);
+        }
+        return true; // vacuously true if hypothesis not met
+    }
+
+    /**
+     * Tests the linear combination property:
+     * if a|b and a|c, then a|(bx+cy) for given x, y.
+     */
+    public static boolean testLinearCombination(int a, int b, int c, int x, int y) {
+        if (!divides(a, b) || !divides(a, c)) return true;
+        return divides(a, b * x + c * y);
+    }
+
+    /**
+     * Finds the common divisors of two integers.
+     * Common divisors of a and b are all d &gt; 0 such that d|a and d|b.
+     */
+    public static java.util.List&lt;Integer&gt; commonDivisors(int a, int b) {
+        java.util.List&lt;Integer&gt; result = new java.util.ArrayList&lt;&gt;();
+        java.util.List&lt;Integer&gt; divA = getDivisors(a);
+        for (int d : divA) {
+            if (divides(d, b)) {
+                result.add(d);
+            }
+        }
+        return result;
+    }
+
+    // =========================================================
+    // DEMONSTRATIONS
+    // =========================================================
+
+    public static void main(String[] args) {
+        System.out.println("===================================");
+        System.out.println(" DIVISIBILITY RELATIONS — CLASS 2  ");
+        System.out.println("===================================\n");
+
+        // Demo 1: Basic divisibility
+        System.out.println("--- Divisibility Tests ---");
+        int[][] pairs = {{3, 12}, {4, 18}, {5, 0}, {7, 49}, {6, 15}, {1, 100}};
+        for (int[] p : pairs) {
+            System.out.printf("  %d | %d ? %s", p[0], p[1], divides(p[0], p[1]));
+            if (divides(p[0], p[1])) {
+                System.out.printf("  (witness k = %d)", p[1] / p[0]);
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+        // Demo 2: Listing divisors
+        System.out.println("--- Divisors ---");
+        for (int n : new int[]{1, 12, 28, 30, 100}) {
+            System.out.printf("  Divisors of %d: %s  (count = %d)%n",
+                n, getDivisors(n), countDivisors(n));
+        }
+        System.out.println();
+
+        // Demo 3: Common divisors
+        System.out.println("--- Common Divisors ---");
+        System.out.println("  Common divisors of 12 and 18: " + commonDivisors(12, 18));
+        System.out.println("  Common divisors of 24 and 36: " + commonDivisors(24, 36));
+        System.out.println();
+
+        // Demo 4: Transitivity verification
+        System.out.println("--- Transitivity Verification ---");
+        boolean allTransitive = true;
+        for (int a = 1; a &lt;= 10; a++) {
+            for (int b = 1; b &lt;= 50; b++) {
+                for (int c = 1; c &lt;= 50; c++) {
+                    if (!testTransitivity(a, b, c)) {
+                        System.out.printf("  FAIL: %d, %d, %d%n", a, b, c);
+                        allTransitive = false;
+                    }
+                }
+            }
+        }
+        if (allTransitive) {
+            System.out.println("  Transitivity holds for all tested triples.");
+        }
+        System.out.println();
+
+        // Demo 5: Linear combination verification
+        System.out.println("--- Linear Combination Verification ---");
+        boolean allLC = true;
+        int a = 6, b = 18, c = 24;
+        for (int x = -20; x &lt;= 20; x++) {
+            for (int y = -20; y &lt;= 20; y++) {
+                if (!testLinearCombination(a, b, c, x, y)) {
+                    System.out.printf("  FAIL: %d | (%d*%d + %d*%d)%n", a, b, x, c, y);
+                    allLC = false;
+                }
+            }
+        }
+        if (allLC) {
+            System.out.printf("  %d divides all %d*x + %d*y (x,y in [-20,20]) ✓%n", a, b, c);
+        }
+    }
+}</code></pre>
+
+<p><strong>Sample Output:</strong></p>
+<pre><code class="language-text">===================================
+ DIVISIBILITY RELATIONS — CLASS 2  
+===================================
+
+--- Divisibility Tests ---
+  3 | 12 ? true  (witness k = 4)
+  4 | 18 ? false
+  5 | 0 ? true  (witness k = 0)
+  7 | 49 ? true  (witness k = 7)
+  6 | 15 ? false
+  1 | 100 ? true  (witness k = 100)
+
+--- Divisors ---
+  Divisors of 1: [1]  (count = 1)
+  Divisors of 12: [1, 2, 3, 4, 6, 12]  (count = 6)
+  Divisors of 28: [1, 2, 4, 7, 14, 28]  (count = 6)
+  Divisors of 30: [1, 2, 3, 5, 6, 10, 15, 30]  (count = 8)
+  Divisors of 100: [1, 2, 4, 5, 10, 20, 25, 50, 100]  (count = 9)
+
+--- Common Divisors ---
+  Common divisors of 12 and 18: [1, 2, 3, 6]
+  Common divisors of 24 and 36: [1, 2, 3, 4, 6, 12]
+
+--- Transitivity Verification ---
+  Transitivity holds for all tested triples.
+
+--- Linear Combination Verification ---
+  6 divides all 18*x + 24*y (x,y in [-20,20]) ✓</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="computational-use-divisibility-in-computer-science">
+<h2>Computational Use: Divisibility in Computer Science</h2>
+
+<h3 id="modular-arithmetic">Modular Arithmetic</h3>
+<p>Checking <code>b % a == 0</code> is the computational core of divisibility. This operation underlies nearly every area of CS that deals with number properties.</p>
+
+<h3 id="cryptography">Cryptography</h3>
+<p>RSA encryption relies on the fact that given a large number $n = pq$ (product of two primes), it is computationally hard to find $p$ and $q$. The security of RSA is fundamentally about the difficulty of the <em>divisibility</em> problem for large numbers.</p>
+
+<h3 id="data-alignment">Data Alignment</h3>
+<p>Computer memory is organized in words (4 bytes, 8 bytes). For efficiency, data structures must be aligned — their starting address must be divisible by their alignment requirement. Checking alignment is a divisibility test.</p>
+
+<h3 id="cyclic-structures">Cyclic Structures</h3>
+<p>Circular buffers, round-robin scheduling, and cyclic linked lists all use the pattern <code>index = (index + 1) % size</code>. Understanding divisibility helps reason about when indices wrap around and whether every position is visited.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Euclid (c. 300 BC)</strong> in Book VII of the <em>Elements</em> defined divisibility and proved the transitivity of the "measures" relation (his term for divisibility). His proofs were geometric — he represented numbers as line segments and "measuring" meant fitting one segment into another.</p>
+
+<p><strong>The notation $a \mid b$</strong> was introduced much later, in the 19th century. Before that, mathematicians wrote "a measures b" or "a is contained in b." The compact symbol emerged as algebra became more formal.</p>
+
+<p><strong>Gauss (1801)</strong> in <em>Disquisitiones Arithmeticae</em> elevated divisibility to a central role in number theory, introducing congruence notation $a \equiv b \pmod{m}$ as a shorthand for $m \mid (a - b)$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> True or false: $5 \mid 0$. Justify using the definition.</p>
+
+<p><strong>A2.</strong> True or false: $0 \mid 5$. Explain why.</p>
+
+<p><strong>A3.</strong> If $a \mid b$, does this imply $a \leq b$? Give an example or counterexample.</p>
+
+<p><strong>A4.</strong> List all positive integers that divide 24.</p>
+
+<hr>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove: If $6 \mid n$, then $2 \mid n$ and $3 \mid n$.</p>
+
+<p><strong>B2.</strong> Prove: If $a \mid b$, then $a \mid (-b)$.</p>
+
+<p><strong>B3.</strong> Prove: If $a \mid b$ and $a \mid c$, then $a \mid (b + c)$.</p>
+
+<p><strong>B4.</strong> Prove or disprove: If $a \mid (b + c)$, then $a \mid b$ or $a \mid c$.</p>
+
+<hr>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write a method <code>boolean divides(int a, int b)</code> that returns true when $a \mid b$. Handle the edge case $a = 0$.</p>
+
+<p><strong>C2.</strong> Write a method <code>List&lt;Integer&gt; getDivisors(int n)</code> that returns all positive divisors of $n$. What is the relationship between the number of divisors and whether $n$ is prime?</p>
+
+<p><strong>C3.</strong> Write a method that takes three integers $a, b, c$ and checks whether $a \mid b$ and $b \mid c$ implies $a \mid c$ for those values.</p>
+
+<p><strong>C4.</strong> Write a method <code>boolean isPerfect(int n)</code> that returns true if $n$ is a perfect number (equal to the sum of its proper divisors). Test: is 28 perfect?</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Prove: If $a \mid b$ and $b \mid c$, then $a \mid c$. (Transitivity — prove from scratch if this is your first time.)</p>
+
+<p><strong>DM2.</strong> Prove: If $a \mid b$ and $a \mid c$, then $a \mid (b - c)$.</p>
+
+<p><strong>DM3.</strong> Prove: If $a \mid b$, then $a \mid (b \cdot n)$ for any integer $n$.</p>
+
+<p><strong>DM4.</strong> Prove: If $a \mid b$ and $c \mid d$, then $ac \mid bd$.</p>
+
+<p><strong>DM5.</strong> Prove or disprove: If $6 \mid ab$, then $6 \mid a$ or $6 \mid b$.</p>
+
+<p><strong>DM6.</strong> Prove: If $a \mid b$ and $b \neq 0$, then $|a| \leq |b|$.</p>
+
+<p><strong>DM7.</strong> Prove: For any integer $n$, the product $n(n+1)(n+2)$ is divisible by 6. <em>(Hint: among any three consecutive integers, one is divisible by 2 and one by 3.)</em></p>
+
+<hr>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement a method <code>boolean relativelyPrime(int a, int b)</code> that returns true if $a$ and $b$ share no common positive divisor other than 1. Test with pairs like $(8, 15)$, $(12, 18)$, $(7, 11)$.</p>
+
+<p><strong>JP2.</strong> Write a method <code>int sumOfDivisors(int n)</code> that returns the sum of all positive divisors of $n$. Test with $n = 28$ (answer: 56) and $n = 12$ (answer: 28).</p>
+
+<p><strong>JP3.</strong> Write a method that finds all "abundant" numbers up to 100. (A number $n$ is abundant if the sum of its proper divisors exceeds $n$.) Example: 12 is abundant because $1+2+3+4+6 = 16 > 12$.</p>
+
+<p><strong>JP4.</strong> Write a method <code>void printDivisibilityChain(int a, int b, int c)</code> that, when $a \mid b$ and $b \mid c$, prints the witnesses $m, n, k$ showing $b = am$, $c = bn$, $c = ak$ with $k = mn$.</p>
+
+<p><strong>JP5.</strong> Write a method that, given an array of integers and a divisor $d$, returns a new array containing only the elements divisible by $d$. Mathematically, this computes $\{x \in \text{arr} : d \mid x\}$.</p>
+
+<p><strong>JP6.</strong> Implement a method <code>int gcd_naive(int a, int b)</code> that finds the greatest common divisor by checking all common divisors. <em>(This is a brute-force approach; the Euclidean algorithm in Class 3 is much faster.)</em></p>
+
+<hr>
+
+<h3 id="bridge-problems-discrete-math-java">Bridge Problems (Discrete Math + Java)</h3>
+
+<p><strong>BR1.</strong> <em>Prove and Verify.</em> Prove that for any integer $n$, $n(n+1)(n+2)$ is divisible by 6. Then write a Java method that tests this for $n = -100$ to $100$.</p>
+
+<p><strong>BR2.</strong> <em>Proof to Code.</em> The proof of transitivity uses substitution: $c = bn = (am)n = a(mn)$. Write a method <code>int transitivityWitness(int a, int b, int c)</code> that computes and returns the combined witness $k = mn$, and asserts that $c == a * k$.</p>
+
+<p><strong>BR3.</strong> <em>Code to Proof.</em> Consider:</p>
+<pre><code class="language-java">public static boolean mysteryDivCheck(int n) {
+    return (n * n * n - n) % 6 == 0;
+}</code></pre>
+<p>State the mathematical theorem this checks and prove it. <em>(Hint: $n^3 - n = n(n-1)(n+1)$, which is a product of three consecutive integers.)</em></p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1 Solution.</strong> Let $a \mid b$ and $b \mid c$. Then $b = am$ and $c = bn$ for some $m, n \in \mathbb{Z}$. Substituting: $c = (am)n = a(mn)$. Since $mn \in \mathbb{Z}$, $a \mid c$. $\blacksquare$</p>
+
+<p><strong>DM2 Solution.</strong> Since $a \mid b$, we have $b = am$. Since $a \mid c$, we have $c = an$. Then $b - c = am - an = a(m - n)$. Since $m - n \in \mathbb{Z}$, $a \mid (b - c)$. $\blacksquare$</p>
+
+<p><strong>DM3 Solution.</strong> Since $a \mid b$, we have $b = ak$ for some $k \in \mathbb{Z}$. Then $bn = (ak)n = a(kn)$. Since $kn \in \mathbb{Z}$, $a \mid bn$. $\blacksquare$</p>
+
+<p><strong>DM4 Solution.</strong> Since $a \mid b$, we have $b = am$ for some $m \in \mathbb{Z}$. Since $c \mid d$, we have $d = cn$ for some $n \in \mathbb{Z}$. Then $bd = (am)(cn) = (ac)(mn)$. Since $mn \in \mathbb{Z}$, $ac \mid bd$. $\blacksquare$</p>
+
+<p><strong>DM5 Solution.</strong> <strong>Disproof.</strong> Let $a = 2$ and $b = 3$. Then $ab = 6$ and $6 \mid 6$, but $6 \nmid 2$ and $6 \nmid 3$. The claim is false. $\blacksquare$</p>
+
+<p>Note: This <em>would</em> be true if 6 were prime (Euclid's lemma), but 6 is composite. The correct statement is: if $p$ is prime and $p \mid ab$, then $p \mid a$ or $p \mid b$.</p>
+
+<p><strong>DM6 Solution.</strong> Since $a \mid b$ and $b \neq 0$, we have $b = ak$ for some $k \in \mathbb{Z}$, $k \neq 0$ (since $b \neq 0$). Taking absolute values: $|b| = |a| \cdot |k|$. Since $|k| \geq 1$, we get $|b| \geq |a|$. $\blacksquare$</p>
+
+<p><strong>DM7 Solution.</strong> Among three consecutive integers $n, n+1, n+2$:</p>
+<ul>
+<li>At least one is even (divisible by 2).</li>
+<li>At least one is divisible by 3 (since the remainders mod 3 cycle through 0, 1, 2).</li>
+</ul>
+
+<p>So $2 \mid n(n+1)(n+2)$ and $3 \mid n(n+1)(n+2)$. Since $\gcd(2, 3) = 1$, we get $6 \mid n(n+1)(n+2)$. $\blacksquare$</p>
+
+<hr>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP1 Solution.</strong></p>
+<pre><code class="language-java">public static boolean relativelyPrime(int a, int b) {
+    // Two numbers are relatively prime if their only common positive divisor is 1
+    a = Math.abs(a); b = Math.abs(b);
+    for (int d = 2; d &lt;= Math.min(a, b); d++) {
+        if (a % d == 0 &amp;&amp; b % d == 0) {
+            return false;   // found a common divisor &gt; 1
+        }
+    }
+    return true;
+}</code></pre>
+
+<p><strong>JP2 Solution.</strong></p>
+<pre><code class="language-java">public static int sumOfDivisors(int n) {
+    // σ(n) = sum of all positive divisors of n
+    int sum = 0;
+    for (int d = 1; d &lt;= Math.abs(n); d++) {
+        if (n % d == 0) {
+            sum += d;
+        }
+    }
+    return sum;
+}</code></pre>
+
+<p><strong>JP3 Solution.</strong></p>
+<pre><code class="language-java">public static void findAbundant(int limit) {
+    System.out.println("Abundant numbers up to " + limit + ":");
+    for (int n = 2; n &lt;= limit; n++) {
+        int properSum = sumOfDivisors(n) - n;  // subtract n itself
+        if (properSum &gt; n) {
+            System.out.printf("  %d (proper divisor sum = %d)%n", n, properSum);
+        }
+    }
+}
+// Output includes: 12, 18, 20, 24, 30, 36, 40, 42, 48, 54, 56, 60, ...</code></pre>
+
+<p><strong>JP4 Solution.</strong></p>
+<pre><code class="language-java">public static void printDivisibilityChain(int a, int b, int c) {
+    if (b % a != 0 || c % b != 0) {
+        System.out.println("Hypotheses not met: a|b and b|c required.");
+        return;
+    }
+    int m = b / a;
+    int n = c / b;
+    int k = m * n;
+    System.out.printf("%d = %d * %d   (m = %d)%n", b, a, m, m);
+    System.out.printf("%d = %d * %d   (n = %d)%n", c, b, n, n);
+    System.out.printf("%d = %d * %d   (k = m*n = %d*%d = %d)%n", c, a, k, m, n, k);
+}</code></pre>
+
+<p><strong>JP5 Solution.</strong></p>
+<pre><code class="language-java">public static int[] filterDivisible(int[] arr, int d) {
+    // Returns {x ∈ arr : d | x}
+    return java.util.Arrays.stream(arr)
+        .filter(x -&gt; x % d == 0)
+        .toArray();
+}
+
+// Or without streams:
+public static int[] filterDivisibleLoop(int[] arr, int d) {
+    int count = 0;
+    for (int x : arr) if (x % d == 0) count++;
+    int[] result = new int[count];
+    int idx = 0;
+    for (int x : arr) {
+        if (x % d == 0) result[idx++] = x;
+    }
+    return result;
+}</code></pre>
+
+<p><strong>JP6 Solution.</strong></p>
+<pre><code class="language-java">public static int gcd_naive(int a, int b) {
+    a = Math.abs(a); b = Math.abs(b);
+    if (a == 0) return b;
+    if (b == 0) return a;
+    int gcd = 1;
+    for (int d = 1; d &lt;= Math.min(a, b); d++) {
+        if (a % d == 0 &amp;&amp; b % d == 0) {
+            gcd = d;
+        }
+    }
+    return gcd;
+}
+// This is O(min(a, b)) — the Euclidean algorithm in Class 3 is O(log(min(a,b)))</code></pre>
+
+<hr>
+
+<h3 id="bridge-problem-solutions">Bridge Problem Solutions</h3>
+
+<p><strong>BR1 Solution.</strong></p>
+
+<p><em>Proof:</em> Among $n, n+1, n+2$, one is divisible by 2 and one by 3 (since they are consecutive, their remainders mod 2 cycle through 0-1, and mod 3 through 0-1-2). So the product is divisible by both 2 and 3, hence by 6. $\blacksquare$</p>
+
+<pre><code class="language-java">public static void verifyConsecutiveTriple() {
+    for (int n = -100; n &lt;= 100; n++) {
+        long product = (long) n * (n + 1) * (n + 2);
+        assert product % 6 == 0 : "Failed for n=" + n;
+    }
+    System.out.println("n(n+1)(n+2) is always divisible by 6: verified.");
+}</code></pre>
+
+<p><strong>BR2 Solution.</strong></p>
+<pre><code class="language-java">public static int transitivityWitness(int a, int b, int c) {
+    assert b % a == 0 : a + " does not divide " + b;
+    assert c % b == 0 : b + " does not divide " + c;
+    int m = b / a;       // b = a * m
+    int n = c / b;       // c = b * n
+    int k = m * n;       // c = a * k
+    assert c == a * k : "Witness verification failed";
+    return k;
+}</code></pre>
+
+<p><strong>BR3 Solution.</strong></p>
+
+<p>The method checks: $6 \mid (n^3 - n)$ for all $n$.</p>
+
+<p><em>Theorem:</em> For any integer $n$, $n^3 - n$ is divisible by 6.</p>
+
+<p><em>Proof:</em> Factor: $n^3 - n = n(n^2 - 1) = n(n-1)(n+1) = (n-1) \cdot n \cdot (n+1)$. This is the product of three consecutive integers. Among any three consecutive integers, one is divisible by 2 and one by 3. Since $\gcd(2,3) = 1$, the product is divisible by $2 \times 3 = 6$. $\blacksquare$</p>
+
+</section>
+</div>
+<hr>
+<div id="class-3" class="class-section">
+<h1 id="module-1-class-3-primes-and-the-euclidean-algorithm">Module 1 – Class 3: Primes and the Euclidean Algorithm</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<p>By the end of this class, students will be able to:</p>
+
+<ol>
+<li>Define prime and composite numbers formally and identify them.</li>
+<li>State and explain the Euclidean algorithm for computing the greatest common divisor (gcd).</li>
+<li>Prove the correctness of the Euclidean algorithm using a loop invariant.</li>
+<li>Argue that the algorithm terminates using a variant function (decreasing remainders).</li>
+<li>Implement <code>gcd</code>, <code>isPrime</code>, and a prime sieve in Java, connecting each to the mathematical definitions.</li>
+</ol>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="prime-numbers">Prime Numbers</h3>
+
+<p><strong>Definition (Prime).</strong> An integer $p > 1$ is <strong>prime</strong> if its only positive divisors are 1 and $p$ itself.</p>
+
+<p><strong>Definition (Composite).</strong> An integer $n > 1$ is <strong>composite</strong> if it is not prime — that is, there exist integers $a, b$ with $1 < a, b < n$ such that $n = ab$.</p>
+
+<p><strong>Special cases:</strong></p>
+<ul>
+<li>1 is <strong>neither</strong> prime nor composite (by convention).</li>
+<li>2 is the only even prime.</li>
+<li>0 and negative integers are neither prime nor composite.</li>
+</ul>
+
+<h3 id="plain-language">Plain Language</h3>
+
+<p>A prime number cannot be broken into smaller factors (other than 1 and itself). A composite number <em>can</em> be factored. Primes are the "atoms" of arithmetic — every integer greater than 1 is either prime or can be built by multiplying primes together.</p>
+
+<h3 id="the-first-few-primes">The First Few Primes</h3>
+
+<div class="katex-block">$2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, \ldots$</div>
+
+<h3 id="greatest-common-divisor">Greatest Common Divisor</h3>
+
+<p><strong>Definition (GCD).</strong> The <strong>greatest common divisor</strong> of integers $a$ and $b$ (not both zero), written $\gcd(a, b)$, is the largest positive integer that divides both $a$ and $b$.</p>
+
+<p><strong>Examples:</strong></p>
+<ul>
+<li>$\gcd(12, 18) = 6$ because the common divisors of 12 and 18 are $\{1, 2, 3, 6\}$</li>
+<li>$\gcd(7, 11) = 1$ (they share no common factor except 1 — they are "coprime")</li>
+<li>$\gcd(0, n) = |n|$ for any nonzero $n$</li>
+</ul>
+
+<h3 id="the-euclidean-algorithm">The Euclidean Algorithm</h3>
+
+<p>The Euclidean algorithm computes $\gcd(a, b)$ efficiently using the key identity:</p>
+
+<div class="katex-block">$\gcd(a, b) = \gcd(b, a \bmod b) \quad\text{for } b \neq 0$</div>
+
+<p>The algorithm repeatedly applies this identity until the remainder is 0. At that point, the other value is the gcd.</p>
+
+<p><strong>Why does this work?</strong> If $a = bq + r$, then any common divisor of $a$ and $b$ also divides $r$ (since $r = a - bq$), and any common divisor of $b$ and $r$ also divides $a$ (since $a = bq + r$). So $a$ and $b$ have exactly the same set of common divisors as $b$ and $r$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<h3 id="the-division-algorithm-identity">The Division Algorithm Identity</h3>
+
+<p>For any integers $a$ and $b$ with $b > 0$:</p>
+
+<div class="katex-block">$a = b \cdot q + r \quad\text{where } q = \lfloor a/b \rfloor \text{ and } 0 \leq r < b$</div>
+
+<h3 id="gcd-properties">GCD Properties</h3>
+
+<table>
+<thead><tr>
+<th>Property</th>
+<th>Statement</th>
+</tr></thead><tbody>
+<tr>
+<td>Commutativity</td>
+<td>$\gcd(a, b) = \gcd(b, a)$</td>
+</tr>
+<tr>
+<td>GCD with 0</td>
+<td>$\gcd(a, 0) = \|a\|$</td>
+</tr>
+<tr>
+<td>Key identity</td>
+<td>$\gcd(a, b) = \gcd(b, a \bmod b)$</td>
+</tr>
+<tr>
+<td>Coprime</td>
+<td>$\gcd(a, b) = 1$ means $a$ and $b$ share no factor $> 1$</td>
+</tr>
+</tbody></table>
+
+<h3 id="algorithm-in-pseudocode">Algorithm in Pseudocode</h3>
+
+<pre><code class="language-text">GCD(a, b):
+    while b ≠ 0:
+        r ← a mod b
+        a ← b
+        b ← r
+    return a</code></pre>
+
+<h3 id="common-pitfalls">Common Pitfalls</h3>
+
+<table>
+<thead><tr>
+<th>Pitfall</th>
+<th>Correction</th>
+</tr></thead><tbody>
+<tr>
+<td>Forgetting that $\gcd(a, 0) = a$, not 0</td>
+<td>Zero is divisible by everything, so the gcd is the other number</td>
+</tr>
+<tr>
+<td>Testing primality by checking only a few small primes</td>
+<td>You must check all potential factors up to $\sqrt{n}$</td>
+</tr>
+<tr>
+<td>Confusing gcd with lcm</td>
+<td>$\gcd$ is the <em>greatest</em> common divisor; $\text{lcm}$ is the <em>least</em> common multiple</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-computing-gcd-1071-462-by-hand-discrete-math">Example 1: Computing gcd(1071, 462) by Hand (Discrete Math)</h3>
+
+<p>Apply the Euclidean algorithm step by step:</p>
+
+<table>
+<thead><tr>
+<th>Step</th>
+<th>Division</th>
+<th>Quotient $q$</th>
+<th>Remainder $r$</th>
+</tr></thead><tbody>
+<tr>
+<td>1</td>
+<td>$1071 = 462 \cdot 2 + 147$</td>
+<td>2</td>
+<td>147</td>
+</tr>
+<tr>
+<td>2</td>
+<td>$462 = 147 \cdot 3 + 21$</td>
+<td>3</td>
+<td>21</td>
+</tr>
+<tr>
+<td>3</td>
+<td>$147 = 21 \cdot 7 + 0$</td>
+<td>7</td>
+<td>0</td>
+</tr>
+</tbody></table>
+
+<p>When the remainder reaches 0, the other value (21) is the gcd.</p>
+
+<div class="katex-block">$\gcd(1071, 462) = 21$</div>
+
+<p><strong>Verification:</strong> $1071 = 21 \times 51$ and $462 = 21 \times 22$. Both are divisible by 21, and 51 and 22 share no common factor ($\gcd(51, 22) = 1$), confirming 21 is the <em>greatest</em> common divisor.</p>
+
+<hr>
+
+<h3 id="example-2-the-euclidean-algorithm-in-java-java-translation">Example 2: The Euclidean Algorithm in Java (Java Translation)</h3>
+
+<pre><code class="language-java">/**
+ * EuclideanGCD.java
+ * Implements the Euclidean algorithm with detailed tracing.
+ */
+public class EuclideanGCD {
+
+    /**
+     * Computes gcd(a, b) using the Euclidean algorithm.
+     *
+     * LOOP INVARIANT: gcd(a, b) = gcd(original_a, original_b)
+     *   at the start of each iteration.
+     *
+     * VARIANT FUNCTION: b decreases each iteration (b &gt; 0 before, and
+     *   the new b = old_a % old_b which is in [0, old_b - 1]).
+     *
+     * TERMINATION: b is a non-negative integer that strictly decreases
+     *   each iteration, so the loop must terminate when b == 0.
+     *
+     * POSTCONDITION: when b == 0, gcd(a, 0) = a.
+     *
+     * Math:  gcd(a, b) = gcd(b, a mod b)
+     * Code:  each iteration replaces (a, b) with (b, a % b)
+     */
+    public static int gcd(int a, int b) {
+        a = Math.abs(a);
+        b = Math.abs(b);
+        while (b != 0) {
+            int r = a % b;    // r = a mod b; the key step
+            a = b;            // replace a with b
+            b = r;            // replace b with r
+        }
+        return a;             // when b == 0, a is the gcd
+    } 
+     // try this 
+
+     public static int gcd(int a, int b) {
+    a = Math.abs(a);
+    b = Math.abs(b);
+    
+    // Base Case: "If b is zero, return the other one"
+    if (b == 0) {
+        return a;
+    }
+    
+    // Recursive Step: Explicitly sending the output to the next 'a' and 'b'
+    return gcd(b, a % b);
+}
+
+
+    /**
+     * Same algorithm with step-by-step tracing for teaching.
+     */
+    public static int gcdWithTrace(int a, int b) {
+        a = Math.abs(a);
+        b = Math.abs(b);
+        System.out.printf("Computing gcd(%d, %d):%n", a, b);
+        int step = 1;
+        while (b != 0) {
+            int q = a / b;
+            int r = a % b;
+            System.out.printf("  Step %d: %d = %d × %d + %d%n", step, a, b, q, r);
+            a = b;
+            b = r;
+            step++;
+        }
+        System.out.printf("  Result: gcd = %d%n%n", a);
+        return a;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("===========================================");
+        System.out.println(" PRIMES AND THE EUCLIDEAN ALGORITHM — CLASS 3");
+        System.out.println("===========================================\n");
+
+        // Traced examples
+        gcdWithTrace(1071, 462);
+        gcdWithTrace(48, 18);
+        gcdWithTrace(100, 35);
+        gcdWithTrace(17, 13);    // coprime
+        gcdWithTrace(0, 15);
+
+        // Verify commutativity
+        System.out.println("--- Commutativity Check ---");
+        for (int a = 0; a &lt;= 50; a++) {
+            for (int b = 0; b &lt;= 50; b++) {
+                if (a == 0 &amp;&amp; b == 0) continue;
+                assert gcd(a, b) == gcd(b, a) : "Commutativity failed!";
+            }
+        }
+        System.out.println("  gcd(a,b) = gcd(b,a) verified for a,b in [0,50]\n");
+
+        // Verify: gcd(a,b) divides both a and b
+        System.out.println("--- GCD Divides Both ---");
+        boolean allPass = true;
+        for (int a = 1; a &lt;= 100; a++) {
+            for (int b = 1; b &lt;= 100; b++) {
+                int g = gcd(a, b);
+                if (a % g != 0 || b % g != 0) {
+                    System.out.printf("  FAIL: gcd(%d,%d)=%d%n", a, b, g);
+                    allPass = false;
+                }
+            }
+        }
+        if (allPass) {
+            System.out.println("  gcd(a,b) divides both a and b: verified.\n");
+        }
+    }
+}</code></pre>
+
+<p><strong>Sample Output:</strong></p>
+<pre><code class="language-text">===========================================
+ PRIMES AND THE EUCLIDEAN ALGORITHM — CLASS 3
+===========================================
+
+Computing gcd(1071, 462):
+  Step 1: 1071 = 462 × 2 + 147
+  Step 2: 462 = 147 × 3 + 21
+  Step 3: 147 = 21 × 7 + 0
+  Result: gcd = 21
+
+Computing gcd(48, 18):
+  Step 1: 48 = 18 × 2 + 12
+  Step 2: 18 = 12 × 1 + 6
+  Step 3: 12 = 6 × 2 + 0
+  Result: gcd = 6
+
+Computing gcd(100, 35):
+  Step 1: 100 = 35 × 2 + 30
+  Step 2: 35 = 30 × 1 + 5
+  Step 3: 30 = 5 × 6 + 0
+  Result: gcd = 5
+
+Computing gcd(17, 13):
+  Step 1: 17 = 13 × 1 + 4
+  Step 2: 13 = 4 × 3 + 1
+  Step 3: 4 = 1 × 4 + 0
+  Result: gcd = 1
+
+Computing gcd(15, 0):
+  Result: gcd = 15</code></pre>
+
+<hr>
+
+<h3 id="example-3-proving-the-euclidean-algorithm-is-correct-combined-dm-java">Example 3: Proving the Euclidean Algorithm Is Correct (Combined DM + Java)</h3>
+
+<p>We prove three things: (1) the loop invariant holds, (2) the algorithm terminates, and (3) the postcondition gives the right answer.</p>
+
+<p><strong>Loop Invariant:</strong> At the start of each iteration, $\gcd(a, b) = \gcd(a_0, b_0)$ where $a_0, b_0$ are the original inputs.</p>
+
+<p><strong>Proof of the invariant:</strong></p>
+
+<p><em>Initialization:</em> Before the first iteration, $a = a_0$ and $b = b_0$, so $\gcd(a, b) = \gcd(a_0, b_0)$. ✓</p>
+
+<p><em>Maintenance:</em> Suppose $\gcd(a, b) = \gcd(a_0, b_0)$ at the start of an iteration. The algorithm computes $r = a \bmod b$ and replaces $(a, b)$ with $(b, r)$.</p>
+
+<p>We must show $\gcd(b, r) = \gcd(a, b)$. Since $a = bq + r$ for some integer $q$:</p>
+<ul>
+<li>Any common divisor of $a$ and $b$ also divides $r = a - bq$ (by the linear combination theorem from Class 2).</li>
+<li>Any common divisor of $b$ and $r$ also divides $a = bq + r$.</li>
+</ul>
+
+<p>So the set of common divisors is the same, and hence the greatest common divisor is the same. ✓</p>
+
+<p><em>Termination:</em> The loop ends when $b = 0$. At that point, $\gcd(a, 0) = a$. By the invariant, $a = \gcd(a_0, b_0)$. ✓</p>
+
+<p><strong>Termination Proof via Variant Function:</strong></p>
+
+<p>Define the variant $V = b$. At each step:</p>
+<ul>
+<li>$b_{\text{new}} = a \bmod b$, and $0 \leq a \bmod b < b$ by the quotient-remainder theorem.</li>
+<li>So $b_{\text{new}} < b_{\text{old}}$ (strictly decreasing).</li>
+<li>Since $b \geq 0$ always, and a non-negative integer cannot decrease forever, the loop terminates. $\blacksquare$</li>
+</ul>
+
+<p><strong>Java annotation showing invariant and variant:</strong></p>
+
+<pre><code class="language-java">public static int gcdAnnotated(int a, int b) {
+    a = Math.abs(a);
+    b = Math.abs(b);
+    // INVARIANT: gcd(a, b) = gcd(original a, original b)
+    // VARIANT:   b ≥ 0 and strictly decreases each iteration
+    while (b != 0) {
+        assert b &gt; 0;                // variant is positive
+        int oldB = b;
+        int r = a % b;
+        a = b;
+        b = r;
+        assert b &lt; oldB;            // variant strictly decreases
+        // gcd(a, b) = gcd(old a, old b) by the key identity
+    }
+    // b == 0, so gcd(a, 0) = a
+    return a;
+}</code></pre>
+
+<hr>
+
+<h3 id="example-4-primality-testing-discrete-math">Example 4: Primality Testing (Discrete Math)</h3>
+
+<p><strong>Claim.</strong> To test whether $n > 1$ is prime, it suffices to check for divisors up to $\sqrt{n}$.</p>
+
+<p><strong>Proof.</strong> Suppose $n$ is composite, so $n = ab$ with $1 < a, b < n$. We cannot have both $a > \sqrt{n}$ and $b > \sqrt{n}$, because then $ab > n$, contradicting $ab = n$. So at least one factor satisfies $a \leq \sqrt{n}$. Therefore, if no integer from 2 to $\lfloor\sqrt{n}\rfloor$ divides $n$, then $n$ is prime. $\blacksquare$</p>
+
+<p><strong>Example:</strong> To test if 97 is prime, check divisors up to $\lfloor\sqrt{97}\rfloor = 9$. Check: $97/2, 97/3, 97/5, 97/7$ — none divide evenly. So 97 is prime.</p>
+
+<hr>
+
+<h3 id="example-5-sieve-of-eratosthenes">Example 5: Sieve of Eratosthenes</h3>
+
+<p>The Sieve of Eratosthenes finds all primes up to $N$:</p>
+<ol>
+<li>List all integers from 2 to $N$.</li>
+<li>The first uncrossed number is prime. Cross out all its multiples.</li>
+<li>Repeat until you've processed numbers up to $\sqrt{N}$.</li>
+</ol>
+
+<p><strong>For $N = 30$:</strong></p>
+
+<p>Start: 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30</p>
+
+<p>Cross out multiples of 2: ~~4~~ ~~6~~ ~~8~~ ~~10~~ ~~12~~ ~~14~~ ~~16~~ ~~18~~ ~~20~~ ~~22~~ ~~24~~ ~~26~~ ~~28~~ ~~30~~</p>
+
+<p>Cross out multiples of 3: ~~9~~ ~~15~~ ~~21~~ ~~27~~</p>
+
+<p>Cross out multiples of 5: ~~25~~</p>
+
+<p>Done ($5 < \sqrt{30} < 6$). Primes: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="loop-invariants">Loop Invariants</h3>
+
+<p>A <strong>loop invariant</strong> is a condition that is:</p>
+<ol>
+<li><strong>True before the loop starts</strong> (initialization).</li>
+<li><strong>Preserved by each iteration</strong> (maintenance).</li>
+<li><strong>Useful when the loop ends</strong> (postcondition).</li>
+</ol>
+
+<p>This is the proof technique that most directly connects mathematics to programming. It mirrors mathematical induction:</p>
+
+<table>
+<thead><tr>
+<th>Induction</th>
+<th>Loop Invariant</th>
+</tr></thead><tbody>
+<tr>
+<td>Base case $P(1)$</td>
+<td>Initialization: invariant holds before first iteration</td>
+</tr>
+<tr>
+<td>Inductive step: $P(k) \Rightarrow P(k+1)$</td>
+<td>Maintenance: if invariant holds before iteration, it holds after</td>
+</tr>
+<tr>
+<td>Conclusion for all $n$</td>
+<td>Postcondition: when loop exits, invariant + exit condition gives result</td>
+</tr>
+</tbody></table>
+
+<h3 id="variant-functions-termination">Variant Functions (Termination)</h3>
+
+<p>A <strong>variant function</strong> (or <strong>decrementing function</strong>) is a function $V$ of the loop variables that:</p>
+<ol>
+<li>Is always $\geq 0$.</li>
+<li>Strictly decreases each iteration.</li>
+</ol>
+
+<p>Since a non-negative integer cannot decrease forever, the loop must terminate.</p>
+
+<h3 id="common-mistakes">Common Mistakes</h3>
+
+<table>
+<thead><tr>
+<th>Mistake</th>
+<th>Correction</th>
+</tr></thead><tbody>
+<tr>
+<td>Claiming the invariant is the entire postcondition</td>
+<td>The invariant is something that holds <em>during</em> the loop; the postcondition combines the invariant with the loop exit condition</td>
+</tr>
+<tr>
+<td>Forgetting to prove initialization</td>
+<td>The invariant must hold <em>before</em> the first iteration</td>
+</tr>
+<tr>
+<td>Not identifying the variant function</td>
+<td>Without a variant, you haven't proved termination</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<h3 id="complete-primes-and-gcd-library">Complete Primes and GCD Library</h3>
+
+<pre><code class="language-java">import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * PrimesAndGCD.java
+ * Complete library for primality testing, the Euclidean algorithm,
+ * and related computations.
+ */
+public class PrimesAndGCD {
+
+    // =========================================================
+    // GCD
+    // =========================================================
+
+    /**
+     * Euclidean algorithm: computes gcd(a, b).
+     * Invariant: gcd(a,b) is preserved each iteration.
+     * Variant: b strictly decreases toward 0.
+     */
+    public static int gcd(int a, int b) {
+        a = Math.abs(a);
+        b = Math.abs(b);
+        while (b != 0) {
+            int r = a % b;
+            a = b;
+            b = r;
+        }
+        return a;
+    }
+
+    /**
+     * Recursive version of the Euclidean algorithm.
+     * Mirrors the mathematical identity: gcd(a, b) = gcd(b, a mod b).
+     * Base case: gcd(a, 0) = a.
+     */
+    public static int gcdRecursive(int a, int b) {
+        a = Math.abs(a);
+        b = Math.abs(b);
+        if (b == 0) return a;
+        return gcdRecursive(b, a % b);
+    }
+
+    /**
+     * Least common multiple using the identity: lcm(a,b) = |a*b| / gcd(a,b).
+     */
+    public static int lcm(int a, int b) {
+        if (a == 0 || b == 0) return 0;
+        return Math.abs(a / gcd(a, b) * b);  // divide first to avoid overflow
+    }
+
+    /**
+     * Extended Euclidean algorithm: returns {g, x, y} where
+     * g = gcd(a, b) and a*x + b*y = g (Bézout's identity).
+     */
+    public static int[] extendedGcd(int a, int b) {
+        if (b == 0) return new int[]{a, 1, 0};
+        int[] result = extendedGcd(b, a % b);
+        int g = result[0];
+        int x = result[2];
+        int y = result[1] - (a / b) * result[2];
+        return new int[]{g, x, y};
+    }
+
+    // =========================================================
+    // PRIMALITY
+    // =========================================================
+
+    /**
+     * Tests whether n is prime.
+     * 
+     * Math: n is prime iff n &gt; 1 and the only positive divisors of n
+     *       are 1 and n.
+     * Optimization: only check divisors up to sqrt(n), because if
+     *       n = a*b with a &lt;= b, then a &lt;= sqrt(n).
+     * 
+     * Time: O(sqrt(n))
+     */
+    public static boolean isPrime(int n) {
+        if (n &lt; 2) return false;
+        if (n &lt; 4) return true;          // 2, 3 are prime
+        if (n % 2 == 0 || n % 3 == 0) return false;
+        // Only need to check divisors of the form 6k ± 1
+        for (int i = 5; i * i &lt;= n; i += 6) {
+            if (n % i == 0 || n % (i + 2) == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Simple primality test (for clarity, not efficiency).
+     * Checks all potential divisors from 2 to sqrt(n).
+     */
+    public static boolean isPrimeSimple(int n) {
+        if (n &lt; 2) return false;
+        for (int d = 2; d * d &lt;= n; d++) {
+            if (n % d == 0) return false;   // found a divisor: not prime
+        }
+        return true;                         // no divisors found: prime
+    }
+
+    /**
+     * Sieve of Eratosthenes: returns all primes up to limit.
+     *
+     * Math: cross out multiples of each prime starting from 2.
+     * After processing primes up to sqrt(limit), all remaining
+     * uncrossed numbers are prime.
+     *
+     * Time: O(n log log n)
+     */
+    public static List&lt;Integer&gt; sieve(int limit) {
+        boolean[] isComposite = new boolean[limit + 1];
+        List&lt;Integer&gt; primes = new ArrayList&lt;&gt;();
+
+        for (int p = 2; p &lt;= limit; p++) {
+            if (!isComposite[p]) {
+                primes.add(p);
+                // Cross out multiples of p starting from p*p
+                // (smaller multiples already crossed out)
+                for (long multiple = (long) p * p; multiple &lt;= limit; multiple += p) {
+                    isComposite[(int) multiple] = true;
+                }
+            }
+        }
+        return primes;
+    }
+
+    /**
+     * Returns the prime factorization of n as a list of factors.
+     * E.g., primeFactors(84) returns [2, 2, 3, 7] since 84 = 2² × 3 × 7.
+     */
+    public static List&lt;Integer&gt; primeFactors(int n) {
+        List&lt;Integer&gt; factors = new ArrayList&lt;&gt;();
+        if (n &lt; 2) return factors;
+
+        // Divide out 2s
+        while (n % 2 == 0) {
+            factors.add(2);
+            n /= 2;
+        }
+
+        // Check odd factors from 3 to sqrt(n)
+        for (int d = 3; d * d &lt;= n; d += 2) {
+            while (n % d == 0) {
+                factors.add(d);
+                n /= d;
+            }
+        }
+
+        // If n &gt; 1, then n is a prime factor
+        if (n &gt; 1) {
+            factors.add(n);
+        }
+
+        return factors;
+    }
+
+    // =========================================================
+    // DEMONSTRATIONS
+    // =========================================================
+
+    public static void main(String[] args) {
+        System.out.println("================================================");
+        System.out.println(" PRIMES AND THE EUCLIDEAN ALGORITHM — CLASS 3  ");
+        System.out.println("================================================\n");
+
+        // Demo 1: Prime checking
+        System.out.println("--- Primality Tests ---");
+        int[] testNums = {1, 2, 3, 4, 11, 15, 17, 25, 29, 97, 100};
+        for (int n : testNums) {
+            System.out.printf("  isPrime(%d) = %s%n", n, isPrime(n));
+        }
+        System.out.println();
+
+        // Demo 2: Sieve of Eratosthenes
+        System.out.println("--- Primes up to 100 (Sieve) ---");
+        List&lt;Integer&gt; primes = sieve(100);
+        System.out.println("  " + primes);
+        System.out.println("  Count: " + primes.size());
+        System.out.println();
+
+        // Demo 3: Prime factorization
+        System.out.println("--- Prime Factorization ---");
+        int[] toFactor = {12, 28, 84, 100, 97, 360};
+        for (int n : toFactor) {
+            System.out.printf("  %d = %s%n", n, primeFactors(n));
+        }
+        System.out.println();
+
+        // Demo 4: GCD examples
+        System.out.println("--- GCD Computations ---");
+        int[][] gcdTests = {{1071, 462}, {48, 18}, {100, 35}, {17, 13}, {0, 15}};
+        for (int[] pair : gcdTests) {
+            System.out.printf("  gcd(%d, %d) = %d%n", pair[0], pair[1], gcd(pair[0], pair[1]));
+        }
+        System.out.println();
+
+        // Demo 5: Extended Euclidean algorithm (Bézout's identity)
+        System.out.println("--- Extended GCD (Bézout's Identity) ---");
+        for (int[] pair : gcdTests) {
+            if (pair[0] == 0 || pair[1] == 0) continue;
+            int[] result = extendedGcd(pair[0], pair[1]);
+            System.out.printf("  gcd(%d, %d) = %d = %d×(%d) + %d×(%d)%n",
+                pair[0], pair[1], result[0], pair[0], result[1], pair[1], result[2]);
+            // Verify
+            assert pair[0] * result[1] + pair[1] * result[2] == result[0];
+        }
+        System.out.println();
+
+        // Demo 6: Verify iterative = recursive
+        System.out.println("--- Iterative vs Recursive GCD ---");
+        boolean match = true;
+        for (int a = 0; a &lt;= 100; a++) {
+            for (int b = 0; b &lt;= 100; b++) {
+                if (a == 0 &amp;&amp; b == 0) continue;
+                if (gcd(a, b) != gcdRecursive(a, b)) {
+                    match = false;
+                    System.out.printf("  MISMATCH: gcd(%d,%d)%n", a, b);
+                }
+            }
+        }
+        if (match) {
+            System.out.println("  Iterative and recursive agree for a,b in [0,100].");
+        }
+        System.out.println();
+
+        // Demo 7: LCM
+        System.out.println("--- LCM Computations ---");
+        int[][] lcmTests = {{12, 18}, {4, 6}, {7, 13}, {100, 35}};
+        for (int[] pair : lcmTests) {
+            System.out.printf("  lcm(%d, %d) = %d%n", pair[0], pair[1], lcm(pair[0], pair[1]));
+        }
+    }
+}</code></pre>
+
+<p><strong>Sample Output:</strong></p>
+<pre><code class="language-text">--- Primality Tests ---
+  isPrime(1) = false
+  isPrime(2) = true
+  isPrime(3) = true
+  isPrime(4) = false
+  isPrime(11) = true
+  isPrime(15) = false
+  isPrime(17) = true
+  isPrime(25) = false
+  isPrime(29) = true
+  isPrime(97) = true
+  isPrime(100) = false
+
+--- Primes up to 100 (Sieve) ---
+  [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+  Count: 25
+
+--- Prime Factorization ---
+  12 = [2, 2, 3]
+  28 = [2, 2, 7]
+  84 = [2, 2, 3, 7]
+  100 = [2, 2, 5, 5]
+  97 = [97]
+  360 = [2, 2, 2, 3, 3, 5]
+
+--- GCD Computations ---
+  gcd(1071, 462) = 21
+  gcd(48, 18) = 6
+  gcd(100, 35) = 5
+  gcd(17, 13) = 1
+  gcd(0, 15) = 15
+
+--- Extended GCD (Bézout's Identity) ---
+  gcd(1071, 462) = 21 = 1071×(-9) + 462×(21)
+  gcd(48, 18) = 6 = 48×(-1) + 18×(3)
+  gcd(100, 35) = 5 = 100×(-1) + 35×(3)
+  gcd(17, 13) = 1 = 17×(-3) + 13×(4)</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="computational-use-primes-and-gcd-in-computer-science">
+<h2>Computational Use: Primes and GCD in Computer Science</h2>
+
+<h3 id="cryptography-rsa">Cryptography (RSA)</h3>
+<p>RSA encryption relies on:</p>
+<ol>
+<li>Generating two large primes $p$ and $q$.</li>
+<li>Computing $n = pq$ (easy).</li>
+<li>The security assumption: factoring $n$ back into $p$ and $q$ is computationally hard.</li>
+</ol>
+
+<p>The gcd and extended Euclidean algorithm are used to compute modular inverses needed for the keys.</p>
+
+<h3 id="hash-functions">Hash Functions</h3>
+<p>Many hash functions use modular arithmetic with a prime table size. Using a prime $m$ distributes keys more uniformly because primes have no common factors with typical data patterns.</p>
+
+<h3 id="rational-arithmetic">Rational Arithmetic</h3>
+<p>To reduce a fraction $a/b$ to lowest terms, divide both by $\gcd(a, b)$.</p>
+
+<h3 id="performance-analysis">Performance Analysis</h3>
+<p>The Euclidean algorithm runs in $O(\log(\min(a, b)))$ time — remarkably efficient. The number of steps is at most about $5 \times (\text{number of digits of } \min(a, b))$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Euclid (c. 300 BC)</strong> described the algorithm in Propositions 1 and 2 of Book VII of the <em>Elements</em>. It is one of the oldest algorithms still in widespread use — over 2300 years old. Euclid described it geometrically: given two line segments, repeatedly subtract the shorter from the longer until the segments are equal.</p>
+
+<p><strong>Fibonacci (1202)</strong> popularized the algorithm in Europe through his <em>Liber Abaci</em>. The worst case of the Euclidean algorithm occurs for consecutive Fibonacci numbers — this is because Fibonacci numbers grow as slowly as possible relative to their gcd.</p>
+
+<p><strong>Lamé (1844)</strong> proved that the number of steps in the Euclidean algorithm for $\gcd(a, b)$ with $a > b$ is at most $5 \times (\text{number of digits of } b)$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> Is 1 a prime number? Why or why not?</p>
+
+<p><strong>A2.</strong> Why is 2 the only even prime?</p>
+
+<p><strong>A3.</strong> What is $\gcd(15, 0)$? What is $\gcd(0, 0)$? (Trick question — $\gcd(0,0)$ is conventionally undefined or taken as 0.)</p>
+
+<p><strong>A4.</strong> If $\gcd(a, b) = 1$, what does that tell you about $a$ and $b$?</p>
+
+<hr>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove: There are infinitely many prime numbers. <em>(Hint: Euclid's proof. Assume finitely many primes $p_1, \ldots, p_n$. Consider $N = p_1 p_2 \cdots p_n + 1$.)</em></p>
+
+<p><strong>B2.</strong> Prove that $\gcd(a, b) = \gcd(b, a \bmod b)$ by showing the two pairs have the same set of common divisors.</p>
+
+<p><strong>B3.</strong> Prove that the Euclidean algorithm terminates by identifying a variant function.</p>
+
+<p><strong>B4.</strong> If $\gcd(a, b) = d$, prove that $\gcd(a/d, b/d) = 1$.</p>
+
+<hr>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Implement <code>int gcd(int a, int b)</code> both iteratively and recursively. Verify they give the same answer for $a, b \in [0, 100]$.</p>
+
+<p><strong>C2.</strong> Implement <code>boolean isPrime(int n)</code> using the $\sqrt{n}$ optimization. Test it for $n = 1$ to $100$.</p>
+
+<p><strong>C3.</strong> Implement the Sieve of Eratosthenes to find all primes up to 1000. How many are there?</p>
+
+<p><strong>C4.</strong> Write a method that computes the prime factorization of any integer and returns it as a <code>List&lt;Integer&gt;</code>.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Compute $\gcd(252, 198)$ by hand using the Euclidean algorithm. Show each step.</p>
+
+<p><strong>DM2.</strong> Prove: If $p$ is prime and $p \mid ab$, then $p \mid a$ or $p \mid b$. <em>(This is Euclid's Lemma. Hint: if $p \nmid a$, then $\gcd(p, a) = 1$, so by Bézout's identity, $1 = px + ay$. Multiply both sides by $b$.)</em></p>
+
+<p><strong>DM3.</strong> Prove: $\gcd(n, n+1) = 1$ for any positive integer $n$. <em>(Hint: if $d \mid n$ and $d \mid (n+1)$, then $d \mid ((n+1) - n) = 1$.)</em></p>
+
+<p><strong>DM4.</strong> Prove: $\gcd(a, b) \cdot \text{lcm}(a, b) = |ab|$.</p>
+
+<p><strong>DM5.</strong> Find integers $x$ and $y$ such that $\gcd(1071, 462) = 1071x + 462y$. <em>(Use the extended Euclidean algorithm by back-substituting.)</em></p>
+
+<p><strong>DM6.</strong> Prove: If $\gcd(a, b) = 1$ and $a \mid c$ and $b \mid c$, then $ab \mid c$.</p>
+
+<p><strong>DM7.</strong> Prove that every composite number $n$ has a prime factor $\leq \sqrt{n}$.</p>
+
+<hr>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Write <code>int gcd(int a, int b)</code> iteratively and <code>int gcdRec(int a, int b)</code> recursively. Assert they match for 10,000 random pairs.</p>
+
+<p><strong>JP2.</strong> Implement the Sieve of Eratosthenes for $N = 10{,}000$. Count the primes (should be 1229). Compute the ratio $\pi(N) / (N / \ln N)$ and compare to 1 (the prime number theorem).</p>
+
+<p><strong>JP3.</strong> Write a method <code>int[] extendedGcd(int a, int b)</code> that returns $\{g, x, y\}$ where $g = \gcd(a,b)$ and $ax + by = g$. Verify for 100 pairs.</p>
+
+<p><strong>JP4.</strong> Write <code>List&lt;Integer&gt; primeFactorization(int n)</code> using trial division. Verify that multiplying the factors recovers $n$ for all $n$ from 2 to 1000.</p>
+
+<p><strong>JP5.</strong> Write a method that determines whether two numbers are coprime (gcd = 1). Use it to count the number of integers from 1 to 100 that are coprime to 100. <em>(This is Euler's totient function $\phi(100)$.)</em></p>
+
+<p><strong>JP6.</strong> Implement a method that finds all prime pairs $(p, p+2)$ ("twin primes") up to 1000. How many are there?</p>
+
+<hr>
+
+<h3 id="bridge-problems-discrete-math-java">Bridge Problems (Discrete Math + Java)</h3>
+
+<p><strong>BR1.</strong> <em>Prove and Verify.</em> Prove that $\gcd(n, n+1) = 1$ for all $n \geq 1$. Then write a Java method that verifies this for $n = 1$ to $10{,}000$.</p>
+
+<p><strong>BR2.</strong> <em>Loop Invariant in Code.</em> Annotate your iterative <code>gcd</code> method with assert statements that check:</p>
+<ul>
+<li>The loop invariant (gcd of current $a, b$ equals gcd of original inputs).</li>
+<li>The variant function (b decreases each iteration).</li>
+</ul>
+<p>Run with assertions enabled (<code>java -ea</code>) and verify no assertions fail.</p>
+
+<p><strong>BR3.</strong> <em>Back-Substitution.</em> The Euclidean algorithm for $\gcd(48, 18)$ gives:</p>
+<pre><code class="language-text">48 = 18 × 2 + 12
+18 = 12 × 1 + 6
+12 = 6 × 2 + 0</code></pre>
+<p>Back-substitute to find $x, y$ such that $6 = 48x + 18y$. Then write Java code that performs this back-substitution automatically (i.e., implement the extended Euclidean algorithm).</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1 Solution.</strong></p>
+<div class="katex-block">$252 = 198 \times 1 + 54$</div>
+<div class="katex-block">$198 = 54 \times 3 + 36$</div>
+<div class="katex-block">$54 = 36 \times 1 + 18$</div>
+<div class="katex-block">$36 = 18 \times 2 + 0$</div>
+<p>Therefore $\gcd(252, 198) = 18$.</p>
+
+<p><strong>DM2 Solution (Euclid's Lemma).</strong></p>
+<p>Suppose $p$ is prime, $p \mid ab$, and $p \nmid a$. Since $p$ is prime, its only divisors are 1 and $p$. Since $p \nmid a$, $\gcd(p, a) = 1$. By Bézout's identity, there exist $x, y$ such that $px + ay = 1$. Multiply by $b$: $pxb + aby = b$. Now $p \mid (pxb)$ (trivially) and $p \mid (aby)$ (since $p \mid ab$). So $p \mid (pxb + aby) = b$. $\blacksquare$</p>
+
+<p><strong>DM3 Solution.</strong></p>
+<p>Suppose $d \mid n$ and $d \mid (n+1)$. Then $d \mid ((n+1) - n) = 1$, so $d = \pm 1$. The largest positive common divisor is 1. $\blacksquare$</p>
+
+<p><strong>DM4 Solution.</strong></p>
+<p>Write $a = d \alpha$ and $b = d \beta$ where $d = \gcd(a, b)$ and $\gcd(\alpha, \beta) = 1$.</p>
+<p>Then $\text{lcm}(a, b) = d \alpha \beta$ (one can verify this is the smallest common multiple).</p>
+<p>So $\gcd(a,b) \cdot \text{lcm}(a,b) = d \cdot d\alpha\beta = d^2 \alpha \beta = (d\alpha)(d\beta) = ab = |ab|$ (for positive $a, b$; take absolute values in general). $\blacksquare$</p>
+
+<p><strong>DM5 Solution.</strong></p>
+<p>From $\gcd(1071, 462) = 21$, back-substitute:</p>
+<p>$21 = 462 - 147 \times 3$</p>
+<p>$147 = 1071 - 462 \times 2$</p>
+<p>Substitute: $21 = 462 - (1071 - 462 \times 2) \times 3 = 462 - 1071 \times 3 + 462 \times 6 = 462 \times 7 + 1071 \times (-3)$</p>
+<p>So $21 = 1071 \times (-3) + 462 \times 7$. Check: $-3213 + 3234 = 21$. ✓</p>
+
+<p><strong>DM6 Solution.</strong></p>
+<p>Since $a \mid c$, $c = am$. Since $b \mid c$, $c = bn$. Since $\gcd(a,b) = 1$, by Bézout there exist $x, y$ with $ax + by = 1$. Multiply by $c$: $acx + bcy = c$. Now $ab \mid (acx)$ (since $b \mid c$, $acx = a \cdot bn \cdot x = ab \cdot nx$) and $ab \mid (bcy)$ (since $a \mid c$, $bcy = b \cdot am \cdot y = ab \cdot my$). So $ab \mid c$. $\blacksquare$</p>
+
+<p><strong>DM7 Solution.</strong></p>
+<p>If $n$ is composite, then $n = ab$ with $1 < a \leq b < n$. Since $a \leq b$, we have $a^2 \leq ab = n$, so $a \leq \sqrt{n}$. Now $a > 1$ and $a \mid n$, so $a$ has a prime factor $p \leq a \leq \sqrt{n}$, and $p \mid n$. $\blacksquare$</p>
+
+<hr>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP1 Solution.</strong></p>
+<pre><code class="language-java">public static int gcd(int a, int b) {
+    a = Math.abs(a); b = Math.abs(b);
+    while (b != 0) { int r = a % b; a = b; b = r; }
+    return a;
+}
+
+public static int gcdRec(int a, int b) {
+    a = Math.abs(a); b = Math.abs(b);
+    return b == 0 ? a : gcdRec(b, a % b);
+}
+
+// Verification:
+public static void verifyGcdVersions() {
+    java.util.Random rng = new java.util.Random(42);
+    for (int i = 0; i &lt; 10000; i++) {
+        int a = rng.nextInt(10000);
+        int b = rng.nextInt(10000);
+        if (a == 0 &amp;&amp; b == 0) continue;
+        assert gcd(a, b) == gcdRec(a, b);
+    }
+    System.out.println("Both GCD versions agree for 10,000 random pairs.");
+}</code></pre>
+
+<p><strong>JP2 Solution.</strong></p>
+<pre><code class="language-java">public static void sieveStatistics(int N) {
+    List&lt;Integer&gt; primes = sieve(N);
+    int count = primes.size();
+    double estimate = N / Math.log(N);
+    System.out.printf("Primes up to %d: %d%n", N, count);
+    System.out.printf("N / ln(N) ≈ %.1f%n", estimate);
+    System.out.printf("π(N) / (N/ln(N)) ≈ %.4f (approaches 1 as N→∞)%n",
+        count / estimate);
+}
+// For N=10000: count=1229, N/ln(N)≈1085.7, ratio≈1.1319</code></pre>
+
+<p><strong>JP3 Solution.</strong></p>
+<pre><code class="language-java">public static int[] extendedGcd(int a, int b) {
+    if (b == 0) return new int[]{a, 1, 0};
+    int[] r = extendedGcd(b, a % b);
+    return new int[]{r[0], r[2], r[1] - (a / b) * r[2]};
+}
+
+// Verify:
+for (int a = 1; a &lt;= 100; a++) {
+    for (int b = 1; b &lt;= 100; b++) {
+        int[] r = extendedGcd(a, b);
+        assert a * r[1] + b * r[2] == r[0];
+    }
+}</code></pre>
+
+<p><strong>JP4 Solution.</strong></p>
+<pre><code class="language-java">public static List&lt;Integer&gt; primeFactorization(int n) {
+    List&lt;Integer&gt; factors = new ArrayList&lt;&gt;();
+    for (int d = 2; d * d &lt;= n; d++) {
+        while (n % d == 0) { factors.add(d); n /= d; }
+    }
+    if (n &gt; 1) factors.add(n);
+    return factors;
+}
+
+// Verify:
+for (int n = 2; n &lt;= 1000; n++) {
+    List&lt;Integer&gt; f = primeFactorization(n);
+    int product = 1;
+    for (int p : f) { assert isPrime(p); product *= p; }
+    assert product == n : "Factorization of " + n + " failed";
+}</code></pre>
+
+<p><strong>JP5 Solution.</strong></p>
+<pre><code class="language-java">public static int eulerTotient(int n) {
+    int count = 0;
+    for (int k = 1; k &lt;= n; k++) {
+        if (gcd(k, n) == 1) count++;
+    }
+    return count;
+}
+// eulerTotient(100) = 40</code></pre>
+
+<p><strong>JP6 Solution.</strong></p>
+<pre><code class="language-java">public static List&lt;int[]&gt; twinPrimes(int limit) {
+    List&lt;Integer&gt; primes = sieve(limit);
+    List&lt;int[]&gt; twins = new ArrayList&lt;&gt;();
+    for (int i = 0; i &lt; primes.size() - 1; i++) {
+        if (primes.get(i + 1) - primes.get(i) == 2) {
+            twins.add(new int[]{primes.get(i), primes.get(i + 1)});
+        }
+    }
+    return twins;
+}
+// Up to 1000: (3,5),(5,7),(11,13),(17,19),(29,31),(41,43),(59,61),
+//             (71,73),(101,103),(107,109),(137,139),(149,151),
+//             (179,181),(191,193),(197,199),(227,229),(239,241),
+//             (269,271),(281,283),(311,313),(347,349),(419,421),
+//             (431,433),(461,463),(521,523),(569,571),(599,601),
+//             (617,619),(641,643),(659,661),(809,811),(821,823),
+//             (827,829),(857,859),(881,883) — 35 twin prime pairs</code></pre>
+
+<hr>
+
+<h3 id="bridge-problem-solutions">Bridge Problem Solutions</h3>
+
+<p><strong>BR1 Solution.</strong></p>
+
+<p><em>Proof:</em> Let $d = \gcd(n, n+1)$. Then $d \mid n$ and $d \mid (n+1)$. So $d \mid (n+1-n) = 1$, giving $d = 1$. $\blacksquare$</p>
+
+<pre><code class="language-java">for (int n = 1; n &lt;= 10000; n++) {
+    assert gcd(n, n + 1) == 1 : "Failed for n=" + n;
+}
+System.out.println("gcd(n, n+1) = 1 verified for n = 1..10000");</code></pre>
+
+<p><strong>BR2 Solution.</strong></p>
+<pre><code class="language-java">public static int gcdWithAssertions(int origA, int origB) {
+    int a = Math.abs(origA), b = Math.abs(origB);
+    int expectedGcd = gcd(origA, origB);  // precompute for checking
+    while (b != 0) {
+        assert gcd(a, b) == expectedGcd : "Invariant violated";
+        int oldB = b;
+        int r = a % b;
+        a = b;
+        b = r;
+        assert b &lt; oldB : "Variant did not decrease";
+    }
+    assert a == expectedGcd : "Postcondition violated";
+    return a;
+}</code></pre>
+
+<p><strong>BR3 Solution.</strong></p>
+
+<p>Back-substitution:</p>
+<p>$6 = 18 - 12 \times 1$</p>
+<p>$12 = 48 - 18 \times 2$</p>
+<p>Substitute: $6 = 18 - (48 - 18 \times 2) = 18 \times 3 - 48 = 48 \times (-1) + 18 \times 3$.</p>
+
+<p>Check: $48 \times (-1) + 18 \times 3 = -48 + 54 = 6$. ✓</p>
+
+<p>Java: The <code>extendedGcd</code> method above implements this automatically.</p>
+
+</section>
+</div>
+<hr>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

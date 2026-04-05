@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 2 Quiz — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="quiz-02">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+      <h1>Module 2: Practice Quiz</h1>
+      <p class="quiz-subtitle">Remainders, Modular Arithmetic & Primes — Test your understanding with 11 multiple-choice questions.</p>
+      <div id="quiz-container" data-questions='[{"q":"The Quotient-Remainder Theorem states that for a and d \u003e 0, there exist unique:","choices":["q and r such that a = dq + r, 0 ≤ r \u003c d","q and r such that a = dq - r","q and r such that a = dq + r, r \u003e 0","p and q such that a = pq"],"answer":0,"explanation":"The QRT guarantees unique q, r with a = dq + r where 0 ≤ r \u003c d."},{"q":"a ≡ b (mod m) means:","choices":["a = b","m | (a - b)","a | m and b | m","a mod b = m"],"answer":1,"explanation":"a is congruent to b mod m iff m divides (a - b)."},{"q":"In modular arithmetic, if a ≡ 3 (mod 5) and b ≡ 4 (mod 5), then a + b ≡ ? (mod 5):","choices":["2","7","12","1"],"answer":0,"explanation":"(3 + 4) mod 5 = 7 mod 5 = 2."},{"q":"What is Math.floorMod(-7, 3) in Java?","choices":["-1","2","1","0"],"answer":1,"explanation":"Math.floorMod always returns a non-negative result: -7 = 3(-3) + 2, so the result is 2."},{"q":"The Fundamental Theorem of Arithmetic states:","choices":["Every integer \u003e 1 has a unique prime factorization","Every integer is either prime or composite","There are infinitely many primes","gcd(a, b) × lcm(a, b) = ab"],"answer":0,"explanation":"The FTA guarantees unique prime factorization (up to order) for every integer greater than 1."},{"q":"Two integers are coprime if:","choices":["They are both prime","Their gcd is 1","Their sum is prime","Their product is even"],"answer":1,"explanation":"Coprime (relatively prime) means gcd(a, b) = 1."},{"q":"The Chinese Remainder Theorem requires that the moduli are:","choices":["All prime","Pairwise coprime","All equal","In ascending order"],"answer":1,"explanation":"CRT requires pairwise coprime moduli to guarantee a unique solution."},{"q":"Which congruence class does 17 belong to mod 5?","choices":["[0]₅","[1]₅","[2]₅","[3]₅"],"answer":2,"explanation":"17 mod 5 = 2, so 17 ∈ [2]₅."},{"q":"If p is prime and p | ab, then:","choices":["p | a or p | b","p | a and p | b","p | (a + b)","p = ab"],"answer":0,"explanation":"This is Euclid's lemma: if a prime divides a product, it must divide at least one factor."},{"q":"How many congruence classes are there modulo m?","choices":["m - 1","m","m + 1","2m"],"answer":1,"explanation":"There are exactly m congruence classes: [0], [1], ..., [m-1]."},{"q":"In RSA encryption, the security relies on:","choices":["The difficulty of factoring large numbers","The Chinese Remainder Theorem","Modular addition","The Euclidean Algorithm"],"answer":0,"explanation":"RSA's security is based on the computational difficulty of factoring the product of two large primes."}]'></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>

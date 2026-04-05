@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 Lab — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="lab-05">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-5-lab-functions-and-relations-in-java">Module 5 – Lab: Functions and Relations in Java</h1>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>In this lab you will implement Java methods to work with functions (as <code>Map</code> objects) and relations (as sets of pairs). You will check injectivity, surjectivity, bijectivity, compute inverses, build and analyze relations, compute equivalence classes, and compose functions.</p>
+
+<p><strong>Prerequisites:</strong> Modules 4–5 (sets, functions, relations).</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-1-function-properties">
+<h2>Part 1: Function Properties</h2>
+
+<h3 id="exercise-1-1-injective-surjective-bijective">Exercise 1.1: Injective / Surjective / Bijective</h3>
+
+<p>Implement the following methods:</p>
+
+<pre><code class="language-java">public static &lt;A, B&gt; boolean isInjective(Map&lt;A, B&gt; f) { /* TODO */ }
+public static &lt;A, B&gt; boolean isSurjective(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) { /* TODO */ }
+public static &lt;A, B&gt; boolean isBijective(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) { /* TODO */ }</code></pre>
+
+<p><strong>Test with:</strong></p>
+<ul>
+<li>$f(n) = 2n + 1$ on $\{0, \ldots, 5\} \to \mathbb{Z}$ — injective but not surjective onto $\{0, \ldots, 11\}$.</li>
+<li>$f(n) = n \bmod 3$ on $\{0, \ldots, 8\} \to \{0,1,2\}$ — surjective but not injective.</li>
+<li>Caesar cipher shift 3 on $\{0, \ldots, 25\}$ — bijective.</li>
+</ul>
+
+<h3 id="exercise-1-2-collisions-and-missing-values">Exercise 1.2: Collisions and Missing Values</h3>
+
+<pre><code class="language-java">public static &lt;A, B&gt; List&lt;A&gt; findCollision(Map&lt;A, B&gt; f) { /* TODO */ }
+public static &lt;A, B&gt; Set&lt;B&gt; findMissing(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) { /* TODO */ }</code></pre>
+
+<p>Test with <code>hashCode() % 7</code> on a list of 10 words.</p>
+
+<h3 id="exercise-1-3-inverse-of-a-bijection">Exercise 1.3: Inverse of a Bijection</h3>
+
+<pre><code class="language-java">public static &lt;A, B&gt; Map&lt;B, A&gt; inverse(Map&lt;A, B&gt; f) { /* TODO */ }</code></pre>
+
+<p>Verify: $f^{-1}(f(x)) = x$ for all $x$ in the domain.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-2-composition">
+<h2>Part 2: Composition</h2>
+
+<h3 id="exercise-2-1-compose-two-maps">Exercise 2.1: Compose Two Maps</h3>
+
+<pre><code class="language-java">public static &lt;A, B, C&gt; Map&lt;A, C&gt; compose(Map&lt;A, B&gt; f, Map&lt;B, C&gt; g) { /* TODO */ }</code></pre>
+
+<p>Test: $f(n) = n + 1$, $g(n) = 2n$. Verify $(g \circ f)(3) = g(f(3)) = g(4) = 8$.</p>
+
+<h3 id="exercise-2-2-composition-preserves-injectivity">Exercise 2.2: Composition Preserves Injectivity</h3>
+
+<p>Build two injective maps. Compose them and verify the result is injective.</p>
+<p>Build one non-injective map and one injective map. Compose and check.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-3-relations">
+<h2>Part 3: Relations</h2>
+
+<h3 id="exercise-3-1-relation-properties">Exercise 3.1: Relation Properties</h3>
+
+<p>Using the <code>Relation</code> class from Class 2, or building your own:</p>
+
+<pre><code class="language-java">public static boolean isReflexive(Set&lt;Integer&gt; domain, Set&lt;List&lt;Integer&gt;&gt; pairs) { /* TODO */ }
+public static boolean isSymmetric(Set&lt;List&lt;Integer&gt;&gt; pairs) { /* TODO */ }
+public static boolean isTransitive(Set&lt;List&lt;Integer&gt;&gt; pairs) { /* TODO */ }
+public static boolean isAntisymmetric(Set&lt;List&lt;Integer&gt;&gt; pairs) { /* TODO */ }</code></pre>
+
+<p><strong>Test on</strong> $A = \{1,2,3,4,5\}$:</p>
+<ul>
+<li>Congruence mod 2: equivalence relation ✓</li>
+<li>Divisibility: partial order ✓</li>
+<li>$|a - b| \leq 1$: reflexive and symmetric but NOT transitive</li>
+</ul>
+
+<h3 id="exercise-3-2-equivalence-classes">Exercise 3.2: Equivalence Classes</h3>
+
+<pre><code class="language-java">public static Set&lt;Integer&gt; equivalenceClass(int a, Set&lt;Integer&gt; domain,
+                                             Set&lt;List&lt;Integer&gt;&gt; pairs) { /* TODO */ }
+public static Set&lt;Set&lt;Integer&gt;&gt; allEquivalenceClasses(Set&lt;Integer&gt; domain,
+                                                       Set&lt;List&lt;Integer&gt;&gt; pairs) { /* TODO */ }</code></pre>
+
+<p>Verify that the equivalence classes of congruence mod 3 on $\{0, \ldots, 11\}$ form a partition (use <code>isPartition</code> from Module 4).</p>
+
+<h3 id="exercise-3-3-transitive-closure">Exercise 3.3: Transitive Closure</h3>
+
+<pre><code class="language-java">public static Set&lt;List&lt;Integer&gt;&gt; transitiveClosure(Set&lt;List&lt;Integer&gt;&gt; pairs) { /* TODO */ }</code></pre>
+
+<p>Test: start with $R = \{(1,2), (2,3)\}$. The closure should add $(1,3)$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-4-integration-social-network">
+<h2>Part 4: Integration — Social Network</h2>
+
+<p>Model a small social network as a relation on a set of people (integers 0–9).</p>
+
+<ol>
+<li>Generate a "friends" relation (symmetric but not necessarily transitive or reflexive).</li>
+<li>Add reflexivity (everyone is their own friend) to get a reflexive, symmetric relation.</li>
+<li>Compute the transitive closure to get "connected within the friend network."</li>
+<li>Verify the closure is an equivalence relation.</li>
+<li>Compute equivalence classes — these are the "friend groups."</li>
+</ol>
+
+<hr>
+
+</section>
+<section class="slide" id="extension-challenges">
+<h2>Extension Challenges</h2>
+
+<p><strong>E1.</strong> Implement Warshall's algorithm for transitive closure using a boolean adjacency matrix. Compare runtime with the set-based approach.</p>
+
+<p><strong>E2.</strong> Build a <code>Map&lt;String, String&gt;</code> modeling an encoder (bijection on $\{a, \ldots, z\}$). Compute the inverse decoder. Encode and decode a message.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="starter-code">
+<h2>Starter Code</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class Module5Lab {
+
+    // ====== Part 1: Function Properties ======
+
+    public static &lt;A, B&gt; boolean isInjective(Map&lt;A, B&gt; f) {
+        // TODO: Return true iff no two keys share the same value
+        return false;
+    }
+
+    public static &lt;A, B&gt; boolean isSurjective(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        // TODO: Return true iff every element of codomain appears as a value
+        return false;
+    }
+
+    public static &lt;A, B&gt; boolean isBijective(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        // TODO
+        return false;
+    }
+
+    public static &lt;A, B&gt; List&lt;A&gt; findCollision(Map&lt;A, B&gt; f) {
+        // TODO: Return a list of two domain elements mapping to the same value,
+        //       or null if injective
+        return null;
+    }
+
+    public static &lt;A, B&gt; Set&lt;B&gt; findMissing(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        // TODO: Return set of codomain elements with no preimage
+        return Collections.emptySet();
+    }
+
+    public static &lt;A, B&gt; Map&lt;B, A&gt; inverse(Map&lt;A, B&gt; f) {
+        // TODO: Return the inverse map. Throw if not injective.
+        return Collections.emptyMap();
+    }
+
+    // ====== Part 2: Composition ======
+
+    public static &lt;A, B, C&gt; Map&lt;A, C&gt; compose(Map&lt;A, B&gt; f, Map&lt;B, C&gt; g) {
+        // TODO: Return g ∘ f, i.e., for each key a of f, result.put(a, g.get(f.get(a)))
+        return Collections.emptyMap();
+    }
+
+    // ====== Part 3: Relations ======
+
+    public static boolean isReflexive(Set&lt;Integer&gt; domain, Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        // TODO: Check (a, a) in pairs for every a in domain
+        return false;
+    }
+
+    public static boolean isSymmetric(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        // TODO: Check (b, a) in pairs for every (a, b) in pairs
+        return false;
+    }
+
+    public static boolean isTransitive(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        // TODO: Check (a, c) in pairs for every (a, b) and (b, c) in pairs
+        return false;
+    }
+
+    public static boolean isAntisymmetric(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        // TODO: Check a == b whenever (a, b) and (b, a) both in pairs
+        return false;
+    }
+
+    public static boolean isEquivalenceRelation(Set&lt;Integer&gt; domain,
+                                                 Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        // TODO
+        return false;
+    }
+
+    public static Set&lt;Integer&gt; equivalenceClass(int a, Set&lt;Integer&gt; domain,
+                                                 Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        // TODO: Return {x in domain | (x, a) in pairs}
+        return Collections.emptySet();
+    }
+
+    public static Set&lt;Set&lt;Integer&gt;&gt; allEquivalenceClasses(Set&lt;Integer&gt; domain,
+                                                           Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        // TODO: Return set of all distinct equivalence classes
+        return Collections.emptySet();
+    }
+
+    public static Set&lt;List&lt;Integer&gt;&gt; transitiveClosure(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        // TODO: Repeatedly add (a, c) whenever (a, b) and (b, c) exist, until stable
+        return Collections.emptySet();
+    }
+
+    // ====== Part 4: Social Network ======
+
+    public static Set&lt;List&lt;Integer&gt;&gt; socialNetworkDemo() {
+        // TODO:
+        // 1. Create 10 "people" (0–9)
+        // 2. Add some friendship pairs (symmetric)
+        // 3. Make reflexive
+        // 4. Compute transitive closure
+        // 5. Verify equivalence relation
+        // 6. Return equivalence classes
+        return Collections.emptySet();
+    }
+
+    // ====== Helpers ======
+
+    public static Set&lt;List&lt;Integer&gt;&gt; buildRelation(Set&lt;Integer&gt; domain,
+                                                    java.util.function.BiPredicate&lt;Integer, Integer&gt; pred) {
+        Set&lt;List&lt;Integer&gt;&gt; pairs = new HashSet&lt;&gt;();
+        for (int a : domain) {
+            for (int b : domain) {
+                if (pred.test(a, b)) pairs.add(Arrays.asList(a, b));
+            }
+        }
+        return pairs;
+    }
+
+    // ====== Main ======
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 5 Lab ===\n");
+
+        // --- Part 1 ---
+        System.out.println("--- Part 1: Function Properties ---");
+        // TODO: build test maps and call isInjective, isSurjective, etc.
+
+        // --- Part 2 ---
+        System.out.println("\n--- Part 2: Composition ---");
+        // TODO: compose two maps and test
+
+        // --- Part 3 ---
+        System.out.println("\n--- Part 3: Relations ---");
+        // TODO: build relations and test properties
+
+        // --- Part 4 ---
+        System.out.println("\n--- Part 4: Social Network ---");
+        // TODO: run socialNetworkDemo()
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class Module5LabSolution {
+
+    // ====== Part 1: Function Properties ======
+
+    public static &lt;A, B&gt; boolean isInjective(Map&lt;A, B&gt; f) {
+        Set&lt;B&gt; seen = new HashSet&lt;&gt;();
+        for (B val : f.values()) {
+            if (!seen.add(val)) return false;
+        }
+        return true;
+    }
+
+    public static &lt;A, B&gt; boolean isSurjective(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        return f.values().containsAll(codomain);
+    }
+
+    public static &lt;A, B&gt; boolean isBijective(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        return isInjective(f) &amp;&amp; isSurjective(f, codomain);
+    }
+
+    public static &lt;A, B&gt; List&lt;A&gt; findCollision(Map&lt;A, B&gt; f) {
+        Map&lt;B, A&gt; inv = new HashMap&lt;&gt;();
+        for (Map.Entry&lt;A, B&gt; entry : f.entrySet()) {
+            A prev = inv.put(entry.getValue(), entry.getKey());
+            if (prev != null) {
+                List&lt;A&gt; result = new ArrayList&lt;&gt;();
+                result.add(prev);
+                result.add(entry.getKey());
+                return result;
+            }
+        }
+        return null;
+    }
+
+    public static &lt;A, B&gt; Set&lt;B&gt; findMissing(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        Set&lt;B&gt; missing = new HashSet&lt;&gt;(codomain);
+        missing.removeAll(new HashSet&lt;&gt;(f.values()));
+        return missing;
+    }
+
+    public static &lt;A, B&gt; Map&lt;B, A&gt; inverse(Map&lt;A, B&gt; f) {
+        if (!isInjective(f)) {
+            throw new IllegalArgumentException("Function not injective — cannot invert");
+        }
+        Map&lt;B, A&gt; inv = new HashMap&lt;&gt;();
+        for (Map.Entry&lt;A, B&gt; entry : f.entrySet()) {
+            inv.put(entry.getValue(), entry.getKey());
+        }
+        return inv;
+    }
+
+    // ====== Part 2: Composition ======
+
+    public static &lt;A, B, C&gt; Map&lt;A, C&gt; compose(Map&lt;A, B&gt; f, Map&lt;B, C&gt; g) {
+        Map&lt;A, C&gt; result = new HashMap&lt;&gt;();
+        for (Map.Entry&lt;A, B&gt; entry : f.entrySet()) {
+            C val = g.get(entry.getValue());
+            if (val != null) {
+                result.put(entry.getKey(), val);
+            }
+        }
+        return result;
+    }
+
+    // ====== Part 3: Relations ======
+
+    public static boolean isReflexive(Set&lt;Integer&gt; domain, Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        for (int a : domain) {
+            if (!pairs.contains(Arrays.asList(a, a))) return false;
+        }
+        return true;
+    }
+
+    public static boolean isSymmetric(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        for (List&lt;Integer&gt; p : pairs) {
+            if (!pairs.contains(Arrays.asList(p.get(1), p.get(0)))) return false;
+        }
+        return true;
+    }
+
+    public static boolean isTransitive(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        for (List&lt;Integer&gt; ab : pairs) {
+            for (List&lt;Integer&gt; bc : pairs) {
+                if (ab.get(1).equals(bc.get(0))) {
+                    if (!pairs.contains(Arrays.asList(ab.get(0), bc.get(1)))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean isAntisymmetric(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        for (List&lt;Integer&gt; p : pairs) {
+            int a = p.get(0), b = p.get(1);
+            if (a != b &amp;&amp; pairs.contains(Arrays.asList(b, a))) return false;
+        }
+        return true;
+    }
+
+    public static boolean isEquivalenceRelation(Set&lt;Integer&gt; domain,
+                                                 Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        return isReflexive(domain, pairs) &amp;&amp; isSymmetric(pairs) &amp;&amp; isTransitive(pairs);
+    }
+
+    public static Set&lt;Integer&gt; equivalenceClass(int a, Set&lt;Integer&gt; domain,
+                                                 Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        Set&lt;Integer&gt; cls = new TreeSet&lt;&gt;();
+        for (int x : domain) {
+            if (pairs.contains(Arrays.asList(x, a))) cls.add(x);
+        }
+        return cls;
+    }
+
+    public static Set&lt;Set&lt;Integer&gt;&gt; allEquivalenceClasses(Set&lt;Integer&gt; domain,
+                                                           Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        Set&lt;Set&lt;Integer&gt;&gt; classes = new HashSet&lt;&gt;();
+        for (int a : domain) {
+            classes.add(equivalenceClass(a, domain, pairs));
+        }
+        return classes;
+    }
+
+    public static Set&lt;List&lt;Integer&gt;&gt; transitiveClosure(Set&lt;List&lt;Integer&gt;&gt; pairs) {
+        Set&lt;List&lt;Integer&gt;&gt; closed = new HashSet&lt;&gt;(pairs);
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            Set&lt;List&lt;Integer&gt;&gt; toAdd = new HashSet&lt;&gt;();
+            for (List&lt;Integer&gt; ab : closed) {
+                for (List&lt;Integer&gt; bc : closed) {
+                    if (ab.get(1).equals(bc.get(0))) {
+                        List&lt;Integer&gt; ac = Arrays.asList(ab.get(0), bc.get(1));
+                        if (!closed.contains(ac)) {
+                            toAdd.add(ac);
+                            changed = true;
+                        }
+                    }
+                }
+            }
+            closed.addAll(toAdd);
+        }
+        return closed;
+    }
+
+    // ====== Helpers ======
+
+    public static Set&lt;List&lt;Integer&gt;&gt; buildRelation(Set&lt;Integer&gt; domain,
+                                                    java.util.function.BiPredicate&lt;Integer, Integer&gt; pred) {
+        Set&lt;List&lt;Integer&gt;&gt; pairs = new HashSet&lt;&gt;();
+        for (int a : domain) {
+            for (int b : domain) {
+                if (pred.test(a, b)) pairs.add(Arrays.asList(a, b));
+            }
+        }
+        return pairs;
+    }
+
+    // ====== Main ======
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 5 Lab — Solution ===\n");
+
+        // --- Part 1 ---
+        System.out.println("--- Part 1: Function Properties ---");
+
+        // f(n) = 2n + 1 on {0..5}
+        Map&lt;Integer, Integer&gt; f1 = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt;= 5; i++) f1.put(i, 2 * i + 1);
+        Set&lt;Integer&gt; cod1 = IntStream.rangeClosed(0, 11).boxed().collect(Collectors.toSet());
+        System.out.println("f(n) = 2n+1: " + f1);
+        System.out.println("  Injective: " + isInjective(f1));        // true
+        System.out.println("  Surjective onto {0..11}: " + isSurjective(f1, cod1)); // false
+        System.out.println("  Missing: " + findMissing(f1, cod1));
+
+        // g(n) = n % 3 on {0..8}
+        Map&lt;Integer, Integer&gt; g1 = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt;= 8; i++) g1.put(i, i % 3);
+        Set&lt;Integer&gt; cod2 = Set.of(0, 1, 2);
+        System.out.println("\ng(n) = n%3: " + g1);
+        System.out.println("  Injective: " + isInjective(g1));        // false
+        System.out.println("  Surjective onto {0,1,2}: " + isSurjective(g1, cod2)); // true
+        System.out.println("  Collision: " + findCollision(g1));
+
+        // Caesar shift 3
+        Map&lt;Integer, Integer&gt; caesar = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt; 26; i++) caesar.put(i, (i + 3) % 26);
+        Set&lt;Integer&gt; alpha = IntStream.range(0, 26).boxed().collect(Collectors.toSet());
+        System.out.println("\nCaesar(3): bijective = " + isBijective(caesar, alpha));
+        Map&lt;Integer, Integer&gt; decCaesar = inverse(caesar);
+        System.out.println("  Encrypt(0) = " + caesar.get(0) + ", Decrypt(3) = " + decCaesar.get(3));
+
+        // --- Part 2 ---
+        System.out.println("\n--- Part 2: Composition ---");
+        Map&lt;Integer, Integer&gt; fComp = new HashMap&lt;&gt;();
+        Map&lt;Integer, Integer&gt; gComp = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt;= 10; i++) {
+            fComp.put(i, i + 1);
+            gComp.put(i, 2 * i);
+        }
+        gComp.put(11, 22); // to handle f's max output
+        Map&lt;Integer, Integer&gt; gof = compose(fComp, gComp);
+        System.out.println("f(n)=n+1, g(n)=2n");
+        System.out.println("  (g∘f)(3) = " + gof.get(3)); // g(4) = 8
+        System.out.println("  f injective: " + isInjective(fComp));
+        System.out.println("  g injective: " + isInjective(gComp));
+        System.out.println("  g∘f injective: " + isInjective(gof));
+
+        // --- Part 3 ---
+        System.out.println("\n--- Part 3: Relations ---");
+        Set&lt;Integer&gt; domain = IntStream.rangeClosed(1, 5).boxed().collect(Collectors.toSet());
+
+        // Congruence mod 2
+        Set&lt;List&lt;Integer&gt;&gt; congMod2 = buildRelation(domain,
+                (a, b) -&gt; Math.floorMod(a, 2) == Math.floorMod(b, 2));
+        System.out.println("Cong mod 2 — Equivalence: "
+                + isEquivalenceRelation(domain, congMod2));
+        System.out.println("  Classes: " + allEquivalenceClasses(domain, congMod2));
+
+        // Divisibility on {1..5}
+        Set&lt;List&lt;Integer&gt;&gt; divRel = buildRelation(domain,
+                (a, b) -&gt; a != 0 &amp;&amp; b % a == 0);
+        System.out.println("\nDivisibility — Partial order: "
+                + (isReflexive(domain, divRel) &amp;&amp; isAntisymmetric(divRel) &amp;&amp; isTransitive(divRel)));
+
+        // |a - b| &lt;= 1
+        Set&lt;List&lt;Integer&gt;&gt; closeRel = buildRelation(domain,
+                (a, b) -&gt; Math.abs(a - b) &lt;= 1);
+        System.out.println("\n|a-b|&lt;=1 — Reflexive: " + isReflexive(domain, closeRel)
+                + " Symmetric: " + isSymmetric(closeRel)
+                + " Transitive: " + isTransitive(closeRel));
+
+        // Transitive closure
+        Set&lt;List&lt;Integer&gt;&gt; closedClose = transitiveClosure(closeRel);
+        System.out.println("  After closure — Transitive: " + isTransitive(closedClose));
+
+        // --- Part 4 ---
+        System.out.println("\n--- Part 4: Social Network ---");
+        Set&lt;Integer&gt; people = IntStream.range(0, 10).boxed().collect(Collectors.toSet());
+        Set&lt;List&lt;Integer&gt;&gt; friends = new HashSet&lt;&gt;();
+
+        // Add some friendships (symmetric)
+        int[][] edges = {{0,1},{1,2},{3,4},{4,5},{6,7},{8,9}};
+        for (int[] e : edges) {
+            friends.add(Arrays.asList(e[0], e[1]));
+            friends.add(Arrays.asList(e[1], e[0]));
+        }
+        // Add reflexivity
+        for (int p : people) {
+            friends.add(Arrays.asList(p, p));
+        }
+        System.out.println("Before closure — Equivalence: "
+                + isEquivalenceRelation(people, friends));
+
+        // Transitive closure
+        Set&lt;List&lt;Integer&gt;&gt; closed = transitiveClosure(friends);
+        System.out.println("After closure — Equivalence: "
+                + isEquivalenceRelation(people, closed));
+        System.out.println("Friend groups: " + allEquivalenceClasses(people, closed));
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="verification-checklist">
+<h2>Verification Checklist</h2>
+
+<ul>
+<li>☐ <code>isInjective</code> correctly identifies injective/non-injective maps</li>
+<li>☐ <code>isSurjective</code> checks all codomain elements</li>
+<li>☐ <code>findCollision</code> returns two different domain elements or null</li>
+<li>☐ <code>inverse</code> throws on non-injective input</li>
+<li>☐ <code>compose</code> correctly computes $g \circ f$</li>
+<li>☐ All four relation properties checked correctly</li>
+<li>☐ Equivalence classes are correct and form a partition</li>
+<li>☐ Transitive closure terminates and is actually transitive</li>
+<li>☐ Social network demo produces sensible friend groups</li>
+</ul>
+
+</section>
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -345,7 +345,44 @@ function runBudgetCalc() {
     const resultEl = document.getElementById('budgetResult');
     if (!resultEl) return;
 
-    if (mode === 'maxPrice') {
+    if (mode === 'ruleOfExpenses') {
+        // Find min rent where cashflow >= 15% of total monthly outflows (mortgage + ops)
+        // Binary search: monthlyCashFlow = 0.15 * (monthlyPayment + annualOperatingExpenses/12)
+        let lo = 0, hi = 50000, solved = null;
+        for (let i = 0; i < 300; i++) {
+            const mid = (lo + hi) / 2;
+            const r = analyzeDeal({ ...inputs, monthlyGrossRent: mid });
+            const totalMonthlyExp = r.monthlyPayment + r.annualOperatingExpenses / 12;
+            const diff = r.monthlyCashFlow - totalMonthlyExp * 0.15;
+            if (Math.abs(diff) < 0.01) { solved = mid; break; }
+            if (diff < 0) lo = mid; else hi = mid;
+        }
+        if (solved === null) solved = (lo + hi) / 2;
+
+        const v = analyzeDeal({ ...inputs, monthlyGrossRent: solved });
+        const totalMonthlyExp = v.monthlyPayment + v.annualOperatingExpenses / 12;
+        const buffer = v.monthlyCashFlow;
+
+        resultEl.innerHTML = `
+            <div class="target-result-card">
+                <div class="target-answer">
+                    <div class="target-answer-label">Minimum Monthly Gross Rent (1.15&times; expenses)</div>
+                    <div class="target-answer-value">${fmtDollar(solved)}/mo</div>
+                </div>
+                <div class="target-verify">
+                    <p>Monthly expenses (mortgage + ops): <strong>${fmtDollar(totalMonthlyExp)}</strong>
+                       &nbsp;&times; 1.15 = <strong class="pos-text">${fmtDollar(solved)}</strong></p>
+                    <p>Cashflow: <strong class="pos-text">${fmtDollar(buffer)}/mo</strong>
+                       &nbsp;|&nbsp; CoC: <strong>${v.coc.toFixed(2)}%</strong>
+                       &nbsp;|&nbsp; DSCR: <strong>${v.dscr.toFixed(2)}</strong></p>
+                    <p style="font-size:0.8rem;color:var(--text-2)">Rent covers all expenses with a 15% positive cashflow buffer.</p>
+                    <button class="btn btn-accent" onclick="applyTargetToForm({ monthlyGrossRent: ${Math.round(solved)} })">
+                        &larr; Apply to Form
+                    </button>
+                </div>
+            </div>`;
+
+    } else if (mode === 'maxPrice') {
         // Given a target monthly P&I payment, find the max purchase price
         const targetPayment = parseFloat(document.getElementById('budgetMonthlyPayment')?.value);
         if (!targetPayment || targetPayment <= 0) {
@@ -427,12 +464,13 @@ function runBudgetCalc() {
 function initBudgetCalc() {
     document.getElementById('runBudgetCalc')?.addEventListener('click', runBudgetCalc);
     document.getElementById('budgetSolveFor')?.addEventListener('change', function () {
-        const isPrice = this.value === 'maxPrice';
-        const pf = document.getElementById('budgetPaymentField');
-        const cf = document.getElementById('budgetCashflowField');
-        if (pf) pf.style.display = isPrice ? '' : 'none';
-        if (cf) cf.style.display = isPrice ? 'none' : '';
-        const lbl = document.getElementById('budgetMonthlyPayment')?.closest('.field')?.querySelector('label');
+        const mode = this.value;
+        const pf  = document.getElementById('budgetPaymentField');
+        const cf  = document.getElementById('budgetCashflowField');
+        const nf  = document.getElementById('budgetNoInputMsg');
+        if (pf) pf.style.display  = mode === 'maxPrice'  ? '' : 'none';
+        if (cf) cf.style.display  = mode === 'minRent'   ? '' : 'none';
+        if (nf) nf.style.display  = mode === 'ruleOfExpenses' ? '' : 'none';
         document.getElementById('budgetResult').innerHTML = '';
     });
 }

@@ -511,17 +511,22 @@
                 <div class="field">
                     <label for="budgetSolveFor">I want to know</label>
                     <select id="budgetSolveFor">
+                        <option value="ruleOfExpenses" selected>Min Rent — 1.15&times; all expenses (positive cashflow default)</option>
                         <option value="maxPrice">Max Purchase Price (for a mortgage payment)</option>
-                        <option value="minRent">Min Rent needed (for a monthly cashflow)</option>
+                        <option value="minRent">Min Rent needed (for a target monthly cashflow)</option>
                     </select>
                 </div>
-                <div class="field" id="budgetPaymentField">
+                <div class="field" id="budgetPaymentField" style="display:none">
                     <label for="budgetMonthlyPayment">Max Monthly Mortgage (P&amp;I)</label>
                     <div class="input-wrap">
                         <span class="prefix">$</span>
                         <input type="number" id="budgetMonthlyPayment" class="has-prefix" placeholder="2,500" min="0">
                     </div>
                     <span class="hint">Uses your rate &amp; term from Analyze tab</span>
+                </div>
+                <div class="field" id="budgetNoInputMsg" style="">
+                    <label>&nbsp;</label>
+                    <p style="margin:0;font-size:0.85rem;color:var(--text-2);line-height:1.4">Uses current form values.<br>Press Calculate to see required rent.</p>
                 </div>
                 <div class="field" id="budgetCashflowField" style="display:none">
                     <label for="budgetMonthlyCashflow">Target Monthly Cashflow</label>

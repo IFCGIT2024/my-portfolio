@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "VP Request Inspector",
+  "version": "1.0",
+  "description": "Captures all XHR/Fetch requests and responses so you can understand how any page's API works.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [{
+    "resources": ["interceptor.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["relay.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["https://www.viewpoint.ca/*"],
+      "js": ["content-viewpoint.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://ifcgit2024.github.io/my-portfolio/real-estate-analyzer/*"],
+      "js": ["content-analyzer.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "VP Request Inspector"
+  }
+}

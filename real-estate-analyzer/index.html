@@ -26,8 +26,9 @@
             <button class="tab-btn"        data-tab="projections" role="tab">Projections</button>
             <button class="tab-btn"        data-tab="target"      role="tab">Target Calc</button>
             <button class="tab-btn"        data-tab="compare"     role="tab">Compare</button>
-            <button class="tab-btn"        data-tab="saved"       role="tab">Saved Deals</button>
-            <button class="tab-btn"        data-tab="tests"       role="tab" style="display:none">🧪 Tests</button>
+            <button class="tab-btn"        data-tab="saved"      role="tab">Saved Deals</button>
+            <button class="tab-btn"        data-tab="settings"   role="tab">⚙ Settings</button>
+            <button class="tab-btn"        data-tab="tests"      role="tab" style="display:none">🧪 Tests</button>
         </nav>
         <div class="header-actions">
             <button id="loadSampleBtn" class="btn btn-secondary">Load Sample</button>
@@ -46,6 +47,20 @@
 
         <!-- ── INPUTS PANEL ─────────────────────────── -->
         <div id="inputsPanel">
+
+            <!-- Lender Template Bar -->
+            <div class="defaults-bar">
+                <label class="defaults-toggle" title="Fill expense fields with lender template values">
+                    <input type="checkbox" id="useDefaultsChk">
+                    <span class="defaults-toggle-label">⚡ Apply Lender Template</span>
+                </label>
+                <select id="defaultsTemplateSelect" class="defaults-template-select">
+                    <option value="standard">Standard (CMHC / typical)</option>
+                    <option value="conservative">Conservative (Lender-Safe)</option>
+                    <option value="aggressive">Aggressive (Best-case)</option>
+                    <option value="custom">My Custom Defaults</option>
+                </select>
+            </div>
 
             <!-- Property Info -->
             <div class="input-section">
@@ -548,6 +563,78 @@
         <p class="no-data">No saved deals yet. Go to the Analyze tab, enter a deal, and click "Save Deal".</p>
     </div>
 
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 5: SETTINGS
+═══════════════════════════════════════════════════ -->
+<section id="tab-settings" class="tab-content" role="tabpanel">
+    <div class="settings-page">
+        <h2>Lender / Analysis Defaults</h2>
+        <p class="settings-desc">Set the percentage defaults that get pre-filled when you click <strong>⚡ Apply Lender Template</strong>. Choosing a preset below overwrites your custom values.</p>
+
+        <div class="settings-preset-row">
+            <span class="settings-preset-label">Load preset:</span>
+            <button class="btn btn-secondary" id="presetConservative">Conservative</button>
+            <button class="btn btn-secondary" id="presetStandard">Standard</button>
+            <button class="btn btn-secondary" id="presetAggressive">Aggressive</button>
+        </div>
+
+        <div class="settings-grid">
+            <div class="settings-field">
+                <label for="s_downPaymentPct">Down Payment %</label>
+                <div class="input-wrap"><input type="number" id="s_downPaymentPct" min="0" max="100" step="0.5"><span class="suffix">%</span></div>
+            </div>
+            <div class="settings-field">
+                <label for="s_interestRate">Interest Rate %</label>
+                <div class="input-wrap"><input type="number" id="s_interestRate" min="0" step="0.05"><span class="suffix">%</span></div>
+            </div>
+            <div class="settings-field">
+                <label for="s_loanTermYears">Loan Term (years)</label>
+                <input type="number" id="s_loanTermYears" min="1" max="40">
+            </div>
+            <div class="settings-field">
+                <label for="s_originationFee">Origination Fee %</label>
+                <div class="input-wrap"><input type="number" id="s_originationFee" min="0" step="0.1"><span class="suffix">%</span></div>
+            </div>
+            <div class="settings-field">
+                <label for="s_occupancyRate">Occupancy Rate %</label>
+                <div class="input-wrap"><input type="number" id="s_occupancyRate" min="0" max="100" step="1"><span class="suffix">%</span></div>
+            </div>
+            <div class="settings-field">
+                <label for="s_vacancyPct">Vacancy %</label>
+                <div class="input-wrap"><input type="number" id="s_vacancyPct" min="0" max="100" step="1"><span class="suffix">%</span></div>
+            </div>
+            <div class="settings-field">
+                <label for="s_propMgmtPct">Prop. Management %</label>
+                <div class="input-wrap"><input type="number" id="s_propMgmtPct" min="0" step="0.5"><span class="suffix">%</span></div>
+            </div>
+            <div class="settings-field">
+                <label for="s_maintenancePct">Maintenance %</label>
+                <div class="input-wrap"><input type="number" id="s_maintenancePct" min="0" step="0.5"><span class="suffix">%</span></div>
+            </div>
+            <div class="settings-field">
+                <label for="s_capexPct">CapEx %</label>
+                <div class="input-wrap"><input type="number" id="s_capexPct" min="0" step="0.5"><span class="suffix">%</span></div>
+            </div>
+            <div class="settings-field">
+                <label for="s_advertisingAnnual">Advertising (annual $)</label>
+                <div class="input-wrap"><span class="prefix">$</span><input type="number" id="s_advertisingAnnual" class="has-prefix" min="0"></div>
+            </div>
+            <div class="settings-field">
+                <label for="s_annualInsurance">Insurance (annual $)</label>
+                <div class="input-wrap"><span class="prefix">$</span><input type="number" id="s_annualInsurance" class="has-prefix" min="0" placeholder="blank = 0.5% of price"></div>
+                <span class="settings-hint">Leave blank to auto-calc as 0.5% of purchase price</span>
+            </div>
+        </div>
+
+        <div class="settings-actions">
+            <button id="saveDefaultsBtn" class="btn btn-primary">💾 Save as My Defaults</button>
+            <button id="resetDefaultsBtn" class="btn btn-secondary">↩ Reset to Standard</button>
+        </div>
+        <p id="settingsSavedMsg" class="settings-saved-msg" style="display:none">✅ Defaults saved!</p>
+    </div>
 </section>
 
 

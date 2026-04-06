@@ -566,7 +566,123 @@ function init() {
     }
 
     updateModeVisibility();
+    initSettingsTab();
     recalculate();
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// ═══════════════════════════════════════════════════════════════════
+// LENDER TEMPLATES — Settings tab + defaults bar logic
+// ═══════════════════════════════════════════════════════════════════
+
+/** Populate the Settings tab form from a defaults object */
+function renderSettingsForm(d) {
+    d = d || getDefaults();
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = (v == null ? '' : v); };
+    set('s_downPaymentPct',    d.downPaymentPct);
+    set('s_interestRate',      d.interestRate);
+    set('s_loanTermYears',     d.loanTermYears);
+    set('s_originationFee',    d.originationFee);
+    set('s_occupancyRate',     d.occupancyRate);
+    set('s_vacancyPct',        d.vacancyPct);
+    set('s_propMgmtPct',       d.propMgmtPct);
+    set('s_maintenancePct',    d.maintenancePct);
+    set('s_capexPct',          d.capexPct);
+    set('s_advertisingAnnual', d.advertisingAnnual);
+    set('s_annualInsurance',   d.annualInsurance);
+}
+
+/** Read defaults form into an object */
+function readSettingsForm() {
+    const num = id => { const v = document.getElementById(id)?.value; return (v === '' || v == null) ? null : parseFloat(v); };
+    return {
+        downPaymentPct:    num('s_downPaymentPct'),
+        interestRate:      num('s_interestRate'),
+        loanTermYears:     num('s_loanTermYears'),
+        originationFee:    num('s_originationFee'),
+        occupancyRate:     num('s_occupancyRate'),
+        vacancyPct:        num('s_vacancyPct'),
+        propMgmtPct:       num('s_propMgmtPct'),
+        maintenancePct:    num('s_maintenancePct'),
+        capexPct:          num('s_capexPct'),
+        advertisingAnnual: num('s_advertisingAnnual'),
+        annualInsurance:   num('s_annualInsurance'),
+    };
+}
+
+/** Apply a named builtin template to the settings form */
+function applyBuiltinTemplate(key) {
+    const t = BUILTIN_TEMPLATES[key];
+    if (!t) return;
+    renderSettingsForm(t);
+}
+
+/** Apply current defaults (or a given object) to the analysis form */
+function applyDefaultsToForm(d) {
+    d = d || getDefaults();
+    const purchasePrice = parseFloat(document.getElementById('purchasePrice')?.value) || 0;
+    const insurance = (d.annualInsurance != null) ? d.annualInsurance : (purchasePrice ? Math.round(purchasePrice * 0.005) : 0);
+    setInputs({
+        downPaymentPct:    d.downPaymentPct,
+        interestRate:      d.interestRate,
+        loanTermYears:     d.loanTermYears,
+        originationFee:    d.originationFee,
+        occupancyRate:     d.occupancyRate,
+        vacancyPct:        d.vacancyPct,
+        propMgmtMode:      'pct',
+        propMgmtPct:       d.propMgmtPct,
+        maintenanceMode:   'pct',
+        maintenancePct:    d.maintenancePct,
+        capexMode:         'pct',
+        capexPct:          d.capexPct,
+        advertisingAnnual: d.advertisingAnnual,
+        annualInsurance:   insurance,
+    });
+    recalculate();
+}
+
+/** Wire up all Settings tab + defaults bar events (called from init) */
+function initSettingsTab() {
+    // Render settings form on first load
+    renderSettingsForm();
+
+    // Preset buttons
+    document.getElementById('presetConservative')?.addEventListener('click', () => applyBuiltinTemplate('conservative'));
+    document.getElementById('presetStandard')    ?.addEventListener('click', () => applyBuiltinTemplate('standard'));
+    document.getElementById('presetAggressive')  ?.addEventListener('click', () => applyBuiltinTemplate('aggressive'));
+
+    // Save / reset
+    document.getElementById('saveDefaultsBtn')?.addEventListener('click', () => {
+        saveDefaults(readSettingsForm());
+        const msg = document.getElementById('settingsSavedMsg');
+        if (msg) { msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 2500); }
+    });
+    document.getElementById('resetDefaultsBtn')?.addEventListener('click', () => {
+        applyBuiltinTemplate('standard');
+        saveDefaults(BUILTIN_TEMPLATES.standard);
+        const msg = document.getElementById('settingsSavedMsg');
+        if (msg) { msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 2500); }
+    });
+
+    // Defaults bar — checkbox applies from the selected dropdown preset
+    const chk      = document.getElementById('useDefaultsChk');
+    const tmplSel  = document.getElementById('defaultsTemplateSelect');
+
+    chk?.addEventListener('change', function () {
+        if (!this.checked) return;
+        const key = tmplSel?.value || 'custom';
+        if (key === 'custom') {
+            applyDefaultsToForm(getDefaults());
+        } else {
+            applyDefaultsToForm(BUILTIN_TEMPLATES[key]);
+        }
+        // Uncheck after applying so it acts as a one-shot button
+        setTimeout(() => { this.checked = false; }, 400);
+    });
+
+    // Re-render settings form when Settings tab is opened
+    document.querySelectorAll('.tab-btn[data-tab="settings"]').forEach(btn => {
+        btn.addEventListener('click', () => renderSettingsForm());
+    });
+}

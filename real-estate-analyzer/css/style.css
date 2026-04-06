@@ -105,7 +105,7 @@ main { max-width: 1600px; margin: 0 auto; padding: 1.25rem 1.5rem; }
 /* ─── Form Layout (Analyze Tab) ─────────────────────────────────────────────── */
 .analyze-layout {
     display: grid;
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: 380px 1fr;
     gap: 1.25rem;
     align-items: start;
 }
@@ -114,7 +114,6 @@ main { max-width: 1600px; margin: 0 auto; padding: 1.25rem 1.5rem; }
 /* ─── Inputs Panel ──────────────────────────────────────────────────────────── */
 #inputsPanel {
     display: flex; flex-direction: column; gap: 0.75rem;
-    position: sticky; top: 70px; max-height: calc(100vh - 80px); overflow-y: auto;
 }
 .input-section {
     background: var(--bg-surface);

@@ -500,6 +500,44 @@
             The solver uses binary search (300 iterations) to find the exact value that produces your target CoC.
             After finding the value, you can click "Apply to Form" to load it directly into the Analyze tab.
         </p>
+
+        <!-- Payment Budget Solver -->
+        <hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0">
+        <h3 style="font-size:1rem;margin-bottom:0.25rem">💵 Payment Budget Solver</h3>
+        <p style="color:var(--text-2);font-size:0.85rem;margin-bottom:1rem">Enter what you can afford monthly — get the max purchase price or required rent.</p>
+
+        <div class="target-form">
+            <div class="field-row-3">
+                <div class="field">
+                    <label for="budgetSolveFor">I want to know</label>
+                    <select id="budgetSolveFor">
+                        <option value="maxPrice">Max Purchase Price (for a mortgage payment)</option>
+                        <option value="minRent">Min Rent needed (for a monthly cashflow)</option>
+                    </select>
+                </div>
+                <div class="field" id="budgetPaymentField">
+                    <label for="budgetMonthlyPayment">Max Monthly Mortgage (P&amp;I)</label>
+                    <div class="input-wrap">
+                        <span class="prefix">$</span>
+                        <input type="number" id="budgetMonthlyPayment" class="has-prefix" placeholder="2,500" min="0">
+                    </div>
+                    <span class="hint">Uses your rate &amp; term from Analyze tab</span>
+                </div>
+                <div class="field" id="budgetCashflowField" style="display:none">
+                    <label for="budgetMonthlyCashflow">Target Monthly Cashflow</label>
+                    <div class="input-wrap">
+                        <span class="prefix">$</span>
+                        <input type="number" id="budgetMonthlyCashflow" class="has-prefix" placeholder="500" min="0">
+                    </div>
+                    <span class="hint">After all expenses &amp; mortgage</span>
+                </div>
+                <div class="field" style="justify-content:flex-end">
+                    <label>&nbsp;</label>
+                    <button id="runBudgetCalc" class="btn btn-primary" style="width:100%;height:38px">Calculate →</button>
+                </div>
+            </div>
+        </div>
+        <div id="budgetResult" class="target-result"></div>
     </div>
 </section>
 

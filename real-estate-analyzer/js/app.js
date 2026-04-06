@@ -337,6 +337,106 @@ function applyTargetToForm(partial) {
     recalculate();
 }
 
+// ─── Payment Budget Solver ────────────────────────────────────────────────────
+
+function runBudgetCalc() {
+    const inputs   = getInputs();
+    const mode     = document.getElementById('budgetSolveFor')?.value;
+    const resultEl = document.getElementById('budgetResult');
+    if (!resultEl) return;
+
+    if (mode === 'maxPrice') {
+        // Given a target monthly P&I payment, find the max purchase price
+        const targetPayment = parseFloat(document.getElementById('budgetMonthlyPayment')?.value);
+        if (!targetPayment || targetPayment <= 0) {
+            resultEl.innerHTML = '<div class="target-impossible"><p>Enter a monthly payment amount.</p></div>';
+            return;
+        }
+
+        const rate     = (inputs.interestRate || 6.5) / 100 / 12;
+        const n        = (inputs.loanTermYears || 30) * 12;
+        const downPct  = (inputs.downPaymentPct || 20) / 100;
+
+        // mortgage payment = loanAmt * rate*(1+rate)^n / ((1+rate)^n - 1)
+        // loanAmt = targetPayment / (rate*(1+rate)^n / ((1+rate)^n - 1))
+        let maxPrice;
+        if (rate === 0) {
+            const loanAmt = targetPayment * n;
+            maxPrice = loanAmt / (1 - downPct);
+        } else {
+            const factor  = Math.pow(1 + rate, n);
+            const loanAmt = targetPayment / (rate * factor / (factor - 1));
+            maxPrice = loanAmt / (1 - downPct);
+        }
+
+        const downAmt    = maxPrice * downPct;
+        const loanAmt    = maxPrice - downAmt;
+        const actualPmt  = calcMonthlyPayment(loanAmt, inputs.interestRate || 6.5, inputs.loanTermYears || 30);
+
+        resultEl.innerHTML = `
+            <div class="target-result-card">
+                <div class="target-answer">
+                    <div class="target-answer-label">Maximum Purchase Price</div>
+                    <div class="target-answer-value">${fmtDollar(maxPrice)}</div>
+                </div>
+                <div class="target-verify">
+                    <p>Down payment (${inputs.downPaymentPct || 20}%): <strong>${fmtDollar(downAmt)}</strong> &nbsp;|&nbsp;
+                       Loan: <strong>${fmtDollar(loanAmt)}</strong> &nbsp;|&nbsp;
+                       Monthly P&amp;I: <strong class="pos-text">${fmtDollar(actualPmt)}</strong></p>
+                    <p style="font-size:0.8rem;color:var(--text-2)">Rate: ${inputs.interestRate || 6.5}% &nbsp; Term: ${inputs.loanTermYears || 30} yrs</p>
+                    <button class="btn btn-accent" onclick="applyTargetToForm({ purchasePrice: ${Math.round(maxPrice)}, arv: ${Math.round(maxPrice)} })">
+                        &larr; Apply to Form
+                    </button>
+                </div>
+            </div>`;
+
+    } else {
+        // minRent: given target monthly cashflow, find required gross monthly rent
+        const targetCF = parseFloat(document.getElementById('budgetMonthlyCashflow')?.value) || 0;
+
+        // Binary search: find monthlyGrossRent such that monthlyCashFlow = targetCF
+        let lo = 0, hi = 50000, solved = null;
+        for (let i = 0; i < 300; i++) {
+            const mid = (lo + hi) / 2;
+            const r = analyzeDeal({ ...inputs, monthlyGrossRent: mid });
+            if (Math.abs(r.monthlyCashFlow - targetCF) < 0.01) { solved = mid; break; }
+            if (r.monthlyCashFlow < targetCF) lo = mid; else hi = mid;
+        }
+        if (solved === null) solved = (lo + hi) / 2;
+
+        const verify = analyzeDeal({ ...inputs, monthlyGrossRent: solved });
+
+        resultEl.innerHTML = `
+            <div class="target-result-card">
+                <div class="target-answer">
+                    <div class="target-answer-label">Minimum Monthly Gross Rent Needed</div>
+                    <div class="target-answer-value">${fmtDollar(solved)}/mo</div>
+                </div>
+                <div class="target-verify">
+                    <p>At this rent: Cashflow = <strong class="${verify.monthlyCashFlow >= 0 ? 'pos-text' : 'neg-text'}">${fmtDollar(verify.monthlyCashFlow)}/mo</strong> &nbsp;|&nbsp;
+                       CoC = <strong>${verify.coc.toFixed(2)}%</strong> &nbsp;|&nbsp;
+                       DSCR = <strong>${verify.dscr.toFixed(2)}</strong></p>
+                    <button class="btn btn-accent" onclick="applyTargetToForm({ monthlyGrossRent: ${Math.round(solved)} })">
+                        &larr; Apply to Form
+                    </button>
+                </div>
+            </div>`;
+    }
+}
+
+function initBudgetCalc() {
+    document.getElementById('runBudgetCalc')?.addEventListener('click', runBudgetCalc);
+    document.getElementById('budgetSolveFor')?.addEventListener('change', function () {
+        const isPrice = this.value === 'maxPrice';
+        const pf = document.getElementById('budgetPaymentField');
+        const cf = document.getElementById('budgetCashflowField');
+        if (pf) pf.style.display = isPrice ? '' : 'none';
+        if (cf) cf.style.display = isPrice ? 'none' : '';
+        const lbl = document.getElementById('budgetMonthlyPayment')?.closest('.field')?.querySelector('label');
+        document.getElementById('budgetResult').innerHTML = '';
+    });
+}
+
 // ─── Saved Deals ──────────────────────────────────────────────────────────────
 
 function renderSavedDeals() {
@@ -567,6 +667,7 @@ function init() {
 
     updateModeVisibility();
     initSettingsTab();
+    initBudgetCalc();
     recalculate();
 }
 

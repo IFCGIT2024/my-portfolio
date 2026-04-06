@@ -36,6 +36,8 @@
         try { respText = truncate(xhr.responseText, 3000); } catch (e) {}
         try { parsed = JSON.parse(xhr.responseText); } catch (e) {}
 
+        maybeStoreMapClick(url, parsed);
+
         send({
           type: 'XHR',
           method,
@@ -72,6 +74,9 @@
       clone.text().then(text => {
         let parsed = null;
         try { parsed = JSON.parse(text); } catch (e) {}
+
+        maybeStoreMapClick(url, parsed);
+
         send({
           type: 'Fetch',
           method,
@@ -103,13 +108,32 @@
     }
   };
 
+  // ── Cache map/click response (fires on cutsheet + property detail pages) ────
+  let _vpMapClick = null;
+
+  function maybeStoreMapClick(url, parsed) {
+    if (typeof url === 'string' && url.includes('/api/v2/map/click') && parsed && parsed.property) {
+      _vpMapClick = parsed;
+    }
+  }
+
   // ── Respond to vp api data requests from the content script ────────────────
   window.addEventListener('message', function (e) {
-    if (!e.data || e.data.__vpRequestApi !== true) return;
-    window.postMessage({
-      __vpApiResponse: true,
-      nonces: window.vp && window.vp.api && window.vp.api.NONCES,
-      ver:    window.vp && window.vp.api && window.vp.api.CLIENT_VER,
-    }, '*');
+    if (!e.data) return;
+
+    if (e.data.__vpRequestApi === true) {
+      window.postMessage({
+        __vpApiResponse: true,
+        nonces: window.vp && window.vp.api && window.vp.api.NONCES,
+        ver:    window.vp && window.vp.api && window.vp.api.CLIENT_VER,
+      }, '*');
+    }
+
+    if (e.data.__vpRequestClickData === true) {
+      window.postMessage({
+        __vpClickDataResponse: true,
+        data: _vpMapClick,
+      }, '*');
+    }
   });
 })();

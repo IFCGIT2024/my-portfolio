@@ -779,11 +779,23 @@ function applyDefaultsToForm(d) {
     const purchasePrice = parseFloat(document.getElementById('purchasePrice')?.value) || 0;
     const insurance = (d.annualInsurance != null) ? d.annualInsurance : (purchasePrice ? Math.round(purchasePrice * 0.005) : 0);
 
+    // Financing
     set('downPaymentPct',    d.downPaymentPct);
     set('interestRate',      d.interestRate);
     set('loanTermYears',     d.loanTermYears);
     set('originationFee',    d.originationFee);
+
+    // Costs calculated from % of purchase price (only if purchase price is known)
+    if (purchasePrice) {
+        if (d.closingCostsPct != null) set('closingCosts', Math.round(purchasePrice * d.closingCostsPct / 100));
+        if (d.rehabCostsPct   != null) set('rehabCosts',   Math.round(purchasePrice * d.rehabCostsPct   / 100));
+    }
+
+    // Income
     set('occupancyRate',     d.occupancyRate);
+
+    // Expenses
+    set('annualInsurance',   insurance);
     set('vacancyPct',        d.vacancyPct);
     set('propMgmtMode',      'pct');
     set('propMgmtPct',       d.propMgmtPct);
@@ -791,8 +803,15 @@ function applyDefaultsToForm(d) {
     set('maintenancePct',    d.maintenancePct);
     set('capexMode',         'pct');
     set('capexPct',          d.capexPct);
+    set('monthlyUtilities',  d.monthlyUtilities);
+    set('monthlyHOA',        d.monthlyHOA);
     set('advertisingAnnual', d.advertisingAnnual);
-    set('annualInsurance',   insurance);
+
+    // Projection settings
+    set('rentGrowthPct',     d.rentGrowthPct);
+    set('expenseGrowthPct',  d.expenseGrowthPct);
+    set('appreciationPct',   d.appreciationPct);
+    set('holdingYears',      d.holdingYears);
 
     updateModeVisibility();
     recalculate();

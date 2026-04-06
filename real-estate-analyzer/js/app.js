@@ -150,6 +150,13 @@ function renderMetrics(result, inputs) {
     const cocGap = result.coc - 15;
     const targetMet = cocGap >= 0;
 
+    // 1.15× expenses rule: monthly gross rent ≥ 1.15 × (P&I + monthly operating expenses)
+    const totalMonthlyExp = result.monthlyPayment + result.annualOperatingExpenses / 12;
+    const minRent115      = totalMonthlyExp * 1.15;
+    const monthlyRent     = inputs.monthlyGrossRent || 0;
+    const rent115Met      = monthlyRent >= minRent115;
+    const rent115Gap      = monthlyRent - minRent115;
+
     const banner = document.getElementById('dealScoreBanner');
     if (banner) {
         banner.className = 'deal-score-banner ' + scoreCls;
@@ -164,10 +171,17 @@ function renderMetrics(result, inputs) {
                     <div class="score-sub">Overall Deal Score</div>
                 </div>
             </div>
-            <div class="target-badge ${targetMet ? 'target-met' : 'target-miss'}">
-                ${targetMet
-                    ? `✓ 15% CoC Target Met (+${cocGap.toFixed(1)}%)`
-                    : `✗ ${Math.abs(cocGap).toFixed(1)}% Below 15% CoC Target`}
+            <div style="display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end">
+                <div class="target-badge ${targetMet ? 'target-met' : 'target-miss'}">
+                    ${targetMet
+                        ? `✓ 15% CoC Target Met (+${cocGap.toFixed(1)}%)`
+                        : `✗ ${Math.abs(cocGap).toFixed(1)}% Below 15% CoC Target`}
+                </div>
+                <div class="target-badge ${rent115Met ? 'target-met' : 'target-miss'}" title="Rent must cover 1.15× all monthly expenses (mortgage + ops) for positive cashflow">
+                    ${rent115Met
+                        ? `✓ 1.15× Expenses Rule (+${fmtDollar(rent115Gap)}/mo)`
+                        : `✗ Needs ${fmtDollar(Math.abs(rent115Gap))}/mo more rent (1.15× rule)`}
+                </div>
             </div>`;
     }
 

@@ -771,27 +771,30 @@ function applyBuiltinTemplate(key) {
     renderSettingsForm(t);
 }
 
-/** Apply current defaults (or a given object) to the analysis form */
+/** Apply current defaults (or a given object) to the analysis form — only touches template fields, never wipes existing property data */
 function applyDefaultsToForm(d) {
     d = d || getDefaults();
+    const set = (id, val) => { if (val === undefined || val === null) return; const el = document.getElementById(id); if (el) el.value = val; };
+
     const purchasePrice = parseFloat(document.getElementById('purchasePrice')?.value) || 0;
     const insurance = (d.annualInsurance != null) ? d.annualInsurance : (purchasePrice ? Math.round(purchasePrice * 0.005) : 0);
-    setInputs({
-        downPaymentPct:    d.downPaymentPct,
-        interestRate:      d.interestRate,
-        loanTermYears:     d.loanTermYears,
-        originationFee:    d.originationFee,
-        occupancyRate:     d.occupancyRate,
-        vacancyPct:        d.vacancyPct,
-        propMgmtMode:      'pct',
-        propMgmtPct:       d.propMgmtPct,
-        maintenanceMode:   'pct',
-        maintenancePct:    d.maintenancePct,
-        capexMode:         'pct',
-        capexPct:          d.capexPct,
-        advertisingAnnual: d.advertisingAnnual,
-        annualInsurance:   insurance,
-    });
+
+    set('downPaymentPct',    d.downPaymentPct);
+    set('interestRate',      d.interestRate);
+    set('loanTermYears',     d.loanTermYears);
+    set('originationFee',    d.originationFee);
+    set('occupancyRate',     d.occupancyRate);
+    set('vacancyPct',        d.vacancyPct);
+    set('propMgmtMode',      'pct');
+    set('propMgmtPct',       d.propMgmtPct);
+    set('maintenanceMode',   'pct');
+    set('maintenancePct',    d.maintenancePct);
+    set('capexMode',         'pct');
+    set('capexPct',          d.capexPct);
+    set('advertisingAnnual', d.advertisingAnnual);
+    set('annualInsurance',   insurance);
+
+    updateModeVisibility();
     recalculate();
 }
 

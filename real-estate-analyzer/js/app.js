@@ -539,6 +539,32 @@ function init() {
         if (testBtn) testBtn.style.display = 'none';
     }
 
+    // ── Pre-fill from viewpoint.ca "Add to Analyzer" button ──────────────────
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('_source') === 'viewpoint') {
+        const vp = {};
+        const str  = k => urlParams.get(k) || undefined;
+        const num  = k => { const v = urlParams.get(k); return v ? parseFloat(v) : undefined; };
+        vp.dealName      = str('dealName');
+        vp.purchasePrice = num('purchasePrice');
+        vp.arv           = num('arv');
+        vp.annualTaxes   = num('annualTaxes');
+        // Remove query string from URL without reload
+        const clean = window.location.pathname;
+        window.history.replaceState({}, '', clean);
+        // Show a brief notice banner
+        const banner = document.createElement('div');
+        banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#10b981;color:#fff;text-align:center;padding:8px;font-weight:600;z-index:9999;font-size:14px';
+        const beds  = urlParams.get('_beds');
+        const baths = urlParams.get('_baths');
+        const sqft  = urlParams.get('_sqft');
+        const details = [beds && beds + ' bed', baths && baths + ' bath', sqft && sqft + ' sqft'].filter(Boolean).join(' · ');
+        banner.textContent = '📊 Imported from Viewpoint.ca' + (details ? ' — ' + details : '') + ' — Fill in rent & expenses to complete analysis';
+        document.body.appendChild(banner);
+        setTimeout(() => banner.remove(), 6000);
+        setInputs(vp);
+    }
+
     updateModeVisibility();
     recalculate();
 }

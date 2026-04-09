@@ -78,4 +78,15 @@ const PROJECTS = [
     badgeColor: "#10b981",
     icon: "🏠",
   },
+  {
+    id: "polymarket-dashboard",
+    title: "Polymarket Lab",
+    description:
+      "A paper trading dashboard for Polymarket prediction markets. Live market data, signal detection (arbitrage, high conviction, near resolution), $10,000 virtual account, and a Data Lab for API exploration.",
+    path: "polymarket-dashboard/index.html",
+    tags: ["Trading", "Finance", "APIs", "Prediction Markets"],
+    badge: "WIP",
+    badgeColor: "#a78bfa",
+    icon: "📈",
+  },
 ];

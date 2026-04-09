@@ -792,29 +792,4 @@ details summary:hover {
 
   .hero h1 { font-size: 1.6rem; }
   .module-grid { grid-template-columns: 1fr; }
-
-  .slide {
-    padding: 1.25rem 1rem;
-    margin: 1rem 0;
-  }
-
-  .quiz-question-card {
-    padding: 1.25rem 1rem;
-  }
-
-  .quiz-nav {
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .quiz-nav-btn {
-    flex: 1 1 auto;
-    min-width: 130px;
-  }
-
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
 }

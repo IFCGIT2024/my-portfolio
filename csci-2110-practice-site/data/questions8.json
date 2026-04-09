@@ -1,0 +1,24 @@
+{
+  "questions": [
+    {"id": 801, "module": 8, "question": "A heap is structurally what kind of tree?", "options": ["Strictly binary tree", "Complete binary tree", "AVL tree", "Skew tree"], "correct": 1, "section": "Heap Fundamentals"},
+    {"id": 802, "module": 8, "question": "In a max-heap, the root always contains:", "options": ["The minimum key", "A random key", "The maximum key", "The median key"], "correct": 2, "section": "Heap Fundamentals"},
+    {"id": 803, "module": 8, "question": "Which property defines heap order for a max-heap?", "options": ["Each node <= all descendants", "Each node >= all descendants", "Left child < right child", "Inorder traversal sorted"], "correct": 1, "section": "Heap Fundamentals"},
+    {"id": 804, "module": 8, "question": "When inserting into a heap, first placement is:", "options": ["At root", "At left child of root", "At next available leaf to keep completeness", "Anywhere then reordered"], "correct": 2, "section": "Heap Insert"},
+    {"id": 805, "module": 8, "question": "After placing new heap node, restoration step is:", "options": ["Sift down", "Sift up", "Rotate left", "Inorder pass"], "correct": 1, "section": "Heap Insert"},
+    {"id": 806, "module": 8, "question": "Sift-up continues while:", "options": ["Node < parent", "Node > parent", "Node is root", "Children are equal"], "correct": 1, "section": "Heap Insert"},
+    {"id": 807, "module": 8, "question": "delete_max in a max-heap removes:", "options": ["Last inserted key", "Root key", "Smallest leaf", "Random internal node"], "correct": 1, "section": "Heap Delete"},
+    {"id": 808, "module": 8, "question": "After deleting max, which key is moved to root before reheapifying?", "options": ["Second largest", "Left child", "Last node in level-order", "First inserted"], "correct": 2, "section": "Heap Delete"},
+    {"id": 809, "module": 8, "question": "Reheapify after delete_max in max-heap uses:", "options": ["Sift up", "Sift down", "Tree rotation", "Hash probing"], "correct": 1, "section": "Heap Delete"},
+    {"id": 810, "module": 8, "question": "HeapSort complexity is typically:", "options": ["O(n)", "O(log n)", "O(n log n)", "O(n^2)"], "correct": 2, "section": "HeapSort"},
+    {"id": 811, "module": 8, "question": "A priority queue processes items by:", "options": ["Arrival order only", "Alphabetical order", "Priority order", "Random order"], "correct": 2, "section": "Priority Queue"},
+    {"id": 812, "module": 8, "question": "Which is a valid priority-queue application from lecture?", "options": ["Static CSS rendering", "Hospital emergency room triage", "Raster image compression only", "Disk defragmentation only"], "correct": 1, "section": "Priority Queue"},
+    {"id": 813, "module": 8, "question": "A complete binary tree means:", "options": ["All nodes have two children", "All levels full except maybe last, filled left-to-right", "Only one leaf per level", "Tree is perfectly balanced"], "correct": 1, "section": "Heap Fundamentals"},
+    {"id": 814, "module": 8, "question": "Are duplicate priorities allowed in heaps?", "options": ["Never", "Only in leaves", "Yes", "Only in min-heaps"], "correct": 2, "section": "Heap Fundamentals"},
+    {"id": 815, "module": 8, "question": "Practice-test style: validating heap array requires checking:", "options": ["Only array sortedness", "Parent-child order and complete-tree indexing", "Only root value", "Only leaf values"], "correct": 1, "section": "Practice Notes"},
+    {"id": 816, "module": 8, "question": "In a max-heap, if child > parent after insertion, you should:", "options": ["Stop", "Swap child and parent", "Delete child", "Move child to leaf"], "correct": 1, "section": "Heap Insert"},
+    {"id": 817, "module": 8, "question": "Heap root children after operations are determined by:", "options": ["Inorder traversal", "Sift-up/sift-down mechanics", "Hash function", "Topological order"], "correct": 1, "section": "Practice Notes"},
+    {"id": 818, "module": 8, "question": "A heap can be viewed functionally as a:", "options": ["Stack", "Queue", "Priority queue", "Dictionary"], "correct": 2, "section": "Priority Queue"},
+    {"id": 819, "module": 8, "question": "Delete-max repeatedly from max-heap yields output order:", "options": ["Ascending", "Descending", "Random", "Stable insertion order"], "correct": 1, "section": "HeapSort"},
+    {"id": 820, "module": 8, "question": "Main structural reason heaps are efficient is:", "options": ["Always perfectly balanced", "Complete-tree height stays O(log n)", "Sorted children", "Doubly linked nodes"], "correct": 1, "section": "Heap Complexity"}
+  ]
+}

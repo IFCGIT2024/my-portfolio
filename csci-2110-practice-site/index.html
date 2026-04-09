@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSCI 2110 Practice Exam</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>CSCI 2110 Practice Exam</h1>
+      <p>Data Structures: Module 7, 8, 9</p>
+    </header>
+
+    <section id="setup-screen" class="card">
+      <h2>Setup</h2>
+      <label for="student-name">Name</label>
+      <input id="student-name" class="input" type="text" placeholder="Your name" />
+
+      <div class="row">
+        <label for="module-select">Module</label>
+        <select id="module-select" class="input"></select>
+      </div>
+
+      <div class="row">
+        <div class="row-head">
+          <label>Sections</label>
+          <div>
+            <button id="btn-all" class="btn btn-ghost" type="button">All</button>
+            <button id="btn-none" class="btn btn-ghost" type="button">None</button>
+          </div>
+        </div>
+        <div id="sections" class="sections"></div>
+      </div>
+
+      <div class="actions">
+        <button id="btn-start" class="btn btn-primary" type="button">Start Quiz</button>
+      </div>
+    </section>
+
+    <section id="quiz-screen" class="card hidden">
+      <div class="meta">
+        <span id="counter">Question 1 of 1</span>
+        <span id="section-pill" class="pill">Section</span>
+      </div>
+      <h2 id="question-text"></h2>
+      <div id="options" class="options"></div>
+      <div class="actions space-between">
+        <button id="btn-prev" class="btn btn-ghost" type="button">Previous</button>
+        <button id="btn-next" class="btn btn-primary" type="button">Next</button>
+      </div>
+    </section>
+
+    <section id="result-screen" class="card hidden">
+      <h2>Results</h2>
+      <p id="score-line" class="score"></p>
+      <div id="breakdown" class="breakdown"></div>
+      <div class="actions">
+        <button id="btn-restart" class="btn btn-primary" type="button">Back to Setup</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

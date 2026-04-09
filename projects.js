@@ -46,6 +46,28 @@ const PROJECTS = [
     icon: "🎓",
   },
   {
+    id: "csci2110-practice-site",
+    title: "CSCI 2110 Practice Site",
+    description:
+      "An isolated practice exam site for Data Structures with module banks for BSTs, heaps, hashing, and graph-focused review.",
+    path: "csci-2110-practice-site/index.html",
+    tags: ["CSCI 2110", "Data Structures", "Practice Exams", "Quiz"],
+    badge: "New",
+    badgeColor: "#0ea5e9",
+    icon: "🌲",
+  },
+  {
+    id: "pdf-too-big-splitter",
+    title: "PDF too big",
+    description:
+      "Browser-only PDF splitter with page/chunk modes and optional max file size per part.",
+    path: "pdf-splitter/index.html",
+    tags: ["PDF", "Utility", "File Tools", "Browser App"],
+    badge: "Utility",
+    badgeColor: "#f59e0b",
+    icon: "📄",
+  },
+  {
     id: "real-estate-analyzer",
     title: "RE Investment Analyzer",
     description:

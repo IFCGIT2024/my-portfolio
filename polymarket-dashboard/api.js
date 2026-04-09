@@ -18,6 +18,10 @@ const PolyAPI = (() => {
   const GAMMA = 'https://gamma-api.polymarket.com';
   const CLOB  = 'https://clob.polymarket.com';
 
+  // Polymarket blocks direct browser requests from US IPs (CORS geoblock).
+  // Route through a public CORS proxy so the request originates server-side.
+  const PROXY = 'https://corsproxy.io/?url=';
+
   /* ── Simple TTL cache so repeated renders don't spam the API ── */
   const _cache = {};
   const CACHE_TTL_MS = 60_000; // 1 minute
@@ -35,7 +39,8 @@ const PolyAPI = (() => {
 
   /* ── Core fetch helper ── */
   function _get(url) {
-    return fetch(url, { headers: { Accept: 'application/json' } })
+    const proxied = PROXY + encodeURIComponent(url);
+    return fetch(proxied, { headers: { Accept: 'application/json' } })
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status} from ${url}`);
         return r.json();
@@ -44,11 +49,12 @@ const PolyAPI = (() => {
 
   /* ── Raw fetch for the Data Lab (returns status + body) ── */
   function rawFetch(url) {
-    return fetch(url, { headers: { Accept: 'application/json' } })
+    const proxied = PROXY + encodeURIComponent(url);
+    return fetch(proxied, { headers: { Accept: 'application/json' } })
       .then(async r => {
         let data;
         try { data = await r.json(); } catch(e) { data = { error: 'non-JSON response' }; }
-        return { status: r.status, ok: r.ok, url: r.url, data };
+        return { status: r.status, ok: r.ok, url, data };
       });
   }
 

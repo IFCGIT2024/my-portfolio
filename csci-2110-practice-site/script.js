@@ -27,7 +27,7 @@ let currentColorScheme = 'blue';
 // INITIALIZATION
 // ============================================
 
-// Load questions from JSON files (module 6-9)
+// Load questions from JSON files (modules 6-9)
 async function loadQuestions() {
     try {
         const [r6, r7, r8, r9] = await Promise.all([
@@ -36,24 +36,22 @@ async function loadQuestions() {
             fetch('data/questions8.json'),
             fetch('data/questions9.json')
         ]);
-        if (!r6.ok) throw new Error(`HTTP ${r6.status} loading data/questions6.json`);
-        if (!r7.ok) throw new Error(`HTTP ${r7.status} loading data/questions7.json`);
-        if (!r8.ok) throw new Error(`HTTP ${r8.status} loading data/questions8.json`);
-        if (!r9.ok) throw new Error(`HTTP ${r9.status} loading data/questions9.json`);
+        if (!r6.ok) throw new Error(`HTTP ${r6.status} loading questions6.json`);
+        if (!r7.ok) throw new Error(`HTTP ${r7.status} loading questions7.json`);
+        if (!r8.ok) throw new Error(`HTTP ${r8.status} loading questions8.json`);
+        if (!r9.ok) throw new Error(`HTTP ${r9.status} loading questions9.json`);
         const [d6, d7, d8, d9] = await Promise.all([r6.json(), r7.json(), r8.json(), r9.json()]);
-
-        const q6 = (d6.questions || []).map((q) => ({ ...q, module: 6 }));
-        const q7 = (d7.questions || []).map((q) => ({ ...q, module: 7 }));
-        const q8 = (d8.questions || []).map((q) => ({ ...q, module: 8 }));
-        const q9 = (d9.questions || []).map((q) => ({ ...q, module: 9 }));
-
+        const q6 = (d6.questions || []).map(q => ({ ...q, module: 6 }));
+        const q7 = (d7.questions || []).map(q => ({ ...q, module: 7 }));
+        const q8 = (d8.questions || []).map(q => ({ ...q, module: 8 }));
+        const q9 = (d9.questions || []).map(q => ({ ...q, module: 9 }));
         allQuestions = [...q6, ...q7, ...q8, ...q9];
         if (allQuestions.length === 0) throw new Error('No questions found');
         console.log(`✓ Loaded ${allQuestions.length} total questions`);
         initSetup();
     } catch (err) {
         console.error('ERROR: Could not load questions:', err);
-        alert('Error: Could not load quiz questions.\n\nDetails: ' + err.message + '\n\nMake sure all data files exist in csci-2110-practice-site/data/.');
+        alert('Error: Could not load quiz questions.\n\nDetails: ' + err.message);
     }
 }
 
@@ -284,7 +282,6 @@ function signOut() {
         document.getElementById('quiz-container').classList.add('hidden');
         document.getElementById('progress-section').classList.add('hidden');
         document.getElementById('results-container').classList.add('hidden');
-        document.getElementById('ordering-screen').classList.add('hidden');
         document.getElementById('name-screen').classList.remove('hidden');
         document.getElementById('student-name').value = '';
         document.getElementById('student-name').focus();
@@ -301,7 +298,6 @@ function goToHome() {
         document.getElementById('quiz-container').classList.add('hidden');
         document.getElementById('progress-section').classList.add('hidden');
         document.getElementById('results-container').classList.add('hidden');
-        document.getElementById('ordering-screen').classList.add('hidden');
         document.getElementById('setup-screen').classList.remove('hidden');
         toggleProfileMenu();
     } else {
@@ -309,7 +305,6 @@ function goToHome() {
         document.getElementById('leaderboard-screen').classList.add('hidden');
         document.getElementById('review-screen').classList.add('hidden');
         document.getElementById('settings-screen').classList.add('hidden');
-        document.getElementById('ordering-screen').classList.add('hidden');
         document.getElementById('name-screen').classList.remove('hidden');
     }
 }
@@ -326,10 +321,7 @@ function backToSetup() {
 
 // Helper: get questions for the currently selected module
 function getModuleQuestions() {
-    if (selectedModule === 0) {
-        return allQuestions;
-    }
-
+    if (selectedModule === 0) return allQuestions;
     return allQuestions.filter(q => Number(q.module) === selectedModule);
 }
 
@@ -1178,188 +1170,37 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ============================================
-// ARRANGE STEPS (ORDERING) MODE
+// EMBEDDED QUESTIONS (All 220 Questions)
 // ============================================
-
-let orderingCurrentType = null;
-let orderingCurrentDifficulty = 'all';
-let orderingCurrentPool = [];
-let orderingCurrentChallenge = null;
-let orderingScrambledSteps = [];
-let orderingUserSteps = [];
-
-function openOrderingMode() {
-    document.getElementById('setup-screen').classList.add('hidden');
-    document.getElementById('quiz-container').classList.add('hidden');
-    document.getElementById('results-container').classList.add('hidden');
-    document.getElementById('progress-section').classList.add('hidden');
-    document.getElementById('ordering-screen').classList.remove('hidden');
-    orderingCurrentType = null;
-    orderingCurrentDifficulty = 'all';
-    orderingCurrentPool = [];
-    orderingCurrentChallenge = null;
-    renderOrderingTypeButtons();
-    document.getElementById('ordering-difficulty-selector').classList.add('hidden');
-    document.getElementById('ordering-problem-card').classList.add('hidden');
-    document.getElementById('ordering-columns').classList.add('hidden');
-    document.getElementById('ordering-action-row').classList.add('hidden');
-    document.getElementById('ordering-result').classList.add('hidden');
-    document.getElementById('ordering-solution-box').classList.add('hidden');
-}
-
-function closeOrderingMode() {
-    document.getElementById('ordering-screen').classList.add('hidden');
-    document.getElementById('setup-screen').classList.remove('hidden');
-}
-
-function renderOrderingTypeButtons() {
-    const container = document.getElementById('ordering-type-buttons');
-    container.innerHTML = '';
-    Object.keys(orderingChallengeBank).forEach(type => {
-        const bank = orderingChallengeBank[type];
-        const btn = document.createElement('button');
-        btn.className = 'ordering-type-btn' + (type === orderingCurrentType ? ' active' : '');
-        btn.textContent = bank.label;
-        btn.onclick = () => selectOrderingType(type);
-        container.appendChild(btn);
-    });
-}
-
-function selectOrderingType(type) {
-    orderingCurrentType = type;
-    orderingCurrentDifficulty = 'all';
-    renderOrderingTypeButtons();
-    document.getElementById('ordering-difficulty-selector').classList.remove('hidden');
-    loadOrderingPool();
-    loadOrderingChallenge();
-}
-
-function setOrderingDifficulty(d) {
-    orderingCurrentDifficulty = d;
-    loadOrderingPool();
-    loadOrderingChallenge();
-}
-
-function loadOrderingPool() {
-    if (!orderingCurrentType) return;
-    const items = orderingChallengeBank[orderingCurrentType].items;
-    if (orderingCurrentDifficulty === 'all') {
-        orderingCurrentPool = [...items];
-    } else {
-        orderingCurrentPool = items.filter(it => it.difficulty === orderingCurrentDifficulty);
-        if (orderingCurrentPool.length === 0) orderingCurrentPool = [...items];
-    }
-}
-
-function loadOrderingChallenge() {
-    if (orderingCurrentPool.length === 0) return;
-    const idx = Math.floor(Math.random() * orderingCurrentPool.length);
-    orderingCurrentChallenge = orderingCurrentPool[idx];
-    orderingScrambledSteps = shuffleArray([...orderingCurrentChallenge.steps]);
-    orderingUserSteps = [];
-    renderOrderingProblem();
-}
-
-function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-}
-
-function renderOrderingProblem() {
-    document.getElementById('ordering-problem-card').classList.remove('hidden');
-    document.getElementById('ordering-problem-title').textContent = orderingCurrentChallenge.title;
-    const badge = document.getElementById('ordering-difficulty-badge');
-    badge.textContent = orderingCurrentChallenge.difficulty.toUpperCase();
-    badge.className = 'ordering-difficulty-badge difficulty-' + orderingCurrentChallenge.difficulty;
-    document.getElementById('ordering-columns').classList.remove('hidden');
-    document.getElementById('ordering-action-row').classList.remove('hidden');
-    document.getElementById('ordering-result').classList.add('hidden');
-    document.getElementById('ordering-solution-box').classList.add('hidden');
-    renderOrderingColumns();
-    updateOrderingCheckBtn();
-}
-
-function renderOrderingColumns() {
-    const scrambledDiv = document.getElementById('ordering-scrambled');
-    scrambledDiv.innerHTML = '';
-    orderingScrambledSteps.forEach((step, i) => {
-        const el = document.createElement('div');
-        el.className = 'ordering-step';
-        el.textContent = step;
-        el.onclick = () => selectOrderingStep(i);
-        scrambledDiv.appendChild(el);
-    });
-
-    const userDiv = document.getElementById('ordering-user');
-    userDiv.innerHTML = '';
-    orderingUserSteps.forEach((step, i) => {
-        const el = document.createElement('div');
-        el.className = 'ordering-step ordering-step-placed';
-        el.textContent = step;
-        el.onclick = () => removeOrderingStep(i);
-        userDiv.appendChild(el);
-    });
-}
-
-function selectOrderingStep(i) {
-    const step = orderingScrambledSteps.splice(i, 1)[0];
-    orderingUserSteps.push(step);
-    renderOrderingColumns();
-    updateOrderingCheckBtn();
-}
-
-function removeOrderingStep(i) {
-    const step = orderingUserSteps.splice(i, 1)[0];
-    orderingScrambledSteps.push(step);
-    renderOrderingColumns();
-    updateOrderingCheckBtn();
-}
-
-function updateOrderingCheckBtn() {
-    const btn = document.getElementById('ordering-check-btn');
-    btn.disabled = !orderingCurrentChallenge || orderingUserSteps.length !== orderingCurrentChallenge.steps.length;
-}
-
-function checkOrderingAnswer() {
-    if (!orderingCurrentChallenge) return;
-    const correct = orderingCurrentChallenge.steps;
-    const isCorrect = orderingUserSteps.every((step, i) => step === correct[i]);
-    const resultDiv = document.getElementById('ordering-result');
-    resultDiv.classList.remove('hidden', 'ordering-result-correct', 'ordering-result-wrong');
-    if (isCorrect) {
-        resultDiv.textContent = '✅ Correct! Great job!';
-        resultDiv.classList.add('ordering-result-correct');
-        document.getElementById('ordering-solution-box').classList.add('hidden');
-    } else {
-        resultDiv.textContent = '❌ Not quite — see the correct order below.';
-        resultDiv.classList.add('ordering-result-wrong');
-        const solBox = document.getElementById('ordering-solution-box');
-        solBox.classList.remove('hidden');
-        const solSteps = document.getElementById('ordering-solution-steps');
-        solSteps.innerHTML = '';
-        correct.forEach((step, i) => {
-            const el = document.createElement('div');
-            el.className = 'ordering-step ordering-step-solution';
-            el.textContent = (i + 1) + '. ' + step;
-            solSteps.appendChild(el);
-        });
-    }
-}
-
-function resetOrderingAnswer() {
-    if (!orderingCurrentChallenge) return;
-    orderingScrambledSteps = shuffleArray([...orderingCurrentChallenge.steps]);
-    orderingUserSteps = [];
-    document.getElementById('ordering-result').classList.add('hidden');
-    document.getElementById('ordering-solution-box').classList.add('hidden');
-    renderOrderingColumns();
-    updateOrderingCheckBtn();
-}
-
-function nextOrderingChallenge() {
-    loadOrderingChallenge();
-}
-
+const embeddedQuestions = [
+    {"id": 1, "question": "Which early computer was described as a control room with eight banks of tubes and could add two sixteen-bit words in two microseconds? (FDE Slide 1)", "options": ["ENIAC", "Little Man Computer", "Whirlwind", "Memory Test Computer"], "correct": 0, "section": "Fetch, Decode, Execute"},
+    {"id": 2, "question": "The Memory Test Computer used a magnetic-core memory bank that stored how many sixteen-bit words? (FDE Slide 2)", "options": ["256", "1,024", "4,096", "16,384"], "correct": 1, "section": "Fetch, Decode, Execute"},
+    {"id": 3, "question": "What key principle is highlighted by the term 'stored program' in computing? (FDE Slide 3)", "options": ["Software is separate from hardware", "Instructions are stored separately from data", "Software instructions are treated as data stored in memory", "Programs must be loaded from external storage at every execution"], "correct": 2, "section": "Fetch, Decode, Execute"},
+    {"id": 4, "question": "Which of the following sequences correctly lists the three phases of machine execution? (FDE Slide 4)", "options": ["Decode, fetch, execute", "Execute, fetch, decode", "Fetch, decode, execute", "Fetch, execute, decode"], "correct": 2, "section": "Fetch, Decode, Execute"},
+    {"id": 5, "question": "During the fetch cycle, what component determines the address of the next instruction? (FDE Slide 5)", "options": ["Arithmetic logic unit (ALU)", "Program counter", "Control unit", "Instruction register"], "correct": 1, "section": "Fetch, Decode, Execute"},
+    {"id": 6, "question": "What is the correct order of actions when executing a single instruction? (FDE Slide 6)", "options": ["Decode → fetch → execute → get data", "Fetch → decode → get data (if needed) → execute", "Get data → fetch → execute → decode", "Execute → fetch → decode → get data"], "correct": 1, "section": "Fetch, Decode, Execute"},
+    {"id": 7, "question": "In the musical performance analogy, which step corresponds to the 'decode' phase of machine execution? (FDE Slide 7)", "options": ["Receiving sheet music", "Reading notation and instructions", "Playing instruments", "Tuning instruments"], "correct": 1, "section": "Fetch, Decode, Execute"},
+    {"id": 8, "question": "How many data registers does the Little Man Computer have? (FDE Slide 8)", "options": ["Zero", "One", "Two", "Four"], "correct": 1, "section": "Fetch, Decode, Execute"},
+    {"id": 9, "question": "Which LMC instruction halts program execution? (FDE Slide 9)", "options": ["ADD", "SUB", "HLT", "BRZ"], "correct": 2, "section": "Fetch, Decode, Execute"},
+    {"id": 10, "question": "In Challenge 1 (Sum of two numbers), what is the purpose of the instruction STA 99 after the first INP? (FDE Slide 10)", "options": ["It stores the input value at memory location 99 for later addition", "It stores the sum of both numbers in location 99", "It adds the value in location 99 to the accumulator", "It outputs the input value"], "correct": 0, "section": "Fetch, Decode, Execute"},
+    {"id": 11, "question": "In Challenge 2 (Multiplication), why does the code use BRZ 14? (FDE Slide 11)", "options": ["To skip the loop if the product is zero", "To branch to the end if the counter (at RAM 98) is zero", "To load the accumulator with zero", "To reset the accumulator"], "correct": 1, "section": "Fetch, Decode, Execute"},
+    {"id": 12, "question": "When SUB 96 is executed in the LMC multiplication program, what is being subtracted? (FDE Slide 12)", "options": ["The multiplicand stored in location 97", "The running sum in location 99", "The decrement value (1) stored in location 96", "The accumulator value itself"], "correct": 2, "section": "Fetch, Decode, Execute"},
+    {"id": 13, "question": "Which statement best summarizes what the Fetch–Decode–Execute lecture aims to teach? (FDE Slide 13)", "options": ["How complex instruction sets are implemented in hardware", "The concept of machine execution and how to trace the FDE cycle using the Little Man Computer", "The importance of pipelining in modern CPUs", "The basics of binary and hexadecimal conversions"], "correct": 1, "section": "Fetch, Decode, Execute"},
+    {"id": 14, "question": "Which processor marked the origin of the x86 family in 1978? (ISA Slide 1)", "options": ["4004", "8008", "8086", "Pentium"], "correct": 2, "section": "Instruction Sets & Registers"},
+    {"id": 15, "question": "Which learning outcome is not explicitly mentioned for Module 4? (ISA Slide 2)", "options": ["Trace machine execution through modern computer architecture from assembly instructions", "Trace execution of software from C statements to machine instructions", "Understand the history of computing from ENIAC to Pentium", "None of the above"], "correct": 2, "section": "Instruction Sets & Registers"},
+    {"id": 16, "question": "Which statement about the 1970s microprocessor revolution is correct? (ISA Slide 3)", "options": ["The Intel 8008 was the first commercial microprocessor", "The Intel 4004 and 8008 were introduced in 1971 and 1972, respectively", "VLSI technology in the 1970s decreased circuit density", "Microprocessors were first adopted in the 1990s"], "correct": 1, "section": "Instruction Sets & Registers"},
+    {"id": 17, "question": "Which feature is not listed as an improvement of the 1993 Pentium processor? (ISA Slide 4)", "options": ["Execution of at least two instructions per clock cycle", "Separate code and data caches", "Wider data bus", "Reduced instruction set"], "correct": 3, "section": "Instruction Sets & Registers"},
+    {"id": 18, "question": "What is a primary objective of CISC processors? (ISA Slide 5)", "options": ["Decrease the number of registers", "Minimize program size by decreasing the number of instructions", "Increase pipeline stages for efficiency", "Reduce the number of transistors needed"], "correct": 1, "section": "Instruction Sets & Registers"},
+    {"id": 19, "question": "Which characteristic is associated with CISC architectures? (ISA Slide 6)", "options": ["Simplified hardware with minimal transistors", "Single-cycle instructions with fixed length", "Multi-clock, memory-to-memory instructions with small code sizes", "Emphasis on compilers over hardware"], "correct": 2, "section": "Instruction Sets & Registers"},
+    {"id": 20, "question": "Which is an advantage of CISC architecture? (ISA Slide 7)", "options": ["Lower cost due to smaller chips", "More complex code easier to write and smaller in size", "Greater reliance on software pipelining", "Simpler hardware design"], "correct": 1, "section": "Instruction Sets & Registers"},
+    {"id": 21, "question": "One disadvantage of CISC processors is that they: (ISA Slide 8)", "options": ["Require more transistors and are typically larger and more expensive", "Have limited addressing modes", "Have slower memory because of Harvard architecture", "Cannot support pipelining"], "correct": 0, "section": "Instruction Sets & Registers"},
+    {"id": 22, "question": "Which company's research in the 1970s led to the reduced instruction set computer (RISC) concept? (ISA Slide 9)", "options": ["Intel", "IBM", "Motorola", "AMD"], "correct": 1, "section": "Instruction Sets & Registers"},
+    {"id": 23, "question": "RISC architectures typically employ which of the following? (ISA Slide 10)", "options": ["Variable-length instructions with many addressing modes", "Small register files and direct memory access in arithmetic", "Simple fixed-length instructions, more registers and pipelining", "Emulation of CISC instructions for compatibility"], "correct": 2, "section": "Instruction Sets & Registers"},
+    {"id": 24, "question": "Which is a benefit of RISC processors? (ISA Slide 11)", "options": ["They are more expensive to manufacture", "They simplify hardware design and can use smaller chips", "They reduce the number of pipeline stages needed", "They make code small and less reliant on memory caches"], "correct": 1, "section": "Instruction Sets & Registers"},
+    {"id": 25, "question": "RISC architectures suffer from which of the following limitations? (ISA Slide 12)", "options": ["Slow execution due to complex instructions", "Dependence on very fast memory systems and large caches", "Difficulty in pipelining", "Limited number of registers"], "correct": 1, "section": "Instruction Sets & Registers"},
+    {"id": 26, "question": "When adding C = A + B, why does the RISC (MIPS) example require more instructions than the x86 (CISC) example? (ISA Slide 13)", "options": ["Because MIPS must use immediate values for all additions", "Because MIPS instructions must load and store operands separately and operate only on registers", "Because x86 only supports two registers for arithmetic", "Because x86 cannot access memory directly"], "correct": 1, "section": "Instruction Sets & Registers"},
+    {"id": 27, "question": "Which x86 register is typically used for loop counting and iteration? (ISA Slide 14)", "options": ["EAX", "EBX", "ECX", "EDX"], "correct": 2, "section": "Instruction Sets & Registers"},
+    {"id": 28, "question": "Which register points to the top of the stack in x86? (ISA Slide 15)", "options": ["EBP", "ESP", "ESI", "EDI"], "correct": 1, "section": "Instruction Sets & Registers"},
+    {"id": 29, "question": "Which of these flags is not part of the EFLAGS register in x86? (ISA Slide 16)", "options": ["Zero flag (ZF)", "Sign flag (SF)", "Overflow flag (OF)", "Instruction flag (IF)"], "correct": 3, "section": "Instruction Sets & Registers"},
+    {"id": 30, "question": "The Instruction Sets & Registers lecture concludes by emphasizing an understanding of: (ISA Slide 17)", "options": ["Boolean logic and binary representation", "CISC vs. RISC instruction sets and x86 registers", "Floating-point arithmetic", "Assembly programming for the Little Man Computer"], "correct": 1, "section": "Instruction Sets & Registers"}
+];

@@ -65,7 +65,7 @@
 
                 <!-- Module Selection -->
                 <div class="setup-section">
-                    <h3>1. Select Module or All Topics</h3>
+                    <h3>1. Select Module</h3>
                     <div class="module-buttons">
                         <button class="module-btn active" onclick="selectModule(0)" data-module="0">All Topics</button>
                         <button class="module-btn" onclick="selectModule(6)" data-module="6">Module 6</button>
@@ -101,67 +101,6 @@
                 <div style="display: flex; gap: 15px; margin-top: 20px;">
                     <button class="btn btn-primary btn-large" onclick="startQuiz()">Start Quiz</button>
                     <button class="btn btn-secondary btn-large" onclick="startRapidFire()">Rapid Fire Mode</button>
-                    <button class="btn btn-secondary btn-large" onclick="openOrderingMode()">Arrange Steps Mode</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Arrange Steps Screen -->
-        <div id="ordering-screen" class="ordering-screen hidden">
-            <div class="ordering-content">
-                <h2>Arrange Steps Practice</h2>
-                <p class="ordering-subtitle">Build algorithm/proof steps in the correct order and check instantly.</p>
-
-                <div class="ordering-controls-row">
-                    <button class="btn btn-secondary" onclick="closeOrderingMode()">Back to Setup</button>
-                </div>
-
-                <div class="ordering-instruction-box">
-                    <h3>How it works</h3>
-                    <p>1. Pick a challenge type and difficulty.</p>
-                    <p>2. Click scrambled steps from left to right in the correct order.</p>
-                    <p>3. Use Check Answer to validate the sequence.</p>
-                </div>
-
-                <div id="ordering-type-buttons" class="ordering-type-buttons"></div>
-
-                <div id="ordering-difficulty-selector" class="ordering-difficulty-selector hidden">
-                    <span>Difficulty:</span>
-                    <button class="btn-small" onclick="setOrderingDifficulty('all')">All</button>
-                    <button class="btn-small" onclick="setOrderingDifficulty('easy')">Easy</button>
-                    <button class="btn-small" onclick="setOrderingDifficulty('medium')">Medium</button>
-                    <button class="btn-small" onclick="setOrderingDifficulty('hard')">Hard</button>
-                </div>
-
-                <div id="ordering-problem-card" class="ordering-problem-card hidden">
-                    <div class="ordering-problem-head">
-                        <h3 id="ordering-problem-title">Challenge</h3>
-                        <span id="ordering-difficulty-badge" class="ordering-difficulty-badge">ALL</span>
-                    </div>
-                </div>
-
-                <div id="ordering-result" class="ordering-result hidden"></div>
-
-                <div id="ordering-columns" class="ordering-columns hidden">
-                    <div class="ordering-column">
-                        <h3>Scrambled Steps</h3>
-                        <div id="ordering-scrambled"></div>
-                    </div>
-                    <div class="ordering-column">
-                        <h3>Your Order</h3>
-                        <div id="ordering-user"></div>
-                    </div>
-                </div>
-
-                <div id="ordering-action-row" class="ordering-action-row hidden">
-                    <button id="ordering-check-btn" class="btn btn-primary" onclick="checkOrderingAnswer()" disabled>Check Answer</button>
-                    <button class="btn btn-secondary" onclick="resetOrderingAnswer()">Reset</button>
-                    <button class="btn btn-secondary" onclick="nextOrderingChallenge()">New Challenge</button>
-                </div>
-
-                <div id="ordering-solution-box" class="ordering-solution-box hidden">
-                    <h3>Correct Order</h3>
-                    <div id="ordering-solution-steps"></div>
                 </div>
             </div>
         </div>
@@ -307,7 +246,6 @@
         </div>
     </div>
 
-    <script src="ordering-challenges.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -27,25 +27,28 @@ let currentColorScheme = 'blue';
 // INITIALIZATION
 // ============================================
 
-// Load questions from JSON files (modules 6-9)
+// Load questions from JSON files (modules 6-10)
 async function loadQuestions() {
     try {
-        const [r6, r7, r8, r9] = await Promise.all([
+        const [r6, r7, r8, r9, r10] = await Promise.all([
             fetch('data/questions6.json'),
             fetch('data/questions7.json'),
             fetch('data/questions8.json'),
-            fetch('data/questions9.json')
+            fetch('data/questions9.json'),
+            fetch('data/questions10.json')
         ]);
         if (!r6.ok) throw new Error(`HTTP ${r6.status} loading questions6.json`);
         if (!r7.ok) throw new Error(`HTTP ${r7.status} loading questions7.json`);
         if (!r8.ok) throw new Error(`HTTP ${r8.status} loading questions8.json`);
         if (!r9.ok) throw new Error(`HTTP ${r9.status} loading questions9.json`);
-        const [d6, d7, d8, d9] = await Promise.all([r6.json(), r7.json(), r8.json(), r9.json()]);
+        if (!r10.ok) throw new Error(`HTTP ${r10.status} loading questions10.json`);
+        const [d6, d7, d8, d9, d10] = await Promise.all([r6.json(), r7.json(), r8.json(), r9.json(), r10.json()]);
         const q6 = (d6.questions || []).map(q => ({ ...q, module: 6 }));
         const q7 = (d7.questions || []).map(q => ({ ...q, module: 7 }));
         const q8 = (d8.questions || []).map(q => ({ ...q, module: 8 }));
         const q9 = (d9.questions || []).map(q => ({ ...q, module: 9 }));
-        allQuestions = [...q6, ...q7, ...q8, ...q9];
+        const q10 = (d10.questions || []).map(q => ({ ...q, module: 10 }));
+        allQuestions = [...q6, ...q7, ...q8, ...q9, ...q10];
         if (allQuestions.length === 0) throw new Error('No questions found');
         console.log(`✓ Loaded ${allQuestions.length} total questions`);
         initSetup();

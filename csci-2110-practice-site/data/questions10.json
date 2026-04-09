@@ -1,0 +1,214 @@
+{
+  "questions": [
+    {
+      "id": 1001,
+      "question": "A graph data structure consists of which two components?",
+      "options": ["Nodes and edges", "Arrays and pointers", "Keys and values", "Rows and columns"],
+      "correct": 0,
+      "section": "Graph Basics"
+    },
+    {
+      "id": 1002,
+      "question": "Which data structures are considered special cases of a graph?",
+      "options": ["Arrays and hash tables", "Stacks and queues", "Lists, binary trees, and BSTs", "Heaps and tries"],
+      "correct": 2,
+      "section": "Graph Basics"
+    },
+    {
+      "id": 1003,
+      "question": "In an undirected graph, if edge (A, B) exists, which of the following is also true?",
+      "options": ["Only (A, B) exists", "Edge (B, A) also exists", "B has no other neighbors", "A is the root"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1004,
+      "question": "In a directed graph, an arrow from vertex 1 to vertex 2 means:",
+      "options": ["2 can be visited from 1 and 1 from 2", "Only 2 can be visited from 1 directly", "1 and 2 are the same", "The graph is unweighted"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1005,
+      "question": "In a weighted graph, what does the weight on an edge represent?",
+      "options": ["The number of vertices", "The effort or cost to traverse that edge", "The degree of a vertex", "The direction of traversal"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1006,
+      "question": "An unweighted graph can be considered a special case of a weighted graph where every edge weight equals:",
+      "options": ["0", "1", "Infinity", "The number of vertices"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1007,
+      "question": "The degree of a vertex in an undirected graph is defined as:",
+      "options": ["The number of vertices in the graph", "The number of edges connected to that vertex", "The shortest path length from the root", "The number of cycles through the vertex"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1008,
+      "question": "In a directed graph, the indegree of a vertex is:",
+      "options": ["Number of edges leaving the vertex", "Number of edges terminating at the vertex", "Total edges connected to the vertex", "Depth of the vertex"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1009,
+      "question": "A simple path is one in which:",
+      "options": ["All edges have weight 1", "No vertex is visited twice (except possibly first and last)", "The graph is undirected", "All vertices have equal degree"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1010,
+      "question": "A cycle in a graph is:",
+      "options": ["Any path of length 2", "A simple path where the first and last vertices are the same", "A path that visits all vertices once", "A directed edge with weight 0"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1011,
+      "question": "A connected graph is one where:",
+      "options": ["All edges are weighted", "There is a path between every pair of vertices", "No cycles exist", "All vertices have degree 2"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1012,
+      "question": "A strongly connected directed graph means:",
+      "options": ["No cycles exist", "There is a path from every vertex to every other vertex", "All edges are bidirectional", "The graph has no isolated vertices"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1013,
+      "question": "A weakly connected directed graph means:",
+      "options": ["Strongly connected in both directions", "If directions are ignored, the resulting undirected graph is connected", "No directed cycles exist", "All indegrees equal outdegrees"],
+      "correct": 1,
+      "section": "Graph Terminology"
+    },
+    {
+      "id": 1014,
+      "question": "In an adjacency matrix representation, G[i][j] = 1 means:",
+      "options": ["Vertex i has degree j", "There is no edge between i and j", "There is an edge between vertex i and vertex j", "i and j are the same vertex"],
+      "correct": 2,
+      "section": "Graph Representation"
+    },
+    {
+      "id": 1015,
+      "question": "The adjacency matrix representation has what time complexity to check if a specific edge exists?",
+      "options": ["O(n)", "O(log n)", "O(1)", "O(n²)"],
+      "correct": 2,
+      "section": "Graph Representation"
+    },
+    {
+      "id": 1016,
+      "question": "A major drawback of the adjacency matrix representation is:",
+      "options": ["It cannot represent weighted graphs", "It wastes space for sparse graphs", "It cannot represent directed graphs", "Checking edge existence is slow"],
+      "correct": 1,
+      "section": "Graph Representation"
+    },
+    {
+      "id": 1017,
+      "question": "In the adjacency list representation, each linked list represents:",
+      "options": ["An edge in the graph", "A vertex and its neighbors", "A path through the graph", "A row of the adjacency matrix"],
+      "correct": 1,
+      "section": "Graph Representation"
+    },
+    {
+      "id": 1018,
+      "question": "Compared to an adjacency matrix, the adjacency list representation is:",
+      "options": ["Slower but uses more space", "Faster for edge lookup", "More space efficient for sparse graphs", "Only usable for undirected graphs"],
+      "correct": 2,
+      "section": "Graph Representation"
+    },
+    {
+      "id": 1019,
+      "question": "In a weighted adjacency list, each entry stores:",
+      "options": ["Just the neighbor vertex", "The neighbor vertex and the edge weight", "The degree of the neighbor", "The shortest path length"],
+      "correct": 1,
+      "section": "Graph Representation"
+    },
+    {
+      "id": 1020,
+      "question": "Depth First Search (DFS) uses which data structure internally?",
+      "options": ["Queue", "Stack or recursion", "Priority queue", "Adjacency matrix"],
+      "correct": 1,
+      "section": "Graph Algorithms"
+    },
+    {
+      "id": 1021,
+      "question": "Breadth First Search (BFS) uses which data structure internally?",
+      "options": ["Stack", "Recursion only", "Queue", "Heap"],
+      "correct": 2,
+      "section": "Graph Algorithms"
+    },
+    {
+      "id": 1022,
+      "question": "In DFS, what happens when you reach a dead end (no unvisited neighbors)?",
+      "options": ["The algorithm stops", "You restart from the beginning", "You backtrack to the previous vertex", "You skip to the next vertex in the list"],
+      "correct": 2,
+      "section": "Graph Algorithms"
+    },
+    {
+      "id": 1023,
+      "question": "In BFS, after visiting vertex v1, which vertices are visited next?",
+      "options": ["The deepest unvisited vertex", "All unvisited neighbors of v1", "A random vertex", "The last vertex in the adjacency list"],
+      "correct": 1,
+      "section": "Graph Algorithms"
+    },
+    {
+      "id": 1024,
+      "question": "Given graph F-E-D / A-B-C (grid), DFS from A produces which order?",
+      "options": ["A B C F E D", "A F E D C B", "A B E F C D", "A B C D E F"],
+      "correct": 0,
+      "section": "Graph Algorithms"
+    },
+    {
+      "id": 1025,
+      "question": "Given graph F-E-D / A-B-C (grid), BFS from A produces which order?",
+      "options": ["A B C D E F", "A B E D C F", "A F E D C B", "A B C F E D"],
+      "correct": 1,
+      "section": "Graph Algorithms"
+    },
+    {
+      "id": 1026,
+      "question": "Topological sorting applies to which type of graph?",
+      "options": ["Undirected weighted graphs", "Directed graphs (respecting dependency order)", "Unconnected undirected graphs", "Cyclic undirected graphs"],
+      "correct": 1,
+      "section": "Graph Algorithms"
+    },
+    {
+      "id": 1027,
+      "question": "In the topological sort algorithm, which vertices are added to the queue first?",
+      "options": ["Vertices with the highest indegree", "Vertices with indegree = 0", "Vertices with the most neighbors", "Vertices added last to the graph"],
+      "correct": 1,
+      "section": "Graph Algorithms"
+    },
+    {
+      "id": 1028,
+      "question": "In topological sort, after dequeuing vertex w, what happens to its neighbors?",
+      "options": ["Their outdegree is incremented", "Their indegree is decremented by 1", "They are immediately added to the result", "They are removed from the graph"],
+      "correct": 1,
+      "section": "Graph Algorithms"
+    },
+    {
+      "id": 1029,
+      "question": "Which of the following is a valid application of graphs?",
+      "options": ["Sorting an array in-place", "Representing web pages connected by hyperlinks", "Storing key-value pairs", "Balancing a binary search tree"],
+      "correct": 1,
+      "section": "Graph Basics"
+    },
+    {
+      "id": 1030,
+      "question": "A Directed Acyclic Graph (DAG) is used for topological sort because:",
+      "options": ["It has no directed edges", "It has no cycles so a valid ordering of dependencies exists", "All vertices have indegree 0", "It is always strongly connected"],
+      "correct": 1,
+      "section": "Graph Algorithms"
+    }
+  ]
+}

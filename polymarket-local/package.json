@@ -5,6 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "scrape": "node scraper.js",
+    "scrape:csv": "node scraper.js --csv",
+    "scrape:fast": "node scraper.js --no-books",
     "dev": "nodemon server.js"
   },
   "dependencies": {

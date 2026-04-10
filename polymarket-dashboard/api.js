@@ -42,8 +42,19 @@ const PolyAPI = (() => {
     });
   }
 
-  /* ── Core fetch helper ── */
-  function _get(url) {
+  /* ── Core fetch helper ──
+     Gamma API supports CORS directly — try it first, no proxy latency.
+     CLOB API is CORS-blocked in browser — always needs proxy.
+  ── */
+  async function _get(url) {
+    // Try direct for Gamma (has Access-Control-Allow-Origin: *)
+    if (url.startsWith(GAMMA)) {
+      try {
+        const r = await fetch(url, { headers: { Accept: 'application/json' } });
+        if (r.ok) return r.json();
+      } catch (e) { /* CORS or network error — fall through to proxy */ }
+    }
+    // Proxy path (required for CLOB, fallback for Gamma)
     const proxied = PROXY + encodeURIComponent(url);
     return fetch(proxied, { headers: { Accept: 'application/json' } })
       .then(r => {
@@ -53,7 +64,16 @@ const PolyAPI = (() => {
   }
 
   /* ── Raw fetch for the Data Lab (returns status + body) ── */
-  function rawFetch(url) {
+  async function rawFetch(url) {
+    // Try Gamma direct first
+    if (url.startsWith(GAMMA)) {
+      try {
+        const r = await fetch(url, { headers: { Accept: 'application/json' } });
+        let data;
+        try { data = await r.json(); } catch(e) { data = { error: 'non-JSON response' }; }
+        return { status: r.status, ok: r.ok, url, data };
+      } catch (e) { /* fall through */ }
+    }
     const proxied = PROXY + encodeURIComponent(url);
     return fetch(proxied, { headers: { Accept: 'application/json' } })
       .then(async r => {
@@ -141,6 +161,10 @@ const PolyAPI = (() => {
     const noPrice  = parseFloat(prices[1]) || 0;
     const sum      = yesPrice + noPrice;
 
+    // bestBid/bestAsk come directly from the API and are the most accurate prices
+    const bestBid = parseFloat(raw.bestBid) || yesPrice || 0;
+    const bestAsk = parseFloat(raw.bestAsk) || (bestBid > 0 ? bestBid + 0.01 : 0);
+
     return {
       id:          raw.conditionId || raw.id || '',
       conditionId: raw.conditionId || '',
@@ -151,14 +175,30 @@ const PolyAPI = (() => {
       yesPrice,
       noPrice,
       sum,
+      bestBid,
+      bestAsk,
+      spread:      parseFloat(raw.spread) || (bestAsk - bestBid),
+      lastTradePrice: parseFloat(raw.lastTradePrice) || bestBid,
       arbGap:      Math.abs(1 - sum),
       arbType:     sum < 1 ? 'UNDERPRICED' : 'OVERPRICED',
       volume:      parseFloat(raw.volume)     || 0,
       volume24hr:  parseFloat(raw.volume24hr) || 0,
+      volume1wk:   parseFloat(raw.volume1wk)  || 0,
       liquidity:   parseFloat(raw.liquidity)  || 0,
-      endDate:     raw.endDate || null,
+      endDate:     raw.endDate   || null,
+      startDate:   raw.startDate || null,
       active:      !!raw.active,
       closed:      !!raw.closed,
+      feesEnabled: !!raw.feesEnabled,
+      makerBaseFee: parseFloat(raw.makerBaseFee) || 0,
+      takerBaseFee: parseFloat(raw.takerBaseFee) || 0,
+      // Liquidity reward fields
+      min_incentive_size:   parseFloat(raw.rewardsMinSize   || raw.min_incentive_size)   || null,
+      max_incentive_spread: parseFloat(raw.rewardsMaxSpread || raw.max_incentive_spread) || null,
+      // Price changes
+      oneDayPriceChange:  parseFloat(raw.oneDayPriceChange)  || 0,
+      oneHourPriceChange: parseFloat(raw.oneHourPriceChange) || 0,
+      oneWeekPriceChange: parseFloat(raw.oneWeekPriceChange) || 0,
       yesTokenId:  clobIds[0] || null,
       noTokenId:   clobIds[1] || null,
     };

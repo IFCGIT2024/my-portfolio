@@ -506,6 +506,305 @@ const LiquidityRewards = (() => {
 
 
 // ═══════════════════════════════════════════════════════════════════════════
+// 6. MARKET MAKER STRATEGY
+//
+// Takes the current composite score + market state and outputs the OPTIMAL
+// quote placement: bid/ask prices, sizes, expected Qmin, expected rebates.
+//
+// The core idea — skewed quoting:
+//   Neutral (score ~50): symmetric quotes — equal size each side, tight spread
+//   Bullish (score >60): skew YES bid tighter + larger, NO bid wider + smaller
+//   Bearish (score <40): skew NO bid tighter + larger, YES bid wider + smaller
+//
+// This does three things at once:
+//   1) Earns liquidity rewards on both sides (two-sided = 3× better than one-sided)
+//   2) Earns maker rebates when fills happen
+//   3) Positions you directionally — you WANT to get filled on the skewed side
+//
+// Pull window: last 60s before resolution = don't quote (price converges to 0/100,
+// spread collapses, you'd be giving away money to informed traders)
+//
+// ═══════════════════════════════════════════════════════════════════════════
+const MarketMakerStrategy = (() => {
+
+  // Fee rate for Crypto markets (from Polymarket docs)
+  const FEE_RATE        = 0.072;
+  const REBATE_PCT      = 0.20;   // 20% of taker fees → maker rebates (Crypto)
+  const PULL_SECONDS    = 60;     // stop quoting this many seconds before resolution
+  const SCALING_FACTOR  = 3.0;   // Polymarket c factor (penalises single-sided)
+
+  /**
+   * computeQuotes — the main strategy function
+   *
+   * @param {number} compositeScore  0-100 from CompositeScorer
+   * @param {number} midpoint        current market YES price (0-1), e.g. 0.50
+   * @param {number} maxSpreadCents  market's max_incentive_spread (default 3)
+   * @param {number} baseSize        base position size in shares (default 200)
+   * @param {number} secsToClose     seconds until market resolution
+   * @returns {object} full quote recommendation
+   */
+  function computeQuotes(compositeScore, midpoint, maxSpreadCents = 3, baseSize = 200, secsToClose = 300) {
+
+    // ── Pull zone: inside last N seconds ──
+    if (secsToClose <= PULL_SECONDS) {
+      return {
+        action: 'PULL',
+        reason: `Only ${secsToClose}s to resolution — pull all quotes (informed trader risk)`,
+        quotes: [],
+        Qmin: 0,
+        expectedRebate: 0,
+        edgeNotes: [],
+      };
+    }
+
+    // ── Determine skew strength from score ──
+    // Score 50 = no skew. Score 70 = 40% skew toward UP. Score 30 = 40% skew toward DOWN.
+    const deviation   = (compositeScore - 50) / 50;  // -1 to +1
+    const skewStrength = Math.abs(deviation);         // 0 = neutral, 1 = max conviction
+    const direction    = deviation > 0 ? 'UP' : deviation < 0 ? 'DOWN' : 'NEUTRAL';
+
+    const v = maxSpreadCents; // alias
+
+    // ── Quote placement ──
+    // Tight = closer to mid = higher score but more fills
+    // Wide  = further from mid = lower score but safer
+
+    // Base spreads: tight ~30% of max, wide ~70% of max
+    const tightSpread = Math.max(0.3, v * 0.20);        // e.g. 0.6¢ on v=3
+    const midSpread   = v * 0.40;                        // e.g. 1.2¢
+    const wideSpread  = v * 0.70;                        // e.g. 2.1¢
+
+    // When bullish, YES bid gets the tight spread + more size
+    // When bearish, NO bid (= YES ask complement) gets the tight spread + more size
+    const upSkew   = direction === 'UP'   ? skewStrength : 0;
+    const downSkew = direction === 'DOWN' ? skewStrength : 0;
+
+    // Size allocation: base size gets reallocated by skew
+    //   Preferred side gets up to 2× base, other side gets down to 0.5× base
+    const preferredSize = Math.round(baseSize * (1 + skewStrength));
+    const otherSize     = Math.round(baseSize * (1 - skewStrength * 0.5));
+
+    // YES side spreads
+    const yesBidSpread = tightSpread + (wideSpread - tightSpread) * downSkew;  // tight if UP, wide if DOWN
+    const yesAskSpread = tightSpread + (wideSpread - tightSpread) * upSkew;    // wide if UP (happy to sell YES cheaper if bearish)... wait, let me re-think
+
+    // Re-think: if bullish (UP direction):
+    //   - YES bid: go TIGHT — you want to buy YES cheaply, and it earns more reward
+    //   - YES ask: go WIDE — you don't want to sell YES (that's the opposite of your bet)
+    //   - NO bid: go WIDE — no need to own NO
+    //   - NO ask: go TIGHT — selling NO = same as buying YES, directionally aligned
+    //
+    // If bearish (DOWN):
+    //   - YES bid: WIDE  — don't want to own YES
+    //   - YES ask: TIGHT — want to sell YES (= short YES = long NO)
+    //   - NO bid: TIGHT  — want to own NO
+    //   - NO ask: WIDE   — don't sell NO
+    //
+    // Neutral: everything at midSpread, equal sizes
+
+    let yesBidS, yesAskS, noBidS,  noAskS;
+    let yesBidSz, yesAskSz, noBidSz, noAskSz;
+
+    if (direction === 'UP') {
+      yesBidS  = tightSpread;   yesBidSz  = preferredSize;      // buy YES — tight + big
+      yesAskS  = wideSpread;    yesAskSz  = otherSize;           // sell YES — wide + small
+      noBidS   = wideSpread;    noBidSz   = otherSize;           // buy NO — wide + small
+      noAskS   = tightSpread;   noAskSz   = preferredSize;      // sell NO (= own YES) — tight
+    } else if (direction === 'DOWN') {
+      yesBidS  = wideSpread;    yesBidSz  = otherSize;           // buy YES — wide + small
+      yesAskS  = tightSpread;   yesAskSz  = preferredSize;      // sell YES — tight + big
+      noBidS   = tightSpread;   noBidSz   = preferredSize;      // buy NO — tight + big
+      noAskS   = wideSpread;    noAskSz   = otherSize;           // sell NO — wide + small
+    } else {
+      yesBidS  = midSpread;     yesBidSz  = baseSize;
+      yesAskS  = midSpread;     yesAskSz  = baseSize;
+      noBidS   = midSpread;     noBidSz   = baseSize;
+      noAskS   = midSpread;     noAskSz   = baseSize;
+    }
+
+    // ── Compute actual prices ──
+    const mid = midpoint;
+    const quotes = [
+      { label: 'YES Bid', side: 'BID', token: 'YES', spread: yesBidS,  size: yesBidSz,  price: mid - yesBidS / 100,  role: direction === 'UP' ? 'preferred' : 'hedge' },
+      { label: 'YES Ask', side: 'ASK', token: 'YES', spread: yesAskS,  size: yesAskSz,  price: mid + yesAskS / 100,  role: direction === 'DOWN' ? 'preferred' : 'hedge' },
+      { label: 'NO Bid',  side: 'BID', token: 'NO',  spread: noBidS,   size: noBidSz,   price: (1 - mid) - noBidS / 100,   role: direction === 'DOWN' ? 'preferred' : 'hedge' },
+      { label: 'NO Ask',  side: 'ASK', token: 'NO',  spread: noAskS,   size: noAskSz,   price: (1 - mid) + noAskS / 100,   role: direction === 'UP' ? 'preferred' : 'hedge' },
+    ].map(q => ({
+      ...q,
+      price: Math.min(0.99, Math.max(0.01, q.price)),
+      scoreS: LiquidityRewards.scoreOrder(v, q.spread),
+      scoreWeighted: LiquidityRewards.scoreOrder(v, q.spread) * q.size,
+      // Maker rebate if this order gets filled:
+      // fee_equivalent = size × feeRate × price × (1 - price)
+      feeEquiv: q.size * FEE_RATE * Math.min(0.99, Math.max(0.01, q.price)) * (1 - Math.min(0.99, Math.max(0.01, q.price))),
+    }));
+
+    // ── Qone, Qtwo, Qmin ──
+    // Qone = YES Bids + NO Asks (one "side" of the binary)
+    const Qone = quotes.filter(q => (q.token === 'YES' && q.side === 'BID') || (q.token === 'NO' && q.side === 'ASK'))
+      .reduce((s, q) => s + q.scoreWeighted, 0);
+    // Qtwo = YES Asks + NO Bids
+    const Qtwo = quotes.filter(q => (q.token === 'YES' && q.side === 'ASK') || (q.token === 'NO' && q.side === 'BID'))
+      .reduce((s, q) => s + q.scoreWeighted, 0);
+
+    let Qmin;
+    if (mid >= 0.10 && mid <= 0.90) {
+      Qmin = Math.max(Math.min(Qone, Qtwo), Math.max(Qone / SCALING_FACTOR, Qtwo / SCALING_FACTOR));
+    } else {
+      Qmin = Math.min(Qone, Qtwo);
+    }
+
+    const isTwoSided = Qone > 0 && Qtwo > 0;
+    const vsSymmetric = isTwoSided ? (Qmin / (baseSize * LiquidityRewards.scoreOrder(v, midSpread))).toFixed(2) : 'n/a';
+
+    // ── Total fee equivalent (for rebate calc) ──
+    const totalFeeEquiv = quotes.reduce((s, q) => s + q.feeEquiv, 0);
+
+    // ── Edge notes ──
+    const edgeNotes = [];
+    if (direction !== 'NEUTRAL') {
+      const impliedProb = direction === 'UP' ? midpoint : (1 - midpoint);
+      const indicatorProb = compositeScore / 100;
+      const edge = ((indicatorProb - impliedProb) * 100).toFixed(1);
+      edgeNotes.push(`Indicator says ${compositeScore}% confidence ${direction} — market implies ${(impliedProb * 100).toFixed(0)}% → edge: +${edge}%`);
+      edgeNotes.push(`${direction === 'UP' ? 'YES' : 'NO'} preferred orders are ${skewStrength > 0.3 ? 'TIGHT' : 'slightly tight'} — you WANT to get filled on these`);
+      edgeNotes.push(`${direction === 'UP' ? 'NO Bid / YES Ask' : 'YES Bid / NO Ask'} are wide — earning score but avoiding unfavourable fills`);
+    }
+    if (isTwoSided) {
+      edgeNotes.push(`Two-sided quoting active → full Qmin (vs ÷3 penalty for single-sided)`);
+    }
+    edgeNotes.push(`Pull ALL quotes at T-${PULL_SECONDS}s (${PULL_SECONDS}s before resolution)`);
+
+    return {
+      action: direction === 'NEUTRAL' ? 'SYMMETRIC' : `SKEWED_${direction}`,
+      compositeScore,
+      direction,
+      skewStrength: Math.round(skewStrength * 100) + '%',
+      midpoint,
+      maxSpreadCents: v,
+      quotes,
+      Qone: Math.round(Qone * 100) / 100,
+      Qtwo: Math.round(Qtwo * 100) / 100,
+      Qmin: Math.round(Qmin * 100) / 100,
+      isTwoSided,
+      vsSymmetric,
+      totalFeeEquiv: Math.round(totalFeeEquiv * 10000) / 10000,
+      expectedRebate: `~$${(totalFeeEquiv * REBATE_PCT).toFixed(4)} if all filled`,
+      edgeNotes,
+      secsToClose,
+    };
+  }
+
+  /**
+   * renderPanel — renders the full MM strategy panel into a DOM element
+   */
+  function renderPanel(containerId, compositeScore, market) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+
+    if (!market) {
+      el.innerHTML = '<div class="mm-panel-empty">No active market — strategy panel waiting...</div>';
+      return;
+    }
+
+    const midpoint     = market.bestBid || 0.5;
+    const maxSpread    = market.max_incentive_spread || market.maxIncentiveSpread || 3;
+    const endDate      = market.endDate ? new Date(market.endDate) : null;
+    const secsToClose  = endDate ? Math.floor((endDate - Date.now()) / 1000) : 999;
+    const baseSize     = 200;
+
+    const rec = computeQuotes(compositeScore, midpoint, maxSpread, baseSize, secsToClose);
+
+    if (rec.action === 'PULL') {
+      el.innerHTML = `
+        <div class="mm-pull-alert">
+          ⚠ PULL QUOTES — ${rec.reason}
+        </div>`;
+      return;
+    }
+
+    const dirColor = rec.direction === 'UP' ? 'var(--green)' : rec.direction === 'DOWN' ? 'var(--red)' : 'var(--text-dim)';
+    const actionLabel = {
+      SYMMETRIC: 'NEUTRAL — Symmetric Quotes',
+      SKEWED_UP: `BULLISH — Skewed UP (${rec.skewStrength} conviction)`,
+      SKEWED_DOWN: `BEARISH — Skewed DOWN (${rec.skewStrength} conviction)`,
+    }[rec.action] || rec.action;
+
+    el.innerHTML = `
+      <div class="mm-panel-header">
+        <span class="mm-action-label" style="color:${dirColor}">${actionLabel}</span>
+        <span class="mm-score-badge">Score: ${rec.compositeScore} / Mid: ${(rec.midpoint * 100).toFixed(1)}¢</span>
+      </div>
+
+      <table class="mm-quote-table">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Price</th>
+            <th>Size</th>
+            <th>Spread</th>
+            <th>S(v,s)</th>
+            <th>Qcontrib</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rec.quotes.map(q => {
+            const isPreferred = q.role === 'preferred';
+            const rowStyle = isPreferred ? 'background:rgba(16,185,129,0.05)' : '';
+            return `<tr style="${rowStyle}">
+              <td style="color:${q.token === 'YES' ? 'var(--green)' : 'var(--red)'}">${q.label}</td>
+              <td style="font-family:var(--font-mono)">${(q.price * 100).toFixed(2)}¢</td>
+              <td style="font-family:var(--font-mono)">${q.size}</td>
+              <td style="font-family:var(--font-mono)">${q.spread.toFixed(1)}¢</td>
+              <td style="font-family:var(--font-mono)">${q.scoreS.toFixed(3)}</td>
+              <td style="font-family:var(--font-mono);font-weight:700">${q.scoreWeighted.toFixed(1)}</td>
+              <td style="color:${isPreferred ? 'var(--green)' : 'var(--text-dim)';font-size:10px">${isPreferred ? '★ preferred' : 'hedge'}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+
+      <div class="mm-totals-row">
+        <div class="mm-total-cell">
+          <div class="mm-total-label">Qone</div>
+          <div class="mm-total-val">${rec.Qone}</div>
+        </div>
+        <div class="mm-total-cell">
+          <div class="mm-total-label">Qtwo</div>
+          <div class="mm-total-val">${rec.Qtwo}</div>
+        </div>
+        <div class="mm-total-cell mm-total-highlight">
+          <div class="mm-total-label">Qmin (your score)</div>
+          <div class="mm-total-val" style="color:var(--green)">${rec.Qmin}</div>
+        </div>
+        <div class="mm-total-cell">
+          <div class="mm-total-label">Two-sided?</div>
+          <div class="mm-total-val" style="color:${rec.isTwoSided ? 'var(--green)' : 'var(--yellow)'}">${rec.isTwoSided ? '✓ YES' : '✗ NO (÷3)'}</div>
+        </div>
+        <div class="mm-total-cell">
+          <div class="mm-total-label">Rebate if filled</div>
+          <div class="mm-total-val" style="color:var(--yellow)">${rec.expectedRebate}</div>
+        </div>
+      </div>
+
+      <div class="mm-edge-notes">
+        ${rec.edgeNotes.map(n => `<div class="mm-edge-note">→ ${n}</div>`).join('')}
+      </div>
+
+      <div class="mm-formula-reminder">
+        S(v,s) = ((v−s)/v)² · b &nbsp;|&nbsp; v=${rec.maxSpreadCents}¢ &nbsp;|&nbsp;
+        Qmin = min(Qone, Qtwo) when two-sided &nbsp;|&nbsp;
+        Rebate = size × 0.072 × p × (1−p) × 20%
+      </div>
+    `;
+  }
+
+  return { computeQuotes, renderPanel };
+})();
+
+
+// ═══════════════════════════════════════════════════════════════════════════
 // 6. AUTO TRADER
 // Runs on each closed candle. Checks score against threshold.
 // Applies confidence filter. Fires Trader.buy() if conditions met.
@@ -951,6 +1250,15 @@ const BTCAlgoUI = (() => {
 
     // Render chart
     ChartRenderer.render(candles);
+
+    // Update MM strategy panel on every tick (not just closed candles — keeps countdown live)
+    MarketMakerStrategy.renderPanel('mm-strategy-panel', comp.score, lastMarket);
+    const mmTime = el('mm-panel-time');
+    if (mmTime && lastMarket?.endDate) {
+      const secs = Math.floor((new Date(lastMarket.endDate) - Date.now()) / 1000);
+      mmTime.textContent = secs > 0 ? `T-${secs}s` : 'resolved';
+      mmTime.style.color = secs < 60 ? 'var(--red)' : secs < 120 ? 'var(--yellow)' : 'var(--text-dim)';
+    }
 
     // On closed candle — run auto-trader
     if (isClosed && lastMarket) {

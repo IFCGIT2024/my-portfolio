@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTC Signal Backtest Report</title>
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --surface2: #1e2533;
+      --border: #2a2f45; --text: #e6edf3; --text-dim: #8892a4;
+      --green: #00e676; --red: #ff5252; --yellow: #ffd740;
+      --blue: #4fc3f7; --purple: #ce93d8; --accent: #7c83fd;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; padding: 24px; }
+    h1 { font-size: 20px; color: var(--blue); margin-bottom: 4px; }
+    .subtitle { font-size: 13px; color: var(--text-dim); margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+    .card h2 { font-size: 13px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { color: var(--text-dim); font-weight: 600; text-align: right; padding: 4px 8px; border-bottom: 1px solid var(--border); }
+    th:first-child { text-align: left; }
+    td { padding: 5px 8px; text-align: right; border-bottom: 1px solid rgba(42,47,69,0.5); }
+    td:first-child { text-align: left; color: var(--text); }
+    .green { color: var(--green); font-weight: 700; }
+    .red   { color: var(--red); }
+    .yellow { color: var(--yellow); }
+    .dim   { color: var(--text-dim); }
+    .bar-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 12px; }
+    .bar-label { width: 120px; color: var(--text-dim); flex-shrink: 0; }
+    .bar-track { flex: 1; height: 14px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+    .bar-fill   { height: 100%; border-radius: 4px; transition: width 0.3s; }
+    .bar-val    { width: 60px; text-align: right; font-family: monospace; font-size: 12px; flex-shrink: 0; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+    .badge-green { background: rgba(0,230,118,0.12); color: var(--green); }
+    .badge-red   { background: rgba(255,82,82,0.12);  color: var(--red); }
+    .badge-yellow { background: rgba(255,215,64,0.12); color: var(--yellow); }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stat-box { background: var(--surface2); border-radius: var(--radius); padding: 10px; text-align: center; }
+    .stat-val { font-size: 20px; font-weight: 700; font-family: monospace; }
+    .stat-lbl { font-size: 10px; color: var(--text-dim); margin-top: 2px; text-transform: uppercase; }
+    canvas { width: 100%; height: 200px; }
+    #drop-zone {
+      border: 2px dashed var(--border); border-radius: var(--radius); padding: 40px;
+      text-align: center; color: var(--text-dim); cursor: pointer; margin-bottom: 24px;
+      transition: border-color 0.2s;
+    }
+    #drop-zone.drag-over { border-color: var(--accent); color: var(--accent); }
+    #drop-zone input { display: none; }
+    .upload-btn {
+      background: var(--accent); color: white; border: none; border-radius: var(--radius);
+      padding: 8px 20px; cursor: pointer; font-size: 13px; margin-top: 10px;
+    }
+    #report { display: none; }
+    .full-width { grid-column: 1 / -1; }
+    .regression-chart-wrap { height: 220px; position: relative; }
+  </style>
+</head>
+<body>
+  <h1>BTC Signal Backtest Report</h1>
+  <p class="subtitle">Load a <code>*_stats.json</code> file from <code>polymarket-local/data/backtest/</code></p>
+
+  <div id="drop-zone" onclick="document.getElementById('file-input').click()">
+    <div style="font-size:32px">📂</div>
+    <div style="margin:8px 0">Drop <code>*_stats.json</code> here, or click to browse</div>
+    <button class="upload-btn">Load Backtest Results</button>
+    <input type="file" id="file-input" accept=".json">
+  </div>
+
+  <div id="report"></div>
+
+  <script>
+  // ── File loading ──
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) readFile(file);
+  });
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) readFile(fileInput.files[0]); });
+
+  function readFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        renderReport(data);
+      } catch (err) {
+        alert('Could not parse JSON: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // ── Helpers ──
+  function edgeColor(edge) {
+    if (edge === null || edge === undefined) return 'dim';
+    if (edge >= 5) return 'green';
+    if (edge >= 0) return 'yellow';
+    return 'red';
+  }
+
+  function edgeBadge(edge) {
+    if (edge === null || edge === undefined) return '<span class="dim">n/a</span>';
+    const cls = edge >= 5 ? 'badge-green' : edge >= 0 ? 'badge-yellow' : 'badge-red';
+    const sign = edge > 0 ? '+' : '';
+    return `<span class="badge ${cls}">${sign}${edge.toFixed(1)}%</span>`;
+  }
+
+  function pctColor(v, good = 54) {
+    return v >= good ? 'green' : v >= 50 ? 'yellow' : 'red';
+  }
+
+  function fmt(v, suffix = '') {
+    if (v === null || v === undefined) return '<span class="dim">—</span>';
+    return v + suffix;
+  }
+
+  // ── Main render ──
+  function renderReport(s) {
+    dropZone.style.display = 'none';
+    const report = document.getElementById('report');
+    report.style.display = 'block';
+
+    const upRate = s.baseUpRate;
+    const c = s.composite;
+    const period = `${s.period?.from?.slice(0,10)} → ${s.period?.to?.slice(0,10)}`;
+
+    report.innerHTML = `
+      <!-- Overview row -->
+      <div class="grid">
+        <div class="card">
+          <h2>Overview</h2>
+          <div class="stat-grid">
+            <div class="stat-box">
+              <div class="stat-val">${s.total?.toLocaleString()}</div>
+              <div class="stat-lbl">Samples</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val ${pctColor(upRate)}">${upRate}%</div>
+              <div class="stat-lbl">Base UP rate</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-val">${s.forward}</div>
+              <div class="stat-lbl">Candles fwd</div>
+            </div>
+          </div>
+          <div style="margin-top:12px; font-size:12px; color:var(--text-dim)">
+            Period: ${period}<br>
+            Threshold: ${s.threshold} | Interval: 1m
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Composite Signal</h2>
+          ${c ? `
+            <div class="stat-grid">
+              <div class="stat-box">
+                <div class="stat-val ${pctColor(c.accuracy)}">${c.accuracy?.toFixed(1)}%</div>
+                <div class="stat-lbl">Accuracy</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-val ${edgeColor(c.edge)}">${c.edge >= 0 ? '+' : ''}${c.edge?.toFixed(1)}%</div>
+                <div class="stat-lbl">Edge vs 50%</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-val">${c.signalRate?.toFixed(1)}%</div>
+                <div class="stat-lbl">Signal rate</div>
+              </div>
+            </div>
+            <div class="bar-row" style="margin-top:10px">
+              <span class="bar-label" style="color:var(--green)">UP calls</span>
+              <div class="bar-track"><div class="bar-fill" style="width:${c.upAccuracy}%;background:var(--green)"></div></div>
+              <span class="bar-val ${pctColor(c.upAccuracy)}">${c.upAccuracy?.toFixed(1)}%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label" style="color:var(--red)">DOWN calls</span>
+              <div class="bar-track"><div class="bar-fill" style="width:${c.dnAccuracy}%;background:var(--red)"></div></div>
+              <span class="bar-val ${pctColor(c.dnAccuracy)}">${c.dnAccuracy?.toFixed(1)}%</span>
+            </div>
+          ` : '<p class="dim">No composite data</p>'}
+        </div>
+
+        <!-- Individual signals -->
+        <div class="card">
+          <h2>Signal Accuracy Comparison</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Signal</th>
+                <th>Fires</th>
+                <th>Accuracy</th>
+                <th>Edge</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${[
+                ['Composite', c],
+                ['RSI (14)', s.signals?.rsi],
+                ['Momentum', s.signals?.momentum],
+                ['MACD',     s.signals?.macd],
+                ['Vol Spike',s.signals?.vol],
+              ].map(([name, sig]) => sig ? `
+                <tr>
+                  <td>${name}</td>
+                  <td class="dim">${sig.signalRate?.toFixed(1)}%</td>
+                  <td class="${pctColor(sig.accuracy)}">${sig.accuracy?.toFixed(1)}%</td>
+                  <td>${edgeBadge(sig.edge)}</td>
+                </tr>
+              ` : `<tr><td>${name}</td><td colspan="3" class="dim">no data</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Score ranges -->
+      <div class="grid">
+        <div class="card full-width">
+          <h2>Score Range Breakdown — When we call UP/DOWN at score X, are we right?</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Score Range</th>
+                <th>Samples</th>
+                <th>Base UP%</th>
+                <th>Accuracy</th>
+                <th>Edge</th>
+                <th>Avg |move|</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(s.scoreRanges || []).map(r => `
+                <tr>
+                  <td>${r.label}</td>
+                  <td class="dim">${r.count}</td>
+                  <td>${fmt(r.upPct?.toFixed(1), '%')}</td>
+                  <td class="${pctColor(r.accuracy)}">${r.accuracy !== null ? r.accuracy.toFixed(1) + '%' : '<span class="dim">—</span>'}</td>
+                  <td>${edgeBadge(r.edge)}</td>
+                  <td class="dim">${r.avgMove !== null ? r.avgMove.toFixed(4) + '%' : '—'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Combinations + Regimes -->
+      <div class="grid">
+        <div class="card">
+          <h2>Signal Consensus — Does agreement improve accuracy?</h2>
+          <table>
+            <thead>
+              <tr><th>Condition</th><th>n</th><th>Accuracy</th><th>Edge</th></tr>
+            </thead>
+            <tbody>
+              ${(s.combinations || []).map(c2 => `
+                <tr>
+                  <td>${c2.label}</td>
+                  <td class="dim">${c2.count}</td>
+                  <td class="${pctColor(c2.accuracy)}">${c2.accuracy?.toFixed(1)}%</td>
+                  <td>${edgeBadge(c2.edge)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h2>Market Regime</h2>
+          <table>
+            <thead>
+              <tr><th>Regime</th><th>n</th><th>Accuracy</th><th>Edge</th><th>Avg|move|</th></tr>
+            </thead>
+            <tbody>
+              ${(s.regimes || []).map(r => `
+                <tr>
+                  <td style="text-transform:capitalize">${r.regime}</td>
+                  <td class="dim">${r.count}</td>
+                  <td class="${pctColor(r.accuracy)}">${r.accuracy?.toFixed(1)}%</td>
+                  <td>${edgeBadge(r.edge)}</td>
+                  <td class="dim">${r.avgMove?.toFixed(4)}%</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Score → UP Rate regression chart -->
+      <div class="grid">
+        <div class="card full-width">
+          <h2>Score → UP Rate Regression (should rise left to right if score is predictive)</h2>
+          <div class="regression-chart-wrap">
+            <canvas id="reg-chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hourly table -->
+      <div class="grid">
+        <div class="card full-width">
+          <h2>Hourly Breakdown (UTC) — Best trading windows</h2>
+          <table>
+            <thead>
+              <tr><th>Hour UTC</th><th>n</th><th>Accuracy</th><th>UP rate</th><th>Avg score</th></tr>
+            </thead>
+            <tbody>
+              ${(s.hourly || []).map(h => `
+                <tr>
+                  <td>${h.label}</td>
+                  <td class="dim">${h.count}</td>
+                  <td class="${pctColor(h.accuracy)}">${h.accuracy?.toFixed(1) ?? '—'}%</td>
+                  <td>${h.upRate?.toFixed(1)}%</td>
+                  <td>${h.avgScore?.toFixed(1)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    renderRegressionChart(s.regression);
+  }
+
+  function renderRegressionChart(data) {
+    const canvas = document.getElementById('reg-chart');
+    if (!canvas || !data || !data.length) return;
+
+    // Size canvas to its CSS display size
+    const rect = canvas.getBoundingClientRect();
+    canvas.width  = rect.width  || 800;
+    canvas.height = rect.height || 200;
+
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const PAD = { top: 20, right: 20, bottom: 30, left: 45 };
+    const cW = W - PAD.left - PAD.right;
+    const cH = H - PAD.top  - PAD.bottom;
+
+    ctx.clearRect(0, 0, W, H);
+
+    const maxScore = 100;
+    const minY = 30, maxY = 70; // focus on 30-70% range
+
+    function xPos(score) { return PAD.left + (score / maxScore) * cW; }
+    function yPos(pct)   { return PAD.top  + cH - ((pct - minY) / (maxY - minY)) * cH; }
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(42,47,69,0.8)';
+    ctx.lineWidth = 1;
+    [40, 50, 60, 70].forEach(y => {
+      const py = yPos(y);
+      ctx.beginPath(); ctx.moveTo(PAD.left, py); ctx.lineTo(W - PAD.right, py); ctx.stroke();
+      ctx.fillStyle = '#8892a4'; ctx.font = '11px Consolas'; ctx.textAlign = 'right';
+      ctx.fillText(y + '%', PAD.left - 4, py + 4);
+    });
+
+    // 50% baseline (coin flip)
+    const baseline = yPos(50);
+    ctx.strokeStyle = 'rgba(255,215,64,0.4)';
+    ctx.setLineDash([4, 4]);
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD.left, baseline); ctx.lineTo(W - PAD.right, baseline); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // X axis labels
+    ctx.fillStyle = '#8892a4'; ctx.font = '11px Consolas'; ctx.textAlign = 'center';
+    [0, 20, 40, 60, 80, 100].forEach(s => {
+      ctx.fillText(s, xPos(s), H - 6);
+    });
+
+    // Draw data points + line
+    const valid = data.filter(d => d.count >= 5);
+    if (valid.length < 2) return;
+
+    // Line
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(79,195,247,0.6)';
+    ctx.lineWidth = 2;
+    valid.forEach((d, i) => {
+      const x = xPos(d.scoreMin + 2.5);
+      const y = yPos(Math.min(maxY, Math.max(minY, d.upRate)));
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Points
+    valid.forEach(d => {
+      const x = xPos(d.scoreMin + 2.5);
+      const y = yPos(Math.min(maxY, Math.max(minY, d.upRate)));
+      const color = d.upRate >= 55 ? '#00e676' : d.upRate >= 50 ? '#ffd740' : '#ff5252';
+      ctx.beginPath();
+      ctx.arc(x, y, Math.min(6, Math.sqrt(d.count / 3)), 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    });
+
+    // Labels
+    ctx.fillStyle = '#8892a4'; ctx.font = '11px Segoe UI'; ctx.textAlign = 'left';
+    ctx.fillText('Composite Score →', PAD.left, H - 6);
+    ctx.save(); ctx.translate(12, PAD.top + cH / 2); ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center'; ctx.fillText('% UP outcomes', 0, 0);
+    ctx.restore();
+  }
+  </script>
+</body>
+</html>

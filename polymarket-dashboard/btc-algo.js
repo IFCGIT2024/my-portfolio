@@ -759,7 +759,7 @@ const MarketMakerStrategy = (() => {
               <td style="font-family:var(--font-mono)">${q.spread.toFixed(1)}¢</td>
               <td style="font-family:var(--font-mono)">${q.scoreS.toFixed(3)}</td>
               <td style="font-family:var(--font-mono);font-weight:700">${q.scoreWeighted.toFixed(1)}</td>
-              <td style="color:${isPreferred ? 'var(--green)' : 'var(--text-dim)';font-size:10px">${isPreferred ? '★ preferred' : 'hedge'}</td>
+              <td style="color:${isPreferred ? 'var(--green)' : 'var(--text-dim)'};font-size:10px">${isPreferred ? '★ preferred' : 'hedge'}</td>
             </tr>`;
           }).join('')}
         </tbody>

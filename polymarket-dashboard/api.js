@@ -19,8 +19,13 @@ const PolyAPI = (() => {
   const CLOB  = 'https://clob.polymarket.com';
 
   // Polymarket blocks direct browser requests from US IPs (CORS geoblock).
-  // Route through a public CORS proxy so the request originates server-side.
-  const PROXY = 'https://corsproxy.io/?url=';
+  // When running via the local Node.js server, server.js injects
+  // window.POLY_API_PROXY = '/api/proxy?url=' which routes calls through
+  // the Express proxy instead of corsproxy.io (no rate limits, VPN support).
+  // On GitHub Pages (online), POLY_API_PROXY is not set → falls back to corsproxy.io.
+  const PROXY = (typeof window !== 'undefined' && window.POLY_API_PROXY)
+    ? window.POLY_API_PROXY
+    : 'https://corsproxy.io/?url=';
 
   /* ── Simple TTL cache so repeated renders don't spam the API ── */
   const _cache = {};

@@ -678,3 +678,281 @@ body {
 .positive { color: var(--green) !important; }
 .negative { color: var(--red) !important; }
 .neutral  { color: var(--text-dim); }
+
+/* ════════════════════ BTC ALGO TAB ════════════════════ */
+
+/* ── Layout ── */
+.btc-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* ── Top bar ── */
+.btc-topbar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.btc-price-display { display: flex; align-items: baseline; gap: 12px; }
+.btc-symbol { font-size: 12px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+.btc-price  { font-size: 26px; font-weight: 700; font-family: var(--font-mono); color: var(--text-bright); }
+.btc-change { font-size: 14px; font-family: var(--font-mono); color: var(--text-dim); }
+.btc-status-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.status-pill {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.algo-note { font-size: 11px; color: var(--text-dim); font-style: italic; }
+
+.btn-auto-off, .btn-auto-on {
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 0.2s;
+}
+.btn-auto-off {
+  background: var(--surface2);
+  border-color: var(--border);
+  color: var(--text-dim);
+}
+.btn-auto-off:hover { border-color: var(--green); color: var(--green); }
+.btn-auto-on {
+  background: var(--green-dim);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+/* ── Main two-column layout ── */
+.btc-main {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 14px;
+  min-height: 0;
+}
+.btc-left, .btc-right { display: flex; flex-direction: column; gap: 14px; }
+
+/* ── Chart card ── */
+.btc-chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+}
+.btc-chart-card canvas { display: block; width: 100%; height: auto; }
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Indicator cards ── */
+.signal-indicators {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.indicator-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+}
+.ind-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.ind-value { font-size: 18px; font-weight: 700; font-family: var(--font-mono); color: var(--text-bright); margin-bottom: 6px; }
+.ind-bar { background: var(--bg2); border-radius: 2px; height: 4px; margin-bottom: 6px; overflow: hidden; }
+.ind-fill { height: 100%; border-radius: 2px; background: var(--blue); transition: width 0.4s, background 0.4s; }
+.ind-signal { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-dim); }
+
+/* ── Composite score ── */
+.composite-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+.comp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 12px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+.comp-body { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 14px; }
+.comp-score-wrap { text-align: center; min-width: 80px; }
+.comp-score { font-size: 48px; font-weight: 900; font-family: var(--font-mono); color: var(--text-bright); line-height: 1; }
+.comp-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+.comp-breakdown { font-size: 11px; color: var(--text-dim); line-height: 2; font-family: var(--font-mono); }
+
+.comp-gauge { display: flex; align-items: center; gap: 8px; }
+.gauge-min, .gauge-max { font-size: 10px; color: var(--text-dim); white-space: nowrap; }
+.gauge-track { flex: 1; height: 6px; background: linear-gradient(to right, var(--red), var(--text-dim) 40%, var(--text-dim) 60%, var(--green)); border-radius: 3px; position: relative; }
+.gauge-cursor {
+  position: absolute;
+  top: -4px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  transform: translateX(-50%);
+  transition: left 0.5s;
+  left: 50%;
+}
+
+/* ── Market card (right column) ── */
+.market-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  overflow-y: auto;
+  flex: 1;
+}
+.market-countdown {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green);
+}
+.mkt-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.mkt-row:last-of-type { border-bottom: none; }
+.mkt-label { color: var(--text-dim); flex-shrink: 0; margin-right: 10px; }
+.mkt-val   { color: var(--text-bright); text-align: right; font-size: 12px; }
+.mkt-question { font-size: 12px; color: var(--text); text-align: right; max-width: 220px; }
+.mkt-prices { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+.mkt-side { flex: 1; text-align: center; padding: 10px; border-radius: var(--radius); }
+.mkt-yes  { background: var(--green-dim); border: 1px solid var(--green-mid); }
+.mkt-no   { background: var(--red-dim);   border: 1px solid var(--red-mid); }
+.mkt-side-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 4px; }
+.mkt-yes .mkt-side-label { color: var(--green); }
+.mkt-no  .mkt-side-label { color: var(--red); }
+.mkt-side-price { font-size: 22px; font-weight: 900; font-family: var(--font-mono); }
+.mkt-yes .mkt-side-price { color: var(--green); }
+.mkt-no  .mkt-side-price { color: var(--red); }
+.mkt-side-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+.mkt-vs { color: var(--text-dim); font-size: 12px; }
+
+/* ── Liquidity Rewards box ── */
+.mm-rewards-box {
+  margin-top: 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+.mm-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--yellow); margin-bottom: 8px; }
+.mm-note {
+  font-size: 12px;
+  color: var(--text);
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+}
+.mm-table { width: 100%; border-collapse: collapse; font-size: 11px; font-family: var(--font-mono); margin-bottom: 8px; }
+.mm-table th { text-align: left; color: var(--text-dim); font-weight: 600; padding: 3px 6px; border-bottom: 1px solid var(--border); }
+.mm-table td { padding: 3px 6px; border-bottom: 1px solid var(--border); color: var(--text); }
+.mm-table tr:last-child td { border-bottom: none; }
+.mm-totals { font-size: 12px; font-family: var(--font-mono); color: var(--text); margin-bottom: 8px; line-height: 1.8; }
+.mm-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: rgba(16,185,129,0.15);
+  color: var(--green);
+  border: 1px solid var(--green-mid);
+  margin-left: 6px;
+}
+.mm-badge.mm-single { background: var(--yellow-dim); color: var(--yellow); border-color: var(--yellow); }
+.mm-sub { font-size: 11px; color: var(--text-dim); line-height: 1.8; font-family: var(--font-mono); }
+
+/* ── Settings card ── */
+.algo-settings-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+}
+.settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.setting-row { display: flex; flex-direction: column; gap: 5px; }
+.setting-row label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+.setting-row input, .setting-row select {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--text-bright);
+  padding: 7px 10px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  outline: none;
+}
+.setting-row input:focus, .setting-row select:focus { border-color: var(--blue); }
+.setting-row select option { background: var(--surface2); }
+.algo-last-action {
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 8px 0 0;
+  font-family: var(--font-mono);
+  border-top: 1px solid var(--border);
+  margin-top: 10px;
+}
+
+/* ── Signal log card ── */
+.log-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+}
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px 6px;
+}
+.btn-text:hover { color: var(--text); }
+.signal-log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 3px; margin-top: 8px; }
+.log-entry { font-size: 11px; font-family: var(--font-mono); padding: 3px 0; border-bottom: 1px solid rgba(31,45,69,0.5); line-height: 1.5; }
+.log-info { color: var(--text-dim); }
+.log-buy  { color: var(--green); }
+.log-warn { color: var(--yellow); }
+
+/* ── Strategy reference ── */
+.strategy-reference {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+.strategy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.strat-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+.strat-card h4 { font-size: 12px; color: var(--blue); margin-bottom: 8px; }
+.strat-card p  { font-size: 12px; color: var(--text); line-height: 1.6; }

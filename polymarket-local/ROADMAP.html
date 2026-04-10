@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polymarket Lab — ROADMAP</title>
+  <style>
+    :root {
+      --bg:       #0d0f14;
+      --surface:  #141720;
+      --surface2: #1c2030;
+      --border:   #2a2f45;
+      --accent:   #00e5ff;
+      --green:    #00e676;
+      --yellow:   #ffd740;
+      --red:      #ff5252;
+      --purple:   #b388ff;
+      --gray:     #7b8294;
+      --text:     #e2e8f0;
+      --text-dim: #8892a4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .page { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
+
+    /* ── Header ── */
+    .roadmap-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 28px;
+    }
+    .roadmap-header .logo { font-size: 36px; }
+    .roadmap-header h1 { font-size: 22px; font-weight: 700; }
+    .roadmap-header p { color: var(--text-dim); font-size: 13px; margin-top: 2px; }
+    .header-badges { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .badge-live  { background: rgba(0,230,118,0.15); color: var(--green); border: 1px solid rgba(0,230,118,0.3); }
+    .badge-local { background: rgba(0,229,255,0.1);  color: var(--accent); border: 1px solid rgba(0,229,255,0.3); }
+    .badge-paper { background: rgba(255,215,64,0.1); color: var(--yellow); border: 1px solid rgba(255,215,64,0.3); }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 14px;
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    /* ── Phase timeline ── */
+    .phases { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+
+    .phase-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .phase-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+    }
+    .phase-card.done::before   { background: var(--green); }
+    .phase-card.active::before { background: var(--accent); }
+    .phase-card.next::before   { background: var(--yellow); }
+    .phase-card.future::before { background: var(--gray); }
+
+    .phase-num {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+    .phase-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .phase-status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .status-done   { background: rgba(0,230,118,0.15); color: var(--green); }
+    .status-active { background: rgba(0,229,255,0.1);  color: var(--accent); }
+    .status-next   { background: rgba(255,215,64,0.1); color: var(--yellow); }
+    .status-future { background: rgba(123,130,148,0.15); color: var(--gray); }
+
+    .phase-items { list-style: none; }
+    .phase-items li {
+      font-size: 12px;
+      color: var(--text-dim);
+      padding: 3px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+    .phase-items li::before { content: '–'; position: absolute; left: 0; color: var(--border); }
+    .phase-items li.done-item { color: var(--text); }
+    .phase-items li.done-item::before { content: '✓'; color: var(--green); }
+    .phase-items li.active-item { color: var(--accent); }
+    .phase-items li.active-item::before { content: '▶'; color: var(--accent); }
+
+    /* ── Build log ── */
+    .build-log { overflow: hidden; border-radius: 10px; border: 1px solid var(--border); }
+    .log-header {
+      background: var(--surface2);
+      padding: 10px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      display: grid;
+      grid-template-columns: 100px 120px 1fr 80px;
+      gap: 12px;
+    }
+    .log-entry {
+      padding: 10px 16px;
+      display: grid;
+      grid-template-columns: 100px 120px 1fr 80px;
+      gap: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+    .log-entry:hover { background: var(--surface2); }
+    .log-date  { color: var(--text-dim); font-size: 12px; }
+    .log-commit { font-family: monospace; color: var(--accent); font-size: 12px; }
+    .log-msg   { color: var(--text); }
+    .log-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      align-self: center;
+    }
+    .tag-feature { background: rgba(0,229,255,0.1);  color: var(--accent); }
+    .tag-fix     { background: rgba(255,82,82,0.1);  color: var(--red); }
+    .tag-infra   { background: rgba(179,136,255,0.1); color: var(--purple); }
+    .tag-data    { background: rgba(255,215,64,0.1); color: var(--yellow); }
+
+    /* ── Research backlog ── */
+    .research-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+    .research-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .research-category {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cat-api      { color: #00e5ff; }
+    .cat-algo     { color: #00e676; }
+    .cat-infra    { color: #b388ff; }
+    .cat-strategy { color: #ffd740; }
+    .cat-risk     { color: #ff5252; }
+    .cat-market   { color: #ff9800; }
+
+    .research-item {
+      display: flex;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .research-item:last-child { border-bottom: none; }
+    .ri-check {
+      width: 16px;
+      height: 16px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .ri-check.checked { background: var(--green); border-color: var(--green); }
+    .ri-check.checked::after { content: '✓'; font-size: 10px; color: #000; font-weight: 900; }
+    .ri-text { flex: 1; }
+    .ri-title { font-size: 13px; color: var(--text); }
+    .ri-desc  { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+    .ri-priority {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      align-self: center;
+    }
+    .p-high   { background: rgba(255,82,82,0.15);  color: var(--red); }
+    .p-med    { background: rgba(255,215,64,0.1); color: var(--yellow); }
+    .p-low    { background: rgba(123,130,148,0.15); color: var(--gray); }
+
+    /* ── Tasks sprint board ── */
+    .sprint-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 768px) { .sprint-board { grid-template-columns: 1fr; } }
+    .sprint-col { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+    .sprint-col-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .col-todo   .sprint-col-title { color: var(--gray); }
+    .col-doing  .sprint-col-title { color: var(--accent); }
+    .col-done-c .sprint-col-title { color: var(--green); }
+
+    .task-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .task-card:last-child { margin-bottom: 0; }
+    .task-card .task-title { font-weight: 600; margin-bottom: 4px; }
+    .task-card .task-detail { font-size: 12px; color: var(--text-dim); }
+    .task-card .task-label {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 8px;
+      margin-top: 6px;
+    }
+
+    /* ── Notes ── */
+    .note-block {
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .note-block.warn { border-left-color: var(--yellow); }
+    .note-block.info { border-left-color: var(--purple); }
+    .note-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .note-label-accent  { color: var(--accent); }
+    .note-label-warn    { color: var(--yellow); }
+    .note-label-info    { color: var(--purple); }
+    code {
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.15);
+      color: var(--accent);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: 'Consolas', monospace;
+      font-size: 12px;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="roadmap-header">
+    <div class="logo">📈</div>
+    <div>
+      <h1>Polymarket Algo Lab — Project Roadmap</h1>
+      <p>Build log · Phase tracker · Research backlog · Sprint tasks</p>
+    </div>
+    <div class="header-badges">
+      <span class="badge badge-live">GitHub Pages (Live)</span>
+      <span class="badge badge-local">Local Server</span>
+      <span class="badge badge-paper">Paper Trading</span>
+    </div>
+  </div>
+
+  <!-- ═══ ARCHITECTURE OVERVIEW ═══ -->
+  <div class="section-title">Architecture — Two Environments</div>
+  <div class="card">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div>
+        <div style="font-weight:700; color:var(--green); margin-bottom:8px;">🌐 Online — GitHub Pages</div>
+        <div style="font-size:13px; color:var(--text-dim); line-height:1.8;">
+          URL: <a href="https://github.com" target="_blank">your-username.github.io/polymarket-dashboard</a><br>
+          API calls: browser → <code>corsproxy.io</code> → Polymarket<br>
+          BTC feed: Binance WebSocket (browser direct)<br>
+          No server, no VPN needed, deployable instantly<br>
+          Limitation: corsproxy.io can rate-limit; US geoblock still applies
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700; color:var(--accent); margin-bottom:8px;">💻 Local — Node.js Server</div>
+        <div style="font-size:13px; color:var(--text-dim); line-height:1.8;">
+          URL: <code>http://localhost:3000</code><br>
+          API calls: browser → Express <code>/api/proxy</code> → Polymarket<br>
+          BTC feed: Binance WS relayed via <code>ws://localhost:3000/ws/btc</code><br>
+          Supports VPN/SOCKS5 proxy via <code>POLY_PROXY</code> env var<br>
+          Full server-side logging to <code>server-log.jsonl</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE TIMELINE ═══ -->
+  <div class="section-title">Phase Timeline</div>
+  <div class="phases">
+
+    <div class="phase-card done">
+      <div class="phase-num">Phase 1</div>
+      <div class="phase-title">Dashboard Foundation</div>
+      <div class="phase-status status-done">✓ Complete</div>
+      <ul class="phase-items">
+        <li class="done-item">6-file dashboard scaffold</li>
+        <li class="done-item">Gamma API integration</li>
+        <li class="done-item">Paper trading engine (PaperTrader)</li>
+        <li class="done-item">Signals / strategy engine</li>
+        <li class="done-item">Data Lab (endpoint explorer)</li>
+        <li class="done-item">Deployed to GitHub Pages</li>
+      </ul>
+    </div>
+
+    <div class="phase-card done">
+      <div class="phase-num">Phase 2</div>
+      <div class="phase-title">CORS Fix + API Discovery</div>
+      <div class="phase-status status-done">✓ Complete</div>
+      <ul class="phase-items">
+        <li class="done-item">Fixed US geoblock via corsproxy.io</li>
+        <li class="done-item">CLOB API order book integration</li>
+        <li class="done-item">Price history endpoint confirmed</li>
+        <li class="done-item">Maker rebates docs researched</li>
+        <li class="done-item">BTC 5-min market slug pattern found</li>
+      </ul>
+    </div>
+
+    <div class="phase-card active">
+      <div class="phase-num">Phase 3</div>
+      <div class="phase-title">BTC Algo Tab + Local Server</div>
+      <div class="phase-status status-active">▶ In Progress</div>
+      <ul class="phase-items">
+        <li class="done-item">BTC Algo tab HTML added to index.html</li>
+        <li class="active-item">btc-algo.js (indicators + auto-trader)</li>
+        <li>BTC tab CSS styling</li>
+        <li class="done-item">Local server (server.js) created</li>
+        <li class="done-item">ROADMAP tracker created</li>
+        <li>api.js local-mode detection</li>
+      </ul>
+    </div>
+
+    <div class="phase-card next">
+      <div class="phase-num">Phase 4</div>
+      <div class="phase-title">Signal Validation + Backtesting</div>
+      <div class="phase-status status-next">Next</div>
+      <ul class="phase-items">
+        <li>Download historical BTC 5-min market data</li>
+        <li>Log indicator signals vs actual market outcomes</li>
+        <li>Build basic backtester (CSV/JSON replay)</li>
+        <li>Tune thresholds on historical data</li>
+        <li>Measure edge / expected value per signal</li>
+      </ul>
+    </div>
+
+    <div class="phase-card future">
+      <div class="phase-num">Phase 5</div>
+      <div class="phase-title">Order Book Intelligence</div>
+      <div class="phase-status status-future">Planned</div>
+      <ul class="phase-items">
+        <li>Real-time order book depth tracking</li>
+        <li>Bid/ask imbalance signals</li>
+        <li>Volume rate analysis (USDC/min)</li>
+        <li>Smart money detection (large orders)</li>
+        <li>Crowd drift tracking across open BTC markets</li>
+      </ul>
+    </div>
+
+    <div class="phase-card future">
+      <div class="phase-num">Phase 6</div>
+      <div class="phase-title">Live Trading Infrastructure</div>
+      <div class="phase-status status-future">Future</div>
+      <ul class="phase-items">
+        <li>Polymarket CLOB auth (private key signing)</li>
+        <li>Walletconnect / browser wallet integration</li>
+        <li>Limit order posting (maker, zero fees)</li>
+        <li>Liquidity rewards tracking</li>
+        <li>Kill switch + risk management</li>
+        <li>Polygon chain position monitoring</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ═══ SPRINT BOARD ═══ -->
+  <div class="section-title">Active Sprint</div>
+  <div class="sprint-board">
+
+    <div class="sprint-col col-todo">
+      <div class="sprint-col-title">📋 To Do</div>
+
+      <div class="task-card">
+        <div class="task-title">BTC tab CSS</div>
+        <div class="task-detail">Style all new BTC algo tab elements in style.css</div>
+        <span class="task-label" style="background:rgba(0,229,255,0.1);color:var(--accent)">Frontend</span>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">api.js local-mode switch</div>
+        <div class="task-detail">Check <code>window.POLY_API_PROXY</code> — use local /api/proxy or corsproxy.io</div>
+        <span class="task-label" style="background:rgba(179,136,255,0.1);color:var(--purple)">Infra</span>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">btc-algo.js WebSocket local switch</div>
+        <div class="task-detail">Use <code>window.POLY_LOCAL_WS</code> when in local mode (relayed Binance feed)</div>
+        <span class="task-label" style="background:rgba(0,230,118,0.1);color:var(--green)">Backend</span>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">Server log viewer panel</div>
+        <div class="task-detail">Small panel in dashboard that polls /api/log and shows recent server calls</div>
+        <span class="task-label" style="background:rgba(255,215,64,0.1);color:var(--yellow)">Feature</span>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">Push Phase 3 to GitHub</div>
+        <div class="task-detail">Commit btc-algo.js, CSS, api.js changes, ROADMAP, server files</div>
+        <span class="task-label" style="background:rgba(123,130,148,0.15);color:var(--gray)">Deploy</span>
+      </div>
+
+    </div>
+
+    <div class="sprint-col col-doing">
+      <div class="sprint-col-title">▶ In Progress</div>
+
+      <div class="task-card" style="border-color:rgba(0,229,255,0.3)">
+        <div class="task-title">btc-algo.js — full implementation</div>
+        <div class="task-detail">BinanceFeed · IndicatorEngine · CompositeScorer · BTCMarketTracker · AutoTrader · ChartRenderer</div>
+        <span class="task-label" style="background:rgba(0,229,255,0.1);color:var(--accent)">Frontend / JS</span>
+      </div>
+
+      <div class="task-card" style="border-color:rgba(0,229,255,0.3)">
+        <div class="task-title">Local server setup</div>
+        <div class="task-detail">server.js, package.json, START.bat created · needs npm install + test</div>
+        <span class="task-label" style="background:rgba(179,136,255,0.1);color:var(--purple)">Infra</span>
+      </div>
+
+    </div>
+
+    <div class="sprint-col col-done-c">
+      <div class="sprint-col-title">✓ Done</div>
+
+      <div class="task-card">
+        <div class="task-title">Dashboard 6-file build</div>
+        <div class="task-detail">api.js, trader.js, strategies.js, app.js, index.html, style.css</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">CORS proxy fix</div>
+        <div class="task-detail">corsproxy.io added — markets loading on GitHub Pages</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">BTC Algo tab HTML</div>
+        <div class="task-detail">Full tab structure added to index.html — chart, indicators, market card, signal log</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">Maker rebates research</div>
+        <div class="task-detail">Docs read — fee formula, rebate pool %, order types confirmed</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">ROADMAP tracker created</div>
+        <div class="task-detail">This page — phases, build log, research backlog, sprint board</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ BUILD LOG ═══ -->
+  <div class="section-title">Build Log</div>
+  <div class="build-log">
+    <div class="log-header">
+      <span>Date</span>
+      <span>Commit</span>
+      <span>Description</span>
+      <span>Type</span>
+    </div>
+
+    <div class="log-entry">
+      <span class="log-date">2026-04-09</span>
+      <span class="log-commit">—</span>
+      <span class="log-msg">polymarket-local server.js — Express proxy, Binance WS relay, log endpoint, VPN support</span>
+      <span class="log-tag tag-infra">Infra</span>
+    </div>
+    <div class="log-entry">
+      <span class="log-date">2026-04-09</span>
+      <span class="log-commit">—</span>
+      <span class="log-msg">ROADMAP.html created — phase tracker, sprint board, research backlog, build log</span>
+      <span class="log-tag tag-infra">Infra</span>
+    </div>
+    <div class="log-entry">
+      <span class="log-date">2026-04-09</span>
+      <span class="log-commit">—</span>
+      <span class="log-msg">BTC Algo tab HTML added to index.html — chart, 4 indicators, market card, signal log</span>
+      <span class="log-tag tag-feature">Feature</span>
+    </div>
+    <div class="log-entry">
+      <span class="log-date">2026-04-09</span>
+      <span class="log-commit">87ddc08</span>
+      <span class="log-msg">CORS proxy fix — corsproxy.io added to all API calls, markets now loading on GitHub Pages</span>
+      <span class="log-tag tag-fix">Fix</span>
+    </div>
+    <div class="log-entry">
+      <span class="log-date">2026-04-09</span>
+      <span class="log-commit">9775fcc</span>
+      <span class="log-msg">Initial dashboard — api.js, trader.js, strategies.js, app.js, index.html, style.css + portal registration</span>
+      <span class="log-tag tag-feature">Feature</span>
+    </div>
+
+  </div>
+  <div style="font-size:12px; color:var(--text-dim); margin-top:8px; padding-left:4px;">
+    Update this log manually when committing. Format: Date · Commit SHA · Description · Type
+  </div>
+
+  <!-- ═══ RESEARCH BACKLOG ═══ -->
+  <div class="section-title">Research Backlog</div>
+  <div class="research-grid">
+
+    <!-- API & Data -->
+    <div class="research-card">
+      <div class="research-category cat-api">🔌 API & Data Sources</div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Polymarket CLOB WebSocket feed</div>
+          <div class="ri-desc">Does the CLOB API have a real-time WS stream for order book updates? Check <code>clob.polymarket.com/ws</code></div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">BTC 5-min market discovery schedule</div>
+          <div class="ri-desc">How far in advance do new btc-updown-5m markets appear? Are they all pre-listed for the day?</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Polymarket Data API — trades endpoint</div>
+          <div class="ri-desc">Confirm <code>data-api.polymarket.com/trades?market=...</code> — get per-trade history for flow analysis</div>
+        </div>
+        <span class="ri-priority p-med">MED</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">CLOB prices-history fidelity options</div>
+          <div class="ri-desc">What fidelity values are available? 1=minute, 60=hourly? Build proper price charts from this.</div>
+        </div>
+        <span class="ri-priority p-med">MED</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Binance alternatives — Kraken, Coinbase WS</div>
+          <div class="ri-desc">Binance WS may be restricted for US users at brokerage level. Research fallbacks.</div>
+        </div>
+        <span class="ri-priority p-low">LOW</span>
+      </div>
+
+    </div>
+
+    <!-- Algo / Signals -->
+    <div class="research-card">
+      <div class="research-category cat-algo">📊 Algorithm & Signals</div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Does RSI predict BTC 5-min market direction?</div>
+          <div class="ri-desc">Backtest RSI 14 on 1-min BTC candles vs Polymarket closing price outcomes. Measure win rate.</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Crowd implied probability accuracy</div>
+          <div class="ri-desc">How well does the Polymarket YES price correlate with actual BTC direction over 5 mins?</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Liquidity premium in BTC markets</div>
+          <div class="ri-desc">Is there a recurring spread between indicator signal and market price that's exploitable?</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Funding rate as signal</div>
+          <div class="ri-desc">Binance perpetual funding rate — high positive = crowded long = contrarian signal?</div>
+        </div>
+        <span class="ri-priority p-med">MED</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">VWAP and Bollinger Band signals</div>
+          <div class="ri-desc">Add VWAP and BB to IndicatorEngine — test if they add signal or noise</div>
+        </div>
+        <span class="ri-priority p-low">LOW</span>
+      </div>
+
+    </div>
+
+    <!-- Infrastructure -->
+    <div class="research-card">
+      <div class="research-category cat-infra">⚙️ Infrastructure</div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">VPN / SOCKS5 proxy setup for local server</div>
+          <div class="ri-desc">Test <code>POLY_PROXY=socks5://...</code> with a VPN to confirm US geoblock bypass. Options: Tailscale exit node, Mullvad, ProxyChains.</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Persistent signal storage (SQLite or flat JSON)</div>
+          <div class="ri-desc">Log every signal decision + market outcome to disk so we can analyze strategy performance</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">nodemon for dev hot-reload</div>
+          <div class="ri-desc"><code>npm install -g nodemon</code> → <code>npm run dev</code> auto-restarts on file changes</div>
+        </div>
+        <span class="ri-priority p-med">MED</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">socks-proxy-agent npm package</div>
+          <div class="ri-desc"><code>npm install socks-proxy-agent</code> — required for POLY_PROXY SOCKS5 support in server.js</div>
+        </div>
+        <span class="ri-priority p-med">MED</span>
+      </div>
+
+    </div>
+
+    <!-- Strategy -->
+    <div class="research-card">
+      <div class="research-category cat-strategy">🎯 Strategy Research</div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Optimal entry timing within the 5-minute window</div>
+          <div class="ri-desc">When within a 5-min window is the best time to enter? Early (before crowd prices in) vs late (signal confirmed)?</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Multi-market confirmation</div>
+          <div class="ri-desc">Can we use the previous 5-min market's closing price movement to predict the next?</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Kelly criterion position sizing</div>
+          <div class="ri-desc">Given estimated edge and win rate, compute optimal bet fraction to maximize log-growth</div>
+        </div>
+        <span class="ri-priority p-med">MED</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Market maker strategy on BTC 5-min markets</div>
+          <div class="ri-desc">Post both YES and NO limit orders near 50¢ to collect the spread + maker rebates. Quantify rebate potential.</div>
+        </div>
+        <span class="ri-priority p-med">MED</span>
+      </div>
+
+    </div>
+
+    <!-- Risk Management -->
+    <div class="research-card">
+      <div class="research-category cat-risk">🛡️ Risk Management</div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Max drawdown stop / daily loss limit</div>
+          <div class="ri-desc">Build circuit breaker: AutoTrader stops if portfolio drops X% in a session</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Correlation risk across open BTC positions</div>
+          <div class="ri-desc">All BTC 5-min bets are correlated — limit total BTC exposure as % of portfolio</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Slippage and liquidity constraints</div>
+          <div class="ri-desc">What's the realistic max position size before our own orders move the market price?</div>
+        </div>
+        <span class="ri-priority p-med">MED</span>
+      </div>
+
+    </div>
+
+    <!-- Market Mechanics -->
+    <div class="research-card">
+      <div class="research-category cat-market">🏦 Market Mechanics</div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">How BTC 5-min markets resolve</div>
+          <div class="ri-desc">What price source does Polymarket use? Binance spot? Chainlink oracle? What's the exact resolution time?</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Order execution timing</div>
+          <div class="ri-desc">How long does it take from order submission to order fill on chain? Is there a gas delay?</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Polymarket CLOB authentication flow</div>
+          <div class="ri-desc">Read: <a href="https://docs.polymarket.com/market-makers/getting-started" target="_blank">docs.polymarket.com/market-makers/getting-started</a> — wallet signing, API key derivation</div>
+        </div>
+        <span class="ri-priority p-high">HIGH</span>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-check" onclick="this.classList.toggle('checked')"></div>
+        <div class="ri-text">
+          <div class="ri-title">Liquidity rewards — do BTC 5-min markets qualify?</div>
+          <div class="ri-desc">Check if btc-updown markets are in the liquidity incentive program. If so, quoting is fee-negative.</div>
+        </div>
+        <span class="ri-priority p-med">MED</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ═══ TECHNICAL NOTES ═══ -->
+  <div class="section-title">Technical Notes</div>
+
+  <div class="note-block">
+    <div class="note-label note-label-accent">🌍 Geoblock — Canada is Fine</div>
+    Canada is <strong>not</strong> on Polymarket's geoblock list — APIs work directly from here.
+    The <code>POLY_PROXY</code> env var is still available in the local server as a useful tool:
+    set it to <code>socks5://127.0.0.1:1080</code> to route Polymarket calls through any VPN or proxy
+    (useful for testing, region simulation, or corporate networks). Binance has no restrictions.
+    The online GitHub Pages version still routes through <code>corsproxy.io</code> as a convenience.
+  </div>
+
+  <div class="note-block">
+    <div class="note-label note-label-accent">📡 Binance WebSocket URL</div>
+    <code>wss://stream.binance.com:9443/ws/btcusdt@kline_1m</code> — 1-minute BTC/USDT klines.
+    Each message: <code>{ k: { t, o, h, l, c, v, x } }</code> where <code>x</code> = candle closed.
+    The local server relays this to browser clients at <code>ws://localhost:3000/ws/btc</code>.
+    This removes the need for each browser tab to open its own upstream connection.
+  </div>
+
+  <div class="note-block">
+    <div class="note-label note-label-accent">🔑 Maker Rebates — Fee Formula</div>
+    <code>fee_equivalent = C × feeRate × p × (1 - p)</code> where C = shares, p = price, feeRate = 0.072 (Crypto).
+    Daily rebate: <code>(your_fee_eq / total_fee_eq) × rebate_pool</code>.
+    Rebate pool = 20% of taker fees collected in that market.
+    Makers NEVER pay fees — posting limit orders (GTC) is free. Only takers pay.
+  </div>
+
+  <div class="note-block info">
+    <div class="note-label note-label-info">🔗 Key API Endpoints</div>
+    <code>gamma-api.polymarket.com/markets?search=btc-updown-5m&active=true&order=endDate</code> — BTC markets<br>
+    <code>clob.polymarket.com/books?token_id={tokenId}</code> — order book<br>
+    <code>clob.polymarket.com/prices-history?market={conditionId}&interval=1d&fidelity=1</code> — price history<br>
+    <code>data-api.polymarket.com/trades?market={conditionId}</code> — trade history (research needed)<br>
+    <code>api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=50</code> — REST candle fallback
+  </div>
+
+</div>
+
+<script>
+  // Persist checkbox state in localStorage so checks survive page reload
+  document.querySelectorAll('.ri-check').forEach((el, i) => {
+    const key = 'ri-' + i;
+    if (localStorage.getItem(key) === '1') el.classList.add('checked');
+    el.addEventListener('click', () => {
+      localStorage.setItem(key, el.classList.contains('checked') ? '1' : '0');
+    });
+  });
+</script>
+</body>
+</html>

@@ -47,6 +47,7 @@
     <button class="tab-btn" data-tab="opportunities">⚡ Opportunities</button>
     <button class="tab-btn" data-tab="portfolio">💼 Portfolio</button>
     <button class="tab-btn" data-tab="lab">🔬 Data Lab</button>
+    <button class="tab-btn" data-tab="btc">₿ BTC Algo</button>
   </nav>
 
   <!-- ═══════════════════════════════ MARKETS TAB ═══════════════════════════════ -->
@@ -298,11 +299,184 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════════════ BTC ALGO TAB ═══════════════════════════════ -->
+  <div id="tab-btc" class="tab-content">
+    <div class="btc-layout">
+
+      <!-- Top bar: live price + status -->
+      <div class="btc-topbar">
+        <div class="btc-price-display">
+          <span class="btc-symbol">₿ BTC/USDT</span>
+          <span class="btc-price" id="btc-live-price">Loading...</span>
+          <span class="btc-change" id="btc-1m-change">—</span>
+        </div>
+        <div class="btc-status-row">
+          <span class="status-pill" id="btc-feed-status">● Connecting to Binance...</span>
+          <span class="status-pill" id="btc-market-status">● Fetching market...</span>
+          <button id="btn-toggle-auto" class="btn-auto-off">▶ Auto-Trade: OFF</button>
+          <span class="algo-note">Paper trades only — no real money</span>
+        </div>
+      </div>
+
+      <div class="btc-main">
+
+        <!-- Left: price chart + indicators -->
+        <div class="btc-left">
+
+          <div class="btc-chart-card">
+            <div class="card-header-row">
+              <span>BTC Price — Last 30 Candles (1-min)</span>
+              <span class="hint" id="btc-candle-count">0 candles</span>
+            </div>
+            <canvas id="btc-chart" width="520" height="160"></canvas>
+          </div>
+
+          <div class="signal-indicators">
+            <div class="indicator-card" id="ind-rsi">
+              <div class="ind-label">RSI (14)</div>
+              <div class="ind-value" id="rsi-value">—</div>
+              <div class="ind-bar"><div class="ind-fill" id="rsi-bar" style="width:50%"></div></div>
+              <div class="ind-signal" id="rsi-signal">—</div>
+            </div>
+            <div class="indicator-card" id="ind-momentum">
+              <div class="ind-label">Momentum (5)</div>
+              <div class="ind-value" id="mom-value">—</div>
+              <div class="ind-bar"><div class="ind-fill" id="mom-bar" style="width:50%"></div></div>
+              <div class="ind-signal" id="mom-signal">—</div>
+            </div>
+            <div class="indicator-card" id="ind-macd">
+              <div class="ind-label">MACD Signal</div>
+              <div class="ind-value" id="macd-value">—</div>
+              <div class="ind-bar"><div class="ind-fill" id="macd-bar" style="width:50%"></div></div>
+              <div class="ind-signal" id="macd-signal">—</div>
+            </div>
+            <div class="indicator-card" id="ind-vol">
+              <div class="ind-label">Vol Spike</div>
+              <div class="ind-value" id="vol-value">—</div>
+              <div class="ind-bar"><div class="ind-fill" id="vol-bar" style="width:50%"></div></div>
+              <div class="ind-signal" id="vol-signal">—</div>
+            </div>
+          </div>
+
+          <!-- Composite score -->
+          <div class="composite-card">
+            <div class="comp-header">
+              <span>Composite Signal Score</span>
+              <span class="hint">Weighted average of all indicators</span>
+            </div>
+            <div class="comp-body">
+              <div class="comp-score-wrap">
+                <div class="comp-score" id="comp-score">0</div>
+                <div class="comp-label" id="comp-label">NEUTRAL</div>
+              </div>
+              <div class="comp-breakdown" id="comp-breakdown">—</div>
+            </div>
+            <div class="comp-gauge">
+              <span class="gauge-min">STRONG DOWN</span>
+              <div class="gauge-track"><div class="gauge-cursor" id="gauge-cursor"></div></div>
+              <span class="gauge-max">STRONG UP</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: current market + trade + log -->
+        <div class="btc-right">
+
+          <div class="market-card" id="btc-market-card">
+            <div class="card-header-row">
+              <span>Current 5-Min BTC Market</span>
+              <span class="market-countdown" id="btc-countdown">—</span>
+            </div>
+            <div id="btc-market-body">
+              <div class="loading-msg">Searching for active BTC market...</div>
+            </div>
+          </div>
+
+          <!-- Auto-trade settings -->
+          <div class="algo-settings-card">
+            <div class="card-header-row">
+              <span>⚙ Auto-Trade Settings</span>
+            </div>
+            <div class="settings-grid">
+              <div class="setting-row">
+                <label>Buy threshold (score ≥)</label>
+                <input type="number" id="set-buy-threshold" value="60" min="50" max="90" step="5">
+              </div>
+              <div class="setting-row">
+                <label>Shares per trade</label>
+                <input type="number" id="set-shares" value="50" min="1" max="500" step="10">
+              </div>
+              <div class="setting-row">
+                <label>Max open BTC positions</label>
+                <input type="number" id="set-max-pos" value="3" min="1" max="10">
+              </div>
+              <div class="setting-row">
+                <label>Confidence filter</label>
+                <select id="set-confidence">
+                  <option value="any">Any signal</option>
+                  <option value="2" selected>2+ indicators agree</option>
+                  <option value="3">3+ indicators agree</option>
+                </select>
+              </div>
+            </div>
+            <div id="algo-last-action" class="algo-last-action">No trades executed yet</div>
+          </div>
+
+          <!-- Signal log -->
+          <div class="log-card">
+            <div class="card-header-row">
+              <span>Signal Log</span>
+              <button id="btn-clear-log" class="btn-text">Clear</button>
+            </div>
+            <div id="signal-log" class="signal-log">
+              <div class="log-entry log-info">System ready. Waiting for data...</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom: strategy reference -->
+      <div class="strategy-reference">
+        <div class="card-header-row"><span>📚 How These Strategies Work</span></div>
+        <div class="strategy-grid">
+          <div class="strat-card">
+            <h4>RSI (Relative Strength Index)</h4>
+            <p>Measures how overbought or oversold an asset is. RSI &gt; 60 = upward momentum. RSI &lt; 40 = downward momentum. RSI 40–60 = neutral, no trade.</p>
+          </div>
+          <div class="strat-card">
+            <h4>Momentum</h4>
+            <p>Price now vs. price 5 candles ago. If BTC is up 0.3%+ in 5 minutes, momentum is strongly bullish. Negative momentum = bearish. Fast and direct.</p>
+          </div>
+          <div class="strat-card">
+            <h4>MACD</h4>
+            <p>12-period EMA minus 26-period EMA vs. its 9-period signal line. When MACD crosses above signal line = buy trigger. Cross below = sell trigger.</p>
+          </div>
+          <div class="strat-card">
+            <h4>Volume Spike</h4>
+            <p>Current candle volume vs. 20-candle average. A spike (&gt;1.5×) with positive price = institutional buying. Confirms direction signals.</p>
+          </div>
+          <div class="strat-card">
+            <h4>Market Edge</h4>
+            <p>Polymarket's 5-min BTC market usually prices near 50/50. When your indicators say 65%+ confidence UP but market says 50%, that's edge — buy UP at 50¢ for a fair value of 65¢.</p>
+          </div>
+          <div class="strat-card">
+            <h4>Composite Score</h4>
+            <p>Weighted combination: RSI 30% + Momentum 35% + MACD 25% + Volume 10%. Score &gt; 60 = BUY UP signal. Score &lt; 40 = BUY DOWN signal. 40–60 = no trade.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div><!-- #app -->
 
 <script src="api.js"></script>
 <script src="trader.js"></script>
 <script src="strategies.js"></script>
+<script src="btc-algo.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

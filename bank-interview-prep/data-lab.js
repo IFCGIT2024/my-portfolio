@@ -131,8 +131,8 @@ SELECT classified_by, count(*) FROM bank.data_catalog GROUP BY classified_by;`);
   const cb_ex4_review = _cb('bash', `python 04_label_review.py`);
 
   const cb_ex4_report = _cb('bash',
-`python 05_audit_report.py -o /tmp/audit.md
-# Open /tmp/audit.md — first table is the coverage matrix`);
+`python 05_audit_report.py
+# The report prints directly to the terminal — first table is the coverage matrix`);
 
   const cb_ex4_insert = _cb('sql',
 `INSERT INTO bank.data_catalog

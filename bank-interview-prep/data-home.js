@@ -147,7 +147,7 @@ window.MODULES.home = () => `
   </tbody>
 </table>
 <div class="callout callout-success"><div class="callout-title">&#127919; The interview-grade summary</div><div>A bank classifies data because it has to (regulation), and because the classification map unlocks every other data control: encryption, access, monitoring, AI governance, M&amp;A, and DSAR. The team is small (often 10&ndash;30 people) but every metric on the CISO dashboard depends on whether they are doing it well. When asked "what does success look like in this role?", tie your answer to one of the value levers above and one KPI you would own.</div></div>
-<div class="callout callout-info"><div class="callout-title">&#129518; Self-host the lab</div><div>A complete <strong>runnable lab</strong> ships with this course at <code>bank-interview-prep/lab/</code>. Postgres, Adminer, Python scanners, role/permission exercises, the full label-review CLI, and 5 hands-on exercises with worked solutions. Runs on WSL/macOS/Linux via Docker &mdash; no cloud account, no PII risk. Read <a href="https://github.com/IFCGIT2024/my-portfolio/tree/main/bank-interview-prep/lab" target="_blank" rel="noopener">lab/README.md</a> to start.</div></div>
+<div class="callout callout-info"><div class="callout-title">&#129518; Hands-on Lab included</div><div>A complete <strong>runnable lab</strong> is included with this course. Postgres, Adminer, Python scanners, role/permission exercises, the full label-review CLI, and 5 hands-on exercises with worked solutions. Runs on any computer via Docker &mdash; no cloud account, no PII risk. Go to the <strong>Lab</strong> tab in the sidebar to get started.</div></div>
 
 <h2>Course Modules</h2>
 <div class="home-modules">

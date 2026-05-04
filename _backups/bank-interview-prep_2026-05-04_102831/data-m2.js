@@ -223,62 +223,6 @@ return _renderModule({
       ]
     },
     {
-      id: 'setup', label: '&#128736; Setup & Sandbox',
-      sections: [
-        {type:'h2', text:'Step 0 — Set Up Your Python Sandbox'},
-        {type:'p', text:'Pick one of two paths. The zero-install path lets you run every code example in this module from a browser. The local path is what you would use day-to-day at a bank.'},
-        {type:'cards', items:[
-          {icon:'&#9889;', title:'Path A — Zero install (recommended for first pass)', body:'Open <a href="https://colab.research.google.com" target="_blank" rel="noopener">Google Colab</a>. Sign in with a Google account. Click <em>New Notebook</em>. You now have Python 3.11, pandas, requests, and most data libraries pre-installed in a free cloud VM. Nothing to install, nothing to break.'},
-          {icon:'&#128190;', title:'Path B — Local install (real-world workflow)', body:'Install Python 3.11+ from <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org</a>. Use a virtual environment so package versions stay isolated per project — this is standard practice on every bank engineering team.'},
-        ]},
-        {type:'h3', text:'Local install — verified setup commands'},
-        {type:'code', lang:'bash', title:'Create an isolated venv and install the libraries used in this module', caption:'Run these in any terminal (PowerShell, bash, zsh). The activate step changes based on shell — both shown.', code:
-`# 1. Create a project folder and a virtual environment
-mkdir dataguard-python && cd dataguard-python
-python -m venv .venv
-
-# 2. Activate the venv
-#   Windows PowerShell:
-.\\.venv\\Scripts\\Activate.ps1
-#   macOS / Linux:
-source .venv/bin/activate
-
-# 3. Install the libraries used across this module
-pip install --upgrade pip
-pip install pandas requests faker python-dateutil
-pip install presidio-analyzer presidio-anonymizer
-python -m spacy download en_core_web_sm   # required by Presidio NER
-
-# 4. Sanity-check the install
-python -c "import pandas, requests, presidio_analyzer; print('OK', pandas.__version__)"`},
-        {type:'callout', variant:'info', title:'&#128202; Why these libraries?',
-          body:'<strong>pandas</strong> = tabular data (the Python equivalent of SQL SELECT/WHERE/GROUP BY). <strong>requests</strong> = call REST APIs like Microsoft Purview or 1touch.io. <strong>Presidio</strong> = Microsoft\'s open-source PII detection engine — it is the closest free analogue to what enterprise classifiers do, and worth knowing by name in interviews. <strong>Faker</strong> = generates realistic synthetic PII so you can test scanners without ever touching real customer data.'},
-        {type:'h3', text:'Verify Presidio detects PII'},
-        {type:'code', lang:'python', title:'30-second smoke test', caption:'If this prints findings for EMAIL_ADDRESS and PERSON, your sandbox is ready.', code:
-`from presidio_analyzer import AnalyzerEngine
-
-text = "Customer Jane Doe (jane.doe@example.co.uk) called about sort code 12-34-56."
-results = AnalyzerEngine().analyze(text=text, language="en")
-for r in results:
-    print(r.entity_type, text[r.start:r.end], round(r.score, 2))`},
-        {type:'h3', text:'Other free Python sandboxes'},
-        {type:'table', headers:['Tool','Best for','Notes'], rows:[
-          ['<a href="https://colab.research.google.com" target="_blank" rel="noopener">Google Colab</a>',          'Notebooks, learning, quick PII scans', 'Free GPU optional. Files lost when session ends unless saved to Drive.'],
-          ['<a href="https://github.com/features/codespaces" target="_blank" rel="noopener">GitHub Codespaces</a>', 'Full VS Code in browser', '60 free hours/month on personal accounts. Real Linux shell.'],
-          ['<a href="https://replit.com" target="_blank" rel="noopener">Replit</a>',                                'Tiny scripts, sharing demos',         'Good for sharing a working snippet by URL.'],
-          ['<a href="https://jupyter.org/try" target="_blank" rel="noopener">JupyterLite</a>',                     'Pure-browser pandas',                  'No backend — runs entirely in your browser via WebAssembly.'],
-        ]},
-        {type:'callout', variant:'success', title:'&#128218; High-quality references',
-          body:'<ul>'
-            +'<li><a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener">Official Python Tutorial</a> — the canonical introduction.</li>'
-            +'<li><a href="https://pandas.pydata.org/docs/user_guide/" target="_blank" rel="noopener">pandas User Guide</a> — start with <em>10 minutes to pandas</em>.</li>'
-            +'<li><a href="https://microsoft.github.io/presidio/" target="_blank" rel="noopener">Microsoft Presidio docs</a> — PII detection patterns and recognizers.</li>'
-            +'<li><a href="https://peps.python.org/pep-0008/" target="_blank" rel="noopener">PEP 8</a> — style guide every Python codebase follows.</li>'
-            +'<li><a href="https://docs.python.org/3/library/venv.html" target="_blank" rel="noopener">venv documentation</a> — why isolated environments are standard at banks.</li>'
-          +'</ul>'},
-      ]
-    },
-    {
       id: 'concepts', label: '&#128214; Concepts',
       sections: [{type:'accordion', items:[
         {

@@ -18,9 +18,10 @@ The customer's data does not live in one table. It's joined across:
 - `accounts` — accounts they own
 - `transactions` — every payment they ever made
 - `dsar_requests` — the request itself
-- `access_logs` — who accessed their data (yes, this is in scope under GDPR Art. 15)
 
 If you miss one table, the bank is non-compliant. The classification register is the **map** that tells you where to look.
+
+> **Note on `access_logs`:** in this lab, `access_logs` records which *employee* (not customer) queried which table. The schema has no customer_id column, so it cannot be filtered to a single customer's record. In a production system the access table would carry the customer identifier, and that audit trail *would* be in scope under Art. 15. We audit it separately in Step 4 below.
 
 ## Tasks
 
@@ -45,8 +46,7 @@ Write a single SQL block (or a `psql -c` invocation) that produces a JSON docume
   "customer": { "customer_id": 42, "full_name": "...", "email": "...", "dob": "..." },
   "accounts": [...],
   "transactions": [...],
-  "dsar_history": [...],
-  "access_audit": [ /* who at the bank looked at this customer's data */ ]
+  "dsar_history": [...]
 }
 ```
 
@@ -75,13 +75,16 @@ WHERE customer_id = 42 AND status IN ('open','in_progress');
 
 ### 4. Verify the audit trail
 
-The fact that *you* ran this query also lands in `access_logs` at a real bank. Confirm:
+A real production system emits a row in `access_logs` for every query against PII tables (typically via `pg_stat_statements` + a trigger). In this lab the table is pre-seeded with historical activity rather than capturing your queries. Confirm the table contains evidence of who has been touching `bank.customers`:
 
 ```sql
-SELECT * FROM bank.access_logs WHERE accessed_at >= now() - interval '5 minutes';
+SELECT al.accessed_at, e.full_name AS who, al.operation, al.rows_returned
+FROM bank.access_logs al
+JOIN bank.employees e ON e.employee_id = al.employee_id
+WHERE al.table_accessed = 'bank.customers'
+ORDER BY al.accessed_at DESC
+LIMIT 5;
 ```
-
-(In our lab, access_logs is seeded historically; in production, the database emits one row per query via `pg_stat_statements` + a trigger.)
 
 ## Edge cases
 

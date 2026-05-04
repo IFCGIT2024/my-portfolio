@@ -69,7 +69,8 @@ GRANT CONNECT ON DATABASE dataguard          TO r_branch_staff;
 GRANT USAGE   ON SCHEMA bank                 TO r_branch_staff;
 GRANT SELECT  ON bank.v_branch_customer_summary TO r_branch_staff;
 
-CREATE USER branch_demo WITH PASSWORD 'lab_branch_2026' IN ROLE r_branch_staff;
+CREATE USER branch_demo WITH PASSWORD 'lab_branch_2026';
+GRANT r_branch_staff TO branch_demo;
 
 -- 5. Verify
 SET ROLE branch_demo;
@@ -117,26 +118,22 @@ Key takeaways most candidates miss in interviews:
 ```sql
 SELECT jsonb_pretty(
   jsonb_build_object(
-    'customer',      to_jsonb(c.*) - 'nino' - 'passport_number',  -- redact at export time? policy choice
+    'customer',      to_jsonb(c.*),
     'accounts',      (SELECT jsonb_agg(to_jsonb(a)) FROM bank.accounts     a WHERE a.customer_id = c.customer_id),
     'transactions',  (SELECT jsonb_agg(to_jsonb(t))
                       FROM bank.transactions t
                       JOIN bank.accounts     a ON a.account_id = t.account_id
                       WHERE a.customer_id = c.customer_id),
-    'dsar_history',  (SELECT jsonb_agg(to_jsonb(d)) FROM bank.dsar_requests d WHERE d.customer_id = c.customer_id),
-    'access_audit',  (SELECT jsonb_agg(jsonb_build_object(
-                                'employee', e.full_name,
-                                'department', e.department,
-                                'table', al.table_accessed,
-                                'when', al.accessed_at))
-                      FROM bank.access_logs al
-                      JOIN bank.employees   e ON e.employee_id = al.employee_id
-                      WHERE al.table_accessed IN ('bank.customers','bank.accounts','bank.transactions'))
+    'dsar_history',  (SELECT jsonb_agg(to_jsonb(d)) FROM bank.dsar_requests d WHERE d.customer_id = c.customer_id)
   )
 ) AS dsar_export
 FROM bank.customers c
 WHERE c.customer_id = 42;
 ```
+
+> **Note on redaction.** A GDPR Article 15 export to the data subject must include *their* personal data — you do **not** redact the requester's own NINO or passport number from their own subject access response. Redaction applies only to *other* individuals' data that may appear inside a record (e.g. a transaction counterparty who is also a customer). For this lab the simpler unredacted export above is correct.
+
+> **Note on `access_audit`.** Earlier drafts of this lab included an `access_audit` block, but the lab schema's `access_logs` table records only the employee and the table they accessed — not the customer record they touched. With this schema we cannot truthfully filter audit history to a single customer. In a production system the access table would carry the customer identifier, and Art. 15 *would* require including it.
 
 ```sql
 UPDATE bank.dsar_requests

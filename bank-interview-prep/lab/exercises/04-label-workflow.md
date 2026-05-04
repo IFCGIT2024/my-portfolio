@@ -36,10 +36,12 @@ Process at least 5 candidates. Mix `accept`, `override`, and `reject` so you exe
 ### Phase C — Coverage check (DSPM + Privacy together)
 
 ```bash
-python 05_audit_report.py -o /tmp/audit.md
+python 05_audit_report.py             # prints to terminal
+# or, to save the report to a file:
+python 05_audit_report.py -o coverage_report.md
 ```
 
-Open the file. The first table is the coverage matrix: every table, % classified.
+Open the file (or scroll the terminal output). The first table is the coverage matrix: every table, % classified.
 
 **Question for your stand-up:** which table has the lowest coverage? (Hint: it should be `transactions` or `dsar_requests` — these were intentionally seeded with no labels.)
 

@@ -32,7 +32,7 @@ A real bank's classification register starts at 0% coverage and climbs over mont
 
 ## Verify
 
-When complete, your query should return roughly **10–15 rows** (depends on which tables you flag). Examples that *should* appear: `transactions.reference`, `customers.passport_number`, `customers.phone`, `accounts.iban`, `accounts.balance_pence`.
+When complete, your query should return roughly **10–14 rows** (depends on which tables you flag). Examples that *should* appear: `transactions.reference`, `customers.passport_number`, `accounts.iban`, `accounts.balance_pence`. (Note: `customers.phone` is *pre-classified* in the seed and should not appear; if it does, add a join condition to filter it out.)
 
 ## Bonus
 

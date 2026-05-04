@@ -272,9 +272,7 @@ ${_callout('warning', '&#128250; Windows &mdash; two things before you continue'
   <li><strong>Windows:</strong> Right-click the downloaded ZIP &rarr; <em>Extract All</em> &rarr; pick a location &rarr; Extract</li>
   <li><strong>Mac:</strong> Double-click the ZIP &mdash; it extracts automatically</li>
 </ul>
-<p>Open VS Code. Go to <strong>File &rarr; Open Folder</strong>. Inside the extracted folder, navigate into <code>bank-interview-prep</code> and open the <code>lab</code> folder:</p>
-<pre style="background:var(--card);padding:10px 16px;border-radius:8px;font-size:0.85rem;color:var(--accent)">bank-interview-prep / lab</pre>
-<p>You will see the lab files appear in the VS Code left panel. The folder contains:</p>
+<p>Open VS Code. Go to <strong>File &rarr; Open Folder</strong>, then open the <code>lab</code> folder from the extracted files. Once open, you will see these files in the left panel:</p>
 <pre style="background:var(--card);padding:14px 18px;border-radius:8px;font-size:0.82rem;color:#b8cce0;overflow-x:auto;line-height:1.8">lab/
 ├── docker-compose.yml     ← tells Docker how to run the database
 ├── .env.example           ← connection settings template

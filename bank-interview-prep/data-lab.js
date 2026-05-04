@@ -218,6 +218,160 @@ WHERE customer_id = 42 AND status IN ('open','in_progress');`);
 `-- In production, every query emits a row here via pg_stat_statements + trigger
 SELECT * FROM bank.access_logs ORDER BY accessed_at DESC LIMIT 5;`);
 
+  // ---- Scaffolded query blocks for exercises ----
+
+  const cb_ex1_step1 = _cb('sql',
+`-- See every column in the bank schema
+SELECT table_name, column_name, data_type
+FROM information_schema.columns
+WHERE table_schema = 'bank'
+ORDER BY table_name, ordinal_position;
+-- Expected: ~60 rows covering customers, accounts, transactions, etc.`);
+
+  const cb_ex1_step2 = _cb('sql',
+`-- Filter for columns whose names suggest PII
+-- ILIKE is case-insensitive pattern matching
+-- ANY(ARRAY[...]) tests multiple patterns in one clause
+SELECT table_name, column_name, data_type
+FROM information_schema.columns
+WHERE table_schema = 'bank'
+  AND column_name ILIKE ANY(ARRAY[
+    '%name%', '%email%', '%phone%', '%address%', '%postcode%',
+    '%dob%',  '%birth%', '%nino%',  '%passport%', '%iban%',
+    '%account%', '%sort%'
+  ])
+ORDER BY table_name, column_name;
+-- Expected: ~15-20 rows -- the columns that look like personal data`);
+
+  const cb_ex1_full = _cb('sql',
+`-- The complete query: PII-shaped columns with NO entry in data_catalog
+SELECT
+  c.table_name,
+  c.column_name,
+  c.data_type,
+  COALESCE(s.n_live_tup, 0) AS est_row_count
+FROM information_schema.columns c
+JOIN information_schema.tables t
+  ON  t.table_schema = c.table_schema
+  AND t.table_name   = c.table_name
+LEFT JOIN bank.data_catalog dc
+  ON  dc.table_name  = c.table_name
+  AND dc.column_name = c.column_name
+LEFT JOIN pg_stat_user_tables s
+  ON s.relname = c.table_name
+WHERE c.table_schema = 'bank'
+  AND t.table_type   = 'BASE TABLE'
+  AND c.column_name  ILIKE ANY(ARRAY[
+    '%name%', '%email%', '%phone%', '%address%', '%postcode%',
+    '%dob%',  '%birth%', '%nino%',  '%passport%', '%iban%',
+    '%account%', '%sort%'
+  ])
+  AND dc.column_name IS NULL    -- LEFT JOIN found no match = unclassified
+ORDER BY est_row_count DESC;    -- highest row count first = highest risk first`);
+
+  const cb_ex1_stale = _cb('sql',
+`-- Bonus: labels that exist but have not been reviewed in 180+ days
+SELECT
+  table_name,
+  column_name,
+  classification_label,
+  last_reviewed_at,
+  NOW() - last_reviewed_at  AS age
+FROM bank.data_catalog
+WHERE last_reviewed_at < NOW() - INTERVAL '180 days'
+ORDER BY last_reviewed_at ASC;
+-- Stale labels are a real compliance risk: schema changes may have made them wrong.`);
+
+  const cb_ex2_view = _cb('sql',
+`-- Step 1: create the view -- the only object branch staff will ever query
+-- Deliberately omits: full_name, nino, passport_number, sort_code, address_line1
+CREATE OR REPLACE VIEW bank.v_branch_customer_summary AS
+SELECT
+  c.customer_id,
+  'Customer #' || c.customer_id           AS pseudonym,
+  c.email,
+  EXTRACT(YEAR FROM c.date_of_birth)::int AS year_of_birth,
+  COUNT(a.account_id)                     AS n_accounts,
+  ROUND(SUM(a.balance_pence) / 100.0, 2) AS total_balance_pounds
+FROM bank.customers c
+LEFT JOIN bank.accounts a ON a.customer_id = c.customer_id
+GROUP BY c.customer_id, c.email, c.date_of_birth;
+
+-- Verify before applying access controls:
+SELECT * FROM bank.v_branch_customer_summary LIMIT 5;`);
+
+  const cb_ex2_role = _cb('sql',
+`-- Step 2: create the role (NOLOGIN = a permission container, not a login account)
+CREATE ROLE r_branch_staff NOLOGIN;
+
+-- Step 3: grant exactly what is needed -- nothing more
+GRANT CONNECT ON DATABASE dataguard              TO r_branch_staff;
+GRANT USAGE   ON SCHEMA   bank                  TO r_branch_staff;
+GRANT SELECT  ON bank.v_branch_customer_summary TO r_branch_staff;
+-- We grant SELECT on the VIEW only -- not on any base table
+
+-- Step 4: create a real login user and assign to the role
+CREATE USER branch_demo WITH PASSWORD 'BranchDemo2024!';
+GRANT r_branch_staff TO branch_demo;`);
+
+  const cb_ex3_count = _cb('sql',
+`-- Total findings the scanner produced
+SELECT COUNT(*) AS total_findings FROM bank.audit_findings;
+
+-- Break down by table
+SELECT table_name, COUNT(*) AS findings
+FROM bank.audit_findings
+GROUP BY table_name
+ORDER BY findings DESC;`);
+
+  const cb_ex3_disagree = _cb('sql',
+`-- Where the scanner's evidence conflicts with the existing catalog label
+-- These are your highest-priority review items
+SELECT
+  af.table_name,
+  af.column_name,
+  dc.classification_label AS catalog_label,
+  af.evidence->>'rule'    AS scanner_rule,
+  af.severity             AS scanner_severity
+FROM bank.audit_findings af
+JOIN bank.data_catalog dc
+  ON  dc.table_name  = af.table_name
+  AND dc.column_name = af.column_name
+WHERE af.severity IN ('high','critical')
+ORDER BY af.table_name, af.column_name;`);
+
+  const cb_ex5_check_req = _cb('sql',
+`-- Read the actual DSAR request record first
+SELECT
+  request_id,
+  customer_id,
+  submitted_at,
+  NOW() - submitted_at   AS age,
+  status,
+  handler_email
+FROM bank.dsar_requests
+WHERE customer_id = 42;
+-- Check the 'age' column. Legal deadline = submitted_at + 30 days.`);
+
+  const cb_ex5_verify_data = _cb('sql',
+`-- Count how many records the bank holds per table for customer 42
+-- Every row here is personal data you must include in the export
+SELECT 'customers'    AS source, COUNT(*) AS records
+  FROM bank.customers       WHERE customer_id = 42
+UNION ALL
+SELECT 'accounts',              COUNT(*)
+  FROM bank.accounts        WHERE customer_id = 42
+UNION ALL
+SELECT 'transactions',          COUNT(*)
+  FROM bank.transactions
+  WHERE account_id IN (SELECT account_id FROM bank.accounts WHERE customer_id = 42)
+UNION ALL
+SELECT 'dsar_requests',         COUNT(*)
+  FROM bank.dsar_requests   WHERE customer_id = 42
+UNION ALL
+SELECT 'access_logs',           COUNT(*)
+  FROM bank.access_logs     WHERE user_id = '42';`);
+
   // ---- Tab content ----
 
   const overview = `
@@ -369,173 +523,351 @@ ${_table(
 `;
 
   const ex1 = `
-${_callout('info', '&#127919; Scenario', '<strong>Role:</strong> DSPM Engineer. <strong>Stakeholder:</strong> The Compliance Officer is preparing the quarterly DORA evidence pack and needs a list of every column that <em>looks like</em> PII but has no classification label.')}
+${_callout('info', '&#127919; Your Brief', '<strong>You are:</strong> DSPM Engineer, week one at DataGuard Bank. Your manager says: &ldquo;Before Friday&rsquo;s DORA evidence review, I need a list of every column in the database that looks like personal data but has no classification label. Sort it by risk &mdash; most data first.&rdquo; This is the query your team runs every Monday morning.')}
 
-<h2>Goal</h2>
-<p>Write a <strong>single SQL query</strong> against the lab database that returns every column in the <code>bank</code> schema with no row in <code>data_catalog</code>, filtered to those whose name suggests PII.</p>
+<h2>Why This Query Exists</h2>
+<p>A <strong>data catalog</strong> is the bank&rsquo;s official register of what data it holds and how sensitive each piece is. Every column in every table should have an entry in the catalog: what classification tier is this, who owns it, when was it last reviewed?</p>
+<p>In practice, catalogs are never 100% complete. Engineers add tables without registering them. Schema changes add columns that slip through. An unclassified column is a <strong>compliance gap</strong> &mdash; no one has decided whether it needs encryption, access controls, or a retention policy. Regulators treat this as a control failure. Your query finds those gaps so they can be closed.</p>
 
+<h2>The Four Tables You Will Use</h2>
 ${_table(
-  ['Output Column', 'Description'],
+  ['Table', 'Where it lives', 'What it contains'],
   [
-    ['<code>table_name</code>', 'Table in the bank schema'],
-    ['<code>column_name</code>', 'The suspect column'],
-    ['<code>data_type</code>', 'Postgres data type'],
-    ['<code>est_row_count</code>', 'From <code>pg_stat_user_tables</code> &mdash; more rows = more risk']
+    ['<code>information_schema.columns</code>', 'Built into every Postgres database', 'One row per column in the entire database: table name, column name, data type. This is the ground truth of what columns exist.'],
+    ['<code>information_schema.tables</code>', 'Built into every Postgres database', 'One row per table. You will use this to filter out views and keep only real base tables.'],
+    ['<code>bank.data_catalog</code>', 'The lab database', 'The classification register. Each row is a column that has been reviewed, labelled, and approved by the privacy team.'],
+    ['<code>pg_stat_user_tables</code>', 'Built into every Postgres database', 'Estimated row counts per table. You use this to prioritise: a 25,000-row PII column carries far more regulatory risk than a 5-row lookup table.']
   ]
 )}
 
-<h2>Constraints</h2>
-<ul>
-  <li>Single <code>SELECT</code> &mdash; no procedural code, no temp tables</li>
-  <li>Must use <code>information_schema.columns</code> and <code>information_schema.tables</code></li>
-  <li>Must <code>LEFT JOIN bank.data_catalog</code> and filter where the join produces no match</li>
-  <li>Filter column names matching: NINO, passport, account, IBAN, email, phone, DOB, address, postcode, name</li>
-</ul>
-
-<h2>How to Connect</h2>
+<h2>How to Open Adminer and Run Queries</h2>
 ${cb_ex1_connect}
 
-<h2>Verify</h2>
-<p>Your query should return roughly <strong>10&ndash;15 rows</strong>. These should appear: <code>customers.passport_number</code>, <code>customers.phone</code>, <code>customers.address_line1</code>, <code>accounts.iban</code>, <code>accounts.balance_pence</code>, <code>transactions.reference</code>.</p>
+<h2>Step 1 &mdash; Understand the Schema</h2>
+<p>Before writing any complex query, always start by seeing what you are working with. Run this and scroll through the results:</p>
+${cb_ex1_step1}
+<p>You should see around <strong>60 rows</strong> covering tables like <code>customers</code>, <code>accounts</code>, <code>transactions</code>. Notice column names like <code>nino</code>, <code>passport_number</code>, <code>iban</code> &mdash; obviously personal data. And <code>txn_id</code>, <code>channel</code>, <code>balance_pence</code> &mdash; less obvious. You cannot manually review all 60 every week. That is why we filter.</p>
 
-<h2>Bonus</h2>
-<p>Extend the query to also flag rows in <code>data_catalog</code> where <code>last_reviewed_at</code> is older than 180 days &mdash; these are <em>stale</em> labels that may no longer reflect reality after schema changes.</p>
+<h2>Step 2 &mdash; Filter for PII-Shaped Column Names</h2>
+<p><code>ILIKE ANY(ARRAY[...])</code> is the key SQL construct here. <code>ILIKE</code> is case-insensitive pattern matching (like <code>LIKE</code> but ignoring case). <code>ANY(ARRAY[...])</code> lets you test against many patterns in a single clause rather than chaining multiple <code>OR</code> conditions. This is the standard approach for building a PII name-pattern filter in SQL:</p>
+${cb_ex1_step2}
+<p>You should see roughly <strong>15&ndash;20 rows</strong> now. You have narrowed from 60 columns to the ones whose names alone signal personal data. These are your candidates for classification.</p>
 
-${_callout('success', '&#128161; What Good Looks Like', "A real bank's classification register starts at 0% coverage and climbs over months. A query like yours runs weekly to catch regression &mdash; when an engineer adds a new table without a catalog entry, this query catches it within 7 days.")}
+<h2>Step 3 &mdash; Find the Gaps</h2>
+<p>Now add the <code>LEFT JOIN</code> to <code>data_catalog</code>. A <code>LEFT JOIN</code> returns <em>all</em> rows from the left table whether or not a match exists on the right. When there is no matching row on the right, those columns come back as <code>NULL</code>. Filtering for <code>dc.column_name IS NULL</code> isolates exactly the columns that exist in the schema but are <strong>absent from the catalog</strong> &mdash; your classification gaps.</p>
+${cb_ex1_full}
 
-<p style="margin-top:24px;color:var(--text-muted)"><em>&#128214; Solutions in <code>lab/exercises/SOLUTIONS.md</code> &rarr; Exercise 1</em></p>
+<h2>Reading Your Output</h2>
+<p>You should see <strong>10&ndash;14 rows</strong>. Here is how to interpret each column:</p>
+${_table(
+  ['Column', 'What it tells you', 'What to do with it'],
+  [
+    ['<code>table_name</code>', 'Which table the unclassified column lives in', 'Tables with multiple gaps are highest priority. Note any table appearing more than twice.'],
+    ['<code>column_name</code>', 'The specific column with no catalog entry', 'This is the item that needs a classification decision: what tier is it, who owns it, when reviewed.'],
+    ['<code>data_type</code>', 'Postgres data type (text, date, integer...)', 'A <code>date</code> column named <code>date_of_birth</code> is certain PII. A <code>text</code> column named <code>reference</code> needs investigation.'],
+    ['<code>est_row_count</code>', 'Estimated number of rows in the parent table', 'Higher = more people potentially affected = higher regulatory exposure. Results are already sorted highest first.']
+  ]
+)}
+<p>You should see <code>customers</code> columns near the top (500 rows), then <code>accounts</code> (~1,210). If any <code>transactions</code> column appears (25,000 rows), that is your <strong>Priority 1 finding</strong> &mdash; 25,000 rows of potentially unclassified payment data is a serious regulatory gap. Note it explicitly.</p>
+
+<h2>Analyse Your Results</h2>
+<p>Answer these four questions before moving on. Write the answers down &mdash; you will need them for the final report.</p>
+<ol>
+  <li><strong>How many unclassified PII-candidate columns did you find?</strong> This is your headline gap count.</li>
+  <li><strong>Which table has the most gaps?</strong> Is it also the table with the most rows?</li>
+  <li><strong>Is <code>transactions.reference</code> in your results?</strong> If yes, note it: a free-text payment reference field often contains names and dates typed by tellers. The column name alone gives no hint &mdash; only the automated scanner in Exercise 3 would catch this.</li>
+  <li><strong>Draft one sentence for the Compliance Officer:</strong> &ldquo;I found N unclassified PII columns across X tables; the highest-risk item is Y because...&rdquo;</li>
+</ol>
+
+<h2>Bonus &mdash; Stale Labels</h2>
+<p>A column with an old label can be as risky as one with no label. If a schema changed 18 months ago and no one re-reviewed the classification, the label may now be wrong. Most UK banks set a maximum review age (typically 12 months). Run this to find labels past that threshold:</p>
+${cb_ex1_stale}
+
+${_callout('success', '&#128196; Report Section 1 &mdash; Unclassified PII Register', 'From the Step 3 query output, note: the total row count, the top 5 highest-risk columns by <code>est_row_count</code>, and any transaction columns flagged as Priority 1. This is the first section of your <strong>Data Classification Health Report</strong>. You will compile the full report in the final tab.')}
+
+<p style="margin-top:24px;color:var(--text-muted)"><em>&#128214; Full worked solution in <code>SOLUTIONS.md</code> (included in the lab download) &rarr; Exercise 1</em></p>
 `;
 
   const ex2 = `
-${_callout('info', '&#127919; Scenario', '<strong>Role:</strong> DSPM Engineer + IAM Admin. <strong>Stakeholder:</strong> Head of Retail wants 12 new branch staff to have <em>some</em> customer visibility for service queries &mdash; but absolutely no access to NINOs, passport numbers, sort codes, or account numbers.')}
+${_callout('info', '&#127919; Your Brief', '<strong>You are:</strong> DSPM Engineer + IAM Admin. The Head of Retail has approved 12 new branch staff for customer data access. They need enough visibility to answer service queries (&ldquo;what accounts does this customer have?&rdquo;) but must be completely blocked from National Insurance numbers, passport numbers, sort codes, and raw account balances. Create the role, test it, and document the design.')}
 
-<h2>Tasks</h2>
-<ol>
-  <li><strong>Create a view</strong> <code>bank.v_branch_customer_summary</code> joining <code>customers</code> and <code>accounts</code>, exposing only: <code>customer_id</code>, a <code>pseudonym</code> (e.g. <code>Customer #42</code>), <code>email</code>, <code>year_of_birth</code>, <code>n_accounts</code>, <code>total_balance_pounds</code> (rounded, not pence)</li>
-  <li><strong>Create the role</strong> <code>r_branch_staff</code> with no login capability</li>
-  <li><strong>Grant</strong> CONNECT on the database, USAGE on the schema, SELECT on the view only &mdash; nothing else</li>
-  <li><strong>Create user</strong> <code>branch_demo</code> with a password, assigned to role <code>r_branch_staff</code></li>
-  <li><strong>Verify</strong> both the allowed and blocked paths:</li>
-</ol>
+<h2>Why Roles, Not Passwords</h2>
+<p>The naive approach is to give everyone the same database login and trust staff to &ldquo;only look at what they need.&rdquo; This fails three ways: it is <strong>unauditable</strong> (you cannot prove who queried what), it is <strong>unenforceable</strong> (trust is not a technical control), and a single compromised password exposes everything to everyone.</p>
+<p><strong>Role-based access control (RBAC)</strong> is the correct approach. A role is a named set of permissions. You grant permissions to the role, then assign individual users to it. The database enforces the role automatically &mdash; not a policy document, not a verbal agreement. If the role cannot SELECT from <code>customers.passport_number</code>, no user in that role can access it regardless of how they try.</p>
+<p>A further layer: rather than granting access to entire base tables (which exposes all columns), you create a <strong>view</strong> that deliberately exposes only the columns you have reviewed and approved. If an engineer adds a new sensitive column to <code>customers</code> next week, branch staff still cannot see it &mdash; it is not in the view. This is called <strong>mediated access</strong> and is standard at every UK retail bank.</p>
 
-${cb_ex2_verify}
-
-<h2>Defensive Design Checks</h2>
-<p>Before declaring done, answer these in a comment block at the top of your script:</p>
-<ul>
-  <li>What happens if an engineer adds <code>passport_number_v2</code> to <code>customers</code> next week? Does your role inadvertently expose it?</li>
-  <li>What password rotation policy applies to <code>branch_demo</code>?</li>
-  <li>Is there an audit log of branch staff queries? Where?</li>
-</ul>
-
-${_callout('success', '&#128161; What Good Looks Like', 'The pattern is <strong>mediated access through views</strong>. Branch staff never query base tables. The view is the contract &mdash; change it intentionally, and you change what 200 staff can see. This is standard at every UK retail bank. The view also protects you: future schema additions to <code>customers</code> are not exposed until you explicitly update the view.')}
-
-<p style="margin-top:24px;color:var(--text-muted)"><em>&#128214; Solutions in <code>lab/exercises/SOLUTIONS.md</code> &rarr; Exercise 2</em></p>
-`;
-
-  const ex3 = `
-${_callout('info', '&#127919; Scenario', '<strong>Role:</strong> DSPM Engineer. <strong>Stakeholder:</strong> Privacy team reports the scanner is flagging too many <code>email</code> columns as <code>Restricted</code> when they should be <code>Internal</code>.')}
-
-<h2>Step 1 &mdash; Run the scanner end-to-end</h2>
-${cb_ex3_run}
-
-<h2>Step 2 &mdash; Inspect the findings table</h2>
-${cb_ex3_inspect}
-
-<h2>Step 3 &mdash; Tune one rule</h2>
-<p>The seed contains a rule called <code>Email address</code> that suggests <code>Internal</code>. Suppose Privacy says a specific marketing distribution list should be <code>Public</code>. Without changing the schema, tune the rule:</p>
-${cb_ex3_tune}
-
-<p>Re-run <code>02_pii_scanner.py</code>. What changed in the findings table?</p>
-
-${_callout('warning', '&#9888; Was That the Right Call?', "<strong>No.</strong> Narrowing the column pattern is fine &mdash; but downgrading <em>email</em> to Public is wrong; all emails are still PII under GDPR regardless of intent. The correct approach: <em>revert</em> the label change and instead create a <em>new</em> rule targeted specifically at <code>%marketing_email%</code> columns. Every rule change at a real bank has a one-paragraph justification, a named owner, and a rollback plan.")}
-
-<h2>Reflection Questions</h2>
-<ul>
-  <li>If you change a rule already applied to 4,000 columns, what should happen to those existing labels? <em>(They should be queued for human re-review &mdash; not silently overwritten.)</em></li>
-  <li>The scanner's email regex is simplified. What real-world addresses does it miss? <em>(Addresses with <code>+</code> sub-addressing, internationalised domains, IPv6 literals.)</em></li>
-  <li>At scale, a real bank runs 150&ndash;500 rules. A single 1-rule change can trigger thousands of label flips and cascade into hundreds of human review items. What governance gate should exist before a rule is changed?</li>
-</ul>
-
-<p style="margin-top:24px;color:var(--text-muted)"><em>&#128214; Solutions in <code>lab/exercises/SOLUTIONS.md</code> &rarr; Exercise 3</em></p>
-`;
-
-  const ex4 = `
-${_callout('info', '&#127919; Scenario', '<strong>Role:</strong> Privacy Analyst. <strong>Stakeholder:</strong> DSPM Engineer pushed 200 new auto-proposals overnight. You must clear the review queue before the 10 a.m. compliance stand-up.')}
-
-<h2>Phase A &mdash; Auto-classification (DSPM Engineer)</h2>
-${cb_ex4_phase_a}
-${cb_ex4_check}
-
-<h2>Phase B &mdash; Human review (Privacy Analyst)</h2>
-${cb_ex4_review}
-<p>Walk through the queue. For each candidate, answer three questions before pressing a key:</p>
-<ol>
-  <li>Does the column name match the rule's intent? (e.g. <code>mortgage_account_number</code> looks like an account number &mdash; is the suggested label correct?)</li>
-  <li>Are sample values consistent? (Open Adminer, run <code>SELECT col FROM table LIMIT 5</code>.)</li>
-  <li>Who is the data owner? (Default: <code>farouk.ahmed@dga-bank.test</code>)</li>
-</ol>
-<p>Process at least 5 candidates. Mix <strong>accept</strong>, <strong>override</strong>, and <strong>reject</strong> so you exercise all code paths.</p>
-
-<h2>Phase C &mdash; Coverage check (DSPM + Privacy together)</h2>
-${cb_ex4_report}
-<p>The first table in the report is the coverage matrix: every table, percentage classified. <strong>Which table has the lowest coverage?</strong> (Hint: <code>transactions</code> or <code>dsar_requests</code> &mdash; intentionally seeded with no labels.)</p>
-
-<h2>Phase D &mdash; Close the loop</h2>
-<p>Pick the worst-covered table and write the missing catalog rows yourself. Template for <code>transactions</code>:</p>
-${cb_ex4_insert}
-
-${_callout('warning', '&#9888; Why is <code>reference</code> Highly Restricted?', 'Run: <code>SELECT reference FROM bank.transactions WHERE reference ILIKE \'For %\' LIMIT 5;</code> &mdash; that free-text field contains DOBs and full names typed in by tellers. A classic spillage point. Multiple UK banks have received GDPR fines tied to free-text fields exactly like this.')}
-
-<h2>Phase E &mdash; Re-run the audit</h2>
-${cb_ex4_rerun}
-<p>Coverage should now be visibly higher. <strong>Save this Markdown report</strong> &mdash; that's the artefact you bring to the next compliance review and the evidence pack for the regulator.</p>
-
-<h2>Reflection</h2>
-<ul>
-  <li>How long does this workflow take at a real bank? (~Daily for routine deltas; weekly for new tables; quarterly for full reviews.)</li>
-  <li>Who signs off the report before it goes to the regulator? (Data Protection Lead.)</li>
-  <li>What automation trigger would speed this up? (Hook the scanner into the deployment pipeline so any new table fails CI without a catalog entry.)</li>
-</ul>
-
-<p style="margin-top:24px;color:var(--text-muted)"><em>&#128214; Solutions in <code>lab/exercises/SOLUTIONS.md</code> &rarr; Exercise 4</em></p>
-`;
-
-  const ex5 = `
-${_callout('info', '&#127919; Scenario', '<strong>Role:</strong> Privacy Analyst. <strong>Stakeholder:</strong> A customer wrote in 28 days ago invoking GDPR Article 15. You have <strong>2 days left</strong> to deliver every piece of personal data the bank holds about them &mdash; in portable format.')}
-
-<h2>Goal &mdash; Customer #42</h2>
-<p>Identify every table containing data about customer 42, extract a complete JSON export, and close the DSAR request with <code>status = 'fulfilled'</code>.</p>
-
-${_callout('warning', '&#9888; Why This Is Hard', "The customer's data is scattered across 5 tables: <code>customers</code>, <code>accounts</code>, <code>transactions</code>, <code>dsar_requests</code>, and <code>access_logs</code>. Miss one table and the bank is non-compliant. The <code>data_catalog</code> is the map that tells you where to look &mdash; without it, you're hunting manually.")}
-
-<h2>Step 1 &mdash; Discover all in-scope tables</h2>
-${cb_ex5_discover}
-
-<h2>Step 2 &mdash; Build the JSON export</h2>
-<p>A single query using <code>jsonb_build_object()</code> and <code>jsonb_agg()</code> across all five tables:</p>
-${cb_ex5_export}
-
-<h2>Step 3 &mdash; Mark the request fulfilled</h2>
-${cb_ex5_fulfill}
-
-<h2>Step 4 &mdash; Confirm the audit trail</h2>
-${cb_ex5_audit}
-
-<h2>Key Facts &mdash; Quote These in Interview</h2>
+<h2>What You Will Build</h2>
 ${_table(
-  ['Point', 'Detail'],
+  ['Object', 'Type', 'Purpose'],
   [
-    ['GDPR Art. 12(3) deadline', 'One calendar month, extendable by two further months for complex requests'],
-    ['Fine for missing deadline', 'Up to 4% of global annual turnover under GDPR Art. 83'],
-    ['What classification enables', 'Without the catalog, you have no automated map of where data lives &mdash; every DSAR becomes a 3-week manual hunt'],
-    ['Mature bank approach', 'One-click DSAR pipeline: system auto-extracts from every tagged source; portable PDF + JSON bundle auto-generated; secure portal delivery']
+    ['<code>bank.v_branch_customer_summary</code>', 'View', 'The safe window into customer data. Exposes only approved columns. Branch staff query this view &mdash; never the base table.'],
+    ['<code>r_branch_staff</code>', 'Role (no login)', 'A named permission set. You grant permissions to the role; users are then assigned to it.'],
+    ['<code>branch_demo</code>', 'Login user', 'A real database user assigned to the role. Used to test both permitted and blocked access paths.']
   ]
 )}
 
-${_callout('success', '&#128161; The Core Point', 'Your <code>data_catalog</code> is the bank\'s "where does data live" map. The quality of your classification programme directly determines how fast you can fulfill DSARs. Bad catalog = weeks of manual discovery. Good catalog = 10-minute automated export. This is the argument you make to every sceptical stakeholder.')}
+<h2>Step 1 &mdash; Create the View</h2>
+<p>Look at the design choices before running it:</p>
+<ul>
+  <li><code>'Customer #' || customer_id</code> creates a pseudonym &mdash; branch staff refer to a customer without ever seeing their real name. This is the GDPR data minimisation principle in practice.</li>
+  <li><code>EXTRACT(YEAR FROM date_of_birth)</code> gives age-band information without exposing the exact date of birth. A branch agent can say &ldquo;born in 1985&rdquo; without the exact date being visible.</li>
+  <li><code>ROUND(SUM(balance_pence) / 100.0, 2)</code> shows total wealth across all accounts in pounds &mdash; enough for a service query, without revealing individual account balances or IBANs.</li>
+</ul>
+${cb_ex2_view}
+<p>Run the verification query at the bottom. Confirm the output shows: pseudonym, email, year_of_birth, n_accounts, total_balance_pounds &mdash; and nothing else.</p>
 
-<p style="margin-top:24px;color:var(--text-muted)"><em>&#128214; Solutions in <code>lab/exercises/SOLUTIONS.md</code> &rarr; Exercise 5</em></p>
+<h2>Steps 2&ndash;4 &mdash; Create the Role, Grants, and User</h2>
+<p><code>NOLOGIN</code> on the role means it is a permission container only &mdash; it cannot connect to the database directly. This means you can revoke all 12 branch staff members&rsquo; access in one command (<code>REVOKE r_branch_staff FROM all_branch_users</code>) rather than managing 12 individual account grants.</p>
+${cb_ex2_role}
+
+<h2>Step 5 &mdash; Test Both Paths</h2>
+<p>This step is not optional. You must verify both that permitted access works <em>and</em> that blocked access is actually blocked. Run both queries in Adminer:</p>
+${cb_ex2_verify}
+<p><strong>Expected results:</strong></p>
+<ul>
+  <li><code>SELECT * FROM bank.customers LIMIT 1</code> &rarr; <strong>ERROR: permission denied for table customers</strong>. Correct. Branch staff cannot touch the base table.</li>
+  <li><code>SELECT * FROM bank.v_branch_customer_summary LIMIT 3</code> &rarr; <strong>3 rows</strong> with only: pseudonym, email, year_of_birth, n_accounts, total_balance_pounds. No names. No NINOs. No IBANs.</li>
+</ul>
+<p>If the first query succeeds instead of erroring, the role is misconfigured. Re-check your GRANT statements and confirm you only granted SELECT on the view, not on any base table.</p>
+
+<h2>Defensive Design &mdash; Three Questions to Answer</h2>
+<p>A real bank&rsquo;s compliance team would ask these during a controls review. Work through each one:</p>
+${_table(
+  ['Question', 'Why it matters', 'Answer for this lab'],
+  [
+    ['An engineer adds a new <code>credit_score</code> column to <code>customers</code> next week. Do branch staff see it?', 'Without mediated access, any new column added to a base table is immediately visible to everyone with table-level grants', 'Safe: the view is an explicit allowlist. New base-table columns are invisible to <code>r_branch_staff</code> until you deliberately add them to the view definition.'],
+    ['What password policy applies to <code>branch_demo</code>?', 'Weak or static passwords on role-assigned users defeat the entire access control model', 'In production: 90-day forced rotation, MFA required, login audit on every session. In this lab: document it as a known gap to address before production use.'],
+    ['Is there an audit log of branch staff queries?', 'Regulators require evidence that controls were enforced AND monitored. Controls without monitoring are not sufficient.', 'Yes: <code>bank.access_logs</code> captures query activity. You will examine this in Exercise 5.']
+  ]
+)}
+
+${_callout('success', '&#128196; Report Section 2 &mdash; Access Control Evidence', 'Your evidence for this section is the output of the two test queries: the permission-denied error and the successful view query. Record: view name, role name, columns exposed, columns blocked, and your answer to the &ldquo;new column&rdquo; defensive design question. An auditor reviewing your access controls will request exactly this. This is <strong>Section 2 of your Data Classification Health Report</strong>.')}
+
+<p style="margin-top:24px;color:var(--text-muted)"><em>&#128214; Full worked solution in <code>SOLUTIONS.md</code> (included in the lab download) &rarr; Exercise 2</em></p>
+`;
+
+  const ex3 = `
+${_callout('info', '&#127919; Your Brief', '<strong>You are:</strong> DSPM Engineer. The Privacy Lead tells you: &ldquo;The SQL query in Exercise 1 only catches columns whose <em>names</em> suggest PII. But what about a column called <code>reference</code> that actually contains names and dates of birth typed in by tellers? The automated scanner reads actual data values. Run it, inspect what it found, and tune the email rule &mdash; the privacy team thinks it&rsquo;s over-flagging.&rdquo;')}
+
+<h2>How the Scanner Works</h2>
+<p>The scanner in <code>02_pii_scanner.py</code> does something the SQL query in Exercise 1 cannot: it reads actual cell values from every column in the bank schema, tests them against regex patterns stored in <code>bank.classification_rules</code>, and scores confidence based on what fraction of sampled values match. A column called <code>reference</code> (no PII hint in the name) with 400 values that look like <code>DOB:1990-05-12 Name:Smith</code> will be flagged as high-confidence PII. A column named <code>email</code> with only 3 of 100 values containing @ signs will receive low confidence.</p>
+<p>Results are written to <code>bank.audit_findings</code> &mdash; one row per column per rule that matched, with a confidence score and the specific evidence. These are <em>candidates</em>, not final labels. Human review (Exercise 4) converts them into official catalog entries.</p>
+
+<h2>Step 1 &mdash; Run the Scanner</h2>
+<p>In VS Code, open a terminal. Navigate to the <code>python/</code> folder (<code>cd python</code>) and make sure your virtual environment is active (see Setup tab, Step 5 if you have not done this). Then run:</p>
+${cb_ex3_run}
+<p>You will see progress output as it works through each table and column. It takes 20&ndash;40 seconds. When it finishes, it prints a summary of how many findings were written.</p>
+
+<h2>Step 2 &mdash; How Many Findings Did It Produce?</h2>
+<p>Switch to Adminer (see Setup tab or Exercise 1 if you need a reminder of how to open it) and run:</p>
+${cb_ex3_count}
+<p>You should see <strong>30&ndash;60 total findings</strong> across 4&ndash;6 tables. <code>customers</code> will have the most (it is the most PII-dense table). Notice that <code>transactions</code> also appears &mdash; the <code>reference</code> free-text field contains names and dates typed in by tellers. The column name gives no hint; only the scanner catches this. <strong>This is the finding Exercise 1 could not surface.</strong></p>
+
+<h2>Step 3 &mdash; Inspect the Findings in Detail</h2>
+<p>Now look at severity and confidence:</p>
+${cb_ex3_inspect}
+<p>How to read the results:</p>
+<ul>
+  <li><strong>Severity breakdown:</strong> <code>critical</code> and <code>high</code> require immediate action &mdash; these need catalog entries before the next compliance review. <code>medium</code> and <code>low</code> are candidates for review but not urgent.</li>
+  <li><strong>Confidence scores:</strong> above 0.85 means the scanner is confident. Below 0.5, treat the finding as a hint that needs human verification &mdash; do not auto-approve these.</li>
+  <li><strong>The evidence column:</strong> it shows the specific regex that matched and a sample value. This is how you explain to a stakeholder <em>why</em> the scanner flagged a column, not just that it did.</li>
+</ul>
+
+<h2>Step 4 &mdash; Find Where the Scanner and Catalog Disagree</h2>
+<p>The most actionable findings are columns that already have a catalog entry but where the scanner&rsquo;s evidence suggests the label might be wrong. A column labelled <code>Internal</code> that the scanner rates as <code>critical</code> PII is a mislabelling risk &mdash; the kind of finding that generates a regulatory observation.</p>
+${cb_ex3_disagree}
+<p>If this query returns rows, flag them as priority review items. These are cases where automated evidence contradicts a human decision, and a human must re-examine.</p>
+
+<h2>Step 5 &mdash; Tune One Rule (and Understand Why It Is Risky)</h2>
+<p>The Privacy Lead says the email rule is over-flagging. Here is the tune, followed by why you should then revert it:</p>
+${cb_ex3_tune}
+<p>Re-run <code>02_pii_scanner.py</code>. The findings count for email columns should change. Which columns are now classified differently?</p>
+
+${_callout('warning', '&#9888; Stop &mdash; Was That the Right Call?', '<strong>No.</strong> Changing the email rule label from <code>Restricted</code> to <code>Public</code> is wrong regardless of intent. Email addresses are personal data under GDPR Article 4(1) by definition, whether they are a customer inbox or a marketing list. The correct approach: <strong>revert this change</strong>, then create a new, narrower rule targeted only at verified public distribution list columns, with a named data owner approving the exception. At a real bank, every rule change requires: a written justification, a named approver, an impact assessment showing how many existing labels will flip, and a rollback plan. A single rule change at scale can trigger thousands of label reversals and cascade into weeks of human review work.')}
+
+<h2>Reflection Questions</h2>
+<ul>
+  <li><strong>Why did Exercise 1 miss <code>transactions.reference</code>?</strong> Because the column name &ldquo;reference&rdquo; does not match any PII keyword pattern. Exercise 1 works by column name only. The scanner works by reading actual values. Both techniques are needed: each catches what the other misses.</li>
+  <li><strong>If you changed a rule already applied to 3,000 columns, what should happen to those existing labels?</strong> They should be queued for human re-review &mdash; not silently overwritten. Automated label flips are a compliance risk because the original label&rsquo;s justification may still be valid.</li>
+  <li><strong>What is the difference between <code>audit_findings</code> and <code>data_catalog</code>?</strong> Findings are unverified candidates from the scanner. The catalog holds authoritative decisions that have been reviewed, approved, and assigned an owner. The scanner feeds the review queue; it does not directly update the catalog. That step happens in Exercise 4.</li>
+</ul>
+
+${_callout('success', '&#128196; Report Section 3 &mdash; Scanner Findings Summary', 'From the Step 3 queries: total findings count, breakdown by severity (critical / high / medium / low), and the top 3 highest-confidence columns with their rule names. If <code>transactions.reference</code> appeared as a high-confidence finding, highlight it and explain why it is significant (free-text spillage not detectable by column-name analysis). If any scanner findings conflicted with existing catalog labels, list those as &ldquo;label review required&rdquo; items. This is <strong>Section 3 of your Data Classification Health Report</strong>.')}
+
+<p style="margin-top:24px;color:var(--text-muted)"><em>&#128214; Full worked solution in <code>SOLUTIONS.md</code> (included in the lab download) &rarr; Exercise 3</em></p>
+`;
+
+  const ex4 = `
+${_callout('info', '&#127919; Your Brief', '<strong>You are:</strong> Privacy Analyst (reviewer) and DSPM Engineer (running the automation). The scanner from Exercise 3 generated classification proposals overnight. Before they become official catalog entries, every proposal must be reviewed by a human. You have until the 10 a.m. compliance stand-up to clear the queue. This exercise walks the <strong>complete label lifecycle</strong>: auto-propose &rarr; human review &rarr; publish &rarr; coverage report &rarr; close the gaps.')}
+
+<h2>Why Human Review Cannot Be Skipped</h2>
+<p>Automated classifiers are good at pattern-matching. They are not good at business context. A column called <code>risk_score</code> with values between 0.0 and 1.0 could be a fraud risk score (Restricted), a credit score (Highly Restricted), or a marketing engagement score (Internal). The regex cannot distinguish these. A human with business knowledge can.</p>
+<p>The review queue enforces a <strong>four-eyes principle</strong>: the machine proposes, a human decides, the decision is logged with a reason and a timestamp. This audit trail is what regulators examine during assessments &mdash; and it is the example you give when asked how you balance automation with oversight in an interview.</p>
+
+<h2>Phase A &mdash; Run the Automation</h2>
+<p>Run the scanner and auto-classifier. The auto-classifier applies labels directly to <code>data_catalog</code> for findings above the confidence threshold (0.95 by default). Everything below goes into a human review queue.</p>
+${cb_ex4_phase_a}
+<p>Now check what was auto-approved vs what is waiting for you:</p>
+${cb_ex4_check}
+<p>You should see two rows: <code>classified_by = 'auto'</code> and <code>classified_by = 'human'</code> (from any manual entries in Ex 1). The <code>auto</code> count tells you how many labels were applied without human eyes. In a real bank, this number requires governance sign-off &mdash; the confidence threshold for auto-approval is itself a documented, auditable decision.</p>
+
+<h2>Phase B &mdash; Human Review</h2>
+<p>Run the interactive review script:</p>
+${cb_ex4_review}
+<p>The script shows one candidate at a time: column name, proposed label, the rule that matched, and a confidence score. Press a key to decide:</p>
+${_table(
+  ['Key', 'Decision', 'When to use it', 'What it does'],
+  [
+    ['<code>a</code>', 'Accept', 'The proposed label is correct and the evidence is convincing', 'Writes the label to <code>data_catalog</code> with <code>classified_by = &apos;human&apos;</code> and a timestamp'],
+    ['<code>o</code>', 'Override', 'The evidence is real PII but the proposed label tier is wrong', 'Prompts you to type the correct label. Your choice and reason are logged.'],
+    ['<code>r</code>', 'Reject', 'False positive &mdash; not actually PII', 'Marks the finding rejected. No catalog entry is created. The rejection reason is logged for model improvement.'],
+    ['<code>s</code>', 'Skip', 'Unsure &mdash; needs escalation', 'Item stays in the queue for another reviewer. Use sparingly: every skip is a deferred decision.']
+  ]
+)}
+<p><strong>Work through at least 5 candidates using all four options.</strong> Before pressing a key for each one:</p>
+<ol>
+  <li><strong>Does the column name match the rule?</strong> A column named <code>marketing_consent</code> flagged as <code>Restricted</code> is probably a false positive (it stores a yes/no value, not PII content). Reject it.</li>
+  <li><strong>Check actual values.</strong> Open a second Adminer browser tab and run <code>SELECT [column] FROM bank.[table] LIMIT 10</code>. Do the values confirm the label? A <code>reference</code> column showing values like &ldquo;DOB:1990-05-12 Name:Smith&rdquo; is definitely Restricted regardless of column name.</li>
+  <li><strong>Check the confidence score.</strong> Above 0.85: lean toward accept unless something looks wrong. Below 0.5: verify values before accepting &mdash; the scanner is not confident.</li>
+</ol>
+
+<h2>Phase C &mdash; Coverage Report</h2>
+<p>Run the audit report to see the current state of catalog coverage across the entire database:</p>
+${cb_ex4_report}
+<p>The report prints a <strong>coverage matrix</strong>: for every table in the bank schema, how many columns are classified and what percentage that is. Read it carefully:</p>
+<ul>
+  <li><strong>Which table has the lowest coverage?</strong> Likely <code>transactions</code> or <code>dsar_requests</code> &mdash; intentionally seeded with no labels so you can close the gap in Phase D.</li>
+  <li><strong>What is the overall estate coverage?</strong> The last line gives the total percentage. This is the headline KPI you report to the CISO. Most banks target 95%+ coverage on tables confirmed to contain PII.</li>
+  <li><strong>Coverage below 60% on a PII table is a red flag.</strong> In a real bank this triggers a remediation sprint before the next regulatory review.</li>
+</ul>
+
+<h2>Phase D &mdash; Close the Gaps Manually</h2>
+<p>Pick the worst-covered table from Phase C. Write the missing catalog entries yourself. Here is a complete template for <code>transactions</code> &mdash; the most likely low-coverage table:</p>
+${cb_ex4_insert}
+
+${_callout('warning', '&#9888; Why is <code>reference</code> flagged as Highly Restricted?', 'Run <code>SELECT reference FROM bank.transactions WHERE reference ILIKE \'%DOB%\' LIMIT 5</code>. That free-text payment reference field contains dates of birth and full names typed in by tellers at the counter. This is a classic <strong>spillage</strong> pattern: sensitive personal data accumulating in a field never designed to hold it. Multiple UK banks have received ICO regulatory action tied to free-text fields exactly like this one.')}
+
+<h2>Phase E &mdash; Re-run the Report</h2>
+${cb_ex4_rerun}
+<p>The coverage percentage for <code>transactions</code> should now be significantly higher. This improvement &mdash; before coverage to after coverage &mdash; is the measurable outcome you present at the compliance stand-up and include in your report.</p>
+
+<h2>Reflection</h2>
+<ul>
+  <li><strong>How long did it take to review 5 candidates in Phase B?</strong> Multiply by the number of columns in a real bank database (often 30,000&ndash;100,000+). This is why automation matters &mdash; but also why human review is irreducible. The queue is not a bottleneck; it is the mechanism that keeps the catalog trustworthy.</li>
+  <li><strong>What threshold should govern auto-approval?</strong> Most banks use 0.95+ confidence. The threshold itself must be documented, approved by the Data Protection Lead, and reviewed annually. It is a governance decision, not a technical one.</li>
+  <li><strong>What happens to rejected findings?</strong> They should be reviewed quarterly. Patterns of rejection reveal model drift &mdash; the classifier being systematically wrong in a way that needs retraining. Rejection rate by rule is how you measure scanner quality over time.</li>
+</ul>
+
+${_callout('success', '&#128196; Report Section 4 &mdash; Classification Coverage Matrix', 'From the Phase C report: the coverage matrix table showing table name, total columns, classified columns, and coverage %. State the overall estate coverage before and after Phase D. Note the lowest-coverage table and what you did to close it. Record your Phase B decisions: how many you accepted, overrode, and rejected. This is <strong>Section 4 of your Data Classification Health Report</strong>.')}
+
+<p style="margin-top:24px;color:var(--text-muted)"><em>&#128214; Full worked solution in <code>SOLUTIONS.md</code> (included in the lab download) &rarr; Exercise 4</em></p>
+`;
+
+  const ex5 = `
+${_callout('info', '&#127919; Your Brief', '<strong>You are:</strong> Privacy Analyst. A customer submitted a Data Subject Access Request 28 days ago under GDPR Article 15. You have <strong>2 days left</strong> before the statutory deadline. The request asks for every piece of personal data the bank holds about them. The data catalog you have been building across Exercises 1&ndash;4 is what makes this possible in minutes rather than weeks.')}
+
+<h2>What a DSAR Is and Why It Matters</h2>
+<p>Under GDPR Article 15, any individual has the right to ask an organisation: <em>&ldquo;What personal data do you hold about me?&rdquo;</em> The organisation must respond within one calendar month with a complete, portable copy. Failure carries fines of up to <strong>4% of global annual turnover</strong> under GDPR Article 83 &mdash; for a major UK bank, that is potentially hundreds of millions of pounds.</p>
+<p>The practical problem is that customer data is scattered across many tables. Without a data catalog, finding all of it requires manually checking every table in the database &mdash; a process that can take weeks and is still error-prone. <strong>The catalog is the map.</strong> It tells you exactly which tables and columns contain customer personal data. This is why classification coverage from Exercise 1 directly determines how fast you can respond to a DSAR.</p>
+
+<h2>Step 1 &mdash; Read the DSAR Request Record</h2>
+<p>Start by reading the actual record in the database:</p>
+${cb_ex5_check_req}
+<p>What to look at:</p>
+<ul>
+  <li><strong><code>age</code>:</strong> Confirm it is approximately 28 days. The legal deadline is <code>submitted_at + 30 days</code>. You have 2 days. This is real in production &mdash; missing this deadline is a regulatory breach.</li>
+  <li><strong><code>status</code>:</strong> Should be <code>open</code> or <code>in_progress</code>. You will change this to <code>fulfilled</code> in Step 5.</li>
+  <li><strong><code>handler_email</code>:</strong> Whoever is responsible for fulfillment. You will update this field when you complete the request.</li>
+</ul>
+
+<h2>Step 2 &mdash; Use the Catalog to Find All In-Scope Tables</h2>
+<p>This step demonstrates the direct operational value of the work done in Exercises 1&ndash;4. Use the catalog to find every table containing customer personal data:</p>
+${cb_ex5_discover}
+<p>The catalog should return: <code>customers</code>, <code>accounts</code>, <code>transactions</code>, and possibly <code>access_logs</code>. These are every table you must include in the export. <strong>Missing even one table makes the response legally non-compliant</strong> &mdash; the bank is liable even if the omission was accidental.</p>
+<p>Notice what would happen if the catalog coverage from Exercise 1 had not been improved: tables without catalog entries would not appear here, and you would miss data in your response. This is the direct link between classification quality and DSAR operational capability.</p>
+
+<h2>Step 3 &mdash; Verify the Data Exists Before Exporting</h2>
+<p>Before building the full export, confirm that data exists for this customer in each in-scope table. A table returning 0 rows unexpectedly could mean the customer has no data there (fine) or there is a join condition error (a problem). Always verify first:</p>
+${cb_ex5_verify_data}
+<p><strong>Expected:</strong> <code>customers</code>=1, <code>accounts</code>=2&ndash;3, <code>transactions</code>=several hundred rows, <code>dsar_requests</code>=1+, <code>access_logs</code>=some rows. If any source shows 0 unexpectedly, investigate before proceeding &mdash; do not export a response with missing data.</p>
+
+<h2>Step 4 &mdash; Build the Complete JSON Export</h2>
+<p>A single SQL query assembles all of the customer&rsquo;s data from every in-scope table. Two Postgres functions do the work:</p>
+<ul>
+  <li><code>jsonb_build_object(key, value, ...)</code> &mdash; constructs a JSON object with named keys</li>
+  <li><code>jsonb_agg(row)</code> &mdash; collects multiple rows into a JSON array</li>
+  <li>The nested sub-selects pull each related table using <code>customer_id</code> as the join key</li>
+</ul>
+${cb_ex5_export}
+<p>The result is one JSON object containing all of the customer&rsquo;s data across every table. In production, this JSON would be signed, encrypted, and delivered via a secure customer portal with a delivery receipt. Copy the output and save it &mdash; this is the artefact you would deliver to the customer.</p>
+
+<h2>Step 5 &mdash; Mark the Request Fulfilled</h2>
+<p>Update the DSAR record to record completion. The <code>fulfilled_at</code> timestamp is your legal proof of on-time delivery:</p>
+${cb_ex5_fulfill}
+<p>This record is retained for a minimum of 3 years in a real bank as compliance evidence. The <code>notes</code> field documents how the data was delivered (secure portal, encrypted email, post). The combination of <code>submitted_at</code> and <code>fulfilled_at</code> proves you met the statutory deadline.</p>
+
+<h2>Step 6 &mdash; Confirm the Audit Trail</h2>
+${cb_ex5_audit}
+<p>The access log should show your recent queries. In a production environment this log is immutable &mdash; no one, not even a DBA, can delete it. It proves that access occurred, when, and by whom. If the bank were investigated for a DSAR breach, the ICO would request this log as the first piece of evidence.</p>
+
+<h2>Key Facts to Use in Interview</h2>
+${_table(
+  ['Point', 'Detail'],
+  [
+    ['GDPR Art. 12(3) deadline', 'One calendar month from receipt. Extendable by two further months for complex or high-volume cases &mdash; but the extension must be communicated within the first month.'],
+    ['Fine for non-compliance', 'Up to 4% of global annual turnover (Art. 83(5)), or &euro;20M, whichever is higher'],
+    ['What classification enables', 'Without a complete catalog, every DSAR requires 3&ndash;6 weeks of manual table-by-table hunting. With full coverage: a 10-minute automated export. This is the measurable ROI of the classification programme.'],
+    ['The business case', 'A bank receiving 500 DSARs per year at 3 weeks manual effort each = 375 person-weeks per year. Full catalog coverage cuts this to under 1 week total.'],
+    ['Mature bank approach', 'One-click DSAR pipeline: system auto-discovers all in-scope data from every catalogued source, generates a portable PDF + JSON bundle, delivers via secure portal, and closes the request automatically.']
+  ]
+)}
+
+${_callout('success', '&#128196; Report Section 5 &mdash; DSAR Completion Evidence', 'From Steps 1&ndash;6: note the request ID, customer ID, submitted date, fulfilled date, and response time in days. List the tables included in the export and the total record count per table (from Step 3). Confirm the response was within the 30-day deadline. This is <strong>Section 5 of your Data Classification Health Report</strong> &mdash; the final piece.')}
+
+<p style="margin-top:24px;color:var(--text-muted)"><em>&#128214; Full worked solution in <code>SOLUTIONS.md</code> (included in the lab download) &rarr; Exercise 5</em></p>
+`;
+
+  const report = `
+${_callout('success', '&#127881; You Have Completed All Five Exercises', 'You have done exactly what a DSPM Engineer and Privacy Analyst do in their first month at a bank: found classification gaps, built access controls, run automated scanning with human oversight, and fulfilled a GDPR data subject request. The output is a real, demonstrable artefact.')}
+
+<h2>&#128196; Your Data Classification Health Report</h2>
+<p>Assemble the five sections you saved at the end of each exercise into a single document. Structure it like this:</p>
+
+<div style="background:var(--card);border-radius:12px;padding:28px 32px;margin:24px 0;border-left:4px solid var(--accent)">
+  <div style="font-size:1rem;font-weight:700;color:var(--accent);margin-bottom:6px">DataGuard Bank &mdash; Data Classification Health Report</div>
+  <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:24px">Prepared by: [Your Name] &middot; Role: DSPM Engineer / Privacy Analyst &middot; Date: [Today]</div>
+
+  <p style="font-weight:600;color:#fff;margin:0 0 4px">Executive Summary</p>
+  <p style="font-size:0.88rem;color:#b8cce0;margin:0 0 24px">3&ndash;4 sentences: how many unclassified PII columns you found, what the scanner detected that SQL alone could not, what the overall coverage percentage is before and after remediation, and that the DSAR was fulfilled on time. This is the paragraph a CISO reads first.</p>
+
+  <p style="font-weight:600;color:#fff;margin:0 0 4px">Section 1 &mdash; Unclassified PII Register <span style="font-weight:400;font-size:0.85rem;color:var(--text-muted)">(Exercise 1)</span></p>
+  <p style="font-size:0.88rem;color:#b8cce0;margin:0 0 24px">The Step 3 query output, sorted by row count descending. Total gap count. Top 5 highest-risk columns. Any transaction table columns flagged as Priority 1 with an explanation of why free-text spillage is a regulatory risk.</p>
+
+  <p style="font-weight:600;color:#fff;margin:0 0 4px">Section 2 &mdash; Access Control Evidence <span style="font-weight:400;font-size:0.85rem;color:var(--text-muted)">(Exercise 2)</span></p>
+  <p style="font-size:0.88rem;color:#b8cce0;margin:0 0 24px">View name, role name, columns exposed, columns blocked. Output of both test queries (permission-denied error and successful view query). Your answer to the &ldquo;what happens if a new column is added?&rdquo; defensive design question.</p>
+
+  <p style="font-weight:600;color:#fff;margin:0 0 4px">Section 3 &mdash; Automated Scanner Findings <span style="font-weight:400;font-size:0.85rem;color:var(--text-muted)">(Exercise 3)</span></p>
+  <p style="font-size:0.88rem;color:#b8cce0;margin:0 0 24px">Total findings count. Severity breakdown (critical / high / medium / low). Top 3 highest-confidence columns with rule names. If <code>transactions.reference</code> appeared, explain it explicitly: free-text spillage that column-name analysis alone would never surface. Any scanner-vs-catalog disagreements listed as &ldquo;label review required.&rdquo;</p>
+
+  <p style="font-weight:600;color:#fff;margin:0 0 4px">Section 4 &mdash; Classification Coverage Matrix <span style="font-weight:400;font-size:0.85rem;color:var(--text-muted)">(Exercise 4)</span></p>
+  <p style="font-size:0.88rem;color:#b8cce0;margin:0 0 24px">The coverage matrix from the Phase C report. Overall estate coverage before Phase D and after. Lowest-coverage table and what you did to close it. Human review decisions: accepted / overridden / rejected counts.</p>
+
+  <p style="font-weight:600;color:#fff;margin:0 0 4px">Section 5 &mdash; DSAR Completion Evidence <span style="font-weight:400;font-size:0.85rem;color:var(--text-muted)">(Exercise 5)</span></p>
+  <p style="font-size:0.88rem;color:#b8cce0;margin:0">Request ID, customer ID, submitted date, fulfilled date, response time in days. Tables included in the export and total record count per table. Confirmation: fulfilled within the 30-day statutory deadline.</p>
+</div>
+
+<h2>Using This Report in an Interview</h2>
+${_table(
+  ['Question you will be asked', 'How this report answers it'],
+  [
+    ['&ldquo;Tell me about a time you identified a data governance gap.&rdquo;', 'Section 1: you found N unclassified PII columns, including <code>transactions.reference</code> &mdash; a free-text spillage field that column-name analysis alone would never surface. You quantified risk by row count and produced a prioritised remediation list.'],
+    ['&ldquo;How do you balance automation with human oversight in classification?&rdquo;', 'Sections 3 and 4: you ran the automated scanner and auto-classifier, but every proposal below the confidence threshold went through your review queue. You accepted, overrode, and rejected items with documented reasons. You understand the governance risk of rule changes at scale (Exercise 3 reflection).'],
+    ['&ldquo;How does data classification support GDPR compliance?&rdquo;', 'Section 5: the DSAR was fulfilled in under 10 minutes because the catalog told you exactly which tables contained the customer&rsquo;s data. Without the catalog it would have been a 3-week manual hunt. You can quote response time, record count, and deadline compliance.'],
+    ['&ldquo;What KPIs would you own in this role?&rdquo;', 'Your report contains three: catalog coverage % (Section 4), unclassified gap count (Section 1), and DSAR response time (Section 5). These are the actual KPIs on a CISO&rsquo;s dashboard.']
+  ]
+)}
+
+${_callout('info', '&#128172; What This Demonstrates', 'Most candidates who apply for DSPM and Privacy Analyst roles have read about classification. Very few have a working lab report showing the complete cycle: gap discovery &rarr; access control &rarr; automated scanning &rarr; human review &rarr; DSAR fulfillment, with measurable output at each step. That is your differentiator.')}
 `;
 
   // ---- Assemble tab structure ----
@@ -546,7 +878,8 @@ ${_callout('success', '&#128161; The Core Point', 'Your <code>data_catalog</code
     { id: 'ex2',      label: 'Ex 2: Least Privilege',   content: ex2      },
     { id: 'ex3',      label: 'Ex 3: Scanner',           content: ex3      },
     { id: 'ex4',      label: 'Ex 4: Labeling',          content: ex4      },
-    { id: 'ex5',      label: 'Ex 5: DSAR',              content: ex5      }
+    { id: 'ex5',      label: 'Ex 5: DSAR',              content: ex5      },
+    { id: 'report',   label: '&#128196; Your Report',   content: report   }
   ];
 
   return `

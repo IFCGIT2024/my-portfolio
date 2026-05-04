@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polymarket Paper Trader</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
+  <header id="header">
+    <div class="header-brand">
+      <span class="logo">📈</span>
+      <span class="brand-name">Polymarket Lab</span>
+      <span class="badge">PAPER TRADING</span>
+    </div>
+    <div class="header-stats">
+      <div class="stat">
+        <span class="stat-label">Portfolio Value</span>
+        <span class="stat-value" id="hdr-portfolio">$10,000.00</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Cash Balance</span>
+        <span class="stat-value" id="hdr-balance">$10,000.00</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Unrealized P&amp;L</span>
+        <span class="stat-value" id="hdr-pnl">$0.00</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Trades Made</span>
+        <span class="stat-value" id="hdr-trades">0</span>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button id="btn-refresh" class="btn-icon" title="Refresh market data">⟳</button>
+      <button id="btn-reset" class="btn-danger-sm">Reset Account</button>
+      <span id="last-update" class="update-time">Not loaded</span>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════ TAB NAV ═══════════════════════════════ -->
+  <nav id="tab-nav">
+    <button class="tab-btn active" data-tab="markets">🌐 Markets</button>
+    <button class="tab-btn" data-tab="opportunities">⚡ Opportunities</button>
+    <button class="tab-btn" data-tab="portfolio">💼 Portfolio</button>
+    <button class="tab-btn" data-tab="lab">🔬 Data Lab</button>
+    <button class="tab-btn" data-tab="btc">₿ BTC Algo</button>
+  </nav>
+
+  <!-- ═══════════════════════════════ MARKETS TAB ═══════════════════════════════ -->
+  <div id="tab-markets" class="tab-content active">
+    <div class="markets-layout">
+
+      <!-- Sidebar: market list -->
+      <div class="markets-sidebar">
+        <div class="sidebar-controls">
+          <input type="text" id="market-search" placeholder="Search markets..." class="search-input">
+          <div class="filter-row">
+            <select id="market-sort" class="select-sm">
+              <option value="volume24hr">Hot (24h Vol)</option>
+              <option value="volume">All-Time Vol</option>
+              <option value="liquidity">Liquidity</option>
+              <option value="endDate">Closing Soon</option>
+            </select>
+            <select id="market-limit" class="select-sm">
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+        </div>
+        <div id="market-list" class="market-list">
+          <div class="loading-msg">Loading markets...</div>
+        </div>
+      </div>
+
+      <!-- Main: market detail -->
+      <div class="market-detail" id="market-detail">
+        <div class="detail-placeholder">
+          <div class="placeholder-icon">📊</div>
+          <p>Select a market to view details</p>
+          <p class="hint">Markets auto-refresh every 60 seconds</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ OPPORTUNITIES TAB ═══════════════════════════════ -->
+  <div id="tab-opportunities" class="tab-content">
+    <div class="opps-layout">
+      <div class="opps-header">
+        <h2>Signal Detection Engine</h2>
+        <p class="hint">Auto-detected trading opportunities from live market data — click any card to view market and trade</p>
+      </div>
+      <div class="signal-grid">
+        <div class="signal-section">
+          <h3>🔄 Arbitrage Opportunities</h3>
+          <p class="section-hint">Markets where YES + NO prices ≠ $1.00. If sum &lt; $1.00, buying both guarantees profit at resolution.</p>
+          <div id="arb-list"><div class="loading-msg">Loading...</div></div>
+        </div>
+        <div class="signal-section">
+          <h3>🔥 High Conviction Markets</h3>
+          <p class="section-hint">Markets with one side above 80% — near-certain outcomes. Lower risk, lower reward.</p>
+          <div id="momentum-list"><div class="loading-msg">Loading...</div></div>
+        </div>
+        <div class="signal-section">
+          <h3>⏰ Near Resolution</h3>
+          <p class="section-hint">Markets closing within 7 days. Less time uncertainty — outcome is near.</p>
+          <div id="resolution-list"><div class="loading-msg">Loading...</div></div>
+        </div>
+        <div class="signal-section">
+          <h3>💧 Best Liquidity</h3>
+          <p class="section-hint">Highest liquidity markets — easiest to enter and exit without price impact.</p>
+          <div id="liquidity-list"><div class="loading-msg">Loading...</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ PORTFOLIO TAB ═══════════════════════════════ -->
+  <div id="tab-portfolio" class="tab-content">
+    <div class="portfolio-layout">
+
+      <div class="portfolio-summary">
+        <div class="summary-card">
+          <span class="card-label">Cash Balance</span>
+          <span class="card-value" id="port-balance">$10,000.00</span>
+        </div>
+        <div class="summary-card">
+          <span class="card-label">Amount Invested</span>
+          <span class="card-value" id="port-invested">$0.00</span>
+        </div>
+        <div class="summary-card">
+          <span class="card-label">Position Value</span>
+          <span class="card-value" id="port-current">$0.00</span>
+        </div>
+        <div class="summary-card">
+          <span class="card-label">Unrealized P&amp;L</span>
+          <span class="card-value" id="port-pnl">$0.00</span>
+        </div>
+        <div class="summary-card">
+          <span class="card-label">Realized P&amp;L</span>
+          <span class="card-value" id="port-total-pnl">$0.00</span>
+        </div>
+        <div class="summary-card">
+          <span class="card-label">Win Rate</span>
+          <span class="card-value" id="port-winrate">—</span>
+        </div>
+      </div>
+
+      <div class="portfolio-panels">
+        <div class="portfolio-panel">
+          <h3>Open Positions</h3>
+          <div id="positions-list"><div class="empty-msg">No open positions yet</div></div>
+        </div>
+        <div class="portfolio-panel">
+          <h3>Trade History</h3>
+          <div id="history-list"><div class="empty-msg">No closed trades yet</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ DATA LAB TAB ═══════════════════════════════ -->
+  <div id="tab-lab" class="tab-content">
+    <div class="lab-layout">
+      <div class="lab-header">
+        <h2>🔬 Data Lab</h2>
+        <p class="hint">Explore raw API responses in real-time. Understand exactly what Polymarket exposes so you can build automated strategies.</p>
+      </div>
+
+      <div class="lab-rows">
+
+        <div class="lab-section">
+          <h3>Live API Endpoints</h3>
+          <p class="section-hint">Hit any endpoint and see the raw JSON response. Select a market first to test CLOB endpoints.</p>
+          <div class="endpoint-list">
+            <div class="endpoint-item">
+              <span class="method get">GET</span>
+              <code>gamma-api.polymarket.com/markets?active=true&amp;closed=false&amp;limit=1</code>
+              <button class="btn-test" data-endpoint="markets-one">Test</button>
+            </div>
+            <div class="endpoint-item">
+              <span class="method get">GET</span>
+              <code>gamma-api.polymarket.com/markets?active=true&amp;order=volume24hr&amp;limit=3</code>
+              <button class="btn-test" data-endpoint="markets-hot">Test</button>
+            </div>
+            <div class="endpoint-item">
+              <span class="method get">GET</span>
+              <code>clob.polymarket.com/books?token_id=<em>[selected market YES token]</em></code>
+              <button class="btn-test" data-endpoint="orderbook">Test (select market first)</button>
+            </div>
+            <div class="endpoint-item">
+              <span class="method get">GET</span>
+              <code>clob.polymarket.com/midpoint?token_id=<em>[selected market YES token]</em></code>
+              <button class="btn-test" data-endpoint="midpoint">Test (select market first)</button>
+            </div>
+            <div class="endpoint-item">
+              <span class="method get">GET</span>
+              <code>clob.polymarket.com/spread?token_id=<em>[selected market YES token]</em></code>
+              <button class="btn-test" data-endpoint="spread">Test (select market first)</button>
+            </div>
+          </div>
+          <div class="response-meta" id="response-meta"></div>
+          <pre id="raw-output" class="raw-output">// Hit "Test" on an endpoint above to see live data
+// All Gamma API calls work from the browser
+// CLOB calls may be blocked by CORS — that's expected.
+//   For automated trading you'd run a backend Node.js/Python script
+//   that calls CLOB directly (no CORS restriction server-side)</pre>
+        </div>
+
+        <div class="lab-section">
+          <h3>Market Object Field Reference</h3>
+          <p class="section-hint">Every field returned by the Gamma API — what it means and how to use it in a trading strategy.</p>
+          <table class="ref-table">
+            <thead>
+              <tr>
+                <th>Field</th><th>Type</th><th>Example</th><th>Trading Significance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>question</td><td>string</td><td>"Will X happen?"</td><td>Determines what you're predicting</td></tr>
+              <tr><td>outcomePrices</td><td>string[]</td><td>["0.65","0.35"]</td><td>Current YES/NO prices — these ARE the probabilities</td></tr>
+              <tr><td>volume24hr</td><td>number</td><td>125000</td><td>Activity signal — high vol = price is informed</td></tr>
+              <tr><td>volume</td><td>number</td><td>2100000</td><td>Market maturity — more vol = more reliable price</td></tr>
+              <tr><td>liquidity</td><td>number</td><td>480000</td><td>How much you can trade without moving the price</td></tr>
+              <tr><td>endDate</td><td>datetime</td><td>"2025-11-01T..."</td><td>Time horizon — affects risk/reward calculation</td></tr>
+              <tr><td>clobTokenIds</td><td>string[]</td><td>["abc123","def456"]</td><td>[0]=YES token, [1]=NO token — used for CLOB order book</td></tr>
+              <tr><td>conditionId</td><td>hex string</td><td>"0xabc..."</td><td>On-chain identifier — unique market ID</td></tr>
+              <tr><td>active</td><td>bool</td><td>true</td><td>Whether market is currently tradeable</td></tr>
+              <tr><td>closed</td><td>bool</td><td>false</td><td>Whether market has resolved</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="lab-section">
+          <h3>How Pricing Works</h3>
+          <div class="explainer-grid">
+            <div class="explainer-card">
+              <h4>Prices = Probabilities</h4>
+              <p>YES @ $0.65 means the market thinks there's a 65% chance of YES. Buying YES at $0.65 pays $1.00 if correct — profit of $0.35 per share.</p>
+            </div>
+            <div class="explainer-card">
+              <h4>Arbitrage Signal</h4>
+              <p>YES + NO should always sum to ~$1.00. If YES=$0.60 and NO=$0.38, they sum to $0.98. Buy both sides for $0.98, collect $1.00 at resolution = guaranteed 2% profit regardless of outcome.</p>
+            </div>
+            <div class="explainer-card">
+              <h4>ROI Calculation</h4>
+              <p>Buying YES at $0.30 means you think probability is higher than 30%. If correct: $1.00 payout / $0.30 cost = 3.33× return. Each cent of edge = profit.</p>
+            </div>
+            <div class="explainer-card">
+              <h4>CLOB vs AMM</h4>
+              <p>Polymarket uses a Central Limit Order Book. Prices shown are the last traded price. The order book shows pending bids/asks — you can set limit orders at any price.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ TRADE MODAL ═══════════════════════════════ -->
+  <div id="trade-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Place Paper Trade</h3>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <p id="modal-question" class="modal-question"></p>
+      <div class="modal-prices">
+        <span id="modal-yes-price"></span>
+        <span id="modal-no-price"></span>
+      </div>
+      <div class="side-selector">
+        <button class="side-btn" id="side-yes" data-side="YES">BUY YES</button>
+        <button class="side-btn" id="side-no" data-side="NO">BUY NO</button>
+      </div>
+      <div class="form-group">
+        <label>Number of Shares</label>
+        <input type="number" id="trade-shares" value="100" min="1" max="100000" step="1">
+      </div>
+      <div class="trade-preview">
+        <div class="preview-row"><span>Price per share</span><span id="prev-price">—</span></div>
+        <div class="preview-row"><span>Total cost</span><span id="prev-cost">—</span></div>
+        <div class="preview-row"><span>Max payout (if correct)</span><span id="prev-payout">—</span></div>
+        <div class="preview-row highlight"><span>Max profit</span><span id="prev-profit">—</span></div>
+        <div class="preview-row"><span>Available cash</span><span id="prev-balance">—</span></div>
+      </div>
+      <div class="modal-actions">
+        <button id="btn-cancel-trade" class="btn-secondary">Cancel</button>
+        <button id="btn-confirm-trade" class="btn-execute">Execute Paper Trade</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ BTC ALGO TAB ═══════════════════════════════ -->
+  <div id="tab-btc" class="tab-content">
+    <div class="btc-layout">
+
+      <!-- Top bar: live price + status -->
+      <div class="btc-topbar">
+        <div class="btc-price-display">
+          <span class="btc-symbol">₿ BTC/USDT</span>
+          <span class="btc-price" id="btc-live-price">Loading...</span>
+          <span class="btc-change" id="btc-1m-change">—</span>
+        </div>
+        <div class="btc-status-row">
+          <span class="status-pill" id="btc-feed-status">● Connecting to Binance...</span>
+          <span class="status-pill" id="btc-market-status">● Fetching market...</span>
+          <button id="btn-toggle-auto" class="btn-auto-off">▶ Auto-Trade: OFF</button>
+          <span class="algo-note">Paper trades only — no real money</span>
+        </div>
+      </div>
+
+      <div class="btc-main">
+
+        <!-- Left: price chart + indicators -->
+        <div class="btc-left">
+
+          <div class="btc-chart-card">
+            <div class="card-header-row">
+              <span>BTC Price — Last 30 Candles (1-min)</span>
+              <span class="hint" id="btc-candle-count">0 candles</span>
+            </div>
+            <canvas id="btc-chart" width="520" height="160"></canvas>
+          </div>
+
+          <div class="signal-indicators">
+            <div class="indicator-card" id="ind-rsi">
+              <div class="ind-label">RSI (14)</div>
+              <div class="ind-value" id="rsi-value">—</div>
+              <div class="ind-bar"><div class="ind-fill" id="rsi-bar" style="width:50%"></div></div>
+              <div class="ind-signal" id="rsi-signal">—</div>
+            </div>
+            <div class="indicator-card" id="ind-momentum">
+              <div class="ind-label">Momentum (5)</div>
+              <div class="ind-value" id="mom-value">—</div>
+              <div class="ind-bar"><div class="ind-fill" id="mom-bar" style="width:50%"></div></div>
+              <div class="ind-signal" id="mom-signal">—</div>
+            </div>
+            <div class="indicator-card" id="ind-macd">
+              <div class="ind-label">MACD Signal</div>
+              <div class="ind-value" id="macd-value">—</div>
+              <div class="ind-bar"><div class="ind-fill" id="macd-bar" style="width:50%"></div></div>
+              <div class="ind-signal" id="macd-signal">—</div>
+            </div>
+            <div class="indicator-card" id="ind-vol">
+              <div class="ind-label">Vol Spike</div>
+              <div class="ind-value" id="vol-value">—</div>
+              <div class="ind-bar"><div class="ind-fill" id="vol-bar" style="width:50%"></div></div>
+              <div class="ind-signal" id="vol-signal">—</div>
+            </div>
+          </div>
+
+          <!-- Composite score -->
+          <div class="composite-card">
+            <div class="comp-header">
+              <span>Composite Signal Score</span>
+              <span class="hint">Weighted average of all indicators</span>
+            </div>
+            <div class="comp-body">
+              <div class="comp-score-wrap">
+                <div class="comp-score" id="comp-score">0</div>
+                <div class="comp-label" id="comp-label">NEUTRAL</div>
+              </div>
+              <div class="comp-breakdown" id="comp-breakdown">—</div>
+            </div>
+            <div class="comp-gauge">
+              <span class="gauge-min">STRONG DOWN</span>
+              <div class="gauge-track"><div class="gauge-cursor" id="gauge-cursor"></div></div>
+              <span class="gauge-max">STRONG UP</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: current market + trade + log -->
+        <div class="btc-right">
+
+          <div class="market-card" id="btc-market-card">
+            <div class="card-header-row">
+              <span>Current 5-Min BTC Market</span>
+              <span class="market-countdown" id="btc-countdown">—</span>
+            </div>
+            <div id="btc-market-body">
+              <div class="loading-msg">Searching for active BTC market...</div>
+            </div>
+          </div>
+
+          <!-- MM Strategy Panel -->
+          <div class="mm-strategy-card">
+            <div class="card-header-row">
+              <span>🎯 Optimal Quote Strategy</span>
+              <span class="hint" id="mm-panel-time">—</span>
+            </div>
+            <div id="mm-strategy-panel">
+              <div class="loading-msg">Waiting for signal + market data...</div>
+            </div>
+          </div>
+
+          <!-- Auto-trade settings -->
+          <div class="algo-settings-card">
+            <div class="card-header-row">
+              <span>⚙ Auto-Trade Settings</span>
+            </div>
+            <div class="settings-grid">
+              <div class="setting-row">
+                <label>Buy threshold (score ≥)</label>
+                <input type="number" id="set-buy-threshold" value="60" min="50" max="90" step="5">
+              </div>
+              <div class="setting-row">
+                <label>Shares per trade</label>
+                <input type="number" id="set-shares" value="50" min="1" max="500" step="10">
+              </div>
+              <div class="setting-row">
+                <label>Max open BTC positions</label>
+                <input type="number" id="set-max-pos" value="3" min="1" max="10">
+              </div>
+              <div class="setting-row">
+                <label>Confidence filter</label>
+                <select id="set-confidence">
+                  <option value="any">Any signal</option>
+                  <option value="2" selected>2+ indicators agree</option>
+                  <option value="3">3+ indicators agree</option>
+                </select>
+              </div>
+            </div>
+            <div id="algo-last-action" class="algo-last-action">No trades executed yet</div>
+          </div>
+
+          <!-- Signal log -->
+          <div class="log-card">
+            <div class="card-header-row">
+              <span>Signal Log</span>
+              <button id="btn-clear-log" class="btn-text">Clear</button>
+            </div>
+            <div id="signal-log" class="signal-log">
+              <div class="log-entry log-info">System ready. Waiting for data...</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom: collapsible strategy reference -->
+      <details class="strategy-reference-details">
+        <summary class="strategy-reference-summary">📚 How These Strategies Work</summary>
+        <div class="strategy-grid">
+          <div class="strat-card">
+            <h4>RSI (Relative Strength Index)</h4>
+            <p>Measures how overbought or oversold an asset is. RSI &gt; 60 = upward momentum. RSI &lt; 40 = downward momentum. RSI 40–60 = neutral, no trade.</p>
+          </div>
+          <div class="strat-card">
+            <h4>Momentum</h4>
+            <p>Price now vs. price 5 candles ago. If BTC is up 0.3%+ in 5 minutes, momentum is strongly bullish. Negative momentum = bearish. Fast and direct.</p>
+          </div>
+          <div class="strat-card">
+            <h4>MACD</h4>
+            <p>12-period EMA minus 26-period EMA vs. its 9-period signal line. When MACD crosses above signal line = buy trigger. Cross below = sell trigger.</p>
+          </div>
+          <div class="strat-card">
+            <h4>Volume Spike</h4>
+            <p>Current candle volume vs. 20-candle average. A spike (&gt;1.5×) with positive price = institutional buying. Confirms direction signals.</p>
+          </div>
+          <div class="strat-card">
+            <h4>Market Edge</h4>
+            <p>Polymarket's 5-min BTC market usually prices near 50/50. When your indicators say 65%+ confidence UP but market says 50%, that's edge — buy UP at 50¢ for a fair value of 65¢.</p>
+          </div>
+          <div class="strat-card">
+            <h4>Composite Score</h4>
+            <p>Weighted combination: RSI 30% + Momentum 35% + MACD 25% + Volume 10%. Score &gt; 60 = BUY UP signal. Score &lt; 40 = BUY DOWN signal. 40–60 = no trade.</p>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<script src="api.js"></script>
+<script src="trader.js"></script>
+<script src="strategies.js"></script>
+<script src="btc-algo.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

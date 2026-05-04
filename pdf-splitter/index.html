@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF too big - Split your PDFs easily</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 PDF too big</h1>
+            <p class="tagline">Split your large PDFs into smaller chunks</p>
+        </header>
+
+        <main>
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-zone" id="uploadZone">
+                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                    </svg>
+                    <p class="upload-text">Drop your PDF here or <span class="browse">browse</span></p>
+                    <input type="file" id="fileInput" accept=".pdf" hidden>
+                </div>
+                
+                <div class="file-info" id="fileInfo" style="display: none;">
+                    <div class="file-details">
+                        <span class="file-name" id="fileName"></span>
+                        <span class="file-stats" id="fileStats"></span>
+                    </div>
+                    <button class="btn-small btn-clear" id="clearBtn">×</button>
+                </div>
+            </section>
+
+            <!-- Split Options -->
+            <section class="options-section" id="optionsSection" style="display: none;">
+                <h2>Split Options</h2>
+                
+                <div class="split-modes">
+                    <label class="mode-option">
+                        <input type="radio" name="splitMode" value="pages" checked>
+                        <div class="mode-card">
+                            <div class="mode-icon">📑</div>
+                            <div class="mode-title">By Pages</div>
+                            <div class="mode-desc">Split every N pages</div>
+                        </div>
+                    </label>
+                    
+                    <label class="mode-option">
+                        <input type="radio" name="splitMode" value="chunks">
+                        <div class="mode-card">
+                            <div class="mode-icon">✂️</div>
+                            <div class="mode-title">By Chunks</div>
+                            <div class="mode-desc">Split into N parts</div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="input-group">
+                    <label for="splitValue" id="splitLabel">Pages per file:</label>
+                    <input type="number" id="splitValue" min="1" value="10">
+                </div>
+
+                <div class="input-group size-limit-group">
+                    <label class="size-limit-toggle" for="enableSizeLimit">
+                        <input type="checkbox" id="enableSizeLimit">
+                        <span>Enable max file size per part</span>
+                    </label>
+                    <div class="size-limit-inputs" id="sizeLimitInputs" style="display: none;">
+                        <label for="maxSizeMB">Max size per part (MB):</label>
+                        <input type="number" id="maxSizeMB" min="0.1" step="0.1" value="5">
+                        <label for="sizePresetMB">Quick presets:</label>
+                        <select id="sizePresetMB">
+                            <option value="">Custom</option>
+                            <option value="2">2 MB</option>
+                            <option value="5">5 MB</option>
+                            <option value="10">10 MB</option>
+                            <option value="15">15 MB</option>
+                            <option value="20">20 MB</option>
+                            <option value="25">25 MB</option>
+                        </select>
+                        <p class="size-note">If a part exceeds this size, it will be split into smaller parts automatically.</p>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="splitBtn">
+                    <span class="btn-text">Split PDF</span>
+                    <span class="btn-loader" style="display: none;">Processing...</span>
+                </button>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <h2>Your Split PDFs</h2>
+                <div class="results-grid" id="resultsGrid"></div>
+                <button class="btn btn-secondary" id="resetBtn">Split Another PDF</button>
+            </section>
+        </main>
+
+        <footer>
+            <p>All processing happens in your browser. Your files never leave your device.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

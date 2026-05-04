@@ -1,0 +1,6 @@
+# Non-runtime content for local workflow only
+_intake/
+_output/
+pipeline/
+SESSION_NOTES.md
+.github/copilot-instructions.md

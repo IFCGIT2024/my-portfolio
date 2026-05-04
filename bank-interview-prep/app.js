@@ -153,7 +153,7 @@ function updateProgressBar() {
   });
 }
 
-function navigate(moduleId) {
+function navigate(moduleId, tabId, tabGroup, scrollTarget) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   const navEl = document.querySelector(`.nav-item[data-module="${moduleId}"]`);
   if (navEl) navEl.classList.add('active');
@@ -163,7 +163,26 @@ function navigate(moduleId) {
     document.getElementById('main').scrollTop = 0;
     window.scrollTo(0, 0);
     attachInteractivity();
+    if (tabId && tabGroup) {
+      const tabBtn = document.querySelector(`.tab-btn[data-tab-group="${tabGroup}"][data-tab="${tabId}"]`);
+      if (tabBtn) tabBtn.click();
+    }
+    if (scrollTarget) {
+      requestAnimationFrame(() => {
+        const el = document.querySelector(scrollTarget);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
   }
+  // Auto-expand this module's sub-list if it exists and isn't already open
+  const subList = document.getElementById('subnav-' + moduleId);
+  if (subList && !subList.classList.contains('open')) {
+    closeAllSubNavs();
+    subList.classList.add('open');
+    if (navEl) navEl.classList.add('expanded');
+  }
+  // Close mobile sidebar after navigation
+  document.body.classList.remove('mob-sidebar-open');
 }
 
 function attachInteractivity() {
@@ -256,13 +275,184 @@ function attachInteractivity() {
   });
 }
 
+// Sub-nav helpers
+function closeAllSubNavs() {
+  document.querySelectorAll('.nav-sub-list.open').forEach(l => l.classList.remove('open'));
+  document.querySelectorAll('.nav-item.expanded').forEach(i => i.classList.remove('expanded'));
+}
+
+// Build expandable sub-navigation
+function buildSubNav() {
+  const SUBNAV = {
+    m1: [
+      { label: 'Classification Gap SQL' },
+      { label: 'Access Audit Queries' },
+      { label: 'PII Pattern Detection' },
+      { label: 'Practice Problems' },
+    ],
+    m2: [
+      { label: 'Setup & Libraries' },
+      { label: 'PII Scanner Logic' },
+      { label: 'Automation Patterns' },
+      { label: 'Practice Exercises' },
+    ],
+    m3: [
+      { label: 'AWS Fundamentals' },
+      { label: 'S3 Tagging & Macie' },
+      { label: 'Azure Purview' },
+      { label: 'GCP & Multi-Cloud' },
+    ],
+    m4: [
+      { label: 'Classification Tiers' },
+      { label: '1touch.io Kontxtual™' },
+      { label: 'Vendor Landscape' },
+      { label: 'Bank Integration' },
+    ],
+    m5: [
+      { label: 'GDPR Essentials' },
+      { label: 'DORA Requirements' },
+      { label: 'BCBS 239' },
+      { label: 'DSARs & Rights' },
+    ],
+    m6: [
+      { label: 'DSPM Overview' },
+      { label: 'Microsoft Purview' },
+      { label: 'Unity Catalog & DLP' },
+      { label: 'SIEM Integration' },
+    ],
+    m7: [
+      { label: 'ML Classification Models' },
+      { label: 'NLP & Pattern Matching' },
+      { label: 'GenAI Risks' },
+      { label: 'AI Governance (EU AI Act)' },
+    ],
+    m8: [
+      { label: 'Project 1: PII Scanner' },
+      { label: 'Project 2: Audit Queries' },
+      { label: 'Project 3: Data Flow Mapper' },
+    ],
+    m9: [
+      { label: 'Basic Level (7 Qs)',   scrollTarget: '.qa-level.basic'  },
+      { label: 'Mid Level (10 Qs)',    scrollTarget: '.qa-level.mid'    },
+      { label: 'Senior Level (7 Qs)', scrollTarget: '.qa-level.senior' },
+    ],
+    m10: [
+      { label: 'DSPM Engineer Pitch',   tabGroup: 'pitch', tabId: 'pitch-dspm'       },
+      { label: 'Privacy Analyst Pitch', tabGroup: 'pitch', tabId: 'pitch-privacy'    },
+      { label: 'Data Protection Lead',  tabGroup: 'pitch', tabId: 'pitch-protection' },
+      { label: 'AI Governance Pitch',   tabGroup: 'pitch', tabId: 'pitch-ai'         },
+    ],
+    lab: [
+      { label: '\ud83d\udcca Overview',           tabGroup: 'lab_t', tabId: 'lab_t_overview' },
+      { label: '\u2699 Setup',               tabGroup: 'lab_t', tabId: 'lab_t_setup'    },
+      { label: 'Ex 1: SQL Audit',       tabGroup: 'lab_t', tabId: 'lab_t_ex1'      },
+      { label: 'Ex 2: Least Privilege', tabGroup: 'lab_t', tabId: 'lab_t_ex2'      },
+      { label: 'Ex 3: Scanner',         tabGroup: 'lab_t', tabId: 'lab_t_ex3'      },
+      { label: 'Ex 4: Labeling',        tabGroup: 'lab_t', tabId: 'lab_t_ex4'      },
+      { label: 'Ex 5: DSAR',            tabGroup: 'lab_t', tabId: 'lab_t_ex5'      },
+    ],
+  };
+
+  Object.entries(SUBNAV).forEach(([moduleId, items]) => {
+    if (!items.length) return;
+    const navEl = document.querySelector(`.nav-item[data-module="${moduleId}"]`);
+    if (!navEl) return;
+
+    // Append expand chevron inside nav-item
+    const expandBtn = document.createElement('button');
+    expandBtn.className = 'nav-expand';
+    expandBtn.setAttribute('aria-label', 'Toggle sections');
+    expandBtn.innerHTML = '&#9660;';
+    navEl.appendChild(expandBtn);
+
+    // Build sub-list as next sibling of nav-item
+    const subList = document.createElement('ul');
+    subList.className = 'nav-sub-list';
+    subList.id = 'subnav-' + moduleId;
+    items.forEach(item => {
+      const li = document.createElement('li');
+      li.className = 'nav-sub-item';
+      li.textContent = item.label;
+      li.dataset.navModule = moduleId;
+      if (item.tabId)        li.dataset.tabId        = item.tabId;
+      if (item.tabGroup)     li.dataset.tabGroup     = item.tabGroup;
+      if (item.scrollTarget) li.dataset.scrollTarget = item.scrollTarget;
+      subList.appendChild(li);
+    });
+    navEl.parentNode.insertBefore(subList, navEl.nextSibling);
+
+    // Expand/collapse toggle
+    expandBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const isOpen = subList.classList.contains('open');
+      closeAllSubNavs();
+      if (!isOpen) {
+        subList.classList.add('open');
+        navEl.classList.add('expanded');
+      }
+    });
+
+    // Sub-item navigation
+    subList.addEventListener('click', e => {
+      const subItem = e.target.closest('.nav-sub-item');
+      if (!subItem) return;
+      document.querySelectorAll('.nav-sub-item').forEach(i => i.classList.remove('active-sub'));
+      subItem.classList.add('active-sub');
+      navigate(
+        subItem.dataset.navModule,
+        subItem.dataset.tabId        || null,
+        subItem.dataset.tabGroup     || null,
+        subItem.dataset.scrollTarget || null
+      );
+    });
+  });
+}
+
+// Sidebar collapse/expand
+function initSidebarToggle() {
+  const toggleBtn = document.getElementById('sidebar-toggle');
+  const mobBtn    = document.getElementById('mob-sidebar-btn');
+  const overlay   = document.getElementById('sidebar-overlay');
+
+  function setCollapsed(collapsed) {
+    document.body.classList.toggle('sidebar-collapsed', collapsed);
+    if (toggleBtn) toggleBtn.innerHTML = collapsed ? '&#x276F;' : '&#x276E;';
+    localStorage.setItem('dga_sidebar_collapsed', collapsed ? '1' : '0');
+  }
+
+  // Restore saved state
+  if (localStorage.getItem('dga_sidebar_collapsed') === '1') setCollapsed(true);
+
+  // Desktop collapse toggle
+  toggleBtn?.addEventListener('click', () => {
+    setCollapsed(!document.body.classList.contains('sidebar-collapsed'));
+  });
+
+  // Mobile: open on hamburger click
+  mobBtn?.addEventListener('click', () => document.body.classList.add('mob-sidebar-open'));
+
+  // Mobile: close via overlay tap
+  overlay?.addEventListener('click', () => document.body.classList.remove('mob-sidebar-open'));
+}
+
 // Nav click handler
 document.getElementById('nav-list').addEventListener('click', e => {
   const item = e.target.closest('.nav-item');
-  if (item && item.dataset.module) navigate(item.dataset.module);
+  if (item && item.dataset.module) {
+    // On desktop: if sidebar is collapsed, expand it first
+    if (document.body.classList.contains('sidebar-collapsed')) {
+      document.body.classList.remove('sidebar-collapsed');
+      const btn = document.getElementById('sidebar-toggle');
+      if (btn) btn.innerHTML = '&#x276E;';
+      localStorage.setItem('dga_sidebar_collapsed', '0');
+    }
+    navigate(item.dataset.module);
+  }
 });
 
 // Init
+buildSubNav();
+initSidebarToggle();
 renderProfileBar();
 navigate('home');
 const _saved = getCurrentUser();

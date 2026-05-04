@@ -1,0 +1,36 @@
+name: dataguard-lab
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: dga-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dga}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dga}
+      POSTGRES_DB: ${POSTGRES_DB:-dataguard}
+    ports:
+      - "${DB_PORT:-55432}:5432"
+    volumes:
+      - dga_pgdata:/var/lib/postgresql/data
+      # Anything in /docker-entrypoint-initdb.d/ runs ONCE on first boot,
+      # in alphabetical order. Keep filename prefixes 01_, 02_, … to control order.
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-dga} -d ${POSTGRES_DB:-dataguard}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  adminer:
+    image: adminer:4
+    container_name: dga-adminer
+    restart: unless-stopped
+    ports:
+      - "${ADMINER_PORT:-8080}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  dga_pgdata:

@@ -8,10 +8,13 @@
 </head>
 <body>
 
+<!-- MOBILE SIDEBAR BUTTON -->
+<button id="mob-sidebar-btn" aria-label="Open navigation">&#9776;</button>
+
 <!-- SIDEBAR NAV -->
 <nav id="sidebar">
   <div class="sidebar-header">
-    <div class="logo">🏦 DataGuard Academy</div>
+    <div class="logo"><span class="logo-icon">🏦</span><span class="logo-text"> DataGuard Academy</span></div>
     <div class="tagline">Bank Data Classification Prep</div>
     <div class="progress-bar-wrap">
       <div class="progress-label">Overall Progress</div>
@@ -19,25 +22,29 @@
       <div class="progress-pct" id="progress-pct">0%</div>
     </div>
     <div id="user-profile-bar"></div>
+    <button class="sidebar-collapse-btn" id="sidebar-toggle" title="Collapse sidebar" aria-label="Collapse sidebar">&#x276E;</button>
   </div>
   <ul class="nav-list" id="nav-list">
-    <li class="nav-item active" data-module="home"><span class="nav-icon">🏠</span> Home</li>
+    <li class="nav-item active" data-module="home"><span class="nav-icon">🏠</span><span class="nav-label"> Home</span></li>
     <li class="nav-section">FOUNDATIONS</li>
-    <li class="nav-item" data-module="m1"><span class="nav-icon">🗄️</span> 1. SQL for Data Analysts</li>
-    <li class="nav-item" data-module="m2"><span class="nav-icon">🐍</span> 2. Python for Automation</li>
-    <li class="nav-item" data-module="m3"><span class="nav-icon">☁️</span> 3. Cloud & AWS Basics</li>
+    <li class="nav-item" data-module="m1"><span class="nav-icon">🗄️</span><span class="nav-label"> 1. SQL for Data Analysts</span></li>
+    <li class="nav-item" data-module="m2"><span class="nav-icon">🐍</span><span class="nav-label"> 2. Python for Automation</span></li>
+    <li class="nav-item" data-module="m3"><span class="nav-icon">☁️</span><span class="nav-label"> 3. Cloud & AWS Basics</span></li>
     <li class="nav-section">BANKING DOMAIN</li>
-    <li class="nav-item" data-module="m4"><span class="nav-icon">🔒</span> 4. Data Classification Systems</li>
-    <li class="nav-item" data-module="m5"><span class="nav-icon">⚖️</span> 5. Compliance & Regulation</li>
-    <li class="nav-item" data-module="m6"><span class="nav-icon">🛡️</span> 6. DSPM & Security Tools</li>
+    <li class="nav-item" data-module="m4"><span class="nav-icon">🔒</span><span class="nav-label"> 4. Data Classification Systems</span></li>
+    <li class="nav-item" data-module="m5"><span class="nav-icon">⚖️</span><span class="nav-label"> 5. Compliance & Regulation</span></li>
+    <li class="nav-item" data-module="m6"><span class="nav-icon">🛡️</span><span class="nav-label"> 6. DSPM & Security Tools</span></li>
     <li class="nav-section">ADVANCED</li>
-    <li class="nav-item" data-module="m7"><span class="nav-icon">🤖</span> 7. AI/ML in Classification</li>
-    <li class="nav-item" data-module="m8"><span class="nav-icon">🔧</span> 8. Mini Projects</li>
+    <li class="nav-item" data-module="m7"><span class="nav-icon">🤖</span><span class="nav-label"> 7. AI/ML in Classification</span></li>
+    <li class="nav-item" data-module="m8"><span class="nav-icon">🔧</span><span class="nav-label"> 8. Mini Projects</span></li>
     <li class="nav-section">INTERVIEW</li>
-    <li class="nav-item" data-module="m9"><span class="nav-icon">💼</span> 9. Interview Q&A Bank</li>
-    <li class="nav-item" data-module="m10"><span class="nav-icon">🗣️</span> 10. Communication Guide</li>
+    <li class="nav-item" data-module="m9"><span class="nav-icon">💼</span><span class="nav-label"> 9. Interview Q&A Bank</span></li>
+    <li class="nav-item" data-module="m10"><span class="nav-icon">🗣️</span><span class="nav-label"> 10. Communication Guide</span></li>
+    <li class="nav-section">LAB</li>
+    <li class="nav-item" data-module="lab"><span class="nav-icon">🔬</span><span class="nav-label"> Hands-On Lab</span></li>
   </ul>
 </nav>
+<div id="sidebar-overlay"></div>
 
 <!-- MAIN CONTENT -->
 <main id="main">
@@ -57,6 +64,7 @@
 <script src="data-m8.js"></script>
 <script src="data-m9.js"></script>
 <script src="data-m10.js"></script>
+<script src="data-lab.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

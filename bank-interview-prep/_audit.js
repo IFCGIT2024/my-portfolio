@@ -19,6 +19,7 @@ const files = {
   'data-m8.js':   fs.readFileSync('data-m8.js','utf8'),
   'data-m9.js':   fs.readFileSync('data-m9.js','utf8'),
   'data-m10.js':  fs.readFileSync('data-m10.js','utf8'),
+  'data-lab.js':  fs.readFileSync('data-lab.js','utf8'),
   'app.js':       fs.readFileSync('app.js','utf8'),
   'styles.css':   fs.readFileSync('styles.css','utf8'),
   'index.html':   fs.readFileSync('index.html','utf8'),
@@ -30,7 +31,7 @@ function pass(msg) { console.log('  PASS: ' + msg); }
 
 // ── 1. window.MODULES registrations ─────────────────────────────────────────
 console.log('\n=== 1. MODULES REGISTERED ===');
-const expectedModules = ['home','m1','m2','m3','m4','m5','m6','m7','m8','m9','m10'];
+const expectedModules = ['home','m1','m2','m3','m4','m5','m6','m7','m8','m9','m10','lab'];
 const allJS = Object.entries(files).filter(([k])=>k.endsWith('.js')).map(([,v])=>v).join('\n');
 expectedModules.forEach(id => {
   const re = new RegExp('window\\.MODULES\\.' + id + '\\s*=');
@@ -49,7 +50,7 @@ expectedModules.forEach(id => {
 // ── 3. Script tags in index.html ─────────────────────────────────────────────
 console.log('\n=== 3. SCRIPT TAGS IN index.html ===');
 const expectedScripts = ['data.js','data-home.js','data-m1.js','data-m2.js','data-m3.js',
-  'data-m4.js','data-m5.js','data-m6.js','data-m7.js','data-m8.js','data-m9.js','data-m10.js','app.js'];
+  'data-m4.js','data-m5.js','data-m6.js','data-m7.js','data-m8.js','data-m9.js','data-m10.js','data-lab.js','app.js'];
 expectedScripts.forEach(s => {
   if (html.includes('src="' + s + '"')) pass('script src="' + s + '"');
   else fail('index.html', 'missing <script src="' + s + '">');
@@ -59,28 +60,34 @@ const lastScript = [...html.matchAll(/src="([^"]+\.js)"/g)].map(m=>m[1]).pop();
 if (lastScript === 'app.js') pass('app.js is last script');
 else fail('index.html', 'app.js should be last script, found: ' + lastScript);
 
-// ── 4. Navigation chain (_nav calls) ─────────────────────────────────────────
+// ── 4. Navigation chain (prev/next in _renderModule config) ────────────────
+// _nav() is called centrally inside _renderModule(cfg); module files set cfg.prev/next.
 console.log('\n=== 4. NAVIGATION CHAIN ===');
 const navChain = [
-  { file:'data-m1.js',  expected:"_nav(null, 'm1', 'm2')" },
-  { file:'data-m2.js',  expected:"_nav('m1', 'm2', 'm3')" },
-  { file:'data-m3.js',  expected:"_nav('m2', 'm3', 'm4')" },
-  { file:'data-m4.js',  expected:"_nav('m3', 'm4', 'm5')" },
-  { file:'data-m5.js',  expected:"_nav('m4', 'm5', 'm6')" },
-  { file:'data-m6.js',  expected:"_nav('m5', 'm6', 'm7')" },
-  { file:'data-m7.js',  expected:"_nav('m6', 'm7', 'm8')" },
-  { file:'data-m8.js',  expected:"_nav('m7', 'm8', 'm9')" },
-  { file:'data-m9.js',  expected:"_nav('m8', 'm9', 'm10')" },
-  { file:'data-m10.js', expected:"_nav('m9', 'm10', null)" },
+  { file:'data-m1.js',  prev:"prev: null",   next:"next: 'm2'" },
+  { file:'data-m2.js',  prev:"prev: 'm1'",   next:"next: 'm3'" },
+  { file:'data-m3.js',  prev:"prev: 'm2'",   next:"next: 'm4'" },
+  { file:'data-m4.js',  prev:"prev: 'm3'",   next:"next: 'm5'" },
+  { file:'data-m5.js',  prev:"prev: 'm4'",   next:"next: 'm6'" },
+  { file:'data-m6.js',  prev:"prev: 'm5'",   next:"next: 'm7'" },
+  { file:'data-m7.js',  prev:"prev: 'm6'",   next:"next: 'm8'" },
+  { file:'data-m8.js',  prev:"prev: 'm7'",   next:"next: 'm9'" },
+  { file:'data-m9.js',  prev:"prev: 'm8'",   next:"next: 'm10'" },
+  { file:'data-m10.js', prev:"prev: 'm9'",   next:"next: null" },
 ];
-navChain.forEach(({file, expected}) => {
-  if (files[file].includes(expected)) pass(file + ': ' + expected);
-  else fail(file, 'expected ' + expected + ' not found');
+navChain.forEach(({file, prev, next}) => {
+  const src = files[file];
+  // Accept either _renderModule config style ("prev: 'xx'") or direct _nav('xx', ...) call
+  const prevOk = src.includes(prev) || src.includes("_nav(" + prev.replace("prev: ","") + ",");
+  const nextOk = src.includes(next) || src.includes(", " + next.replace("next: ","") + ")");
+  if (!prevOk) fail(file, 'expected config ' + prev + ' not found');
+  else if (!nextOk) fail(file, 'expected config ' + next + ' not found');
+  else pass(file + ': ' + prev + ', ' + next);
 });
 
 // ── 5. Tab group consistency ─────────────────────────────────────────────────
 console.log('\n=== 5. TAB GROUP CONSISTENCY ===');
-const moduleFiles = Object.entries(files).filter(([k])=>k.startsWith('data-m'));
+const moduleFiles = Object.entries(files).filter(([k])=>k.startsWith('data-m') || k === 'data-lab.js');
 moduleFiles.forEach(([fname, src]) => {
   // Extract all data-tab-group values from buttons
   const btnGroups   = [...src.matchAll(/class="tab-btn[^"]*"[^>]*data-tab-group="([^"]+)"/g)].map(m=>m[1]);
@@ -113,11 +120,13 @@ moduleFiles.forEach(([fname, src]) => {
 });
 
 // ── 6. data-goto targets all valid ──────────────────────────────────────────
+// Exclude data.js which contains the _nav() helper with ${prev}/${next} template vars.
 console.log('\n=== 6. DATA-GOTO TARGETS ===');
-const validTargets = new Set(['home','m1','m2','m3','m4','m5','m6','m7','m8','m9','m10']);
-const allContent = Object.values(files).join('\n');
+const validTargets = new Set(['home','m1','m2','m3','m4','m5','m6','m7','m8','m9','m10','lab']);
+const allContent = Object.entries(files).filter(([k])=>k!=='data.js').map(([,v])=>v).join('\n');
 const gotoMatches = [...allContent.matchAll(/data-goto="([^"]+)"/g)].map(m=>m[1]);
-const badGotos = [...new Set(gotoMatches.filter(t=>!validTargets.has(t)))];
+// Also skip any that are JS template expressions (start with $)
+const badGotos = [...new Set(gotoMatches.filter(t=>!validTargets.has(t) && !t.startsWith('$')))];
 if (badGotos.length) badGotos.forEach(t => fail('*', 'invalid data-goto="'+t+'"'));
 else pass('all ' + gotoMatches.length + ' data-goto targets are valid module IDs');
 

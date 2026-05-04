@@ -198,13 +198,13 @@ ORDER BY table_name;`);
                       WHERE customer_id = c.customer_id)),
   'dsar_history', (SELECT jsonb_agg(d)
                    FROM bank.dsar_requests d
-                   WHERE d.customer_id = c.customer_id),
-  'access_audit', (SELECT jsonb_agg(l)
-                   FROM bank.access_logs l
-                   WHERE l.user_id = c.customer_id::text)
+                   WHERE d.customer_id = c.customer_id)
 ) AS dsar_export
 FROM bank.customers c
-WHERE c.customer_id = 42;`);
+WHERE c.customer_id = 42;
+-- Note: access_logs records WHO inside the bank queried customer data --
+-- it is employee activity, not customer activity, so it is NOT part of
+-- the Article 15 export. We audit it separately in Step 6.`);
 
   const cb_ex5_fulfill = _cb('sql',
 `UPDATE bank.dsar_requests
@@ -215,8 +215,17 @@ SET status        = 'fulfilled',
 WHERE customer_id = 42 AND status IN ('open','in_progress');`);
 
   const cb_ex5_audit = _cb('sql',
-`-- In production, every query emits a row here via pg_stat_statements + trigger
-SELECT * FROM bank.access_logs ORDER BY accessed_at DESC LIMIT 5;`);
+`-- access_logs records every query against PII tables. In production every
+-- session emits rows here automatically via pg_stat_statements + a trigger.
+-- Show the most recent 5 accesses against the customers table -- this is
+-- the evidence you would hand to the ICO if asked who has touched this
+-- customer's record.
+SELECT al.accessed_at, e.full_name AS who, al.operation, al.rows_returned
+FROM bank.access_logs al
+JOIN bank.employees e ON e.employee_id = al.employee_id
+WHERE al.table_accessed = 'bank.customers'
+ORDER BY al.accessed_at DESC
+LIMIT 5;`);
 
   // ---- Scaffolded query blocks for exercises ----
 
@@ -302,7 +311,12 @@ SELECT * FROM bank.v_branch_customer_summary LIMIT 5;`);
 
   const cb_ex2_role = _cb('sql',
 `-- Step 2: create the role (NOLOGIN = a permission container, not a login account)
-CREATE ROLE r_branch_staff NOLOGIN;
+-- The DO block lets you re-run this script safely without errors.
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'r_branch_staff') THEN
+    CREATE ROLE r_branch_staff NOLOGIN;
+  END IF;
+END $$;
 
 -- Step 3: grant exactly what is needed -- nothing more
 GRANT CONNECT ON DATABASE dataguard              TO r_branch_staff;
@@ -311,7 +325,11 @@ GRANT SELECT  ON bank.v_branch_customer_summary TO r_branch_staff;
 -- We grant SELECT on the VIEW only -- not on any base table
 
 -- Step 4: create a real login user and assign to the role
-CREATE USER branch_demo WITH PASSWORD 'BranchDemo2024!';
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'branch_demo') THEN
+    CREATE USER branch_demo WITH PASSWORD 'BranchDemo2024!';
+  END IF;
+END $$;
 GRANT r_branch_staff TO branch_demo;`);
 
   const cb_ex3_count = _cb('sql',
@@ -345,17 +363,19 @@ ORDER BY af.table_name, af.column_name;`);
 SELECT
   request_id,
   customer_id,
-  submitted_at,
-  NOW() - submitted_at   AS age,
+  received_at,
+  NOW() - received_at   AS age,
+  deadline_at,
   status,
   handler_email
 FROM bank.dsar_requests
 WHERE customer_id = 42;
--- Check the 'age' column. Legal deadline = submitted_at + 30 days.`);
+-- Check the 'age' column. Legal deadline = received_at + 30 days
+-- (already pre-computed in the deadline_at column).`);
 
   const cb_ex5_verify_data = _cb('sql',
 `-- Count how many records the bank holds per table for customer 42
--- Every row here is personal data you must include in the export
+-- Every row here is personal data that must be included in the Art. 15 export
 SELECT 'customers'    AS source, COUNT(*) AS records
   FROM bank.customers       WHERE customer_id = 42
 UNION ALL
@@ -367,10 +387,7 @@ SELECT 'transactions',          COUNT(*)
   WHERE account_id IN (SELECT account_id FROM bank.accounts WHERE customer_id = 42)
 UNION ALL
 SELECT 'dsar_requests',         COUNT(*)
-  FROM bank.dsar_requests   WHERE customer_id = 42
-UNION ALL
-SELECT 'access_logs',           COUNT(*)
-  FROM bank.access_logs     WHERE user_id = '42';`);
+  FROM bank.dsar_requests   WHERE customer_id = 42;`);
 
   // ---- Tab content ----
 
@@ -514,7 +531,7 @@ ${_table(
     ['<code>transactions</code>', '25,000', '12 months of transaction history'],
     ['<code>employees</code>', '60', 'Bank staff across 5 departments'],
     ['<code>access_logs</code>', '~8,400', 'A record of who accessed which table, when, and for how long'],
-    ['<code>data_catalog</code>', '~10% filled', 'The classification register &mdash; intentionally incomplete so you can complete it in the exercises'],
+    ['<code>data_catalog</code>', '~15% filled', 'The classification register &mdash; intentionally incomplete so you can complete it in the exercises'],
     ['<code>classification_rules</code>', '15', 'The regex and context patterns the PII scanner uses'],
     ['<code>dsar_requests</code>', '12', 'Open and closed Data Subject Access Requests'],
     ['<code>audit_findings</code>', 'empty at start', 'The PII scanner writes its findings here when you run it in Exercise 3']
@@ -808,7 +825,7 @@ ${cb_ex5_fulfill}
 
 <h2>Step 6 &mdash; Confirm the Audit Trail</h2>
 ${cb_ex5_audit}
-<p>The access log should show your recent queries. In a production environment this log is immutable &mdash; no one, not even a DBA, can delete it. It proves that access occurred, when, and by whom. If the bank were investigated for a DSAR breach, the ICO would request this log as the first piece of evidence.</p>
+<p>You should see 5 rows showing which employees have queried the customers table most recently. The lab pre-seeds these access entries; in production every session emits rows here automatically. The log is immutable in production &mdash; no one, not even a DBA, can delete it. It proves that access occurred, when, and by whom. If the bank were investigated for a DSAR breach, the ICO would request this log as the first piece of evidence.</p>
 
 <h2>Key Facts to Use in Interview</h2>
 ${_table(

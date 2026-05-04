@@ -41,8 +41,19 @@ def main() -> None:
         rows = cur.fetchall()
 
         for schema, table, col, conf, summary, pii_cat, rule in rows:
-            label = "Restricted" if "Restricted" in summary else "Internal" if "Internal" in summary else None
-            if label is None:
+            # Parse the suggested label out of the summary string.
+            # Order matters: "Highly Restricted" must be checked BEFORE "Restricted"
+            # because a substring search for "Restricted" would otherwise match
+            # the longer label and downgrade it.
+            if "Highly Restricted" in summary:
+                label = "Highly Restricted"
+            elif "Restricted" in summary:
+                label = "Restricted"
+            elif "Internal" in summary:
+                label = "Internal"
+            elif "Public" in summary:
+                label = "Public"
+            else:
                 continue
 
             cur.execute("""

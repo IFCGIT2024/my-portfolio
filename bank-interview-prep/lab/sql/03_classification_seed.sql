@@ -1,6 +1,6 @@
 -- =====================================================================
--- DataGuard Academy Lab — 03_classification_seed.sql
--- Pre-populate ~30% of the data_catalog. The rest of the schema is
+-- DataGuard Academy Lab -- 03_classification_seed.sql
+-- Pre-populate ~15% of the data_catalog. The rest of the schema is
 -- intentionally left UNCLASSIFIED so learners can find the gaps.
 -- =====================================================================
 SET search_path TO bank, public;
@@ -45,6 +45,10 @@ VALUES
 
   -- employees (a known low-confidence row for the Review exercise)
   ('bank','employees','full_name',     'text',        'Internal',          'identity',  0.62, 'auto', '2026-02-15', NULL, 'farouk.ahmed@dga-bank.test', 1825, 'LOW CONFIDENCE — review needed'),
-  ('bank','employees','email',         'text',        'Internal',          'contact',   0.91, 'auto', '2026-02-15', NULL, 'farouk.ahmed@dga-bank.test', 1825, NULL);
+  ('bank','employees','email',         'text',        'Internal',          'contact',   0.91, 'auto', '2026-02-15', NULL, 'farouk.ahmed@dga-bank.test', 1825, NULL),
+
+  -- A deliberately stale label for the Exercise 1 bonus query
+  -- last_reviewed_at is > 180 days ago so the stale-label query returns at least one row
+  ('bank','customers','phone',         'text',        'Internal',          'contact',   0.85, 'human','2024-08-10','2024-08-10','farouk.ahmed@dga-bank.test', 2555, 'STALE -- not reviewed since 2024');
 
   -- transactions, dsar_requests, access_logs, audit_findings — ALL MISSING

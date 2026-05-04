@@ -75,7 +75,7 @@ CREATE INDEX idx_access_emp_time ON access_logs(employee_id, accessed_at);
 CREATE INDEX idx_access_table_time ON access_logs(table_accessed, accessed_at);
 
 -- ── Data catalog (the classification register) ───────────────────────
--- One row per (schema, table, column). Intentionally only ~30% populated
+-- One row per (schema, table, column). Intentionally only ~15% populated
 -- so learners can find the gaps.
 CREATE TABLE data_catalog (
     catalog_id            BIGSERIAL PRIMARY KEY,

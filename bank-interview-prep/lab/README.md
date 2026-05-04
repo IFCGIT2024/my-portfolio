@@ -27,11 +27,12 @@ Optional but recommended: VS Code extensions **PostgreSQL** (Chris Kolkman) and 
 ## Quickstart (5 commands)
 
 ```bash
-# 1. From the repo root, enter the lab folder
-cd bank-interview-prep/lab
+# 1. From the extracted lab folder
+cd lab
 
 # 2. Copy the env file (do not edit unless you change ports)
-cp .env.example .env
+cp .env.example .env        # macOS / Linux / Git Bash
+# copy .env.example .env    # Windows PowerShell
 
 # 3. Bring up Postgres + Adminer
 docker compose up -d
@@ -58,7 +59,7 @@ To stop everything: `docker compose down`. To wipe data and start fresh: `docker
 | `transactions`           | 25,000 | 12 months of transaction history |
 | `employees`              | 60 | Bank staff across 5 departments |
 | `access_logs`            | ~8,400 | Who accessed which table, when, for how long |
-| `data_catalog`           | partial | The classification register — **only ~10% pre-labeled on purpose** (run the Python toolkit to fill it in) |
+| `data_catalog`           | partial | The classification register — **only ~15% pre-labeled on purpose** (run the Python toolkit to fill it in) |
 | `classification_rules`   | 15 | Regex + context patterns the scanner uses |
 | `dsar_requests`          | 12 | Open and closed Data Subject Access Requests |
 | `audit_findings`         | (empty) | The scanner writes here |

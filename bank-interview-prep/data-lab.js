@@ -6,34 +6,82 @@ window.MODULES.lab = () => {
 
   // ---- Pre-build all code blocks to avoid nested template-literal conflicts ----
 
-  const cb_quickstart = _cb('bash',
-`# 1. Enter the lab folder
-cd bank-interview-prep/lab
+  const cb_step1_clone = _cb('bash',
+`# Run this in your terminal (bash, zsh, or WSL on Windows)
+git clone https://github.com/IFCGIT2024/my-portfolio.git
+cd my-portfolio/bank-interview-prep`);
 
-# 2. Copy the env file
+  const cb_step1_ps = _cb('powershell',
+`# Windows PowerShell alternative (if you don't have Git, install from https://git-scm.com)
+git clone https://github.com/IFCGIT2024/my-portfolio.git
+cd my-portfolio\\bank-interview-prep`);
+
+  const cb_step3_docker = _cb('bash',
+`# From inside the bank-interview-prep folder:
+cd lab
+
+# Copy the env file (only needed once)
 cp .env.example .env
 
-# 3. Start Postgres + Adminer
+# Start Postgres + Adminer in the background
 docker compose up -d
 
-# 4. Verify schema loaded
+# Wait ~10 seconds then verify the database tables loaded:
 docker compose exec db psql -U dga -d dataguard -c "\\dt bank.*"
+# You should see: customers, accounts, transactions, employees, access_logs, etc.`);
 
-# 5. Open Adminer at http://localhost:8080
-#    System: PostgreSQL  Server: db  User: dga  Password: dga  Database: dataguard`);
+  const cb_step3_adminer = _cb('text',
+`Open your browser and go to: http://localhost:8080
 
-  const cb_python_setup = _cb('bash',
-`cd lab/python
+Fill in:
+  System:   PostgreSQL
+  Server:   db
+  Username: dga
+  Password: dga
+  Database: dataguard
+
+Click Login — you should see all the bank tables on the left.`);
+
+  const cb_step4_python = _cb('bash',
+`# From inside bank-interview-prep/lab/python
+cd python
+
+# Create an isolated Python environment (do this once)
 python -m venv .venv
-source .venv/bin/activate         # Windows PS: .venv\\Scripts\\Activate.ps1
+
+# Activate it:
+source .venv/bin/activate            # macOS / Linux / WSL
+# .venv\\Scripts\\Activate.ps1       # Windows PowerShell (uncomment this line)
+
+# Install the required libraries (do this once)
 pip install -r requirements.txt
 
-# Run scripts in order:
-python 01_smoke_test.py           # verify connection
-python 02_pii_scanner.py          # scan columns, write findings
-python 03_classifier_simulator.py # auto-label high-confidence findings
-python 04_label_review.py         # interactive human review
-python 05_audit_report.py         # coverage + anomaly report`);
+# Test everything works — this just checks the DB connection:
+python 01_smoke_test.py
+# Expected output: "Connection OK — dataguard database is ready"`);
+
+  const cb_quickstart = _cb('bash',
+`# Quick reference — full sequence from a fresh clone:
+git clone https://github.com/IFCGIT2024/my-portfolio.git
+cd my-portfolio/bank-interview-prep/lab
+cp .env.example .env
+docker compose up -d
+# wait 10s
+docker compose exec db psql -U dga -d dataguard -c "\\dt bank.*"
+cd python
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python 01_smoke_test.py`);
+
+  const cb_python_setup = _cb('bash',
+`# All 5 scripts live in bank-interview-prep/lab/python/
+# Run them in order as each exercise requires them:
+
+python 01_smoke_test.py           # Step 4 — verify DB connection
+python 02_pii_scanner.py          # Exercise 3 — scan columns, write findings to audit_findings table
+python 03_classifier_simulator.py # Exercise 4A — auto-label high-confidence findings
+python 04_label_review.py         # Exercise 4B — interactive human review queue
+python 05_audit_report.py         # Exercise 4C/E — coverage + anomaly report`);
 
   const cb_ex1_connect = _cb('bash',
 `docker compose exec db psql -U dga -d dataguard
@@ -201,17 +249,70 @@ ${_callout('info', '&#127881; Deterministic Seed', 'All data is generated from a
 `;
 
   const setup = `
-<h2>&#9889; Quickstart (5 commands)</h2>
+<h2>&#9889; How to Get the Lab Files</h2>
 
-${_callout('info', '&#128736; Prerequisites', '<ul><li><strong>Windows:</strong> WSL2 + Docker Desktop (WSL integration on), VS Code + Remote&ndash;WSL extension</li><li><strong>macOS:</strong> Docker Desktop (Apple Silicon or Intel)</li><li><strong>Linux:</strong> Docker Engine + docker-compose-plugin</li></ul>Optional but recommended: VS Code extensions <strong>PostgreSQL</strong> (Chris Kolkman) and <strong>Python</strong> (Microsoft).')}
+<p>All lab files — SQL scripts, Python scripts, Docker config — live in this site's GitHub repository. You download them by cloning the repo. <strong>You do not need to copy anything manually.</strong></p>
 
+<h3>Step 1 &mdash; Install the tools you need (one-time)</h3>
+${_table(
+  ['Tool', 'What it does', 'Download'],
+  [
+    ['<strong>Git</strong>', 'Downloads the repo to your machine', '<a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git-scm.com/downloads</a>'],
+    ['<strong>Docker Desktop</strong>', 'Runs the Postgres database in a container — no install required, no version conflicts', '<a href="https://www.docker.com/products/docker-desktop/" target="_blank" rel="noopener">docker.com/products/docker-desktop</a>'],
+    ['<strong>Python 3.11+</strong>', 'Runs the scanner and review scripts', '<a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a>'],
+    ['<strong>VS Code</strong> (optional)', 'Edit scripts, run the SQL extension, view the database', '<a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a>']
+  ]
+)}
+
+${_callout('info', '&#128250; Windows users', 'Open <strong>PowerShell</strong> or <strong>Git Bash</strong> (installed with Git). Either works. Docker Desktop must be running before Step 3.')}
+
+<h3>Step 2 &mdash; Clone the repo (get the files)</h3>
+<p>This downloads the entire project — including all SQL scripts, Python scripts, and Docker config — into a folder called <code>my-portfolio</code> on your machine.</p>
+
+${cb_step1_clone}
+
+<p>You now have this folder structure on your machine:</p>
+<pre style="background:var(--card);padding:14px 18px;border-radius:8px;font-size:0.82rem;color:#b8cce0;overflow-x:auto">my-portfolio/
+└── bank-interview-prep/
+    ├── lab/
+    │   ├── docker-compose.yml   ← starts the database
+    │   ├── .env.example         ← connection settings
+    │   ├── sql/
+    │   │   ├── 01_schema.sql    ← creates all tables
+    │   │   ├── 02_seed.sql      ← inserts 26,000 rows of bank data
+    │   │   ├── 03_classification_seed.sql
+    │   │   ├── 04_users_and_roles.sql
+    │   │   └── 05_views_for_audit.sql
+    │   └── python/
+    │       ├── requirements.txt       ← list of libraries to install
+    │       ├── 01_smoke_test.py       ← test the DB connection
+    │       ├── 02_pii_scanner.py      ← scans every column for PII
+    │       ├── 03_classifier_simulator.py
+    │       ├── 04_label_review.py     ← interactive review queue
+    │       └── 05_audit_report.py     ← coverage report
+    └── index.html               ← this site</pre>
+
+<h3>Step 3 &mdash; Start the database</h3>
+<p>Docker will download Postgres and Adminer automatically, create the schema, and seed all 26,000 rows. <strong>You do not run the SQL scripts manually</strong> — Docker runs them for you on first start.</p>
+
+${cb_step3_docker}
+
+<h3>Step 4 &mdash; Open Adminer (browser-based query tool)</h3>
+<p>Adminer is a lightweight SQL client that runs in your browser — no separate app needed. Once Docker is up:</p>
+
+${cb_step3_adminer}
+
+${_callout('success', '&#10003; You are ready', 'If you can see the tables in Adminer, the database is fully set up. You can now run queries directly in Adminer or use <code>psql</code> via the Docker command shown above. Move on to Step 5 only when you need to run the Python exercises (Ex 3 and 4).')}
+
+<h3>Step 5 &mdash; Set up the Python scripts</h3>
+<p>Only needed for Exercises 3 and 4. The Python scripts connect to the same Postgres database Docker is running.</p>
+
+${cb_step4_python}
+
+<h3>Quick reference &mdash; full sequence</h3>
 ${cb_quickstart}
 
-<p>Postgres listens on <strong>localhost:55432</strong> (avoids clashing with any local Postgres you may have running). Adminer is at <strong><a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a></strong> &mdash; point-and-click query interface, no psql needed.</p>
-<p>To stop: <code>docker compose down</code>. To wipe all data and start fresh: <code>docker compose down -v</code>.</p>
-
-<h2>&#128013; Python Toolkit</h2>
-${cb_python_setup}
+<p>To stop the database: <code>docker compose down</code>. To wipe all data and start completely fresh: <code>docker compose down -v &amp;&amp; docker compose up -d</code></p>
 
 <h2>&#128204; What's in the Database</h2>
 ${_table(

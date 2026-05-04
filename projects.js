@@ -94,7 +94,7 @@ const PROJECTS = [
     title: "DataGuard Academy",
     description:
       "A 10-module interactive interview prep course for bank data classification roles — covering SQL, Python, cloud, compliance, DSPM, and AI/ML with quizzes, progress tracking, and a full Q&A bank.",
-    path: "docs/projects/bank-interview-prep/index.html",
+    path: "bank-interview-prep/index.html",
     tags: ["Banking", "Data Classification", "SQL", "Python", "Security", "Course"],
     badge: "New",
     badgeColor: "#0ea5e9",

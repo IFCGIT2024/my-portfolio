@@ -251,7 +251,7 @@ ${_callout('info', '&#127881; Deterministic Seed', 'All data is generated from a
      style="display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#0a1628;font-weight:700;font-size:1rem;padding:13px 28px;border-radius:8px;text-decoration:none;width:fit-content">
     &#11015; Download Lab Files (ZIP)
   </a>
-  <p style="margin:0;font-size:0.82rem;color:var(--text-muted)">Your lab folder is inside: <code>my-portfolio-main &rarr; bank-interview-prep &rarr; lab</code></p>
+  <p style="margin:0;font-size:0.82rem;color:var(--text-muted)">After extracting, open the <code>lab/</code> folder in VS Code &mdash; instructions below.</p>
 </div>
 
 <h2>What you need to install (one-time)</h2>
@@ -269,11 +269,11 @@ ${_callout('warning', '&#128250; Windows &mdash; two things before you continue'
 
 <h2>Step 2 &mdash; Unzip and open in VS Code</h2>
 <ul>
-  <li><strong>Windows:</strong> Right-click <code>my-portfolio-main.zip</code> &rarr; <em>Extract All</em> &rarr; pick a location &rarr; Extract</li>
+  <li><strong>Windows:</strong> Right-click the downloaded ZIP &rarr; <em>Extract All</em> &rarr; pick a location &rarr; Extract</li>
   <li><strong>Mac:</strong> Double-click the ZIP &mdash; it extracts automatically</li>
 </ul>
-<p>Open VS Code. Go to <strong>File &rarr; Open Folder</strong>. Navigate inside the unzipped folder and open:</p>
-<pre style="background:var(--card);padding:10px 16px;border-radius:8px;font-size:0.85rem;color:var(--accent)">my-portfolio-main / bank-interview-prep / lab</pre>
+<p>Open VS Code. Go to <strong>File &rarr; Open Folder</strong>. Inside the extracted folder, navigate into <code>bank-interview-prep</code> and open the <code>lab</code> folder:</p>
+<pre style="background:var(--card);padding:10px 16px;border-radius:8px;font-size:0.85rem;color:var(--accent)">bank-interview-prep / lab</pre>
 <p>You will see the lab files appear in the VS Code left panel. The folder contains:</p>
 <pre style="background:var(--card);padding:14px 18px;border-radius:8px;font-size:0.82rem;color:#b8cce0;overflow-x:auto;line-height:1.8">lab/
 ├── docker-compose.yml     ← tells Docker how to run the database

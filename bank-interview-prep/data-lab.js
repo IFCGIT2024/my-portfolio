@@ -87,11 +87,25 @@ python 04_label_review.py         # Ex 4B: interactive human review queue
 python 05_audit_report.py         # Ex 4C/E: coverage + anomaly report`);
 
   const cb_ex1_connect = _cb('text',
-`Go to http://localhost:8080 (Adminer) in your browser.
-  1. Log in with: System=PostgreSQL, Server=db, User=dga, Password=dga, Database=dataguard
-  2. Click "SQL command" in the top menu
-  3. Paste your query into the editor
-  4. Click Execute (or press Ctrl+Enter)`);
+`1. Open your browser and go to:  http://localhost:8080
+   (If you see "This site can't be reached", Docker is not running — open Docker Desktop first.)
+
+2. You will see an Adminer login form with five fields. Fill them in exactly:
+     System:   PostgreSQL          ← select from the dropdown
+     Server:   db                  ← type this exactly, not "localhost"
+     Username: dga
+     Password: dga
+     Database: dataguard
+   Then click the Login button.
+
+3. After logging in, you will see a dark sidebar on the left listing tables.
+   If the sidebar is empty, the database is still loading — wait 30 seconds and refresh.
+
+4. To run a SQL query:
+   a. Click "SQL command" in the top navigation bar (second item in the grey menu).
+   b. A large text area appears. Paste your query into it.
+   c. Click the "Execute" button (bottom-left of the text area), or press Ctrl+Enter.
+   d. Results appear in a table below the editor.`);
 
   const cb_ex2_verify = _cb('sql',
 `-- In Adminer SQL command editor, run these to test the role:
@@ -279,7 +293,16 @@ ${_table(
   ]
 )}
 
-${_callout('warning', '&#128250; Windows &mdash; two things before you continue', '<ol style="margin:6px 0 0"><li>When installing Python, tick <strong>"Add Python to PATH"</strong> before clicking Install.</li><li>After installing Docker Desktop, open it and leave it running. You should see the Docker whale icon in your taskbar.</li></ol>')}
+<h2>How to install Docker Desktop</h2>
+<ol>
+  <li>Go to <a href="https://www.docker.com/products/docker-desktop/" target="_blank" rel="noopener">docker.com &rarr; Docker Desktop</a> and click <strong>Download for Windows</strong> (or Mac).</li>
+  <li>Run the installer. On Windows, it will ask to enable WSL 2 &mdash; click OK and let it restart if prompted.</li>
+  <li>After installation, open Docker Desktop from the Start Menu (Windows) or Applications (Mac).</li>
+  <li>Wait for the Docker Desktop window to finish loading. You will see a whale icon appear in your taskbar (Windows) or menu bar (Mac). The icon should be <strong>steady, not animated</strong> &mdash; animated means it is still starting up.</li>
+  <li>Leave Docker Desktop open in the background whenever you are using the lab. You do not need to interact with it &mdash; just having it open is enough.</li>
+</ol>
+
+${_callout('warning', '&#128250; Windows &mdash; two things before you continue', '<ol style="margin:6px 0 0"><li>When installing Python, tick <strong>"Add Python to PATH"</strong> before clicking Install.</li><li>After installing Docker Desktop, open it and leave it running. You should see the Docker whale icon in your taskbar before moving on.</li></ol>')}
 
 <h2>Step 2 &mdash; Unzip and open in VS Code</h2>
 <ul>

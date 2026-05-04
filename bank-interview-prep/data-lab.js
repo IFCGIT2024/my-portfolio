@@ -6,29 +6,29 @@ window.MODULES.lab = () => {
 
   // ---- Pre-build all code blocks to avoid nested template-literal conflicts ----
 
-  const cb_step1_clone = _cb('bash',
-`# Run this in your terminal (bash, zsh, or WSL on Windows)
-git clone https://github.com/IFCGIT2024/my-portfolio.git
-cd my-portfolio/bank-interview-prep`);
+  const cb_step3_docker = _cb('text',
+`1. Open VS Code
+2. Go to File → Open Folder
+3. Navigate to the folder you just unzipped, then into:
+     lab-files/lab/
+4. Click "Select Folder"
+5. VS Code will open — you will see all the lab files in the left panel`);
 
-  const cb_step1_ps = _cb('powershell',
-`# Windows PowerShell alternative (if you don't have Git, install from https://git-scm.com)
-git clone https://github.com/IFCGIT2024/my-portfolio.git
-cd my-portfolio\\bank-interview-prep`);
+  const cb_step4_docker = _cb('bash',
+`# In the VS Code terminal (Terminal → New Terminal):
 
-  const cb_step3_docker = _cb('bash',
-`# From inside the bank-interview-prep folder:
-cd lab
-
-# Copy the env file (only needed once)
+# Copy the connection settings file (do this once):
 cp .env.example .env
 
-# Start Postgres + Adminer in the background
+# Start the database:
 docker compose up -d
 
-# Wait ~10 seconds then verify the database tables loaded:
+# You will see Docker downloading Postgres — this takes 1-2 minutes the first time.
+# When it finishes and returns to the prompt, wait 10 more seconds then run:
 docker compose exec db psql -U dga -d dataguard -c "\\dt bank.*"
-# You should see: customers, accounts, transactions, employees, access_logs, etc.`);
+
+# You should see a list of tables: customers, accounts, transactions, etc.
+# If you see that list — the database is running and fully loaded.`);
 
   const cb_step3_adminer = _cb('text',
 `Open your browser and go to: http://localhost:8080
@@ -61,17 +61,21 @@ python 01_smoke_test.py
 # Expected output: "Connection OK — dataguard database is ready"`);
 
   const cb_quickstart = _cb('bash',
-`# Quick reference — full sequence from a fresh clone:
-git clone https://github.com/IFCGIT2024/my-portfolio.git
-cd my-portfolio/bank-interview-prep/lab
+`# Quick reference — all terminal commands in order (run from inside lab/ folder):
+
 cp .env.example .env
 docker compose up -d
-# wait 10s
+# wait 10 seconds...
 docker compose exec db psql -U dga -d dataguard -c "\\dt bank.*"
+# You should see the table list — database is ready
+
+# For Python exercises only:
 cd python
-python -m venv .venv && source .venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate      # Mac/Linux/WSL
+# .venv\\Scripts\\Activate.ps1  # Windows PowerShell
 pip install -r requirements.txt
-python 01_smoke_test.py`);
+python 01_smoke_test.py        # Should print: Connection OK`);
 
   const cb_python_setup = _cb('bash',
 `# All 5 scripts live in bank-interview-prep/lab/python/
@@ -249,84 +253,100 @@ ${_callout('info', '&#127881; Deterministic Seed', 'All data is generated from a
 `;
 
   const setup = `
-<h2>&#9889; How to Get the Lab Files</h2>
 
-<p>All lab files — SQL scripts, Python scripts, Docker config — live in this site's GitHub repository. You download them by cloning the repo. <strong>You do not need to copy anything manually.</strong></p>
+<div style="background:var(--navy-mid);border:2px solid var(--accent);border-radius:12px;padding:24px 28px;margin-bottom:32px;display:flex;flex-direction:column;gap:16px">
+  <div style="font-size:1.1rem;font-weight:700;color:#fff">&#128230; Step 1 — Download the lab files to your computer</div>
+  <p style="margin:0;color:#b8cce0">Everything you need — SQL scripts, Python scripts, database config — is packaged in a single ZIP file. Click the button below to download it. No account or sign-up required.</p>
+  <a href="https://github.com/IFCGIT2024/my-portfolio/archive/refs/heads/main.zip"
+     target="_blank" rel="noopener"
+     style="display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#0a1628;font-weight:700;font-size:1rem;padding:13px 28px;border-radius:8px;text-decoration:none;width:fit-content">
+    &#11015; Download Lab Files (ZIP)
+  </a>
+  <p style="margin:0;font-size:0.82rem;color:var(--text-muted)">File name: <code>my-portfolio-main.zip</code> &nbsp;&bull;&nbsp; Your lab files are inside the folder <code>my-portfolio-main/bank-interview-prep/lab/</code></p>
+</div>
 
-<h3>Step 1 &mdash; Install the tools you need (one-time)</h3>
+<h2>What you will install (one-time only)</h2>
+<p>You need three free tools. Install them before continuing. Each one is installed the same way as any normal program — download the installer, run it, click Next.</p>
+
 ${_table(
-  ['Tool', 'What it does', 'Download'],
+  ['Tool', 'Why you need it', 'Where to get it'],
   [
-    ['<strong>Git</strong>', 'Downloads the repo to your machine', '<a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git-scm.com/downloads</a>'],
-    ['<strong>Docker Desktop</strong>', 'Runs the Postgres database in a container — no install required, no version conflicts', '<a href="https://www.docker.com/products/docker-desktop/" target="_blank" rel="noopener">docker.com/products/docker-desktop</a>'],
-    ['<strong>Python 3.11+</strong>', 'Runs the scanner and review scripts', '<a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a>'],
-    ['<strong>VS Code</strong> (optional)', 'Edit scripts, run the SQL extension, view the database', '<a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a>']
+    ['<strong>Docker Desktop</strong>', 'Runs the Postgres database automatically — no database knowledge needed to set it up', '<a href="https://www.docker.com/products/docker-desktop/" target="_blank" rel="noopener">docker.com &rarr; Docker Desktop</a>'],
+    ['<strong>VS Code</strong>', 'The code editor you will use to open the lab folder, run commands, and edit scripts', '<a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a>'],
+    ['<strong>Python 3.11+</strong>', 'Runs the PII scanner and review scripts in Exercises 3 and 4', '<a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a>']
   ]
 )}
 
-${_callout('info', '&#128250; Windows users', 'Open <strong>PowerShell</strong> or <strong>Git Bash</strong> (installed with Git). Either works. Docker Desktop must be running before Step 3.')}
+${_callout('info', '&#128250; Windows users — one extra step after installing Python', 'When the Python installer starts, tick the box that says <strong>"Add Python to PATH"</strong> before clicking Install. If you miss this, Python commands will not work in the terminal.')}
 
-<h3>Step 2 &mdash; Clone the repo (get the files)</h3>
-<p>This downloads the entire project — including all SQL scripts, Python scripts, and Docker config — into a folder called <code>my-portfolio</code> on your machine.</p>
+<h2>Setting everything up — step by step</h2>
 
-${cb_step1_clone}
-
-<p>You now have this folder structure on your machine:</p>
-<pre style="background:var(--card);padding:14px 18px;border-radius:8px;font-size:0.82rem;color:#b8cce0;overflow-x:auto">my-portfolio/
+<h3>Step 2 &mdash; Unzip the downloaded file</h3>
+<ul>
+  <li><strong>Windows:</strong> Right-click <code>my-portfolio-main.zip</code> → <em>Extract All</em> → choose a location (e.g. your Desktop) → click Extract</li>
+  <li><strong>Mac:</strong> Double-click the ZIP file — it extracts automatically to the same folder</li>
+</ul>
+<p>You now have a folder called <code>my-portfolio-main</code>. Inside it, find your lab folder:</p>
+<pre style="background:var(--card);padding:14px 18px;border-radius:8px;font-size:0.82rem;color:#b8cce0;overflow-x:auto;line-height:1.7">my-portfolio-main/
 └── bank-interview-prep/
-    ├── lab/
-    │   ├── docker-compose.yml   ← starts the database
-    │   ├── .env.example         ← connection settings
-    │   ├── sql/
-    │   │   ├── 01_schema.sql    ← creates all tables
-    │   │   ├── 02_seed.sql      ← inserts 26,000 rows of bank data
-    │   │   ├── 03_classification_seed.sql
-    │   │   ├── 04_users_and_roles.sql
-    │   │   └── 05_views_for_audit.sql
-    │   └── python/
-    │       ├── requirements.txt       ← list of libraries to install
-    │       ├── 01_smoke_test.py       ← test the DB connection
-    │       ├── 02_pii_scanner.py      ← scans every column for PII
-    │       ├── 03_classifier_simulator.py
-    │       ├── 04_label_review.py     ← interactive review queue
-    │       └── 05_audit_report.py     ← coverage report
-    └── index.html               ← this site</pre>
+    └── <strong style="color:var(--accent)">lab/</strong>                     ← THIS is the folder you will open in VS Code
+        ├── docker-compose.yml   ← tells Docker how to run the database
+        ├── .env.example         ← database connection settings
+        ├── sql/                 ← 5 SQL scripts that build and fill the database
+        │   ├── 01_schema.sql
+        │   ├── 02_seed.sql      ← 26,000 rows of realistic bank data
+        │   ├── 03_classification_seed.sql
+        │   ├── 04_users_and_roles.sql
+        │   └── 05_views_for_audit.sql
+        └── python/              ← 5 Python scripts — one per exercise
+            ├── requirements.txt
+            ├── 01_smoke_test.py
+            ├── 02_pii_scanner.py
+            ├── 03_classifier_simulator.py
+            ├── 04_label_review.py
+            └── 05_audit_report.py</pre>
 
-<h3>Step 3 &mdash; Start the database</h3>
-<p>Docker will download Postgres and Adminer automatically, create the schema, and seed all 26,000 rows. <strong>You do not run the SQL scripts manually</strong> — Docker runs them for you on first start.</p>
+${_callout('info', '&#128161; You do not run the SQL scripts yourself', 'Those <code>.sql</code> files in the <code>sql/</code> folder are run automatically by Docker when you start the database in Step 4. You never need to open or run them manually — Docker does it for you. They are there so you can read them and understand the schema.')}
 
+<h3>Step 3 &mdash; Open the lab folder in VS Code</h3>
 ${cb_step3_docker}
 
-<h3>Step 4 &mdash; Open Adminer (browser-based query tool)</h3>
-<p>Adminer is a lightweight SQL client that runs in your browser — no separate app needed. Once Docker is up:</p>
+<h3>Step 4 &mdash; Start the database</h3>
+<p>In VS Code, open a terminal: go to the menu bar → <strong>Terminal</strong> → <strong>New Terminal</strong>. A panel will open at the bottom. Make sure Docker Desktop is open and running (you should see the Docker whale icon in your taskbar/menu bar).</p>
+<p>Then type these commands one at a time, pressing Enter after each:</p>
+${cb_step4_docker}
 
+<h3>Step 5 &mdash; Open Adminer (your browser-based SQL tool)</h3>
+<p>Adminer lets you run SQL queries in a web browser — no separate SQL app needed. Once the database is running:</p>
 ${cb_step3_adminer}
 
-${_callout('success', '&#10003; You are ready', 'If you can see the tables in Adminer, the database is fully set up. You can now run queries directly in Adminer or use <code>psql</code> via the Docker command shown above. Move on to Step 5 only when you need to run the Python exercises (Ex 3 and 4).')}
+${_callout('success', '&#10003; Checkpoint — you are ready to do the SQL exercises', 'If you can log in to Adminer and see the table list on the left side, your database is running correctly. You can now do Exercises 1 and 2. Come back to Step 6 when you reach Exercise 3.')}
 
-<h3>Step 5 &mdash; Set up the Python scripts</h3>
-<p>Only needed for Exercises 3 and 4. The Python scripts connect to the same Postgres database Docker is running.</p>
-
+<h3>Step 6 &mdash; Set up Python (needed for Exercises 3 and 4 only)</h3>
+<p>The Python scripts in the <code>python/</code> folder connect to the same database and automate the classification workflow. In your VS Code terminal:</p>
 ${cb_step4_python}
 
-<h3>Quick reference &mdash; full sequence</h3>
-${cb_quickstart}
+${_callout('success', '&#10003; Checkpoint — Python is ready', 'If <code>01_smoke_test.py</code> prints <strong>Connection OK</strong>, everything is wired up correctly. You are ready for Exercises 3 and 4.')}
 
-<p>To stop the database: <code>docker compose down</code>. To wipe all data and start completely fresh: <code>docker compose down -v &amp;&amp; docker compose up -d</code></p>
+<h3>Resetting the database</h3>
+<p>If something goes wrong or you want to start fresh with clean data, run this in the VS Code terminal from the <code>lab/</code> folder:</p>
+<pre style="background:var(--card);padding:12px 16px;border-radius:8px;font-size:0.85rem;color:#b8cce0">docker compose down -v
+docker compose up -d</pre>
+<p>This wipes all data and rebuilds the entire database from scratch. Your scripts and SQL files are untouched.</p>
 
-<h2>&#128204; What's in the Database</h2>
+<h2>&#128204; What is in the database</h2>
 ${_table(
-  ['Table', 'Rows', 'Purpose'],
+  ['Table', 'Rows', 'What it contains'],
   [
-    ['<code>customers</code>', '500', 'Synthetic UK retail customers &mdash; names, DOBs, NINOs, emails, passports, addresses'],
-    ['<code>accounts</code>', '~1,210', 'Current/savings accounts with sort codes, IBANs, balances'],
+    ['<code>customers</code>', '500', 'Synthetic UK retail customers — names, dates of birth, National Insurance numbers, emails, passport numbers, addresses'],
+    ['<code>accounts</code>', '~1,210', 'Current and savings accounts with sort codes, IBANs, and balances'],
     ['<code>transactions</code>', '25,000', '12 months of transaction history'],
     ['<code>employees</code>', '60', 'Bank staff across 5 departments'],
-    ['<code>access_logs</code>', '~8,400', 'Who accessed which table, when, for how long'],
-    ['<code>data_catalog</code>', 'partial', 'Classification register &mdash; ~10% pre-labeled on purpose (run the toolkit to fill it in)'],
-    ['<code>classification_rules</code>', '15', 'Regex + context patterns the scanner uses'],
+    ['<code>access_logs</code>', '~8,400', 'A record of who accessed which table, when, and for how long'],
+    ['<code>data_catalog</code>', 'partial', 'The classification register — intentionally only ~10% filled in so you can complete it in the exercises'],
+    ['<code>classification_rules</code>', '15', 'The regex and context patterns the PII scanner uses to detect sensitive data'],
     ['<code>dsar_requests</code>', '12', 'Open and closed Data Subject Access Requests'],
-    ['<code>audit_findings</code>', '(empty)', 'The scanner writes PII candidates here when it runs']
+    ['<code>audit_findings</code>', '(empty at start)', 'The PII scanner writes its findings here when you run it in Exercise 3']
   ]
 )}
 `;

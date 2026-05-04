@@ -1,43 +1,54 @@
-# My Project Portal
+# Portfolio Site Layout
 
-The front page (`index.html`) auto-builds itself from the project list in `projects.js`.  
-**You only ever need to edit `projects.js`.**
+This repo now has a clean deployable portfolio site under `docs/`.
 
----
+## What gets deployed
 
-## Adding a new project
+Use `docs/` as the GitHub Pages site root.
 
-Open `projects.js` and add an object to the `PROJECTS` array:
+The deployed portfolio includes only these runtime folders:
+
+- `docs/index.html`
+- `docs/portal.css`
+- `docs/projects.js`
+- `docs/projects/discrete-math/`
+- `docs/projects/proofs/`
+- `docs/projects/csci-1120-prep/`
+- `docs/projects/re-analyzer/`
+
+Everything else in the repo stays outside the public site, including pipelines, agent systems, prompts, PDFs, test files, and unrelated project folders.
+
+## Publishing On GitHub Pages
+
+1. Push the repo.
+2. In GitHub, open `Settings > Pages`.
+3. Set the source to `Deploy from a branch`.
+4. Choose your main branch and the `/docs` folder.
+5. Save.
+
+## Editing The Live Portfolio
+
+For the deployable site, edit `docs/projects.js` and keep project paths inside `docs/projects/...`.
+
+Example:
 
 ```js
 {
-  id: "unique-slug",             // no spaces, used as the card footer label
+  id: "unique-slug",
   title: "Project Name",
   description: "One or two sentences about what it does.",
-  path: "folder-name/index.html", // relative path from the root of this repo
-  tags: ["Tag1", "Tag2"],         // shown as filter buttons and card chips
-  badge: "New",                   // ribbon in top-right corner — set null to hide
-  badgeColor: "#10b981",          // any CSS color — ignored if badge is null
-  icon: "⚡",                     // emoji or short symbol shown on the card
-},
+  path: "projects/project-folder/index.html",
+  tags: ["Tag1", "Tag2"],
+  badge: "New",
+  badgeColor: "#10b981",
+  icon: "⚡",
+}
 ```
 
-Save the file and push to GitHub — done.
+## Workspace Copies
 
----
+The root `index.html`, `portal.css`, and `projects.js` are still present for local workspace browsing, but the GitHub-ready version is the one in `docs/`.
 
-## Files
+## Folder Naming Rule
 
-| File | What it does |
-|---|---|
-| `index.html` | Portal landing page — don't edit unless changing layout |
-| `portal.css` | All portal styles — don't edit unless changing appearance |
-| `projects.js` | **The only file you need to edit to add/remove projects** |
-
----
-
-## Folder name tip
-
-GitHub Pages encodes spaces in URLs as `%20`, which can break links.  
-Keep folder names lowercase with hyphens instead of spaces, e.g. `csci-1120`.  
-Update the `path` field in `projects.js` to match if you rename anything.
+For anything that will be public on the site, use lowercase folder names with hyphens instead of spaces.

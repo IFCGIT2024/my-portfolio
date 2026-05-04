@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="module-05">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<div id="class-1" class="class-section">
+<h1 id="module-5-class-1-functions-and-domains">Module 5 – Class 1: Functions and Domains</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define functions, domains, codomains and ranges formally.</li>
+<li>Distinguish between functions and non-functions (the vertical line test for mappings).</li>
+<li>Translate mathematical functions to Java methods and <code>Function&lt;T,R&gt;</code>.</li>
+<li>Prove that a given rule defines a function.</li>
+<li>Analyze Java methods as functions: identify domain, codomain and range.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="what-is-a-function">What Is a Function?</h3>
+
+<p>A <strong>function</strong> $f: X \rightarrow Y$ is a rule that assigns to each element $x \in X$ exactly one element $f(x) \in Y$.</p>
+
+<table>
+<thead><tr>
+<th>Term</th>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>Domain</td>
+<td>$X$ or $\text{dom}(f)$</td>
+<td>Set of all inputs</td>
+</tr>
+<tr>
+<td>Codomain</td>
+<td>$Y$</td>
+<td>Set of all allowable outputs</td>
+</tr>
+<tr>
+<td>Range (Image)</td>
+<td>$\text{range}(f)$ or $f(X)$</td>
+<td>$\{f(x) \mid x \in X\}$ — actual outputs</td>
+</tr>
+<tr>
+<td>Image of $x$</td>
+<td>$f(x)$</td>
+<td>The output for input $x$</td>
+</tr>
+<tr>
+<td>Preimage of $y$</td>
+<td>$f^{-1}(\{y\})$</td>
+<td>$\{x \in X \mid f(x) = y\}$</td>
+</tr>
+</tbody></table>
+
+<p><strong>Key property:</strong> Each input maps to <em>exactly one</em> output. Two things can fail:</p>
+<ol>
+<li>Some input has <strong>no</strong> output defined → not a function on that domain.</li>
+<li>Some input maps to <strong>multiple</strong> outputs → not a function.</li>
+</ol>
+
+<h3 id="function-equality">Function Equality</h3>
+
+<p>$f = g$ if and only if $\text{dom}(f) = \text{dom}(g)$ and $\forall x \in \text{dom}(f): f(x) = g(x)$.</p>
+
+<h3 id="functions-as-sets-of-ordered-pairs">Functions as Sets of Ordered Pairs</h3>
+
+<p>A function $f: X \rightarrow Y$ can be viewed as a set $F \subseteq X \times Y$ (connecting to Module 4) where:</p>
+<ul>
+<li>For every $x \in X$, there exists exactly one $y$ with $(x, y) \in F$.</li>
+</ul>
+
+<h3 id="composition">Composition</h3>
+
+<p>If $f: X \rightarrow Y$ and $g: Y \rightarrow Z$, the <strong>composition</strong> $g \circ f: X \rightarrow Z$ is defined by $(g \circ f)(x) = g(f(x))$.</p>
+
+<p><strong>Why this matters in CS:</strong></p>
+<ul>
+<li>Java methods are functions: parameters form the domain, return type is the codomain.</li>
+<li><strong>Hash functions</strong> map keys to buckets: <code>hashCode: Object → int</code>.</li>
+<li><strong>Functional programming</strong> uses composition (<code>Function.andThen</code>, <code>Function.compose</code>).</li>
+<li>Understanding domain and range prevents bugs: calling a function outside its domain causes errors.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Expression</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$f: X \rightarrow Y$</td>
+<td>$f$ maps from $X$ to $Y$</td>
+</tr>
+<tr>
+<td>$\text{dom}(f) = X$</td>
+<td>Domain of $f$</td>
+</tr>
+<tr>
+<td>$\text{range}(f) = \{f(x) \mid x \in X\}$</td>
+<td>Range (image) of $f$</td>
+</tr>
+<tr>
+<td>$(g \circ f)(x) = g(f(x))$</td>
+<td>Composition</td>
+</tr>
+<tr>
+<td>$f\|_A$</td>
+<td>Restriction of $f$ to subset $A \subseteq X$</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-identifying-domain-codomain-and-range">Example 1: Identifying Domain, Codomain and Range</h3>
+
+<p><strong>Function:</strong> $f: \mathbb{Z} \rightarrow \mathbb{Z}$ defined by $f(n) = 3n$.</p>
+
+<ul>
+<li>Domain: $\mathbb{Z}$ </li>
+<li>Codomain: $\mathbb{Z}$</li>
+<li>Range: $\{3k \mid k \in \mathbb{Z}\} = $ multiples of 3</li>
+</ul>
+
+<p>The range is a proper subset of the codomain ($3 \nmid 1$, so $1$ is not in the range).</p>
+
+<p><strong>Java translation:</strong></p>
+<pre><code class="language-java">// Domain: int (all 32-bit integers)
+// Codomain: int
+// Range: multiples of 3 (that fit in int)
+public static int f(int n) { return 3 * n; }</code></pre>
+
+<h3 id="example-2-is-this-a-function">Example 2: Is This a Function?</h3>
+
+<p><strong>Rule:</strong> $g: \mathbb{Z} \rightarrow \mathbb{Z}$ defined by "$g(n) = $ a number whose square is $n$."</p>
+
+<p>This is <strong>not</strong> a function because:</p>
+<ul>
+<li>For $n = 4$: both $2$ and $-2$ satisfy $g(4)^2 = 4$. Multiple outputs.</li>
+<li>For $n = 3$: no integer has square 3. No output.</li>
+</ul>
+
+<h3 id="example-3-composition">Example 3: Composition</h3>
+
+<p>Let $f(x) = x + 2$ and $g(x) = x^2$. Then:</p>
+<ul>
+<li>$(g \circ f)(x) = g(f(x)) = g(x+2) = (x+2)^2$</li>
+<li>$(f \circ g)(x) = f(g(x)) = f(x^2) = x^2 + 2$</li>
+</ul>
+
+<p>Note: $g \circ f \neq f \circ g$ in general! Composition is <strong>not</strong> commutative.</p>
+
+<h3 id="example-4-function-from-module-2-remainder">Example 4: Function from Module 2 — Remainder</h3>
+
+<p>$r_m: \mathbb{Z} \rightarrow \{0, 1, \ldots, m-1\}$ defined by $r_m(n) = n \bmod m$.</p>
+
+<ul>
+<li>Domain: $\mathbb{Z}$</li>
+<li>Codomain: $\{0, \ldots, m-1\}$</li>
+<li>Range = Codomain (every remainder value is achieved) → <strong>surjective</strong> (Module 5, Class 3)</li>
+<li>Preimage: $r_m^{-1}(\{k\}) = [k]_m$ (congruence class from Module 2)</li>
+</ul>
+
+<h3 id="example-5-hash-function-as-a-function">Example 5: Hash Function as a Function</h3>
+
+<pre><code class="language-java">// Domain: all possible String values
+// Codomain: int (all 32-bit integers)
+// Range: a subset of int (not every int is a hash value)
+int h = "hello".hashCode();  // h = 99162322</code></pre>
+
+<p>The hash function maps an infinite domain to a finite codomain — by the pigeonhole principle (Module 7 preview), <strong>collisions must occur</strong>.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="proving-a-rule-is-or-isn-t-a-function">Proving a Rule Is (or Isn't) a Function</h3>
+
+<p><strong>To prove $f: X \rightarrow Y$ is a function:</strong></p>
+<ol>
+<li>Show every $x \in X$ has at least one output (well-defined).</li>
+<li>Show every $x \in X$ has at most one output (single-valued).</li>
+</ol>
+
+<p><strong>To disprove:</strong> Find an $x$ with zero or multiple outputs.</p>
+
+<h3 id="proving-function-equality">Proving Function Equality</h3>
+
+<p>To prove $f = g$ where $f, g: X \rightarrow Y$:</p>
+<blockquote>
+<p>"Let $x \in X$. Then $f(x) = \ldots = g(x)$."</p>
+</blockquote>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
+public class FunctionLibrary {
+
+    // --- Representing Functions ---
+
+    /**
+     * Represent a finite function as a Map.
+     * Domain = keySet, Codomain determined by context, Range = values.
+     */
+    public static &lt;X, Y&gt; boolean isFunction(Map&lt;X, Y&gt; mapping, Set&lt;X&gt; domain) {
+        // Every element of domain must have exactly one image
+        for (X x : domain) {
+            if (!mapping.containsKey(x)) return false;
+        }
+        return true;  // Maps give single-valued by construction
+    }
+
+    /**
+     * Compute the range (image) of a function.
+     */
+    public static &lt;X, Y&gt; Set&lt;Y&gt; range(Map&lt;X, Y&gt; f) {
+        return new HashSet&lt;&gt;(f.values());
+    }
+
+    /**
+     * Compute the preimage of a value y.
+     * f^{-1}({y}) = { x ∈ dom(f) | f(x) = y }
+     */
+    public static &lt;X, Y&gt; Set&lt;X&gt; preimage(Map&lt;X, Y&gt; f, Y y) {
+        Set&lt;X&gt; result = new HashSet&lt;&gt;();
+        for (Map.Entry&lt;X, Y&gt; entry : f.entrySet()) {
+            if (Objects.equals(entry.getValue(), y)) {
+                result.add(entry.getKey());
+            }
+        }
+        return result;
+    }
+
+    // --- Composition ---
+
+    /**
+     * Compose two functions: (g ∘ f)(x) = g(f(x))
+     */
+    public static &lt;X, Y, Z&gt; Function&lt;X, Z&gt; compose(
+            Function&lt;X, Y&gt; f, Function&lt;Y, Z&gt; g) {
+        return x -&gt; g.apply(f.apply(x));
+    }
+
+    /**
+     * Compose finite functions represented as Maps.
+     */
+    public static &lt;X, Y, Z&gt; Map&lt;X, Z&gt; composeMaps(
+            Map&lt;X, Y&gt; f, Map&lt;Y, Z&gt; g) {
+        Map&lt;X, Z&gt; result = new HashMap&lt;&gt;();
+        for (Map.Entry&lt;X, Y&gt; entry : f.entrySet()) {
+            Y intermediate = entry.getValue();
+            if (g.containsKey(intermediate)) {
+                result.put(entry.getKey(), g.get(intermediate));
+            }
+        }
+        return result;
+    }
+
+    // --- Analysis Methods ---
+
+    /**
+     * Analyze a Java function over a domain:
+     * compute its range and identify the mapping.
+     */
+    public static &lt;X, Y&gt; Map&lt;X, Y&gt; analyzeFunction(
+            Set&lt;X&gt; domain, Function&lt;X, Y&gt; f) {
+        Map&lt;X, Y&gt; mapping = new LinkedHashMap&lt;&gt;();
+        for (X x : domain) {
+            mapping.put(x, f.apply(x));
+        }
+        return mapping;
+    }
+
+    /**
+     * Check if two functions agree on a domain.
+     * f = g iff ∀x ∈ domain: f(x) = g(x)
+     */
+    public static &lt;X, Y&gt; boolean functionsEqual(
+            Set&lt;X&gt; domain, Function&lt;X, Y&gt; f, Function&lt;X, Y&gt; g) {
+        for (X x : domain) {
+            if (!Objects.equals(f.apply(x), g.apply(x))) return false;
+        }
+        return true;
+    }
+
+    // --- Demonstration ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Function Library ===\n");
+
+        // f(n) = 3n
+        Set&lt;Integer&gt; domain = IntStream.rangeClosed(-5, 5).boxed()
+                .collect(Collectors.toCollection(TreeSet::new));
+        Function&lt;Integer, Integer&gt; f = n -&gt; 3 * n;
+        Map&lt;Integer, Integer&gt; fMap = analyzeFunction(domain, f);
+        System.out.println("f(n) = 3n on [-5,5]:");
+        System.out.println("  Mapping: " + fMap);
+        System.out.println("  Range: " + new TreeSet&lt;&gt;(range(fMap)));
+
+        // Composition: g(x) = x + 2, h(x) = x^2
+        Function&lt;Integer, Integer&gt; g = x -&gt; x + 2;
+        Function&lt;Integer, Integer&gt; h = x -&gt; x * x;
+        Function&lt;Integer, Integer&gt; hg = compose(g, h);  // h(g(x)) = (x+2)^2
+        Function&lt;Integer, Integer&gt; gh = compose(h, g);  // g(h(x)) = x^2 + 2
+
+        System.out.println("\nComposition (non-commutative):");
+        System.out.println("  (h ∘ g)(3) = " + hg.apply(3) + " = (3+2)^2 = 25");
+        System.out.println("  (g ∘ h)(3) = " + gh.apply(3) + " = 3^2 + 2 = 11");
+
+        // Remainder function r_m
+        int m = 5;
+        Function&lt;Integer, Integer&gt; rem = n -&gt; Math.floorMod(n, m);
+        Map&lt;Integer, Integer&gt; remMap = analyzeFunction(
+                IntStream.rangeClosed(0, 14).boxed().collect(Collectors.toSet()), rem);
+        System.out.println("\nr_5(n) = n mod 5:");
+        System.out.println("  Mapping: " + new TreeMap&lt;&gt;(remMap));
+        System.out.println("  Range: " + new TreeSet&lt;&gt;(range(remMap)));
+
+        // Preimage: which inputs map to 2 under r_5?
+        Map&lt;Integer, Integer&gt; extendedRem = analyzeFunction(
+                IntStream.rangeClosed(0, 20).boxed().collect(Collectors.toSet()), rem);
+        System.out.println("  Preimage of 2: " + new TreeSet&lt;&gt;(preimage(extendedRem, 2)));
+
+        // Function equality
+        Function&lt;Integer, Integer&gt; f1 = x -&gt; x * x - 1;
+        Function&lt;Integer, Integer&gt; f2 = x -&gt; (x - 1) * (x + 1);
+        boolean eq = functionsEqual(domain, f1, f2);
+        System.out.println("\nx²-1 = (x-1)(x+1)? " + eq);
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p>The modern concept of a function evolved over centuries:</p>
+<ul>
+<li><strong>Euler</strong> (1748) defined a function as an "analytic expression."</li>
+<li><strong>Dirichlet</strong> (1837) generalized to any rule assigning outputs to inputs.</li>
+<li><strong>Set-theoretic definition</strong> (20th century): a function is a set of ordered pairs with unique first components.</li>
+</ul>
+
+<p>In computer science, <strong>Alonzo Church</strong>'s lambda calculus (1930s) formalized computation as function application. This directly influenced functional programming languages (Lisp, Haskell, and Java 8+'s lambda expressions).</p>
+
+<p>Java's <code>Function&lt;T, R&gt;</code> interface (Java 8) made functions first-class citizens, enabling <code>map</code>, <code>filter</code>, <code>compose</code> — all grounded in the mathematical concept.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> For $f: \mathbb{Z} \rightarrow \mathbb{Z}$ with $f(n) = n^2$, what is the range?</p>
+
+<p><strong>A2.</strong> Is the rule "$g(x) = \pm\sqrt{x}$" a function from $\mathbb{R}^+ \rightarrow \mathbb{R}$? Why or why not?</p>
+
+<p><strong>A3.</strong> Given $f(x) = 2x+1$ and $g(x) = x-3$, compute $(g \circ f)(4)$ and $(f \circ g)(4)$.</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove that $f(n) = 2n + 1$ is a well-defined function from $\mathbb{Z}$ to $\mathbb{Z}$.</p>
+
+<p><strong>B2.</strong> Prove: if $f: X \rightarrow Y$ and $g: Y \rightarrow Z$, then composition is associative: $h \circ (g \circ f) = (h \circ g) \circ f$.</p>
+
+<p><strong>B3.</strong> Prove the range of $f(n) = n \bmod m$ is exactly $\{0, 1, \ldots, m-1\}$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write a method that takes a <code>Function&lt;Integer, Integer&gt;</code> and a domain, and returns the range as a <code>Set&lt;Integer&gt;</code>.</p>
+
+<p><strong>C2.</strong> Implement function composition for <code>Map</code>-based finite functions.</p>
+
+<p><strong>C3.</strong> Write a method to compute the preimage of a given output value.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> For each rule, determine whether it defines a function from $\mathbb{Z}$ to $\mathbb{Z}$:</p>
+<p>(a) $f(n) = n + 3$ (b) $g(n) = n/2$ (c) $h(n) = |n|$ (d) $k(n) = $ "the smallest prime greater than $n$"</p>
+
+<p><strong>DM2.</strong> Prove: if $f: X \rightarrow Y$ is a function, then for all $A \subseteq X$: $f(A) \subseteq Y$ (the image of a subset of the domain is a subset of the codomain).</p>
+
+<p><strong>DM3.</strong> Let $f: \mathbb{Z} \rightarrow \mathbb{Z}$ with $f(n) = n^2 + 1$. Compute $f(\{-2, -1, 0, 1, 2\})$ and $f^{-1}(\{2\})$.</p>
+
+<p><strong>DM4.</strong> Prove: composition of functions is associative.</p>
+
+<p><strong>DM5.</strong> Prove or disprove: the range of $f \circ g$ is a subset of the range of $f$.</p>
+
+<p><strong>DM6.</strong> Let $f(n) = n \bmod 5$ (from Module 2). Show that the fibers of $f$ (sets $f^{-1}(\{k\})$ for $k = 0,\ldots,4$) form a partition of $\mathbb{Z}$. (Connects to Module 4, Class 3.)</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Represent a function as a <code>Map&lt;Integer, Integer&gt;</code>. Write methods: <code>isFunction(Map, Set domain)</code>, <code>getRange(Map)</code>, <code>getPreimage(Map, value)</code>.</p>
+
+<p><strong>JP2.</strong> Implement a method that takes two <code>Function&lt;Integer, Integer&gt;</code> objects and composes them. Test by composing $f(x) = x + 1$ and $g(x) = x * 2$ in both orders.</p>
+
+<p><strong>JP3.</strong> Write a method that, given a <code>List&lt;Function&lt;Integer, Integer&gt;&gt;</code>, composes them left-to-right ($f_1 \circ f_2 \circ \cdots \circ f_n$).</p>
+
+<p><strong>JP4.</strong> Analyze Java's <code>String.hashCode()</code> as a function: for all 2-character strings from 'a' to 'z', compute the hash and identify collisions (different inputs, same output).</p>
+
+<p><strong>JP5.</strong> Write a method that determines whether a given <code>Map&lt;Integer, Integer&gt;</code> is a well-defined function on a given domain and codomain (every domain element maps to an element in the codomain).</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> The divisor-count function $\tau(n) = |D(n)|$ maps $\mathbb{Z}^+$ to $\mathbb{Z}^+$. Compute $\tau(n)$ for $n = 1, \ldots, 30$. What is the range of $\tau$ restricted to $\{1, \ldots, 30\}$? Which values have the largest preimage?</p>
+
+<p><strong>BR2.</strong> Recall from Module 2 that $r_m(n) = n \bmod m$ maps $\mathbb{Z}$ to $\{0, \ldots, m-1\}$. Prove that the fibers of $r_m$ are exactly the congruence classes. Implement in Java: compute fibers for $m = 7$ over $\{0, \ldots, 50\}$ and verify they match <code>partitionByMod</code> from Module 4.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> (a) Yes — well-defined, single-valued. (b) No — $g(3) = 3/2 \notin \mathbb{Z}$. Not well-defined on $\mathbb{Z}$. (c) Yes — well-defined, single-valued. (d) Yes — by Bertrand's postulate, there exists a prime between $n$ and $2n$; the smallest such prime is unique.</p>
+
+<p><strong>DM2.</strong> Let $y \in f(A)$. Then $y = f(a)$ for some $a \in A \subseteq X$. Since $f: X \rightarrow Y$, $f(a) \in Y$. So $y \in Y$. $\blacksquare$</p>
+
+<p><strong>DM3.</strong> $f(\{-2,-1,0,1,2\}) = \{5, 2, 1, 2, 5\} = \{1, 2, 5\}$. $f^{-1}(\{2\}) = \{-1, 1\}$ (since $(-1)^2 + 1 = 2$ and $1^2 + 1 = 2$).</p>
+
+<p><strong>DM5.</strong> True. Let $y \in \text{range}(f \circ g)$. Then $y = f(g(x))$ for some $x$. Let $z = g(x)$. Then $y = f(z)$, so $y \in \text{range}(f)$. $\blacksquare$</p>
+
+<p><strong>DM6.</strong> $f^{-1}(\{k\}) = \{n \in \mathbb{Z} \mid n \bmod 5 = k\} = [k]_5$. By Module 4, Class 3 (Problem A3 of the assignment), the fibers of any function partition the domain. Since every $n \in \mathbb{Z}$ has $n \bmod 5 \in \{0,\ldots,4\}$, the five fibers are non-empty, pairwise disjoint, and cover $\mathbb{Z}$. $\blacksquare$</p>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP4.</strong></p>
+<pre><code class="language-java">Set&lt;Integer&gt; hashes = new HashSet&lt;&gt;();
+Map&lt;Integer, List&lt;String&gt;&gt; hashToStrings = new HashMap&lt;&gt;();
+for (char c1 = 'a'; c1 &lt;= 'z'; c1++) {
+    for (char c2 = 'a'; c2 &lt;= 'z'; c2++) {
+        String s = "" + c1 + c2;
+        int h = s.hashCode();
+        hashToStrings.computeIfAbsent(h, k -&gt; new ArrayList&lt;&gt;()).add(s);
+        hashes.add(h);
+    }
+}
+System.out.println("Total 2-char strings: " + (26 * 26));
+System.out.println("Distinct hash values: " + hashes.size());
+// Find collisions
+hashToStrings.entrySet().stream()
+    .filter(e -&gt; e.getValue().size() &gt; 1)
+    .forEach(e -&gt; System.out.println("Collision: hash=" + e.getKey()
+            + " strings=" + e.getValue()));</code></pre>
+
+<p><strong>BR1.</strong></p>
+<pre><code class="language-java">Map&lt;Integer, Integer&gt; tau = new TreeMap&lt;&gt;();
+for (int n = 1; n &lt;= 30; n++) {
+    int count = 0;
+    for (int d = 1; d &lt;= n; d++) if (n % d == 0) count++;
+    tau.put(n, count);
+}
+System.out.println("τ(n) for n=1..30: " + tau);
+Set&lt;Integer&gt; tauRange = new TreeSet&lt;&gt;(tau.values());
+System.out.println("Range of τ: " + tauRange);
+
+// Preimage analysis
+Map&lt;Integer, List&lt;Integer&gt;&gt; preimages = new TreeMap&lt;&gt;();
+for (var e : tau.entrySet()) {
+    preimages.computeIfAbsent(e.getValue(), k -&gt; new ArrayList&lt;&gt;())
+            .add(e.getKey());
+}
+preimages.forEach((k, v) -&gt;
+    System.out.println("  τ^{-1}({" + k + "}) = " + v));</code></pre>
+
+</section>
+</div>
+<hr>
+<div id="class-2" class="class-section">
+<h1 id="module-5-class-2-relations-and-properties">Module 5 – Class 2: Relations and Properties</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define binary relations on a set as subsets of $A \times A$.</li>
+<li>Identify and prove reflexive, symmetric, transitive and antisymmetric properties.</li>
+<li>Distinguish equivalence relations from partial orders.</li>
+<li>Compute equivalence classes and verify they form partitions.</li>
+<li>Implement relation-checking in Java using sets of pairs and boolean predicates.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="binary-relations">Binary Relations</h3>
+
+<p>A <strong>binary relation</strong> $R$ on a set $A$ is a subset $R \subseteq A \times A$. We write $aRb$ or $(a,b) \in R$ to mean "$a$ is related to $b$."</p>
+
+<h3 id="properties-of-relations">Properties of Relations</h3>
+
+<table>
+<thead><tr>
+<th>Property</th>
+<th>Definition</th>
+<th>Example on $\mathbb{Z}$</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Reflexive</strong></td>
+<td>$\forall a \in A: aRa$</td>
+<td>$\leq$ (since $a \leq a$)</td>
+</tr>
+<tr>
+<td><strong>Symmetric</strong></td>
+<td>$\forall a,b: aRb \rightarrow bRa$</td>
+<td>$=$ (since $a = b \rightarrow b = a$)</td>
+</tr>
+<tr>
+<td><strong>Transitive</strong></td>
+<td>$\forall a,b,c: (aRb \wedge bRc) \rightarrow aRc$</td>
+<td>$\leq$</td>
+</tr>
+<tr>
+<td><strong>Antisymmetric</strong></td>
+<td>$\forall a,b: (aRb \wedge bRa) \rightarrow a = b$</td>
+<td>$\leq$ (since $a \leq b \wedge b \leq a \implies a = b$)</td>
+</tr>
+<tr>
+<td><strong>Irreflexive</strong></td>
+<td>$\forall a \in A: \neg(aRa)$</td>
+<td>$<$</td>
+</tr>
+</tbody></table>
+
+<h3 id="equivalence-relations">Equivalence Relations</h3>
+
+<p>A relation that is <strong>reflexive, symmetric and transitive</strong> is an <strong>equivalence relation</strong>. It partitions the set into <strong>equivalence classes</strong>.</p>
+
+<div class="katex-block">$[a] = \{x \in A \mid xRa\}$</div>
+
+<p><strong>Key theorem:</strong> The equivalence classes of an equivalence relation form a partition of $A$, and every partition defines an equivalence relation. (Connects to Module 4, Class 3.)</p>
+
+<h3 id="partial-orders">Partial Orders</h3>
+
+<p>A relation that is <strong>reflexive, antisymmetric and transitive</strong> is a <strong>partial order</strong>.</p>
+
+<p>Examples:</p>
+<ul>
+<li>$\leq$ on $\mathbb{Z}$</li>
+<li>$\subseteq$ on $\mathcal{P}(A)$ (subset ordering)</li>
+<li>$a \mid b$ (divisibility) on $\mathbb{Z}^+$</li>
+</ul>
+
+<p><strong>Why this matters in CS:</strong></p>
+<ul>
+<li><strong>Graphs</strong> are relations: an edge $(u,v)$ means $uRv$.</li>
+<li><strong>Equivalence relations</strong> model "same group" — union-find, connected components.</li>
+<li><strong>Partial orders</strong> model dependencies — topological sort, build systems, task scheduling.</li>
+<li><strong>Comparators</strong> in Java implement total orders (a special case of partial orders).</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Notation</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$R \subseteq A \times A$</td>
+<td>$R$ is a relation on $A$</td>
+</tr>
+<tr>
+<td>$aRb$</td>
+<td>$(a,b) \in R$</td>
+</tr>
+<tr>
+<td>$[a]_R = \{x \mid xRa\}$</td>
+<td>Equivalence class of $a$</td>
+</tr>
+<tr>
+<td>$A / R$</td>
+<td>Quotient set: set of all equivalence classes</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-congruence-modulo-inlinemath_39-is-an-equivalence-relation">Example 1: Congruence Modulo $m$ Is an Equivalence Relation</h3>
+
+<p><strong>Relation:</strong> $a \equiv b \pmod{m}$ on $\mathbb{Z}$.</p>
+
+<p><strong>Proof.</strong></p>
+<ul>
+<li><em>Reflexive:</em> $a - a = 0 = m \cdot 0$, so $m \mid (a - a)$. ✓</li>
+<li><em>Symmetric:</em> If $m \mid (a - b)$, then $a - b = mk$, so $b - a = m(-k)$ and $m \mid (b - a)$. ✓</li>
+<li><em>Transitive:</em> If $m \mid (a - b)$ and $m \mid (b - c)$, then $a - c = (a - b) + (b - c) = mk + ml = m(k+l)$, so $m \mid (a - c)$. ✓</li>
+</ul>
+
+<p>Since all three hold, $\equiv \pmod{m}$ is an equivalence relation. Its equivalence classes are the congruence classes from Module 2. $\blacksquare$</p>
+
+<h3 id="example-2-divisibility-on-inlinemath_54-is-a-partial-order">Example 2: Divisibility on $\mathbb{Z}^+$ Is a Partial Order</h3>
+
+<p><strong>Relation:</strong> $a \mid b$ on $\mathbb{Z}^+$.</p>
+
+<ul>
+<li><em>Reflexive:</em> $a = a \cdot 1$, so $a \mid a$. ✓</li>
+<li><em>Antisymmetric:</em> If $a \mid b$ and $b \mid a$, then $b = ak$ and $a = bl$, so $a = akl$, giving $kl = 1$. Since $k, l \in \mathbb{Z}^+$, $k = l = 1$, so $a = b$. ✓</li>
+<li><em>Transitive:</em> (Proved in Module 1, Class 2.) ✓</li>
+</ul>
+
+<p>So divisibility is a partial order on $\mathbb{Z}^+$. $\blacksquare$</p>
+
+<h3 id="example-3-a-relation-that-is-not-an-equivalence-relation">Example 3: A Relation That Is NOT an Equivalence Relation</h3>
+
+<p><strong>Relation:</strong> $R$ on $\mathbb{Z}$ defined by $aRb$ iff $|a - b| \leq 1$.</p>
+
+<ul>
+<li><em>Reflexive:</em> $|a - a| = 0 \leq 1$. ✓</li>
+<li><em>Symmetric:</em> $|a - b| = |b - a|$. ✓</li>
+<li><em>Transitive:</em> $1R2$ and $2R3$, but $|1 - 3| = 2 > 1$, so $\neg(1R3)$. ✗</li>
+</ul>
+
+<p>Not an equivalence relation (transitivity fails).</p>
+
+<h3 id="example-4-equivalence-classes">Example 4: Equivalence Classes</h3>
+
+<p><strong>Relation:</strong> Congruence mod 3 on $\{0, 1, \ldots, 8\}$.</p>
+
+<p>$[0]_3 = \{0, 3, 6\}$, $[1]_3 = \{1, 4, 7\}$, $[2]_3 = \{2, 5, 8\}$.</p>
+
+<p>These are pairwise disjoint and their union is $\{0, \ldots, 8\}$ — a partition! (Module 4, Class 3.)</p>
+
+<h3 id="example-5-checking-properties-programmatically">Example 5: Checking Properties Programmatically</h3>
+
+<p>Given a finite relation as a set of pairs, we can check each property by iterating:</p>
+
+<ul>
+<li><strong>Reflexive:</strong> For every $a$ in the set, check $(a,a) \in R$.</li>
+<li><strong>Symmetric:</strong> For every $(a,b) \in R$, check $(b,a) \in R$.</li>
+<li><strong>Transitive:</strong> For every $(a,b) \in R$ and $(b,c) \in R$, check $(a,c) \in R$.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="proving-a-relation-has-a-property">Proving a Relation Has a Property</h3>
+
+<p>Each property requires a universal statement ("for all..."). To prove:</p>
+<blockquote>
+<p>"Let $a, b$ [, $c$] be arbitrary in $A$ with the given conditions. Then..."</p>
+</blockquote>
+
+<h3 id="disproving-a-property">Disproving a Property</h3>
+
+<p>Find a specific counterexample:</p>
+<blockquote>
+<p>"Consider $a = \ldots$, $b = \ldots$. We have $aRb$ but not $bRa$. So $R$ is not symmetric."</p>
+</blockquote>
+
+<h3 id="proving-equivalence-classes-form-a-partition">Proving Equivalence Classes Form a Partition</h3>
+
+<ol>
+<li><strong>Non-empty:</strong> Each $[a]$ contains $a$ (by reflexivity).</li>
+<li><strong>Disjoint or equal:</strong> Prove that if $[a] \cap [b] \neq \emptyset$, then $[a] = [b]$.</li>
+<li><strong>Cover:</strong> Every $a \in A$ belongs to $[a]$.</li>
+</ol>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
+public class RelationLibrary {
+
+    // --- Relation Representation ---
+
+    /**
+     * A relation on integers, represented as a set of pairs.
+     */
+    public static class Relation {
+        private final Set&lt;Integer&gt; domain;
+        private final Set&lt;List&lt;Integer&gt;&gt; pairs;
+
+        public Relation(Set&lt;Integer&gt; domain, Set&lt;List&lt;Integer&gt;&gt; pairs) {
+            this.domain = domain;
+            this.pairs = pairs;
+        }
+
+        public boolean relates(int a, int b) {
+            return pairs.contains(Arrays.asList(a, b));
+        }
+
+        // --- Property Checks ---
+
+        public boolean isReflexive() {
+            for (int a : domain) {
+                if (!relates(a, a)) return false;
+            }
+            return true;
+        }
+
+        public boolean isSymmetric() {
+            for (List&lt;Integer&gt; pair : pairs) {
+                if (!relates(pair.get(1), pair.get(0))) return false;
+            }
+            return true;
+        }
+
+        public boolean isTransitive() {
+            for (List&lt;Integer&gt; ab : pairs) {
+                for (List&lt;Integer&gt; bc : pairs) {
+                    if (ab.get(1).equals(bc.get(0))) {
+                        if (!relates(ab.get(0), bc.get(1))) return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public boolean isAntisymmetric() {
+            for (List&lt;Integer&gt; pair : pairs) {
+                int a = pair.get(0), b = pair.get(1);
+                if (a != b &amp;&amp; relates(b, a)) return false;
+            }
+            return true;
+        }
+
+        public boolean isEquivalenceRelation() {
+            return isReflexive() &amp;&amp; isSymmetric() &amp;&amp; isTransitive();
+        }
+
+        public boolean isPartialOrder() {
+            return isReflexive() &amp;&amp; isAntisymmetric() &amp;&amp; isTransitive();
+        }
+
+        // --- Equivalence Classes ---
+
+        public Set&lt;Integer&gt; equivalenceClass(int a) {
+            Set&lt;Integer&gt; cls = new TreeSet&lt;&gt;();
+            for (int x : domain) {
+                if (relates(x, a)) cls.add(x);
+            }
+            return cls;
+        }
+
+        public Set&lt;Set&lt;Integer&gt;&gt; allEquivalenceClasses() {
+            Set&lt;Set&lt;Integer&gt;&gt; classes = new HashSet&lt;&gt;();
+            for (int a : domain) {
+                classes.add(equivalenceClass(a));
+            }
+            return classes;
+        }
+
+        // --- Transitive Closure ---
+
+        public Relation transitiveClosure() {
+            Set&lt;List&lt;Integer&gt;&gt; closed = new HashSet&lt;&gt;(pairs);
+            boolean changed = true;
+            while (changed) {
+                changed = false;
+                Set&lt;List&lt;Integer&gt;&gt; toAdd = new HashSet&lt;&gt;();
+                for (List&lt;Integer&gt; ab : closed) {
+                    for (List&lt;Integer&gt; bc : closed) {
+                        if (ab.get(1).equals(bc.get(0))) {
+                            List&lt;Integer&gt; ac = Arrays.asList(ab.get(0), bc.get(1));
+                            if (!closed.contains(ac)) {
+                                toAdd.add(ac);
+                                changed = true;
+                            }
+                        }
+                    }
+                }
+                closed.addAll(toAdd);
+            }
+            return new Relation(domain, closed);
+        }
+    }
+
+    // --- Factory Methods ---
+
+    /**
+     * Build the congruence relation mod m on domain.
+     */
+    public static Relation congruenceRelation(Set&lt;Integer&gt; domain, int m) {
+        Set&lt;List&lt;Integer&gt;&gt; pairs = new HashSet&lt;&gt;();
+        for (int a : domain) {
+            for (int b : domain) {
+                if (Math.floorMod(a, m) == Math.floorMod(b, m)) {
+                    pairs.add(Arrays.asList(a, b));
+                }
+            }
+        }
+        return new Relation(domain, pairs);
+    }
+
+    /**
+     * Build the divisibility relation on domain.
+     */
+    public static Relation divisibilityRelation(Set&lt;Integer&gt; domain) {
+        Set&lt;List&lt;Integer&gt;&gt; pairs = new HashSet&lt;&gt;();
+        for (int a : domain) {
+            for (int b : domain) {
+                if (a != 0 &amp;&amp; b % a == 0) {
+                    pairs.add(Arrays.asList(a, b));
+                }
+            }
+        }
+        return new Relation(domain, pairs);
+    }
+
+    /**
+     * Build a relation from a predicate.
+     */
+    public static Relation fromPredicate(Set&lt;Integer&gt; domain,
+                                          BiPredicate&lt;Integer, Integer&gt; pred) {
+        Set&lt;List&lt;Integer&gt;&gt; pairs = new HashSet&lt;&gt;();
+        for (int a : domain) {
+            for (int b : domain) {
+                if (pred.test(a, b)) pairs.add(Arrays.asList(a, b));
+            }
+        }
+        return new Relation(domain, pairs);
+    }
+
+    // --- Demonstration ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Relation Library ===\n");
+
+        Set&lt;Integer&gt; domain = IntStream.rangeClosed(0, 8).boxed()
+                .collect(Collectors.toSet());
+
+        // Congruence mod 3
+        Relation congMod3 = congruenceRelation(domain, 3);
+        System.out.println("Congruence mod 3:");
+        System.out.println("  Reflexive: " + congMod3.isReflexive());
+        System.out.println("  Symmetric: " + congMod3.isSymmetric());
+        System.out.println("  Transitive: " + congMod3.isTransitive());
+        System.out.println("  Equivalence relation: " + congMod3.isEquivalenceRelation());
+        System.out.println("  Classes: " + congMod3.allEquivalenceClasses());
+
+        // Divisibility on {1..12}
+        Set&lt;Integer&gt; posDomain = IntStream.rangeClosed(1, 12).boxed()
+                .collect(Collectors.toSet());
+        Relation divides = divisibilityRelation(posDomain);
+        System.out.println("\nDivisibility on {1..12}:");
+        System.out.println("  Reflexive: " + divides.isReflexive());
+        System.out.println("  Antisymmetric: " + divides.isAntisymmetric());
+        System.out.println("  Transitive: " + divides.isTransitive());
+        System.out.println("  Partial order: " + divides.isPartialOrder());
+
+        // |a - b| &lt;= 1 (not transitive)
+        Relation close = fromPredicate(domain, (a, b) -&gt; Math.abs(a - b) &lt;= 1);
+        System.out.println("\n|a-b| &lt;= 1:");
+        System.out.println("  Reflexive: " + close.isReflexive());
+        System.out.println("  Symmetric: " + close.isSymmetric());
+        System.out.println("  Transitive: " + close.isTransitive());
+        System.out.println("  Equivalence: " + close.isEquivalenceRelation());
+
+        // Transitive closure
+        Relation closedClose = close.transitiveClosure();
+        System.out.println("  After transitive closure — Equivalence: "
+                + closedClose.isEquivalenceRelation());
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Giuseppe Peano</strong> (1858–1932) and <strong>Ernst Schröder</strong> (1841–1902) formalized the study of relations in the late 19th century. Schröder developed an algebra of relations that predates modern relational databases.</p>
+
+<p><strong>Equivalence relations</strong> became central in abstract algebra through the work of <strong>Évariste Galois</strong> and later algebraists, who used quotient structures (groups modulo normal subgroups, rings modulo ideals) extensively.</p>
+
+<p><strong>Edgar Codd</strong> (1970) based the <strong>relational database model</strong> on mathematical relations. SQL tables are relations (sets of tuples), and queries are operations on these relations.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> For each relation on $\{1,2,3\}$, determine reflexive/symmetric/transitive: (a) $R = \{(1,1),(2,2),(3,3)\}$ (b) $R = \{(1,2),(2,1)\}$ (c) $R = \{(1,2),(2,3),(1,3)\}$</p>
+
+<p><strong>A2.</strong> Is $<$ on $\mathbb{Z}$ a partial order? Why or why not?</p>
+
+<p><strong>A3.</strong> Name two equivalence relations you use in everyday life.</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove: "same parity" (both even or both odd) is an equivalence relation on $\mathbb{Z}$.</p>
+
+<p><strong>B2.</strong> Prove: if $R$ is an equivalence relation on $A$ and $[a] \cap [b] \neq \emptyset$, then $[a] = [b]$.</p>
+
+<p><strong>B3.</strong> Prove: $\subseteq$ is a partial order on $\mathcal{P}(S)$ for any set $S$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Implement <code>isReflexive</code>, <code>isSymmetric</code>, <code>isTransitive</code> for a relation given as <code>Set&lt;List&lt;Integer&gt;&gt;</code>.</p>
+
+<p><strong>C2.</strong> Compute all equivalence classes of "same remainder mod 4" on $\{0, \ldots, 15\}$.</p>
+
+<p><strong>C3.</strong> Implement <code>transitiveClosure</code> and test on a small relation.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Determine which properties hold for each relation on $\mathbb{Z}$: (a) $aRb$ iff $a + b$ is even (b) $aRb$ iff $a \leq b + 1$ (c) $aRb$ iff $a \mid b$ (on $\mathbb{Z}^+$)</p>
+
+<p><strong>DM2.</strong> Prove: "has the same number of divisors" is an equivalence relation on $\mathbb{Z}^+$. What are the equivalence classes of $[1], [2], [6]$?</p>
+
+<p><strong>DM3.</strong> Prove that if $R$ is an equivalence relation on a finite set $A$ with $|A| = n$, and there are $k$ equivalence classes of sizes $n_1, \ldots, n_k$, then $n_1 + \cdots + n_k = n$.</p>
+
+<p><strong>DM4.</strong> Prove: the intersection of two equivalence relations on $A$ is an equivalence relation.</p>
+
+<p><strong>DM5.</strong> Let $R$ be a relation on $A$ that is symmetric and transitive. Is $R$ necessarily reflexive? Prove or give a counterexample.</p>
+
+<p><strong>DM6.</strong> Prove: if $(A, \preceq)$ is a partial order and $B \subseteq A$, then $(B, \preceq \cap (B \times B))$ is also a partial order.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Build the <code>Relation</code> class with <code>isReflexive()</code>, <code>isSymmetric()</code>, <code>isTransitive()</code>, <code>isAntisymmetric()</code>. Test with at least 4 different relations.</p>
+
+<p><strong>JP2.</strong> Implement <code>allEquivalenceClasses()</code> for an equivalence relation. Verify the classes form a partition (using Module 4's <code>isPartition</code>).</p>
+
+<p><strong>JP3.</strong> Implement <code>transitiveClosure()</code> using Warshall's algorithm. Compare with the iterative approach.</p>
+
+<p><strong>JP4.</strong> Model a small directed graph as a relation: <code>Set&lt;List&lt;String&gt;&gt;</code> of edges. Check if the "reachability" relation (transitive closure) is reflexive (every node reaches itself) and transitive (by construction).</p>
+
+<p><strong>JP5.</strong> Implement a <code>Comparator&lt;Integer&gt;</code> based on divisibility order. Use it with a list and explain why <code>Collections.sort</code> may fail (partial order, not total).</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> From Module 1: divisibility $a \mid b$ on $\{1, \ldots, 30\}$ is a partial order. Draw the Hasse diagram (or describe it programmatically). Use a topological sort to produce a linear extension. Verify the extension is a total order.</p>
+
+<p><strong>BR2.</strong> From Module 2: congruence mod $m$ is an equivalence relation. From Module 4: equivalence classes partition the set. From Module 5: this is a special case of the general partition theorem. Write a Java program that demonstrates all three perspectives for $m = 5$ on $\{0, \ldots, 24\}$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> (a) Reflexive: $a + a = 2a$ is even. ✓ Symmetric: $a + b = b + a$. ✓ Transitive: If $a + b$ even and $b + c$ even, then $(a+b)+(b+c) = a + 2b + c$ is even, so $a + c$ is even. ✓ <strong>Equivalence relation.</strong></p>
+
+<p>(b) Reflexive: $a \leq a + 1$. ✓ Symmetric: $1 \leq 2 + 1 = 3$ ✓, but is $2 \leq 1 + 1 = 2$? Yes. Try $1R3$: $1 \leq 4$ ✓. $3R1$: $3 \leq 2$? No. ✗ <strong>Not symmetric.</strong> Not an equivalence relation.</p>
+
+<p>(c) On $\mathbb{Z}^+$: Reflexive ✓, Antisymmetric ✓, Transitive ✓. <strong>Partial order.</strong> Not symmetric (e.g., $2 \mid 4$ but $4 \nmid 2$).</p>
+
+<p><strong>DM2.</strong> Let $\tau(n)$ = number of divisors. Define $aRb \iff \tau(a) = \tau(b)$.</p>
+<ul>
+<li>Reflexive: $\tau(a) = \tau(a)$. ✓</li>
+<li>Symmetric: $\tau(a) = \tau(b) \implies \tau(b) = \tau(a)$. ✓</li>
+<li>Transitive: $\tau(a) = \tau(b)$ and $\tau(b) = \tau(c)$ $\implies$ $\tau(a) = \tau(c)$. ✓</li>
+</ul>
+
+<p>$[1] = \{1\}$ (only 1 has exactly 1 divisor). $[2] = \{p \mid p \text{ prime}\} = \{2, 3, 5, 7, 11, \ldots\}$. $[6] = \{n \mid \tau(n) = 4\} = \{6, 8, 10, 14, 15, 21, 22, \ldots\}$. $\blacksquare$</p>
+
+<p><strong>DM5.</strong> No! Counterexample: $A = \{1, 2\}$, $R = \emptyset$. $R$ is vacuously symmetric and transitive, but not reflexive ($(1,1) \notin R$). Another counterexample: $A = \{1,2,3\}$, $R = \{(1,2),(2,1),(1,1),(2,2)\}$. Symmetric ✓, transitive ✓, but not reflexive ($(3,3) \notin R$). $\blacksquare$</p>
+
+</section>
+</div>
+<hr>
+<div id="class-3" class="class-section">
+<h1 id="module-5-class-3-injective-surjective-and-bijective-functions">Module 5 – Class 3: Injective, Surjective and Bijective Functions</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define injective (one-to-one), surjective (onto) and bijective functions.</li>
+<li>Prove a function is injective by assuming $f(x_1) = f(x_2)$ and showing $x_1 = x_2$.</li>
+<li>Prove a function is surjective by constructing a preimage for each element in the codomain.</li>
+<li>Understand how bijectivity connects to invertibility.</li>
+<li>Prove that composition preserves injectivity and surjectivity.</li>
+<li>Implement injectivity/surjectivity checks in Java using <code>Map</code> representations.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="injective-one-to-one">Injective (One-to-One)</h3>
+
+<p>A function $f: A \to B$ is <strong>injective</strong> if:</p>
+
+<div class="katex-block">$\forall x_1, x_2 \in A: f(x_1) = f(x_2) \implies x_1 = x_2$</div>
+
+<p>Equivalently (contrapositive): $x_1 \neq x_2 \implies f(x_1) \neq f(x_2)$.</p>
+
+<p><strong>Intuition:</strong> Every output comes from at most one input. No two different inputs share the same output.</p>
+
+<h3 id="surjective-onto">Surjective (Onto)</h3>
+
+<p>A function $f: A \to B$ is <strong>surjective</strong> if:</p>
+
+<div class="katex-block">$\forall b \in B, \exists a \in A: f(a) = b$</div>
+
+<p><strong>Intuition:</strong> Every element in the codomain $B$ is actually "hit." The range equals the codomain.</p>
+
+<h3 id="bijective-one-to-one-correspondence">Bijective (One-to-One Correspondence)</h3>
+
+<p>A function is <strong>bijective</strong> if it is both injective and surjective.</p>
+
+<div class="katex-block">$\text{Bijective} = \text{Injective} + \text{Surjective}$</div>
+
+<p><strong>Key theorem:</strong> $f: A \to B$ is bijective if and only if $f$ has an inverse function $f^{-1}: B \to A$.</p>
+
+<h3 id="counting-implications">Counting Implications</h3>
+
+<p>For finite sets $|A| = m$, $|B| = n$:</p>
+<ul>
+<li>If $f: A \to B$ is injective, then $m \leq n$.</li>
+<li>If $f: A \to B$ is surjective, then $m \geq n$.</li>
+<li>If $f: A \to B$ is bijective, then $m = n$.</li>
+</ul>
+
+<p>This foreshadows the counting arguments of Module 7.</p>
+
+<h3 id="cs-connections">CS Connections</h3>
+
+<table>
+<thead><tr>
+<th>Concept</th>
+<th>CS Application</th>
+</tr></thead><tbody>
+<tr>
+<td>Injective</td>
+<td>Hash functions with no collisions; unique ID generators</td>
+</tr>
+<tr>
+<td>Surjective</td>
+<td>Covering all enum values; complete switch statements</td>
+</tr>
+<tr>
+<td>Bijective</td>
+<td>Encryption/decryption; lossless compression; array index mappings</td>
+</tr>
+<tr>
+<td>Inverse</td>
+<td>Decode is the inverse of encode; deserialize inverts serialize</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Notation</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$f: A \hookrightarrow B$</td>
+<td>$f$ is injective</td>
+</tr>
+<tr>
+<td>$f: A \twoheadrightarrow B$</td>
+<td>$f$ is surjective</td>
+</tr>
+<tr>
+<td>$f: A \xrightarrow{\sim} B$</td>
+<td>$f$ is bijective</td>
+</tr>
+<tr>
+<td>$f^{-1}: B \to A$</td>
+<td>Inverse (exists iff $f$ is bijective)</td>
+</tr>
+<tr>
+<td>$|f^{-1}(\{b\})|$</td>
+<td>Size of the preimage (fiber) of $b$</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-proving-injectivity">Example 1: Proving Injectivity</h3>
+
+<p><strong>Claim:</strong> $f: \mathbb{Z} \to \mathbb{Z}$ defined by $f(n) = 2n + 3$ is injective.</p>
+
+<p><strong>Proof.</strong> Assume $f(x_1) = f(x_2)$:</p>
+<div class="katex-block">$2x_1 + 3 = 2x_2 + 3$</div>
+<div class="katex-block">$2x_1 = 2x_2$</div>
+<div class="katex-block">$x_1 = x_2$</div>
+
+<p>So $f$ is injective. $\blacksquare$</p>
+
+<h3 id="example-2-proving-surjectivity">Example 2: Proving Surjectivity</h3>
+
+<p><strong>Claim:</strong> $f: \mathbb{R} \to \mathbb{R}$ defined by $f(x) = 2x + 3$ is surjective.</p>
+
+<p><strong>Proof.</strong> Let $y \in \mathbb{R}$. We need $x$ such that $f(x) = y$:</p>
+<div class="katex-block">$2x + 3 = y \implies x = \frac{y - 3}{2}$</div>
+
+<p>Check: $f\!\left(\frac{y-3}{2}\right) = 2 \cdot \frac{y-3}{2} + 3 = y$. ✓</p>
+
+<p>Since $\frac{y-3}{2} \in \mathbb{R}$, every $y$ has a preimage. $\blacksquare$</p>
+
+<p><strong>Note:</strong> Over $\mathbb{Z}$, $f(n) = 2n + 3$ is NOT surjective (e.g., $y = 4$ has no integer preimage: $n = 1/2$).</p>
+
+<h3 id="example-3-a-function-that-is-neither">Example 3: A Function That Is Neither</h3>
+
+<p>$f: \mathbb{Z} \to \mathbb{Z}$ defined by $f(n) = n^2$.</p>
+<ul>
+<li>Not injective: $f(2) = f(-2) = 4$ but $2 \neq -2$.</li>
+<li>Not surjective: no $n$ gives $f(n) = -1$.</li>
+</ul>
+
+<h3 id="example-4-composition-preserves-injectivity">Example 4: Composition Preserves Injectivity</h3>
+
+<p><strong>Theorem:</strong> If $f: A \to B$ and $g: B \to C$ are both injective, then $g \circ f: A \to C$ is injective.</p>
+
+<p><strong>Proof.</strong> Assume $(g \circ f)(x_1) = (g \circ f)(x_2)$, i.e., $g(f(x_1)) = g(f(x_2))$.</p>
+
+<p>Since $g$ is injective: $f(x_1) = f(x_2)$.</p>
+
+<p>Since $f$ is injective: $x_1 = x_2$. $\blacksquare$</p>
+
+<h3 id="example-5-bijectivity-and-inverses">Example 5: Bijectivity and Inverses</h3>
+
+<p>$f: \{0, 1, \ldots, 25\} \to \{0, 1, \ldots, 25\}$ defined by $f(x) = (x + 3) \bmod 26$ (Caesar cipher with shift 3).</p>
+
+<ul>
+<li><em>Injective:</em> $f(x_1) = f(x_2) \implies x_1 + 3 \equiv x_2 + 3 \pmod{26} \implies x_1 \equiv x_2 \pmod{26}$. Since $0 \leq x_1, x_2 \leq 25$, $x_1 = x_2$. ✓</li>
+<li><em>Surjective:</em> For any $y$, take $x = (y - 3) \bmod 26$. Then $f(x) = y$. ✓</li>
+</ul>
+
+<p>So $f$ is bijective with inverse $f^{-1}(y) = (y - 3) \bmod 26$. This connects to Module 2's modular arithmetic.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="the-injection-proof-template">The Injection Proof Template</h3>
+
+<ol>
+<li>Assume $f(x_1) = f(x_2)$.</li>
+<li>Use the definition of $f$ and algebraic manipulation.</li>
+<li>Conclude $x_1 = x_2$.</li>
+</ol>
+
+<h3 id="the-surjection-proof-template">The Surjection Proof Template</h3>
+
+<ol>
+<li>Let $y$ be an arbitrary element of the codomain.</li>
+<li>Construct a candidate $x$ (often by "solving" $f(x) = y$).</li>
+<li>Verify $f(x) = y$.</li>
+<li>Verify $x$ is in the domain.</li>
+</ol>
+
+<h3 id="disproof-by-counterexample">Disproof by Counterexample</h3>
+
+<ul>
+<li><strong>Not injective:</strong> Find $x_1 \neq x_2$ with $f(x_1) = f(x_2)$.</li>
+<li><strong>Not surjective:</strong> Find $y$ in the codomain with no preimage.</li>
+</ul>
+
+<h3 id="composition-proofs">Composition Proofs</h3>
+
+<p>For composition, chain the property through: use injectivity/surjectivity of the inner function, then the outer function.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
+public class InjectSurjectLibrary {
+
+    // --- Injectivity / Surjectivity Checks ---
+
+    /**
+     * Check if a function (Map) is injective.
+     * f is injective iff all values are distinct.
+     */
+    public static &lt;A, B&gt; boolean isInjective(Map&lt;A, B&gt; f) {
+        Set&lt;B&gt; seen = new HashSet&lt;&gt;();
+        for (B val : f.values()) {
+            if (!seen.add(val)) return false; // duplicate value
+        }
+        return true;
+    }
+
+    /**
+     * Check if a function (Map) is surjective with respect to a codomain.
+     * f is surjective iff every element of codomain appears as a value.
+     */
+    public static &lt;A, B&gt; boolean isSurjective(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        return f.values().containsAll(codomain);
+    }
+
+    /**
+     * Check if a function (Map) is bijective.
+     */
+    public static &lt;A, B&gt; boolean isBijective(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        return isInjective(f) &amp;&amp; isSurjective(f, codomain);
+    }
+
+    /**
+     * Find a collision (two domain elements mapping to same value).
+     * Returns null if function is injective.
+     */
+    public static &lt;A, B&gt; List&lt;A&gt; findCollision(Map&lt;A, B&gt; f) {
+        Map&lt;B, A&gt; inverse = new HashMap&lt;&gt;();
+        for (Map.Entry&lt;A, B&gt; entry : f.entrySet()) {
+            A prev = inverse.put(entry.getValue(), entry.getKey());
+            if (prev != null) {
+                // Use ArrayList to ensure a mutable, safe list
+                List&lt;A&gt; collision = new ArrayList&lt;&gt;();
+                collision.add(prev);
+                collision.add(entry.getKey());
+                return collision;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find elements in codomain with no preimage.
+     */
+    public static &lt;A, B&gt; Set&lt;B&gt; findMissing(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        Set&lt;B&gt; range = new HashSet&lt;&gt;(f.values());
+        Set&lt;B&gt; missing = new HashSet&lt;&gt;(codomain);
+        missing.removeAll(range);
+        return missing;
+    }
+
+    // --- Inverse ---
+
+    /**
+     * Compute the inverse of a bijective function.
+     * Throws if not bijective.
+     */
+    public static &lt;A, B&gt; Map&lt;B, A&gt; inverse(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        if (!isBijective(f, codomain)) {
+            throw new IllegalArgumentException("Function is not bijective");
+        }
+        Map&lt;B, A&gt; inv = new HashMap&lt;&gt;();
+        for (Map.Entry&lt;A, B&gt; entry : f.entrySet()) {
+            inv.put(entry.getValue(), entry.getKey());
+        }
+        return inv;
+    }
+
+    // --- Composition with Property Preservation ---
+
+    /**
+     * Compose two maps: (g ∘ f)(x) = g(f(x)).
+     */
+    public static &lt;A, B, C&gt; Map&lt;A, C&gt; compose(Map&lt;A, B&gt; f, Map&lt;B, C&gt; g) {
+        Map&lt;A, C&gt; result = new HashMap&lt;&gt;();
+        for (Map.Entry&lt;A, B&gt; entry : f.entrySet()) {
+            C val = g.get(entry.getValue());
+            if (val != null) {
+                result.put(entry.getKey(), val);
+            }
+        }
+        return result;
+    }
+
+    // --- Fiber / Preimage ---
+
+    /**
+     * Compute the preimage (fiber) of a value b.
+     */
+    public static &lt;A, B&gt; Set&lt;A&gt; fiber(Map&lt;A, B&gt; f, B b) {
+        Set&lt;A&gt; result = new HashSet&lt;&gt;();
+        for (Map.Entry&lt;A, B&gt; entry : f.entrySet()) {
+            if (Objects.equals(entry.getValue(), b)) {
+                result.add(entry.getKey());
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Print fiber sizes. A function is:
+     * - injective iff max fiber size = 1
+     * - surjective iff min fiber size &gt;= 1 (over codomain)
+     */
+    public static &lt;A, B&gt; void analyzeFibers(Map&lt;A, B&gt; f, Set&lt;B&gt; codomain) {
+        System.out.println("Fiber analysis:");
+        for (B b : codomain) {
+            Set&lt;A&gt; fib = fiber(f, b);
+            System.out.println("  f^{-1}({" + b + "}) = " + fib
+                    + " (size " + fib.size() + ")");
+        }
+    }
+
+    // --- Demo: Caesar Cipher ---
+
+    public static Map&lt;Integer, Integer&gt; caesarEncrypt(int shift, int alphabetSize) {
+        Map&lt;Integer, Integer&gt; f = new HashMap&lt;&gt;();
+        for (int x = 0; x &lt; alphabetSize; x++) {
+            f.put(x, Math.floorMod(x + shift, alphabetSize));
+        }
+        return f;
+    }
+
+    // --- Demonstration ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Inject/Surject Library ===\n");
+
+        // f(n) = 2n + 3 on {0,...,5} -&gt; Z
+        Map&lt;Integer, Integer&gt; f1 = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt;= 5; i++) f1.put(i, 2 * i + 3);
+        System.out.println("f(n) = 2n+3 on {0..5}: " + f1);
+        System.out.println("  Injective: " + isInjective(f1));
+
+        // g(n) = n % 3 on {0,...,5} -&gt; {0,1,2}
+        Map&lt;Integer, Integer&gt; g1 = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt;= 5; i++) g1.put(i, i % 3);
+        Set&lt;Integer&gt; codomainG = Set.of(0, 1, 2);
+        System.out.println("\ng(n) = n%3 on {0..5}: " + g1);
+        System.out.println("  Injective: " + isInjective(g1));
+        System.out.println("  Surjective onto {0,1,2}: " + isSurjective(g1, codomainG));
+        List&lt;Integer&gt; collision = findCollision(g1);
+        System.out.println("  Collision: " + collision);
+        analyzeFibers(g1, codomainG);
+
+        // Caesar cipher
+        int n = 26;
+        Map&lt;Integer, Integer&gt; caesar = caesarEncrypt(3, n);
+        Set&lt;Integer&gt; alphabet = IntStream.range(0, n).boxed()
+                .collect(Collectors.toSet());
+        System.out.println("\nCaesar(3) on {0..25}:");
+        System.out.println("  Bijective: " + isBijective(caesar, alphabet));
+        Map&lt;Integer, Integer&gt; inv = inverse(caesar, alphabet);
+        System.out.println("  Encrypt(0) = " + caesar.get(0)
+                + ", Decrypt(3) = " + inv.get(3));
+
+        // Composition preserves injectivity
+        Map&lt;Integer, Integer&gt; h = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt;= 5; i++) h.put(i, i * i); // not injective on Z, but on {0..5}?
+        System.out.println("\nh(n) = n^2 on {0..5}: " + h);
+        System.out.println("  Injective: " + isInjective(h));
+        Map&lt;Integer, Integer&gt; composed = compose(f1, h);
+        System.out.println("  h ∘ f1 injective: " + isInjective(composed));
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Georg Cantor</strong> (1845–1918) used bijections to compare the sizes of infinite sets, leading to his groundbreaking theorem that $|\mathbb{R}|> |\mathbb{N}|$ (the reals are uncountable). His "diagonal argument" for surjection failure remains one of the most elegant proofs in mathematics.</p>
+
+<p>The classification into injective/surjective/bijective became standard through <strong>Bourbaki</strong> (1930s–), the pseudonym of a group of French mathematicians who systematized modern mathematics. They also introduced the arrow notation $f: A \to B$.</p>
+
+<p>In cryptography, <strong>Claude Shannon</strong> (1949) established that a secure cipher must be a bijection on the message space — if encryption is not injective, information is lost; if not surjective, some ciphertexts can never appear.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> For $f: \{1,2,3\} \to \{a,b,c,d\}$ with $f(1) = a, f(2) = b, f(3) = c$: injective? surjective? bijective?</p>
+
+<p><strong>A2.</strong> Can a function from a 5-element set to a 3-element set be injective? Surjective? Justify.</p>
+
+<p><strong>A3.</strong> If <code>HashMap</code> maps keys to values, is the key→value mapping always injective? Is it always surjective?</p>
+
+<p><strong>A4.</strong> True or false: The composition of two surjective functions is surjective.</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove: $f(n) = 3n - 7$ is injective on $\mathbb{Z}$.</p>
+
+<p><strong>B2.</strong> Prove or disprove: $f(n) = n \bmod 5$ is surjective from $\mathbb{Z}$ to $\{0,1,2,3,4\}$.</p>
+
+<p><strong>B3.</strong> Prove: If $g \circ f$ is surjective, then $g$ is surjective.</p>
+
+<p><strong>B4.</strong> Prove: If $g \circ f$ is injective, then $f$ is injective.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write <code>isInjective(Map&lt;Integer, Integer&gt; f)</code> and test with $f(n) = n^2$ on $\{-3, \ldots, 3\}$.</p>
+
+<p><strong>C2.</strong> Write <code>inverse(Map&lt;A, B&gt; f)</code> that returns the inverse map. Throw an exception if $f$ is not bijective.</p>
+
+<p><strong>C3.</strong> Compose two maps and check whether the composition preserves injectivity.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Let $f: \mathbb{Z} \to \mathbb{Z}$ be $f(n) = 5n + 2$. Prove $f$ is injective. Is $f$ surjective? Prove or disprove.</p>
+
+<p><strong>DM2.</strong> Let $f: \mathbb{R} \to \mathbb{R}$ be $f(x) = x^3$. Prove $f$ is bijective. Find $f^{-1}$.</p>
+
+<p><strong>DM3.</strong> Let $f: A \to B$ and $g: B \to C$. Prove: if $g \circ f$ is injective, then $f$ is injective.</p>
+
+<p><strong>DM4.</strong> Let $f: A \to B$ and $g: B \to C$. Prove: if $g \circ f$ is surjective, then $g$ is surjective.</p>
+
+<p><strong>DM5.</strong> Prove: if $f: A \to B$ is a bijection, then $|A| = |B|$ for finite sets.</p>
+
+<p><strong>DM6.</strong> Let $f: \{0, \ldots, n-1\} \to \{0, \ldots, n-1\}$ be defined by $f(x) = (ax + b) \bmod n$. Under what conditions on $a$ and $n$ is $f$ a bijection? (Connect to Module 2, units mod $n$.)</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement <code>isInjective</code>, <code>isSurjective</code>, <code>isBijective</code> for <code>Map&lt;Integer, Integer&gt;</code> with a given codomain.</p>
+
+<p><strong>JP2.</strong> Given a bijective map, compute its inverse. Verify that $f^{-1}(f(x)) = x$ for all $x$ in the domain.</p>
+
+<p><strong>JP3.</strong> Build two injective maps $f$ and $g$, compose them, and verify the composition is injective.</p>
+
+<p><strong>JP4.</strong> Build a hash function from strings to integers (using <code>hashCode() % tableSize</code>). Find collisions, demonstrating the function is not injective. Compute fibers.</p>
+
+<p><strong>JP5.</strong> Implement the Caesar cipher as a bijective map. Encrypt a message, decrypt using the inverse. Extend to an affine cipher $f(x) = (ax + b) \bmod 26$ and compute the inverse using modular inverse from Module 2.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> From Module 2: the map $f(x) = ax \bmod n$ is a bijection iff $\gcd(a, n) = 1$. Verify this for $n = 26$ and all values of $a$ from 1 to 25, using your GCD function from Module 1.</p>
+
+<p><strong>BR2.</strong> From Module 5 Class 2: an equivalence relation on $A$ partitions $A$ into classes. Define the <strong>canonical map</strong> $\pi: A \to A/R$ by $\pi(a) = [a]$. Prove $\pi$ is surjective. When is $\pi$ injective?</p>
+
+<p><strong>BR3.</strong> From Module 4: the function $\text{powerSet}: \{0, 1, \ldots, n-1\} \to \{0,1\}^n$ that maps a subset to its characteristic function (bit vector) is a bijection from $\mathcal{P}(\{0,\ldots,n-1\})$ to $\{0,1\}^n$. Verify in Java for $n = 4$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> <em>Injective:</em> $5x_1 + 2 = 5x_2 + 2 \implies 5x_1 = 5x_2 \implies x_1 = x_2$. ✓</p>
+<p><em>Not surjective over $\mathbb{Z}$:</em> $y = 1$ requires $5n + 2 = 1$, so $n = -1/5 \notin \mathbb{Z}$. $\blacksquare$</p>
+
+<p><strong>DM2.</strong> <em>Injective:</em> $x_1^3 = x_2^3 \implies x_1 = x_2$ (cube root is well-defined on $\mathbb{R}$). <em>Surjective:</em> For any $y \in \mathbb{R}$, take $x = y^{1/3}$. Then $f(x) = y$. <em>Inverse:</em> $f^{-1}(y) = y^{1/3}$. $\blacksquare$</p>
+
+<p><strong>DM3.</strong> Assume $g \circ f$ is injective. Let $f(x_1) = f(x_2)$. Then $g(f(x_1)) = g(f(x_2))$, i.e., $(g \circ f)(x_1) = (g \circ f)(x_2)$. Since $g \circ f$ is injective, $x_1 = x_2$. So $f$ is injective. $\blacksquare$</p>
+
+<p><strong>DM4.</strong> Assume $g \circ f$ is surjective. Let $c \in C$. Then $\exists a \in A: (g \circ f)(a) = c$. So $g(f(a)) = c$. Let $b = f(a) \in B$. Then $g(b) = c$. So for every $c$, $\exists b: g(b) = c$. Thus $g$ is surjective. $\blacksquare$</p>
+
+<p><strong>DM5.</strong> If $f$ is bijective: injective $\implies |A| \leq |B|$, surjective $\implies |A| \geq |B|$. Therefore $|A| = |B|$. $\blacksquare$</p>
+
+<p><strong>DM6.</strong> $f(x) = (ax + b) \bmod n$ is bijective iff $\gcd(a, n) = 1$. If $\gcd(a, n) = 1$, then $a$ has an inverse $a^{-1}$ mod $n$, and $f^{-1}(y) = a^{-1}(y - b) \bmod n$. If $\gcd(a, n) = d > 1$, then $f(0) = b$ and $f(n/d) = (a \cdot n/d + b) \bmod n = b$ (since $a \cdot n/d$ is a multiple of $n$), so $f$ is not injective. $\blacksquare$</p>
+
+<h3 id="java-programming-solutions">Java Programming Solutions</h3>
+
+<p><strong>JP4.</strong></p>
+<pre><code class="language-java">public static void hashCollisionDemo() {
+    String[] words = {"cat", "dog", "bat", "tab", "act", "god", "tac"};
+    int tableSize = 5;
+    Map&lt;String, Integer&gt; hashMap = new HashMap&lt;&gt;();
+    for (String w : words) {
+        hashMap.put(w, Math.floorMod(w.hashCode(), tableSize));
+    }
+    System.out.println("Hash map: " + hashMap);
+    System.out.println("Injective: " + isInjective(hashMap));
+    Set&lt;Integer&gt; codomain = IntStream.range(0, tableSize).boxed()
+            .collect(Collectors.toSet());
+    analyzeFibers(hashMap, codomain);
+}</code></pre>
+
+<p><strong>JP5.</strong></p>
+<pre><code class="language-java">public static void affineCipherDemo() {
+    int a = 5, b = 8, n = 26;
+    // Verify gcd(a, n) = 1
+    // From Module 1: gcd(5, 26) = 1, so a^{-1} mod 26 exists
+    // Extended Euclidean: 5 * 21 = 105 = 4*26 + 1, so a^{-1} = 21
+
+    Map&lt;Integer, Integer&gt; encrypt = new HashMap&lt;&gt;();
+    for (int x = 0; x &lt; n; x++) {
+        encrypt.put(x, Math.floorMod(a * x + b, n));
+    }
+    Set&lt;Integer&gt; alpha = IntStream.range(0, n).boxed().collect(Collectors.toSet());
+    System.out.println("Affine(5,8) bijective: " + isBijective(encrypt, alpha));
+
+    int aInv = 21; // precomputed
+    Map&lt;Integer, Integer&gt; decrypt = new HashMap&lt;&gt;();
+    for (int y = 0; y &lt; n; y++) {
+        decrypt.put(y, Math.floorMod(aInv * (y - b), n));
+    }
+    // Verify round-trip
+    for (int x = 0; x &lt; n; x++) {
+        assert decrypt.get(encrypt.get(x)) == x;
+    }
+    System.out.println("Round-trip verified for all 26 letters.");
+}</code></pre>
+
+</section>
+</div>
+<hr>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

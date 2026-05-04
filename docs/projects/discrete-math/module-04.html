@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4 — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="module-04">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<div id="class-1" class="class-section">
+<h1 id="module-4-class-1-sets-and-membership">Module 4 – Class 1: Sets and Membership</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define sets, membership, the empty set and subset relations.</li>
+<li>Prove set equality using double inclusion ($A \subseteq B$ and $B \subseteq A$).</li>
+<li>Translate set concepts to Java's <code>Set&lt;T&gt;</code> interface.</li>
+<li>Apply element-chasing proofs to verify set relationships.</li>
+<li>Implement <code>isSubset</code>, <code>union</code>, <code>intersection</code> in Java and verify properties.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="what-is-a-set">What Is a Set?</h3>
+
+<p>A <strong>set</strong> is an unordered collection of distinct elements. Two sets are equal if and only if they contain the same elements.</p>
+
+<div class="katex-block">$A = B \iff (\forall x : x \in A \leftrightarrow x \in B)$</div>
+
+<table>
+<thead><tr>
+<th>Term</th>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>Membership</td>
+<td>$x \in A$</td>
+<td>$x$ is an element of $A$</td>
+</tr>
+<tr>
+<td>Empty set</td>
+<td>$\emptyset$ or $\{\}$</td>
+<td>The set with no elements</td>
+</tr>
+<tr>
+<td>Subset</td>
+<td>$A \subseteq B$</td>
+<td>Every element of $A$ is in $B$</td>
+</tr>
+<tr>
+<td>Proper subset</td>
+<td>$A \subset B$</td>
+<td>$A \subseteq B$ and $A \neq B$</td>
+</tr>
+<tr>
+<td>Set equality</td>
+<td>$A = B$</td>
+<td>$A \subseteq B$ and $B \subseteq A$</td>
+</tr>
+<tr>
+<td>Cardinality</td>
+<td>$|A|$</td>
+<td>Number of elements in $A$</td>
+</tr>
+</tbody></table>
+
+<h3 id="roster-and-set-builder-notation">Roster and Set-Builder Notation</h3>
+
+<ul>
+<li><strong>Roster notation</strong>: $A = \{1, 2, 3\}$</li>
+<li><strong>Set-builder notation</strong>: $A = \{x \in \mathbb{Z} \mid x > 0 \text{ and } x \leq 3\}$</li>
+</ul>
+
+<h3 id="key-properties">Key Properties</h3>
+
+<ol>
+<li><strong>No duplicates</strong>: $\{1, 1, 2\} = \{1, 2\}$.</li>
+<li><strong>No order</strong>: $\{1, 2, 3\} = \{3, 1, 2\}$.</li>
+<li><strong>Sets can contain sets</strong>: $\{1, \{2, 3\}\}$ has two elements.</li>
+</ol>
+
+<h3 id="subsets">Subsets</h3>
+
+<p>$A \subseteq B$ means $\forall x : x \in A \rightarrow x \in B$.</p>
+
+<p>To prove $A \subseteq B$: Take an arbitrary $x \in A$ and show $x \in B$.</p>
+<p>To disprove $A \subseteq B$: Find a specific $x \in A$ with $x \notin B$ (counterexample).</p>
+
+<h3 id="set-equality-via-double-inclusion">Set Equality via Double Inclusion</h3>
+
+<p>To prove $A = B$:</p>
+<ol>
+<li>Show $A \subseteq B$ (every element of $A$ is in $B$).</li>
+<li>Show $B \subseteq A$ (every element of $B$ is in $A$).</li>
+</ol>
+
+<p><strong>Why this matters in CS:</strong></p>
+<ul>
+<li>Sets model collections of <strong>unique</strong> items: user IDs, permissions, states, visited nodes.</li>
+<li>Database queries use set semantics (SQL <code>DISTINCT</code>, <code>UNION</code>, <code>INTERSECT</code>).</li>
+<li>Type systems use subsets: "Integer is a subset of Number."</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Expression</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$\{x \in S \mid P(x)\}$</td>
+<td>Set of elements in $S$ satisfying predicate $P$</td>
+</tr>
+<tr>
+<td>$A \subseteq B$</td>
+<td>$\forall x (x \in A \rightarrow x \in B)$</td>
+</tr>
+<tr>
+<td>$A = B$</td>
+<td>$\forall x (x \in A \leftrightarrow x \in B)$</td>
+</tr>
+<tr>
+<td>$\|A\|$</td>
+<td>Number of elements in finite set $A$</td>
+</tr>
+<tr>
+<td>$\emptyset$</td>
+<td>The unique set with no elements</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-proving-a-subset-relationship">Example 1: Proving a Subset Relationship</h3>
+
+<p><strong>Claim:</strong> If $A = \{x \in \mathbb{Z} \mid x \text{ is divisible by } 6\}$ and $B = \{x \in \mathbb{Z} \mid x \text{ is divisible by } 3\}$, then $A \subseteq B$.</p>
+
+<p><strong>Proof.</strong> Let $x \in A$. Then $6 \mid x$, so $x = 6k$ for some $k \in \mathbb{Z}$. But $x = 6k = 3(2k)$, and since $2k \in \mathbb{Z}$, we have $3 \mid x$, so $x \in B$. Since $x$ was arbitrary, $A \subseteq B$. $\blacksquare$</p>
+
+<h3 id="example-2-disproving-a-subset">Example 2: Disproving a Subset</h3>
+
+<p><strong>Claim:</strong> $B \subseteq A$ (with $A$, $B$ as above).</p>
+
+<p><strong>Disproof.</strong> Counterexample: $9 \in B$ (since $3 \mid 9$) but $9 \notin A$ (since $6 \nmid 9$). So $B \not\subseteq A$. $\blacksquare$</p>
+
+<h3 id="example-3-set-equality-by-double-inclusion">Example 3: Set Equality by Double Inclusion</h3>
+
+<p><strong>Claim:</strong> $\{x \in \mathbb{Z} \mid x^2 = x\} = \{0, 1\}$.</p>
+
+<p><strong>Proof.</strong></p>
+<ul>
+<li>($\subseteq$): If $x^2 = x$, then $x^2 - x = 0$, so $x(x-1) = 0$, giving $x = 0$ or $x = 1$.</li>
+<li>($\supseteq$): $0^2 = 0$ ✓ and $1^2 = 1$ ✓.</li>
+</ul>
+
+<p>Both inclusions hold, so the sets are equal. $\blacksquare$</p>
+
+<h3 id="example-4-empty-set-is-a-subset-of-every-set">Example 4: Empty Set Is a Subset of Every Set</h3>
+
+<p><strong>Claim:</strong> $\emptyset \subseteq A$ for any set $A$.</p>
+
+<p><strong>Proof.</strong> We must show $\forall x (x \in \emptyset \rightarrow x \in A)$. Since $x \in \emptyset$ is always false, the implication is vacuously true. $\blacksquare$</p>
+
+<h3 id="example-5-connecting-to-module-1-divisor-sets">Example 5: Connecting to Module 1 — Divisor Sets</h3>
+
+<p><strong>Claim:</strong> For positive integer $n$, let $D(n) = \{d \in \mathbb{Z}^+ \mid d \text{ divides } n\}$. If $a \mid b$, then $D(a) \subseteq D(b)$.</p>
+
+<p><strong>Proof.</strong> Let $d \in D(a)$, so $d \mid a$. Since $a \mid b$, by transitivity of divisibility (Module 1, Class 2), $d \mid b$, so $d \in D(b)$. $\blacksquare$</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="element-chasing">Element-Chasing</h3>
+
+<p>The standard technique for proving set relationships:</p>
+
+<p><strong>To prove $A \subseteq B$:</strong></p>
+<blockquote>
+<p>"Let $x \in A$. [Show that $x$ satisfies the conditions for membership in $B$.] Therefore $x \in B$."</p>
+</blockquote>
+
+<p><strong>To prove $A = B$:</strong></p>
+<blockquote>
+<p>"($\subseteq$): Let $x \in A$. ... Therefore $x \in B$.</p>
+<p>($\supseteq$): Let $x \in B$. ... Therefore $x \in A$.</p>
+<p>By double inclusion, $A = B$."</p>
+</blockquote>
+
+<p><strong>To prove $A \cap B \subseteq C$:</strong></p>
+<blockquote>
+<p>"Let $x \in A \cap B$. Then $x \in A$ and $x \in B$. [Use both facts to show $x \in C$.]"</p>
+</blockquote>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class SetMembershipLibrary {
+
+    // --- Membership and Subset ---
+
+    /**
+     * Check whether every element of A is contained in B.
+     * Implements: A ⊆ B ≡ ∀x (x ∈ A → x ∈ B)
+     */
+    public static &lt;T&gt; boolean isSubset(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        for (T x : a) {
+            if (!b.contains(x)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check set equality via double inclusion.
+     * A = B iff A ⊆ B and B ⊆ A
+     */
+    public static &lt;T&gt; boolean setEquals(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        return isSubset(a, b) &amp;&amp; isSubset(b, a);
+    }
+
+    // --- Set Construction ---
+
+    /**
+     * Build a set from a predicate (set-builder notation).
+     * { x ∈ universe | predicate(x) }
+     */
+    public static &lt;T&gt; Set&lt;T&gt; setBuilder(Set&lt;T&gt; universe,
+                                         java.util.function.Predicate&lt;T&gt; predicate) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;();
+        for (T x : universe) {
+            if (predicate.test(x)) result.add(x);
+        }
+        return result;
+    }
+
+    /**
+     * Compute the set of positive divisors of n.
+     * D(n) = { d ∈ Z+ | d divides n }
+     * Connects to Module 1.
+     */
+    public static Set&lt;Integer&gt; divisorSet(int n) {
+        Set&lt;Integer&gt; result = new TreeSet&lt;&gt;();
+        for (int d = 1; d &lt;= Math.abs(n); d++) {
+            if (n % d == 0) result.add(d);
+        }
+        return result;
+    }
+
+    // --- Intersection and Union ---
+
+    /**
+     * A ∩ B = { x | x ∈ A and x ∈ B }
+     * Returns a new set (does not mutate inputs).
+     */
+    public static &lt;T&gt; Set&lt;T&gt; intersection(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;(a);
+        result.retainAll(b);
+        return result;
+    }
+
+    /**
+     * A ∪ B = { x | x ∈ A or x ∈ B }
+     * Returns a new set (does not mutate inputs).
+     */
+    public static &lt;T&gt; Set&lt;T&gt; union(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;(a);
+        result.addAll(b);
+        return result;
+    }
+
+    /**
+     * A \ B = { x | x ∈ A and x ∉ B }
+     */
+    public static &lt;T&gt; Set&lt;T&gt; difference(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;(a);
+        result.removeAll(b);
+        return result;
+    }
+
+    // --- Verification Methods ---
+
+    /**
+     * Verify A ∩ B ⊆ A (a basic set identity).
+     */
+    public static &lt;T&gt; boolean verifyIntersectionSubset(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; inter = intersection(a, b);
+        return isSubset(inter, a);
+    }
+
+    /**
+     * Verify: if a | b then D(a) ⊆ D(b).
+     * Connects divisibility (Module 1) with set theory.
+     */
+    public static boolean verifyDivisorSubset(int a, int b) {
+        if (b % a != 0) return false;  // a does not divide b
+        return isSubset(divisorSet(a), divisorSet(b));
+    }
+
+    // --- Demonstration ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Set Membership Library ===\n");
+
+        // Basic sets
+        Set&lt;Integer&gt; a = new HashSet&lt;&gt;(Arrays.asList(1, 2, 3, 4));
+        Set&lt;Integer&gt; b = new HashSet&lt;&gt;(Arrays.asList(2, 3, 4, 5, 6));
+        Set&lt;Integer&gt; c = new HashSet&lt;&gt;(Arrays.asList(1, 2, 3));
+
+        System.out.println("A = " + a);
+        System.out.println("B = " + b);
+        System.out.println("C = " + c);
+
+        // Subset tests
+        System.out.println("\nC ⊆ A? " + isSubset(c, a));       // true
+        System.out.println("A ⊆ B? " + isSubset(a, b));         // false (1 ∉ B)
+
+        // Set operations
+        System.out.println("\nA ∩ B = " + intersection(a, b));   // {2,3,4}
+        System.out.println("A ∪ B = " + union(a, b));            // {1,2,3,4,5,6}
+        System.out.println("A \\ B = " + difference(a, b));      // {1}
+
+        // Verify A ∩ B ⊆ A
+        System.out.println("\nA ∩ B ⊆ A? " + verifyIntersectionSubset(a, b));
+
+        // Set-builder notation
+        Set&lt;Integer&gt; universe = IntStream.rangeClosed(1, 20)
+                .boxed().collect(Collectors.toSet());
+        Set&lt;Integer&gt; evens = setBuilder(universe, n -&gt; n % 2 == 0);
+        Set&lt;Integer&gt; divBy3 = setBuilder(universe, n -&gt; n % 3 == 0);
+        System.out.println("\nEvens in [1,20]: " + new TreeSet&lt;&gt;(evens));
+        System.out.println("Div by 3 in [1,20]: " + new TreeSet&lt;&gt;(divBy3));
+        System.out.println("Even ∩ DivBy3: " + new TreeSet&lt;&gt;(intersection(evens, divBy3)));
+
+        // Divisor sets (connecting to Module 1)
+        System.out.println("\nD(12) = " + divisorSet(12));
+        System.out.println("D(6)  = " + divisorSet(6));
+        System.out.println("6 | 12? " + (12 % 6 == 0));
+        System.out.println("D(6) ⊆ D(12)? " + verifyDivisorSubset(6, 12));
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Georg Cantor</strong> (1845–1918) created set theory in the 1870s–1880s, defining a set as "a gathering together into a whole of definite, distinct objects of our perception or thought." His work on infinite sets (countable vs. uncountable) sparked a revolution in mathematics.</p>
+
+<p><strong>Ernst Zermelo</strong> and <strong>Abraham Fraenkel</strong> formalized set theory axiomatically (ZF/ZFC) in the early 20th century, addressing paradoxes like Russell's paradox ($\{x \mid x \notin x\}$).</p>
+
+<p>In computer science, sets appear everywhere: hash sets, tree sets, bit vectors. Java's <code>Set&lt;T&gt;</code> interface directly mirrors the mathematical concept: <code>contains()</code> for $\in$, <code>addAll()</code> for $\cup$, <code>retainAll()</code> for $\cap$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> Let $A = \{1, 2, 3\}$, $B = \{2, 3, 4\}$. Is $A \subseteq B$? Is $B \subseteq A$? Is $A = B$?</p>
+
+<p><strong>A2.</strong> How many subsets does $\{a, b, c\}$ have? List them all.</p>
+
+<p><strong>A3.</strong> True or false: $\emptyset \in \{1, 2, 3\}$. True or false: $\emptyset \subseteq \{1, 2, 3\}$.</p>
+
+<p><strong>A4.</strong> If $|A| = 5$ and $A \subseteq B$, what is the minimum possible value of $|B|$?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove: If $A \subseteq B$ and $B \subseteq C$, then $A \subseteq C$ (transitivity of subset).</p>
+
+<p><strong>B2.</strong> Prove: $A \cap B \subseteq A$ for any sets $A$ and $B$.</p>
+
+<p><strong>B3.</strong> Prove or disprove: If $A \subseteq B$ and $A \subseteq C$, then $A \subseteq B \cap C$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write a method <code>&lt;T&gt; Set&lt;T&gt; symmetricDifference(Set&lt;T&gt; a, Set&lt;T&gt; b)</code> that returns elements in exactly one of the two sets.</p>
+
+<p><strong>C2.</strong> Write a method that takes a <code>List&lt;Integer&gt;</code> and returns a <code>Set&lt;Integer&gt;</code> of duplicates.</p>
+
+<p><strong>C3.</strong> Implement <code>divisorSet(int n)</code> and verify that <code>D(6) ⊆ D(12)</code>.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Let $A = \{1, 2, 3, 4, 5\}$, $B = \{3, 4, 5, 6, 7\}$. Compute $A \cap B$, $A \cup B$, $A \setminus B$, $B \setminus A$.</p>
+
+<p><strong>DM2.</strong> Prove by element-chasing: $A \cap (B \cup C) \supseteq (A \cap B) \cup (A \cap C)$.</p>
+
+<p><strong>DM3.</strong> Prove that $A \subseteq B$ if and only if $A \cap B = A$.</p>
+
+<p><strong>DM4.</strong> Let $E = \{n \in \mathbb{Z} \mid n \text{ is even}\}$ and $O = \{n \in \mathbb{Z} \mid n \text{ is odd}\}$. Prove $E \cap O = \emptyset$ and $E \cup O = \mathbb{Z}$.</p>
+
+<p><strong>DM5.</strong> Prove that $|\mathcal{P}(\emptyset)| = 1$ and identify the single element of $\mathcal{P}(\emptyset)$.</p>
+
+<p><strong>DM6.</strong> Prove: $A \setminus B = A \cap \overline{B}$ (where $\overline{B}$ is the complement of $B$ relative to a universal set $U$).</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Write a method <code>boolean isSubset(Set&lt;Integer&gt; a, Set&lt;Integer&gt; b)</code> and test with at least 5 pairs of sets.</p>
+
+<p><strong>JP2.</strong> Implement set-builder notation: <code>Set&lt;Integer&gt; setBuilder(int low, int high, Predicate&lt;Integer&gt; p)</code> returning all integers in $[\text{low}, \text{high}]$ satisfying $p$. Use it to build the set of primes less than 100.</p>
+
+<p><strong>JP3.</strong> Write a method that, given two sets $A$ and $B$, verifies the identity $|A \cup B| = |A| + |B| - |A \cap B|$ by computing both sides.</p>
+
+<p><strong>JP4.</strong> Implement <code>divisorSet(int n)</code> and write tests verifying: if $a | b$ then $D(a) \subseteq D(b)$. Test for $a = 6, b = 30$ and $a = 4, b = 12$.</p>
+
+<p><strong>JP5.</strong> Write a method that partitions a set of integers into two subsets: primes and composites (connecting to Module 1).</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Prove mathematically that for positive integers $a$ and $b$, $D(\gcd(a,b)) = D(a) \cap D(b)$. Then write Java code to verify this for all pairs $(a,b)$ with $1 \leq a, b \leq 50$.</p>
+
+<p><strong>BR2.</strong> Prove: the set of all linear combinations $\{ax + by \mid x, y \in \mathbb{Z}\}$ equals the set of all multiples of $\gcd(a,b)$. Write a Java method that generates both sets for $a, b \leq 20$ and verifies equality (for sufficiently many values).</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> $A \cap B = \{3, 4, 5\}$. $A \cup B = \{1, 2, 3, 4, 5, 6, 7\}$. $A \setminus B = \{1, 2\}$. $B \setminus A = \{6, 7\}$.</p>
+
+<p><strong>DM2.</strong> Let $x \in (A \cap B) \cup (A \cap C)$. Then $x \in A \cap B$ or $x \in A \cap C$.</p>
+<ul>
+<li>Case 1: $x \in A \cap B$. Then $x \in A$ and $x \in B$. Since $x \in B$, $x \in B \cup C$. So $x \in A \cap (B \cup C)$.</li>
+<li>Case 2: $x \in A \cap C$. Then $x \in A$ and $x \in C \subseteq B \cup C$. So $x \in A \cap (B \cup C)$.</li>
+</ul>
+
+<p>In both cases, $x \in A \cap (B \cup C)$. $\blacksquare$</p>
+
+<p><strong>DM3.</strong> ($\Rightarrow$): Assume $A \subseteq B$. Let $x \in A \cap B$, then $x \in A$, so $A \cap B \subseteq A$. Now let $x \in A$. Since $A \subseteq B$, $x \in B$, so $x \in A \cap B$. Thus $A \subseteq A \cap B$. By double inclusion, $A \cap B = A$.</p>
+
+<p>($\Leftarrow$): Assume $A \cap B = A$. Let $x \in A$. Then $x \in A \cap B$ (since $A = A \cap B$), so $x \in B$. Thus $A \subseteq B$. $\blacksquare$</p>
+
+<p><strong>DM4.</strong> ($E \cap O = \emptyset$): Suppose $n \in E \cap O$. Then $2 | n$ and $n = 2k+1$. So $2 | (2k+1)$, meaning $2k+1 = 2m$, giving $1 = 2(m-k)$. But $|2(m-k)| \geq 2$ or $= 0$, so no integer satisfies this. Contradiction.</p>
+
+<p>($E \cup O = \mathbb{Z}$): For any $n \in \mathbb{Z}$, by the quotient-remainder theorem (Module 2), $n = 2q + r$ where $r \in \{0, 1\}$. If $r = 0$, $n \in E$. If $r = 1$, $n \in O$. $\blacksquare$</p>
+
+<p><strong>DM5.</strong> $\mathcal{P}(\emptyset) = \{\emptyset\}$. It has exactly one element (the empty set itself is the only subset of the empty set). $|\mathcal{P}(\emptyset)| = 2^0 = 1$. $\blacksquare$</p>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP2.</strong></p>
+<pre><code class="language-java">public static Set&lt;Integer&gt; setBuilder(int low, int high,
+                                       Predicate&lt;Integer&gt; p) {
+    Set&lt;Integer&gt; result = new TreeSet&lt;&gt;();
+    for (int i = low; i &lt;= high; i++) {
+        if (p.test(i)) result.add(i);
+    }
+    return result;
+}
+
+// Primes less than 100
+Set&lt;Integer&gt; primes = setBuilder(2, 99, n -&gt; {
+    if (n &lt; 2) return false;
+    for (int i = 2; i * i &lt;= n; i++)
+        if (n % i == 0) return false;
+    return true;
+});</code></pre>
+
+<p><strong>BR1.</strong></p>
+<pre><code class="language-java">// Verify D(gcd(a,b)) = D(a) ∩ D(b)
+for (int a = 1; a &lt;= 50; a++) {
+    for (int b = 1; b &lt;= 50; b++) {
+        int g = gcd(a, b);
+        Set&lt;Integer&gt; dGcd = divisorSet(g);
+        Set&lt;Integer&gt; inter = intersection(divisorSet(a), divisorSet(b));
+        assert dGcd.equals(inter)
+            : "Failed for a=" + a + ", b=" + b;
+    }
+}</code></pre>
+
+</section>
+</div>
+<hr>
+<div id="class-2" class="class-section">
+<h1 id="module-4-class-2-set-operations-and-distributive-laws">Module 4 – Class 2: Set Operations and Distributive Laws</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Compute union, intersection, difference, complement and Cartesian product.</li>
+<li>Prove the distributive laws using double inclusion and element-chasing.</li>
+<li>Translate set operations to Java's <code>HashSet</code> methods.</li>
+<li>Understand how set operations underlie database queries and search.</li>
+<li>Verify set identities programmatically.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="set-operations">Set Operations</h3>
+
+<table>
+<thead><tr>
+<th>Operation</th>
+<th>Notation</th>
+<th>Definition</th>
+</tr></thead><tbody>
+<tr>
+<td>Union</td>
+<td>$A \cup B$</td>
+<td>$\{x \mid x \in A \text{ or } x \in B\}$</td>
+</tr>
+<tr>
+<td>Intersection</td>
+<td>$A \cap B$</td>
+<td>$\{x \mid x \in A \text{ and } x \in B\}$</td>
+</tr>
+<tr>
+<td>Difference</td>
+<td>$A \setminus B$</td>
+<td>$\{x \mid x \in A \text{ and } x \notin B\}$</td>
+</tr>
+<tr>
+<td>Complement</td>
+<td>$\overline{A}$ or $A^c$</td>
+<td>$\{x \in U \mid x \notin A\}$ (relative to universe $U$)</td>
+</tr>
+<tr>
+<td>Symmetric Difference</td>
+<td>$A \triangle B$</td>
+<td>$(A \setminus B) \cup (B \setminus A)$</td>
+</tr>
+<tr>
+<td>Cartesian Product</td>
+<td>$A \times B$</td>
+<td>$\{(a, b) \mid a \in A \text{ and } b \in B\}$</td>
+</tr>
+</tbody></table>
+
+<h3 id="core-identities">Core Identities</h3>
+
+<p><strong>Commutative laws:</strong></p>
+<ul>
+<li>$A \cup B = B \cup A$</li>
+<li>$A \cap B = B \cap A$</li>
+</ul>
+
+<p><strong>Associative laws:</strong></p>
+<ul>
+<li>$(A \cup B) \cup C = A \cup (B \cup C)$</li>
+<li>$(A \cap B) \cap C = A \cap (B \cap C)$</li>
+</ul>
+
+<p><strong>Distributive laws:</strong></p>
+<ul>
+<li>$A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$</li>
+<li>$A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$</li>
+</ul>
+
+<p><strong>De Morgan's laws for sets:</strong></p>
+<ul>
+<li>$\overline{A \cup B} = \overline{A} \cap \overline{B}$</li>
+<li>$\overline{A \cap B} = \overline{A} \cup \overline{B}$</li>
+</ul>
+
+<p><strong>Absorption laws:</strong></p>
+<ul>
+<li>$A \cup (A \cap B) = A$</li>
+<li>$A \cap (A \cup B) = A$</li>
+</ul>
+
+<h3 id="cartesian-product">Cartesian Product</h3>
+
+<p>$A \times B = \{(a, b) \mid a \in A, b \in B\}$</p>
+
+<p>$|A \times B| = |A| \cdot |B|$</p>
+
+<p>In Java, the Cartesian product corresponds to <strong>nested loops</strong>.</p>
+
+<p><strong>Why this matters in CS:</strong></p>
+<ul>
+<li><strong>Database joins</strong> are Cartesian products filtered by predicates.</li>
+<li><strong>SQL</strong> <code>UNION</code>, <code>INTERSECT</code>, <code>EXCEPT</code> map directly to $\cup$, $\cap$, $\setminus$.</li>
+<li><strong>Bitwise operations</strong> on bit masks implement set operations on sets of flags.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<p>Distributive law (first form):</p>
+
+<div class="katex-block">$A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$</div>
+
+<p>Proof pattern: show $\text{LHS} \subseteq \text{RHS}$ and $\text{RHS} \subseteq \text{LHS}$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-distributive-law-full-proof">Example 1: Distributive Law — Full Proof</h3>
+
+<p><strong>Claim:</strong> $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$</p>
+
+<p><strong>Proof.</strong></p>
+
+<p><strong>($\subseteq$):</strong> Let $x \in A \cap (B \cup C)$. Then $x \in A$ and $x \in B \cup C$.</p>
+<ul>
+<li>Case 1: $x \in B$. Then $x \in A$ and $x \in B$, so $x \in A \cap B \subseteq (A \cap B) \cup (A \cap C)$.</li>
+<li>Case 2: $x \in C$. Then $x \in A$ and $x \in C$, so $x \in A \cap C \subseteq (A \cap B) \cup (A \cap C)$.</li>
+</ul>
+
+<p><strong>($\supseteq$):</strong> Let $x \in (A \cap B) \cup (A \cap C)$.</p>
+<ul>
+<li>Case 1: $x \in A \cap B$. Then $x \in A$ and $x \in B \subseteq B \cup C$. So $x \in A \cap (B \cup C)$.</li>
+<li>Case 2: $x \in A \cap C$. Then $x \in A$ and $x \in C \subseteq B \cup C$. So $x \in A \cap (B \cup C)$.</li>
+</ul>
+
+<p>By double inclusion, $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$. $\blacksquare$</p>
+
+<h3 id="example-2-de-morgan-s-law-for-sets">Example 2: De Morgan's Law for Sets</h3>
+
+<p><strong>Claim:</strong> $\overline{A \cup B} = \overline{A} \cap \overline{B}$ (relative to universe $U$).</p>
+
+<p><strong>Proof.</strong></p>
+
+<p>($\subseteq$): Let $x \in \overline{A \cup B}$. Then $x \notin A \cup B$, so $x \notin A$ and $x \notin B$. Thus $x \in \overline{A}$ and $x \in \overline{B}$, giving $x \in \overline{A} \cap \overline{B}$.</p>
+
+<p>($\supseteq$): Let $x \in \overline{A} \cap \overline{B}$. Then $x \notin A$ and $x \notin B$. So $x \notin A \cup B$, giving $x \in \overline{A \cup B}$. $\blacksquare$</p>
+
+<h3 id="example-3-set-difference-identity">Example 3: Set Difference Identity</h3>
+
+<p><strong>Claim:</strong> $A \setminus (B \cup C) = (A \setminus B) \cap (A \setminus C)$.</p>
+
+<p><strong>Proof.</strong></p>
+<p>($\subseteq$): Let $x \in A \setminus (B \cup C)$. Then $x \in A$ and $x \notin B \cup C$. So $x \notin B$ and $x \notin C$. Thus $x \in A \setminus B$ and $x \in A \setminus C$, giving $x \in (A \setminus B) \cap (A \setminus C)$.</p>
+
+<p>($\supseteq$): Let $x \in (A \setminus B) \cap (A \setminus C)$. Then $x \in A$, $x \notin B$, $x \notin C$. So $x \notin B \cup C$, giving $x \in A \setminus (B \cup C)$. $\blacksquare$</p>
+
+<h3 id="example-4-cartesian-product">Example 4: Cartesian Product</h3>
+
+<p><strong>Problem:</strong> Let $A = \{1, 2\}$, $B = \{a, b, c\}$. Compute $A \times B$ and $|A \times B|$.</p>
+
+<p>$A \times B = \{(1,a), (1,b), (1,c), (2,a), (2,b), (2,c)\}$</p>
+
+<p>$|A \times B| = 2 \cdot 3 = 6$</p>
+
+<h3 id="example-5-connecting-set-operations-to-logic">Example 5: Connecting Set Operations to Logic</h3>
+
+<table>
+<thead><tr>
+<th>Set Operation</th>
+<th>Logical Connective</th>
+<th>Java Operator</th>
+</tr></thead><tbody>
+<tr>
+<td>$A \cup B$</td>
+<td>$P \vee Q$</td>
+<td><code>a.addAll(b)</code></td>
+</tr>
+<tr>
+<td>$A \cap B$</td>
+<td>$P \wedge Q$</td>
+<td><code>a.retainAll(b)</code></td>
+</tr>
+<tr>
+<td>$\overline{A}$</td>
+<td>$\neg P$</td>
+<td><code>U.removeAll(a)</code></td>
+</tr>
+<tr>
+<td>$A \setminus B$</td>
+<td>$P \wedge \neg Q$</td>
+<td><code>a.removeAll(b)</code></td>
+</tr>
+</tbody></table>
+
+<p>De Morgan's laws for sets follow from De Morgan's laws for logic (Module 3)!</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="double-inclusion-with-case-analysis">Double Inclusion with Case Analysis</h3>
+
+<p>Many set identity proofs require splitting into cases based on which sets an element belongs to. The pattern:</p>
+
+<ol>
+<li><strong>Goal:</strong> Prove $X = Y$.</li>
+<li><strong>($\subseteq$):</strong> Take $x \in X$. Analyze cases from the definition of $X$.</li>
+<li><strong>($\supseteq$):</strong> Take $x \in Y$. Analyze cases from the definition of $Y$.</li>
+</ol>
+
+<p><strong>Tip:</strong> If a definition involves "or" (union), split into cases. If it involves "and" (intersection), use both facts together.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class SetOperationsLibrary {
+
+    // --- Core Operations (non-mutating) ---
+
+    public static &lt;T&gt; Set&lt;T&gt; union(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;(a);
+        result.addAll(b);
+        return result;
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; intersection(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;(a);
+        result.retainAll(b);
+        return result;
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; difference(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;(a);
+        result.removeAll(b);
+        return result;
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; complement(Set&lt;T&gt; a, Set&lt;T&gt; universe) {
+        return difference(universe, a);
+    }
+
+    public static &lt;T&gt; Set&lt;T&gt; symmetricDifference(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        return union(difference(a, b), difference(b, a));
+    }
+
+    /**
+     * Cartesian product A × B.
+     * Each pair is represented as a two-element list [a, b].
+     */
+    public static &lt;S, T&gt; Set&lt;List&lt;Object&gt;&gt; cartesianProduct(Set&lt;S&gt; a, Set&lt;T&gt; b) {
+        Set&lt;List&lt;Object&gt;&gt; result = new HashSet&lt;&gt;();
+        for (S x : a) {
+            for (T y : b) {
+                result.add(Arrays.asList(x, y));
+            }
+        }
+        return result;
+    }
+
+    // --- Identity Verification ---
+
+    /**
+     * Verify distributive law: A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)
+     */
+    public static &lt;T&gt; boolean verifyDistributive(Set&lt;T&gt; a, Set&lt;T&gt; b, Set&lt;T&gt; c) {
+        Set&lt;T&gt; lhs = intersection(a, union(b, c));
+        Set&lt;T&gt; rhs = union(intersection(a, b), intersection(a, c));
+        return lhs.equals(rhs);
+    }
+
+    /**
+     * Verify De Morgan: complement(A ∪ B) = complement(A) ∩ complement(B)
+     */
+    public static &lt;T&gt; boolean verifyDeMorgan(Set&lt;T&gt; a, Set&lt;T&gt; b, Set&lt;T&gt; universe) {
+        Set&lt;T&gt; lhs = complement(union(a, b), universe);
+        Set&lt;T&gt; rhs = intersection(complement(a, universe), complement(b, universe));
+        return lhs.equals(rhs);
+    }
+
+    /**
+     * Verify: A \ (B ∪ C) = (A \ B) ∩ (A \ C)
+     */
+    public static &lt;T&gt; boolean verifyDiffDistributive(Set&lt;T&gt; a, Set&lt;T&gt; b, Set&lt;T&gt; c) {
+        Set&lt;T&gt; lhs = difference(a, union(b, c));
+        Set&lt;T&gt; rhs = intersection(difference(a, b), difference(a, c));
+        return lhs.equals(rhs);
+    }
+
+    /**
+     * Verify inclusion-exclusion: |A ∪ B| = |A| + |B| - |A ∩ B|
+     */
+    public static &lt;T&gt; boolean verifyInclusionExclusion(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        int lhs = union(a, b).size();
+        int rhs = a.size() + b.size() - intersection(a, b).size();
+        return lhs == rhs;
+    }
+
+    // --- Demonstration ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Set Operations Library ===\n");
+
+        Set&lt;Integer&gt; a = new HashSet&lt;&gt;(Arrays.asList(1, 2, 3, 4, 5));
+        Set&lt;Integer&gt; b = new HashSet&lt;&gt;(Arrays.asList(3, 4, 5, 6, 7));
+        Set&lt;Integer&gt; c = new HashSet&lt;&gt;(Arrays.asList(5, 6, 7, 8, 9));
+        Set&lt;Integer&gt; u = IntStream.rangeClosed(1, 10).boxed()
+                .collect(Collectors.toSet());
+
+        System.out.println("A = " + new TreeSet&lt;&gt;(a));
+        System.out.println("B = " + new TreeSet&lt;&gt;(b));
+        System.out.println("C = " + new TreeSet&lt;&gt;(c));
+        System.out.println("U = " + new TreeSet&lt;&gt;(u));
+
+        // Operations
+        System.out.println("\nA ∪ B = " + new TreeSet&lt;&gt;(union(a, b)));
+        System.out.println("A ∩ B = " + new TreeSet&lt;&gt;(intersection(a, b)));
+        System.out.println("A \\ B = " + new TreeSet&lt;&gt;(difference(a, b)));
+        System.out.println("A △ B = " + new TreeSet&lt;&gt;(symmetricDifference(a, b)));
+        System.out.println("complement(A) = " + new TreeSet&lt;&gt;(complement(a, u)));
+
+        // Verify identities
+        System.out.println("\n--- Identity Verification ---");
+        System.out.println("Distributive: " + verifyDistributive(a, b, c));
+        System.out.println("De Morgan: " + verifyDeMorgan(a, b, u));
+        System.out.println("Diff Distributive: " + verifyDiffDistributive(a, b, c));
+        System.out.println("Inclusion-Exclusion: " + verifyInclusionExclusion(a, b));
+
+        // Cartesian product
+        Set&lt;String&gt; colors = new HashSet&lt;&gt;(Arrays.asList("R", "G", "B"));
+        Set&lt;Integer&gt; sizes = new HashSet&lt;&gt;(Arrays.asList(1, 2));
+        System.out.println("\nColors × Sizes = " + cartesianProduct(colors, sizes));
+        System.out.println("|Colors × Sizes| = " + cartesianProduct(colors, sizes).size()
+                + " (expected " + (colors.size() * sizes.size()) + ")");
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>George Boole</strong> (1815–1864) developed Boolean algebra, which treats logical operations as algebraic operations on truth values. The deep parallel between set algebra and Boolean algebra was recognized by Boole himself and later by <strong>Augustus De Morgan</strong>.</p>
+
+<p>De Morgan's laws were originally stated for propositions (Module 3, Class 1), but they translate directly to sets:</p>
+<ul>
+<li>Logic: $\neg(P \wedge Q) \equiv \neg P \vee \neg Q$</li>
+<li>Sets: $\overline{A \cap B} = \overline{A} \cup \overline{B}$</li>
+</ul>
+
+<p>This parallel is not a coincidence — both propositional logic and set algebra are instances of <strong>Boolean algebra</strong>, an algebraic structure with two binary operations satisfying the same axioms.</p>
+
+<p><strong>SQL</strong> (1970s) adopted set semantics from relational algebra, which <strong>Edgar Codd</strong> based directly on set theory and first-order logic.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> Let $A = \{1,2,3\}$, $B = \{2,3,4\}$, $C = \{3,4,5\}$. Compute $A \cap (B \cup C)$ and $(A \cap B) \cup (A \cap C)$. Are they equal?</p>
+
+<p><strong>A2.</strong> Compute $|A \times B|$ where $A = \{x, y\}$ and $B = \{1, 2, 3, 4\}$.</p>
+
+<p><strong>A3.</strong> If $U = \{1,\ldots,10\}$ and $A = \{2,4,6,8,10\}$, what is $\overline{A}$?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove: $A \cup (A \cap B) = A$ (absorption law).</p>
+
+<p><strong>B2.</strong> Prove: $A \triangle B = B \triangle A$ (symmetric difference is commutative).</p>
+
+<p><strong>B3.</strong> Prove: $A \setminus B = A \cap \overline{B}$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write a method verifying the second distributive law: $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$.</p>
+
+<p><strong>C2.</strong> Generate all elements of $\{0,1\} \times \{0,1\} \times \{0,1\}$ (all 3-bit strings).</p>
+
+<p><strong>C3.</strong> Write a program that generates random sets $A, B, C \subseteq \{1,\ldots,20\}$ and verifies both distributive laws.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Prove the second distributive law: $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$.</p>
+
+<p><strong>DM2.</strong> Prove both De Morgan's laws for sets using element-chasing.</p>
+
+<p><strong>DM3.</strong> Prove: $A \triangle B = (A \cup B) \setminus (A \cap B)$.</p>
+
+<p><strong>DM4.</strong> Prove: $|A \times B| = |A| \cdot |B|$ for finite sets.</p>
+
+<p><strong>DM5.</strong> Prove: $A \setminus (B \cap C) = (A \setminus B) \cup (A \setminus C)$.</p>
+
+<p><strong>DM6.</strong> For sets $A$, $B$, $C$, prove or disprove: $A \times (B \cup C) = (A \times B) \cup (A \times C)$.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement all six set operations (<code>union</code>, <code>intersection</code>, <code>difference</code>, <code>complement</code>, <code>symmetricDifference</code>, <code>cartesianProduct</code>) with non-mutating methods and test each.</p>
+
+<p><strong>JP2.</strong> Write a method that takes three sets and verifies all identities listed in the concept overview (commutative, associative, distributive, De Morgan, absorption).</p>
+
+<p><strong>JP3.</strong> Implement a <code>BitSetOps</code> class that represents sets as <code>BitSet</code> objects and implements union (OR), intersection (AND), complement (FLIP), and difference. Compare performance with <code>HashSet</code> for sets $\subseteq \{0, \ldots, 999\}$.</p>
+
+<p><strong>JP4.</strong> Write a method <code>Set&lt;List&lt;Integer&gt;&gt; cartesianPower(Set&lt;Integer&gt; s, int n)</code> that computes $S^n = S \times S \times \cdots \times S$ ($n$ times). Use it to enumerate all $n$-digit strings from a given alphabet.</p>
+
+<p><strong>JP5.</strong> Model a simple database query: given a <code>List&lt;Map&lt;String, Object&gt;&gt;</code> (list of records), implement <code>SELECT ... WHERE</code> as set filtering, <code>UNION</code> and <code>INTERSECT</code> using set operations.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Using Module 1's divisibility and Module 4's set theory, prove: $D(\text{lcm}(a,b)) = D(a) \cup D(b)$ (where $D(n)$ is the divisor set). Verify in Java for $1 \leq a, b \leq 30$.</p>
+
+<p><strong>BR2.</strong> Prove that De Morgan's laws for sets are equivalent to De Morgan's laws for propositional logic (Module 3). Write a Java program that demonstrates this equivalence by evaluating both the set version and the logical version on corresponding inputs.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$</p>
+
+<p>($\subseteq$): Let $x \in A \cup (B \cap C)$.</p>
+<ul>
+<li>Case 1: $x \in A$. Then $x \in A \cup B$ and $x \in A \cup C$, so $x \in (A \cup B) \cap (A \cup C)$.</li>
+<li>Case 2: $x \in B \cap C$. Then $x \in B$ and $x \in C$. So $x \in A \cup B$ and $x \in A \cup C$, giving $x \in (A \cup B) \cap (A \cup C)$.</li>
+</ul>
+
+<p>($\supseteq$): Let $x \in (A \cup B) \cap (A \cup C)$. Then $x \in A \cup B$ and $x \in A \cup C$.</p>
+<ul>
+<li>If $x \in A$: then $x \in A \cup (B \cap C)$. ✓</li>
+<li>If $x \notin A$: from $x \in A \cup B$, $x \in B$; from $x \in A \cup C$, $x \in C$. So $x \in B \cap C$, giving $x \in A \cup (B \cap C)$. ✓</li>
+</ul>
+
+<p>$\blacksquare$</p>
+
+<p><strong>DM3.</strong> $A \triangle B = (A \cup B) \setminus (A \cap B)$</p>
+
+<p>($\subseteq$): Let $x \in A \triangle B = (A \setminus B) \cup (B \setminus A)$.</p>
+<ul>
+<li>Case 1: $x \in A \setminus B$. Then $x \in A$ (so $x \in A \cup B$) and $x \notin B$. Since $x \notin B$, $x \notin A \cap B$. So $x \in (A \cup B) \setminus (A \cap B)$.</li>
+<li>Case 2: $x \in B \setminus A$. Symmetric argument.</li>
+</ul>
+
+<p>($\supseteq$): Let $x \in (A \cup B) \setminus (A \cap B)$. Then $x \in A \cup B$ and $x \notin A \cap B$.</p>
+<ul>
+<li>Since $x \in A \cup B$: $x \in A$ or $x \in B$.</li>
+<li>Since $x \notin A \cap B$: not ($x \in A$ and $x \in B$).</li>
+<li>If $x \in A$: then $x \notin B$ (otherwise $x \in A \cap B$). So $x \in A \setminus B$.</li>
+<li>If $x \in B$: then $x \notin A$. So $x \in B \setminus A$.</li>
+</ul>
+<p>Either way, $x \in A \triangle B$. $\blacksquare$</p>
+
+<p><strong>DM6.</strong> True. $A \times (B \cup C) = (A \times B) \cup (A \times C)$.</p>
+
+<p>($\subseteq$): Let $(a, x) \in A \times (B \cup C)$. Then $a \in A$ and $x \in B \cup C$.</p>
+<ul>
+<li>If $x \in B$: $(a, x) \in A \times B \subseteq (A \times B) \cup (A \times C)$.</li>
+<li>If $x \in C$: $(a, x) \in A \times C \subseteq (A \times B) \cup (A \times C)$.</li>
+</ul>
+
+<p>($\supseteq$): Let $(a, x) \in (A \times B) \cup (A \times C)$.</p>
+<ul>
+<li>If $(a, x) \in A \times B$: $a \in A$, $x \in B \subseteq B \cup C$, so $(a, x) \in A \times (B \cup C)$.</li>
+<li>If $(a, x) \in A \times C$: similarly. $\blacksquare$</li>
+</ul>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP3.</strong> (BitSet implementation)</p>
+<pre><code class="language-java">public class BitSetOps {
+    private BitSet bits;
+    private int universeSize;
+
+    public BitSetOps(int universeSize) {
+        this.bits = new BitSet(universeSize);
+        this.universeSize = universeSize;
+    }
+
+    public BitSetOps union(BitSetOps other) {
+        BitSetOps result = copy();
+        result.bits.or(other.bits);
+        return result;
+    }
+
+    public BitSetOps intersection(BitSetOps other) {
+        BitSetOps result = copy();
+        result.bits.and(other.bits);
+        return result;
+    }
+
+    public BitSetOps complement() {
+        BitSetOps result = copy();
+        result.bits.flip(0, universeSize);
+        return result;
+    }
+
+    public BitSetOps difference(BitSetOps other) {
+        BitSetOps result = copy();
+        result.bits.andNot(other.bits);
+        return result;
+    }
+
+    private BitSetOps copy() {
+        BitSetOps c = new BitSetOps(universeSize);
+        c.bits = (BitSet) this.bits.clone();
+        return c;
+    }
+}</code></pre>
+
+<p><strong>BR1.</strong></p>
+<pre><code class="language-java">for (int a = 1; a &lt;= 30; a++) {
+    for (int b = 1; b &lt;= 30; b++) {
+        int lcm = a * b / gcd(a, b);
+        Set&lt;Integer&gt; dLcm = divisorSet(lcm);
+        Set&lt;Integer&gt; dUnion = union(divisorSet(a), divisorSet(b));
+        assert dLcm.equals(dUnion)
+            : "Failed for a=" + a + ", b=" + b;
+    }
+}</code></pre>
+
+</section>
+</div>
+<hr>
+<div id="class-3" class="class-section">
+<h1 id="module-4-class-3-power-sets-indexed-families-and-partitions">Module 4 – Class 3: Power Sets, Indexed Families and Partitions</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define and compute power sets, proving $|\mathcal{P}(A)| = 2^{|A|}$.</li>
+<li>Represent indexed families of sets and compute their unions and intersections.</li>
+<li>Define partitions and connect them to equivalence classes (Module 5 preview).</li>
+<li>Implement power set generation using recursion and bit masks in Java.</li>
+<li>Apply subset enumeration and partitioning to algorithmic problems.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="power-sets">Power Sets</h3>
+
+<p>The <strong>power set</strong> of $A$, written $\mathcal{P}(A)$, is the set of all subsets of $A$.</p>
+
+<div class="katex-block">$\mathcal{P}(A) = \{S \mid S \subseteq A\}$</div>
+
+<p><strong>Example:</strong> $\mathcal{P}(\{1, 2\}) = \{\emptyset, \{1\}, \{2\}, \{1, 2\}\}$</p>
+
+<p><strong>Theorem:</strong> If $|A| = n$, then $|\mathcal{P}(A)| = 2^n$.</p>
+
+<p><strong>Proof by induction on $n$:</strong></p>
+<ul>
+<li><strong>Base:</strong> $n = 0$. $A = \emptyset$, $\mathcal{P}(\emptyset) = \{\emptyset\}$. $|\mathcal{P}(\emptyset)| = 1 = 2^0$. ✓</li>
+<li><strong>Inductive step:</strong> Assume $|\mathcal{P}(S)| = 2^k$ for any set $S$ with $|S| = k$. Let $|A| = k + 1$ and pick $a \in A$. Let $A' = A \setminus \{a\}$, so $|A'| = k$. Every subset of $A$ either contains $a$ or doesn't:</li>
+<li>Subsets not containing $a$: subsets of $A'$, of which there are $2^k$.</li>
+<li>Subsets containing $a$: each is $S \cup \{a\}$ for some $S \subseteq A'$, so there are $2^k$.</li>
+<li>Total: $2^k + 2^k = 2^{k+1}$. $\blacksquare$</li>
+</ul>
+
+<h3 id="indexed-families-of-sets">Indexed Families of Sets</h3>
+
+<p>An <strong>indexed family</strong> $\{A_i\}_{i \in I}$ assigns a set $A_i$ to each index $i$ in an index set $I$.</p>
+
+<div class="katex-block">$\bigcup_{i \in I} A_i = \{x \mid \exists i \in I : x \in A_i\}$</div>
+<div class="katex-block">$\bigcap_{i \in I} A_i = \{x \mid \forall i \in I : x \in A_i\}$</div>
+
+<p>In Java: <code>Map&lt;K, Set&lt;V&gt;&gt;</code> represents an indexed family.</p>
+
+<h3 id="partitions">Partitions</h3>
+
+<p>A <strong>partition</strong> of set $A$ is a collection of non-empty subsets $\{A_1, A_2, \ldots, A_k\}$ such that:</p>
+<ol>
+<li><strong>Pairwise disjoint:</strong> $A_i \cap A_j = \emptyset$ for $i \neq j$.</li>
+<li><strong>Cover $A$:</strong> $A_1 \cup A_2 \cup \cdots \cup A_k = A$.</li>
+</ol>
+
+<p><strong>Examples:</strong></p>
+<ul>
+<li>$\{E, O\}$ where $E$ = even integers and $O$ = odd integers is a partition of $\mathbb{Z}$.</li>
+<li>Congruence classes modulo $m$ partition $\mathbb{Z}$ into $m$ classes (connects to Module 2).</li>
+</ul>
+
+<p><strong>Key connection:</strong> Every equivalence relation on $A$ induces a partition of $A$ into equivalence classes, and every partition determines an equivalence relation. (Module 5 will formalize this.)</p>
+
+<p><strong>Why this matters in CS:</strong></p>
+<ul>
+<li><strong>Subset enumeration</strong> (power sets) appears in backtracking, SAT solvers, and combinatorial optimization.</li>
+<li><strong>Partitions</strong> model equivalence classes, graph components, union-find structures.</li>
+<li><strong>Indexed families</strong> represent grouping operations (SQL <code>GROUP BY</code>, Map-Reduce).</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Notation</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$\mathcal{P}(A)$</td>
+<td>Power set: all subsets of $A$</td>
+</tr>
+<tr>
+<td>$\{A_i\}_{i \in I}$</td>
+<td>Indexed family of sets</td>
+</tr>
+<tr>
+<td>$\bigcup_{i \in I} A_i$</td>
+<td>Union of all sets in the family</td>
+</tr>
+<tr>
+<td>$\bigcap_{i \in I} A_i$</td>
+<td>Intersection of all sets in the family</td>
+</tr>
+<tr>
+<td>Partition</td>
+<td>Disjoint cover of a set</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-power-set-computation">Example 1: Power Set Computation</h3>
+
+<p><strong>Problem:</strong> Compute $\mathcal{P}(\{a, b, c\})$.</p>
+
+<p><strong>Solution:</strong></p>
+<div class="katex-block">$\mathcal{P}(\{a,b,c\}) = \{\emptyset, \{a\}, \{b\}, \{c\}, \{a,b\}, \{a,c\}, \{b,c\}, \{a,b,c\}\}$</div>
+
+<p>$|\mathcal{P}(\{a,b,c\})| = 2^3 = 8$. ✓</p>
+
+<h3 id="example-2-power-set-via-bit-masks">Example 2: Power Set via Bit Masks</h3>
+
+<p>Each subset of $\{a_0, a_1, \ldots, a_{n-1}\}$ corresponds to an $n$-bit integer where bit $i$ indicates whether $a_i$ is included.</p>
+
+<p>For $\{a, b, c\}$:</p>
+<table>
+<thead><tr>
+<th>Binary</th>
+<th>Decimal</th>
+<th>Subset</th>
+</tr></thead><tbody>
+<tr>
+<td>000</td>
+<td>0</td>
+<td>$\emptyset$</td>
+</tr>
+<tr>
+<td>001</td>
+<td>1</td>
+<td>$\{a\}$</td>
+</tr>
+<tr>
+<td>010</td>
+<td>2</td>
+<td>$\{b\}$</td>
+</tr>
+<tr>
+<td>011</td>
+<td>3</td>
+<td>$\{a,b\}$</td>
+</tr>
+<tr>
+<td>100</td>
+<td>4</td>
+<td>$\{c\}$</td>
+</tr>
+<tr>
+<td>101</td>
+<td>5</td>
+<td>$\{a,c\}$</td>
+</tr>
+<tr>
+<td>110</td>
+<td>6</td>
+<td>$\{b,c\}$</td>
+</tr>
+<tr>
+<td>111</td>
+<td>7</td>
+<td>$\{a,b,c\}$</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-3-indexed-family">Example 3: Indexed Family</h3>
+
+<p><strong>Problem:</strong> Let $A_i = \{i, i+1, i+2\}$ for $i \in \{1, 2, 3\}$. Compute $\bigcup_{i=1}^{3} A_i$ and $\bigcap_{i=1}^{3} A_i$.</p>
+
+<p>$A_1 = \{1, 2, 3\}$, $A_2 = \{2, 3, 4\}$, $A_3 = \{3, 4, 5\}$.</p>
+
+<p>$\bigcup = \{1, 2, 3, 4, 5\}$. $\bigcap = \{3\}$.</p>
+
+<h3 id="example-4-partition-by-congruence-classes">Example 4: Partition by Congruence Classes</h3>
+
+<p><strong>Problem:</strong> Partition $\{0, 1, 2, \ldots, 11\}$ by congruence modulo 3.</p>
+
+<p>$[0]_3 = \{0, 3, 6, 9\}$, $[1]_3 = \{1, 4, 7, 10\}$, $[2]_3 = \{2, 5, 8, 11\}$.</p>
+
+<p>Verification: pairwise disjoint (no overlaps) and union = $\{0, \ldots, 11\}$. ✓</p>
+
+<p>This directly connects to Module 2's congruence classes!</p>
+
+<h3 id="example-5-partition-into-primes-and-composites">Example 5: Partition into Primes and Composites</h3>
+
+<p>Partition $\{2, 3, \ldots, 20\}$ into primes and composites:</p>
+<ul>
+<li>Primes: $\{2, 3, 5, 7, 11, 13, 17, 19\}$</li>
+<li>Composites: $\{4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20\}$</li>
+</ul>
+
+<p>Disjoint? Yes (no number is both prime and composite). Cover? Yes ($|\text{Primes}| + |\text{Composites}| = 8 + 11 = 19 = |\{2, \ldots, 20\}|$). ✓</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="counting-via-bijections">Counting via Bijections</h3>
+
+<p>To prove $|\mathcal{P}(A)| = 2^n$, we established a bijection between subsets of $A$ and $n$-bit strings. In general:</p>
+
+<blockquote>
+<p>If there is a bijection $f : X \rightarrow Y$ between finite sets, then $|X| = |Y|$.</p>
+</blockquote>
+
+<p>This is a powerful counting technique that we'll use more in Module 7.</p>
+
+<h3 id="partition-arguments">Partition Arguments</h3>
+
+<p>To prove a collection $\{A_1, \ldots, A_k\}$ is a partition:</p>
+<ol>
+<li>Show each $A_i \neq \emptyset$.</li>
+<li>Show $A_i \cap A_j = \emptyset$ for $i \neq j$ (often by assuming $x \in A_i \cap A_j$ and deriving $i = j$).</li>
+<li>Show $\bigcup A_i = A$.</li>
+</ol>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class PowerSetLibrary {
+
+    // --- Power Set Generation ---
+
+    /**
+     * Generate the power set using bit masks.
+     * Time: O(n · 2^n), Space: O(n · 2^n).
+     * Each integer from 0 to 2^n - 1 represents one subset.
+     */
+    public static &lt;T&gt; Set&lt;Set&lt;T&gt;&gt; powerSetBitMask(List&lt;T&gt; elements) {
+        int n = elements.size();
+        Set&lt;Set&lt;T&gt;&gt; result = new HashSet&lt;&gt;();
+
+        for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {
+            Set&lt;T&gt; subset = new HashSet&lt;&gt;();
+            for (int i = 0; i &lt; n; i++) {
+                if ((mask &amp; (1 &lt;&lt; i)) != 0) {
+                    subset.add(elements.get(i));
+                }
+            }
+            result.add(subset);
+        }
+        return result;
+    }
+
+    /**
+     * Generate the power set recursively.
+     * Base: P({}) = {{}}
+     * Step: For element a, P(A) = P(A\{a}) ∪ { S ∪ {a} | S ∈ P(A\{a}) }
+     */
+    public static &lt;T&gt; Set&lt;Set&lt;T&gt;&gt; powerSetRecursive(List&lt;T&gt; elements) {
+        Set&lt;Set&lt;T&gt;&gt; result = new HashSet&lt;&gt;();
+        if (elements.isEmpty()) {
+            result.add(new HashSet&lt;&gt;());  // { {} }
+            return result;
+        }
+
+        T first = elements.get(0);
+        List&lt;T&gt; rest = elements.subList(1, elements.size());
+        Set&lt;Set&lt;T&gt;&gt; subsetsOfRest = powerSetRecursive(rest);
+
+        for (Set&lt;T&gt; subset : subsetsOfRest) {
+            result.add(new HashSet&lt;&gt;(subset));          // without first
+            Set&lt;T&gt; withFirst = new HashSet&lt;&gt;(subset);
+            withFirst.add(first);                        // with first
+            result.add(withFirst);
+        }
+        return result;
+    }
+
+    // --- Indexed Families ---
+
+    /**
+     * Compute the union of all sets in a family.
+     * ⋃_{i ∈ I} A_i
+     */
+    public static &lt;K, V&gt; Set&lt;V&gt; familyUnion(Map&lt;K, Set&lt;V&gt;&gt; family) {
+        Set&lt;V&gt; result = new HashSet&lt;&gt;();
+        for (Set&lt;V&gt; set : family.values()) {
+            result.addAll(set);
+        }
+        return result;
+    }
+
+    /**
+     * Compute the intersection of all sets in a family.
+     * ⋂_{i ∈ I} A_i
+     */
+    public static &lt;K, V&gt; Set&lt;V&gt; familyIntersection(Map&lt;K, Set&lt;V&gt;&gt; family) {
+        Iterator&lt;Set&lt;V&gt;&gt; iter = family.values().iterator();
+        if (!iter.hasNext()) return new HashSet&lt;&gt;();
+        Set&lt;V&gt; result = new HashSet&lt;&gt;(iter.next());
+        while (iter.hasNext()) {
+            result.retainAll(iter.next());
+        }
+        return result;
+    }
+
+    // --- Partitions ---
+
+    /**
+     * Partition a set of integers by their remainder modulo m.
+     * Returns congruence classes [0]_m, [1]_m, ..., [m-1]_m.
+     * Connects to Module 2.
+     */
+    public static Map&lt;Integer, Set&lt;Integer&gt;&gt; partitionByMod(Set&lt;Integer&gt; s, int m) {
+        Map&lt;Integer, Set&lt;Integer&gt;&gt; partition = new TreeMap&lt;&gt;();
+        for (int i = 0; i &lt; m; i++) {
+            partition.put(i, new TreeSet&lt;&gt;());
+        }
+        for (int x : s) {
+            int cls = Math.floorMod(x, m);
+            partition.get(cls).add(x);
+        }
+        // Remove empty classes (they might not appear in s)
+        partition.entrySet().removeIf(e -&gt; e.getValue().isEmpty());
+        return partition;
+    }
+
+    /**
+     * Partition by predicate: elements satisfying p go to "true",
+     * others go to "false".
+     */
+    public static &lt;T&gt; Map&lt;Boolean, Set&lt;T&gt;&gt; partitionByPredicate(
+            Set&lt;T&gt; s, java.util.function.Predicate&lt;T&gt; p) {
+        Map&lt;Boolean, Set&lt;T&gt;&gt; result = new HashMap&lt;&gt;();
+        result.put(true, new HashSet&lt;&gt;());
+        result.put(false, new HashSet&lt;&gt;());
+        for (T x : s) {
+            result.get(p.test(x)).add(x);
+        }
+        return result;
+    }
+
+    /**
+     * Verify that a collection of sets forms a valid partition.
+     */
+    public static &lt;T&gt; boolean isPartition(Set&lt;T&gt; whole, Collection&lt;Set&lt;T&gt;&gt; parts) {
+        // Check pairwise disjoint
+        List&lt;Set&lt;T&gt;&gt; list = new ArrayList&lt;&gt;(parts);
+        for (int i = 0; i &lt; list.size(); i++) {
+            if (list.get(i).isEmpty()) return false;
+            for (int j = i + 1; j &lt; list.size(); j++) {
+                Set&lt;T&gt; inter = new HashSet&lt;&gt;(list.get(i));
+                inter.retainAll(list.get(j));
+                if (!inter.isEmpty()) return false;
+            }
+        }
+        // Check cover
+        Set&lt;T&gt; union = new HashSet&lt;&gt;();
+        for (Set&lt;T&gt; part : parts) union.addAll(part);
+        return union.equals(whole);
+    }
+
+    // --- Demonstration ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Power Set Library ===\n");
+
+        // Power set
+        List&lt;Integer&gt; elems = Arrays.asList(1, 2, 3);
+        Set&lt;Set&lt;Integer&gt;&gt; ps = powerSetBitMask(elems);
+        System.out.println("P({1,2,3}) has " + ps.size() + " subsets:");
+        for (Set&lt;Integer&gt; s : ps) {
+            System.out.println("  " + s);
+        }
+
+        // Verify: recursive matches bit-mask
+        Set&lt;Set&lt;Integer&gt;&gt; psRec = powerSetRecursive(elems);
+        System.out.println("\nRecursive method matches bit-mask? " + ps.equals(psRec));
+
+        // Indexed family
+        Map&lt;Integer, Set&lt;Integer&gt;&gt; family = new TreeMap&lt;&gt;();
+        for (int i = 1; i &lt;= 3; i++) {
+            Set&lt;Integer&gt; ai = new TreeSet&lt;&gt;();
+            for (int j = i; j &lt;= i + 2; j++) ai.add(j);
+            family.put(i, ai);
+        }
+        System.out.println("\nIndexed family: " + family);
+        System.out.println("Union: " + familyUnion(family));
+        System.out.println("Intersection: " + familyIntersection(family));
+
+        // Partition by mod
+        Set&lt;Integer&gt; nums = IntStream.rangeClosed(0, 11).boxed()
+                .collect(Collectors.toSet());
+        Map&lt;Integer, Set&lt;Integer&gt;&gt; modPart = partitionByMod(nums, 3);
+        System.out.println("\nPartition of {0..11} by mod 3: " + modPart);
+        System.out.println("Valid partition? " +
+                isPartition(nums, modPart.values()));
+
+        // Partition: primes vs composites
+        Set&lt;Integer&gt; range = IntStream.rangeClosed(2, 20).boxed()
+                .collect(Collectors.toSet());
+        Map&lt;Boolean, Set&lt;Integer&gt;&gt; primePartition = partitionByPredicate(
+                range, n -&gt; isPrime(n));
+        System.out.println("\nPrimes: " + new TreeSet&lt;&gt;(primePartition.get(true)));
+        System.out.println("Composites: " + new TreeSet&lt;&gt;(primePartition.get(false)));
+        System.out.println("Valid partition? " +
+                isPartition(range, primePartition.values()));
+    }
+
+    static boolean isPrime(int n) {
+        if (n &lt; 2) return false;
+        for (int i = 2; i * i &lt;= n; i++)
+            if (n % i == 0) return false;
+        return true;
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Cantor's Power Set Theorem</strong> (1891) proved that for any set $A$, there is no surjection from $A$ onto $\mathcal{P}(A)$. For finite sets, this simply says $2^n > n$. For infinite sets, it implies there are different "sizes" of infinity — the power set of the natural numbers is uncountably infinite (the same size as the real numbers).</p>
+
+<p>The concept of partitions links to <strong>equivalence classes</strong>, formalized by mathematicians in the early 20th century. In CS, the <strong>Union-Find</strong> data structure (Tarjan, 1975) efficiently maintains partitions with near-constant-time operations.</p>
+
+<p>Power set enumeration ($2^n$ subsets) is the basis of <strong>exponential-time algorithms</strong> in complexity theory, including brute-force solutions to NP-complete problems like the subset sum problem.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> How many elements does $\mathcal{P}(\{1,2,3,4,5\})$ have?</p>
+
+<p><strong>A2.</strong> Is $\{1\} \in \mathcal{P}(\{1,2,3\})$? Is $1 \in \mathcal{P}(\{1,2,3\})$?</p>
+
+<p><strong>A3.</strong> Name three ways to partition $\{1,2,3,4,5,6\}$ into exactly two non-empty parts.</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove by induction: $|\mathcal{P}(A)| = 2^{|A|}$ for finite sets.</p>
+
+<p><strong>B2.</strong> Prove: congruence classes modulo $m$ form a partition of $\mathbb{Z}$.</p>
+
+<p><strong>B3.</strong> Prove: if $\{A_1, \ldots, A_k\}$ is a partition of $A$, then $\sum_{i=1}^{k} |A_i| = |A|$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Generate the power set of $\{1,2,3,4\}$ and count subsets of each size. Verify: $\sum_{k=0}^{4} \binom{4}{k} = 16$.</p>
+
+<p><strong>C2.</strong> Partition a list of strings by their first letter.</p>
+
+<p><strong>C3.</strong> Implement <code>isPartition</code> and test with valid and invalid partitions.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> List all elements of $\mathcal{P}(\{a, b, c, d\})$. How many subsets of size 2 are there?</p>
+
+<p><strong>DM2.</strong> Prove by induction: $|\mathcal{P}(A)| = 2^{|A|}$.</p>
+
+<p><strong>DM3.</strong> Prove: If $A \subseteq B$, then $\mathcal{P}(A) \subseteq \mathcal{P}(B)$.</p>
+
+<p><strong>DM4.</strong> Prove that the congruence classes $[0]_m, [1]_m, \ldots, [m-1]_m$ form a partition of $\mathbb{Z}$.</p>
+
+<p><strong>DM5.</strong> Let $f: A \rightarrow B$ be a function. Define $A_b = \{a \in A \mid f(a) = b\}$ for each $b \in B$. Prove that $\{A_b \mid b \in B, A_b \neq \emptyset\}$ is a partition of $A$. (Preview of Module 5.)</p>
+
+<p><strong>DM6.</strong> Prove: $\mathcal{P}(A \cap B) = \mathcal{P}(A) \cap \mathcal{P}(B)$.</p>
+
+<p><strong>DM7.</strong> Prove or disprove: $\mathcal{P}(A \cup B) = \mathcal{P}(A) \cup \mathcal{P}(B)$.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement power set generation using both bit masks and recursion. Verify both produce the same result for sets of sizes 0 through 6.</p>
+
+<p><strong>JP2.</strong> Write a method <code>List&lt;Set&lt;Integer&gt;&gt; subsetsOfSize(List&lt;Integer&gt; elements, int k)</code> that returns all $k$-element subsets. Verify that the count matches $\binom{n}{k}$.</p>
+
+<p><strong>JP3.</strong> Implement <code>Map&lt;Integer, Set&lt;Integer&gt;&gt; partitionByMod(Set&lt;Integer&gt; s, int m)</code> and verify using <code>isPartition</code>.</p>
+
+<p><strong>JP4.</strong> Write a <strong>subset sum solver</strong>: given a set $S$ of integers and a target $t$, enumerate all subsets of $S$ whose sum equals $t$. Use power set generation.</p>
+
+<p><strong>JP5.</strong> Implement a general <code>groupBy</code> method: <code>&lt;T, K&gt; Map&lt;K, Set&lt;T&gt;&gt; groupBy(Set&lt;T&gt; s, Function&lt;T, K&gt; classifier)</code> that partitions $s$ by the classifier function.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Implement the subset sum solver from JP4. For a set $S$ with $|S| = n$, the solver checks $2^n$ subsets. Measure the runtime for $n = 10, 15, 20, 25$ and plot the growth. Explain why this is exponential and relate to $|\mathcal{P}(S)| = 2^n$.</p>
+
+<p><strong>BR2.</strong> Recall from Module 2 that congruence modulo $m$ is an equivalence relation. Implement a method that takes a set of integers and a modulus $m$, partitions the set by congruence classes, and then verifies: (a) each class is non-empty, (b) classes are pairwise disjoint, (c) their union equals the original set, (d) all elements in a class have the same remainder mod $m$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM2.</strong> See proof in Concept Overview above. $\blacksquare$</p>
+
+<p><strong>DM3.</strong> Assume $A \subseteq B$. Let $S \in \mathcal{P}(A)$, so $S \subseteq A$. Since $A \subseteq B$, by transitivity of $\subseteq$, $S \subseteq B$, so $S \in \mathcal{P}(B)$. $\blacksquare$</p>
+
+<p><strong>DM4.</strong> Let $a, b \in \mathbb{Z}$. If $a \in [i]_m \cap [j]_m$, then $a \equiv i \pmod{m}$ and $a \equiv j \pmod{m}$, so $i \equiv j \pmod{m}$. Since $0 \leq i, j < m$, this means $i = j$. So classes are pairwise disjoint. Every $a \in \mathbb{Z}$ satisfies $a \equiv r \pmod{m}$ for some $r \in \{0, \ldots, m-1\}$ (by quotient-remainder, Module 2), so $a \in [r]_m$. Thus the classes cover $\mathbb{Z}$. $\blacksquare$</p>
+
+<p><strong>DM6.</strong> ($\subseteq$): Let $S \in \mathcal{P}(A \cap B)$. Then $S \subseteq A \cap B$, so $S \subseteq A$ and $S \subseteq B$, giving $S \in \mathcal{P}(A)$ and $S \in \mathcal{P}(B)$, i.e., $S \in \mathcal{P}(A) \cap \mathcal{P}(B)$.</p>
+
+<p>($\supseteq$): Let $S \in \mathcal{P}(A) \cap \mathcal{P}(B)$. Then $S \subseteq A$ and $S \subseteq B$, so $S \subseteq A \cap B$, giving $S \in \mathcal{P}(A \cap B)$. $\blacksquare$</p>
+
+<p><strong>DM7.</strong> False. Counterexample: $A = \{1\}$, $B = \{2\}$. Then $\{1, 2\} \in \mathcal{P}(A \cup B)$ but $\{1, 2\} \notin \mathcal{P}(A) = \{\emptyset, \{1\}\}$ and $\{1, 2\} \notin \mathcal{P}(B) = \{\emptyset, \{2\}\}$. So $\{1, 2\} \notin \mathcal{P}(A) \cup \mathcal{P}(B)$. $\blacksquare$</p>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP2.</strong></p>
+<pre><code class="language-java">public static List&lt;Set&lt;Integer&gt;&gt; subsetsOfSize(List&lt;Integer&gt; elements, int k) {
+    List&lt;Set&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+    generateSubsets(elements, k, 0, new HashSet&lt;&gt;(), result);
+    return result;
+}
+
+private static void generateSubsets(List&lt;Integer&gt; elements, int k,
+        int start, Set&lt;Integer&gt; current, List&lt;Set&lt;Integer&gt;&gt; result) {
+    if (current.size() == k) {
+        result.add(new HashSet&lt;&gt;(current));
+        return;
+    }
+    if (start &gt;= elements.size()) return;
+    // Include elements[start]
+    current.add(elements.get(start));
+    generateSubsets(elements, k, start + 1, current, result);
+    current.remove(elements.get(start));
+    // Exclude elements[start]
+    generateSubsets(elements, k, start + 1, current, result);
+}</code></pre>
+
+<p><strong>JP4.</strong></p>
+<pre><code class="language-java">public static List&lt;Set&lt;Integer&gt;&gt; subsetSum(List&lt;Integer&gt; elements, int target) {
+    List&lt;Set&lt;Integer&gt;&gt; solutions = new ArrayList&lt;&gt;();
+    int n = elements.size();
+    for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {
+        Set&lt;Integer&gt; subset = new HashSet&lt;&gt;();
+        int sum = 0;
+        for (int i = 0; i &lt; n; i++) {
+            if ((mask &amp; (1 &lt;&lt; i)) != 0) {
+                subset.add(elements.get(i));
+                sum += elements.get(i);
+            }
+        }
+        if (sum == target) solutions.add(subset);
+    }
+    return solutions;
+}</code></pre>
+
+</section>
+</div>
+<hr>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

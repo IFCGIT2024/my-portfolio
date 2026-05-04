@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 Quiz — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="quiz-05">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+      <h1>Module 5: Practice Quiz</h1>
+      <p class="quiz-subtitle">Functions, Relations & Mappings — Test your understanding with 12 multiple-choice questions.</p>
+      <div id="quiz-container" data-questions='[{"q":"A function f: X → Y must map each element of X to:","choices":["At most one element of Y","Exactly one element of Y","At least two elements of Y","Every element of Y"],"answer":1,"explanation":"A function assigns exactly one output to each input."},{"q":"A function is injective (one-to-one) if:","choices":["Every element of Y is hit","Different inputs always give different outputs","f(a) = f(b) for all a, b","The domain equals the codomain"],"answer":1,"explanation":"Injective: f(a) = f(b) implies a = b."},{"q":"A function is surjective (onto) if:","choices":["It is one-to-one","Every element of the codomain is in the range","It has an inverse","The domain is finite"],"answer":1,"explanation":"Surjective: for every y ∈ Y, there exists x ∈ X with f(x) = y."},{"q":"A bijection is:","choices":["Injective only","Surjective only","Both injective and surjective","Neither injective nor surjective"],"answer":2,"explanation":"A bijection is both one-to-one and onto."},{"q":"If f: X → Y and g: Y → Z, what is (g ∘ f)(x)?","choices":["f(g(x))","g(f(x))","f(x) + g(x)","f(x) · g(x)"],"answer":1,"explanation":"Composition (g ∘ f)(x) = g(f(x)): apply f first, then g."},{"q":"Is composition of functions commutative?","choices":["Always","Never","Only for bijections","Generally not"],"answer":3,"explanation":"In general, g ∘ f ≠ f ∘ g. Composition is associative but not commutative."},{"q":"A relation R on a set A is an equivalence relation if it is:","choices":["Reflexive and symmetric","Symmetric and transitive","Reflexive, symmetric, and transitive","Reflexive and antisymmetric"],"answer":2,"explanation":"An equivalence relation must be reflexive, symmetric, and transitive."},{"q":"A relation that is reflexive, antisymmetric, and transitive is called:","choices":["Equivalence relation","Partial order","Total order","Function"],"answer":1,"explanation":"Reflexive + antisymmetric + transitive = partial order."},{"q":"The preimage f⁻¹({y}) is:","choices":["The inverse function","The set of all x with f(x) = y","y itself","The codomain"],"answer":1,"explanation":"f⁻¹({y}) = {x ∈ X : f(x) = y} — all inputs mapping to y."},{"q":"In Java, Function\u003cInteger, Integer\u003e represents:","choices":["An array of integers","A function from Integer to Integer","A pair of integers","An integer variable"],"answer":1,"explanation":"Function\u003cT, R\u003e is a functional interface representing a function from T to R."},{"q":"Which is NOT a valid function from Z to Z?","choices":["f(n) = n²","f(n) = n + 3","f(n) = n/2","f(n) = |n|"],"answer":2,"explanation":"f(n) = n/2 is not well-defined on all integers (e.g., f(3) = 1.5 ∉ Z)."},{"q":"The range of f: X → Y is:","choices":["X","Y","{f(x) : x ∈ X}","X × Y"],"answer":2,"explanation":"The range (image) is the set of all actual outputs: {f(x) : x ∈ X} ⊆ Y."}]'></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "last_updated": null,
+  "phases": {
+    "crawl": {
+      "status": "done",
+      "rows": 7519,
+      "output": "data/forsale_urls.csv",
+      "last_run": null
+    },
+    "scrape": {
+      "status": "in_progress",
+      "rows_done": 0,
+      "rows_total": 6381,
+      "output": "data/properties.csv",
+      "last_run": null
+    },
+    "load_db": {
+      "status": "pending",
+      "output": "data/properties.sqlite",
+      "last_run": null
+    },
+    "score": {
+      "status": "pending",
+      "output": "data/properties.sqlite (scores table)",
+      "last_run": null
+    },
+    "export": {
+      "status": "pending",
+      "output": "dashboard/deals.json",
+      "last_run": null
+    }
+  },
+  "blocking_issues": [],
+  "notes": ""
+}

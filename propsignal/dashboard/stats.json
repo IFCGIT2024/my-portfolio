@@ -1,0 +1,25 @@
+{
+  "total_properties": 6381,
+  "bank_owned": 0,
+  "below_assessment": 407,
+  "high_score_50plus": 268,
+  "avg_deal_score": 14.1,
+  "score_distribution": {
+    "90_100": 5,
+    "70_89": 36,
+    "50_69": 227,
+    "30_49": 1483,
+    "0_29": 4630
+  },
+  "segment_counts": {
+    "investor_lead": 268,
+    "flipper_lead": 1867,
+    "value_buyer": 2778,
+    "developer_lead": 25,
+    "below_assessment": 256,
+    "motivated_seller": 719,
+    "waterfront": 0,
+    "bank_owned": 0,
+    "low_confidence": 3425
+  }
+}

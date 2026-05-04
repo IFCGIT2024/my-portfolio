@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSCI 1120 Practice Exam</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand" onclick="goToHome()">
+                <span class="brand-icon">🎓</span>
+                <span class="brand-text">Duke's Exam Prep</span>
+            </div>
+            <div class="navbar-menu">
+                <button class="nav-item" onclick="toggleProfileMenu()" id="profile-btn" style="display: none;">
+                    <span id="nav-student-name">Profile</span>
+                    <span class="dropdown-arrow">▼</span>
+                </button>
+                <div class="profile-dropdown hidden" id="profile-dropdown">
+                    <div class="dropdown-header" id="dropdown-name">Student Name</div>
+                    <hr style="margin: 8px 0;">
+                    <button class="dropdown-item" onclick="viewStudentStats()">📊 My Statistics</button>
+                    <button class="dropdown-item" onclick="viewSettings()">⚙️ Settings</button>
+                    <button class="dropdown-item" onclick="viewLeaderboardFromNav()">🏆 Leaderboard</button>
+                    <button class="dropdown-item" onclick="viewQuestionReview()">🔍 Question Review</button>
+                    <hr style="margin: 8px 0;">
+                    <label class="dropdown-dark-mode">
+                        <input type="checkbox" id="navbar-dark-toggle">
+                        <span>🌙 Dark Mode</span>
+                    </label>
+                    <hr style="margin: 8px 0;">
+                    <button class="dropdown-item logout" onclick="signOut()">🚪 Sign Out</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>CSCI 1120 Practice Exam</h1>
+            <p>Machine Execution & Computer Architecture Fundamentals</p>
+        </div>
+
+        <!-- Name Entry Screen -->
+        <div id="name-screen" class="name-screen">
+            <div class="name-content">
+                <h2>Welcome to CSCI 1120 Practice Exam</h2>
+                <p>Enter your name to begin</p>
+                <input type="text" id="student-name" placeholder="Your Name" class="name-input" onkeypress="if(event.key==='Enter') goToSetup()">
+                <div style="display: flex; gap: 12px; margin-top: 20px;">
+                    <button class="btn btn-primary btn-large" onclick="goToSetup()">Continue</button>
+                    <button class="btn btn-secondary btn-large" onclick="viewLeaderboard()">View Leaderboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Screen -->
+        <div id="setup-screen" class="setup-screen hidden">
+            <div class="setup-content">
+                <h2>Quiz Setup</h2>
+
+                <!-- Module Selection -->
+                <div class="setup-section">
+                    <h3>1. Select Module</h3>
+                    <div class="module-buttons">
+                        <button class="module-btn active" onclick="selectModule(4)" data-module="4">Module 4</button>
+                        <button class="module-btn" onclick="selectModule(5)" data-module="5">Module 5</button>
+                        <button class="module-btn disabled" disabled title="Questions coming soon">Module 1</button>
+                        <button class="module-btn disabled" disabled title="Questions coming soon">Module 2</button>
+                        <button class="module-btn disabled" disabled title="Questions coming soon">Module 3</button>
+                    </div>
+                </div>
+
+                <!-- Section Selection -->
+                <div class="setup-section">
+                    <h3>2. Select Sections <span id="section-count">(All selected)</span></h3>
+                    <div class="controls">
+                        <button class="btn-small" onclick="selectAllSections()">Select All</button>
+                        <button class="btn-small" onclick="deselectAllSections()">Deselect All</button>
+                    </div>
+                    <div id="section-checkboxes" class="section-checkboxes">
+                        <!-- Checkboxes will be inserted here by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="setup-section">
+                    <h3>3. Settings</h3>
+                    <label class="toggle-setting">
+                        <input type="checkbox" id="immediate-feedback" checked>
+                        <span>Show correct answer immediately after selection</span>
+                    </label>
+                    <p class="setting-note" id="feedback-note">You'll see if you're correct right away</p>
+                </div>
+
+                <!-- Start Buttons -->
+                <div style="display: flex; gap: 15px; margin-top: 20px;">
+                    <button class="btn btn-primary btn-large" onclick="startQuiz()">Start Quiz</button>
+                    <button class="btn btn-secondary btn-large" onclick="startRapidFire()">Rapid Fire Mode</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div id="progress-section" class="progress-section hidden">
+            <div class="progress-info">
+                <span id="student-name-display" style="font-weight: 600;">Student Name</span>
+                <span id="question-counter">Question 1 of 220</span>
+                <span id="section-name">Fetch, Decode, Execute</span>
+            </div>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="quiz-container hidden">
+            <!-- Question Will Be Inserted Here -->
+        </div>
+
+        <!-- Results Container (Hidden Initially) -->
+        <div id="results-container" class="results-container hidden">
+            <div class="results-content">
+                <h2>Quiz Complete!</h2>
+                <div class="score-display">
+                    <div class="score-circle">
+                        <span id="final-score">0</span>
+                        <span class="score-label" id="final-total">/ 220</span>
+                    </div>
+                </div>
+                <div id="percentage-display" class="percentage-display"></div>
+
+                <!-- Student Stats -->
+                <div id="student-stats" class="student-stats"></div>
+
+                <div id="summary-stats" class="summary-stats"></div>
+
+                <!-- Review Wrong Answers -->
+                <div id="wrong-answers-section" class="wrong-answers-section">
+                    <h3>Questions You Got Wrong <span id="wrong-count">(0)</span></h3>
+                    <div id="wrong-answers-list" class="wrong-answers-list"></div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="backToSetup()">Back to Setup</button>
+                    <button class="btn btn-primary" onclick="location.reload()">New Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Screen -->
+        <div id="leaderboard-screen" class="leaderboard-screen hidden">
+            <div class="leaderboard-content">
+                <h2>🏆 Leaderboard</h2>
+                <div id="leaderboard-list" class="leaderboard-list"></div>
+                <button class="btn btn-secondary btn-large" onclick="backToName()" style="margin-top: 20px;">Back</button>
+            </div>
+        </div>
+
+        <!-- Question Review Screen -->
+        <div id="review-screen" class="review-screen hidden">
+            <div class="review-content">
+                <h2>🔍 Question Review</h2>
+                <p class="review-info">Users have flagged the following questions as wrong or irrelevant.</p>
+                <div id="review-stats" class="review-stats"></div>
+                <div id="flagged-questions-list" class="flagged-questions-list"></div>
+                <button class="btn btn-secondary btn-large" onclick="backToSetupOrName()" style="margin-top: 20px;">Back</button>
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div id="settings-screen" class="settings-screen hidden">
+            <div class="settings-content">
+                <h2>⚙️ Settings</h2>
+
+                <!-- Dark Mode Toggle -->
+                <div class="settings-section">
+                    <h3>Appearance</h3>
+                    <div class="settings-item">
+                        <label class="toggle-setting">
+                            <input type="checkbox" id="dark-mode-toggle">
+                            <span>Dark Mode</span>
+                        </label>
+                        <p class="setting-note">Switch to dark mode for easier reading at night</p>
+                    </div>
+                </div>
+
+                <!-- Color Scheme Selection -->
+                <div class="settings-section">
+                    <h3>Color Theme</h3>
+                    <div class="color-scheme-selector">
+                        <div class="color-option" onclick="setColorScheme('blue')" id="scheme-blue">
+                            <div class="color-sample" style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);"></div>
+                            <span>Blue</span>
+                        </div>
+                        <div class="color-option" onclick="setColorScheme('green')" id="scheme-green">
+                            <div class="color-sample" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);"></div>
+                            <span>Green</span>
+                        </div>
+                        <div class="color-option" onclick="setColorScheme('purple')" id="scheme-purple">
+                            <div class="color-sample" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);"></div>
+                            <span>Purple</span>
+                        </div>
+                        <div class="color-option" onclick="setColorScheme('orange')" id="scheme-orange">
+                            <div class="color-sample" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);"></div>
+                            <span>Orange</span>
+                        </div>
+                        <div class="color-option" onclick="setColorScheme('red')" id="scheme-red">
+                            <div class="color-sample" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);"></div>
+                            <span>Red</span>
+                        </div>
+                        <div class="color-option" onclick="setColorScheme('pink')" id="scheme-pink">
+                            <div class="color-sample" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);"></div>
+                            <span>Pink</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Management -->
+                <div class="settings-section">
+                    <h3>Data Management</h3>
+                    <button class="btn btn-danger btn-large" onclick="clearAllData()" style="width: 100%;">🗑️ Clear All Leaderboard Data</button>
+                    <p class="setting-note">Remove all student scores and quiz attempt data. This cannot be undone.</p>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary btn-large" onclick="backToSetupOrName()">Back</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div id="confirmation-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Are you sure?</h3>
+                <p id="modal-message">Are you sure you want to go back to setup? Your current progress will be lost.</p>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-danger" onclick="confirmAction()">Yes, Go Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

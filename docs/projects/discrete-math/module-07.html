@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 7 — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="module-07">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<div id="class-1" class="class-section">
+<h1 id="module-7-class-1-sum-and-product-principles">Module 7 – Class 1: Sum and Product Principles</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>State and apply the rule of product (multiplication principle) and the rule of sum (addition principle).</li>
+<li>Use inclusion-exclusion for overlapping cases.</li>
+<li>Connect counting principles to nested loops and algorithm analysis.</li>
+<li>Estimate the size of search spaces using counting arguments.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="rule-of-product-multiplication-principle">Rule of Product (Multiplication Principle)</h3>
+
+<p>If a process can be broken into <strong>sequential stages</strong>, with $a$ choices for stage 1 and $b$ choices for stage 2 (independent of stage 1's choice), then there are $a \cdot b$ total outcomes.</p>
+
+<p><strong>General form:</strong> For $k$ stages with $n_1, n_2, \ldots, n_k$ choices:</p>
+
+<div class="katex-block">$\text{Total} = n_1 \cdot n_2 \cdots n_k = \prod_{i=1}^{k} n_i$</div>
+
+<h3 id="rule-of-sum-addition-principle">Rule of Sum (Addition Principle)</h3>
+
+<p>If a task can be done in <strong>one of several disjoint ways</strong>, with $a$ choices for way 1 and $b$ choices for way 2 (with no overlap), then there are $a + b$ total choices.</p>
+
+<div class="katex-block">$|A \cup B| = |A| + |B| \quad \text{when } A \cap B = \emptyset$</div>
+
+<h3 id="inclusion-exclusion-for-overlapping-cases">Inclusion-Exclusion (for overlapping cases)</h3>
+
+<p>When the cases overlap:</p>
+
+<div class="katex-block">$|A \cup B| = |A| + |B| - |A \cap B|$</div>
+
+<h3 id="connection-to-loops">Connection to Loops</h3>
+
+<table>
+<thead><tr>
+<th>Counting Principle</th>
+<th>Code Pattern</th>
+<th>Iterations</th>
+</tr></thead><tbody>
+<tr>
+<td>Product rule</td>
+<td>Nested loops</td>
+<td>$m \times n$</td>
+</tr>
+<tr>
+<td>Sum rule</td>
+<td>Sequential blocks / <code>if-else</code></td>
+<td>$m + n$</td>
+</tr>
+<tr>
+<td>$k$-fold product</td>
+<td>$k$ nested loops</td>
+<td>$n_1 \cdot n_2 \cdots n_k$</td>
+</tr>
+</tbody></table>
+
+<h3 id="connection-to-sets-module-4">Connection to Sets (Module 4)</h3>
+
+<ul>
+<li><strong>Product rule:</strong> $|A \times B| = |A| \cdot |B|$ (Cartesian product)</li>
+<li><strong>Sum rule:</strong> $|A \cup B| = |A| + |B|$ when $A \cap B = \emptyset$ (disjoint union)</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<p>For finite sets $A, B$:</p>
+<ul>
+<li>$|A \times B| = |A| \cdot |B|$</li>
+<li>$|A \cup B| = |A| + |B| - |A \cap B|$</li>
+<li>$|A^k| = |A|^k$ (strings of length $k$ over alphabet $A$)</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-4-digit-pins">Example 1: 4-Digit PINs</h3>
+
+<p>How many 4-digit PINs (digits 0–9)?</p>
+
+<p>Each digit: 10 choices. By the product rule: $10^4 = 10000$.</p>
+
+<pre><code class="language-java">int count = 0;
+for (int d1 = 0; d1 &lt;= 9; d1++)
+  for (int d2 = 0; d2 &lt;= 9; d2++)
+    for (int d3 = 0; d3 &lt;= 9; d3++)
+      for (int d4 = 0; d4 &lt;= 9; d4++)
+        count++;
+// count == 10000</code></pre>
+
+<h3 id="example-2-license-plates">Example 2: License Plates</h3>
+
+<p>3 letters (A–Z) followed by 3 digits (0–9):</p>
+<div class="katex-block">$26^3 \cdot 10^3 = 17{,}576 \cdot 1000 = 17{,}576{,}000$</div>
+
+<h3 id="example-3-strings-with-constraints">Example 3: Strings with Constraints</h3>
+
+<p>How many 3-character strings over $\{a, b, c, d\}$ start with $a$ or end with $d$?</p>
+
+<ul>
+<li>Start with $a$: $1 \cdot 4 \cdot 4 = 16$.</li>
+<li>End with $d$: $4 \cdot 4 \cdot 1 = 16$.</li>
+<li>Start with $a$ AND end with $d$: $1 \cdot 4 \cdot 1 = 4$.</li>
+<li>By inclusion-exclusion: $16 + 16 - 4 = 28$.</li>
+</ul>
+
+<h3 id="example-4-loop-iteration-count">Example 4: Loop Iteration Count</h3>
+
+<pre><code class="language-java">int count = 0;
+for (int i = 0; i &lt; m; i++)
+    for (int j = 0; j &lt; n; j++)
+        count++;</code></pre>
+
+<p>By the product rule: <code>count == m * n</code>. This is the basis of Big-O analysis for nested loops.</p>
+
+<h3 id="example-5-brute-force-vs-smart-search">Example 5: Brute-Force vs. Smart Search</h3>
+
+<p><strong>Problem:</strong> Find all 8-character passwords using lowercase letters + digits.</p>
+
+<p>Search space: $36^8 = 2{,}821{,}109{,}907{,}456 \approx 2.8 \times 10^{12}$.</p>
+
+<p>At 1 billion checks/second: $\approx 2821$ seconds $\approx 47$ minutes.</p>
+
+<p>This counting argument motivates why longer passwords and larger alphabets increase security.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="counting-arguments-as-proofs">Counting Arguments as Proofs</h3>
+
+<p>To prove a set has a certain size, decompose the problem using sum/product rules:</p>
+<ol>
+<li>Break into stages or cases.</li>
+<li>Ensure stages are independent (product) or cases are disjoint (sum).</li>
+<li>Multiply or add.</li>
+</ol>
+
+<h3 id="double-counting">Double Counting</h3>
+
+<p>Count the same set two different ways to establish an identity. Example: the number of ordered pairs $(a, b) \in A \times B$ can be counted as $|A| \cdot |B|$ or by summing over elements of $A$: $\sum_{a \in A} |B| = |A| \cdot |B|$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class CountingPrinciples {
+
+    // --- Counting by Enumeration ---
+
+    /**
+     * Count all strings of length k over an alphabet of size n.
+     * By product rule: n^k.
+     */
+    public static long countStrings(int alphabetSize, int length) {
+        long count = 1;
+        for (int i = 0; i &lt; length; i++) {
+            count *= alphabetSize;
+        }
+        return count;
+    }
+
+    /**
+     * Generate all strings of length k over the given alphabet.
+     * The number generated should equal alphabetSize^k.
+     */
+    public static List&lt;String&gt; generateStrings(char[] alphabet, int length) {
+        List&lt;String&gt; result = new ArrayList&lt;&gt;();
+        generateHelper(alphabet, length, new char[length], 0, result);
+        return result;
+    }
+
+    private static void generateHelper(char[] alpha, int len, char[] current,
+                                        int pos, List&lt;String&gt; result) {
+        if (pos == len) {
+            result.add(new String(current));
+            return;
+        }
+        for (char c : alpha) {
+            current[pos] = c;
+            generateHelper(alpha, len, current, pos + 1, result);
+        }
+    }
+
+    /**
+     * Count iterations of k nested loops each from 0 to n-1.
+     * By product rule: n^k.
+     */
+    public static long countNestedLoopIterations(int n, int k) {
+        long count = 1;
+        for (int i = 0; i &lt; k; i++) count *= n;
+        return count;
+    }
+
+    // --- Inclusion-Exclusion ---
+
+    /**
+     * |A ∪ B| = |A| + |B| - |A ∩ B|.
+     */
+    public static &lt;T&gt; int inclusionExclusion(Set&lt;T&gt; a, Set&lt;T&gt; b) {
+        Set&lt;T&gt; intersection = new HashSet&lt;&gt;(a);
+        intersection.retainAll(b);
+        return a.size() + b.size() - intersection.size();
+    }
+
+    /**
+     * Three-set inclusion-exclusion:
+     * |A ∪ B ∪ C| = |A| + |B| + |C| - |A∩B| - |A∩C| - |B∩C| + |A∩B∩C|.
+     */
+    public static &lt;T&gt; int inclusionExclusion3(Set&lt;T&gt; a, Set&lt;T&gt; b, Set&lt;T&gt; c) {
+        Set&lt;T&gt; ab = new HashSet&lt;&gt;(a); ab.retainAll(b);
+        Set&lt;T&gt; ac = new HashSet&lt;&gt;(a); ac.retainAll(c);
+        Set&lt;T&gt; bc = new HashSet&lt;&gt;(b); bc.retainAll(c);
+        Set&lt;T&gt; abc = new HashSet&lt;&gt;(ab); abc.retainAll(c);
+        return a.size() + b.size() + c.size()
+                - ab.size() - ac.size() - bc.size()
+                + abc.size();
+    }
+
+    // --- Cartesian Product ---
+
+    /**
+     * Generate A × B as a list of pairs.
+     * |result| should equal |A| * |B|.
+     */
+    public static &lt;A, B&gt; List&lt;List&lt;Object&gt;&gt; cartesianProduct(Set&lt;A&gt; setA, Set&lt;B&gt; setB) {
+        List&lt;List&lt;Object&gt;&gt; result = new ArrayList&lt;&gt;();
+        for (A a : setA) {
+            for (B b : setB) {
+                result.add(Arrays.asList(a, b));
+            }
+        }
+        return result;
+    }
+
+    // --- Demo ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Counting Principles ===\n");
+
+        // Product rule: PINs
+        System.out.println("4-digit PINs: " + countStrings(10, 4));
+
+        // License plates
+        System.out.println("License plates (3 letters + 3 digits): "
+                + (countStrings(26, 3) * countStrings(10, 3)));
+
+        // Generate small alphabet strings
+        List&lt;String&gt; strs = generateStrings(new char[]{'a','b'}, 3);
+        System.out.println("\nAll 3-char strings over {a,b}: " + strs);
+        System.out.println("  Count: " + strs.size() + " (expected " + countStrings(2, 3) + ")");
+
+        // Inclusion-exclusion
+        Set&lt;Integer&gt; A = IntStream.rangeClosed(1, 20).filter(i -&gt; i % 2 == 0)
+                .boxed().collect(Collectors.toSet());
+        Set&lt;Integer&gt; B = IntStream.rangeClosed(1, 20).filter(i -&gt; i % 3 == 0)
+                .boxed().collect(Collectors.toSet());
+        System.out.println("\nEvens in {1..20}: " + A.size());
+        System.out.println("Multiples of 3 in {1..20}: " + B.size());
+        System.out.println("|A ∪ B| by inclusion-exclusion: " + inclusionExclusion(A, B));
+
+        // Cartesian product
+        Set&lt;String&gt; colors = Set.of("red", "blue");
+        Set&lt;Integer&gt; sizes = Set.of(1, 2, 3);
+        var cp = cartesianProduct(colors, sizes);
+        System.out.println("\n{red,blue} × {1,2,3}: " + cp);
+        System.out.println("  Count: " + cp.size() + " (expected " + (colors.size() * sizes.size()) + ")");
+
+        // Nested loop counting
+        System.out.println("\nNested loops (m=5, n=4): " + (5 * 4) + " iterations");
+        System.out.println("3 nested loops (n=10): " + countNestedLoopIterations(10, 3));
+
+        // Password space
+        long passSpace = countStrings(36, 8);
+        System.out.println("\n8-char password space (a-z + 0-9): " + passSpace);
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p>Counting principles have ancient roots. <strong>Indian mathematicians</strong> (Mahavira, 9th century) and <strong>Arabic scholars</strong> systematized combinatorial counting. <strong>Blaise Pascal</strong> (1654) and <strong>Pierre de Fermat</strong> developed counting methods through their study of gambling problems, which also launched probability theory.</p>
+
+<p>The <strong>inclusion-exclusion principle</strong> was formalized by <strong>Abraham de Moivre</strong> (1718) and extended by <strong>Sylvester</strong> (1883). It is fundamentally connected to Euler's totient function, the sieve of Eratosthenes, and Möbius inversion.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> A restaurant offers 3 appetizers, 5 entrees, and 4 desserts. How many different meals can you order?</p>
+
+<p><strong>A2.</strong> How many 5-bit binary strings are there? How does this relate to the power set of a 5-element set?</p>
+
+<p><strong>A3.</strong> A program has a loop over $m$ items inside a loop over $n$ items. How many operations?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Use counting to prove: $|A \times B| = |B \times A|$ for finite sets.</p>
+
+<p><strong>B2.</strong> Prove by inclusion-exclusion: the number of integers in $\{1, \ldots, 100\}$ divisible by 2 or 3 is 67.</p>
+
+<p><strong>B3.</strong> Prove: the number of functions from an $n$-element set to a $k$-element set is $k^n$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write <code>generateStrings(alphabet, length)</code> and verify the count matches $|\text{alphabet}|^{\text{length}}$.</p>
+
+<p><strong>C2.</strong> Compute the Cartesian product of two sets. Verify $|A \times B| = |A| \cdot |B|$.</p>
+
+<p><strong>C3.</strong> Write a method counting integers in $\{1, \ldots, n\}$ divisible by $a$ or $b$. Use inclusion-exclusion.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> How many strings of length 6 can be formed from the 26 lowercase letters if (a) repetition is allowed, (b) no letter is repeated?</p>
+
+<p><strong>DM2.</strong> How many integers in $\{1, \ldots, 1000\}$ are divisible by 2, 3, or 5? Use inclusion-exclusion.</p>
+
+<p><strong>DM3.</strong> A function $f: \{1,\ldots,n\} \to \{1,\ldots,k\}$ corresponds to a string of length $n$ over a $k$-letter alphabet. How many such functions are there? (Connect to Module 5.)</p>
+
+<p><strong>DM4.</strong> Prove: the number of subsets of $\{1,\ldots,n\}$ is $2^n$ using the product rule: for each element, choose "in" or "out." (Alternative to the induction proof from Module 6.)</p>
+
+<p><strong>DM5.</strong> How many ways can you seat $n$ people in a row? In a circle? (Introduce permutations preview.)</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Generate all binary strings of length $n$. Verify count equals $2^n$.</p>
+
+<p><strong>JP2.</strong> Implement 3-set inclusion-exclusion. Verify: integers in {1..1000} divisible by 2, 3, or 5.</p>
+
+<p><strong>JP3.</strong> Generate all strings of length 3 over $\{a,b,c,d\}$ that start with $a$ or end with $d$ (Example 3). Verify count is 28.</p>
+
+<p><strong>JP4.</strong> Compute Cartesian products of 3 sets $A \times B \times C$. Verify $|A \times B \times C| = |A| \cdot |B| \cdot |C|$.</p>
+
+<p><strong>JP5.</strong> Estimate brute-force time for an $n$-character password over a $k$-symbol alphabet at $10^9$ guesses/sec.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> From Module 4: the password space $\{a,...,z,0,...,9\}^n$ is a Cartesian product. Each element is a function $f: \{1,...,n\} \to \{a,...,z,0,...,9\}$ (Module 5). How many such functions are injective? Connect to Module 5's injectivity.</p>
+
+<p><strong>BR2.</strong> From Module 2: count the number of units mod $n$ (integers coprime to $n$ in $\{1,...,n\}$) using inclusion-exclusion on prime factors. Connect to Euler's totient function $\phi(n)$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> (a) $26^6 = 308{,}915{,}776$. (b) $26 \cdot 25 \cdot 24 \cdot 23 \cdot 22 \cdot 21 = 165{,}765{,}600$.</p>
+
+<p><strong>DM2.</strong> $|D_2| = 500, |D_3| = 333, |D_5| = 200, |D_2 \cap D_3| = |D_6| = 166, |D_2 \cap D_5| = |D_{10}| = 100, |D_3 \cap D_5| = |D_{15}| = 66, |D_2 \cap D_3 \cap D_5| = |D_{30}| = 33$.</p>
+
+<p>By inclusion-exclusion: $500 + 333 + 200 - 166 - 100 - 66 + 33 = 734$.</p>
+
+<p><strong>DM3.</strong> Each of the $n$ inputs can be mapped to any of $k$ outputs independently. By the product rule: $k^n$ functions.</p>
+
+<p><strong>DM4.</strong> For each element $x_i \in \{1,...,n\}$, there are 2 choices: include $x_i$ or exclude $x_i$. All choices are independent. By the product rule: $2^n$ subsets.</p>
+
+<p><strong>DM5.</strong> Row: $n!$. Circle: $(n-1)!$ (fix one person, permute the rest).</p>
+
+</section>
+</div>
+<hr>
+<div id="class-2" class="class-section">
+<h1 id="module-7-class-2-binomial-coefficients-permutations-and-combinations">Module 7 – Class 2: Binomial Coefficients, Permutations and Combinations</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Compute permutations $P(n,k)$ and combinations $C(n,k)$.</li>
+<li>State and prove Pascal's identity.</li>
+<li>Apply the binomial theorem.</li>
+<li>Implement factorial, $C(n,k)$, and combination generation in Java.</li>
+<li>Connect combinations to power sets (Module 4) and counting (Module 7 Class 1).</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="permutations">Permutations</h3>
+
+<p>A <strong>permutation</strong> of $k$ elements from a set of $n$ is an ordered arrangement:</p>
+
+<div class="katex-block">$P(n,k) = \frac{n!}{(n-k)!} = n \cdot (n-1) \cdots (n-k+1)$</div>
+
+<ul>
+<li>$P(n,n) = n!$ — arrange all $n$ elements.</li>
+<li>$P(n,1) = n$ — choose one element.</li>
+</ul>
+
+<h3 id="combinations-binomial-coefficients">Combinations (Binomial Coefficients)</h3>
+
+<p>A <strong>combination</strong> of $k$ elements from $n$ is an unordered selection:</p>
+
+<div class="katex-block">$C(n,k) = \binom{n}{k} = \frac{n!}{k!(n-k)!} = \frac{P(n,k)}{k!}$</div>
+
+<ul>
+<li>$\binom{n}{0} = \binom{n}{n} = 1$</li>
+<li>$\binom{n}{k} = \binom{n}{n-k}$ (symmetry)</li>
+</ul>
+
+<h3 id="pascal-s-identity">Pascal's Identity</h3>
+
+<div class="katex-block">$\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$</div>
+
+<p><strong>Combinatorial proof:</strong> Among the $\binom{n}{k}$ subsets of $\{1,\ldots,n\}$ of size $k$, those containing $n$ number $\binom{n-1}{k-1}$ (choose remaining $k-1$ from $\{1,\ldots,n-1\}$), and those not containing $n$ number $\binom{n-1}{k}$.</p>
+
+<h3 id="the-binomial-theorem">The Binomial Theorem</h3>
+
+<div class="katex-block">$(x + y)^n = \sum_{k=0}^{n} \binom{n}{k} x^k y^{n-k}$</div>
+
+<p><strong>Special cases:</strong></p>
+<ul>
+<li>$(1+1)^n = \sum \binom{n}{k} = 2^n$ (total subsets of an $n$-set — Module 4!)</li>
+<li>$(1-1)^n = \sum (-1)^k \binom{n}{k} = 0$ (equal even- and odd-sized subsets)</li>
+</ul>
+
+<h3 id="pascal-s-triangle">Pascal's Triangle</h3>
+
+<pre><code class="language-text">        1
+       1 1
+      1 2 1
+     1 3 3 1
+    1 4 6 4 1
+   1 5 10 10 5 1</code></pre>
+
+<p>Row $n$: $\binom{n}{0}, \binom{n}{1}, \ldots, \binom{n}{n}$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$n!$</td>
+<td>$n$ factorial: $1 \cdot 2 \cdots n$</td>
+</tr>
+<tr>
+<td>$P(n,k)$</td>
+<td>Permutations: $n!/(n-k)!$</td>
+</tr>
+<tr>
+<td>$\binom{n}{k}$ or $C(n,k)$</td>
+<td>Combinations: $n!/(k!(n-k)!)$</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-committee-selection">Example 1: Committee Selection</h3>
+
+<p>How many ways to choose a 3-person committee from 10 people?</p>
+
+<div class="katex-block">$\binom{10}{3} = \frac{10!}{3! \cdot 7!} = \frac{10 \cdot 9 \cdot 8}{3 \cdot 2 \cdot 1} = 120$</div>
+
+<h3 id="example-2-arranging-letters">Example 2: Arranging Letters</h3>
+
+<p>How many arrangements of the letters in "ABCDE"? $5! = 120$.</p>
+
+<p>How many 3-letter arrangements from "ABCDE"? $P(5,3) = 5 \cdot 4 \cdot 3 = 60$.</p>
+
+<h3 id="example-3-pascal-s-identity">Example 3: Pascal's Identity</h3>
+
+<p>$\binom{5}{2} = \binom{4}{1} + \binom{4}{2} = 4 + 6 = 10$. ✓</p>
+
+<h3 id="example-4-subsets-of-size-inlinemath_37">Example 4: Subsets of Size $k$</h3>
+
+<p>List all 2-element subsets of $\{1,2,3,4\}$:</p>
+<p>$\{1,2\}, \{1,3\}, \{1,4\}, \{2,3\}, \{2,4\}, \{3,4\}$ — 6 subsets = $\binom{4}{2} = 6$. ✓</p>
+
+<h3 id="example-5-binomial-theorem-application">Example 5: Binomial Theorem Application</h3>
+
+<p>$(x + 1)^4 = \binom{4}{0}x^4 + \binom{4}{1}x^3 + \binom{4}{2}x^2 + \binom{4}{3}x + \binom{4}{4} = x^4 + 4x^3 + 6x^2 + 4x + 1$</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="combinatorial-proofs">Combinatorial Proofs</h3>
+
+<p>Instead of algebraic manipulation, argue by counting the same set two ways.</p>
+
+<p><strong>Example:</strong> Prove $\sum_{k=0}^{n} \binom{n}{k} = 2^n$.</p>
+
+<p><em>Combinatorial proof:</em> The left side counts all subsets of $\{1,...,n\}$ by size. The right side counts all subsets by the product rule ($2^n$ binary choices). Both count $|\mathcal{P}(\{1,...,n\})|$. $\blacksquare$</p>
+
+<h3 id="algebraic-proofs-of-binomial-identities">Algebraic Proofs of Binomial Identities</h3>
+
+<p>Use factorials and simplify. For Pascal's identity:</p>
+
+<div class="katex-block">$\binom{n-1}{k-1} + \binom{n-1}{k} = \frac{(n-1)!}{(k-1)!(n-k)!} + \frac{(n-1)!}{k!(n-k-1)!}$</div>
+
+<p><div class="katex-block">$= \frac{(n-1)! \cdot k + (n-1)! \cdot (n-k)}{k!(n-k)!} = \frac{(n-1)! \cdot n}{k!(n-k)!} = \binom{n}{k}$</div> $\blacksquare$</p>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class CombinatoricsLibrary {
+
+    // --- Factorial ---
+
+    public static long factorial(int n) {
+        long result = 1;
+        for (int i = 2; i &lt;= n; i++) result *= i;
+        return result;
+    }
+
+    // --- Binomial Coefficient ---
+
+    /**
+     * C(n, k) computed without full factorial to avoid overflow.
+     * C(n,k) = n*(n-1)*...*(n-k+1) / k!
+     */
+    public static long binomial(int n, int k) {
+        if (k &lt; 0 || k &gt; n) return 0;
+        if (k == 0 || k == n) return 1;
+        if (k &gt; n - k) k = n - k; // symmetry: C(n,k) = C(n,n-k)
+        long result = 1;
+        for (int i = 0; i &lt; k; i++) {
+            result = result * (n - i) / (i + 1);
+        }
+        return result;
+    }
+
+    /**
+     * C(n, k) via Pascal's triangle (dynamic programming).
+     */
+    public static long binomialDP(int n, int k) {
+        long[][] dp = new long[n + 1][k + 1];
+        for (int i = 0; i &lt;= n; i++) {
+            dp[i][0] = 1;
+            for (int j = 1; j &lt;= Math.min(i, k); j++) {
+                dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+            }
+        }
+        return dp[n][k];
+    }
+
+    // --- Permutations ---
+
+    public static long permutations(int n, int k) {
+        long result = 1;
+        for (int i = 0; i &lt; k; i++) result *= (n - i);
+        return result;
+    }
+
+    // --- Pascal's Triangle ---
+
+    public static void printPascalsTriangle(int rows) {
+        for (int n = 0; n &lt; rows; n++) {
+            // Spacing
+            for (int s = 0; s &lt; rows - n - 1; s++) System.out.print("   ");
+            for (int k = 0; k &lt;= n; k++) {
+                System.out.printf("%5d ", binomial(n, k));
+            }
+            System.out.println();
+        }
+    }
+
+    // --- Generate All k-Subsets ---
+
+    /**
+     * Generate all subsets of {0,...,n-1} of size k.
+     * Count should equal C(n, k).
+     */
+    public static List&lt;List&lt;Integer&gt;&gt; generateCombinations(int n, int k) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        generateCombHelper(n, k, 0, new ArrayList&lt;&gt;(), result);
+        return result;
+    }
+
+    private static void generateCombHelper(int n, int k, int start,
+                                            List&lt;Integer&gt; current,
+                                            List&lt;List&lt;Integer&gt;&gt; result) {
+        if (current.size() == k) {
+            result.add(new ArrayList&lt;&gt;(current));
+            return;
+        }
+        for (int i = start; i &lt; n; i++) {
+            current.add(i);
+            generateCombHelper(n, k, i + 1, current, result);
+            current.remove(current.size() - 1);
+        }
+    }
+
+    // --- Generate All Permutations ---
+
+    public static List&lt;List&lt;Integer&gt;&gt; generatePermutations(int n) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        List&lt;Integer&gt; items = IntStream.range(0, n).boxed()
+                .collect(Collectors.toList());
+        permuteHelper(items, 0, result);
+        return result;
+    }
+
+    private static void permuteHelper(List&lt;Integer&gt; items, int idx,
+                                       List&lt;List&lt;Integer&gt;&gt; result) {
+        if (idx == items.size()) {
+            result.add(new ArrayList&lt;&gt;(items));
+            return;
+        }
+        for (int i = idx; i &lt; items.size(); i++) {
+            Collections.swap(items, idx, i);
+            permuteHelper(items, idx + 1, result);
+            Collections.swap(items, idx, i);
+        }
+    }
+
+    // --- Verify Identities ---
+
+    public static void verifyIdentities(int maxN) {
+        for (int n = 0; n &lt;= maxN; n++) {
+            // Sum of row = 2^n
+            long rowSum = 0;
+            for (int k = 0; k &lt;= n; k++) rowSum += binomial(n, k);
+            assert rowSum == (1L &lt;&lt; n) : "Row sum failed for n=" + n;
+
+            // Pascal's identity
+            for (int k = 1; k &lt; n; k++) {
+                assert binomial(n, k) == binomial(n - 1, k - 1) + binomial(n - 1, k)
+                        : "Pascal failed for n=" + n + ", k=" + k;
+            }
+
+            // Symmetry
+            for (int k = 0; k &lt;= n; k++) {
+                assert binomial(n, k) == binomial(n, n - k);
+            }
+        }
+    }
+
+    // --- Demo ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Combinatorics Library ===\n");
+
+        // Binomial coefficients
+        System.out.println("C(10,3) = " + binomial(10, 3));       // 120
+        System.out.println("C(10,3) DP = " + binomialDP(10, 3));  // 120
+        System.out.println("P(5,3) = " + permutations(5, 3));     // 60
+        System.out.println("5! = " + factorial(5));                // 120
+
+        // Pascal's triangle
+        System.out.println("\nPascal's Triangle (8 rows):");
+        printPascalsTriangle(8);
+
+        // Generate combinations
+        List&lt;List&lt;Integer&gt;&gt; combs = generateCombinations(5, 2);
+        System.out.println("\nAll 2-subsets of {0..4}: " + combs);
+        System.out.println("Count: " + combs.size() + " (expected " + binomial(5, 2) + ")");
+
+        // Generate permutations
+        List&lt;List&lt;Integer&gt;&gt; perms = generatePermutations(4);
+        System.out.println("\nPermutations of {0..3}: " + perms.size()
+                + " (expected " + factorial(4) + ")");
+
+        // Verify identities
+        verifyIdentities(20);
+        System.out.println("\nAll identities verified for n = 0..20!");
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Blaise Pascal</strong> (1654) published the <em>Traité du triangle arithmétique</em>, establishing fundamental properties of binomial coefficients. However, the triangle was known centuries earlier: <strong>Pingala</strong> (India, ~200 BC), <strong>Al-Karaji</strong> (Persia, ~1000 AD), and <strong>Yang Hui</strong> (China, 1261) all studied it.</p>
+
+<p>The <strong>binomial theorem</strong> for positive integers was known to <strong>Isaac Newton</strong> (1665), who extended it to non-integer exponents, creating the generalized binomial series.</p>
+
+<p><strong>Combinatorial proofs</strong> — proving identities by counting — are preferred by many mathematicians because they provide understanding, not just verification. This philosophy aligns with the course's emphasis on proofs as explanations.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> What is the difference between $P(n,k)$ and $C(n,k)$?</p>
+
+<p><strong>A2.</strong> How does $\binom{n}{k}$ relate to the number of subsets of size $k$ of an $n$-element set?</p>
+
+<p><strong>A3.</strong> Explain why $\binom{n}{k} = \binom{n}{n-k}$ without algebra (combinatorial argument).</p>
+
+<p><strong>A4.</strong> How many rows of Pascal's triangle do you need to compute $\binom{10}{3}$ using only Pascal's identity?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove Pascal's identity combinatorially and algebraically.</p>
+
+<p><strong>B2.</strong> Prove: $\sum_{k=0}^n \binom{n}{k} = 2^n$.</p>
+
+<p><strong>B3.</strong> Prove: $\sum_{k=0}^n (-1)^k \binom{n}{k} = 0$ for $n \geq 1$.</p>
+
+<p><strong>B4.</strong> Prove by induction: $\binom{n}{k} \leq 2^n / 2$ for $1 \leq k \leq n-1$ and $n \geq 2$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Implement <code>binomial(n, k)</code> without computing full factorials. Verify against <code>binomialDP(n, k)</code>.</p>
+
+<p><strong>C2.</strong> Generate all 3-element subsets of $\{1,...,7\}$. Verify count = $\binom{7}{3} = 35$.</p>
+
+<p><strong>C3.</strong> Build Pascal's triangle up to row 15 using dynamic programming.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Compute: (a) $\binom{8}{3}$, (b) $P(8,3)$, (c) $\binom{12}{4}$, (d) $P(6,6)$.</p>
+
+<p><strong>DM2.</strong> How many 5-card poker hands can be dealt from a 52-card deck?</p>
+
+<p><strong>DM3.</strong> Prove: $\binom{n}{k} \cdot \binom{k}{j} = \binom{n}{j} \cdot \binom{n-j}{k-j}$ (Vandermonde-like identity).</p>
+
+<p><strong>DM4.</strong> Prove by induction on $n$: $\sum_{k=0}^{n} \binom{n}{k}^2 = \binom{2n}{n}$.</p>
+
+<p><strong>DM5.</strong> A committee of 4 is chosen from 6 men and 5 women. How many committees have at least 2 women?</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement <code>factorial</code>, <code>permutations</code>, <code>binomial</code>. Test with known values.</p>
+
+<p><strong>JP2.</strong> Using DP, build Pascal's triangle as a 2D array. Print rows 0–15.</p>
+
+<p><strong>JP3.</strong> Generate all $k$-element subsets of $\{0,...,n-1\}$ using backtracking. Verify count = $\binom{n}{k}$.</p>
+
+<p><strong>JP4.</strong> Generate all permutations of a string. For "ABCD", verify count = 24.</p>
+
+<p><strong>JP5.</strong> Implement the binomial theorem: given $n$, expand $(x+y)^n$ as a list of terms $\binom{n}{k} x^k y^{n-k}$. Evaluate at $x = 1, y = 1$ and verify = $2^n$.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> From Module 4: $|\mathcal{P}(A)| = 2^n$. From this class: $\sum_{k=0}^n \binom{n}{k} = 2^n$. These are the same fact from two perspectives. Explain the connection and implement both computations.</p>
+
+<p><strong>BR2.</strong> From Module 5: the number of injective functions $f: \{1,...,k\} \to \{1,...,n\}$ is $P(n,k)$. The number of $k$-element subsets of $\{1,...,n\}$ is $C(n,k) = P(n,k)/k!$ (quotient by the symmetry group). Verify in Java for small $n, k$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> (a) $\binom{8}{3} = 56$. (b) $P(8,3) = 336$. (c) $\binom{12}{4} = 495$. (d) $P(6,6) = 720$.</p>
+
+<p><strong>DM2.</strong> $\binom{52}{5} = 2{,}598{,}960$.</p>
+
+<p><strong>DM5.</strong> Exactly 2 women: $\binom{5}{2}\binom{6}{2} = 10 \cdot 15 = 150$. Exactly 3 women: $\binom{5}{3}\binom{6}{1} = 10 \cdot 6 = 60$. Exactly 4 women: $\binom{5}{4}\binom{6}{0} = 5$. Total: $150 + 60 + 5 = 215$.</p>
+
+</section>
+</div>
+<hr>
+<div id="class-3" class="class-section">
+<h1 id="module-7-class-3-pigeonhole-principle-and-simple-probability">Module 7 – Class 3: Pigeonhole Principle and Simple Probability</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>State and apply the pigeonhole principle (basic and generalized).</li>
+<li>Analyze hash table collisions using the pigeonhole principle.</li>
+<li>Compute basic discrete probabilities over finite sample spaces.</li>
+<li>Understand and estimate the birthday paradox.</li>
+<li>Implement hash collision detection and birthday paradox simulation in Java.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="the-pigeonhole-principle-php">The Pigeonhole Principle (PHP)</h3>
+
+<p>If $n$ items are placed into $m$ containers and $n > m$, then at least one container holds more than one item.</p>
+
+<p><strong>Formally:</strong> For any function $f: A \to B$, if $|A| > |B|$, then $f$ is <strong>not</strong> injective. (Module 5!)</p>
+
+<h3 id="generalized-pigeonhole-principle">Generalized Pigeonhole Principle</h3>
+
+<p>If $n$ items are placed into $m$ containers, then some container holds at least $\lceil n/m \rceil$ items.</p>
+
+<h3 id="applications">Applications</h3>
+
+<table>
+<thead><tr>
+<th>Scenario</th>
+<th>Items</th>
+<th>Containers</th>
+<th>Conclusion</th>
+</tr></thead><tbody>
+<tr>
+<td>13 people born in some year</td>
+<td>people</td>
+<td>12 months</td>
+<td>$\geq 2$ share a birth month</td>
+</tr>
+<tr>
+<td>27 English words</td>
+<td>words</td>
+<td>26 letters</td>
+<td>$\geq 2$ start with same letter</td>
+</tr>
+<tr>
+<td>$n+1$ integers from $\{1,...,2n\}$</td>
+<td>integers</td>
+<td>$n$ pairs $\{k, 2n+1-k\}$</td>
+<td>$\geq 2$ sum to $2n+1$</td>
+</tr>
+<tr>
+<td>Hash table: $n$ keys, $m$ slots</td>
+<td>keys</td>
+<td>slots</td>
+<td>collision if $n > m$</td>
+</tr>
+</tbody></table>
+
+<h3 id="simple-probability">Simple Probability</h3>
+
+<p>For a finite sample space $S$ where all outcomes are equally likely:</p>
+
+<div class="katex-block">$P(E) = \frac{|E|}{|S|}$</div>
+
+<p><strong>The Birthday Problem:</strong> In a group of $k$ people, what is the probability that at least two share a birthday?</p>
+
+<div class="katex-block">$P(\text{no match among } k) = \frac{365}{365} \cdot \frac{364}{365} \cdot \frac{363}{365} \cdots \frac{365-k+1}{365} = \frac{P(365, k)}{365^k}$</div>
+
+<div class="katex-block">$P(\text{at least one match}) = 1 - P(\text{no match})$</div>
+
+<p>At $k = 23$, $P(\text{match}) \approx 0.507$ — <strong>more than 50%</strong>.</p>
+
+<p>At $k = 70$, $P(\text{match}) > 0.999$.</p>
+
+<h3 id="birthday-paradox-and-hash-collisions">Birthday Paradox and Hash Collisions</h3>
+
+<p>For a hash table with $m$ slots, the expected number of keys before the first collision is approximately $\sqrt{\pi m / 2}$ (birthday bound). This is why a 128-bit hash gives $\approx 2^{64}$ collision resistance, not $2^{128}$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$\lceil x \rceil$</td>
+<td>Ceiling: smallest integer $\geq x$</td>
+</tr>
+<tr>
+<td>$P(E)$</td>
+<td>Probability of event $E$</td>
+</tr>
+<tr>
+<td>$S$</td>
+<td>Sample space</td>
+</tr>
+<tr>
+<td>$P(n,k)$</td>
+<td>Permutations (from Class 2)</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-birthday-months">Example 1: Birthday Months</h3>
+
+<p>In a group of 13 people, prove that at least 2 share a birth month.</p>
+
+<p><em>Proof:</em> There are 13 people (items) and 12 months (containers). By PHP, at least one month contains $\geq 2$ people. $\blacksquare$</p>
+
+<h3 id="example-2-sock-drawer">Example 2: Sock Drawer</h3>
+
+<p>A drawer contains 10 red socks and 10 blue socks. How many must you draw (in the dark) to guarantee a matching pair?</p>
+
+<p>$m = 2$ colors. Need $m + 1 = 3$ socks.</p>
+
+<h3 id="example-3-generalized-php-in-load-balancing">Example 3: Generalized PHP in Load Balancing</h3>
+
+<p>7 tasks are assigned to 3 servers. Show that some server gets at least 3 tasks.</p>
+
+<p>$\lceil 7/3 \rceil = 3$. By the generalized PHP, at least one server handles $\geq 3$ tasks. $\blacksquare$</p>
+
+<h3 id="example-4-hash-table-collision">Example 4: Hash Table Collision</h3>
+
+<p>A hash table has 1000 slots. How many keys can be inserted before a collision is guaranteed?</p>
+
+<p><strong>Guaranteed:</strong> $1001$ keys (by PHP).</p>
+
+<p><strong>Expected (birthday bound):</strong> $\approx \sqrt{\pi \cdot 1000 / 2} \approx 39.6$, so expect a collision around 40 keys.</p>
+
+<h3 id="example-5-probability-drawing-cards">Example 5: Probability — Drawing Cards</h3>
+
+<p>From a standard 52-card deck, draw 5 cards. What is the probability of getting exactly 2 aces?</p>
+
+<div class="katex-block">$P = \frac{\binom{4}{2}\binom{48}{3}}{\binom{52}{5}} = \frac{6 \cdot 17296}{2598960} = \frac{103776}{2598960} \approx 0.0399$</div>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="existence-proofs-via-php">Existence Proofs via PHP</h3>
+
+<p>The pigeonhole principle is a powerful tool for <strong>existence proofs</strong> — proving that something must exist without constructing it explicitly.</p>
+
+<p><strong>Theorem:</strong> Among any 5 points placed in a $1 \times 1$ square, at least two are within distance $\frac{\sqrt{2}}{2}$ of each other.</p>
+
+<p><em>Proof:</em> Divide the square into 4 smaller squares of side $\frac{1}{2}$. By PHP ($5$ points, $4$ squares), at least two points are in the same small square. The diameter of a $\frac{1}{2} \times \frac{1}{2}$ square is $\frac{\sqrt{2}}{2}$. $\blacksquare$</p>
+
+<h3 id="counting-complement">Counting Complement</h3>
+
+<p>To find $P(E)$, compute $P(\overline{E})$ instead:</p>
+
+<div class="katex-block">$P(E) = 1 - P(\overline{E})$</div>
+
+<p>This technique powers the birthday problem calculation and many other problems.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.stream.*;
+
+public class PigeonholeAndProbability {
+
+    // --- Pigeonhole Demonstration: Hash Collisions ---
+
+    /**
+     * Insert keys into a hash table of size m.
+     * Returns the number of keys inserted before the first collision.
+     */
+    public static int firstCollision(int[] keys, int tableSize) {
+        boolean[] occupied = new boolean[tableSize];
+        for (int i = 0; i &lt; keys.length; i++) {
+            int slot = Math.floorMod(keys[i], tableSize);
+            if (occupied[slot]) return i + 1; // collision on (i+1)-th key
+            occupied[slot] = true;
+        }
+        return -1; // no collision
+    }
+
+    /**
+     * Demonstrate the pigeonhole principle:
+     * inserting tableSize+1 distinct hash keys guarantees a collision.
+     */
+    public static void demonstratePHP(int tableSize) {
+        int[] keys = IntStream.range(0, tableSize + 1).toArray();
+        int col = firstCollision(keys, tableSize);
+        System.out.println("Table size: " + tableSize + ", keys: " + (tableSize + 1)
+                + " → first collision at key #" + col);
+    }
+
+    // --- Generalized PHP ---
+
+    /**
+     * Given n items in m containers, the minimum items in the
+     * fullest container is ceil(n/m).
+     */
+    public static int generalizedPHP(int n, int m) {
+        return (n + m - 1) / m; // integer ceiling
+    }
+
+    /**
+     * Simulate random distribution of n items into m containers.
+     * Returns the maximum load.
+     */
+    public static int simulateMaxLoad(int n, int m, Random rng) {
+        int[] counts = new int[m];
+        for (int i = 0; i &lt; n; i++) counts[rng.nextInt(m)]++;
+        return Arrays.stream(counts).max().orElse(0);
+    }
+
+    // --- Birthday Problem ---
+
+    /**
+     * Exact probability that among k people, at least two share
+     * a birthday (assuming 365 equally likely birthdays).
+     */
+    public static double birthdayProbExact(int k) {
+        if (k &gt; 365) return 1.0;
+        double pNoMatch = 1.0;
+        for (int i = 1; i &lt; k; i++) {
+            pNoMatch *= (365.0 - i) / 365.0;
+        }
+        return 1.0 - pNoMatch;
+    }
+
+    /**
+     * Monte Carlo simulation: estimate birthday collision probability.
+     */
+    public static double birthdayProbMonteCarlo(int k, int trials) {
+        Random rng = new Random(42);
+        int collisions = 0;
+        for (int t = 0; t &lt; trials; t++) {
+            Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+            boolean found = false;
+            for (int i = 0; i &lt; k; i++) {
+                int day = rng.nextInt(365);
+                if (!seen.add(day)) { found = true; break; }
+            }
+            if (found) collisions++;
+        }
+        return (double) collisions / trials;
+    }
+
+    /**
+     * Birthday bound approximation: expected keys to first collision
+     * in a hash table of size m is sqrt(pi * m / 2).
+     */
+    public static double birthdayBound(int m) {
+        return Math.sqrt(Math.PI * m / 2.0);
+    }
+
+    // --- Simple Probability ---
+
+    /**
+     * P(E) = |E| / |S| for equally likely outcomes.
+     */
+    public static double uniformProbability(long eventSize, long sampleSize) {
+        return (double) eventSize / sampleSize;
+    }
+
+    // --- Reusing C(n,k) from Class 2 ---
+
+    public static long binomial(int n, int k) {
+        if (k &lt; 0 || k &gt; n) return 0;
+        if (k == 0 || k == n) return 1;
+        if (k &gt; n - k) k = n - k;
+        long result = 1;
+        for (int i = 0; i &lt; k; i++) {
+            result = result * (n - i) / (i + 1);
+        }
+        return result;
+    }
+
+    // --- Monte Carlo: First Collision in Hash Table ---
+
+    /**
+     * Simulate inserting random keys into a table of size m.
+     * Returns the average number of insertions until first collision.
+     */
+    public static double avgFirstCollision(int m, int trials) {
+        Random rng = new Random(42);
+        long totalInserts = 0;
+        for (int t = 0; t &lt; trials; t++) {
+            Set&lt;Integer&gt; used = new HashSet&lt;&gt;();
+            int count = 0;
+            while (true) {
+                int slot = rng.nextInt(m);
+                count++;
+                if (!used.add(slot)) break;
+            }
+            totalInserts += count;
+        }
+        return (double) totalInserts / trials;
+    }
+
+    // --- Demo ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Pigeonhole Principle &amp; Probability ===\n");
+
+        // PHP Demonstration
+        demonstratePHP(10);
+        demonstratePHP(100);
+
+        // Generalized PHP
+        System.out.println("\n7 tasks, 3 servers: max load &gt;= "
+                + generalizedPHP(7, 3));
+
+        // Simulated load balancing
+        Random rng = new Random(42);
+        int maxLoad = simulateMaxLoad(7, 3, rng);
+        System.out.println("Simulated max load (7 tasks, 3 servers): " + maxLoad);
+
+        // Birthday problem
+        System.out.println("\n--- Birthday Problem ---");
+        for (int k : new int[]{10, 20, 23, 30, 50, 70}) {
+            System.out.printf("k=%2d: exact=%.4f, monte carlo=%.4f%n",
+                    k, birthdayProbExact(k),
+                    birthdayProbMonteCarlo(k, 100000));
+        }
+
+        // Birthday bound for hash tables
+        System.out.println("\n--- Birthday Bound ---");
+        for (int m : new int[]{100, 1000, 1_000_000}) {
+            System.out.printf("m=%,d: bound=%.1f, simulated avg=%.1f%n",
+                    m, birthdayBound(m), avgFirstCollision(m, 10000));
+        }
+
+        // Probability: 2 aces in 5-card hand
+        long event = binomial(4, 2) * binomial(48, 3);
+        long sample = binomial(52, 5);
+        System.out.printf("\nP(exactly 2 aces in 5-card hand) = %d/%d = %.4f%n",
+                event, sample, uniformProbability(event, sample));
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p>The <strong>pigeonhole principle</strong> (Dirichlet's box principle) is attributed to <strong>Peter Gustav Lejeune Dirichlet</strong> (1834), though the idea was used informally much earlier. The German name <em>Schubfachprinzip</em> ("drawer principle") reflects its intuitive roots.</p>
+
+<p>The <strong>birthday problem</strong> was posed by <strong>Richard von Mises</strong> in 1939 and is a staple of probability courses because it so effectively challenges human intuition. Hash table designers rely on its mathematics daily.</p>
+
+<p><strong>Probability theory</strong> grew from correspondence between <strong>Blaise Pascal</strong> and <strong>Pierre de Fermat</strong> in 1654 about gambling problems — the same Pascal from Class 2's triangle.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> State the pigeonhole principle. What does it guarantee?</p>
+
+<p><strong>A2.</strong> There are 367 students in a class. What can you conclude about their birthdays?</p>
+
+<p><strong>A3.</strong> Why is the birthday paradox surprising? At what group size does the probability hit 50%?</p>
+
+<p><strong>A4.</strong> How does the birthday bound relate to the security of a hash function with $n$-bit output?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove: among any 5 integers, at least two have the same remainder when divided by 4.</p>
+
+<p><strong>B2.</strong> Prove: in any group of 6 people, either 3 mutually know each other or 3 mutually don't. (Hint: fix one person, apply PHP to classify the other 5.)</p>
+
+<p><strong>B3.</strong> Prove the generalized PHP: if $n$ items are in $m$ containers, some container has $\geq \lceil n/m \rceil$ items.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write a program that inserts $n$ random keys into a hash table of size $m$ and reports the first collision.</p>
+
+<p><strong>C2.</strong> Simulate the birthday problem 100,000 times for $k = 1, 2, ..., 50$ and plot exact vs simulated probabilities.</p>
+
+<p><strong>C3.</strong> Implement <code>generalizedPHP(n, m)</code> and verify experimentally by distributing $n$ random balls into $m$ bins.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> A store has 6 types of fruit. How many pieces must you buy to guarantee at least 4 of the same type?</p>
+
+<p><strong>DM2.</strong> Prove: among any 10 integers, there exist two whose difference is divisible by 9.</p>
+
+<p><strong>DM3.</strong> A deck of 52 cards is dealt to 4 players (13 each). Prove that at least one player has cards of all 4 suits.</p>
+
+<p><strong>DM4.</strong> Compute $P(\text{exactly 3 heads in 8 coin flips})$.</p>
+
+<p><strong>DM5.</strong> Prove: the number of people in a room who have shaken an odd number of hands is even. (Hint: sum of degrees.)</p>
+
+<p><strong>DM6.</strong> In a round-robin tournament with 6 players, prove that at least one player has $\geq 3$ wins or $\geq 3$ losses.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Implement <code>firstCollision(keys, tableSize)</code>. Test with sequential and random keys.</p>
+
+<p><strong>JP2.</strong> Compute and display the birthday probability for $k = 1, ..., 60$ (exact and Monte Carlo).</p>
+
+<p><strong>JP3.</strong> Simulate the generalized PHP: distribute $n$ balls into $m$ bins 10,000 times and report the average and maximum of the max-load.</p>
+
+<p><strong>JP4.</strong> Implement a simple hash table with chaining. Insert 2000 random keys into a 1000-slot table. Report the maximum chain length and compare with $\lceil 2000/1000 \rceil = 2$ (PHP bound) vs actual.</p>
+
+<p><strong>JP5.</strong> Merge the counting functions from Classes 1–3 into a single <code>CombinatoricsToolkit</code> class with <code>binomial</code>, <code>permutations</code>, <code>inclusionExclusion</code>, <code>birthdayProb</code>, and <code>firstCollision</code>.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Module 5: $f: A \to B$ with $|A| > |B|$ is not injective. That <em>is</em> the pigeonhole principle. Give three different interpretations (functions, hash tables, birthdays) and implement each in Java.</p>
+
+<p><strong>BR2.</strong> Module 7 Class 1 used inclusion-exclusion. The birthday problem can also be solved with inclusion-exclusion over pairwise collisions (though it's harder). Set up the formula for $k = 3$ people and verify numerically.</p>
+
+<p><strong>BR3.</strong> Module 4: $|\mathcal{P}(A)| = 2^n$. A random subset of $A$ is equally likely to be any of $2^n$ subsets. What is $P(|S| = k)$? This equals $\binom{n}{k}/2^n$. Verify in Java by random sampling.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> By generalized PHP: $\lceil n / 6 \rceil \geq 4 \Rightarrow n \geq 19$. Buy 19 pieces.</p>
+
+<p><strong>DM2.</strong> There are 9 possible remainders mod 9 ($\{0,...,8\}$). 10 integers → by PHP, two share a remainder. Their difference is divisible by 9. $\blacksquare$</p>
+
+<p><strong>DM3.</strong> The 4 players receive $4 \times 13 = 52$ cards covering all 4 suits. Each suit has 13 cards distributed among 4 players. If any player had cards of $\leq 3$ suits, those 3 suits contribute at most $13 \times 3 = 39$ cards total to those players. But we actually need a cleaner argument: Each player gets 13 cards from 4 suits. By PHP, any player with 13 cards from 4 suits needs $\lceil 13/4 \rceil = 4$ from some suit, but that doesn't immediately help. Instead: There are 4 suits. A player misses a suit only if they get 0 from that suit. Across all 4 players, total suit-appearances is $4 \times 13 = 52$. But we just need to show one player has all 4 suits. By PHP on suits: each suit has 13 cards among 4 players, so at most 3 players can miss a given suit. Across 4 suits, at most $3 \times 4 = 12$ (player, missed-suit) pairs. But there are 4 players, each with at most 3 missable suits, totalling at most 12 misses—so it's possible all miss 3. A more direct route: this is not provable in general; counterexample: deal each suit entirely to one player. Corrected statement: "at least one player has cards from at least $\lceil 13 \times 4 / 52 \rceil$ suits" is trivially 1. The correct pigeonhole application: since 13 > 4, a player with 13 cards from 4 available suits must have at least $\lceil 13/4 \rceil = 4$ cards of the same suit. But actually: <strong>each player gets 13 cards drawn from all 4 suits so must touch at least $\lceil 13/(13) \rceil = 1$ suit, and since cards come from a shuffled deck, any player <em>could</em> get all one suit</strong>. The claim as stated isn't necessarily true — it requires additional conditions. We replace this problem.</p>
+
+<p><strong>DM3 (Revised).</strong> 13 cards are dealt to one player from a 52-card deck containing 4 suits of 13 cards. Prove the player has at least $\lceil 13/4 \rceil = 4$ cards of the same suit. <em>Proof:</em> 13 cards are distributed among 4 suits (containers). By generalized PHP, at least one suit has $\lceil 13/4 \rceil = 4$ cards. $\blacksquare$</p>
+
+<p><strong>DM4.</strong> $P = \frac{\binom{8}{3}}{2^8} = \frac{56}{256} = \frac{7}{32} \approx 0.2188$.</p>
+
+<p><strong>DM5.</strong> Let $d_i$ = number of handshakes for person $i$. The sum $\sum d_i$ is even (each handshake counted twice). The people with odd $d_i$ contribute an odd amount each; for the total to be even, there must be an even number of odd contributors. $\blacksquare$</p>
+
+<p><strong>DM6.</strong> Each player plays 5 games. If a player has $\leq 2$ wins, they have $\geq 3$ losses. If a player has $\geq 3$ wins, we're done. $\blacksquare$</p>
+
+</section>
+</div>
+<hr>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

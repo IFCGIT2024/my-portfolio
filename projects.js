@@ -19,7 +19,7 @@ const PROJECTS = [
     title: "Discrete Math for CS",
     description:
       "A complete 30-class course bridging discrete mathematics, formal proof, and Java programming. Every concept ships with rigorous proofs and runnable Java code.",
-    path: "New folder (4)/site/index.html",
+    path: "docs/projects/discrete-math/index.html",
     tags: ["Discrete Math", "Java", "Proofs", "Course"],
     badge: "Featured",
     badgeColor: "#6366f1",
@@ -30,7 +30,7 @@ const PROJECTS = [
     title: "Proof Practice Exams",
     description:
       "Interactive proof-step arrangement tool for mastering mathematical proof structure. Drag-and-drop exercises across multiple proof types.",
-    path: "1315HELP/index.html",
+    path: "docs/projects/proofs/index.html",
     tags: ["CSCI 1315", "Proofs", "Interactive"],
     badge: null,
     icon: "∴",
@@ -40,7 +40,7 @@ const PROJECTS = [
     title: "CSCI 1120 Exam Prep",
     description:
       "A full-featured practice exam platform with leaderboards, student profiles, statistics tracking, and timed quiz modes.",
-    path: "csci 1120 prac websiute/index.html",
+    path: "docs/projects/csci-1120-prep/index.html",
     tags: ["CSCI 1120", "Practice Exams", "Quiz"],
     badge: null,
     icon: "🎓",
@@ -50,7 +50,7 @@ const PROJECTS = [
     title: "RE Investment Analyzer",
     description:
       "A real estate investment analysis tool with cash flow projections, target price calculator, deal comparison, and saved deals — all in the browser.",
-    path: "real-estate-analyzer/index.html",
+    path: "docs/projects/re-analyzer/index.html",
     tags: ["Real Estate", "Finance", "Calculator", "Charts"],
     badge: "New",
     badgeColor: "#10b981",

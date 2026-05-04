@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 2 — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="module-02">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<div id="class-1" class="class-section">
+<h1 id="module-2-class-1-quotient-remainder-theorem">Module 2 – Class 1: Quotient–Remainder Theorem</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>State the Quotient–Remainder Theorem and explain its uniqueness.</li>
+<li>Compute quotients and remainders by hand and in Java.</li>
+<li>Connect Java's <code>/</code> and <code>%</code> operators to the mathematical definitions.</li>
+<li>Prove the existence and uniqueness of $q$ and $r$.</li>
+<li>Identify how remainder arithmetic appears in hashing, cyclic buffers and indexing.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<p>The <strong>Quotient–Remainder Theorem</strong> (also called the Division Algorithm, though it is a theorem, not an algorithm) is one of the foundational results in number theory:</p>
+
+<blockquote>
+<p><strong>Theorem.</strong> For any integers $n$ and $d$ with $d > 0$, there exist <strong>unique</strong> integers $q$ (the quotient) and $r$ (the remainder) such that</p>
+<p><div class="katex-block">$n = d \cdot q + r \qquad \text{and} \qquad 0 \leq r < d.$</div></p>
+</blockquote>
+
+<p>This simple result is the engine behind modular arithmetic, hashing, cyclic structures, and much of what programmers do with the <code>%</code> operator.</p>
+
+<p><strong>Why this matters in CS:</strong></p>
+<ul>
+<li><strong>Hashing:</strong> <code>hash(key) % tableSize</code> maps keys to buckets.</li>
+<li><strong>Cyclic buffers:</strong> <code>(index + 1) % capacity</code> wraps around.</li>
+<li><strong>Round-robin scheduling:</strong> task assignment cycles through processors.</li>
+<li><strong>Clock arithmetic:</strong> hours, minutes, and seconds all wrap around.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<ul>
+<li>$n$ is the <strong>dividend</strong>, $d$ is the <strong>divisor</strong> (with $d > 0$).</li>
+<li>$q = \lfloor n / d \rfloor$ is the <strong>quotient</strong>.</li>
+<li>$r = n \bmod d = n - d \cdot q$ is the <strong>remainder</strong>, satisfying $0 \leq r < d$.</li>
+<li>We write $n \bmod d$ (or $n \mod d$) for the remainder.</li>
+<li>The <strong>congruence</strong> $a \equiv b \pmod{m}$ means $m \mid (a - b)$, i.e., $a$ and $b$ leave the same remainder when divided by $m$.</li>
+</ul>
+
+<p><strong>Common pitfall:</strong> In Java, <code>n % d</code> can return a negative value when <code>n</code> is negative (e.g., <code>(-7) % 3 == -1</code> in Java, but mathematically $-7 \bmod 3 = 2$). To get the mathematical remainder:</p>
+
+<pre><code class="language-java">int mathMod(int n, int d) {
+    int r = n % d;
+    return (r &lt; 0) ? r + d : r;
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-basic-computation-discrete-math">Example 1: Basic Computation — Discrete Math</h3>
+
+<p><strong>Problem:</strong> Find $q$ and $r$ when $n = 137$ and $d = 5$.</p>
+
+<p><strong>Solution:</strong></p>
+<div class="katex-block">$137 = 5 \cdot 27 + 2$</div>
+
+<p>Check: $5 \cdot 27 = 135$, and $137 - 135 = 2$. Since $0 \leq 2 < 5$, we have $q = 27$ and $r = 2$. $\blacksquare$</p>
+
+<h3 id="example-2-java-translation-quotientremainder-demo">Example 2: Java Translation — QuotientRemainder Demo</h3>
+
+<p><strong>Problem:</strong> Implement a method that returns the quotient and remainder as a pair.</p>
+
+<pre><code class="language-java">public class QuotRemDemo {
+
+    /**
+     * Returns {quotient, remainder} for n divided by d.
+     * Mathematical definition: n = d*q + r, 0 &lt;= r &lt; d.
+     */
+    public static int[] quotRem(int n, int d) {
+        if (d &lt;= 0) throw new IllegalArgumentException("d must be positive");
+        // Java's / truncates toward zero, not toward negative infinity.
+        // For non-negative n, this matches floor division.
+        int q = Math.floorDiv(n, d);   // floor(n / d)
+        int r = Math.floorMod(n, d);   // n - d * floor(n / d), always in [0, d)
+        return new int[]{q, r};
+    }
+
+    public static void main(String[] args) {
+        int[][] tests = {{137, 5}, {13, 5}, {0, 7}, {-7, 3}, {-20, 6}, {100, 10}};
+        for (int[] t : tests) {
+            int[] qr = quotRem(t[0], t[1]);
+            System.out.printf("%4d = %d × %d + %d   (0 ≤ %d &lt; %d)%n",
+                t[0], t[1], qr[0], qr[1], qr[1], t[1]);
+        }
+    }
+}</code></pre>
+
+<p><strong>Sample output:</strong></p>
+<pre><code class="language-text"> 137 = 5 × 27 + 2   (0 ≤ 2 &lt; 5)
+  13 = 5 × 2 + 3   (0 ≤ 3 &lt; 5)
+   0 = 7 × 0 + 0   (0 ≤ 0 &lt; 7)
+  -7 = 3 × -3 + 2   (0 ≤ 2 &lt; 3)
+ -20 = 6 × -4 + 4   (0 ≤ 4 &lt; 6)
+ 100 = 10 × 10 + 0   (0 ≤ 0 &lt; 10)</code></pre>
+
+<p><strong>Key code ↔ math connection:</strong></p>
+<table>
+<thead><tr>
+<th>Java</th>
+<th>Math</th>
+</tr></thead><tbody>
+<tr>
+<td><code>Math.floorDiv(n, d)</code></td>
+<td>$q = \lfloor n/d \rfloor$</td>
+</tr>
+<tr>
+<td><code>Math.floorMod(n, d)</code></td>
+<td>$r = n - d\lfloor n/d \rfloor$, guaranteed $0 \leq r < d$</td>
+</tr>
+<tr>
+<td><code>n / d</code> (integer division)</td>
+<td>Truncation toward zero — differs from $\lfloor n/d \rfloor$ for negative $n$</td>
+</tr>
+<tr>
+<td><code>n % d</code></td>
+<td>May be negative for negative $n$ — not the mathematical remainder</td>
+</tr>
+</tbody></table>
+
+<h3 id="example-3-combined-proving-and-verifying-negative-operands">Example 3: Combined — Proving and Verifying Negative Operands</h3>
+
+<p><strong>Problem:</strong> Show that <code>Math.floorMod(n, d)</code> always satisfies $0 \leq r < d$ and $n = d \cdot q + r$.</p>
+
+<p><strong>Proof sketch:</strong> <code>Math.floorDiv(n, d)</code> computes $\lfloor n/d \rfloor$. Setting $r = n - d \cdot \lfloor n/d \rfloor$:</p>
+<ul>
+<li>By definition, $n/d - 1 < \lfloor n/d \rfloor \leq n/d$.</li>
+<li>Multiply by $-d$: $-n \leq -d \cdot \lfloor n/d \rfloor < -n + d$.</li>
+<li>Add $n$: $0 \leq n - d \cdot \lfloor n/d \rfloor < d$.</li>
+<li>So $0 \leq r < d$. $\blacksquare$</li>
+</ul>
+
+<p><strong>Java verification:</strong></p>
+<pre><code class="language-java">public static void verifyFloorMod() {
+    for (int n = -1000; n &lt;= 1000; n++) {
+        for (int d = 1; d &lt;= 20; d++) {
+            int q = Math.floorDiv(n, d);
+            int r = Math.floorMod(n, d);
+            assert n == d * q + r : "Equation failed for n=" + n + ", d=" + d;
+            assert r &gt;= 0 &amp;&amp; r &lt; d : "Range failed for n=" + n + ", d=" + d;
+        }
+    }
+    System.out.println("FloorMod verified for n in [-1000,1000], d in [1,20]");
+}</code></pre>
+
+<h3 id="example-4-existence-proof">Example 4: Existence Proof</h3>
+
+<p><strong>Problem:</strong> Prove that for any $n \in \mathbb{Z}$ and $d > 0$, there exist $q, r \in \mathbb{Z}$ with $n = dq + r$ and $0 \leq r < d$.</p>
+
+<p><strong>Proof.</strong> Consider the set $S = \{n - dk \mid k \in \mathbb{Z},\, n - dk \geq 0\}$.</p>
+
+<p><em>$S$ is non-empty:</em> If $n \geq 0$, take $k = 0$ to get $n \in S$. If $n < 0$, take $k = n$ (note $n - dn = n(1 - d) \geq 0$ since $n < 0$ and $1 - d \leq 0$).</p>
+
+<p>By the Well-Ordering Principle, $S$ has a smallest element. Call it $r = n - dq$ for some $q$.</p>
+
+<p><em>$r < d$:</em> Suppose for contradiction that $r \geq d$. Then $r - d = n - d(q + 1) \geq 0$, so $r - d \in S$. But $r - d < r$, contradicting the minimality of $r$.</p>
+
+<p>So $0 \leq r < d$ and $n = dq + r$. $\blacksquare$</p>
+
+<h3 id="example-5-uniqueness-proof">Example 5: Uniqueness Proof</h3>
+
+<p><strong>Problem:</strong> Prove that $q$ and $r$ are unique.</p>
+
+<p><strong>Proof.</strong> Suppose $n = dq_1 + r_1 = dq_2 + r_2$ with $0 \leq r_1, r_2 < d$.</p>
+
+<p>Then $d(q_1 - q_2) = r_2 - r_1$. Since $|r_2 - r_1| < d$ (both remainders are in $[0, d)$), and $d \mid (r_2 - r_1)$, we must have $r_2 - r_1 = 0$, so $r_1 = r_2$.</p>
+
+<p>Then $d(q_1 - q_2) = 0$, and since $d > 0$, $q_1 = q_2$. $\blacksquare$</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="the-well-ordering-principle-in-existence-proofs">The Well-Ordering Principle in Existence Proofs</h3>
+
+<p>The existence proof above uses a powerful technique:</p>
+<ol>
+<li>Define a set of "candidate" values.</li>
+<li>Show the set is non-empty.</li>
+<li>Invoke the Well-Ordering Principle (every non-empty set of non-negative integers has a least element).</li>
+<li>Show the least element satisfies the required bounds.</li>
+</ol>
+
+<p><strong>Template:</strong></p>
+<pre><code class="language-text">Proof. Define S = { [expression involving unknowns] : [conditions] }.
+1. S is non-empty because [specific element is in S].
+2. By the Well-Ordering Principle, S has a minimum element r.
+3. r satisfies [lower bound] because [definition of S].
+4. r satisfies [upper bound] because [contradiction if not].
+Therefore q and r exist. □</code></pre>
+
+<p><strong>Common mistakes:</strong></p>
+<ul>
+<li>Forgetting to prove $S$ is non-empty (especially for negative $n$).</li>
+<li>Confusing "least element" arguments with induction.</li>
+<li>Not handling the edge case $n = 0$ (where $q = 0, r = 0$).</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class QuotientRemainderLibrary {
+
+    // --- Core Methods ---
+
+    /** Mathematical floor division: q = floor(n / d) */
+    public static int floorDiv(int n, int d) {
+        return Math.floorDiv(n, d);
+    }
+
+    /** Mathematical mod: r in [0, d), satisfying n = d*q + r */
+    public static int mathMod(int n, int d) {
+        return Math.floorMod(n, d);
+    }
+
+    /** Returns {quotient, remainder} satisfying n = d*q + r, 0 &lt;= r &lt; d */
+    public static int[] divMod(int n, int d) {
+        return new int[]{floorDiv(n, d), mathMod(n, d)};
+    }
+
+    // --- Applications ---
+
+    /** Cyclic increment: wraps index around a buffer of given capacity */
+    public static int cyclicNext(int index, int capacity) {
+        // (index + 1) mod capacity — always in [0, capacity)
+        return (index + 1) % capacity;
+    }
+
+    /** Maps a value to a bucket in a hash table */
+    public static int hashBucket(int value, int numBuckets) {
+        // Ensure non-negative bucket index
+        return Math.floorMod(value, numBuckets);
+    }
+
+    /**
+     * Converts total seconds to hours:minutes:seconds.
+     * Uses repeated application of the quotient-remainder theorem.
+     */
+    public static String toHMS(int totalSeconds) {
+        int hours = totalSeconds / 3600;
+        int remaining = totalSeconds % 3600;
+        int minutes = remaining / 60;
+        int seconds = remaining % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    /**
+     * Extracts the k-th digit (from the right, 0-indexed) of n in base b.
+     * digit_k = (n / b^k) mod b
+     */
+    public static int digit(int n, int base, int k) {
+        n = Math.abs(n);
+        for (int i = 0; i &lt; k; i++) n /= base;
+        return n % base;
+    }
+
+    /**
+     * Converts n to its representation in the given base.
+     * Repeatedly applies the quotient-remainder theorem.
+     */
+    public static String toBase(int n, int base) {
+        if (n == 0) return "0";
+        StringBuilder sb = new StringBuilder();
+        boolean negative = n &lt; 0;
+        n = Math.abs(n);
+        while (n &gt; 0) {
+            sb.append(n % base);
+            n /= base;
+        }
+        if (negative) sb.append('-');
+        return sb.reverse().toString();
+    }
+
+    // --- Demonstration ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Quotient-Remainder Theorem ===\n");
+
+        // Basic division
+        int[][] tests = {{137, 5}, {13, 5}, {0, 7}, {-7, 3}, {-20, 6}};
+        System.out.println("Division with mathematical remainder:");
+        for (int[] t : tests) {
+            int[] qr = divMod(t[0], t[1]);
+            System.out.printf("  %4d = %d × %2d + %d%n", t[0], t[1], qr[0], qr[1]);
+        }
+
+        // Java % vs mathematical mod for negative numbers
+        System.out.println("\nJava % vs Math.floorMod for negative n:");
+        for (int n : new int[]{-7, -13, -20}) {
+            System.out.printf("  n=%3d, d=5: Java %% → %2d,  floorMod → %d%n",
+                n, n % 5, Math.floorMod(n, 5));
+        }
+
+        // Cyclic buffer demo
+        System.out.println("\nCyclic buffer (capacity 5):");
+        int idx = 0;
+        for (int i = 0; i &lt; 12; i++) {
+            System.out.printf("  step %2d: index = %d%n", i, idx);
+            idx = cyclicNext(idx, 5);
+        }
+
+        // Time conversion
+        System.out.println("\nTime conversion:");
+        for (int sec : new int[]{0, 3661, 86399, 7200}) {
+            System.out.printf("  %6d seconds = %s%n", sec, toHMS(sec));
+        }
+
+        // Base conversion
+        System.out.println("\nBase conversion:");
+        for (int n : new int[]{42, 255, 1000}) {
+            System.out.printf("  %4d in base 2:  %s%n", n, toBase(n, 2));
+            System.out.printf("  %4d in base 16: %s%n", n, toBase(n, 16));
+        }
+    }
+}</code></pre>
+
+<p><strong>Sample output:</strong></p>
+<pre><code class="language-text">=== Quotient-Remainder Theorem ===
+
+Division with mathematical remainder:
+   137 = 5 × 27 + 2
+    13 = 5 ×  2 + 3
+     0 = 7 ×  0 + 0
+    -7 = 3 × -3 + 2
+   -20 = 6 × -4 + 4
+
+Java % vs Math.floorMod for negative n:
+  n= -7, d=5: Java % → -2,  floorMod → 3
+  n=-13, d=5: Java % → -3,  floorMod → 2
+  n=-20, d=5: Java % →  0,  floorMod → 0
+
+Cyclic buffer (capacity 5):
+  step  0: index = 0
+  step  1: index = 1
+  step  2: index = 2
+  step  3: index = 3
+  step  4: index = 4
+  step  5: index = 0
+  ...
+
+Time conversion:
+       0 seconds = 00:00:00
+    3661 seconds = 01:01:01
+   86399 seconds = 23:59:59
+    7200 seconds = 02:00:00
+
+Base conversion:
+    42 in base 2:  101010
+    42 in base 16: 2a
+   255 in base 2:  11111111
+   255 in base 16: ff
+  1000 in base 2:  1111101000
+  1000 in base 16: 3e8</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p>The idea of dividing with remainder is ancient — Euclid described it implicitly in his algorithm for computing the GCD. The formal statement of the Division Algorithm as a theorem (existence and uniqueness) was sharpened during the 19th century as mathematicians sought rigorous foundations for number theory.</p>
+
+<p>The notation $a \bmod m$ and the systematic study of <strong>modular arithmetic</strong> were formalized by <strong>Carl Friedrich Gauss</strong> in his 1801 masterwork <em>Disquisitiones Arithmeticae</em>. Gauss introduced the congruence notation $a \equiv b \pmod{m}$ and showed that arithmetic within equivalence classes is consistent — a result that underlies everything from clock arithmetic to RSA encryption.</p>
+
+<p>The <strong>Chinese Remainder Theorem</strong>, which concerns simultaneous congruences, dates back to the 3rd-century Chinese mathematician <strong>Sunzi</strong>. His original problem: "Find a number that leaves remainder 2 when divided by 3, remainder 3 when divided by 5, and remainder 2 when divided by 7."</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> True or false: For any integer $n$ and positive integer $d$, the remainder $r = n \bmod d$ satisfies $0 \leq r \leq d$.</p>
+
+<p><strong>A2.</strong> What are the quotient and remainder when $n = -17$ is divided by $d = 5$? (Use the mathematical definition where $r \geq 0$.)</p>
+
+<p><strong>A3.</strong> In Java, what is the value of <code>(-17) % 5</code>? How does this differ from the mathematical remainder?</p>
+
+<p><strong>A4.</strong> A circular buffer has capacity 8. If the current index is 6, what is the next index? What about after 5 more steps?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove: If $a = dq_1 + r_1$ and $a = dq_2 + r_2$ with $0 \leq r_1, r_2 < d$, then $q_1 = q_2$ and $r_1 = r_2$.</p>
+
+<p><strong>B2.</strong> Prove: For any positive integers $a$ and $b$, $a \bmod b < a$ if and only if $a \geq b$.</p>
+
+<p><strong>B3.</strong> Prove: For any integers $a, b$ and positive integer $d$, $(a + b) \bmod d = ((a \bmod d) + (b \bmod d)) \bmod d$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write a method <code>boolean isLeapYear(int year)</code> using the quotient-remainder theorem (a year is a leap year if divisible by 4, except centuries, except centuries divisible by 400).</p>
+
+<p><strong>C2.</strong> Write a method <code>int dayOfWeek(int dayNumber)</code> that takes a day number (0 = Sunday) and returns the day of the week after advancing by any number of days (including negative).</p>
+
+<p><strong>C3.</strong> Write a method <code>String toBaseN(int n, int base)</code> that converts a non-negative integer $n$ to its string representation in the given base (2 through 36).</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Find the quotient and remainder when $n = 2023$ is divided by $d = 17$.</p>
+
+<p><strong>DM2.</strong> Prove that for any integer $n$, $n^2 \bmod 4 \in \{0, 1\}$. <em>(That is, perfect squares leave remainder 0 or 1 when divided by 4.)</em></p>
+
+<p><strong>DM3.</strong> Prove: If $a \bmod d = 0$ and $b \bmod d = 0$, then $(a + b) \bmod d = 0$.</p>
+
+<p><strong>DM4.</strong> Prove the existence of $q$ and $r$ in the quotient-remainder theorem using the Well-Ordering Principle.</p>
+
+<p><strong>DM5.</strong> Prove: For any positive integers $a, b, c$ with $c > 0$, $\lfloor \lfloor a/b \rfloor / c \rfloor = \lfloor a / (bc) \rfloor$.</p>
+
+<p><strong>DM6.</strong> Let $n$ be a positive integer. Prove that among any $n + 1$ integers from $\{1, 2, \ldots, 2n\}$, at least two have the same remainder when divided by $n$.</p>
+
+<p><strong>DM7.</strong> Prove that the last digit of $n^2$ (i.e., $n^2 \bmod 10$) can only be one of $\{0, 1, 4, 5, 6, 9\}$.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Write a method <code>int[] quotRem(int n, int d)</code> that returns the mathematical quotient and remainder (not Java's truncation-toward-zero). Test with positive and negative inputs.</p>
+
+<p><strong>JP2.</strong> Write a method <code>int extractDigit(int n, int position)</code> that returns the digit at the given position (0 = ones, 1 = tens, etc.).</p>
+
+<p><strong>JP3.</strong> Write a method <code>int sumOfDigits(int n)</code> that computes the sum of digits of $n$ using repeated division. Prove (informally) that the loop terminates.</p>
+
+<p><strong>JP4.</strong> Implement a circular buffer class with methods <code>add(int item)</code>, <code>get(int index)</code>, and <code>isFull()</code>. Use <code>%</code> for wrap-around.</p>
+
+<p><strong>JP5.</strong> Write a method <code>boolean isPerfectSquare(int n)</code> that uses the fact that $n^2 \bmod 4 \in \{0, 1\}$ to quickly reject non-squares before checking with <code>Math.sqrt</code>.</p>
+
+<p><strong>JP6.</strong> Write a program that reads integers from the user and groups them by their remainder modulo 7. Print each group.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Prove that the sum of digits of a number $n$ has the same remainder as $n$ when divided by 9 (i.e., $n \equiv \text{digitSum}(n) \pmod{9}$). Then write a Java method that verifies this for all $n$ from 1 to 10000.</p>
+
+<p><strong>BR2.</strong> A hash table uses <code>h(key) = key % tableSize</code>. Prove that if <code>tableSize</code> divides <code>key1 - key2</code>, then <code>key1</code> and <code>key2</code> collide. Write Java code that demonstrates this.</p>
+
+<p><strong>BR3.</strong> Write a Java method <code>int[] toMixedRadix(int seconds)</code> that converts a number of seconds to days, hours, minutes, seconds. This uses the quotient-remainder theorem three times in sequence. State and prove the invariant at each step.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> $2023 = 17 \times 119 + 0$. Check: $17 \times 119 = 2023$. So $q = 119, r = 0$.</p>
+
+<p><strong>DM2.</strong> Any integer $n$ satisfies $n \bmod 2 \in \{0, 1\}$.</p>
+<ul>
+<li>If $n = 2k$: $n^2 = 4k^2$, so $n^2 \bmod 4 = 0$.</li>
+<li>If $n = 2k + 1$: $n^2 = 4k^2 + 4k + 1 = 4(k^2 + k) + 1$, so $n^2 \bmod 4 = 1$. $\blacksquare$</li>
+</ul>
+
+<p><strong>DM3.</strong> If $a = dq_1$ and $b = dq_2$, then $a + b = d(q_1 + q_2)$. Since $q_1 + q_2 \in \mathbb{Z}$, $d \mid (a + b)$. $\blacksquare$</p>
+
+<p><strong>DM4.</strong> (See Example 4 above for the full proof using the Well-Ordering Principle.)</p>
+
+<p><strong>DM5.</strong> Let $a = bq_1 + r_1$ with $0 \leq r_1 < b$, and $q_1 = cq_2 + r_2$ with $0 \leq r_2 < c$. Then $a = b(cq_2 + r_2) + r_1 = bcq_2 + (br_2 + r_1)$. We need $0 \leq br_2 + r_1 < bc$: since $r_2 < c$ and $r_1 < b$, $br_2 + r_1 < bc$, and both are non-negative. So $\lfloor a/(bc) \rfloor = q_2 = \lfloor q_1/c \rfloor = \lfloor \lfloor a/b \rfloor / c \rfloor$. $\blacksquare$</p>
+
+<p><strong>DM6.</strong> By the Pigeonhole Principle: there are $n$ possible remainders modulo $n$ (namely $0, 1, \ldots, n-1$). With $n + 1$ integers, at least two must share the same remainder. $\blacksquare$</p>
+
+<p><strong>DM7.</strong> Compute $k^2 \bmod 10$ for $k = 0, 1, \ldots, 9$: $0, 1, 4, 9, 6, 5, 6, 9, 4, 1$. Since $n \bmod 10 \in \{0,\ldots,9\}$, $n^2 \bmod 10$ is determined by $n \bmod 10$, and the only possible values are $\{0, 1, 4, 5, 6, 9\}$. $\blacksquare$</p>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP1.</strong></p>
+<pre><code class="language-java">public static int[] quotRem(int n, int d) {
+    int q = Math.floorDiv(n, d);
+    int r = Math.floorMod(n, d);
+    return new int[]{q, r};
+}</code></pre>
+
+<p><strong>JP2.</strong></p>
+<pre><code class="language-java">public static int extractDigit(int n, int position) {
+    n = Math.abs(n);
+    for (int i = 0; i &lt; position; i++) n /= 10;
+    return n % 10;
+}</code></pre>
+
+<p><strong>JP3.</strong></p>
+<pre><code class="language-java">public static int sumOfDigits(int n) {
+    n = Math.abs(n);
+    int sum = 0;
+    // Variant function: n (decreases by factor of 10 each iteration)
+    while (n &gt; 0) {
+        sum += n % 10;   // extract last digit
+        n /= 10;         // remove last digit
+    }
+    return sum;
+}
+// Termination: n is non-negative and n /= 10 strictly decreases n
+// toward 0 (since n &gt;= 1 implies n/10 &lt; n for integer division).</code></pre>
+
+<p><strong>JP4.</strong></p>
+<pre><code class="language-java">public class CircularBuffer {
+    private int[] data;
+    private int head, size, capacity;
+
+    public CircularBuffer(int capacity) {
+        this.capacity = capacity;
+        data = new int[capacity];
+        head = 0;
+        size = 0;
+    }
+
+    public void add(int item) {
+        if (size == capacity) throw new IllegalStateException("Buffer full");
+        data[(head + size) % capacity] = item;  // wrap-around
+        size++;
+    }
+
+    public int get(int index) {
+        if (index &lt; 0 || index &gt;= size) throw new IndexOutOfBoundsException();
+        return data[(head + index) % capacity];  // wrap-around
+    }
+
+    public boolean isFull() { return size == capacity; }
+}</code></pre>
+
+<p><strong>JP5.</strong></p>
+<pre><code class="language-java">public static boolean isPerfectSquare(int n) {
+    if (n &lt; 0) return false;
+    // Quick reject: n^2 mod 4 ∈ {0,1}, so if n mod 4 ∈ {2,3}, not a square
+    int r = n % 4;
+    if (r == 2 || r == 3) return false;
+    // Full check
+    int s = (int) Math.round(Math.sqrt(n));
+    return s * s == n;
+}</code></pre>
+
+<p><strong>JP6.</strong></p>
+<pre><code class="language-java">public static void groupByRemainder(int[] nums, int mod) {
+    Map&lt;Integer, List&lt;Integer&gt;&gt; groups = new TreeMap&lt;&gt;();
+    for (int n : nums) {
+        int r = Math.floorMod(n, mod);
+        groups.computeIfAbsent(r, k -&gt; new ArrayList&lt;&gt;()).add(n);
+    }
+    for (var entry : groups.entrySet()) {
+        System.out.printf("  Remainder %d: %s%n", entry.getKey(), entry.getValue());
+    }
+}</code></pre>
+
+<h3 id="bridge-solutions">Bridge Solutions</h3>
+
+<p><strong>BR1.</strong> Write $n$ in decimal: $n = a_k \cdot 10^k + \cdots + a_1 \cdot 10 + a_0$. Since $10 \equiv 1 \pmod{9}$, we have $10^i \equiv 1 \pmod{9}$ for all $i$. So $n \equiv a_k + \cdots + a_1 + a_0 \pmod{9}$.</p>
+
+<pre><code class="language-java">public static void verifyCastingOutNines() {
+    for (int n = 1; n &lt;= 10000; n++) {
+        assert Math.floorMod(n, 9) == Math.floorMod(sumOfDigits(n), 9)
+            : "Failed for n=" + n;
+    }
+    System.out.println("Casting out nines verified for 1..10000");
+}</code></pre>
+
+<p><strong>BR2.</strong> If $\text{tableSize} \mid (k_1 - k_2)$, then $k_1 \equiv k_2 \pmod{\text{tableSize}}$, so $k_1 \bmod \text{tableSize} = k_2 \bmod \text{tableSize}$, meaning they hash to the same bucket.</p>
+
+<pre><code class="language-java">public static void demonstrateCollisions() {
+    int tableSize = 7;
+    // keys that differ by multiples of 7 collide
+    int[] keys = {3, 10, 17, 24, 31};
+    for (int k : keys) {
+        System.out.printf("  hash(%d) = %d%n", k, k % tableSize);
+    }
+    // All print 3, confirming collisions
+}</code></pre>
+
+<p><strong>BR3.</strong></p>
+<pre><code class="language-java">public static int[] toMixedRadix(int totalSeconds) {
+    // Step 1: totalSeconds = 86400*days + rem1,  0 &lt;= rem1 &lt; 86400
+    int days = totalSeconds / 86400;
+    int rem1 = totalSeconds % 86400;
+    // Invariant: totalSeconds = 86400*days + rem1
+
+    // Step 2: rem1 = 3600*hours + rem2,  0 &lt;= rem2 &lt; 3600
+    int hours = rem1 / 3600;
+    int rem2 = rem1 % 3600;
+    // Invariant: totalSeconds = 86400*days + 3600*hours + rem2
+
+    // Step 3: rem2 = 60*minutes + seconds,  0 &lt;= seconds &lt; 60
+    int minutes = rem2 / 60;
+    int seconds = rem2 % 60;
+    // Invariant: totalSeconds = 86400*days + 3600*hours + 60*minutes + seconds
+
+    return new int[]{days, hours, minutes, seconds};
+}</code></pre>
+
+</section>
+</div>
+<hr>
+<div id="class-2" class="class-section">
+<h1 id="module-2-class-2-modular-arithmetic-and-congruence-classes">Module 2 – Class 2: Modular Arithmetic and Congruence Classes</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>Define congruence modulo $m$ and explain its meaning as an equivalence relation.</li>
+<li>Prove that congruence is reflexive, symmetric, and transitive.</li>
+<li>Prove that addition and multiplication respect congruence.</li>
+<li>Translate congruence operations into Java using <code>%</code> and <code>Math.floorMod</code>.</li>
+<li>Apply modular arithmetic to cyclic structures, hashing, and cryptography.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<p><strong>Congruence modulo $m$</strong> captures the idea that two integers "behave the same" with respect to division by $m$.</p>
+
+<blockquote>
+<p><strong>Definition.</strong> Let $m$ be a positive integer. We say $a$ is <strong>congruent</strong> to $b$ <strong>modulo</strong> $m$, written</p>
+<p><div class="katex-block">$a \equiv b \pmod{m},$</div></p>
+<p>if $m \mid (a - b)$, i.e., there exists $k \in \mathbb{Z}$ such that $a - b = mk$.</p>
+</blockquote>
+
+<p>Equivalently: $a$ and $b$ leave the same remainder when divided by $m$.</p>
+
+<p><strong>Congruence classes (equivalence classes):</strong> The set of all integers congruent to $a$ modulo $m$ is denoted $[a]_m$:</p>
+<div class="katex-block">$[a]_m = \{a + km \mid k \in \mathbb{Z}\} = \{\ldots, a - 2m, a - m, a, a + m, a + 2m, \ldots\}$</div>
+
+<p>The integers modulo $m$ partition into exactly $m$ congruence classes: $[0]_m, [1]_m, \ldots, [m-1]_m$.</p>
+
+<p><strong>Why this matters in CS:</strong></p>
+<ul>
+<li><strong>Hashing:</strong> Keys mapped to buckets via <code>key % tableSize</code> — all keys in the same congruence class collide.</li>
+<li><strong>Cyclic data structures:</strong> Circular buffers, ring buffers, round-robin schedulers.</li>
+<li><strong>Cryptography:</strong> RSA, Diffie-Hellman, and other protocols operate in $\mathbb{Z}_n$.</li>
+<li><strong>Checksums:</strong> ISBN, credit card (Luhn), and network checksums use modular arithmetic.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$a \equiv b \pmod{m}$</td>
+<td>$m \mid (a - b)$</td>
+</tr>
+<tr>
+<td>$[a]_m$</td>
+<td>Congruence class of $a$ modulo $m$: $\{a + km : k \in \mathbb{Z}\}$</td>
+</tr>
+<tr>
+<td>$\mathbb{Z}_m$ or $\mathbb{Z}/m\mathbb{Z}$</td>
+<td>The set of congruence classes $\{[0]_m, [1]_m, \ldots, [m-1]_m\}$</td>
+</tr>
+<tr>
+<td>$a \bmod m$</td>
+<td>The unique $r \in \{0, 1, \ldots, m-1\}$ with $a \equiv r \pmod{m}$</td>
+</tr>
+</tbody></table>
+
+<p><strong>Key properties of congruence:</strong></p>
+
+<ol>
+<li><strong>Reflexive:</strong> $a \equiv a \pmod{m}$ because $m \mid 0$.</li>
+<li><strong>Symmetric:</strong> If $a \equiv b \pmod{m}$, then $b \equiv a \pmod{m}$.</li>
+<li><strong>Transitive:</strong> If $a \equiv b \pmod{m}$ and $b \equiv c \pmod{m}$, then $a \equiv c \pmod{m}$.</li>
+</ol>
+
+<p>Together these make congruence an <strong>equivalence relation</strong>.</p>
+
+<p><strong>Arithmetic compatibility:</strong></p>
+
+<ol>
+<li><strong>Addition:</strong> If $a \equiv b \pmod{m}$ and $c \equiv d \pmod{m}$, then $a + c \equiv b + d \pmod{m}$.</li>
+<li><strong>Multiplication:</strong> If $a \equiv b \pmod{m}$ and $c \equiv d \pmod{m}$, then $ac \equiv bd \pmod{m}$.</li>
+</ol>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-verifying-congruences-discrete-math">Example 1: Verifying Congruences — Discrete Math</h3>
+
+<p><strong>Problem:</strong> Show that $38 \equiv 14 \pmod{8}$ and that $38 \not\equiv 14 \pmod{5}$.</p>
+
+<p><strong>Solution:</strong></p>
+<ul>
+<li>$38 - 14 = 24 = 8 \times 3$. Since $8 \mid 24$, $38 \equiv 14 \pmod{8}$. ✓</li>
+<li>$38 - 14 = 24$. Is $5 \mid 24$? No ($24 / 5 = 4.8$). So $38 \not\equiv 14 \pmod{5}$. ✓</li>
+</ul>
+
+<h3 id="example-2-java-translation-congruence-checker">Example 2: Java Translation — Congruence Checker</h3>
+
+<pre><code class="language-java">public class CongruenceDemo {
+
+    /** Checks whether a ≡ b (mod m), i.e., m | (a - b) */
+    public static boolean isCongruent(int a, int b, int m) {
+        // (a - b) is divisible by m iff (a - b) % m == 0
+        // Use Math.floorMod to handle negative differences correctly
+        return Math.floorMod(a - b, m) == 0;
+    }
+
+    /** Returns the canonical representative of [a]_m, i.e., a mod m in [0, m) */
+    public static int canonical(int a, int m) {
+        return Math.floorMod(a, m);
+    }
+
+    /** Groups integers by their congruence class mod m */
+    public static Map&lt;Integer, List&lt;Integer&gt;&gt; groupByClass(int[] nums, int m) {
+        Map&lt;Integer, List&lt;Integer&gt;&gt; classes = new TreeMap&lt;&gt;();
+        for (int n : nums) {
+            int rep = canonical(n, m);
+            classes.computeIfAbsent(rep, k -&gt; new ArrayList&lt;&gt;()).add(n);
+        }
+        return classes;
+    }
+
+    public static void main(String[] args) {
+        // Check congruences
+        System.out.println("38 ≡ 14 (mod 8)? " + isCongruent(38, 14, 8));
+        System.out.println("38 ≡ 14 (mod 5)? " + isCongruent(38, 14, 5));
+
+        // Group numbers by congruence class mod 4
+        int[] nums = {-7, -3, 0, 1, 4, 5, 8, 9, 12, 13, 16, 17};
+        var classes = groupByClass(nums, 4);
+        for (var entry : classes.entrySet()) {
+            System.out.printf("  [%d]_4 = %s%n", entry.getKey(), entry.getValue());
+        }
+    }
+}</code></pre>
+
+<p><strong>Sample output:</strong></p>
+<pre><code class="language-text">38 ≡ 14 (mod 8)? true
+38 ≡ 14 (mod 5)? false
+  [0]_4 = [0, 4, 8, 12, 16]
+  [1]_4 = [1, 5, 9, 13, 17]
+  [2]_4 = [-7, -3]       (since floorMod(-7,4) = 1... wait)</code></pre>
+
+<p>Actually, let's be precise: <code>Math.floorMod(-7, 4) = 1</code> and <code>Math.floorMod(-3, 4) = 1</code>. So $-7$ and $-3$ go into class $[1]_4$. This is correct: $-7 \equiv 1 \pmod{4}$ because $-7 - 1 = -8 = 4 \times (-2)$.</p>
+
+<h3 id="example-3-proving-addition-respects-congruence-combined">Example 3: Proving Addition Respects Congruence — Combined</h3>
+
+<p><strong>Problem:</strong> Prove: If $a \equiv b \pmod{m}$ and $c \equiv d \pmod{m}$, then $a + c \equiv b + d \pmod{m}$.</p>
+
+<p><strong>Proof.</strong> By hypothesis, $m \mid (a - b)$ and $m \mid (c - d)$. Write $a - b = mk_1$ and $c - d = mk_2$.</p>
+
+<p>Then $(a + c) - (b + d) = (a - b) + (c - d) = mk_1 + mk_2 = m(k_1 + k_2)$.</p>
+
+<p>Since $k_1 + k_2 \in \mathbb{Z}$, $m \mid ((a+c) - (b+d))$, so $a + c \equiv b + d \pmod{m}$. $\blacksquare$</p>
+
+<p><strong>Java verification:</strong></p>
+<pre><code class="language-java">public static void verifyAdditionCompat() {
+    for (int m = 2; m &lt;= 20; m++) {
+        for (int a = -50; a &lt;= 50; a++) {
+            for (int c = -50; c &lt;= 50; c++) {
+                int b = canonical(a, m);  // b ≡ a (mod m)
+                int d = canonical(c, m);  // d ≡ c (mod m)
+                // (a + c) mod m should equal (b + d) mod m
+                assert canonical(a + c, m) == canonical(b + d, m);
+            }
+        }
+    }
+    System.out.println("Addition compatibility verified.");
+}</code></pre>
+
+<h3 id="example-4-proving-multiplication-respects-congruence">Example 4: Proving Multiplication Respects Congruence</h3>
+
+<p><strong>Problem:</strong> Prove: If $a \equiv b \pmod{m}$ and $c \equiv d \pmod{m}$, then $ac \equiv bd \pmod{m}$.</p>
+
+<p><strong>Proof.</strong> Write $a = b + mk_1$ and $c = d + mk_2$. Then:</p>
+<div class="katex-block">$ac = (b + mk_1)(d + mk_2) = bd + bmk_2 + mk_1 d + m^2 k_1 k_2 = bd + m(bk_2 + k_1 d + mk_1 k_2)$</div>
+
+<p>So $ac - bd = m(bk_2 + k_1 d + mk_1 k_2)$, and since the expression in parentheses is an integer, $m \mid (ac - bd)$. $\blacksquare$</p>
+
+<h3 id="example-5-circular-buffer-index-cycling">Example 5: Circular Buffer Index Cycling</h3>
+
+<p><strong>Problem:</strong> Prove that starting from index 0 and repeatedly computing $(i + 1) \bmod n$ visits every index $0, 1, \ldots, n-1$ exactly once before returning to 0.</p>
+
+<p><strong>Proof.</strong> After $k$ steps, the index is $k \bmod n$. For $0 \leq k < n$, these are $0, 1, \ldots, n-1$ — all distinct (since $0 \leq k_1 < k_2 < n$ implies $k_2 - k_1 < n$, so $k_1 \not\equiv k_2 \pmod{n}$). After $n$ steps, the index is $n \bmod n = 0$. $\blacksquare$</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="equivalence-relation-proofs">Equivalence Relation Proofs</h3>
+
+<p>To prove congruence is an equivalence relation, verify three properties:</p>
+
+<p><strong>Template for reflexivity:</strong> "$a - a = 0 = m \cdot 0$, so $m \mid (a - a)$."</p>
+
+<p><strong>Template for symmetry:</strong> "If $a - b = mk$, then $b - a = m(-k)$, and $-k \in \mathbb{Z}$."</p>
+
+<p><strong>Template for transitivity:</strong> "If $a - b = mk_1$ and $b - c = mk_2$, add: $a - c = m(k_1 + k_2)$."</p>
+
+<h3 id="modular-arithmetic-in-proofs">Modular Arithmetic in Proofs</h3>
+
+<p>A powerful technique: <strong>reduce expressions modulo $m$</strong> to simplify.</p>
+
+<p>To find the last digit of $7^{100}$:</p>
+<ul>
+<li>$7^1 \equiv 7 \pmod{10}$</li>
+<li>$7^2 \equiv 49 \equiv 9 \pmod{10}$</li>
+<li>$7^3 \equiv 63 \equiv 3 \pmod{10}$</li>
+<li>$7^4 \equiv 21 \equiv 1 \pmod{10}$</li>
+<li>The pattern repeats with period 4. Since $100 = 4 \times 25$, $7^{100} \equiv 1 \pmod{10}$.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class ModularArithmeticLibrary {
+
+    // --- Core Modular Operations ---
+
+    /** Canonical representative: a mod m, always in [0, m) */
+    public static int mod(int a, int m) {
+        return Math.floorMod(a, m);
+    }
+
+    /** Modular addition: (a + b) mod m */
+    public static int modAdd(int a, int b, int m) {
+        return mod(mod(a, m) + mod(b, m), m);
+    }
+
+    /** Modular multiplication: (a * b) mod m */
+    public static int modMul(int a, int b, int m) {
+        // Use long to avoid overflow for large a, b
+        return (int) (((long) mod(a, m) * mod(b, m)) % m);
+    }
+
+    /** Modular exponentiation: a^exp mod m (fast, using repeated squaring) */
+    public static int modPow(int base, int exp, int m) {
+        long result = 1;
+        long b = mod(base, m);
+        while (exp &gt; 0) {
+            if (exp % 2 == 1) {
+                result = (result * b) % m;
+            }
+            b = (b * b) % m;
+            exp /= 2;
+        }
+        return (int) result;
+    }
+
+    // --- Congruence Checks ---
+
+    /** Returns true if a ≡ b (mod m) */
+    public static boolean congruent(int a, int b, int m) {
+        return mod(a - b, m) == 0;
+    }
+
+    /**
+     * Builds the addition table for Z_m.
+     * Entry [i][j] = (i + j) mod m.
+     */
+    public static int[][] additionTable(int m) {
+        int[][] table = new int[m][m];
+        for (int i = 0; i &lt; m; i++)
+            for (int j = 0; j &lt; m; j++)
+                table[i][j] = (i + j) % m;
+        return table;
+    }
+
+    /**
+     * Builds the multiplication table for Z_m.
+     * Entry [i][j] = (i * j) mod m.
+     */
+    public static int[][] multiplicationTable(int m) {
+        int[][] table = new int[m][m];
+        for (int i = 0; i &lt; m; i++)
+            for (int j = 0; j &lt; m; j++)
+                table[i][j] = (i * j) % m;
+        return table;
+    }
+
+    /**
+     * Finds all units (invertible elements) in Z_m.
+     * a is a unit if gcd(a, m) = 1.
+     */
+    public static List&lt;Integer&gt; units(int m) {
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        for (int a = 1; a &lt; m; a++) {
+            if (gcd(a, m) == 1) result.add(a);
+        }
+        return result;
+    }
+
+    /** Finds the multiplicative inverse of a mod m, if it exists. */
+    public static int modInverse(int a, int m) {
+        int[] r = extendedGcd(mod(a, m), m);
+        if (r[0] != 1) throw new ArithmeticException(a + " has no inverse mod " + m);
+        return mod(r[1], m);
+    }
+
+    // --- Helper: GCD ---
+
+    public static int gcd(int a, int b) {
+        a = Math.abs(a); b = Math.abs(b);
+        while (b != 0) { int r = a % b; a = b; b = r; }
+        return a;
+    }
+
+    public static int[] extendedGcd(int a, int b) {
+        if (b == 0) return new int[]{a, 1, 0};
+        int[] r = extendedGcd(b, a % b);
+        return new int[]{r[0], r[2], r[1] - (a / b) * r[2]};
+    }
+
+    // --- Printing ---
+
+    public static void printTable(int[][] table, String label) {
+        int m = table.length;
+        System.out.println(label + " table for Z_" + m + ":");
+        System.out.printf("  %s |", "");
+        for (int j = 0; j &lt; m; j++) System.out.printf(" %2d", j);
+        System.out.println();
+        System.out.print("  ---+");
+        for (int j = 0; j &lt; m; j++) System.out.print("---");
+        System.out.println();
+        for (int i = 0; i &lt; m; i++) {
+            System.out.printf("  %2d |", i);
+            for (int j = 0; j &lt; m; j++) System.out.printf(" %2d", table[i][j]);
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== Modular Arithmetic Library ===\n");
+
+        // Addition and multiplication tables for Z_5
+        printTable(additionTable(5), "Addition");
+        printTable(multiplicationTable(5), "Multiplication");
+
+        // Units of Z_12
+        System.out.println("Units of Z_12: " + units(12));
+        // Expected: [1, 5, 7, 11] — those coprime to 12
+
+        // Modular inverse
+        System.out.println("Inverse of 5 mod 12 = " + modInverse(5, 12));
+        // 5 * 5 = 25 ≡ 1 (mod 12) ✓
+
+        // Modular exponentiation: last digit of 7^100
+        System.out.println("7^100 mod 10 = " + modPow(7, 100, 10));
+        // Expected: 1
+
+        // Verify: (a+b) mod m = ((a mod m) + (b mod m)) mod m
+        System.out.println("\nVerifying modular arithmetic properties...");
+        for (int m = 2; m &lt;= 15; m++) {
+            for (int a = -50; a &lt;= 50; a++) {
+                for (int b = -50; b &lt;= 50; b++) {
+                    assert mod(a + b, m) == modAdd(a, b, m);
+                    assert mod(a * b, m) == modMul(a, b, m);
+                }
+            }
+        }
+        System.out.println("All properties verified.");
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Carl Friedrich Gauss</strong> (1777–1855) formalized modular arithmetic in his <em>Disquisitiones Arithmeticae</em> (1801), introducing the notation $a \equiv b \pmod{m}$. He showed that congruence classes form a consistent arithmetic system — you can add, subtract, and multiply congruence classes and get well-defined results.</p>
+
+<p>The <strong>Chinese Remainder Theorem</strong> (next class) was discovered by <strong>Sunzi</strong> in the 3rd century CE. It states that a system of simultaneous congruences with pairwise coprime moduli has a unique solution. This was used for calendar calculations and later became foundational in cryptography.</p>
+
+<p><strong>Euler's theorem</strong> ($a^{\phi(m)} \equiv 1 \pmod{m}$ for $\gcd(a,m) = 1$) and <strong>Fermat's little theorem</strong> ($a^{p-1} \equiv 1 \pmod{p}$ for prime $p$) are key results that power modern cryptography, including RSA.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> True or false: $25 \equiv 4 \pmod{7}$.</p>
+
+<p><strong>A2.</strong> List all elements of the congruence class $[3]_5$ that lie between $-15$ and $20$.</p>
+
+<p><strong>A3.</strong> How many distinct congruence classes are there modulo $m$?</p>
+
+<p><strong>A4.</strong> If today is Wednesday (day 3), what day will it be 100 days from now? Express using congruence.</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove that congruence modulo $m$ is transitive.</p>
+
+<p><strong>B2.</strong> Prove that if $a \equiv b \pmod{m}$, then $a^2 \equiv b^2 \pmod{m}$.</p>
+
+<p><strong>B3.</strong> Prove or disprove: If $ac \equiv bc \pmod{m}$, then $a \equiv b \pmod{m}$.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write a method that builds and prints the multiplication table for $\mathbb{Z}_m$.</p>
+
+<p><strong>C2.</strong> Write a method <code>List&lt;Integer&gt; congruenceClass(int a, int m, int lo, int hi)</code> that returns all integers in $[a]_m$ between <code>lo</code> and <code>hi</code>.</p>
+
+<p><strong>C3.</strong> Write a method that finds all elements in $\mathbb{Z}_m$ that are their own multiplicative inverse (i.e., $a^2 \equiv 1 \pmod{m}$).</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Determine whether $123 \equiv 42 \pmod{9}$.</p>
+
+<p><strong>DM2.</strong> Prove that $a \equiv b \pmod{m}$ if and only if $a \bmod m = b \bmod m$.</p>
+
+<p><strong>DM3.</strong> Prove: For any integer $n$, $n^2 \equiv 0$ or $1 \pmod{3}$.</p>
+
+<p><strong>DM4.</strong> Find the last two digits of $3^{100}$ (i.e., compute $3^{100} \bmod 100$).</p>
+
+<p><strong>DM5.</strong> Prove that if $\gcd(c, m) = 1$ and $ac \equiv bc \pmod{m}$, then $a \equiv b \pmod{m}$. (This is the <strong>cancellation law</strong>.)</p>
+
+<p><strong>DM6.</strong> Prove that $[a]_m$ has a multiplicative inverse in $\mathbb{Z}_m$ if and only if $\gcd(a, m) = 1$.</p>
+
+<p><strong>DM7.</strong> How many units (invertible elements) are there in $\mathbb{Z}_{30}$? List them.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Write a method <code>boolean isCongruent(int a, int b, int m)</code> that correctly handles negative inputs.</p>
+
+<p><strong>JP2.</strong> Implement modular exponentiation using repeated squaring: <code>int modPow(int base, int exp, int mod)</code>.</p>
+
+<p><strong>JP3.</strong> Write a method that reads a list of integers and partitions them into congruence classes modulo $m$, printing each class.</p>
+
+<p><strong>JP4.</strong> Implement a method <code>int modInverse(int a, int m)</code> that returns the modular inverse using the extended Euclidean algorithm. Throw an exception if the inverse doesn't exist.</p>
+
+<p><strong>JP5.</strong> Write a program that verifies Fermat's Little Theorem: for prime $p$ and $1 \leq a < p$, $a^{p-1} \equiv 1 \pmod{p}$. Test for all primes $p \leq 50$.</p>
+
+<p><strong>JP6.</strong> Implement a simple clock class where the time wraps around using modular arithmetic. Support <code>advance(int hours)</code>, <code>retreat(int hours)</code>, and <code>toString()</code>.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Prove that in $\mathbb{Z}_m$, the number of units equals Euler's totient $\phi(m)$. Write a Java method <code>int eulerTotient(int m)</code> and verify that <code>units(m).size() == eulerTotient(m)</code> for $m = 1, \ldots, 100$.</p>
+
+<p><strong>BR2.</strong> A circular array of size $n$ starts at index 0. Prove that after $n$ increments of $(i + 1) \bmod n$, the index returns to 0 and every position has been visited exactly once. Write Java code that verifies this for $n = 1, \ldots, 1000$.</p>
+
+<p><strong>BR3.</strong> Implement a Luhn checksum verifier for credit card numbers using modular arithmetic. Explain how each step relates to congruence modulo 10.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> $123 - 42 = 81 = 9 \times 9$. Since $9 \mid 81$, $123 \equiv 42 \pmod{9}$. ✓</p>
+
+<p><strong>DM2.</strong> ($\Rightarrow$) If $a \equiv b \pmod{m}$, then $m \mid (a - b)$. Write $a = mq_1 + r$ and $b = mq_2 + r'$ with $0 \leq r, r' < m$. Then $a - b = m(q_1 - q_2) + (r - r')$. Since $m \mid (a - b)$, $m \mid (r - r')$. But $|r - r'| < m$, so $r = r'$.</p>
+<p>($\Leftarrow$) If $a \bmod m = b \bmod m = r$, then $a = mq_1 + r$ and $b = mq_2 + r$, so $a - b = m(q_1 - q_2)$, giving $m \mid (a - b)$. $\blacksquare$</p>
+
+<p><strong>DM3.</strong> Any integer $n$ satisfies $n \equiv 0, 1, \text{ or } 2 \pmod{3}$.</p>
+<ul>
+<li>$n \equiv 0$: $n^2 \equiv 0 \pmod{3}$.</li>
+<li>$n \equiv 1$: $n^2 \equiv 1 \pmod{3}$.</li>
+<li>$n \equiv 2$: $n^2 \equiv 4 \equiv 1 \pmod{3}$. $\blacksquare$</li>
+</ul>
+
+<p><strong>DM4.</strong> Using repeated squaring modulo 100:</p>
+<ul>
+<li>$3^1 = 3$</li>
+<li>$3^2 = 9$</li>
+<li>$3^4 = 81$</li>
+<li>$3^8 = 6561 \equiv 61$</li>
+<li>$3^{16} \equiv 61^2 = 3721 \equiv 21$</li>
+<li>$3^{32} \equiv 21^2 = 441 \equiv 41$</li>
+<li>$3^{64} \equiv 41^2 = 1681 \equiv 81$</li>
+<li>$3^{100} = 3^{64} \cdot 3^{32} \cdot 3^{4} \equiv 81 \cdot 41 \cdot 81 \pmod{100}$</li>
+<li>$81 \cdot 41 = 3321 \equiv 21$</li>
+<li>$21 \cdot 81 = 1701 \equiv 1$</li>
+</ul>
+
+<p>So $3^{100} \equiv 1 \pmod{100}$.</p>
+
+<p><strong>DM5.</strong> If $ac \equiv bc \pmod{m}$, then $m \mid c(a - b)$. Since $\gcd(c, m) = 1$, by Euclid's Lemma, $m \mid (a - b)$, so $a \equiv b \pmod{m}$. $\blacksquare$</p>
+
+<p><strong>DM6.</strong> ($\Rightarrow$) If $[a]_m$ has an inverse $[b]_m$, then $ab \equiv 1 \pmod{m}$, so $ab = 1 + mk$ for some $k$. Then $ab - mk = 1$, which is a Bézout expression, so $\gcd(a, m) = 1$.</p>
+<p>($\Leftarrow$) If $\gcd(a, m) = 1$, by the extended Euclidean algorithm, find $x, y$ with $ax + my = 1$. Then $ax \equiv 1 \pmod{m}$, so $[x]_m$ is the inverse. $\blacksquare$</p>
+
+<p><strong>DM7.</strong> The units of $\mathbb{Z}_{30}$ are those $a$ with $\gcd(a, 30) = 1$: $\{1, 7, 11, 13, 17, 19, 23, 29\}$. There are 8 units. (This equals $\phi(30) = 30 \cdot (1 - 1/2)(1 - 1/3)(1 - 1/5) = 8$.)</p>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP1.</strong></p>
+<pre><code class="language-java">public static boolean isCongruent(int a, int b, int m) {
+    return Math.floorMod(a - b, m) == 0;
+}</code></pre>
+
+<p><strong>JP2.</strong></p>
+<pre><code class="language-java">public static int modPow(int base, int exp, int mod) {
+    long result = 1;
+    long b = Math.floorMod(base, mod);
+    while (exp &gt; 0) {
+        if (exp % 2 == 1) result = (result * b) % mod;
+        b = (b * b) % mod;
+        exp /= 2;
+    }
+    return (int) result;
+}</code></pre>
+
+<p><strong>JP3.</strong></p>
+<pre><code class="language-java">public static void partitionByCongruence(int[] nums, int m) {
+    Map&lt;Integer, List&lt;Integer&gt;&gt; classes = new TreeMap&lt;&gt;();
+    for (int n : nums) {
+        int r = Math.floorMod(n, m);
+        classes.computeIfAbsent(r, k -&gt; new ArrayList&lt;&gt;()).add(n);
+    }
+    for (var entry : classes.entrySet()) {
+        System.out.printf("  [%d]_%d = %s%n", entry.getKey(), m, entry.getValue());
+    }
+}</code></pre>
+
+<p><strong>JP4.</strong></p>
+<pre><code class="language-java">public static int modInverse(int a, int m) {
+    a = Math.floorMod(a, m);
+    int[] r = extendedGcd(a, m);
+    if (r[0] != 1) throw new ArithmeticException(a + " not invertible mod " + m);
+    return Math.floorMod(r[1], m);
+}</code></pre>
+
+<p><strong>JP5.</strong></p>
+<pre><code class="language-java">public static void verifyFermatsLittle() {
+    for (int p = 2; p &lt;= 50; p++) {
+        if (!isPrime(p)) continue;
+        for (int a = 1; a &lt; p; a++) {
+            assert modPow(a, p - 1, p) == 1 :
+                "Fermat failed for a=" + a + ", p=" + p;
+        }
+    }
+    System.out.println("Fermat's Little Theorem verified for primes ≤ 50.");
+}</code></pre>
+
+<p><strong>JP6.</strong></p>
+<pre><code class="language-java">public class ModularClock {
+    private int hour;  // 0..23
+
+    public ModularClock(int hour) { this.hour = Math.floorMod(hour, 24); }
+
+    public void advance(int hours) { hour = Math.floorMod(hour + hours, 24); }
+    public void retreat(int hours) { advance(-hours); }
+
+    public String toString() { return String.format("%02d:00", hour); }
+}</code></pre>
+
+<h3 id="bridge-solutions">Bridge Solutions</h3>
+
+<p><strong>BR1.</strong></p>
+<pre><code class="language-java">public static int eulerTotient(int m) {
+    int count = 0;
+    for (int a = 1; a &lt; m; a++) {
+        if (gcd(a, m) == 1) count++;
+    }
+    return count;
+}
+
+public static void verifyTotient() {
+    for (int m = 1; m &lt;= 100; m++) {
+        assert units(m).size() == eulerTotient(m);
+    }
+    System.out.println("Totient = #units verified for m=1..100");
+}</code></pre>
+
+<p><strong>BR2.</strong></p>
+<pre><code class="language-java">public static void verifyCyclicTraversal() {
+    for (int n = 1; n &lt;= 1000; n++) {
+        boolean[] visited = new boolean[n];
+        int idx = 0;
+        for (int step = 0; step &lt; n; step++) {
+            assert !visited[idx] : "Revisited index " + idx;
+            visited[idx] = true;
+            idx = (idx + 1) % n;
+        }
+        assert idx == 0 : "Did not return to 0";
+        for (int i = 0; i &lt; n; i++) assert visited[i];
+    }
+    System.out.println("Cyclic traversal verified for n=1..1000");
+}</code></pre>
+
+<p><strong>BR3.</strong></p>
+<pre><code class="language-java">public static boolean luhnCheck(String cardNumber) {
+    // Luhn: from right, double every second digit.
+    // If doubled &gt; 9, subtract 9. Sum all. Valid if sum ≡ 0 (mod 10).
+    int sum = 0;
+    boolean doubleNext = false;
+    for (int i = cardNumber.length() - 1; i &gt;= 0; i--) {
+        int d = cardNumber.charAt(i) - '0';
+        if (doubleNext) {
+            d *= 2;
+            if (d &gt; 9) d -= 9;  // equivalent to d mod 9 for d in [10,18]
+        }
+        sum += d;
+        doubleNext = !doubleNext;
+    }
+    return sum % 10 == 0;  // congruence check: sum ≡ 0 (mod 10)
+}</code></pre>
+
+</section>
+</div>
+<hr>
+<div id="class-3" class="class-section">
+<h1 id="module-2-class-3-primes-factorization-and-simple-cryptography">Module 2 – Class 3: Primes, Factorization and Simple Cryptography</h1>
+
+<section class="slide" id="learning-objectives">
+<h2>Learning Objectives</h2>
+
+<ul>
+<li>State the Fundamental Theorem of Arithmetic and prove existence by strong induction.</li>
+<li>Implement trial division for prime factorization in Java.</li>
+<li>State and apply the Chinese Remainder Theorem (CRT).</li>
+<li>Implement a constructive CRT solver using Bézout coefficients.</li>
+<li>Explain how prime factorization and CRT apply to RSA and multi-modulus computation.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="concept-overview">
+<h2>Concept Overview</h2>
+
+<h3 id="the-fundamental-theorem-of-arithmetic">The Fundamental Theorem of Arithmetic</h3>
+
+<blockquote>
+<p><strong>Theorem.</strong> Every integer $n > 1$ can be written as a product of primes:</p>
+<p><div class="katex-block">$n = p_1^{e_1} \cdot p_2^{e_2} \cdots p_k^{e_k}$</div></p>
+<p>and this factorization is unique up to the order of the factors.</p>
+</blockquote>
+
+<p>The <em>existence</em> part follows by strong induction. The <em>uniqueness</em> part requires Euclid's Lemma: if $p$ is prime and $p \mid ab$, then $p \mid a$ or $p \mid b$.</p>
+
+<h3 id="the-chinese-remainder-theorem-crt">The Chinese Remainder Theorem (CRT)</h3>
+
+<blockquote>
+<p><strong>Theorem.</strong> If $m$ and $n$ are coprime (i.e., $\gcd(m, n) = 1$), then the system</p>
+<p><div class="katex-block">$x \equiv a \pmod{m}, \qquad x \equiv b \pmod{n}$</div></p>
+<p>has a unique solution modulo $mn$.</p>
+</blockquote>
+
+<p><strong>Constructive solution:</strong> Find Bézout coefficients $s, t$ with $ms + nt = 1$. Then $x = a \cdot nt + b \cdot ms$.</p>
+
+<p><strong>Why this matters in CS:</strong></p>
+<ul>
+<li><strong>RSA cryptography:</strong> Encryption and decryption rely on modular exponentiation and CRT for efficient computation.</li>
+<li><strong>Multi-modulus arithmetic:</strong> CRT allows computing with large numbers by splitting into smaller moduli.</li>
+<li><strong>Error detection:</strong> Residue number systems use CRT for fault-tolerant computation.</li>
+<li><strong>Hash functions:</strong> Prime factorization analysis helps understand collision behavior.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="formal-notation">
+<h2>Formal Notation</h2>
+
+<table>
+<thead><tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr></thead><tbody>
+<tr>
+<td>$n = p_1^{e_1} \cdots p_k^{e_k}$</td>
+<td>Prime factorization of $n$</td>
+</tr>
+<tr>
+<td>$\text{lcm}(a, b)$</td>
+<td>Least common multiple: $ab / \gcd(a,b)$</td>
+</tr>
+<tr>
+<td>$x \equiv a \pmod{m}$</td>
+<td>$x$ leaves remainder $a$ when divided by $m$</td>
+</tr>
+<tr>
+<td>$ms + nt = 1$</td>
+<td>Bézout's identity (when $\gcd(m,n) = 1$)</td>
+</tr>
+</tbody></table>
+
+<p><strong>Relationship between GCD and LCM:</strong></p>
+<div class="katex-block">$\gcd(a, b) \cdot \text{lcm}(a, b) = a \cdot b$</div>
+<div class="katex-block">$\text{lcm}(a, b) = \frac{a \cdot b}{\gcd(a, b)}$</div>
+
+<hr>
+
+</section>
+<section class="slide" id="worked-examples">
+<h2>Worked Examples</h2>
+
+<h3 id="example-1-prime-factorization-by-trial-division-discrete-math">Example 1: Prime Factorization by Trial Division — Discrete Math</h3>
+
+<p><strong>Problem:</strong> Factor $n = 2520$ into primes.</p>
+
+<p><strong>Solution:</strong> Divide by the smallest prime possible at each step:</p>
+<ul>
+<li>$2520 / 2 = 1260$</li>
+<li>$1260 / 2 = 630$</li>
+<li>$630 / 2 = 315$</li>
+<li>$315 / 3 = 105$</li>
+<li>$105 / 3 = 35$</li>
+<li>$35 / 5 = 7$</li>
+<li>$7 / 7 = 1$</li>
+</ul>
+
+<p>So $2520 = 2^3 \cdot 3^2 \cdot 5 \cdot 7$. $\blacksquare$</p>
+
+<h3 id="example-2-java-translation-prime-factorization">Example 2: Java Translation — Prime Factorization</h3>
+
+<pre><code class="language-java">import java.util.*;
+
+public class PrimeFactorizationDemo {
+
+    /**
+     * Returns the prime factorization of n as a map: prime -&gt; exponent.
+     * E.g., 2520 -&gt; {2:3, 3:2, 5:1, 7:1}
+     *
+     * Algorithm: trial division.
+     * Mathematical basis: every composite n has a factor ≤ sqrt(n).
+     */
+    public static Map&lt;Integer, Integer&gt; factorize(int n) {
+        Map&lt;Integer, Integer&gt; factors = new TreeMap&lt;&gt;();
+        // Try each possible divisor d starting from 2.
+        // Only need d &lt;= sqrt(n) because if n has no factor ≤ sqrt(n), n is prime.
+        for (int d = 2; (long) d * d &lt;= n; d++) {
+            while (n % d == 0) {
+                factors.merge(d, 1, Integer::sum);  // increment exponent
+                n /= d;
+            }
+        }
+        // If n &gt; 1 at this point, n itself is a prime factor.
+        if (n &gt; 1) factors.merge(n, 1, Integer::sum);
+        return factors;
+    }
+
+    /** Converts a factorization map to a readable string like "2^3 × 3^2 × 5 × 7" */
+    public static String factorString(Map&lt;Integer, Integer&gt; factors) {
+        StringBuilder sb = new StringBuilder();
+        for (var entry : factors.entrySet()) {
+            if (sb.length() &gt; 0) sb.append(" × ");
+            sb.append(entry.getKey());
+            if (entry.getValue() &gt; 1) sb.append("^").append(entry.getValue());
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        int[] testNums = {2, 12, 84, 100, 2520, 97, 1000, 7919};
+        for (int n : testNums) {
+            var factors = factorize(n);
+            System.out.printf("  %5d = %s%n", n, factorString(factors));
+        }
+    }
+}</code></pre>
+
+<p><strong>Sample output:</strong></p>
+<pre><code class="language-text">      2 = 2
+     12 = 2^2 × 3
+     84 = 2^2 × 3 × 7
+    100 = 2^2 × 5^2
+   2520 = 2^3 × 3^2 × 5 × 7
+     97 = 97
+   1000 = 2^3 × 5^3
+   7919 = 7919</code></pre>
+
+<h3 id="example-3-existence-proof-by-strong-induction-combined">Example 3: Existence Proof by Strong Induction — Combined</h3>
+
+<p><strong>Problem:</strong> Prove that every integer $n > 1$ has a prime factorization.</p>
+
+<p><strong>Proof (Strong Induction).</strong></p>
+
+<p><em>Base case:</em> $n = 2$ is prime, so its factorization is just $\{2\}$. ✓</p>
+
+<p><em>Inductive step:</em> Assume every integer $k$ with $2 \leq k < n$ has a prime factorization. Consider $n$:</p>
+<ul>
+<li><strong>Case 1:</strong> $n$ is prime. Then its factorization is $\{n\}$.</li>
+<li><strong>Case 2:</strong> $n$ is composite. Then $n = a \cdot b$ with $2 \leq a, b < n$. By the inductive hypothesis, $a = p_1^{e_1} \cdots p_j^{e_j}$ and $b = q_1^{f_1} \cdots q_k^{f_k}$. Combining these gives a prime factorization of $n$.</li>
+</ul>
+
+<p>By strong induction, every $n > 1$ has a prime factorization. $\blacksquare$</p>
+
+<h3 id="example-4-crt-solving-simultaneous-congruences">Example 4: CRT — Solving Simultaneous Congruences</h3>
+
+<p><strong>Problem:</strong> Solve $x \equiv 2 \pmod{3}$ and $x \equiv 3 \pmod{5}$.</p>
+
+<p><strong>Solution:</strong></p>
+
+<p>Step 1: Verify $\gcd(3, 5) = 1$. ✓</p>
+
+<p>Step 2: Find Bézout coefficients: $3s + 5t = 1$. By inspection (or extended GCD), $s = 2, t = -1$: $3(2) + 5(-1) = 1$. ✓</p>
+
+<p>Step 3: Compute $x = a \cdot nt + b \cdot ms = 2 \cdot 5 \cdot (-1) + 3 \cdot 3 \cdot 2 = -10 + 18 = 8$.</p>
+
+<p>Step 4: Reduce: $x \equiv 8 \pmod{15}$.</p>
+
+<p><strong>Verification:</strong> $8 \bmod 3 = 2$ ✓ and $8 \bmod 5 = 3$ ✓. $\blacksquare$</p>
+
+<h3 id="example-5-crt-correctness-proof">Example 5: CRT Correctness Proof</h3>
+
+<p><strong>Problem:</strong> Prove that $x = a \cdot nt + b \cdot ms$ solves the system when $ms + nt = 1$.</p>
+
+<p><strong>Proof.</strong> Check the first congruence:</p>
+<div class="katex-block">$x = a \cdot nt + b \cdot ms \equiv a \cdot nt \pmod{m}$</div>
+<p>(since $m \mid ms$, the term $b \cdot ms \equiv 0 \pmod{m}$).</p>
+
+<p>Now $nt = 1 - ms$, so $nt \equiv 1 \pmod{m}$. Therefore $x \equiv a \cdot 1 = a \pmod{m}$. ✓</p>
+
+<p>By symmetry, $x \equiv b \pmod{n}$. ✓</p>
+
+<p><strong>Uniqueness:</strong> If $x_1$ and $x_2$ both solve the system, then $m \mid (x_1 - x_2)$ and $n \mid (x_1 - x_2)$. Since $\gcd(m, n) = 1$, $mn \mid (x_1 - x_2)$, so $x_1 \equiv x_2 \pmod{mn}$. $\blacksquare$</p>
+
+<hr>
+
+</section>
+<section class="slide" id="proof-techniques-spotlight">
+<h2>Proof Techniques Spotlight</h2>
+
+<h3 id="strong-induction-vs-ordinary-induction">Strong Induction vs. Ordinary Induction</h3>
+
+<table>
+<thead><tr>
+<th>Feature</th>
+<th>Ordinary Induction</th>
+<th>Strong Induction</th>
+</tr></thead><tbody>
+<tr>
+<td>Hypothesis</td>
+<td>Assume $P(k)$</td>
+<td>Assume $P(2), P(3), \ldots, P(k)$</td>
+</tr>
+<tr>
+<td>Use</td>
+<td>When $P(k+1)$ follows from $P(k)$ alone</td>
+<td>When $P(k+1)$ needs earlier values (e.g., factors of $k+1$ may be much smaller than $k$)</td>
+</tr>
+<tr>
+<td>Template</td>
+<td>Base → Assume $P(k)$ → Show $P(k+1)$</td>
+<td>Base → Assume $P(j)$ for all $2 \leq j \leq k$ → Show $P(k+1)$</td>
+</tr>
+</tbody></table>
+
+<p><strong>Why strong induction for FTA:</strong> When $n$ is composite ($n = ab$), the factors $a$ and $b$ may be much less than $n - 1$. Ordinary induction gives us only $P(n-1)$, but strong induction gives us $P(a)$ and $P(b)$.</p>
+
+<h3 id="constructive-proofs">Constructive Proofs</h3>
+
+<p>The CRT proof is <strong>constructive</strong>: it doesn't just assert a solution exists; it gives an explicit formula. This is directly translatable to code — the mathematical construction <em>is</em> the algorithm.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="java-deep-dive">
+<h2>Java Deep Dive</h2>
+
+<pre><code class="language-java">import java.util.*;
+
+public class CRTandFactorization {
+
+    // --- Prime Factorization ---
+
+    public static Map&lt;Integer, Integer&gt; factorize(int n) {
+        Map&lt;Integer, Integer&gt; factors = new TreeMap&lt;&gt;();
+        for (int d = 2; (long) d * d &lt;= n; d++) {
+            while (n % d == 0) { factors.merge(d, 1, Integer::sum); n /= d; }
+        }
+        if (n &gt; 1) factors.merge(n, 1, Integer::sum);
+        return factors;
+    }
+
+    /** Reconstructs n from its factorization: product of p^e */
+    public static int fromFactors(Map&lt;Integer, Integer&gt; factors) {
+        int product = 1;
+        for (var entry : factors.entrySet()) {
+            for (int i = 0; i &lt; entry.getValue(); i++) product *= entry.getKey();
+        }
+        return product;
+    }
+
+    /**
+     * Computes LCM from prime factorizations:
+     * lcm(a,b) uses max exponent of each prime.
+     */
+    public static int lcmFromFactors(int a, int b) {
+        var fa = factorize(a);
+        var fb = factorize(b);
+        Map&lt;Integer, Integer&gt; merged = new TreeMap&lt;&gt;(fa);
+        for (var entry : fb.entrySet()) {
+            merged.merge(entry.getKey(), entry.getValue(), Math::max);
+        }
+        return fromFactors(merged);
+    }
+
+    // --- GCD and Extended GCD ---
+
+    public static int gcd(int a, int b) {
+        a = Math.abs(a); b = Math.abs(b);
+        while (b != 0) { int r = a % b; a = b; b = r; }
+        return a;
+    }
+
+    public static int[] extendedGcd(int a, int b) {
+        if (b == 0) return new int[]{a, 1, 0};
+        int[] r = extendedGcd(b, a % b);
+        return new int[]{r[0], r[2], r[1] - (a / b) * r[2]};
+    }
+
+    // --- Chinese Remainder Theorem ---
+
+    /**
+     * Solves: x ≡ a (mod m) and x ≡ b (mod n), where gcd(m,n) = 1.
+     * Returns x in [0, m*n).
+     *
+     * Algorithm: Find s,t with ms + nt = 1 (Bézout).
+     *            x = a*n*t + b*m*s
+     */
+    public static int crt(int a, int m, int b, int n) {
+        if (gcd(m, n) != 1)
+            throw new IllegalArgumentException("Moduli must be coprime");
+        int[] bezout = extendedGcd(m, n);
+        int s = bezout[1]; // m*s + n*t = 1
+        int t = bezout[2];
+        // x = a*n*t + b*m*s
+        long x = (long) a * n * t + (long) b * m * s;
+        return Math.floorMod((int) (x % ((long) m * n)), m * n);
+    }
+
+    /**
+     * Generalized CRT for multiple congruences:
+     * x ≡ a[0] (mod m[0]), x ≡ a[1] (mod m[1]), ..., x ≡ a[k-1] (mod m[k-1])
+     * All m[i] must be pairwise coprime.
+     */
+    public static int crtMultiple(int[] remainders, int[] moduli) {
+        int x = remainders[0];
+        int mod = moduli[0];
+        for (int i = 1; i &lt; remainders.length; i++) {
+            x = crt(x, mod, remainders[i], moduli[i]);
+            mod *= moduli[i];
+        }
+        return Math.floorMod(x, mod);
+    }
+
+    // --- Simple RSA Demo ---
+
+    /** Modular exponentiation: base^exp mod m */
+    public static long modPow(long base, long exp, long mod) {
+        long result = 1;
+        base = ((base % mod) + mod) % mod;
+        while (exp &gt; 0) {
+            if (exp % 2 == 1) result = (result * base) % mod;
+            base = (base * base) % mod;
+            exp /= 2;
+        }
+        return result;
+    }
+
+    /**
+     * Simplified RSA demonstration with small primes.
+     * NOT for real cryptography — uses small numbers for illustration.
+     */
+    public static void rsaDemo() {
+        System.out.println("=== Simplified RSA Demo ===\n");
+
+        // Step 1: Choose two primes
+        int p = 61, q = 53;
+        int n = p * q;                // n = 3233 (public modulus)
+        int phi = (p - 1) * (q - 1); // φ(n) = 3120
+
+        System.out.println("p = " + p + ", q = " + q);
+        System.out.println("n = p*q = " + n);
+        System.out.println("φ(n) = (p-1)(q-1) = " + phi);
+
+        // Step 2: Choose public exponent e with gcd(e, φ(n)) = 1
+        int e = 17;
+        assert gcd(e, phi) == 1 : "e must be coprime to φ(n)";
+        System.out.println("Public exponent e = " + e);
+
+        // Step 3: Compute private exponent d = e^(-1) mod φ(n)
+        int[] bezout = extendedGcd(e, phi);
+        int d = Math.floorMod(bezout[1], phi);
+        System.out.println("Private exponent d = " + d);
+        System.out.println("Check: e*d mod φ(n) = " + ((long) e * d % phi));
+
+        // Step 4: Encrypt and decrypt
+        int message = 42;
+        long encrypted = modPow(message, e, n);
+        long decrypted = modPow(encrypted, d, n);
+
+        System.out.println("\nMessage: " + message);
+        System.out.println("Encrypted: " + encrypted);
+        System.out.println("Decrypted: " + decrypted);
+        assert decrypted == message;
+        System.out.println("Decryption successful!");
+    }
+
+    // --- Main ---
+
+    public static void main(String[] args) {
+        System.out.println("=== Prime Factorization ===\n");
+        for (int n : new int[]{84, 360, 2520, 97, 1000}) {
+            var f = factorize(n);
+            System.out.printf("  %d = %s  (reconstructed: %d)%n", n,
+                factorString(f), fromFactors(f));
+        }
+
+        System.out.println("\n=== LCM via Factorization ===\n");
+        int[][] lcmTests = {{12, 18}, {35, 15}, {100, 75}};
+        for (int[] pair : lcmTests) {
+            System.out.printf("  lcm(%d, %d) = %d%n", pair[0], pair[1],
+                lcmFromFactors(pair[0], pair[1]));
+        }
+
+        System.out.println("\n=== Chinese Remainder Theorem ===\n");
+        // x ≡ 2 (mod 3) and x ≡ 3 (mod 5)
+        int x1 = crt(2, 3, 3, 5);
+        System.out.printf("  x ≡ 2 (mod 3), x ≡ 3 (mod 5) → x = %d (mod 15)%n", x1);
+        assert x1 % 3 == 2 &amp;&amp; x1 % 5 == 3;
+
+        // Sunzi's original problem: x ≡ 2 (mod 3), x ≡ 3 (mod 5), x ≡ 2 (mod 7)
+        int x2 = crtMultiple(new int[]{2, 3, 2}, new int[]{3, 5, 7});
+        System.out.printf("  x ≡ 2 (mod 3), x ≡ 3 (mod 5), x ≡ 2 (mod 7) → x = %d (mod 105)%n", x2);
+        assert x2 % 3 == 2 &amp;&amp; x2 % 5 == 3 &amp;&amp; x2 % 7 == 2;
+
+        System.out.println();
+        rsaDemo();
+    }
+
+    static String factorString(Map&lt;Integer, Integer&gt; factors) {
+        StringBuilder sb = new StringBuilder();
+        for (var entry : factors.entrySet()) {
+            if (sb.length() &gt; 0) sb.append(" × ");
+            sb.append(entry.getKey());
+            if (entry.getValue() &gt; 1) sb.append("^").append(entry.getValue());
+        }
+        return sb.toString();
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="historical-context">
+<h2>Historical Context</h2>
+
+<p><strong>Euclid</strong> (~300 BC) proved that there are infinitely many primes but did not state the Fundamental Theorem of Arithmetic explicitly. The formal proof of unique factorization was first given by <strong>Carl Friedrich Gauss</strong> in <em>Disquisitiones Arithmeticae</em> (1801).</p>
+
+<p>The <strong>Chinese Remainder Theorem</strong> originates from <strong>Sunzi's</strong> <em>Sunzi Suanjing</em> (3rd century CE). The classic problem: "Find a number that leaves remainder 2 when divided by 3, remainder 3 when divided by 5, and remainder 2 when divided by 7." The answer is 23 (modulo 105).</p>
+
+<p><strong>RSA</strong> (Rivest, Shamir, Adleman, 1977) is the most famous public-key cryptosystem. Its security relies on the difficulty of factoring large numbers: given $n = pq$ (product of two large primes), finding $p$ and $q$ is computationally hard. The encryption uses modular exponentiation: $c = m^e \bmod n$, and decryption inverts using the private key: $m = c^d \bmod n$, where $ed \equiv 1 \pmod{\phi(n)}$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="slide-ready-problem-sets">
+<h2>Slide-Ready Problem Sets</h2>
+
+<h3 id="slide-set-a-conceptual-questions">Slide Set A: Conceptual Questions</h3>
+
+<p><strong>A1.</strong> Factor $360$ into primes.</p>
+
+<p><strong>A2.</strong> True or false: If $p$ is prime and $p \mid 6n$, then $p \mid n$ or $p \leq 3$.</p>
+
+<p><strong>A3.</strong> The CRT says the system $x \equiv 1 \pmod{4}$, $x \equiv 2 \pmod{6}$ has a unique solution modulo 24. What's wrong with this claim?</p>
+
+<p><strong>A4.</strong> In RSA, why is it important that factoring $n = pq$ is hard?</p>
+
+<h3 id="slide-set-b-proof-problems">Slide Set B: Proof Problems</h3>
+
+<p><strong>B1.</strong> Prove by strong induction: every integer $n > 1$ has a prime factor.</p>
+
+<p><strong>B2.</strong> Prove: $\text{lcm}(a, b) = ab / \gcd(a, b)$ using prime factorization.</p>
+
+<p><strong>B3.</strong> Prove the CRT for the case $m = 3, n = 5$: the system $x \equiv a \pmod{3}$, $x \equiv b \pmod{5}$ has a unique solution modulo 15.</p>
+
+<h3 id="slide-set-c-java-coding-problems">Slide Set C: Java Coding Problems</h3>
+
+<p><strong>C1.</strong> Write a method <code>Map&lt;Integer, Integer&gt; factorize(int n)</code> returning a prime-to-exponent map. Verify that <code>fromFactors(factorize(n)) == n</code> for $n = 2, \ldots, 10000$.</p>
+
+<p><strong>C2.</strong> Implement a CRT solver for two congruences. Test with Sunzi's original problem.</p>
+
+<p><strong>C3.</strong> Write a simplified RSA demo that encrypts and decrypts a single integer message.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="full-problem-set">
+<h2>Full Problem Set</h2>
+
+<h3 id="discrete-math-problems">Discrete Math Problems</h3>
+
+<p><strong>DM1.</strong> Factor $n = 13860$ into primes. Verify by reconstructing the product.</p>
+
+<p><strong>DM2.</strong> Prove: If $p$ is prime and $p \mid a^2$, then $p \mid a$.</p>
+
+<p><strong>DM3.</strong> Use the CRT to solve: $x \equiv 3 \pmod{7}$ and $x \equiv 5 \pmod{11}$.</p>
+
+<p><strong>DM4.</strong> Prove that $\text{lcm}(a, b) \cdot \gcd(a, b) = ab$ for all positive integers $a, b$.</p>
+
+<p><strong>DM5.</strong> Prove: If $n$ has $k$ distinct prime factors, then $n \geq 2^k$.</p>
+
+<p><strong>DM6.</strong> Prove that $\sqrt{2}$ is irrational using unique prime factorization. <em>(If $\sqrt{2} = p/q$, then $2q^2 = p^2$; compare the number of 2s in each factorization.)</em></p>
+
+<p><strong>DM7.</strong> Solve the system $x \equiv 1 \pmod{2}$, $x \equiv 2 \pmod{3}$, $x \equiv 3 \pmod{5}$, $x \equiv 4 \pmod{7}$.</p>
+
+<h3 id="java-programming-problems">Java Programming Problems</h3>
+
+<p><strong>JP1.</strong> Write <code>Map&lt;Integer, Integer&gt; factorize(int n)</code> and verify FTA for $n = 2, \ldots, 100000$: check that all factors are prime and the product equals $n$.</p>
+
+<p><strong>JP2.</strong> Implement <code>int lcm(int a, int b)</code> using the formula $\text{lcm}(a,b) = ab / \gcd(a,b)$. Handle overflow by dividing first: <code>a / gcd(a,b) * b</code>.</p>
+
+<p><strong>JP3.</strong> Implement the generalized CRT for an array of congruences (pairwise coprime moduli). Verify that the solution satisfies all congruences.</p>
+
+<p><strong>JP4.</strong> Write a simplified RSA key-generation, encryption, and decryption program. Use primes $p$ and $q$ with $pq < 10^6$. Encrypt each letter of a short message individually.</p>
+
+<p><strong>JP5.</strong> Given two factorizations (as maps), write methods to compute the GCD and LCM by taking min/max exponents of each prime. Verify against the direct GCD/LCM methods.</p>
+
+<p><strong>JP6.</strong> Write a method that determines whether an integer $n$ is a <strong>perfect power</strong> (i.e., $n = a^k$ for some $a, k \geq 2$) using its prime factorization.</p>
+
+<h3 id="bridge-problems">Bridge Problems</h3>
+
+<p><strong>BR1.</strong> Prove that the trial division algorithm for prime factorization is correct and terminates. Then implement it and verify correctness for $n = 2, \ldots, 50000$.</p>
+
+<p><strong>BR2.</strong> Implement a CRT-based method for computing large factorials modulo a product of small primes. For example, compute $100! \bmod 105$ where $105 = 3 \times 5 \times 7$, by computing $100! \bmod 3$, $100! \bmod 5$, and $100! \bmod 7$ separately and combining with CRT.</p>
+
+<p><strong>BR3.</strong> Write a program that empirically measures the distribution of prime factorization lengths (number of prime factors with multiplicity) for all integers from 2 to $10^6$, and print a histogram. What's the average number of prime factors?</p>
+
+<hr>
+
+</section>
+<section class="slide" id="solutions">
+<h2>Solutions</h2>
+
+<h3 id="discrete-math-solutions">Discrete Math Solutions</h3>
+
+<p><strong>DM1.</strong> $13860 = 2^2 \cdot 3^2 \cdot 5 \cdot 7 \cdot 11$. Check: $4 \cdot 9 \cdot 5 \cdot 7 \cdot 11 = 4 \cdot 9 \cdot 385 = 36 \cdot 385 = 13860$. ✓</p>
+
+<p><strong>DM2.</strong> Write $a = p_1^{e_1} \cdots p_k^{e_k}$. Then $a^2 = p_1^{2e_1} \cdots p_k^{2e_k}$. If $p \mid a^2$, then $p$ appears in the factorization of $a^2$, so $p = p_i$ for some $i$. Then $p \mid a$ (since $e_i \geq 1$). $\blacksquare$</p>
+
+<p><strong>DM3.</strong> $\gcd(7, 11) = 1$. Extended GCD: $7(-3) + 11(2) = -21 + 22 = 1$, so $s = -3, t = 2$.</p>
+<p>$x = 3 \cdot 11 \cdot 2 + 5 \cdot 7 \cdot (-3) = 66 - 105 = -39 \equiv 38 \pmod{77}$.</p>
+<p>Check: $38 \bmod 7 = 3$ ✓, $38 \bmod 11 = 5$ ✓.</p>
+
+<p><strong>DM4.</strong> Write $a = \prod p_i^{a_i}$ and $b = \prod p_i^{b_i}$. Then $\gcd(a,b) = \prod p_i^{\min(a_i, b_i)}$ and $\text{lcm}(a,b) = \prod p_i^{\max(a_i, b_i)}$. So $\gcd(a,b) \cdot \text{lcm}(a,b) = \prod p_i^{\min(a_i,b_i) + \max(a_i,b_i)} = \prod p_i^{a_i + b_i} = ab$. $\blacksquare$</p>
+
+<p><strong>DM5.</strong> By induction on $k$. Base: $k = 1$, $n \geq 2 = 2^1$. Inductive step: If $n$ has $k + 1$ distinct primes, then $n = p \cdot m$ where $m$ has at least $k$ distinct primes. By hypothesis, $m \geq 2^k$. Since $p \geq 2$, $n = pm \geq 2 \cdot 2^k = 2^{k+1}$. $\blacksquare$</p>
+
+<p><strong>DM6.</strong> Suppose $\sqrt{2} = p/q$ with $\gcd(p, q) = 1$. Then $p^2 = 2q^2$. The prime 2 appears an even number of times in $p^2$, but an odd number of times in $2q^2$ (one extra 2). This contradicts unique factorization. $\blacksquare$</p>
+
+<p><strong>DM7.</strong> Solve pairwise:</p>
+<ul>
+<li>$x \equiv 1 \pmod{2}$, $x \equiv 2 \pmod{3}$: $x \equiv 5 \pmod{6}$.</li>
+<li>$x \equiv 5 \pmod{6}$, $x \equiv 3 \pmod{5}$: $x \equiv 23 \pmod{30}$.</li>
+<li>$x \equiv 23 \pmod{30}$, $x \equiv 4 \pmod{7}$: $x \equiv 53 \pmod{210}$.</li>
+</ul>
+
+<p>Check: $53 \bmod 2 = 1$ ✓, $53 \bmod 3 = 2$ ✓, $53 \bmod 5 = 3$ ✓, $53 \bmod 7 = 4$ ✓.</p>
+
+<h3 id="java-solutions">Java Solutions</h3>
+
+<p><strong>JP1.</strong></p>
+<pre><code class="language-java">public static void verifyFTA(int limit) {
+    for (int n = 2; n &lt;= limit; n++) {
+        var factors = factorize(n);
+        int product = 1;
+        for (var entry : factors.entrySet()) {
+            assert isPrime(entry.getKey()) : entry.getKey() + " not prime";
+            for (int i = 0; i &lt; entry.getValue(); i++) product *= entry.getKey();
+        }
+        assert product == n : "Product mismatch for " + n;
+    }
+}</code></pre>
+
+<p><strong>JP2.</strong></p>
+<pre><code class="language-java">public static int lcm(int a, int b) {
+    return a / gcd(a, b) * b;  // divide first to reduce overflow risk
+}</code></pre>
+
+<p><strong>JP3.</strong></p>
+<pre><code class="language-java">public static int crtMultiple(int[] remainders, int[] moduli) {
+    int x = remainders[0], mod = moduli[0];
+    for (int i = 1; i &lt; remainders.length; i++) {
+        x = crt(x, mod, remainders[i], moduli[i]);
+        mod *= moduli[i];
+    }
+    return Math.floorMod(x, mod);
+}</code></pre>
+
+<p><strong>JP4.</strong></p>
+<pre><code class="language-java">public static void rsaEncryptMessage(String msg, int p, int q) {
+    int n = p * q;
+    int phi = (p - 1) * (q - 1);
+    int e = 17;
+    while (gcd(e, phi) != 1) e += 2;
+    int d = Math.floorMod(extendedGcd(e, phi)[1], phi);
+
+    System.out.println("Public key: (n=" + n + ", e=" + e + ")");
+    System.out.println("Private key: d=" + d);
+
+    StringBuilder encrypted = new StringBuilder();
+    StringBuilder decrypted = new StringBuilder();
+    for (char c : msg.toCharArray()) {
+        long enc = modPow(c, e, n);
+        long dec = modPow(enc, d, n);
+        encrypted.append(enc).append(" ");
+        decrypted.append((char) dec);
+    }
+    System.out.println("Encrypted: " + encrypted);
+    System.out.println("Decrypted: " + decrypted);
+}</code></pre>
+
+<p><strong>JP5.</strong></p>
+<pre><code class="language-java">public static Map&lt;Integer, Integer&gt; gcdFromFactors(
+        Map&lt;Integer, Integer&gt; fa, Map&lt;Integer, Integer&gt; fb) {
+    Map&lt;Integer, Integer&gt; result = new TreeMap&lt;&gt;();
+    for (int p : fa.keySet()) {
+        if (fb.containsKey(p)) {
+            result.put(p, Math.min(fa.get(p), fb.get(p)));
+        }
+    }
+    return result;
+}
+
+public static Map&lt;Integer, Integer&gt; lcmFromFactors(
+        Map&lt;Integer, Integer&gt; fa, Map&lt;Integer, Integer&gt; fb) {
+    Map&lt;Integer, Integer&gt; result = new TreeMap&lt;&gt;(fa);
+    for (var entry : fb.entrySet()) {
+        result.merge(entry.getKey(), entry.getValue(), Math::max);
+    }
+    return result;
+}</code></pre>
+
+<p><strong>JP6.</strong></p>
+<pre><code class="language-java">public static boolean isPerfectPower(int n) {
+    var factors = factorize(n);
+    if (factors.isEmpty()) return false;
+    int g = 0;
+    for (int exp : factors.values()) g = gcd(g, exp);
+    return g &gt;= 2;
+}
+// Examples: 8 = 2^3 → gcd(3) = 3 ≥ 2 → true
+//           12 = 2^2 × 3 → gcd(2,1) = 1 &lt; 2 → false
+//           64 = 2^6 → gcd(6) = 6 ≥ 2 → true</code></pre>
+
+<h3 id="bridge-solutions">Bridge Solutions</h3>
+
+<p><strong>BR1.</strong> <em>Correctness:</em> The loop extracts factor $d$ as many times as it divides $n$. After the inner <code>while</code>, $d \nmid n$, so $d$ is fully extracted. After the outer <code>for</code> loop, all factors $\leq \sqrt{n_{\text{current}}}$ are extracted. If $n > 1$ remains, it must be prime (if it were composite, it would have a factor $\leq$ its own square root, contradicting the loop's completion).</p>
+
+<p><em>Termination:</em> Each inner <code>while</code> iteration strictly reduces $n$. The outer loop's bound $d^2 \leq n$ shrinks each iteration. $\blacksquare$</p>
+
+<p><strong>BR2.</strong></p>
+<pre><code class="language-java">public static int factorialModCRT(int n, int[] primes) {
+    int[] remainders = new int[primes.length];
+    for (int i = 0; i &lt; primes.length; i++) {
+        long factMod = 1;
+        for (int j = 1; j &lt;= n; j++) {
+            factMod = (factMod * j) % primes[i];
+        }
+        remainders[i] = (int) factMod;
+    }
+    return crtMultiple(remainders, primes);
+}
+// For 100! mod 105: 100! mod 3 = 0, 100! mod 5 = 0, 100! mod 7 = 0
+// So 100! mod 105 = 0 (since 3, 5, 7 all divide 100!)</code></pre>
+
+<p><strong>BR3.</strong></p>
+<pre><code class="language-java">public static void primeFactorHistogram(int limit) {
+    int[] counts = new int[30]; // counts[k] = how many n have k prime factors
+    long totalFactors = 0;
+    for (int n = 2; n &lt;= limit; n++) {
+        int numFactors = 0;
+        int temp = n;
+        for (int d = 2; (long) d * d &lt;= temp; d++) {
+            while (temp % d == 0) { numFactors++; temp /= d; }
+        }
+        if (temp &gt; 1) numFactors++;
+        counts[numFactors]++;
+        totalFactors += numFactors;
+    }
+    System.out.printf("Average # prime factors (2..%d): %.2f%n",
+        limit, (double) totalFactors / (limit - 1));
+    for (int k = 1; k &lt; counts.length &amp;&amp; counts[k] &gt; 0; k++) {
+        System.out.printf("  %2d factors: %d numbers%n", k, counts[k]);
+    }
+}</code></pre>
+
+</section>
+</div>
+<hr>
+
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 8 Lab — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="lab-08">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+<h1 id="module-8-lab-algorithm-correctness-and-verification">Module 8 – Lab: Algorithm Correctness and Verification</h1>
+
+<section class="slide" id="overview">
+<h2>Overview</h2>
+
+<p>In this lab you will implement searching and sorting algorithms, annotate them with loop invariants and variant functions, and build verification harnesses that check correctness at runtime.</p>
+
+<p><strong>Prerequisites:</strong> Module 8 Classes 1–3 (Specifications, Loop Invariants, Termination)</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-1-specifications-and-assertions">
+<h2>Part 1: Specifications and Assertions</h2>
+
+<h3 id="exercise-1-1-annotated-linear-search">Exercise 1.1: Annotated Linear Search</h3>
+
+<p>Implement <code>linearSearch(int[] a, int key)</code> with:</p>
+<ul>
+<li><code>@requires</code> and <code>@ensures</code> comments</li>
+<li>A loop invariant comment</li>
+<li><code>assert</code> statements checking the precondition</li>
+</ul>
+
+<h3 id="exercise-1-2-annotated-max-and-min">Exercise 1.2: Annotated max and min</h3>
+
+<p>Implement <code>max(int[] a)</code> and <code>min(int[] a)</code> with:</p>
+<ul>
+<li>Full specifications</li>
+<li>Loop invariants</li>
+<li>Postcondition verification: after computing <code>max</code>, assert it is $\geq$ all elements and exists in the array.</li>
+</ul>
+
+<h3 id="exercise-1-3-countoccurrences-with-invariant">Exercise 1.3: countOccurrences with Invariant</h3>
+
+<p>Implement <code>countOccurrences(int[] a, int x)</code> with invariant: count = number of occurrences of $x$ in $a[0..i-1]$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-2-loop-invariants-for-sorting">
+<h2>Part 2: Loop Invariants for Sorting</h2>
+
+<h3 id="exercise-2-1-selection-sort">Exercise 2.1: Selection Sort</h3>
+
+<p>Implement selection sort with:</p>
+<ul>
+<li>Outer loop invariant: <code>a[0..i-1]</code> is sorted and contains the smallest $i$ elements.</li>
+<li>Inner loop invariant: <code>minIdx</code> indexes the minimum of <code>a[i..j-1]</code>.</li>
+<li><code>assert</code> checks after each outer iteration.</li>
+</ul>
+
+<h3 id="exercise-2-2-insertion-sort">Exercise 2.2: Insertion Sort</h3>
+
+<p>Implement insertion sort with:</p>
+<ul>
+<li>Outer loop invariant: <code>a[0..i-1]</code> is sorted.</li>
+<li><code>assert isSortedUpTo(a, i)</code> at the start of each outer iteration.</li>
+</ul>
+
+<h3 id="exercise-2-3-bubble-sort">Exercise 2.3: Bubble Sort</h3>
+
+<p>Implement bubble sort with:</p>
+<ul>
+<li>Outer loop invariant: after pass $i$, the last $i$ elements are in their final sorted positions.</li>
+<li>Count comparisons and swaps.</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="part-3-binary-search-correctness">
+<h2>Part 3: Binary Search Correctness</h2>
+
+<h3 id="exercise-3-1-binary-search-with-invariant">Exercise 3.1: Binary Search with Invariant</h3>
+
+<p>Implement binary search with:</p>
+<ul>
+<li>Precondition assertion: array is sorted.</li>
+<li>Invariant: if key exists, it is in <code>a[lo..hi]</code>.</li>
+<li>Variant: <code>hi - lo + 1</code> — print and assert it decreases.</li>
+</ul>
+
+<h3 id="exercise-3-2-off-by-one-analysis">Exercise 3.2: Off-by-One Analysis</h3>
+
+<p>Test binary search on arrays of sizes 0, 1, 2, 3 with keys present and absent. Verify no off-by-one errors by checking all boundary cases.</p>
+
+<h3 id="exercise-3-3-step-counter">Exercise 3.3: Step Counter</h3>
+
+<p>Count the number of comparisons in binary search for arrays of size $n = 1, 2, 4, 8, ..., 1{,}048{,}576$. Verify the count is $\leq \lfloor \log_2 n \rfloor + 1$.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="part-4-termination-and-variant-functions">
+<h2>Part 4: Termination and Variant Functions</h2>
+
+<h3 id="exercise-4-1-gcd-variant-tracking">Exercise 4.1: GCD Variant Tracking</h3>
+
+<p>Implement GCD with variant-tracking output:</p>
+<ul>
+<li>Print $a$, $b$, and $V = b$ at each step.</li>
+<li>Test on Fibonacci pairs: $(F_{10}, F_9)$, $(F_{20}, F_{19})$, $(F_{30}, F_{29})$.</li>
+<li>Verify Lamé's theorem: steps $\leq 5 \cdot \lfloor \log_{10} \min(a,b) \rfloor$.</li>
+</ul>
+
+<h3 id="exercise-4-2-total-correctness-verifier">Exercise 4.2: Total Correctness Verifier</h3>
+
+<p>Write a <code>verifySortingAlgorithm</code> method that takes a sorting function (as a lambda or method reference), applies it to random arrays, and checks:</p>
+<ol>
+<li>Output is sorted.</li>
+<li>Output is a permutation of the input.</li>
+<li>The function returned (i.e., terminated).</li>
+</ol>
+
+<h3 id="exercise-4-3-collatz-exploration">Exercise 4.3: Collatz Exploration</h3>
+
+<p>Implement the Collatz sequence for $n = 1, ..., 1000$. Track:</p>
+<ul>
+<li>Maximum sequence length.</li>
+<li>Which starting value produces the longest sequence.</li>
+<li>(Observe: no variant function is known — termination is conjectured but unproven!)</li>
+</ul>
+
+<hr>
+
+</section>
+<section class="slide" id="extension-challenges">
+<h2>Extension Challenges</h2>
+
+<p><strong>E1.</strong> Implement merge sort. State invariants for the merge step: "the output array is sorted and contains exactly the elements of the two input halves." Prove correctness.</p>
+
+<p><strong>E2.</strong> Implement repeated squaring <code>power(base, exp)</code>. State the invariant: <code>result * b^e == base^exp</code>. Assert it holds. Prove termination via variant $V = e$.</p>
+
+<p><strong>E3.</strong> Implement a generic "loop verifier" that wraps any iterative algorithm, checks its invariant at each step, and reports whether the invariant was ever violated.</p>
+
+<hr>
+
+</section>
+<section class="slide" id="starter-code">
+<h2>Starter Code</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+
+public class Module8Lab {
+
+    // ==================== Part 1: Specifications ====================
+
+    /**
+     * @requires a != null
+     * @ensures result == index of key in a, or -1
+     */
+    public static int linearSearch(int[] a, int key) {
+        // TODO: implement with invariant assertions
+        return -1;
+    }
+
+    /**
+     * @requires a != null and a.length &gt;= 1
+     * @ensures result == maximum element of a
+     */
+    public static int max(int[] a) {
+        // TODO: implement with invariant and postcondition check
+        return -1;
+    }
+
+    /**
+     * @requires a != null and a.length &gt;= 1
+     * @ensures result == minimum element of a
+     */
+    public static int min(int[] a) {
+        // TODO
+        return -1;
+    }
+
+    /**
+     * @requires a != null
+     * @ensures result == count of x in a
+     */
+    public static int countOccurrences(int[] a, int x) {
+        // TODO: invariant: count == occurrences of x in a[0..i-1]
+        return -1;
+    }
+
+    // ==================== Part 2: Sorting ====================
+
+    public static void selectionSort(int[] a) {
+        // TODO: with invariant assertions
+    }
+
+    public static void insertionSort(int[] a) {
+        // TODO: with invariant assertions
+    }
+
+    public static void bubbleSort(int[] a) {
+        // TODO: with comparison and swap counting
+    }
+
+    // ==================== Part 3: Binary Search ====================
+
+    public static int binarySearch(int[] a, int key) {
+        // TODO: with invariant and variant assertions
+        return -1;
+    }
+
+    public static int binarySearchSteps(int[] a, int key) {
+        // TODO: return the number of comparisons made
+        return -1;
+    }
+
+    // ==================== Part 4: Termination ====================
+
+    public static int gcdWithTracking(int a, int b) {
+        // TODO: print variant at each step
+        return -1;
+    }
+
+    public static int collatzLength(int n) {
+        // TODO: return sequence length
+        return -1;
+    }
+
+    // ==================== Helpers ====================
+
+    public static boolean isSorted(int[] a) {
+        // TODO
+        return false;
+    }
+
+    public static boolean isPermutation(int[] original, int[] sorted) {
+        // TODO: check sorted is a permutation of original
+        return false;
+    }
+
+    public static boolean isSortedUpTo(int[] a, int end) {
+        // TODO
+        return false;
+    }
+
+    // ==================== Main ====================
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 8 Lab ===\n");
+
+        // Part 1
+        System.out.println("--- Part 1: Specifications ---");
+        int[] data = {5, 3, 8, 1, 9, 2, 7};
+        System.out.println("linearSearch(data, 9) = " + linearSearch(data, 9));
+        System.out.println("max(data) = " + max(data));
+        System.out.println("min(data) = " + min(data));
+        System.out.println("countOccurrences([1,2,3,2,1,2], 2) = "
+                + countOccurrences(new int[]{1, 2, 3, 2, 1, 2}, 2));
+
+        // Part 2
+        System.out.println("\n--- Part 2: Sorting ---");
+        int[] arr1 = {64, 25, 12, 22, 11};
+        selectionSort(arr1);
+        System.out.println("Selection sort: " + Arrays.toString(arr1));
+
+        int[] arr2 = {64, 25, 12, 22, 11};
+        insertionSort(arr2);
+        System.out.println("Insertion sort: " + Arrays.toString(arr2));
+
+        int[] arr3 = {64, 25, 12, 22, 11};
+        bubbleSort(arr3);
+        System.out.println("Bubble sort: " + Arrays.toString(arr3));
+
+        // Part 3
+        System.out.println("\n--- Part 3: Binary Search ---");
+        int[] sorted = {1, 3, 5, 7, 9, 11, 13, 15};
+        System.out.println("binarySearch(sorted, 7) = " + binarySearch(sorted, 7));
+        System.out.println("binarySearch(sorted, 6) = " + binarySearch(sorted, 6));
+
+        System.out.println("\nBinary search step counts:");
+        for (int size = 1; size &lt;= 1_048_576; size *= 2) {
+            int[] big = new int[size];
+            for (int i = 0; i &lt; size; i++) big[i] = i;
+            int steps = binarySearchSteps(big, -1); // worst case: not found
+            int bound = (int) (Math.log(size) / Math.log(2)) + 1;
+            System.out.printf("n=%,8d: steps=%2d, bound=%2d%n", size, steps, bound);
+        }
+
+        // Part 4
+        System.out.println("\n--- Part 4: Termination ---");
+        System.out.println("GCD(1071, 462):");
+        System.out.println("Result: " + gcdWithTracking(1071, 462));
+
+        System.out.println("\nCollatz sequence lengths (1-20):");
+        for (int n = 1; n &lt;= 20; n++) {
+            System.out.printf("n=%2d: length=%d%n", n, collatzLength(n));
+        }
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="solution-key">
+<h2>Solution Key</h2>
+
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+
+public class Module8LabSolution {
+
+    // ==================== Part 1: Specifications ====================
+
+    public static int linearSearch(int[] a, int key) {
+        assert a != null : "Pre: non-null array";
+        // Invariant: key not in a[0..i-1]
+        for (int i = 0; i &lt; a.length; i++) {
+            if (a[i] == key) return i;
+        }
+        return -1;
+    }
+
+    public static int max(int[] a) {
+        assert a != null &amp;&amp; a.length &gt;= 1 : "Pre: non-empty array";
+        int result = a[0];
+        // Invariant: result == max(a[0..i-1])
+        for (int i = 1; i &lt; a.length; i++) {
+            if (a[i] &gt; result) result = a[i];
+        }
+        // Postcondition check
+        for (int x : a) assert result &gt;= x;
+        return result;
+    }
+
+    public static int min(int[] a) {
+        assert a != null &amp;&amp; a.length &gt;= 1 : "Pre: non-empty array";
+        int result = a[0];
+        // Invariant: result == min(a[0..i-1])
+        for (int i = 1; i &lt; a.length; i++) {
+            if (a[i] &lt; result) result = a[i];
+        }
+        for (int x : a) assert result &lt;= x;
+        return result;
+    }
+
+    public static int countOccurrences(int[] a, int x) {
+        assert a != null;
+        int count = 0;
+        // Invariant: count == |{j : 0 &lt;= j &lt; i, a[j] == x}|
+        for (int i = 0; i &lt; a.length; i++) {
+            if (a[i] == x) count++;
+        }
+        return count;
+    }
+
+    // ==================== Part 2: Sorting ====================
+
+    public static void selectionSort(int[] a) {
+        assert a != null;
+        for (int i = 0; i &lt; a.length - 1; i++) {
+            // Invariant: a[0..i-1] sorted, contains smallest i elements
+            assert isSortedUpTo(a, i);
+            int minIdx = i;
+            for (int j = i + 1; j &lt; a.length; j++) {
+                if (a[j] &lt; a[minIdx]) minIdx = j;
+            }
+            int temp = a[i]; a[i] = a[minIdx]; a[minIdx] = temp;
+        }
+        assert isSorted(a);
+    }
+
+    public static void insertionSort(int[] a) {
+        assert a != null;
+        for (int i = 1; i &lt; a.length; i++) {
+            // Invariant: a[0..i-1] is sorted
+            assert isSortedUpTo(a, i);
+            int key = a[i];
+            int j = i - 1;
+            while (j &gt;= 0 &amp;&amp; a[j] &gt; key) {
+                a[j + 1] = a[j];
+                j--;
+            }
+            a[j + 1] = key;
+        }
+        assert isSorted(a);
+    }
+
+    static int bubbleComparisons = 0;
+    static int bubbleSwaps = 0;
+
+    public static void bubbleSort(int[] a) {
+        assert a != null;
+        bubbleComparisons = 0;
+        bubbleSwaps = 0;
+        for (int i = 0; i &lt; a.length - 1; i++) {
+            // Invariant: a[n-i..n-1] contains the i largest elements, sorted
+            boolean swapped = false;
+            for (int j = 0; j &lt; a.length - 1 - i; j++) {
+                bubbleComparisons++;
+                if (a[j] &gt; a[j + 1]) {
+                    int temp = a[j]; a[j] = a[j + 1]; a[j + 1] = temp;
+                    bubbleSwaps++;
+                    swapped = true;
+                }
+            }
+            if (!swapped) break; // early termination
+        }
+        assert isSorted(a);
+        System.out.printf("  Bubble sort: %d comparisons, %d swaps%n",
+                bubbleComparisons, bubbleSwaps);
+    }
+
+    // ==================== Part 3: Binary Search ====================
+
+    public static int binarySearch(int[] a, int key) {
+        assert a != null;
+        assert isSorted(a) : "Pre: sorted array";
+        int lo = 0, hi = a.length - 1;
+        // Invariant: if key in a, then key in a[lo..hi]
+        while (lo &lt;= hi) {
+            int variant = hi - lo + 1;
+            int mid = lo + (hi - lo) / 2;
+            if (a[mid] == key) return mid;
+            else if (a[mid] &lt; key) lo = mid + 1;
+            else hi = mid - 1;
+            assert hi - lo + 1 &lt; variant || lo &gt; hi : "Variant must decrease";
+        }
+        return -1;
+    }
+
+    public static int binarySearchSteps(int[] a, int key) {
+        int lo = 0, hi = a.length - 1;
+        int steps = 0;
+        while (lo &lt;= hi) {
+            int mid = lo + (hi - lo) / 2;
+            steps++;
+            if (a[mid] == key) return steps;
+            else if (a[mid] &lt; key) lo = mid + 1;
+            else hi = mid - 1;
+        }
+        return steps;
+    }
+
+    // ==================== Part 4: Termination ====================
+
+    public static int gcdWithTracking(int a, int b) {
+        assert a &gt;= 0 &amp;&amp; b &gt; 0;
+        int steps = 0;
+        while (b != 0) {
+            int variant = b;
+            int r = a % b;
+            steps++;
+            System.out.printf("  Step %d: a=%d, b=%d, r=%d, V=%d%n",
+                    steps, a, b, r, variant);
+            a = b;
+            b = r;
+            assert b &lt; variant : "Variant decreased";
+        }
+        System.out.printf("  Terminated in %d steps%n", steps);
+        return a;
+    }
+
+    public static int collatzLength(int n) {
+        assert n &gt;= 1;
+        int steps = 0;
+        while (n != 1) {
+            if (n % 2 == 0) n = n / 2;
+            else n = 3 * n + 1;
+            steps++;
+        }
+        return steps;
+    }
+
+    // ==================== Helpers ====================
+
+    public static boolean isSorted(int[] a) {
+        for (int i = 1; i &lt; a.length; i++) {
+            if (a[i] &lt; a[i - 1]) return false;
+        }
+        return true;
+    }
+
+    public static boolean isPermutation(int[] original, int[] sorted) {
+        if (original.length != sorted.length) return false;
+        int[] a = Arrays.copyOf(original, original.length);
+        int[] b = Arrays.copyOf(sorted, sorted.length);
+        Arrays.sort(a);
+        Arrays.sort(b);
+        return Arrays.equals(a, b);
+    }
+
+    public static boolean isSortedUpTo(int[] a, int end) {
+        for (int i = 1; i &lt; end; i++) {
+            if (a[i] &lt; a[i - 1]) return false;
+        }
+        return true;
+    }
+
+    // ==================== Main ====================
+
+    public static void main(String[] args) {
+        System.out.println("=== Module 8 Lab Solution ===\n");
+
+        // Part 1
+        System.out.println("--- Part 1: Specifications ---");
+        int[] data = {5, 3, 8, 1, 9, 2, 7};
+        System.out.println("linearSearch(data, 9) = " + linearSearch(data, 9));   // 4
+        System.out.println("max(data) = " + max(data));                            // 9
+        System.out.println("min(data) = " + min(data));                            // 1
+        System.out.println("countOccurrences([1,2,3,2,1,2], 2) = "
+                + countOccurrences(new int[]{1, 2, 3, 2, 1, 2}, 2));              // 3
+
+        // Part 2
+        System.out.println("\n--- Part 2: Sorting ---");
+        int[] arr1 = {64, 25, 12, 22, 11};
+        selectionSort(arr1);
+        System.out.println("Selection sort: " + Arrays.toString(arr1));
+
+        int[] arr2 = {64, 25, 12, 22, 11};
+        insertionSort(arr2);
+        System.out.println("Insertion sort: " + Arrays.toString(arr2));
+
+        int[] arr3 = {64, 25, 12, 22, 11};
+        bubbleSort(arr3);
+        System.out.println("Bubble sort: " + Arrays.toString(arr3));
+
+        // Part 3
+        System.out.println("\n--- Part 3: Binary Search ---");
+        int[] sorted = {1, 3, 5, 7, 9, 11, 13, 15};
+        System.out.println("binarySearch(sorted, 7) = " + binarySearch(sorted, 7));
+        System.out.println("binarySearch(sorted, 6) = " + binarySearch(sorted, 6));
+
+        System.out.println("\nBinary search step counts:");
+        for (int size = 1; size &lt;= 1_048_576; size *= 2) {
+            int[] big = new int[size];
+            for (int i = 0; i &lt; size; i++) big[i] = i;
+            int steps = binarySearchSteps(big, -1);
+            int bound = (int) (Math.log(size) / Math.log(2)) + 1;
+            System.out.printf("n=%,8d: steps=%2d, bound=%2d  %s%n",
+                    size, steps, bound, steps &lt;= bound ? "✓" : "✗");
+        }
+
+        // Part 4
+        System.out.println("\n--- Part 4: Termination ---");
+        System.out.println("GCD(1071, 462):");
+        System.out.println("Result: " + gcdWithTracking(1071, 462));
+
+        System.out.println("\nCollatz sequence lengths (1-20):");
+        int maxLen = 0;
+        int maxN = 0;
+        for (int n = 1; n &lt;= 1000; n++) {
+            int len = collatzLength(n);
+            if (len &gt; maxLen) { maxLen = len; maxN = n; }
+        }
+        for (int n = 1; n &lt;= 20; n++) {
+            System.out.printf("n=%2d: length=%d%n", n, collatzLength(n));
+        }
+        System.out.printf("\nLongest Collatz sequence (1-1000): n=%d, length=%d%n",
+                maxN, maxLen);
+
+        // Verification
+        System.out.println("\n--- Sorting Verification ---");
+        Random rng = new Random(42);
+        for (int trial = 0; trial &lt; 100; trial++) {
+            int n = rng.nextInt(50) + 1;
+            int[] original = rng.ints(n, -100, 100).toArray();
+            int[] copy = Arrays.copyOf(original, n);
+            insertionSort(copy);
+            assert isSorted(copy) : "Not sorted!";
+            assert isPermutation(original, copy) : "Not a permutation!";
+        }
+        System.out.println("100 random insertion sort verifications passed!");
+    }
+}</code></pre>
+
+<hr>
+
+</section>
+<section class="slide" id="verification-checklist">
+<h2>Verification Checklist</h2>
+
+<table>
+<thead><tr>
+<th>Task</th>
+<th>Expected Output</th>
+<th>✓</th>
+</tr></thead><tbody>
+<tr>
+<td><code>linearSearch(data, 9)</code></td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td><code>max(data)</code></td>
+<td>9</td>
+<td></td>
+</tr>
+<tr>
+<td><code>min(data)</code></td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td><code>countOccurrences(..., 2)</code></td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>Selection sort produces sorted output</td>
+<td>All assertions pass</td>
+<td></td>
+</tr>
+<tr>
+<td>Insertion sort produces sorted output</td>
+<td>All assertions pass</td>
+<td></td>
+</tr>
+<tr>
+<td>Bubble sort produces sorted output</td>
+<td>All assertions pass</td>
+<td></td>
+</tr>
+<tr>
+<td>Binary search finds present keys</td>
+<td>Correct index</td>
+<td></td>
+</tr>
+<tr>
+<td>Binary search returns -1 for absent keys</td>
+<td>-1</td>
+<td></td>
+</tr>
+<tr>
+<td>Binary search steps ≤ log₂(n) + 1</td>
+<td>All sizes verified</td>
+<td></td>
+</tr>
+<tr>
+<td>GCD terminates with correct result</td>
+<td>21 for (1071, 462)</td>
+<td></td>
+</tr>
+<tr>
+<td>Collatz sequences computed</td>
+<td>All terminate for n ≤ 1000</td>
+<td></td>
+</tr>
+<tr>
+<td>Sorting verification (100 trials)</td>
+<td>All pass</td>
+<td></td>
+</tr>
+</tbody></table>
+
+</section>
+    </div>
+  </main>
+  <button id="view-toggle">🖥️ Slide View</button>
+  <div class="slide-controls">
+    <button onclick="prevSlide()">◀ Prev</button>
+    <span id="slide-counter">1 / 1</span>
+    <button onclick="nextSlide()">Next ▶</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

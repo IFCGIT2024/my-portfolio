@@ -1,0 +1,1239 @@
+[
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v1/user/getUserData.json?suppress_auth=1",
+    "status": 200,
+    "duration": 54,
+    "requestBody": "",
+    "responseText": "{\"id\":\"790301\",\"data\":{\"user_trail_timestamp\":\"2026-04-07 20:48:27.897988\",\"rate_limit_daily_val\":\"218\",\"rate_limit_burst_val\":\"11\",\"rate_limit_burst_time\":\"1775605526\",\"sidebar-filter-INVIEW\":\"false\",\"last_user_agent\":\"Mozilla\\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\\/537.36 (KHTML, like Gecko) Chrome\\/126.0.0.0 Safari\\/537.36\",\"last_login_ip\":\"76.11.71.186\",\"rate_limit_daily_time\":\"1775574627\",\"hide_sidebar\":\"0\",\"lastPane\":\"newtoday\",\"tos\":\"1\",\"signup_ip\":\"76.11.71.186\"},\"email\":\"m.cluett@dal.ca\",\"fname\":\"Michael\",\"fullname\":\"Michael Cluett\",\"logins\":\"12\",\"phone\":\"902-222-1087\",\"last_login\":\"1775604474\",\"is_realtor\":null,\"is_admin\":false,\"is_pvsc\":false,\"is_insurance\":false,\"is_vp_realtor\":false,\"created\":\"2026-04-05 20:46:44.891911\",\"created_ts\":\"1775432804\",\"email_permissions\":{\"allemail\":1,\"savedsearch\":1,\"followingfavourites\":1,\"promotional\":1},\"roles\":[\"1\",\"100\"],\"user\":{\"last_login\":\"2026-04-07 20:27:54\",\"logins\":12,\"user_id\":\"790301\",\"force_password\":0}}",
+    "responseParsed": {
+      "id": "790301",
+      "data": {
+        "user_trail_timestamp": "2026-04-07 20:48:27.897988",
+        "rate_limit_daily_val": "218",
+        "rate_limit_burst_val": "11",
+        "rate_limit_burst_time": "1775605526",
+        "sidebar-filter-INVIEW": "false",
+        "last_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+        "last_login_ip": "76.11.71.186",
+        "rate_limit_daily_time": "1775574627",
+        "hide_sidebar": "0",
+        "lastPane": "newtoday",
+        "tos": "1",
+        "signup_ip": "76.11.71.186"
+      },
+      "email": "m.cluett@dal.ca",
+      "fname": "Michael",
+      "fullname": "Michael Cluett",
+      "logins": "12",
+      "phone": "902-222-1087",
+      "last_login": "1775604474",
+      "is_realtor": null,
+      "is_admin": false,
+      "is_pvsc": false,
+      "is_insurance": false,
+      "is_vp_realtor": false,
+      "created": "2026-04-05 20:46:44.891911",
+      "created_ts": "1775432804",
+      "email_permissions": {
+        "allemail": 1,
+        "savedsearch": 1,
+        "followingfavourites": 1,
+        "promotional": 1
+      },
+      "roles": [
+        "1",
+        "100"
+      ],
+      "user": {
+        "last_login": "2026-04-07 20:27:54",
+        "logins": 12,
+        "user_id": "790301",
+        "force_password": 0
+      }
+    },
+    "timestamp": "2026-04-07T23:48:28.076Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v1/user/getUserData.json?suppress_auth=1",
+    "status": 200,
+    "duration": 39,
+    "requestBody": "",
+    "responseText": "{\"id\":\"790301\",\"data\":{\"user_trail_timestamp\":\"2026-04-07 20:48:30.048272\",\"rate_limit_daily_val\":\"218\",\"rate_limit_burst_val\":\"11\",\"rate_limit_burst_time\":\"1775605526\",\"sidebar-filter-INVIEW\":\"false\",\"last_user_agent\":\"Mozilla\\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\\/537.36 (KHTML, like Gecko) Chrome\\/126.0.0.0 Safari\\/537.36\",\"last_login_ip\":\"76.11.71.186\",\"rate_limit_daily_time\":\"1775574627\",\"hide_sidebar\":\"0\",\"lastPane\":\"newtoday\",\"tos\":\"1\",\"signup_ip\":\"76.11.71.186\"},\"email\":\"m.cluett@dal.ca\",\"fname\":\"Michael\",\"fullname\":\"Michael Cluett\",\"logins\":\"12\",\"phone\":\"902-222-1087\",\"last_login\":\"1775604474\",\"is_realtor\":null,\"is_admin\":false,\"is_pvsc\":false,\"is_insurance\":false,\"is_vp_realtor\":false,\"created\":\"2026-04-05 20:46:44.891911\",\"created_ts\":\"1775432804\",\"email_permissions\":{\"allemail\":1,\"savedsearch\":1,\"followingfavourites\":1,\"promotional\":1},\"roles\":[\"1\",\"100\"],\"user\":{\"last_login\":\"2026-04-07 20:27:54\",\"logins\":12,\"user_id\":\"790301\",\"force_password\":0}}",
+    "responseParsed": {
+      "id": "790301",
+      "data": {
+        "user_trail_timestamp": "2026-04-07 20:48:30.048272",
+        "rate_limit_daily_val": "218",
+        "rate_limit_burst_val": "11",
+        "rate_limit_burst_time": "1775605526",
+        "sidebar-filter-INVIEW": "false",
+        "last_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+        "last_login_ip": "76.11.71.186",
+        "rate_limit_daily_time": "1775574627",
+        "hide_sidebar": "0",
+        "lastPane": "newtoday",
+        "tos": "1",
+        "signup_ip": "76.11.71.186"
+      },
+      "email": "m.cluett@dal.ca",
+      "fname": "Michael",
+      "fullname": "Michael Cluett",
+      "logins": "12",
+      "phone": "902-222-1087",
+      "last_login": "1775604474",
+      "is_realtor": null,
+      "is_admin": false,
+      "is_pvsc": false,
+      "is_insurance": false,
+      "is_vp_realtor": false,
+      "created": "2026-04-05 20:46:44.891911",
+      "created_ts": "1775432804",
+      "email_permissions": {
+        "allemail": 1,
+        "savedsearch": 1,
+        "followingfavourites": 1,
+        "promotional": 1
+      },
+      "roles": [
+        "1",
+        "100"
+      ],
+      "user": {
+        "last_login": "2026-04-07 20:27:54",
+        "logins": 12,
+        "user_id": "790301",
+        "force_password": 0
+      }
+    },
+    "timestamp": "2026-04-07T23:48:30.279Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/get?roles=true&CLIENT_VER=23235",
+    "status": 200,
+    "duration": 48,
+    "requestBody": "",
+    "responseText": "{\"user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"12\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:27:54\",\"email_flag\":\"0\",\"roles\":[\"1\",\"100\"]},\"status\":\"success\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"12\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:27:54\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "12",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:27:54",
+        "email_flag": "0",
+        "roles": [
+          "1",
+          "100"
+        ]
+      },
+      "status": "success",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "12",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:27:54",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:48:33.331Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/drip/popup?CLIENT_VER=23235",
+    "status": 200,
+    "duration": 48,
+    "requestBody": "",
+    "responseText": "{\"data\":null,\"status\":\"success\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"12\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:27:54\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "data": null,
+      "status": "success",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "12",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:27:54",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:48:33.374Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/quota_check?quota%5B%5D=client-cutsheet-dashboard&quota%5B%5D=client-cutsheet-historical&quota%5B%5D=client-cutsheet-public-record-sales&quota%5B%5D=client-cutsheet-land-registry&CLIENT_VER=23235&nonce=d04088772cd4dcaf9072e1fa4ba059d5",
+    "status": 200,
+    "duration": 50,
+    "requestBody": "",
+    "responseText": "{\"access\":{\"client-cutsheet-dashboard\":{\"allowed\":\"t\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"1\",\"total\":\"4\",\"used\":\"3\"},\"client-cutsheet-historical\":{\"allowed\":\"t\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"4\",\"total\":\"4\",\"used\":\"0\"},\"client-cutsheet-public-record-sales\":{\"allowed\":\"f\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"0\",\"total\":\"4\",\"used\":\"4\"},\"client-cutsheet-land-registry\":{\"allowed\":\"f\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"0\",\"total\":\"4\",\"used\":\"4\"}},\"status\":\"success\",\"nonce\":\"bd77d16db849842f0ef4300f40f10d67\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"12\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:27:54\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "access": {
+        "client-cutsheet-dashboard": {
+          "allowed": "t",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "1",
+          "total": "4",
+          "used": "3"
+        },
+        "client-cutsheet-historical": {
+          "allowed": "t",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "4",
+          "total": "4",
+          "used": "0"
+        },
+        "client-cutsheet-public-record-sales": {
+          "allowed": "f",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "0",
+          "total": "4",
+          "used": "4"
+        },
+        "client-cutsheet-land-registry": {
+          "allowed": "f",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "0",
+          "total": "4",
+          "used": "4"
+        }
+      },
+      "status": "success",
+      "nonce": "bd77d16db849842f0ef4300f40f10d67",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "12",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:27:54",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:48:33.379Z"
+  },
+  {
+    "type": "XHR",
+    "method": "POST",
+    "url": "https://www.viewpoint.ca/api/v2/user/add_viewed_section",
+    "status": 201,
+    "duration": 42,
+    "requestBody": "viewed_id=2042894284&section_id=6&CLIENT_VER=23235&nonce=be4698925586462fdceae6ba0504348f",
+    "responseText": "{\"viewed_section_id\":\"565668352\",\"status\":\"success\",\"nonce\":\"be4698925586462fdceae6ba0504348f\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"12\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:27:54\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "viewed_section_id": "565668352",
+      "status": "success",
+      "nonce": "be4698925586462fdceae6ba0504348f",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "12",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:27:54",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:48:35.385Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/property/history?type=listing&pid=00151324&class_id=1&listing_id=202602657&listing_class_id=2&CLIENT_VER=23235&nonce=9e4be03fbf41dba65b527e3323c23d0d",
+    "status": 200,
+    "duration": 65,
+    "requestBody": "",
+    "responseText": "{\"history\":{\"mls_history\":[{\"listing_id\":\"202602657\",\"class_id\":\"2\",\"changes\":[{\"id\":\"152869951\",\"column_id\":\"518\",\"field\":\"list_price\",\"oldvalue\":\"1139000\",\"newvalue\":\"999900\",\"lastmoddate_fmt\":\"Mar 05, 2026\",\"lastmoddate_utc\":\"1772712148\"},{\"id\":\"153694264\",\"column_id\":\"518\",\"field\":\"list_price\",\"oldvalue\":\"999900\",\"newvalue\":\"949900\",\"lastmoddate_fmt\":\"Apr 01, 2026\",\"lastmoddate_utc\":\"1775059407\"}],\"dom\":54,\"ldate\":\"2026-02-12 00:00:00\",\"sdate\":null,\"expdate\":\"2026-02-12 00:00:00\",\"entrydate\":\"2026-02-12 00:00:00\",\"stid\":\"5\",\"lprice_fmt\":\"$949,900\",\"lprice\":\"949900\",\"sprice\":null,\"seo_address\":\"2456-Agricola-Street-Halifax\"}]},\"status\":\"success\",\"nonce\":\"94f0cdc5b216d610492c82410fb182e2\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"12\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:27:54\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "history": {
+        "mls_history": [
+          {
+            "listing_id": "202602657",
+            "class_id": "2",
+            "changes": [
+              {
+                "id": "152869951",
+                "column_id": "518",
+                "field": "list_price",
+                "oldvalue": "1139000",
+                "newvalue": "999900",
+                "lastmoddate_fmt": "Mar 05, 2026",
+                "lastmoddate_utc": "1772712148"
+              },
+              {
+                "id": "153694264",
+                "column_id": "518",
+                "field": "list_price",
+                "oldvalue": "999900",
+                "newvalue": "949900",
+                "lastmoddate_fmt": "Apr 01, 2026",
+                "lastmoddate_utc": "1775059407"
+              }
+            ],
+            "dom": 54,
+            "ldate": "2026-02-12 00:00:00",
+            "sdate": null,
+            "expdate": "2026-02-12 00:00:00",
+            "entrydate": "2026-02-12 00:00:00",
+            "stid": "5",
+            "lprice_fmt": "$949,900",
+            "lprice": "949900",
+            "sprice": null,
+            "seo_address": "2456-Agricola-Street-Halifax"
+          }
+        ]
+      },
+      "status": "success",
+      "nonce": "94f0cdc5b216d610492c82410fb182e2",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "12",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:27:54",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:48:35.407Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/get?roles=true&CLIENT_VER=23235",
+    "status": 200,
+    "duration": 44,
+    "requestBody": "",
+    "responseText": "{\"user\":null,\"status\":\"success\",\"api_user\":false,\"api_login\":true}",
+    "responseParsed": {
+      "user": null,
+      "status": "success",
+      "api_user": false,
+      "api_login": true
+    },
+    "timestamp": "2026-04-07T23:48:48.915Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/listing/insight?class_id=2&listing_id=202602657&CLIENT_VER=23235&nonce=9cf59d6511cd7362cc40068c35de892e",
+    "status": 200,
+    "duration": 189,
+    "requestBody": "",
+    "responseText": "{\"insight\":{\"views\":\"71\",\"users\":\"63\"},\"status\":\"success\",\"nonce\":\"736ef3240259a6e804e6bd137d3c8101\",\"api_user\":false,\"api_login\":true}",
+    "responseParsed": {
+      "insight": {
+        "views": "71",
+        "users": "63"
+      },
+      "status": "success",
+      "nonce": "736ef3240259a6e804e6bd137d3c8101",
+      "api_user": false,
+      "api_login": true
+    },
+    "timestamp": "2026-04-07T23:48:59.420Z"
+  },
+  {
+    "type": "XHR",
+    "method": "POST",
+    "url": "https://www.viewpoint.ca/api/v2/user/login",
+    "status": 201,
+    "duration": 72,
+    "requestBody": "email=m.cluett%40dal.ca&password=BigMoneyMilkders&remember=1&CLIENT_VER=23235",
+    "responseText": "{\"user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"12\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:27:54\",\"email_flag\":\"0\",\"roles\":[\"1\",\"100\"]},\"status\":\"success\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "12",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:27:54",
+        "email_flag": "0",
+        "roles": [
+          "1",
+          "100"
+        ]
+      },
+      "status": "success",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:22.367Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/get?roles=true&CLIENT_VER=23235",
+    "status": 200,
+    "duration": 49,
+    "requestBody": "",
+    "responseText": "{\"user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\",\"roles\":[\"1\",\"100\"]},\"status\":\"success\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0",
+        "roles": [
+          "1",
+          "100"
+        ]
+      },
+      "status": "success",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:22.862Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/drip/popup?CLIENT_VER=23235",
+    "status": 200,
+    "duration": 40,
+    "requestBody": "",
+    "responseText": "{\"data\":null,\"status\":\"success\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "data": null,
+      "status": "success",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:22.898Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/quota_check?quota%5B%5D=client-cutsheet-dashboard&quota%5B%5D=client-cutsheet-historical&quota%5B%5D=client-cutsheet-public-record-sales&quota%5B%5D=client-cutsheet-land-registry&CLIENT_VER=23235&nonce=f337d8205f72dd17769b41fa45198997",
+    "status": 200,
+    "duration": 50,
+    "requestBody": "",
+    "responseText": "{\"access\":{\"client-cutsheet-dashboard\":{\"allowed\":\"t\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"1\",\"total\":\"4\",\"used\":\"3\"},\"client-cutsheet-historical\":{\"allowed\":\"t\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"4\",\"total\":\"4\",\"used\":\"0\"},\"client-cutsheet-public-record-sales\":{\"allowed\":\"f\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"0\",\"total\":\"4\",\"used\":\"4\"},\"client-cutsheet-land-registry\":{\"allowed\":\"f\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"0\",\"total\":\"4\",\"used\":\"4\"}},\"status\":\"success\",\"nonce\":\"1fd4546ea394acc37291c2660d825c09\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "access": {
+        "client-cutsheet-dashboard": {
+          "allowed": "t",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "1",
+          "total": "4",
+          "used": "3"
+        },
+        "client-cutsheet-historical": {
+          "allowed": "t",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "4",
+          "total": "4",
+          "used": "0"
+        },
+        "client-cutsheet-public-record-sales": {
+          "allowed": "f",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "0",
+          "total": "4",
+          "used": "4"
+        },
+        "client-cutsheet-land-registry": {
+          "allowed": "f",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "0",
+          "total": "4",
+          "used": "4"
+        }
+      },
+      "status": "success",
+      "nonce": "1fd4546ea394acc37291c2660d825c09",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:22.910Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/get?roles=true&CLIENT_VER=23235",
+    "status": 200,
+    "duration": 46,
+    "requestBody": "",
+    "responseText": "{\"user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\",\"roles\":[\"1\",\"100\"]},\"status\":\"success\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0",
+        "roles": [
+          "1",
+          "100"
+        ]
+      },
+      "status": "success",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:26.489Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/drip/popup?CLIENT_VER=23235",
+    "status": 200,
+    "duration": 45,
+    "requestBody": "",
+    "responseText": "{\"data\":null,\"status\":\"success\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "data": null,
+      "status": "success",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:26.530Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/quota_check?quota%5B%5D=client-cutsheet-dashboard&quota%5B%5D=client-cutsheet-historical&quota%5B%5D=client-cutsheet-public-record-sales&quota%5B%5D=client-cutsheet-land-registry&CLIENT_VER=23235&nonce=7b9ab44560eabb4fae56d919c80d3e5e",
+    "status": 200,
+    "duration": 51,
+    "requestBody": "",
+    "responseText": "{\"access\":{\"client-cutsheet-dashboard\":{\"allowed\":\"t\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"1\",\"total\":\"4\",\"used\":\"3\"},\"client-cutsheet-historical\":{\"allowed\":\"t\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"4\",\"total\":\"4\",\"used\":\"0\"},\"client-cutsheet-public-record-sales\":{\"allowed\":\"f\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"0\",\"total\":\"4\",\"used\":\"4\"},\"client-cutsheet-land-registry\":{\"allowed\":\"f\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"0\",\"total\":\"4\",\"used\":\"4\"}},\"status\":\"success\",\"nonce\":\"5f94e413d7ddfc12eb13b412a1ec79e5\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "access": {
+        "client-cutsheet-dashboard": {
+          "allowed": "t",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "1",
+          "total": "4",
+          "used": "3"
+        },
+        "client-cutsheet-historical": {
+          "allowed": "t",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "4",
+          "total": "4",
+          "used": "0"
+        },
+        "client-cutsheet-public-record-sales": {
+          "allowed": "f",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "0",
+          "total": "4",
+          "used": "4"
+        },
+        "client-cutsheet-land-registry": {
+          "allowed": "f",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "0",
+          "total": "4",
+          "used": "4"
+        }
+      },
+      "status": "success",
+      "nonce": "5f94e413d7ddfc12eb13b412a1ec79e5",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:26.538Z"
+  },
+  {
+    "type": "XHR",
+    "method": "POST",
+    "url": "https://www.viewpoint.ca/api/v2/user/add_viewed_section",
+    "status": 201,
+    "duration": 41,
+    "requestBody": "viewed_id=2042895021&section_id=6&CLIENT_VER=23235&nonce=831bfbcdb4b223db701a3a547af26e02",
+    "responseText": "{\"viewed_section_id\":\"565668591\",\"status\":\"success\",\"nonce\":\"831bfbcdb4b223db701a3a547af26e02\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "viewed_section_id": "565668591",
+      "status": "success",
+      "nonce": "831bfbcdb4b223db701a3a547af26e02",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:27.888Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/property/history?type=listing&pid=00151324&class_id=1&listing_id=202602657&listing_class_id=2&CLIENT_VER=23235&nonce=7ed21248eab698cd2c054ed170f15f45",
+    "status": 200,
+    "duration": 63,
+    "requestBody": "",
+    "responseText": "{\"history\":{\"mls_history\":[{\"listing_id\":\"202602657\",\"class_id\":\"2\",\"changes\":[{\"id\":\"152869951\",\"column_id\":\"518\",\"field\":\"list_price\",\"oldvalue\":\"1139000\",\"newvalue\":\"999900\",\"lastmoddate_fmt\":\"Mar 05, 2026\",\"lastmoddate_utc\":\"1772712148\"},{\"id\":\"153694264\",\"column_id\":\"518\",\"field\":\"list_price\",\"oldvalue\":\"999900\",\"newvalue\":\"949900\",\"lastmoddate_fmt\":\"Apr 01, 2026\",\"lastmoddate_utc\":\"1775059407\"}],\"dom\":54,\"ldate\":\"2026-02-12 00:00:00\",\"sdate\":null,\"expdate\":\"2026-02-12 00:00:00\",\"entrydate\":\"2026-02-12 00:00:00\",\"stid\":\"5\",\"lprice_fmt\":\"$949,900\",\"lprice\":\"949900\",\"sprice\":null,\"seo_address\":\"2456-Agricola-Street-Halifax\"}]},\"status\":\"success\",\"nonce\":\"3b78594fa74947bb7a53e0a284e2143c\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "history": {
+        "mls_history": [
+          {
+            "listing_id": "202602657",
+            "class_id": "2",
+            "changes": [
+              {
+                "id": "152869951",
+                "column_id": "518",
+                "field": "list_price",
+                "oldvalue": "1139000",
+                "newvalue": "999900",
+                "lastmoddate_fmt": "Mar 05, 2026",
+                "lastmoddate_utc": "1772712148"
+              },
+              {
+                "id": "153694264",
+                "column_id": "518",
+                "field": "list_price",
+                "oldvalue": "999900",
+                "newvalue": "949900",
+                "lastmoddate_fmt": "Apr 01, 2026",
+                "lastmoddate_utc": "1775059407"
+              }
+            ],
+            "dom": 54,
+            "ldate": "2026-02-12 00:00:00",
+            "sdate": null,
+            "expdate": "2026-02-12 00:00:00",
+            "entrydate": "2026-02-12 00:00:00",
+            "stid": "5",
+            "lprice_fmt": "$949,900",
+            "lprice": "949900",
+            "sprice": null,
+            "seo_address": "2456-Agricola-Street-Halifax"
+          }
+        ]
+      },
+      "status": "success",
+      "nonce": "3b78594fa74947bb7a53e0a284e2143c",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:27.909Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/quota_check?quota%5B%5D=client-cutsheet-public-record-sales&CLIENT_VER=23235&nonce=5f94e413d7ddfc12eb13b412a1ec79e5",
+    "status": 200,
+    "duration": 47,
+    "requestBody": "",
+    "responseText": "{\"access\":{\"client-cutsheet-public-record-sales\":{\"allowed\":\"f\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"0\",\"total\":\"4\",\"used\":\"4\"}},\"status\":\"success\",\"nonce\":\"8d4b8fc45f2b8e2aa47fa3aa8aa5248b\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "access": {
+        "client-cutsheet-public-record-sales": {
+          "allowed": "f",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "0",
+          "total": "4",
+          "used": "4"
+        }
+      },
+      "status": "success",
+      "nonce": "8d4b8fc45f2b8e2aa47fa3aa8aa5248b",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:29.324Z"
+  },
+  {
+    "type": "XHR",
+    "method": "POST",
+    "url": "https://www.viewpoint.ca/api/v2/user/add_viewed_section",
+    "status": 201,
+    "duration": 42,
+    "requestBody": "viewed_id=2042895021&section_id=7&CLIENT_VER=23235&nonce=3b78594fa74947bb7a53e0a284e2143c",
+    "responseText": "{\"viewed_section_id\":\"565668599\",\"status\":\"success\",\"nonce\":\"3b78594fa74947bb7a53e0a284e2143c\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "viewed_section_id": "565668599",
+      "status": "success",
+      "nonce": "3b78594fa74947bb7a53e0a284e2143c",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:30.275Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/property/taxes?pid=00151324&class_id=1&CLIENT_VER=23235&nonce=831bfbcdb4b223db701a3a547af26e02",
+    "status": 200,
+    "duration": 123,
+    "requestBody": "",
+    "responseText": "{\"taxes\":{\"is_park\":false,\"assessments\":{\"2008\":{\"assessment\":\"95400\",\"cap\":null},\"2009\":{\"assessment\":\"178600\",\"cap\":null},\"2010\":{\"assessment\":\"181200\",\"cap\":null},\"2011\":{\"assessment\":\"201600\",\"cap\":null},\"2012\":{\"assessment\":\"212700\",\"cap\":null},\"2013\":{\"assessment\":\"246800\",\"cap\":\"246800\"},\"2014\":{\"assessment\":\"257100\",\"cap\":\"257100\"},\"2015\":{\"assessment\":\"283000\",\"cap\":\"283000\"},\"2016\":{\"assessment\":\"251600\",\"cap\":\"251600\"},\"2017\":{\"assessment\":\"253500.00\",\"cap\":\"253500\"},\"2018\":{\"assessment\":\"252500.00\",\"cap\":\"252500\"},\"2019\":{\"assessment\":\"262400.00\",\"cap\":\"262400\"},\"2020\":{\"assessment\":\"286400.00\",\"cap\":\"286400\"},\"2021\":{\"assessment\":\"309700.00\",\"cap\":\"309700\"},\"2022\":{\"assessment\":\"323100.00\",\"cap\":\"323100\"},\"2023\":{\"assessment\":\"354900.00\",\"cap\":\"354900\"},\"2024\":{\"assessment\":\"374100.00\",\"cap\":\"374100\"},\"2025\":{\"assessment\":\"418700.00\",\"cap\":\"418700\"},\"2026\":{\"assessment\":\"540400.00\",\"cap\":\"540400\"}},\"current_year\":2026,\"hrm_rate_year\":2025,\"info\":{\"multi_rate\":\"Property is mixed use and subject to multiple tax rates.\",\"tax_expense\":\"16,443.03\",\"exempt\":null,\"aan\":\"00683841\",\"rate\":\"3.679\",\"records\":[{\"aan\":\"00683841\",\"leg_code\":\"1\",\"taxstatus\":\"Y\",\"pubvalue\":\"135100.00\",\"rate\":\"1.115\",\"comm_rate\":\"3.533\"},{\"aan\":\"00683841\",\"leg_code\":\"2\",\"taxstatus\":\"Y\",\"pubvalue\":\"405300.00\",\"rate\":\"1.115\",\"comm_rate\":\"3.533\"}],\"parcel_pid\":\"00151324\",\"parcel_class_id\":\"1\"},\"cap_available\":true,\"preview\":{\"year\":2026,\"value\":null},\"has_pvsc\":true},\"status\":\"success\",\"nonce\":\"2c5be65f884cdf791428093b1eca5fc7\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "taxes": {
+        "is_park": false,
+        "assessments": {
+          "2008": {
+            "assessment": "95400",
+            "cap": null
+          },
+          "2009": {
+            "assessment": "178600",
+            "cap": null
+          },
+          "2010": {
+            "assessment": "181200",
+            "cap": null
+          },
+          "2011": {
+            "assessment": "201600",
+            "cap": null
+          },
+          "2012": {
+            "assessment": "212700",
+            "cap": null
+          },
+          "2013": {
+            "assessment": "246800",
+            "cap": "246800"
+          },
+          "2014": {
+            "assessment": "257100",
+            "cap": "257100"
+          },
+          "2015": {
+            "assessment": "283000",
+            "cap": "283000"
+          },
+          "2016": {
+            "assessment": "251600",
+            "cap": "251600"
+          },
+          "2017": {
+            "assessment": "253500.00",
+            "cap": "253500"
+          },
+          "2018": {
+            "assessment": "252500.00",
+            "cap": "252500"
+          },
+          "2019": {
+            "assessment": "262400.00",
+            "cap": "262400"
+          },
+          "2020": {
+            "assessment": "286400.00",
+            "cap": "286400"
+          },
+          "2021": {
+            "assessment": "309700.00",
+            "cap": "309700"
+          },
+          "2022": {
+            "assessment": "323100.00",
+            "cap": "323100"
+          },
+          "2023": {
+            "assessment": "354900.00",
+            "cap": "354900"
+          },
+          "2024": {
+            "assessment": "374100.00",
+            "cap": "374100"
+          },
+          "2025": {
+            "assessment": "418700.00",
+            "cap": "418700"
+          },
+          "2026": {
+            "assessment": "540400.00",
+            "cap": "540400"
+          }
+        },
+        "current_year": 2026,
+        "hrm_rate_year": 2025,
+        "info": {
+          "multi_rate": "Property is mixed use and subject to multiple tax rates.",
+          "tax_expense": "16,443.03",
+          "exempt": null,
+          "aan": "00683841",
+          "rate": "3.679",
+          "records": [
+            {
+              "aan": "00683841",
+              "leg_code": "1",
+              "taxstatus": "Y",
+              "pubvalue": "135100.00",
+              "rate": "1.115",
+              "comm_rate": "3.533"
+            },
+            {
+              "aan": "00683841",
+              "leg_code": "2",
+              "taxstatus": "Y",
+              "pubvalue": "405300.00",
+              "rate": "1.115",
+              "comm_rate": "3.533"
+            }
+          ],
+          "parcel_pid": "00151324",
+          "parcel_class_id": "1"
+        },
+        "cap_available": true,
+        "preview": {
+          "year": 2026,
+          "value": null
+        },
+        "has_pvsc": true
+      },
+      "status": "success",
+      "nonce": "2c5be65f884cdf791428093b1eca5fc7",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:30.355Z"
+  },
+  {
+    "type": "XHR",
+    "method": "POST",
+    "url": "https://www.viewpoint.ca/api/v2/user/add_viewed_section",
+    "status": 201,
+    "duration": 42,
+    "requestBody": "viewed_id=2042895021&section_id=4&CLIENT_VER=23235&nonce=8d4b8fc45f2b8e2aa47fa3aa8aa5248b",
+    "responseText": "{\"viewed_section_id\":\"565668609\",\"status\":\"success\",\"nonce\":\"8d4b8fc45f2b8e2aa47fa3aa8aa5248b\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "viewed_section_id": "565668609",
+      "status": "success",
+      "nonce": "8d4b8fc45f2b8e2aa47fa3aa8aa5248b",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:32.273Z"
+  },
+  {
+    "type": "XHR",
+    "method": "POST",
+    "url": "https://www.viewpoint.ca/api/v2/user/add_viewed_section",
+    "status": 201,
+    "duration": 44,
+    "requestBody": "viewed_id=2042895021&section_id=14&CLIENT_VER=23235&nonce=2c5be65f884cdf791428093b1eca5fc7",
+    "responseText": "{\"viewed_section_id\":\"565668623\",\"status\":\"success\",\"nonce\":\"2c5be65f884cdf791428093b1eca5fc7\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "viewed_section_id": "565668623",
+      "status": "success",
+      "nonce": "2c5be65f884cdf791428093b1eca5fc7",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:34.403Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/listing/insight?class_id=2&listing_id=202602657&CLIENT_VER=23235&nonce=3b78594fa74947bb7a53e0a284e2143c",
+    "status": 200,
+    "duration": 69,
+    "requestBody": "",
+    "responseText": "{\"insight\":{\"views\":\"73\",\"users\":\"63\"},\"status\":\"success\",\"nonce\":\"0fe10980621a240d7684b2747f21c1a4\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "insight": {
+        "views": "73",
+        "users": "63"
+      },
+      "status": "success",
+      "nonce": "0fe10980621a240d7684b2747f21c1a4",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:34.428Z"
+  },
+  {
+    "type": "XHR",
+    "method": "POST",
+    "url": "https://www.viewpoint.ca/api/v2/user/add_viewed_section",
+    "status": 201,
+    "duration": 42,
+    "requestBody": "viewed_id=2042895021&section_id=10&CLIENT_VER=23235&nonce=2c5be65f884cdf791428093b1eca5fc7",
+    "responseText": "{\"viewed_section_id\":\"565668629\",\"status\":\"success\",\"nonce\":\"2c5be65f884cdf791428093b1eca5fc7\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "viewed_section_id": "565668629",
+      "status": "success",
+      "nonce": "2c5be65f884cdf791428093b1eca5fc7",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:35.184Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/listing/schools?class_id=2&listing_id=202602657&CLIENT_VER=23235&nonce=8d4b8fc45f2b8e2aa47fa3aa8aa5248b",
+    "status": 200,
+    "duration": 62,
+    "requestBody": "",
+    "responseText": "{\"schools\":{\"Elementary\":[{\"NAME\":\"Oxford School\",\"GRADES\":\"Grade 6\",\"PROGRAM\":\"Elementary - English\",\"DISTANCE\":\"896.4 m\",\"SUMMARYPAGE\":\"\\/hrm\\/schools#pid\\/00151324\\/program\\/203\"},{\"NAME\":\"Joseph Howe Elementary\",\"GRADES\":\"Pre-Primary to Grade 5\",\"PROGRAM\":\"Elementary - English\",\"DISTANCE\":\"252.4 m\",\"SUMMARYPAGE\":\"\\/hrm\\/schools#pid\\/00151324\\/program\\/155\"},{\"NAME\":\"St. Joseph's-Alexander McKay Elementary\",\"GRADES\":\"Primary to Grade 6\",\"PROGRAM\":\"Elementary - French (early)\",\"DISTANCE\":\"1.5 km\",\"SUMMARYPAGE\":\"\\/hrm\\/schools#pid\\/00151324\\/program\\/14\"}],\"Junior High\":[{\"NAME\":\"Oxford School\",\"GRADES\":\"Grade 7 to Grade 9\",\"PROGRAM\":\"Junior High - English\",\"DISTANCE\":\"896.4 m\",\"SUMMARYPAGE\":\"\\/hrm\\/schools#pid\\/00151324\\/program\\/221\"},{\"NAME\":\"Oxford School\",\"GRADES\":\"Grade 7 to Grade 9\",\"PROGRAM\":\"Junior High - French (early)\",\"DISTANCE\":\"896.4 m\",\"SUMMARYPAGE\":\"\\/hrm\\/schools#pid\\/00151324\\/program\\/34\"}],\"Senior High\":[{\"NAME\":\"Citadel High\",\"GRADES\":\"Grade 10 to Grade 12\",\"PROGRAM\":\"High School - English\",\"DISTANCE\":\"889.4 m\",\"SUMMARYPAGE\":\"\\/hrm\\/schools#pid\\/00151324\\/program\\/255\"},{\"NAME\":\"Citadel High\",\"GRADES\":\"Grade 10 to Grade 12\",\"PROGRAM\":\"High School - French (early)\",\"DISTANCE\":\"889.4 m\",\"SUMMARYPAGE\":\"\\/hrm\\/schools#pid\\/00151324\\/program\\/50\"}]},\"status\":\"success\",\"nonce\":\"416b287b9f58def4e6e87267e8523521\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "schools": {
+        "Elementary": [
+          {
+            "NAME": "Oxford School",
+            "GRADES": "Grade 6",
+            "PROGRAM": "Elementary - English",
+            "DISTANCE": "896.4 m",
+            "SUMMARYPAGE": "/hrm/schools#pid/00151324/program/203"
+          },
+          {
+            "NAME": "Joseph Howe Elementary",
+            "GRADES": "Pre-Primary to Grade 5",
+            "PROGRAM": "Elementary - English",
+            "DISTANCE": "252.4 m",
+            "SUMMARYPAGE": "/hrm/schools#pid/00151324/program/155"
+          },
+          {
+            "NAME": "St. Joseph's-Alexander McKay Elementary",
+            "GRADES": "Primary to Grade 6",
+            "PROGRAM": "Elementary - French (early)",
+            "DISTANCE": "1.5 km",
+            "SUMMARYPAGE": "/hrm/schools#pid/00151324/program/14"
+          }
+        ],
+        "Junior High": [
+          {
+            "NAME": "Oxford School",
+            "GRADES": "Grade 7 to Grade 9",
+            "PROGRAM": "Junior High - English",
+            "DISTANCE": "896.4 m",
+            "SUMMARYPAGE": "/hrm/schools#pid/00151324/program/221"
+          },
+          {
+            "NAME": "Oxford School",
+            "GRADES": "Grade 7 to Grade 9",
+            "PROGRAM": "Junior High - French (early)",
+            "DISTANCE": "896.4 m",
+            "SUMMARYPAGE": "/hrm/schools#pid/00151324/program/34"
+          }
+        ],
+        "Senior High": [
+          {
+            "NAME": "Citadel High",
+            "GRADES": "Grade 10 to Grade 12",
+            "PROGRAM": "High School - English",
+            "DISTANCE": "889.4 m",
+            "SUMMARYPAGE": "/hrm/schools#pid/00151324/program/255"
+          },
+          {
+            "NAME": "Citadel High",
+            "GRADES": "Grade 10 to Grade 12",
+            "PROGRAM": "High School - French (early)",
+            "DISTANCE": "889.4 m",
+            "SUMMARYPAGE": "/hrm/schools#pid/00151324/program/50"
+          }
+        ]
+      },
+      "status": "success",
+      "nonce": "416b287b9f58def4e6e87267e8523521",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:35.203Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/quota_check?quota%5B%5D=client-cutsheet-land-registry&CLIENT_VER=23235&nonce=0fe10980621a240d7684b2747f21c1a4",
+    "status": 200,
+    "duration": 49,
+    "requestBody": "",
+    "responseText": "{\"access\":{\"client-cutsheet-land-registry\":{\"allowed\":\"f\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"0\",\"total\":\"4\",\"used\":\"4\"}},\"status\":\"success\",\"nonce\":\"c1112140bcdcabaa5def4b0cbacc4db8\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "access": {
+        "client-cutsheet-land-registry": {
+          "allowed": "f",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "0",
+          "total": "4",
+          "used": "4"
+        }
+      },
+      "status": "success",
+      "nonce": "c1112140bcdcabaa5def4b0cbacc4db8",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:37.445Z"
+  },
+  {
+    "type": "XHR",
+    "method": "POST",
+    "url": "https://www.viewpoint.ca/api/v2/user/add_viewed_section",
+    "status": 201,
+    "duration": 42,
+    "requestBody": "viewed_id=2042895021&section_id=12&CLIENT_VER=23235&nonce=2c5be65f884cdf791428093b1eca5fc7",
+    "responseText": "{\"viewed_section_id\":\"565668644\",\"status\":\"success\",\"nonce\":\"2c5be65f884cdf791428093b1eca5fc7\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "viewed_section_id": "565668644",
+      "status": "success",
+      "nonce": "2c5be65f884cdf791428093b1eca5fc7",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:38.332Z"
+  },
+  {
+    "type": "XHR",
+    "method": "POST",
+    "url": "https://www.viewpoint.ca/api/v2/user/add_viewed_section",
+    "status": 201,
+    "duration": 41,
+    "requestBody": "viewed_id=2042895021&section_id=18&CLIENT_VER=23235&nonce=416b287b9f58def4e6e87267e8523521",
+    "responseText": "{\"viewed_section_id\":\"565668653\",\"status\":\"success\",\"nonce\":\"416b287b9f58def4e6e87267e8523521\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "viewed_section_id": "565668653",
+      "status": "success",
+      "nonce": "416b287b9f58def4e6e87267e8523521",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:49:39.675Z"
+  }
+]

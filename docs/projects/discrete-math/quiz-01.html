@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 Quiz — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="quiz-01">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+      <h1>Module 1: Practice Quiz</h1>
+      <p class="quiz-subtitle">Integers, Definitions & Proofs — Test your understanding with 12 multiple-choice questions.</p>
+      <div id="quiz-container" data-questions='[{"q":"An integer n is even if and only if:","choices":["n = 2k for some integer k","n = 2k + 1 for some integer k","n is divisible by 3","n \u003e 0"],"answer":0,"explanation":"By definition, n is even iff there exists an integer k such that n = 2k."},{"q":"Which is a valid counterexample to \"all primes are odd\"?","choices":["1","2","9","15"],"answer":1,"explanation":"2 is prime and even, disproving the claim."},{"q":"If a | b and b | c, then:","choices":["a | c","c | a","a = c","b = a + c"],"answer":0,"explanation":"Divisibility is transitive: a | b means b = ak, b | c means c = bl, so c = akl = a(kl), hence a | c."},{"q":"What does gcd(12, 8) equal?","choices":["2","4","8","24"],"answer":1,"explanation":"The greatest common divisor of 12 and 8 is 4, since 4 divides both and no larger integer does."},{"q":"In a direct proof that the sum of two even integers is even, you start by:","choices":["Assuming the conclusion","Assuming the sum is odd","Writing each even integer as 2k for some integer","Using proof by contradiction"],"answer":2,"explanation":"In a direct proof, you start from the hypothesis: let a = 2j and b = 2k."},{"q":"The Euclidean Algorithm computes:","choices":["The least common multiple","The greatest common divisor","The prime factorization","The modular inverse"],"answer":1,"explanation":"The Euclidean Algorithm repeatedly applies division to compute gcd(a, b)."},{"q":"Which statement is true about the integer 1?","choices":["1 is prime","1 is composite","1 is neither prime nor composite","1 is even"],"answer":2,"explanation":"By convention, 1 is neither prime nor composite. Primes must be greater than 1."},{"q":"What is gcd(0, 7)?","choices":["0","1","7","undefined"],"answer":2,"explanation":"Every integer divides 0, so gcd(0, 7) = 7."},{"q":"In Java, what does -7 % 2 return?","choices":["0","1","-1","-7"],"answer":2,"explanation":"Java's % operator preserves the sign of the dividend, so -7 % 2 = -1."},{"q":"To disprove a universal statement ∀x P(x), you need:","choices":["A proof for all x","A proof for some x","One counterexample","A contradiction"],"answer":2,"explanation":"A single counterexample where P(x) is false disproves ∀x P(x)."},{"q":"If a = 2j + 1 and b = 2k + 1 (both odd), then a + b is:","choices":["Always odd","Always even","Sometimes even, sometimes odd","Always prime"],"answer":1,"explanation":"a + b = 2j + 1 + 2k + 1 = 2(j + k + 1), which is even."},{"q":"Which Java expression correctly checks if n is even?","choices":["n / 2 == 0","n % 2 == 0","n % 2 == 1","Math.abs(n) == 2"],"answer":1,"explanation":"n % 2 == 0 checks if n leaves remainder 0 when divided by 2."}]'></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>

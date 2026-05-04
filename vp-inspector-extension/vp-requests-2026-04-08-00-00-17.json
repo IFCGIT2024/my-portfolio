@@ -1,0 +1,216 @@
+[
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/get?roles=true&CLIENT_VER=23235",
+    "status": 200,
+    "duration": 57,
+    "requestBody": "",
+    "responseText": "{\"user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\",\"roles\":[\"1\",\"100\"]},\"status\":\"success\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0",
+        "roles": [
+          "1",
+          "100"
+        ]
+      },
+      "status": "success",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:59:05.036Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/drip/popup?CLIENT_VER=23235",
+    "status": 200,
+    "duration": 49,
+    "requestBody": "",
+    "responseText": "{\"data\":null,\"status\":\"success\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "data": null,
+      "status": "success",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:59:05.075Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/quota_check?quota%5B%5D=client-cutsheet-dashboard&quota%5B%5D=client-cutsheet-historical&quota%5B%5D=client-cutsheet-public-record-sales&quota%5B%5D=client-cutsheet-land-registry&CLIENT_VER=23235&nonce=4c0d7a273419606fb780f856ea9c98ad",
+    "status": 200,
+    "duration": 55,
+    "requestBody": "",
+    "responseText": "{\"access\":{\"client-cutsheet-dashboard\":{\"allowed\":\"t\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"1\",\"total\":\"4\",\"used\":\"3\"},\"client-cutsheet-historical\":{\"allowed\":\"t\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"4\",\"total\":\"4\",\"used\":\"0\"},\"client-cutsheet-public-record-sales\":{\"allowed\":\"f\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"0\",\"total\":\"4\",\"used\":\"4\"},\"client-cutsheet-land-registry\":{\"allowed\":\"f\",\"frequency\":\"Monthly\",\"period\":\"April\",\"remaining\":\"0\",\"total\":\"4\",\"used\":\"4\"}},\"status\":\"success\",\"nonce\":\"a8aad549826d16e2ef26565af18cc158\",\"api_user\":{\"id\":\"790301\",\"created\":\"2026-04-05 20:46:44.891911\",\"fname\":\"Michael\",\"lname\":\"Cluett\",\"email\":\"m.cluett@dal.ca\",\"logins\":\"13\",\"phone\":\"902-222-1087\",\"last_login\":\"2026-04-07 20:49:22\",\"email_flag\":\"0\"},\"api_login\":false}",
+    "responseParsed": {
+      "access": {
+        "client-cutsheet-dashboard": {
+          "allowed": "t",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "1",
+          "total": "4",
+          "used": "3"
+        },
+        "client-cutsheet-historical": {
+          "allowed": "t",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "4",
+          "total": "4",
+          "used": "0"
+        },
+        "client-cutsheet-public-record-sales": {
+          "allowed": "f",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "0",
+          "total": "4",
+          "used": "4"
+        },
+        "client-cutsheet-land-registry": {
+          "allowed": "f",
+          "frequency": "Monthly",
+          "period": "April",
+          "remaining": "0",
+          "total": "4",
+          "used": "4"
+        }
+      },
+      "status": "success",
+      "nonce": "a8aad549826d16e2ef26565af18cc158",
+      "api_user": {
+        "id": "790301",
+        "created": "2026-04-05 20:46:44.891911",
+        "fname": "Michael",
+        "lname": "Cluett",
+        "email": "m.cluett@dal.ca",
+        "logins": "13",
+        "phone": "902-222-1087",
+        "last_login": "2026-04-07 20:49:22",
+        "email_flag": "0"
+      },
+      "api_login": false
+    },
+    "timestamp": "2026-04-07T23:59:05.087Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/get?roles=true&CLIENT_VER=23235",
+    "status": 200,
+    "duration": 112,
+    "requestBody": "",
+    "responseText": "{\"user\":null,\"status\":\"success\",\"api_user\":false,\"api_login\":true}",
+    "responseParsed": {
+      "user": null,
+      "status": "success",
+      "api_user": false,
+      "api_login": true
+    },
+    "timestamp": "2026-04-07T23:59:29.690Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/get?roles=true&CLIENT_VER=23235",
+    "status": 200,
+    "duration": 51,
+    "requestBody": "",
+    "responseText": "{\"user\":null,\"status\":\"success\",\"api_user\":false,\"api_login\":true}",
+    "responseParsed": {
+      "user": null,
+      "status": "success",
+      "api_user": false,
+      "api_login": true
+    },
+    "timestamp": "2026-04-07T23:59:38.988Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/listing/insight?class_id=2&listing_id=202602657&CLIENT_VER=23235&nonce=0fe1fb3e268df85c1ae0ce2de3ec8728",
+    "status": 200,
+    "duration": 120,
+    "requestBody": "",
+    "responseText": "{\"insight\":{\"views\":\"77\",\"users\":\"63\"},\"status\":\"success\",\"nonce\":\"3aa3252c274e377b4d6428f24deae7a9\",\"api_user\":false,\"api_login\":true}",
+    "responseParsed": {
+      "insight": {
+        "views": "77",
+        "users": "63"
+      },
+      "status": "success",
+      "nonce": "3aa3252c274e377b4d6428f24deae7a9",
+      "api_user": false,
+      "api_login": true
+    },
+    "timestamp": "2026-04-07T23:59:45.120Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/user/get?roles=true&CLIENT_VER=23235",
+    "status": 200,
+    "duration": 63,
+    "requestBody": "",
+    "responseText": "{\"user\":null,\"status\":\"success\",\"api_user\":false,\"api_login\":true}",
+    "responseParsed": {
+      "user": null,
+      "status": "success",
+      "api_user": false,
+      "api_login": true
+    },
+    "timestamp": "2026-04-07T23:59:59.739Z"
+  },
+  {
+    "type": "XHR",
+    "method": "GET",
+    "url": "https://www.viewpoint.ca/api/v2/listing/insight?class_id=2&listing_id=202602657&CLIENT_VER=23235&nonce=1932de02b07da4ee464be3e8cd3bd50b",
+    "status": 200,
+    "duration": 116,
+    "requestBody": "",
+    "responseText": "{\"insight\":{\"views\":\"77\",\"users\":\"63\"},\"status\":\"success\",\"nonce\":\"9a8f27b21b29361b6f7d4c2e21fdcf17\",\"api_user\":false,\"api_login\":true}",
+    "responseParsed": {
+      "insight": {
+        "views": "77",
+        "users": "63"
+      },
+      "status": "success",
+      "nonce": "9a8f27b21b29361b6f7d4c2e21fdcf17",
+      "api_user": false,
+      "api_login": true
+    },
+    "timestamp": "2026-04-08T00:00:10.053Z"
+  }
+]

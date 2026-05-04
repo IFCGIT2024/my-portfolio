@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 Quiz — Discrete Math for CS</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-page="quiz-03">
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav id="sidebar"></nav>
+  <main id="main">
+    <div class="page-content">
+      <h1>Module 3: Practice Quiz</h1>
+      <p class="quiz-subtitle">Logic, Quantifiers & Program Reasoning — Test your understanding with 12 multiple-choice questions.</p>
+      <div id="quiz-container" data-questions='[{"q":"The negation of p ∧ q is:","choices":["¬p ∧ ¬q","¬p ∨ ¬q","p ∨ q","¬(p ∨ q)"],"answer":1,"explanation":"By De Morgan's Law: ¬(p ∧ q) ≡ ¬p ∨ ¬q."},{"q":"The contrapositive of \"if P then Q\" is:","choices":["if Q then P","if ¬P then ¬Q","if ¬Q then ¬P","P and ¬Q"],"answer":2,"explanation":"The contrapositive of P → Q is ¬Q → ¬P, and it is logically equivalent."},{"q":"An implication P → Q is false only when:","choices":["P is false and Q is true","P is true and Q is false","Both P and Q are false","Both P and Q are true"],"answer":1,"explanation":"P → Q is false only when the hypothesis is true and the conclusion is false."},{"q":"∀x ∈ S, P(x) means:","choices":["P holds for some x in S","P holds for all x in S","P holds for no x in S","There exists an S where P is true"],"answer":1,"explanation":"The universal quantifier ∀ means 'for all' — P(x) must hold for every x in S."},{"q":"The negation of ∀x P(x) is:","choices":["∀x ¬P(x)","∃x ¬P(x)","¬∃x P(x)","∃x P(x)"],"answer":1,"explanation":"¬(∀x P(x)) ≡ ∃x ¬P(x): there exists at least one x for which P fails."},{"q":"In Java, (a && b) uses:","choices":["Eager evaluation","Short-circuit evaluation","Lazy loading","Bitwise AND"],"answer":1,"explanation":"&& is the short-circuit AND: if a is false, b is not evaluated."},{"q":"A proof by contradiction assumes:","choices":["The conclusion is true","The negation of what you want to prove","The contrapositive","Nothing"],"answer":1,"explanation":"In proof by contradiction, assume ¬P and derive a contradiction, establishing P."},{"q":"Which is a tautology?","choices":["P ∧ ¬P","P ∨ ¬P","P → ¬P","P ↔ ¬P"],"answer":1,"explanation":"P ∨ ¬P (law of excluded middle) is always true."},{"q":"Modus ponens states: given P → Q and P, we can conclude:","choices":["¬Q","Q","¬P","P ∧ Q"],"answer":1,"explanation":"Modus ponens: from P → Q and P, deduce Q."},{"q":"Modus tollens states: given P → Q and ¬Q, we can conclude:","choices":["Q","P","¬P","¬Q"],"answer":2,"explanation":"Modus tollens: from P → Q and ¬Q, deduce ¬P."},{"q":"In Design by Contract, a precondition is:","choices":["What must be true after the method executes","What must be true before the method executes","An invariant that always holds","A test case"],"answer":1,"explanation":"A precondition states what the caller must guarantee before invoking the method."},{"q":"P ↔ Q (biconditional) is true when:","choices":["P and Q have the same truth value","P and Q are both true","P and Q are both false","P is true or Q is true"],"answer":0,"explanation":"P ↔ Q is true when both are true or both are false."}]'></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="app.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>

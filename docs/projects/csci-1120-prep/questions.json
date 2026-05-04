@@ -1,0 +1,1544 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "Which early computer was described as a control room with eight banks of tubes and could add two sixteen-bit words in two microseconds? (FDE Slide 1)",
+      "options": ["ENIAC", "Little Man Computer", "Whirlwind", "Memory Test Computer"],
+      "correct": 0,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 2,
+      "question": "The Memory Test Computer used a magnetic-core memory bank that stored how many sixteen-bit words? (FDE Slide 2)",
+      "options": ["256", "1,024", "4,096", "16,384"],
+      "correct": 1,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 3,
+      "question": "What key principle is highlighted by the term 'stored program' in computing? (FDE Slide 3)",
+      "options": ["Software is separate from hardware", "Instructions are stored separately from data", "Software instructions are treated as data stored in memory", "Programs must be loaded from external storage at every execution"],
+      "correct": 2,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 4,
+      "question": "Which of the following sequences correctly lists the three phases of machine execution? (FDE Slide 4)",
+      "options": ["Decode, fetch, execute", "Execute, fetch, decode", "Fetch, decode, execute", "Fetch, execute, decode"],
+      "correct": 2,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 5,
+      "question": "During the fetch cycle, what component determines the address of the next instruction? (FDE Slide 5)",
+      "options": ["Arithmetic logic unit (ALU)", "Program counter", "Control unit", "Instruction register"],
+      "correct": 1,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 6,
+      "question": "What is the correct order of actions when executing a single instruction? (FDE Slide 6)",
+      "options": ["Decode → fetch → execute → get data", "Fetch → decode → get data (if needed) → execute", "Get data → fetch → execute → decode", "Execute → fetch → decode → get data"],
+      "correct": 1,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 7,
+      "question": "In the musical performance analogy, which step corresponds to the 'decode' phase of machine execution? (FDE Slide 7)",
+      "options": ["Receiving sheet music", "Reading notation and instructions", "Playing instruments", "Tuning instruments"],
+      "correct": 1,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 8,
+      "question": "How many data registers does the Little Man Computer have? (FDE Slide 8)",
+      "options": ["Zero", "One", "Two", "Four"],
+      "correct": 1,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 9,
+      "question": "Which LMC instruction halts program execution? (FDE Slide 9)",
+      "options": ["ADD", "SUB", "HLT", "BRZ"],
+      "correct": 2,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 10,
+      "question": "In Challenge 1 (Sum of two numbers), what is the purpose of the instruction STA 99 after the first INP? (FDE Slide 10)",
+      "options": ["It stores the input value at memory location 99 for later addition", "It stores the sum of both numbers in location 99", "It adds the value in location 99 to the accumulator", "It outputs the input value"],
+      "correct": 0,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 11,
+      "question": "In Challenge 2 (Multiplication), why does the code use BRZ 14? (FDE Slide 11)",
+      "options": ["To skip the loop if the product is zero", "To branch to the end if the counter (at RAM 98) is zero", "To load the accumulator with zero", "To reset the accumulator"],
+      "correct": 1,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 12,
+      "question": "When SUB 96 is executed in the LMC multiplication program, what is being subtracted? (FDE Slide 12)",
+      "options": ["The multiplicand stored in location 97", "The running sum in location 99", "The decrement value (1) stored in location 96", "The accumulator value itself"],
+      "correct": 2,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 13,
+      "question": "Which statement best summarizes what the Fetch–Decode–Execute lecture aims to teach? (FDE Slide 13)",
+      "options": ["How complex instruction sets are implemented in hardware", "The concept of machine execution and how to trace the FDE cycle using the Little Man Computer", "The importance of pipelining in modern CPUs", "The basics of binary and hexadecimal conversions"],
+      "correct": 1,
+      "section": "Fetch, Decode, Execute"
+    },
+    {
+      "id": 14,
+      "question": "Which processor marked the origin of the x86 family in 1978? (ISA Slide 1)",
+      "options": ["4004", "8008", "8086", "Pentium"],
+      "correct": 2,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 15,
+      "question": "Which learning outcome is not explicitly mentioned for Module 4? (ISA Slide 2)",
+      "options": ["Trace machine execution through modern computer architecture from assembly instructions", "Trace execution of software from C statements to machine instructions", "Understand the history of computing from ENIAC to Pentium", "None of the above"],
+      "correct": 2,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 16,
+      "question": "Which statement about the 1970s microprocessor revolution is correct? (ISA Slide 3)",
+      "options": ["The Intel 8008 was the first commercial microprocessor", "The Intel 4004 and 8008 were introduced in 1971 and 1972, respectively", "VLSI technology in the 1970s decreased circuit density", "Microprocessors were first adopted in the 1990s"],
+      "correct": 1,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 17,
+      "question": "Which feature is not listed as an improvement of the 1993 Pentium processor? (ISA Slide 4)",
+      "options": ["Execution of at least two instructions per clock cycle", "Separate code and data caches", "Wider data bus", "Reduced instruction set"],
+      "correct": 3,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 18,
+      "question": "What is a primary objective of CISC processors? (ISA Slide 5)",
+      "options": ["Decrease the number of registers", "Minimize program size by decreasing the number of instructions", "Increase pipeline stages for efficiency", "Reduce the number of transistors needed"],
+      "correct": 1,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 19,
+      "question": "Which characteristic is associated with CISC architectures? (ISA Slide 6)",
+      "options": ["Simplified hardware with minimal transistors", "Single-cycle instructions with fixed length", "Multi-clock, memory-to-memory instructions with small code sizes", "Emphasis on compilers over hardware"],
+      "correct": 2,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 20,
+      "question": "Which is an advantage of CISC architecture? (ISA Slide 7)",
+      "options": ["Lower cost due to smaller chips", "More complex code easier to write and smaller in size", "Greater reliance on software pipelining", "Simpler hardware design"],
+      "correct": 1,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 21,
+      "question": "One disadvantage of CISC processors is that they: (ISA Slide 8)",
+      "options": ["Require more transistors and are typically larger and more expensive", "Have limited addressing modes", "Have slower memory because of Harvard architecture", "Cannot support pipelining"],
+      "correct": 0,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 22,
+      "question": "Which company's research in the 1970s led to the reduced instruction set computer (RISC) concept? (ISA Slide 9)",
+      "options": ["Intel", "IBM", "Motorola", "AMD"],
+      "correct": 1,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 23,
+      "question": "RISC architectures typically employ which of the following? (ISA Slide 10)",
+      "options": ["Variable-length instructions with many addressing modes", "Small register files and direct memory access in arithmetic", "Simple fixed-length instructions, more registers and pipelining", "Emulation of CISC instructions for compatibility"],
+      "correct": 2,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 24,
+      "question": "Which is a benefit of RISC processors? (ISA Slide 11)",
+      "options": ["They are more expensive to manufacture", "They simplify hardware design and can use smaller chips", "They reduce the number of pipeline stages needed", "They make code small and less reliant on memory caches"],
+      "correct": 1,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 25,
+      "question": "RISC architectures suffer from which of the following limitations? (ISA Slide 12)",
+      "options": ["Slow execution due to complex instructions", "Dependence on very fast memory systems and large caches", "Difficulty in pipelining", "Limited number of registers"],
+      "correct": 1,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 26,
+      "question": "When adding C = A + B, why does the RISC (MIPS) example require more instructions than the x86 (CISC) example? (ISA Slide 13)",
+      "options": ["Because MIPS must use immediate values for all additions", "Because MIPS instructions must load and store operands separately and operate only on registers", "Because x86 only supports two registers for arithmetic", "Because x86 cannot access memory directly"],
+      "correct": 1,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 27,
+      "question": "Which x86 register is typically used for loop counting and iteration? (ISA Slide 14)",
+      "options": ["EAX", "EBX", "ECX", "EDX"],
+      "correct": 2,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 28,
+      "question": "Which register points to the top of the stack in x86? (ISA Slide 15)",
+      "options": ["EBP", "ESP", "ESI", "EDI"],
+      "correct": 1,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 29,
+      "question": "Which of these flags is not part of the EFLAGS register in x86? (ISA Slide 16)",
+      "options": ["Zero flag (ZF)", "Sign flag (SF)", "Overflow flag (OF)", "Instruction flag (IF)"],
+      "correct": 3,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 30,
+      "question": "The Instruction Sets & Registers lecture concludes by emphasizing an understanding of: (ISA Slide 17)",
+      "options": ["Boolean logic and binary representation", "CISC vs. RISC instruction sets and x86 registers", "Floating-point arithmetic", "Assembly programming for the Little Man Computer"],
+      "correct": 1,
+      "section": "Instruction Sets & Registers"
+    },
+    {
+      "id": 31,
+      "question": "Why is the mov instruction considered fundamental in x86 assembly? (Assembly Slide 1)",
+      "options": ["It performs arithmetic operations directly on memory", "It initializes variables and loads constants and data into registers", "It compares two values and sets the zero flag", "It jumps to different parts of the program based on conditions"],
+      "correct": 1,
+      "section": "Assembly Instructions"
+    },
+    {
+      "id": 32,
+      "question": "What determines the opcode for a mov instruction? (Assembly Slide 2)",
+      "options": ["The ALU operation used", "The program counter value", "The combination of source and destination operands", "The size of the program"],
+      "correct": 2,
+      "section": "Assembly Instructions"
+    },
+    {
+      "id": 33,
+      "question": "Which of the following is a valid mov instruction format? (Assembly Slide 3)",
+      "options": ["mov <mem>, <mem>", "mov <mem>, <const>", "mov <const>, <mem>", "mov <reg>, <reg>, <mem>"],
+      "correct": 2,
+      "section": "Assembly Instructions"
+    },
+    {
+      "id": 34,
+      "question": "What does the mov instruction do to its first operand? (Assembly Slide 4)",
+      "options": ["It clears the first operand after copying", "It increments the first operand", "It does not change the first operand; it copies its value to the destination", "It stores the first operand as an immediate value"],
+      "correct": 2,
+      "section": "Assembly Instructions"
+    },
+    {
+      "id": 35,
+      "question": "In the example that multiplies 4 × 2 and prints the result, what instruction is used for multiplication? (Assembly Slide 5)",
+      "options": ["mul", "add", "imul", "div"],
+      "correct": 2,
+      "section": "Assembly Instructions"
+    },
+    {
+      "id": 36,
+      "question": "Which instruction triggers a Linux system call in the multiplication example? (Assembly Slide 6)",
+      "options": ["int 0x21", "int 0x80", "syscall", "call 0x80"],
+      "correct": 1,
+      "section": "Assembly Instructions"
+    },
+    {
+      "id": 37,
+      "question": "Which instruction would you use to move a 16-bit (word) data item? (Assembly Slide 7)",
+      "options": ["movb", "movw", "movl", "movd"],
+      "correct": 1,
+      "section": "Assembly Instructions"
+    },
+    {
+      "id": 38,
+      "question": "Which of the following statements correctly contrasts registers and memory addresses? (Assembly Slide 8)",
+      "options": ["Registers are slower and store data for longer periods; memory addresses are faster and temporary", "Registers are small, fast, temporary storage units within the CPU, while memory addresses refer to main memory locations for longer-term storage", "Registers can only be accessed by system calls; memory addresses can be accessed directly by instructions", "Memory addresses are part of the CPU; registers are in RAM"],
+      "correct": 1,
+      "section": "Assembly Instructions"
+    },
+    {
+      "id": 39,
+      "question": "A double-word operand (32 bits) can represent integer values ranging from 0 to what maximum? (Assembly Slide 9)",
+      "options": ["2^16 - 1", "2^32 - 1", "2^64 - 1", "2^8 - 1"],
+      "correct": 1,
+      "section": "Assembly Instructions"
+    },
+    {
+      "id": 40,
+      "question": "What does the Assembly Instructions lecture mainly focus on? (Assembly Slide 10)",
+      "options": ["Implementing entire programs in high-level languages", "Learning about the LMC programming model", "Understanding x86 assembly instructions, operand formats and basic arithmetic and system calls", "Exploring the history of the Pentium processor"],
+      "correct": 2,
+      "section": "Assembly Instructions"
+    },
+    {
+      "id": 41,
+      "question": "What learning outcome is achieved through the Branching lecture? (Branching Slide 1)",
+      "options": ["Trace machine execution from assembly instructions through a modern computer architecture", "Understand advanced memory hierarchy", "Learn about pipelining and branch prediction only", "Study floating-point representation"],
+      "correct": 0,
+      "section": "Branching"
+    },
+    {
+      "id": 42,
+      "question": "Which lecture session is not part of Module 4? (Branching Slide 2)",
+      "options": ["Fetch, Decode, Execute", "Instruction Sets & Registers", "Assembly Instructions", "Memory Management"],
+      "correct": 3,
+      "section": "Branching"
+    },
+    {
+      "id": 43,
+      "question": "Why is the fetch–decode–execute cycle described as 'highly predictable'? (Branching Slide 3)",
+      "options": ["Because it uses random memory access", "Because it always follows the same sequence unless a branch occurs", "Because it dynamically reorders instructions", "Because modern CPUs have unpredictable timing"],
+      "correct": 1,
+      "section": "Branching"
+    },
+    {
+      "id": 44,
+      "question": "In the provided C function, under what condition is B incremented by 2? (Branching Slide 4)",
+      "options": ["When A equals 0", "When B equals 0", "When A is not zero", "When A is greater than B"],
+      "correct": 2,
+      "section": "Branching"
+    },
+    {
+      "id": 45,
+      "question": "Which of the following correctly describes the role of the EFLAGS register? (Branching Slide 5)",
+      "options": ["It stores the address of the next instruction to be executed", "It stores status flags that reflect the outcome of arithmetic and logical operations", "It holds function call parameters", "It holds immediate values for arithmetic operations"],
+      "correct": 1,
+      "section": "Branching"
+    },
+    {
+      "id": 46,
+      "question": "In the assembly translation of the if (A != 0) statement, what instruction checks whether A equals zero? (Branching Slide 6)",
+      "options": ["movl A, %eax", "cmpl $0, %eax", "jne not_zero", "subl $1, %eax"],
+      "correct": 1,
+      "section": "Branching"
+    },
+    {
+      "id": 47,
+      "question": "Branching in assembly language allows a program to: (Branching Slide 7)",
+      "options": ["Copy data between registers", "Perform arithmetic operations on memory", "Execute different sequences of instructions based on conditions", "Increase the size of the program counter"],
+      "correct": 2,
+      "section": "Branching"
+    },
+    {
+      "id": 48,
+      "question": "Which of the following jump instructions transfers control unconditionally? (Branching Slide 8)",
+      "options": ["je", "jne", "js", "jmp"],
+      "correct": 3,
+      "section": "Branching"
+    },
+    {
+      "id": 49,
+      "question": "Which flag is set by cmpl when the subtraction result is negative? (Branching Slide 9)",
+      "options": ["Zero flag (ZF)", "Sign flag (SF)", "Carry flag (CF)", "Parity flag (PF)"],
+      "correct": 1,
+      "section": "Branching"
+    },
+    {
+      "id": 50,
+      "question": "What does the jne instruction do? (Branching Slide 10)",
+      "options": ["Jumps if the zero flag is set", "Jumps if the zero flag is not set", "Jumps if the sign flag is set", "Jumps if the carry flag is set"],
+      "correct": 1,
+      "section": "Branching"
+    },
+    {
+      "id": 51,
+      "question": "Why are labels used in assembly code? (Branching Slide 11)",
+      "options": ["To allocate memory dynamically", "To indicate locations without specifying actual memory addresses at compile time", "To mark the beginning of functions in high-level languages", "To store the values of local variables"],
+      "correct": 1,
+      "section": "Branching"
+    },
+    {
+      "id": 52,
+      "question": "In the translated if–else assembly code, what instruction prevents the execution of the 'else' part if A is not zero? (Branching Slide 12)",
+      "options": ["jne not_zero", "jmp end_if", "cmpl $0, %eax", "movl B, %eax"],
+      "correct": 1,
+      "section": "Branching"
+    },
+    {
+      "id": 53,
+      "question": "In the assembly translation of while (A <= 0), what instruction is used to exit the loop when A becomes positive? (Branching Slide 13)",
+      "options": ["jg while_loop_start", "jg while_loop_end", "jne while_loop_start", "cmp $0, %eax"],
+      "correct": 1,
+      "section": "Branching"
+    },
+    {
+      "id": 54,
+      "question": "Which of the following control structures uses two unconditional jumps (one for call and one for return)? (Branching Slide 14)",
+      "options": ["if{} statement", "if{ } else{} statement", "while{} loop", "Function calls"],
+      "correct": 3,
+      "section": "Branching"
+    },
+    {
+      "id": 55,
+      "question": "What distinguishes conditional branching from unconditional branching? (Branching Slide 15)",
+      "options": ["Conditional branching jumps unconditionally; unconditional branching uses flags", "Conditional branching evaluates a condition before jumping; unconditional branching always jumps regardless of conditions", "Both require the zero flag to be set", "Both evaluate the carry flag"],
+      "correct": 1,
+      "section": "Branching"
+    },
+    {
+      "id": 56,
+      "question": "Branching can impact performance because modern processors use what technique to guess the outcome of branches and reduce pipeline stalls? (Branching Slide 16)",
+      "options": ["Out-of-order execution", "Branch prediction", "Superscalar execution", "Instruction prefetching"],
+      "correct": 1,
+      "section": "Branching"
+    },
+    {
+      "id": 57,
+      "question": "Which CPU component decodes the opcode and determines which operation to perform?",
+      "options": ["Arithmetic logic unit (ALU)", "Control unit", "Instruction pointer", "Data bus"],
+      "correct": 1,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 58,
+      "question": "What role does the arithmetic logic unit (ALU) play in the fetch–decode–execute cycle?",
+      "options": ["It fetches instructions from memory", "It decodes instructions", "It performs the actual arithmetic or logic operations during execution", "It stores the program counter"],
+      "correct": 2,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 59,
+      "question": "In the fetch phase, the CPU retrieves an instruction from memory based on which register?",
+      "options": ["EAX", "EFLAGS", "Program counter (PC/EIP)", "Stack pointer"],
+      "correct": 2,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 60,
+      "question": "What happens if a branch instruction alters the program counter during the fetch–decode–execute cycle?",
+      "options": ["The CPU ignores the instruction", "The instruction is executed twice", "The normal PC+1 sequence is interrupted, and the next instruction comes from the branch target", "The CPU resets"],
+      "correct": 2,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 61,
+      "question": "An instruction set defines:",
+      "options": ["The hardware components of the CPU", "The basic commands a CPU can execute, serving as a bridge between software and hardware", "The memory hierarchy", "The programming languages a CPU can understand"],
+      "correct": 1,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 62,
+      "question": "Which of the following is part of a CPU's instruction set?",
+      "options": ["Only data transfer operations", "Only arithmetic operations", "A set of commands covering arithmetic, data transfer, and control operations", "Only high-level language constructs"],
+      "correct": 2,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 63,
+      "question": "Which architecture uses complex instructions that often require multiple cycles to execute and can operate directly on memory?",
+      "options": ["RISC", "CISC", "Harvard architecture", "MIPS"],
+      "correct": 1,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 64,
+      "question": "Which architecture typically uses fixed-length instructions, emphasizes registers over memory and is well-suited for pipelining?",
+      "options": ["CISC", "RISC", "x86", "8086"],
+      "correct": 1,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 65,
+      "question": "Which register holds the address of the next instruction to execute in x86?",
+      "options": ["EAX", "EFLAGS", "EIP", "EDX"],
+      "correct": 2,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 66,
+      "question": "What is the primary purpose of the EFLAGS register?",
+      "options": ["It stores general-purpose data", "It holds the stack pointer", "It stores various status flags (zero, sign, carry, overflow) that indicate the results of operations", "It stores the program counter"],
+      "correct": 2,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 67,
+      "question": "Which type of operand can appear in an x86 instruction?",
+      "options": ["Register", "Immediate value", "Memory location", "All of the above"],
+      "correct": 3,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 68,
+      "question": "What does the add instruction do in x86 assembly? (Assume add <source>,<dest>)",
+      "options": ["Subtracts source from destination", "Adds source to destination and stores the result in the destination", "Copies source to destination", "Multiplies source and destination"],
+      "correct": 1,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 69,
+      "question": "In x86 assembly, which of the following is a valid immediate operand format?",
+      "options": ["%eax", "$5", "result", "(result)"],
+      "correct": 1,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 70,
+      "question": "Which instruction sets the zero flag if the operands are equal and is typically followed by a conditional jump?",
+      "options": ["cmp", "mov", "jmp", "imul"],
+      "correct": 0,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 71,
+      "question": "Branching instructions change the program counter to:",
+      "options": ["Zero", "Another sequential instruction address", "A different instruction address based on a condition or unconditionally", "The top of the stack"],
+      "correct": 2,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 72,
+      "question": "Which of the following is not a scenario where branching is used?",
+      "options": ["Loops", "Function calls", "Simple sequential arithmetic operations without any decision", "If–else statements"],
+      "correct": 2,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 73,
+      "question": "Which branch instruction is used to implement a loop condition in assembly?",
+      "options": ["jmp followed by ret", "jg or a similar conditional jump to exit the loop", "call", "int 0x80"],
+      "correct": 1,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 74,
+      "question": "In a high-level if–else structure compiled to assembly, how many jumps are typically used?",
+      "options": ["One conditional jump only", "One conditional jump and one unconditional jump", "Two conditional jumps", "Two unconditional jumps"],
+      "correct": 1,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 75,
+      "question": "Which jump instruction transfers control unconditionally?",
+      "options": ["je", "jne", "jmp", "js"],
+      "correct": 2,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 76,
+      "question": "Which conditional jump tests the zero flag and transfers control if it is set?",
+      "options": ["je or jz", "jne or jnz", "js", "jg"],
+      "correct": 0,
+      "section": "Learning Objectives"
+    },
+    {
+      "id": 77,
+      "question": "Which of the following best encapsulates the major difference between RISC and CISC architectures?",
+      "options": ["RISC executes instructions more slowly because it has fewer registers", "CISC includes many simple instructions executed in a single cycle", "RISC uses simple instructions that rely on registers and can execute in one cycle; CISC uses complex, multi-cycle instructions that can operate directly on memory", "They are identical except for historical branding"],
+      "correct": 2,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 78,
+      "question": "Why do RISC processors typically require larger and faster caches than CISC processors?",
+      "options": ["Because RISC instructions are decoded more slowly", "Because RISC compilers generate more complex microcode", "Because the rapid execution rate of simple RISC instructions demands fast memory access to keep the pipeline fed", "Because RISC processors store data in caches instead of registers"],
+      "correct": 2,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 79,
+      "question": "Which x86 register is not a general-purpose register but is crucial for managing function calls and returning to the correct location?",
+      "options": ["EAX", "EIP", "ESP", "EFLAGS"],
+      "correct": 1,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 80,
+      "question": "In terms of control flow, what do loops, if–else structures and function calls have in common?",
+      "options": ["They all decrease program size", "They all require branching instructions to alter the normal sequential flow of execution", "They all use the int 0x80 instruction", "They are executed outside the CPU"],
+      "correct": 1,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 81,
+      "question": "Which pipeline hazard is most directly affected by branch instructions?",
+      "options": ["Structural hazard", "Data hazard", "Control hazard (branch hazard)", "Cache hazard"],
+      "correct": 2,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 82,
+      "question": "What is the purpose of using labels in assembly programs?",
+      "options": ["They allocate stack memory", "They provide symbolic names for memory addresses, making it easier to reference jump targets", "They define global variables", "They store values in registers"],
+      "correct": 1,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 83,
+      "question": "Which of the following correctly pairs an x86 instruction with its typical use?",
+      "options": ["mov – comparison and setting flags", "add – transfer control based on flags", "cmp – arithmetic addition", "jne – conditional jump that occurs if the zero flag is clear"],
+      "correct": 3,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 84,
+      "question": "Which of the following is not directly visible to an assembly programmer?",
+      "options": ["EAX", "EFLAGS", "Instruction pipeline stages", "EIP"],
+      "correct": 2,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 85,
+      "question": "If a program must multiply two numbers, which combination of instructions is generally used in x86?",
+      "options": ["mov → add → cmp", "mov → imul → add", "mov → imul (and possibly conversion)", "cmp → add → jmp"],
+      "correct": 2,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 86,
+      "question": "Which step is not part of the fetch–decode–execute cycle?",
+      "options": ["Fetch the next instruction", "Decode the instruction", "Execute the instruction", "Compile the instruction into high-level code"],
+      "correct": 3,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 87,
+      "question": "What is a key reason that high-level languages use conditionals like if instead of direct cmp/jne instructions?",
+      "options": ["High-level languages cannot perform arithmetic", "Conditionals abstract away low-level control flow and make code easier to write and maintain", "cmp/jne are unavailable on modern CPUs", "High-level languages are slower than assembly"],
+      "correct": 1,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 88,
+      "question": "In the context of x86, which statement about immediate values is true?",
+      "options": ["Immediate values must be stored in memory before use", "Immediate values are denoted by a dollar sign ($) and can be used as operands directly", "Immediate values can only be used for branching instructions", "Immediate values always represent memory addresses"],
+      "correct": 1,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 89,
+      "question": "Which pipeline technique is used by both RISC and CISC processors to improve throughput by overlapping instruction stages?",
+      "options": ["Caching", "Pipelining", "Microcoding", "Hyperthreading"],
+      "correct": 1,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 90,
+      "question": "Which of the following is not part of the EFLAGS register used for conditional jumps?",
+      "options": ["Zero flag (ZF)", "Sign flag (SF)", "Carry flag (CF)", "General-purpose flag (GPF)"],
+      "correct": 3,
+      "section": "Module-Wide Concepts"
+    },
+    {
+      "id": 91,
+      "question": "Which is a correct description of mov %ebx, %eax?",
+      "options": ["It moves the value in %eax into %ebx", "It moves the value in %ebx into %eax", "It swaps the values of %eax and %ebx", "It copies a constant into %eax"],
+      "correct": 1,
+      "section": "x86 Instruction Types"
+    },
+    {
+      "id": 92,
+      "question": "Which mov instruction stores an 8-bit value of 5 into a variable var?",
+      "options": ["mov %eax, var", "mov $5, var", "movb $5, var", "movl $5, var"],
+      "correct": 2,
+      "section": "x86 Instruction Types"
+    },
+    {
+      "id": 93,
+      "question": "What does the sub instruction do? (Assume sub <source>,<dest>)",
+      "options": ["Adds source and destination and stores in source", "Subtracts the destination from the source and stores in the destination", "Subtracts source from destination and stores in the destination", "Moves the source to destination"],
+      "correct": 2,
+      "section": "x86 Instruction Types"
+    },
+    {
+      "id": 94,
+      "question": "Which instruction multiplies the value in %ebx by the value in %eax?",
+      "options": ["mul %ebx", "imul %ebx, %eax", "addl %ebx, %eax", "div %ebx, %eax"],
+      "correct": 1,
+      "section": "x86 Instruction Types"
+    },
+    {
+      "id": 95,
+      "question": "When cmp $0, %eax is executed, what happens if %eax equals 0?",
+      "options": ["The carry flag is set", "The zero flag is set", "The sign flag is set", "The overflow flag is set"],
+      "correct": 1,
+      "section": "x86 Instruction Types"
+    },
+    {
+      "id": 96,
+      "question": "What is the purpose of the parity flag (PF)?",
+      "options": ["Indicates whether the number of set bits in the result is even", "Indicates if there was a borrow in an unsigned subtraction", "Indicates if the result is negative", "Indicates if there is an overflow"],
+      "correct": 0,
+      "section": "x86 Instruction Types"
+    },
+    {
+      "id": 97,
+      "question": "Which instruction causes the program to jump if the sign flag is clear?",
+      "options": ["js", "jns", "je", "jz"],
+      "correct": 1,
+      "section": "x86 Instruction Types"
+    },
+    {
+      "id": 98,
+      "question": "Which conditional jump would be used to branch when a value is greater than zero?",
+      "options": ["jg", "jl", "je", "jz"],
+      "correct": 0,
+      "section": "x86 Instruction Types"
+    },
+    {
+      "id": 99,
+      "question": "Which register holds the Linux system call number for SYS_WRITE in the multiplication program example?",
+      "options": ["%ebx", "%eax", "%ecx", "%edx"],
+      "correct": 1,
+      "section": "x86 Instruction Types"
+    },
+    {
+      "id": 100,
+      "question": "Which register typically contains the file descriptor when invoking a Linux write system call?",
+      "options": ["%eax", "%ebx", "%ecx", "%edx"],
+      "correct": 1,
+      "section": "x86 Instruction Types"
+    },
+    {
+      "id": 101,
+      "question": "After executing: mov $7, %eax; add $5, %eax - What is the value in %eax?",
+      "options": ["2", "5", "7", "12"],
+      "correct": 3,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 102,
+      "question": "After executing: mov $10, %eax; mov $3, %ebx; sub %ebx, %eax - What value does %eax hold?",
+      "options": ["7", "13", "−7", "3"],
+      "correct": 0,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 103,
+      "question": "After executing: mov $5, %eax; imul $4, %eax; add $1, %eax - What is %eax?",
+      "options": ["20", "21", "16", "9"],
+      "correct": 1,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 104,
+      "question": "After executing: mov $2, %eax; mov $5, %ebx; imul %ebx, %eax; sub $4, %eax - What is %eax?",
+      "options": ["6", "10", "2", "1"],
+      "correct": 0,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 105,
+      "question": "After executing: mov $8, %eax; mov $3, %ecx; add %ecx, %eax; imul $2, %eax - What is the final value of %eax?",
+      "options": ["11", "16", "22", "24"],
+      "correct": 2,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 106,
+      "question": "Assume num1=4 and num2=6. After executing: mov num1, %eax; add num2, %eax - What is %eax?",
+      "options": ["10", "12", "4", "6"],
+      "correct": 0,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 107,
+      "question": "After executing: mov $10, %eax; mov $4, %ebx; mov %eax, %ecx; sub %ebx, %ecx; add %ebx, %eax - What is %eax?",
+      "options": ["10", "14", "20", "6"],
+      "correct": 0,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 108,
+      "question": "After executing: mov $3, %eax; mov $2, %ebx; imul %ebx, %eax; mov $5, %ecx; add %ecx, %eax - What is %eax?",
+      "options": ["6", "10", "11", "13"],
+      "correct": 2,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 109,
+      "question": "After executing: mov $12, %eax; mov $3, %ebx; add %ebx, %eax; sub $5, %eax - What is %eax?",
+      "options": ["10", "8", "15", "20"],
+      "correct": 0,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 110,
+      "question": "After executing: mov $2, %eax; mov $3, %ebx; add %ebx, %eax; imul $3, %eax; sub $2, %eax - What is the final value of %eax?",
+      "options": ["13", "11", "15", "18"],
+      "correct": 0,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 111,
+      "question": "Which instruction increments a 32-bit register by one without requiring an immediate operand?",
+      "options": ["incl %eax", "addl $1, %eax", "shll $1, %eax", "decl %eax"],
+      "correct": 0,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 112,
+      "question": "What does the instruction shll $1, %ebx accomplish?",
+      "options": ["Divides %ebx by 2", "Shifts %ebx right by one bit", "Multiplies %ebx by 2 by shifting left one bit", "Subtracts 1 from %ebx"],
+      "correct": 2,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 113,
+      "question": "Which of the following x86 instructions performs a bitwise AND between two registers?",
+      "options": ["orl %ebx, %eax", "addl %ebx, %eax", "xorl %ebx, %eax", "andl %ebx, %eax"],
+      "correct": 3,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 114,
+      "question": "To load integers from memory, increment one using incl, double the other using shll $1, and add them - which sequence is correct?",
+      "options": ["mov 1000, %eax; mov 2000, %ebx; incl %eax; shll $1, %ebx; mov %eax, %ecx; addl %ebx, %ecx;", "mov 1000, %eax; mov 2000, %ebx; incl %ebx; shll $1, %eax; mov %eax, %ecx; addl %ebx, %ecx;", "mov 1000, %eax; mov 2000, %ebx; incl %eax; shll $1, %ebx; addl %ebx, %eax;", "mov 1000, %eax; mov 2000, %ebx; incw %eax; shll $2, %ebx; mov %eax, %ecx; addl %ebx, %ecx;"],
+      "correct": 2,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 115,
+      "question": "Which of the following qualities is characteristic of a RISC instruction set?",
+      "options": ["The CPU control is mostly hard-wired without control memory", "The instruction set contains a large number of variable-length instructions", "Instructions are complex and may perform multiple operations", "Instructions routinely require multiple clock cycles to execute"],
+      "correct": 0,
+      "section": "Instruction Sequences"
+    },
+    {
+      "id": 116,
+      "question": "Define: mov instruction",
+      "options": ["Moves data from source to destination (copies, doesn't remove from source)", "Multiplies two operands together", "Compares two values and sets flags", "Jumps to a new instruction address"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 117,
+      "question": "Define: add instruction",
+      "options": ["Subtracts source from destination", "Adds source to destination and stores result in destination", "Multiplies source and destination", "Compares two values"],
+      "correct": 1,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 118,
+      "question": "Define: sub instruction",
+      "options": ["Adds source to destination", "Subtracts source from destination and stores result in destination", "Substitutes one value for another", "Compares two values without storing"],
+      "correct": 1,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 119,
+      "question": "Define: imul instruction",
+      "options": ["Immediate move of a value", "Integer multiplication (signed)", "Integer modulus operation", "Immediate addition"],
+      "correct": 1,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 120,
+      "question": "Define: cmp instruction",
+      "options": ["Copies values between registers", "Compares two operands by subtracting them and setting flags (doesn't store result)", "Compiles the program", "Compresses data in memory"],
+      "correct": 1,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 121,
+      "question": "Define: jmp instruction",
+      "options": ["Jumps only if zero flag is set", "Unconditional jump to specified label/address", "Jumps if values are not equal", "Conditional jump based on sign flag"],
+      "correct": 1,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 122,
+      "question": "Define: je (or jz) instruction",
+      "options": ["Jump if equal (zero flag is set)", "Jump if not equal", "Jump if greater than", "Jump if less than"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 123,
+      "question": "Define: jne (or jnz) instruction",
+      "options": ["Jump if equal", "Jump if not equal (zero flag is clear)", "Jump if negative", "Jump if overflow"],
+      "correct": 1,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 124,
+      "question": "Define: jg instruction",
+      "options": ["Jump if greater than (signed comparison)", "Jump if equal", "Jump if less than", "Jump if general purpose flag is set"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 125,
+      "question": "Define: jl instruction",
+      "options": ["Jump if less than (signed comparison)", "Jump if equal", "Jump if greater than", "Jump to label"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 126,
+      "question": "Define: js instruction",
+      "options": ["Jump if sign flag is set (result was negative)", "Jump if equal", "Jump to subroutine", "Jump if system call"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 127,
+      "question": "Define: jns instruction",
+      "options": ["Jump if sign flag is clear (result was non-negative)", "Jump if not equal", "Jump if negative system", "Jump if null set"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 128,
+      "question": "Define: incl instruction",
+      "options": ["Includes a library", "Increments operand by 1", "Initializes a variable", "Integer calculation"],
+      "correct": 1,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 129,
+      "question": "Define: decl instruction",
+      "options": ["Declares a variable", "Decrements operand by 1", "Deletes a value", "Decimal conversion"],
+      "correct": 1,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 130,
+      "question": "Define: ZF (Zero Flag)",
+      "options": ["Set when result of operation is zero", "Set when there's a zero division error", "Set when zero register is used", "Set when memory is zeroed"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 131,
+      "question": "Define: SF (Sign Flag)",
+      "options": ["Set when a signed operation occurs", "Set when result is negative (most significant bit is 1)", "Set when subtraction occurs", "Set when shift operation occurs"],
+      "correct": 1,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 132,
+      "question": "Define: CF (Carry Flag)",
+      "options": ["Set when there is a carry out or borrow in unsigned arithmetic", "Set when function is called", "Set when comparison fails", "Set when control flow changes"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 133,
+      "question": "Define: OF (Overflow Flag)",
+      "options": ["Set when operation overflows memory", "Set when signed arithmetic result is too large/small to fit in operand", "Set when function overflows stack", "Set when output fails"],
+      "correct": 1,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 134,
+      "question": "Define: %eax register",
+      "options": ["General purpose accumulator register, often used for return values and arithmetic", "Stack pointer register", "Base pointer register", "Counter register for loops"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 135,
+      "question": "Define: %ebx register",
+      "options": ["General purpose base register, often used for memory addressing", "Counter register", "Accumulator register", "Stack pointer register"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 136,
+      "question": "Define: %ecx register",
+      "options": ["General purpose counter register, commonly used for loop counting", "Accumulator register", "Stack pointer", "Code segment register"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 137,
+      "question": "Define: %edx register",
+      "options": ["General purpose data register, often used in multiplication/division", "Destination register only", "Debug register", "Division-only register"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 138,
+      "question": "Define: %esp register",
+      "options": ["Stack pointer - points to top of the stack", "Extra stack pointer", "Extended special register", "Error stack pointer"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 139,
+      "question": "Define: %ebp register",
+      "options": ["Base pointer - points to base of current stack frame", "Extra base pointer", "Extended base processor", "Error base pointer"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 140,
+      "question": "Define: immediate value (e.g., $5)",
+      "options": ["A constant literal value prefixed with $ that is part of the instruction itself", "A value stored immediately in memory", "A value that must be calculated immediately", "A value stored in the accumulator"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 141,
+      "question": "Define: label in assembly",
+      "options": ["A symbolic name for a memory address/location in code", "A print statement marker", "A variable name", "A register alias"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 142,
+      "question": "Define: EFLAGS register",
+      "options": ["A register that stores status flags (ZF, SF, CF, OF, etc.) reflecting results of operations", "A register for error handling", "A register for function flags", "A register for extended flags only"],
+      "correct": 0,
+      "section": "Assembly Definitions"
+    },
+    {
+      "id": 143,
+      "question": "Translate to assembly: int a = 5;",
+      "options": ["mov $5, %eax", "add $5, %eax", "cmp $5, %eax", "jmp 5"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 144,
+      "question": "Translate to assembly: a = a + 3; (assume a is in %eax)",
+      "options": ["mov $3, %eax", "add $3, %eax", "sub $3, %eax", "imul $3, %eax"],
+      "correct": 1,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 145,
+      "question": "Translate to assembly: b = b - 2; (assume b is in %ebx)",
+      "options": ["add $2, %ebx", "sub $2, %ebx", "mov $2, %ebx", "cmp $2, %ebx"],
+      "correct": 1,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 146,
+      "question": "Translate to assembly: c = a + b; (a in %eax, b in %ebx, c in %ecx)",
+      "options": ["mov %eax, %ecx; add %ebx, %ecx", "add %eax, %ebx; mov %ebx, %ecx", "mov %ebx, %ecx; add %eax, %ecx", "imul %eax, %ebx; mov %eax, %ecx"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 147,
+      "question": "Translate to assembly: a = a * 2; (assume a is in %eax)",
+      "options": ["add %eax, %eax", "imul $2, %eax", "Either A or B (both work)", "shll $1, %eax only"],
+      "correct": 2,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 148,
+      "question": "Translate to assembly: a++; (assume a is in %eax)",
+      "options": ["incl %eax", "add $1, %eax", "Either A or B (both work)", "mov $1, %eax"],
+      "correct": 2,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 149,
+      "question": "Translate to assembly: b--; (assume b is in %ebx)",
+      "options": ["decl %ebx", "sub $1, %ebx", "Either A or B (both work)", "mov $-1, %ebx"],
+      "correct": 2,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 150,
+      "question": "Translate condition check: if (a == 0) (assume a is in %eax)",
+      "options": ["cmp $0, %eax; je true_label", "mov $0, %eax; je true_label", "sub $0, %eax; je true_label", "test %eax; je true_label"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 151,
+      "question": "Translate condition check: if (a != 0) (assume a is in %eax)",
+      "options": ["cmp $0, %eax; je true_label", "cmp $0, %eax; jne true_label", "mov $0, %eax; jne true_label", "test $0, %eax; jne true_label"],
+      "correct": 1,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 152,
+      "question": "Translate: if (a > 0) (assume a is in %eax)",
+      "options": ["cmp $0, %eax; jg true_label", "cmp $0, %eax; jl true_label", "mov $0, %eax; jg true_label", "sub $0, %eax; jg true_label"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 153,
+      "question": "Translate: if (a < 0) (assume a is in %eax)",
+      "options": ["cmp $0, %eax; jg true_label", "cmp $0, %eax; jl true_label", "cmp $0, %eax; js true_label", "Both B and C work"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 154,
+      "question": "Translate: if (a >= 0) (assume a is in %eax)",
+      "options": ["cmp $0, %eax; jge true_label", "cmp $0, %eax; jns true_label", "cmp $0, %eax; jl false_label", "Both A and B work"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 155,
+      "question": "Simple if statement: if (a != 0) { b = 5; } Full translation pattern?",
+      "options": ["cmp $0, %eax; je skip; mov $5, %ebx; skip:", "cmp $0, %eax; jne do_it; jmp skip; do_it: mov $5, %ebx; skip:", "mov $0, %eax; jne skip; mov $5, %ebx; skip:", "test %eax; je skip; mov $5, %ebx; skip:"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 156,
+      "question": "If-else: if (a == 0) { b = 1; } else { b = 2; } What's the pattern?",
+      "options": ["cmp $0, %eax; je else_part; mov $1, %ebx; jmp end; else_part: mov $2, %ebx; end:", "cmp $0, %eax; je then_part; mov $2, %ebx; jmp end; then_part: mov $1, %ebx; end:", "cmp $0, %eax; jne then_part; mov $2, %ebx; then_part: mov $1, %ebx;", "mov $0, %eax; je else_part; mov $1, %ebx; else_part: mov $2, %ebx;"],
+      "correct": 1,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 157,
+      "question": "While loop start: while (a > 0) What's the pattern?",
+      "options": ["loop_start: cmp $0, %eax; jg loop_start", "loop_start: cmp $0, %eax; jle loop_end; [body]; jmp loop_start; loop_end:", "cmp $0, %eax; jg loop_start; loop_start: [body]", "loop_start: [body]; cmp $0, %eax; jg loop_start"],
+      "correct": 1,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 158,
+      "question": "While loop: while (a < 10) { a++; } Full translation?",
+      "options": ["loop: cmp $10, %eax; jge end; incl %eax; jmp loop; end:", "loop: incl %eax; cmp $10, %eax; jl loop;", "loop: cmp $10, %eax; jl loop; incl %eax; end:", "incl %eax; loop: cmp $10, %eax; jl loop;"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 159,
+      "question": "Translate: a = 4; b = 5; while (a < b) { b++; }",
+      "options": ["mov $4, %eax; mov $5, %ebx; loop: cmp %ebx, %eax; jge end; incl %ebx; jmp loop; end:", "mov $4, %eax; mov $5, %ebx; loop: cmp %eax, %ebx; jl end; incl %ebx; jmp loop; end:", "mov $4, %eax; mov $5, %ebx; loop: incl %ebx; cmp %ebx, %eax; jl loop;", "mov $4, %eax; mov $5, %ebx; incl %ebx; loop: cmp %ebx, %eax; jge end; jmp loop; end:"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 160,
+      "question": "Translate: int x = 10; while (x > 0) { x--; }",
+      "options": ["mov $10, %eax; loop: cmp $0, %eax; jle end; decl %eax; jmp loop; end:", "mov $10, %eax; loop: decl %eax; cmp $0, %eax; jg loop;", "mov $10, %eax; loop: cmp $0, %eax; jg loop; decl %eax; end:", "mov $10, %eax; decl %eax; loop: cmp $0, %eax; jg loop;"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 161,
+      "question": "Translate: if (a == b) { c = 1; } (a in %eax, b in %ebx, c in %ecx)",
+      "options": ["cmp %ebx, %eax; jne skip; mov $1, %ecx; skip:", "cmp %eax, %ebx; je skip; mov $1, %ecx; skip:", "mov %ebx, %eax; je skip; mov $1, %ecx; skip:", "sub %ebx, %eax; je skip; mov $1, %ecx; skip:"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 162,
+      "question": "Translate: if (a != b) { c = 0; } else { c = 1; }",
+      "options": ["cmp %ebx, %eax; je else_part; mov $0, %ecx; jmp end; else_part: mov $1, %ecx; end:", "cmp %ebx, %eax; jne then_part; mov $1, %ecx; jmp end; then_part: mov $0, %ecx; end:", "cmp %eax, %ebx; jne skip; mov $0, %ecx; skip: mov $1, %ecx;", "mov %ebx, %eax; jne else_part; mov $0, %ecx; else_part: mov $1, %ecx;"],
+      "correct": 1,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 163,
+      "question": "Translate: a = 0; while (a < 5) { a = a + 2; }",
+      "options": ["mov $0, %eax; loop: cmp $5, %eax; jge end; add $2, %eax; jmp loop; end:", "mov $0, %eax; loop: add $2, %eax; cmp $5, %eax; jl loop;", "mov $0, %eax; add $2, %eax; loop: cmp $5, %eax; jl loop;", "mov $0, %eax; loop: cmp $5, %eax; jl end; add $2, %eax; jmp loop; end:"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 164,
+      "question": "Translate: if (a > b) { c = a; } else { c = b; } (max operation)",
+      "options": ["cmp %ebx, %eax; jle else_part; mov %eax, %ecx; jmp end; else_part: mov %ebx, %ecx; end:", "cmp %ebx, %eax; jg then_part; mov %ebx, %ecx; jmp end; then_part: mov %eax, %ecx; end:", "cmp %eax, %ebx; jg else_part; mov %eax, %ecx; else_part: mov %ebx, %ecx;", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 165,
+      "question": "Translate: a = 3; b = a * 4;",
+      "options": ["mov $3, %eax; imul $4, %eax; mov %eax, %ebx", "mov $3, %eax; mov %eax, %ebx; imul $4, %ebx", "mov $3, %eax; mov $4, %ebx; imul %eax, %ebx", "mov $3, %eax; shll $2, %eax; mov %eax, %ebx"],
+      "correct": 1,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 166,
+      "question": "Translate: while (a <= 10) { a++; } (Note <= not <)",
+      "options": ["loop: cmp $10, %eax; jg end; incl %eax; jmp loop; end:", "loop: cmp $10, %eax; jle loop; incl %eax; end:", "loop: incl %eax; cmp $10, %eax; jle loop;", "loop: cmp $10, %eax; jl end; incl %eax; jmp loop; end:"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 167,
+      "question": "Translate: if (a >= 5) { b = 10; }",
+      "options": ["cmp $5, %eax; jl skip; mov $10, %ebx; skip:", "cmp $5, %eax; jge then; jmp skip; then: mov $10, %ebx; skip:", "cmp $5, %eax; jle skip; mov $10, %ebx; skip:", "mov $5, %eax; jge skip; mov $10, %ebx; skip:"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 168,
+      "question": "What's wrong with: if (a == 0) b++; translated as: mov $0, %eax; je skip; incl %ebx; skip:",
+      "options": ["Missing cmp instruction before je", "Should use jne instead of je", "Should use jmp instead of je", "Nothing wrong, it's correct"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 169,
+      "question": "Translate: a = b + c - d; (b in %ebx, c in %ecx, d in %edx, result in %eax)",
+      "options": ["mov %ebx, %eax; add %ecx, %eax; sub %edx, %eax", "add %ebx, %ecx; sub %edx, %ecx; mov %ecx, %eax", "mov %ebx, %eax; sub %edx, %eax; add %ecx, %eax", "add %ebx, %ecx, %edx; mov %ebx, %eax"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 170,
+      "question": "Translate: if (a < 0) { a = 0; } (clamp to zero)",
+      "options": ["cmp $0, %eax; jge skip; mov $0, %eax; skip:", "cmp $0, %eax; jl skip; mov $0, %eax; skip:", "cmp $0, %eax; js set_zero; jmp skip; set_zero: mov $0, %eax; skip:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 171,
+      "question": "Translate: a = 10; b = 3; c = a - b;",
+      "options": ["mov $10, %eax; mov $3, %ebx; sub %ebx, %eax; mov %eax, %ecx", "mov $10, %eax; mov $3, %ebx; mov %eax, %ecx; sub %ebx, %ecx", "mov $10, %eax; mov $3, %ecx; sub %eax, %ecx", "mov $10, %eax; sub $3, %eax; mov %eax, %ecx"],
+      "correct": 1,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 172,
+      "question": "Translate: if (a > 10) { b = 0; }",
+      "options": ["cmp $10, %eax; jle skip; mov $0, %ebx; skip:", "cmp $10, %eax; jg then; jmp skip; then: mov $0, %ebx; skip:", "cmp $10, %eax; jge skip; mov $0, %ebx; skip:", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 173,
+      "question": "Translate: while (a != 5) { a++; }",
+      "options": ["loop: cmp $5, %eax; je end; incl %eax; jmp loop; end:", "loop: incl %eax; cmp $5, %eax; jne loop;", "cmp $5, %eax; loop: incl %eax; jne loop;", "loop: cmp $5, %eax; jne loop; incl %eax;"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 174,
+      "question": "Translate: a = b * 3;",
+      "options": ["mov %ebx, %eax; imul $3, %eax", "imul $3, %ebx; mov %ebx, %eax", "mov %ebx, %eax; add %eax, %eax; add %ebx, %eax", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 175,
+      "question": "Translate: if (a == b) { c = 10; } else { c = 20; }",
+      "options": ["cmp %ebx, %eax; je then; mov $20, %ecx; jmp end; then: mov $10, %ecx; end:", "cmp %ebx, %eax; jne else; mov $10, %ecx; jmp end; else: mov $20, %ecx; end:", "cmp %eax, %ebx; je then; mov $20, %ecx; then: mov $10, %ecx;", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 176,
+      "question": "Translate: a = 1; while (a <= 5) { a = a + 1; }",
+      "options": ["mov $1, %eax; loop: cmp $5, %eax; jg end; add $1, %eax; jmp loop; end:", "mov $1, %eax; loop: cmp $5, %eax; jle body; jmp end; body: add $1, %eax; jmp loop; end:", "mov $1, %eax; loop: add $1, %eax; cmp $5, %eax; jle loop;", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 177,
+      "question": "Translate: a = a - 1;",
+      "options": ["sub $1, %eax", "decl %eax", "add $-1, %eax", "All of the above are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 178,
+      "question": "Translate: if (a <= 0) { b = a; }",
+      "options": ["cmp $0, %eax; jg skip; mov %eax, %ebx; skip:", "cmp $0, %eax; jle then; jmp skip; then: mov %eax, %ebx; skip:", "cmp $0, %eax; js then; je then; jmp skip; then: mov %eax, %ebx; skip:", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 179,
+      "question": "Translate: a = 0; b = 0; while (a < 3) { b = b + a; a++; }",
+      "options": ["mov $0, %eax; mov $0, %ebx; loop: cmp $3, %eax; jge end; add %eax, %ebx; incl %eax; jmp loop; end:", "mov $0, %eax; mov $0, %ebx; loop: add %eax, %ebx; incl %eax; cmp $3, %eax; jl loop;", "mov $0, %eax; mov $0, %ebx; loop: cmp $3, %eax; jl body; jmp end; body: add %eax, %ebx; incl %eax; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 180,
+      "question": "Translate: if (a > 0 && a < 10) { b = 1; } (use nested conditions)",
+      "options": ["cmp $0, %eax; jle skip; cmp $10, %eax; jge skip; mov $1, %ebx; skip:", "cmp $0, %eax; jg check2; jmp skip; check2: cmp $10, %eax; jl then; jmp skip; then: mov $1, %ebx; skip:", "cmp $0, %eax; jle skip; cmp $10, %eax; jl then; jmp skip; then: mov $1, %ebx; skip:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 181,
+      "question": "Translate: a = a * 4;",
+      "options": ["imul $4, %eax", "shll $2, %eax", "add %eax, %eax; add %eax, %eax", "All of the above are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 182,
+      "question": "Translate: if (a != 5 && a != 10) { b = 0; }",
+      "options": ["cmp $5, %eax; je skip; cmp $10, %eax; je skip; mov $0, %ebx; skip:", "cmp $5, %eax; jne check2; jmp skip; check2: cmp $10, %eax; jne then; jmp skip; then: mov $0, %ebx; skip:", "cmp $5, %eax; je skip; cmp $10, %eax; jne then; jmp skip; then: mov $0, %ebx; skip:", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 183,
+      "question": "Translate: a = 100; while (a > 0) { a = a - 10; }",
+      "options": ["mov $100, %eax; loop: cmp $0, %eax; jle end; sub $10, %eax; jmp loop; end:", "mov $100, %eax; loop: sub $10, %eax; cmp $0, %eax; jg loop;", "mov $100, %eax; loop: cmp $0, %eax; jg body; jmp end; body: sub $10, %eax; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 184,
+      "question": "Translate: c = (a + b) * 2;",
+      "options": ["mov %eax, %ecx; add %ebx, %ecx; imul $2, %ecx", "add %eax, %ebx; imul $2, %ebx; mov %ebx, %ecx", "mov %eax, %ecx; add %ebx, %ecx; shll $1, %ecx", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 185,
+      "question": "Translate: if (a == 0 || a == 1) { b = 5; }",
+      "options": ["cmp $0, %eax; je then; cmp $1, %eax; je then; jmp skip; then: mov $5, %ebx; skip:", "cmp $0, %eax; jne check2; mov $5, %ebx; jmp skip; check2: cmp $1, %eax; jne skip; mov $5, %ebx; skip:", "cmp $0, %eax; je then; cmp $1, %eax; jne skip; then: mov $5, %ebx; skip:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 186,
+      "question": "Translate: a = 5; b = a + a;",
+      "options": ["mov $5, %eax; mov %eax, %ebx; add %eax, %ebx", "mov $5, %eax; add %eax, %eax; mov %eax, %ebx", "mov $5, %eax; imul $2, %eax; mov %eax, %ebx", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 187,
+      "question": "Translate: while (a >= 10) { a--; }",
+      "options": ["loop: cmp $10, %eax; jl end; decl %eax; jmp loop; end:", "loop: decl %eax; cmp $10, %eax; jge loop;", "loop: cmp $10, %eax; jge body; jmp end; body: decl %eax; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 188,
+      "question": "Translate: if (a < b) { c = a; } else { c = b; } (min operation)",
+      "options": ["cmp %ebx, %eax; jge else; mov %eax, %ecx; jmp end; else: mov %ebx, %ecx; end:", "cmp %ebx, %eax; jl then; mov %ebx, %ecx; jmp end; then: mov %eax, %ecx; end:", "cmp %eax, %ebx; jl else; mov %eax, %ecx; jmp end; else: mov %ebx, %ecx; end:", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 189,
+      "question": "Translate: a = b; b = a; (swap issue - what's the problem?)",
+      "options": ["mov %ebx, %eax; mov %eax, %ebx - This correctly swaps values", "mov %ebx, %eax; mov %eax, %ebx - This sets both to original b value (not a swap)", "Need temp: mov %eax, %ecx; mov %ebx, %eax; mov %ecx, %ebx", "Both B and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 190,
+      "question": "Translate: a = 2; while (a < 100) { a = a * 2; }",
+      "options": ["mov $2, %eax; loop: cmp $100, %eax; jge end; imul $2, %eax; jmp loop; end:", "mov $2, %eax; loop: imul $2, %eax; cmp $100, %eax; jl loop;", "mov $2, %eax; loop: add %eax, %eax; cmp $100, %eax; jl loop;", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 191,
+      "question": "Translate: if (a >= 5) { a = a - 5; }",
+      "options": ["cmp $5, %eax; jl skip; sub $5, %eax; skip:", "cmp $5, %eax; jge then; jmp skip; then: sub $5, %eax; skip:", "cmp $5, %eax; jnge skip; sub $5, %eax; skip:", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 192,
+      "question": "Translate: a = 1; b = 2; c = a + b + 5;",
+      "options": ["mov $1, %eax; mov $2, %ebx; mov %eax, %ecx; add %ebx, %ecx; add $5, %ecx", "mov $1, %eax; mov $2, %ebx; add %ebx, %eax; add $5, %eax; mov %eax, %ecx", "mov $1, %eax; add $2, %eax; add $5, %eax; mov %eax, %ecx", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 193,
+      "question": "Translate: if (a != 0) { b++; } else { b--; }",
+      "options": ["cmp $0, %eax; je else; incl %ebx; jmp end; else: decl %ebx; end:", "cmp $0, %eax; jne then; decl %ebx; jmp end; then: incl %ebx; end:", "cmp $0, %eax; jz else; incl %ebx; jmp end; else: decl %ebx; end:", "All of the above are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 194,
+      "question": "Translate: a = 0; while (a != 10) { a = a + 2; }",
+      "options": ["mov $0, %eax; loop: cmp $10, %eax; je end; add $2, %eax; jmp loop; end:", "mov $0, %eax; loop: add $2, %eax; cmp $10, %eax; jne loop;", "mov $0, %eax; loop: cmp $10, %eax; jne body; jmp end; body: add $2, %eax; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 195,
+      "question": "Translate: if (a > 100) { a = 100; } (clamp to max)",
+      "options": ["cmp $100, %eax; jle skip; mov $100, %eax; skip:", "cmp $100, %eax; jg then; jmp skip; then: mov $100, %eax; skip:", "cmp $100, %eax; jng skip; mov $100, %eax; skip:", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 196,
+      "question": "Translate: a = 7; b = a % 2; (modulo - think about what instruction to use)",
+      "options": ["Need div instruction which is more complex than simple instructions", "mov $7, %eax; mov $2, %ebx; div %ebx; mov %edx, %ebx", "mov $7, %eax; and $1, %eax; mov %eax, %ebx (works only for mod 2)", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 197,
+      "question": "Translate: while (a > 0 && b < 10) { a--; b++; }",
+      "options": ["loop: cmp $0, %eax; jle end; cmp $10, %ebx; jge end; decl %eax; incl %ebx; jmp loop; end:", "loop: cmp $0, %eax; jg check2; jmp end; check2: cmp $10, %ebx; jl body; jmp end; body: decl %eax; incl %ebx; jmp loop; end:", "loop: cmp $0, %eax; jle end; cmp $10, %ebx; jl body; jmp end; body: decl %eax; incl %ebx; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 198,
+      "question": "Translate: a = 8; b = a / 2; (use shift for division by 2)",
+      "options": ["mov $8, %eax; shrl $1, %eax; mov %eax, %ebx", "mov $8, %eax; mov %eax, %ebx; shrl $1, %ebx", "mov $8, %eax; shr %eax; mov %eax, %ebx", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 199,
+      "question": "Translate: if (a <= 5 && b >= 3) { c = 1; }",
+      "options": ["cmp $5, %eax; jg skip; cmp $3, %ebx; jl skip; mov $1, %ecx; skip:", "cmp $5, %eax; jle check2; jmp skip; check2: cmp $3, %ebx; jge then; jmp skip; then: mov $1, %ecx; skip:", "cmp $5, %eax; jg skip; cmp $3, %ebx; jge then; jmp skip; then: mov $1, %ecx; skip:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 200,
+      "question": "Translate: a = 15; while (a != 0) { a = a - 3; }",
+      "options": ["mov $15, %eax; loop: cmp $0, %eax; je end; sub $3, %eax; jmp loop; end:", "mov $15, %eax; loop: sub $3, %eax; cmp $0, %eax; jne loop;", "mov $15, %eax; loop: test %eax; jz end; sub $3, %eax; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 201,
+      "question": "Translate: a = b + 1; b = a - 1; (sequence matters)",
+      "options": ["mov %ebx, %eax; add $1, %eax; mov %eax, %ebx; sub $1, %ebx", "mov %ebx, %eax; incl %eax; mov %eax, %ebx; decl %ebx", "mov %ebx, %eax; add $1, %eax; mov %eax, %ecx; sub $1, %ecx; mov %ecx, %ebx", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 202,
+      "question": "Translate: if (a == 5) { b = 10; c = 20; }",
+      "options": ["cmp $5, %eax; jne skip; mov $10, %ebx; mov $20, %ecx; skip:", "cmp $5, %eax; je then; jmp skip; then: mov $10, %ebx; mov $20, %ecx; skip:", "cmp $5, %eax; jne skip; mov $10, %ebx; jmp skip; mov $20, %ecx; skip:", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 203,
+      "question": "Translate: a = 3; while (a > 0) { b = b + a; a--; }",
+      "options": ["mov $3, %eax; loop: cmp $0, %eax; jle end; add %eax, %ebx; decl %eax; jmp loop; end:", "mov $3, %eax; loop: add %eax, %ebx; decl %eax; cmp $0, %eax; jg loop;", "mov $3, %eax; loop: cmp $0, %eax; jg body; jmp end; body: add %eax, %ebx; decl %eax; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 204,
+      "question": "Translate: if (a < b && b < c) { a = c; }",
+      "options": ["cmp %ebx, %eax; jge skip; cmp %ecx, %ebx; jge skip; mov %ecx, %eax; skip:", "cmp %ebx, %eax; jl check2; jmp skip; check2: cmp %ecx, %ebx; jl then; jmp skip; then: mov %ecx, %eax; skip:", "cmp %ebx, %eax; jge skip; cmp %ecx, %ebx; jl then; jmp skip; then: mov %ecx, %eax; skip:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 205,
+      "question": "Translate: a = 20; b = 20; while (a == b) { a++; }",
+      "options": ["mov $20, %eax; mov $20, %ebx; loop: cmp %ebx, %eax; jne end; incl %eax; jmp loop; end:", "mov $20, %eax; mov $20, %ebx; loop: incl %eax; cmp %ebx, %eax; je loop;", "mov $20, %eax; mov $20, %ebx; loop: cmp %ebx, %eax; je body; jmp end; body: incl %eax; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 206,
+      "question": "Translate: a = a + 10; b = a;",
+      "options": ["add $10, %eax; mov %eax, %ebx", "mov %eax, %ebx; add $10, %ebx", "add $10, %eax; mov $10, %ebx; add %ebx, %ebx", "None of the above"],
+      "correct": 0,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 207,
+      "question": "Translate: if (a >= 0 && a <= 100) { b = 1; } (range check)",
+      "options": ["cmp $0, %eax; jl skip; cmp $100, %eax; jg skip; mov $1, %ebx; skip:", "cmp $0, %eax; jge check2; jmp skip; check2: cmp $100, %eax; jle then; jmp skip; then: mov $1, %ebx; skip:", "cmp $0, %eax; jl skip; cmp $100, %eax; jle then; jmp skip; then: mov $1, %ebx; skip:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 208,
+      "question": "Translate: while (a < b) { a = a + 1; b = b - 1; }",
+      "options": ["loop: cmp %ebx, %eax; jge end; add $1, %eax; sub $1, %ebx; jmp loop; end:", "loop: add $1, %eax; sub $1, %ebx; cmp %ebx, %eax; jl loop;", "loop: cmp %ebx, %eax; jl body; jmp end; body: incl %eax; decl %ebx; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 209,
+      "question": "Translate: a = 5; if (a < 10) { a = a * 2; } else { a = a + 2; }",
+      "options": ["mov $5, %eax; cmp $10, %eax; jge else; imul $2, %eax; jmp end; else: add $2, %eax; end:", "mov $5, %eax; cmp $10, %eax; jl then; add $2, %eax; jmp end; then: imul $2, %eax; end:", "mov $5, %eax; cmp $10, %eax; jge else; shll $1, %eax; jmp end; else: add $2, %eax; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 210,
+      "question": "Translate: a = 0; b = 10; while (a < b) { a++; b--; }",
+      "options": ["mov $0, %eax; mov $10, %ebx; loop: cmp %ebx, %eax; jge end; incl %eax; decl %ebx; jmp loop; end:", "mov $0, %eax; mov $10, %ebx; loop: incl %eax; decl %ebx; cmp %ebx, %eax; jl loop;", "mov $0, %eax; mov $10, %ebx; loop: cmp %ebx, %eax; jl body; jmp end; body: incl %eax; decl %ebx; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 211,
+      "question": "Translate: if (a != b && a != c) { b = c; }",
+      "options": ["cmp %ebx, %eax; je skip; cmp %ecx, %eax; je skip; mov %ecx, %ebx; skip:", "cmp %ebx, %eax; jne check2; jmp skip; check2: cmp %ecx, %eax; jne then; jmp skip; then: mov %ecx, %ebx; skip:", "cmp %ebx, %eax; je skip; cmp %ecx, %eax; jne then; jmp skip; then: mov %ecx, %ebx; skip:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 212,
+      "question": "Translate: a = 1; b = 1; c = a + b; a = c;",
+      "options": ["mov $1, %eax; mov $1, %ebx; mov %eax, %ecx; add %ebx, %ecx; mov %ecx, %eax", "mov $1, %eax; mov $1, %ebx; add %ebx, %eax; mov %eax, %ecx; mov %ecx, %eax", "mov $1, %eax; mov %eax, %ebx; add %ebx, %eax; mov %eax, %ecx", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 213,
+      "question": "Translate: if (a == 0 && b == 0) { c = 0; } else { c = 1; }",
+      "options": ["cmp $0, %eax; jne else; cmp $0, %ebx; jne else; mov $0, %ecx; jmp end; else: mov $1, %ecx; end:", "cmp $0, %eax; je check2; jmp else; check2: cmp $0, %ebx; je then; jmp else; then: mov $0, %ecx; jmp end; else: mov $1, %ecx; end:", "test %eax; jnz else; test %ebx; jnz else; mov $0, %ecx; jmp end; else: mov $1, %ecx; end:", "All of the above are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 214,
+      "question": "Translate: while (a >= 1 && a <= 10) { a = a + 10; }",
+      "options": ["loop: cmp $1, %eax; jl end; cmp $10, %eax; jg end; add $10, %eax; jmp loop; end:", "loop: cmp $1, %eax; jge check2; jmp end; check2: cmp $10, %eax; jle body; jmp end; body: add $10, %eax; jmp loop; end:", "loop: cmp $1, %eax; jl end; cmp $10, %eax; jle body; jmp end; body: add $10, %eax; jmp loop; end:", "Both A and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 215,
+      "question": "Translate: a = b; b = c; c = a; (rotate values - needs temp)",
+      "options": ["mov %ebx, %eax; mov %ecx, %ebx; mov %eax, %ecx (incorrect - overwrites a)", "mov %eax, %edx; mov %ebx, %eax; mov %ecx, %ebx; mov %edx, %ecx", "Need temporary register to hold original a value", "Both B and C are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 216,
+      "question": "Translate: a = 50; if (a > 25) { b = a / 2; } (use shift)",
+      "options": ["mov $50, %eax; cmp $25, %eax; jle skip; shrl $1, %eax; mov %eax, %ebx; skip:", "mov $50, %eax; cmp $25, %eax; jg then; jmp skip; then: mov %eax, %ebx; shrl $1, %ebx; skip:", "mov $50, %eax; cmp $25, %eax; jle skip; shr %eax; mov %eax, %ebx; skip:", "All of the above are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 217,
+      "question": "Translate: a = 0; while (a < 20) { if (a == 10) { break; } a++; }",
+      "options": ["mov $0, %eax; loop: cmp $20, %eax; jge end; cmp $10, %eax; je end; incl %eax; jmp loop; end:", "Break requires jumping out of loop early - same as shown in option A", "mov $0, %eax; loop: cmp $20, %eax; jge end; incl %eax; cmp $10, %eax; je end; jmp loop; end:", "Both A and B are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 218,
+      "question": "Translate: a = (b == 0) ? 1 : 0; (ternary operator)",
+      "options": ["cmp $0, %ebx; jne else; mov $1, %eax; jmp end; else: mov $0, %eax; end:", "cmp $0, %ebx; je then; mov $0, %eax; jmp end; then: mov $1, %eax; end:", "test %ebx; jnz else; mov $1, %eax; jmp end; else: mov $0, %eax; end:", "All of the above are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 219,
+      "question": "Translate: a = 64; while (a > 1) { a = a / 2; }",
+      "options": ["mov $64, %eax; loop: cmp $1, %eax; jle end; shrl $1, %eax; jmp loop; end:", "mov $64, %eax; loop: shrl $1, %eax; cmp $1, %eax; jg loop;", "mov $64, %eax; loop: cmp $1, %eax; jg body; jmp end; body: shr %eax; jmp loop; end:", "All of the above are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    },
+    {
+      "id": 220,
+      "question": "Translate: if (a > 0) { if (b > 0) { c = a + b; } }",
+      "options": ["cmp $0, %eax; jle skip; cmp $0, %ebx; jle skip; mov %eax, %ecx; add %ebx, %ecx; skip:", "cmp $0, %eax; jg check2; jmp skip; check2: cmp $0, %ebx; jg then; jmp skip; then: mov %eax, %ecx; add %ebx, %ecx; skip:", "cmp $0, %eax; jle skip; cmp $0, %ebx; jg then; jmp skip; then: mov %eax, %ecx; add %ebx, %ecx; skip:", "All of the above are correct"],
+      "correct": 3,
+      "section": "C to Assembly Translation"
+    }
+  ]
+}

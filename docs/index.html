@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mizel Cluett — Projects</title>
+  <meta name="description" content="A collection of interactive study tools and course materials built by Mizel Cluett." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="portal.css" />
+</head>
+<body>
+  <div id="portal-root">
+
+    <!-- ── Navigation ── -->
+    <nav class="portal-nav" role="navigation" aria-label="Main navigation">
+      <div class="container">
+        <div class="nav-inner">
+          <a href="#" class="nav-logo" aria-label="Home">
+            <div class="nav-logo-icon">M</div>
+            <span>Mizel Cluett</span>
+          </a>
+          <ul class="nav-links" role="list">
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="https://github.com/mizelcluett" target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── Hero ── -->
+    <header class="hero" role="banner">
+      <div class="container">
+        <div class="hero-eyebrow">portfolio &amp; study tools</div>
+        <h1>
+          Built by&nbsp;<span class="name-highlight">Mizel Cluett</span>
+        </h1>
+        <p class="hero-sub">
+          Interactive study tools, practice exams, and full course sites
+          for computer science mathematics — open for anyone to use.
+        </p>
+        <div class="hero-stats" id="hero-stats">
+          <!-- populated by JS -->
+        </div>
+      </div>
+    </header>
+
+    <div class="divider"></div>
+
+    <!-- ── Projects ── -->
+    <section id="projects" aria-labelledby="projects-heading">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title" id="projects-heading">
+            Projects <span id="project-count"></span>
+          </h2>
+          <div class="filter-bar" role="group" aria-label="Filter by tag" id="filter-bar">
+            <!-- populated by JS -->
+          </div>
+        </div>
+        <div class="projects-grid" id="projects-grid" role="list">
+          <!-- populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Footer ── -->
+    <footer class="portal-footer" role="contentinfo">
+      <div class="container">
+        <div class="footer-inner">
+          <p class="footer-copy">© <span id="footer-year"></span> Mizel Cluett. All rights reserved.</p>
+          <nav class="footer-links" aria-label="Footer links">
+            <a href="https://github.com/mizelcluett" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </nav>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /#portal-root -->
+
+  <!-- Registry — edit projects.js to add new projects -->
+  <script src="projects.js"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      /* ---------- Helpers ---------- */
+      const esc = (str) =>
+        String(str).replace(/[&<>"']/g, (c) =>
+          ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+        );
+
+      /* ---------- Footer year ---------- */
+      document.getElementById("footer-year").textContent = new Date().getFullYear();
+
+      /* ---------- Hero stats ---------- */
+      const allTags = [...new Set(PROJECTS.flatMap((p) => p.tags))];
+      document.getElementById("hero-stats").innerHTML = `
+        <div class="stat">
+          <span class="stat-value">${PROJECTS.length}</span>
+          <span class="stat-label">Projects</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">${allTags.length}</span>
+          <span class="stat-label">Topics</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">${new Date().getFullYear()}</span>
+          <span class="stat-label">Active</span>
+        </div>
+      `;
+
+      /* ---------- Collect unique tags for filter bar ---------- */
+      const filterBar = document.getElementById("filter-bar");
+      const uniqueTags = ["All", ...new Set(PROJECTS.flatMap((p) => p.tags))];
+      let activeFilter = "All";
+
+      uniqueTags.forEach((tag) => {
+        const btn = document.createElement("button");
+        btn.className = "filter-btn" + (tag === "All" ? " active" : "");
+        btn.textContent = tag;
+        btn.addEventListener("click", () => {
+          activeFilter = tag;
+          filterBar.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          renderCards();
+        });
+        filterBar.appendChild(btn);
+      });
+
+      /* ---------- Render cards ---------- */
+      const grid = document.getElementById("projects-grid");
+      const countEl = document.getElementById("project-count");
+
+      function buildCard(project, index) {
+        const badgeHTML = project.badge
+          ? `<span class="card-badge" style="background:${esc(project.badgeColor || "#6366f1")}">${esc(project.badge)}</span>`
+          : "";
+
+        const tagsHTML = project.tags
+          .map((t) => `<span class="tag">${esc(t)}</span>`)
+          .join("");
+
+        const arrowSVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
+
+        const article = document.createElement("article");
+        article.className = "project-card card-animate";
+        article.setAttribute("role", "listitem");
+        article.style.transitionDelay = `${index * 60}ms`;
+        article.innerHTML = `
+          ${badgeHTML}
+          <div class="card-icon" aria-hidden="true">${esc(project.icon)}</div>
+          <h3 class="card-title">${esc(project.title)}</h3>
+          <p class="card-desc">${esc(project.description)}</p>
+          <div class="card-tags" aria-label="Tags">${tagsHTML}</div>
+          <div class="card-footer">
+            <a
+              class="btn-launch"
+              href="${esc(project.path)}"
+              aria-label="Launch ${esc(project.title)}"
+            >Launch ${arrowSVG}</a>
+            <span class="card-id" aria-hidden="true">#${esc(project.id)}</span>
+          </div>
+        `;
+        return article;
+      }
+
+      function renderCards() {
+        grid.innerHTML = "";
+        const filtered =
+          activeFilter === "All"
+            ? PROJECTS
+            : PROJECTS.filter((p) => p.tags.includes(activeFilter));
+
+        countEl.textContent = `(${filtered.length})`;
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `<div class="no-results">No projects match this filter.</div>`;
+          return;
+        }
+
+        filtered.forEach((project, i) => {
+          const card = buildCard(project, i);
+          grid.appendChild(card);
+        });
+
+        /* Intersection observer for scroll-in animation */
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+        grid.querySelectorAll(".card-animate").forEach((el) => observer.observe(el));
+      }
+
+      renderCards();
+    })();
+  </script>
+</body>
+</html>

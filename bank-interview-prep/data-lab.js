@@ -7,13 +7,20 @@ window.MODULES.lab = () => {
   // ---- Pre-build all code blocks to avoid nested template-literal conflicts ----
 
   const cb_docker_start = _cb('bash',
-`# In the VS Code terminal, make sure you are in the lab/ folder, then run:
+`# Open a VS Code terminal (Terminal → New Terminal).
+# It opens automatically in the lab/ folder since that is what you opened in VS Code.
+# Run these two commands:
 
-cp .env.example .env
+# Windows PowerShell:
+copy .env.example .env
+
+# macOS / Linux / Git Bash on Windows:
+# cp .env.example .env
+
 docker compose up -d
 
-# Docker will download Postgres automatically (takes 1-2 min on first run).
-# When it finishes and returns to the prompt, wait 10 seconds then run:
+# Docker downloads Postgres automatically (1-2 min on first run).
+# When it returns to the prompt, wait 10 seconds then run:
 docker compose exec db psql -U dga -d dataguard -c "\\dt bank.*"
 
 # You should see a list of tables: customers, accounts, transactions, etc.
@@ -51,16 +58,23 @@ python 01_smoke_test.py
 # Expected: Connected to dataguard as dga`);
 
   const cb_quickstart = _cb('bash',
-`# Full sequence — run from inside the lab/ folder:
-cp .env.example .env
+`# Run from the lab/ folder (where you opened VS Code):
+
+# Windows PowerShell:
+copy .env.example .env
+# macOS / Linux / Git Bash:
+# cp .env.example .env
+
 docker compose up -d
 # wait 10 seconds, then verify:
 docker compose exec db psql -U dga -d dataguard -c "\\dt bank.*"
 # open http://localhost:8080 in browser to use Adminer
 
-# Python setup (Exercises 3 and 4 only) — run from lab/python/:
+# Python setup (Exercises 3 and 4 only) — run from the python/ sub-folder:
+cd python
 python -m venv .venv
-source .venv/bin/activate    # or .venv\\Scripts\\Activate.ps1 on Windows
+source .venv/bin/activate    # macOS / Linux / Git Bash
+# .venv\\Scripts\\Activate.ps1  # Windows PowerShell
 pip install -r requirements.txt
 python 01_smoke_test.py`);
 
@@ -272,7 +286,7 @@ ${_callout('warning', '&#128250; Windows &mdash; two things before you continue'
   <li><strong>Windows:</strong> Right-click the downloaded ZIP &rarr; <em>Extract All</em> &rarr; pick a location &rarr; Extract</li>
   <li><strong>Mac:</strong> Double-click the ZIP &mdash; it extracts automatically</li>
 </ul>
-<p>Open VS Code. Go to <strong>File &rarr; Open Folder</strong>, then open the <code>lab</code> folder from the extracted files. Once open, you will see these files in the left panel:</p>
+<p>Inside the extracted folder you will find a folder called <code>lab</code>. Open VS Code, go to <strong>File &rarr; Open Folder</strong>, select that <code>lab</code> folder, and click Open. You will see these files in the VS Code left panel:</p>
 <pre style="background:var(--card);padding:14px 18px;border-radius:8px;font-size:0.82rem;color:#b8cce0;overflow-x:auto;line-height:1.8">lab/
 ├── docker-compose.yml     ← tells Docker how to run the database
 ├── .env.example           ← connection settings template
@@ -293,7 +307,7 @@ ${_callout('warning', '&#128250; Windows &mdash; two things before you continue'
 ${_callout('info', '&#128161; You never run the SQL scripts manually', 'Docker reads the <code>sql/</code> folder and runs those 5 scripts automatically when the database starts for the first time. They are there so you can read and understand the schema &mdash; nothing more.')}
 
 <h2>Step 3 &mdash; Start the database</h2>
-<p>In VS Code, open a terminal: menu bar &rarr; <strong>Terminal &rarr; New Terminal</strong>. A panel opens at the bottom. Make sure Docker Desktop is open and running, then type:</p>
+<p>In VS Code, open a terminal: menu bar &rarr; <strong>Terminal &rarr; New Terminal</strong>. It opens automatically in the <code>lab</code> folder. Make sure Docker Desktop is running (whale icon in your taskbar/menu bar), then run:</p>
 ${cb_docker_start}
 
 <h2>Step 4 &mdash; Open Adminer (your SQL query tool)</h2>

@@ -66,4 +66,15 @@ const PROJECTS = [
     badgeColor: "#0ea5e9",
     icon: "🏦",
   },
+  {
+    id: "calc-1000-prep",
+    title: "CALC 1000 Derivative Practice",
+    description:
+      "A broad memorization tool for Calculus 1 covering all standard derivative rules — power, product, quotient, chain, trig, inverse trig, exponential, logarithmic, implicit differentiation, parametric, and geometric formulas.",
+    path: "projects/calc-1000-prep/index.html",
+    tags: ["CALC 1000", "Calculus", "Derivatives", "Practice Exams", "Quiz"],
+    badge: "New",
+    badgeColor: "#8b5cf6",
+    icon: "∂",
+  },
 ];

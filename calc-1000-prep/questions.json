@@ -1,0 +1,844 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is d/dx[c] where c is a constant?",
+      "options": ["c", "0", "1", "cx"],
+      "correct": 1,
+      "section": "Constant & Power Rules"
+    },
+    {
+      "id": 2,
+      "question": "What is d/dx[x]?",
+      "options": ["0", "x", "1", "2x"],
+      "correct": 2,
+      "section": "Constant & Power Rules"
+    },
+    {
+      "id": 3,
+      "question": "The Power Rule states d/dx[x^n] equals what?",
+      "options": ["nx^n", "x^(n+1)/(n+1)", "n·x^(n-1)", "(n-1)·x^n"],
+      "correct": 2,
+      "section": "Constant & Power Rules"
+    },
+    {
+      "id": 4,
+      "question": "What is d/dx[x^5]?",
+      "options": ["5x^4", "4x^5", "5x^6/6", "x^4"],
+      "correct": 0,
+      "section": "Constant & Power Rules"
+    },
+    {
+      "id": 5,
+      "question": "What is d/dx[sqrt(x)] = d/dx[x^(1/2)]?",
+      "options": ["2·sqrt(x)", "(1/2)·x^(-1/2)", "sqrt(x)/2", "2·x^(1/2)"],
+      "correct": 1,
+      "section": "Constant & Power Rules"
+    },
+    {
+      "id": 6,
+      "question": "What is d/dx[1/x] = d/dx[x^(-1)]?",
+      "options": ["1/x^2", "-1/x^2", "ln(x)", "-2/x^3"],
+      "correct": 1,
+      "section": "Constant & Power Rules"
+    },
+    {
+      "id": 7,
+      "question": "What is d/dx[x^3]?",
+      "options": ["x^2", "3x^2", "3x^3", "2x^3"],
+      "correct": 1,
+      "section": "Constant & Power Rules"
+    },
+    {
+      "id": 8,
+      "question": "What is d/dx[1]? (The derivative of the constant 1)",
+      "options": ["1", "x", "0", "undefined"],
+      "correct": 2,
+      "section": "Constant & Power Rules"
+    },
+    {
+      "id": 9,
+      "question": "What is d/dx[x^(2/3)]?",
+      "options": ["(2/3)·x^(-1/3)", "(3/2)·x^(1/3)", "(2/3)·x^(5/3)", "x^(5/3)"],
+      "correct": 0,
+      "section": "Constant & Power Rules"
+    },
+    {
+      "id": 10,
+      "question": "What is d/dx[7x^4]?",
+      "options": ["28x^3", "7x^3", "28x^4", "4x^3"],
+      "correct": 0,
+      "section": "Constant & Power Rules"
+    },
+    {
+      "id": 11,
+      "question": "The Constant Multiple Rule states d/dx[c·f(x)] equals what?",
+      "options": ["c + f'(x)", "f'(x)", "c·f'(x)", "c·f(x)"],
+      "correct": 2,
+      "section": "Sum, Difference & Constant Multiple"
+    },
+    {
+      "id": 12,
+      "question": "The Sum Rule states d/dx[f(x) + g(x)] equals what?",
+      "options": ["f'(x)·g'(x)", "f'(x) + g'(x)", "f(x)·g'(x) + f'(x)·g(x)", "f'(x) + g(x)"],
+      "correct": 1,
+      "section": "Sum, Difference & Constant Multiple"
+    },
+    {
+      "id": 13,
+      "question": "The Difference Rule states d/dx[f(x) - g(x)] equals what?",
+      "options": ["f'(x) + g'(x)", "f'(x)·g'(x)", "f'(x) - g'(x)", "f(x) - g(x)"],
+      "correct": 2,
+      "section": "Sum, Difference & Constant Multiple"
+    },
+    {
+      "id": 14,
+      "question": "What is d/dx[x^3 + x^2]?",
+      "options": ["3x^2 + 2x", "x^4 + x^3", "3x^2·2x", "6x"],
+      "correct": 0,
+      "section": "Sum, Difference & Constant Multiple"
+    },
+    {
+      "id": 15,
+      "question": "What is d/dx[5x^2 - 3x + 7]?",
+      "options": ["10x", "10x - 3", "5x - 3", "10x - 3 + 7"],
+      "correct": 1,
+      "section": "Sum, Difference & Constant Multiple"
+    },
+    {
+      "id": 16,
+      "question": "What is d/dx[3x^5 - 2x^3 + x]?",
+      "options": ["15x^4 - 6x^2 + 1", "15x^4 - 6x^3 + 1", "3x^4 - 2x^2 + 1", "15x^4 - 6x^2"],
+      "correct": 0,
+      "section": "Sum, Difference & Constant Multiple"
+    },
+    {
+      "id": 17,
+      "question": "What is d/dx[x^(-2) + 3] = d/dx[1/x^2 + 3]?",
+      "options": ["2/x^3", "-2x^3", "1/x^3", "-2/x^3"],
+      "correct": 3,
+      "section": "Sum, Difference & Constant Multiple"
+    },
+    {
+      "id": 18,
+      "question": "What is d/dx[6x^(1/3)]?",
+      "options": ["6x^(-2/3)", "2x^(-2/3)", "2x^(1/3)", "18x^(4/3)"],
+      "correct": 1,
+      "section": "Sum, Difference & Constant Multiple"
+    },
+    {
+      "id": 19,
+      "question": "The Product Rule for d/dx[f(x)·g(x)] is what?",
+      "options": ["f'(x) + g'(x)", "f'(x)·g(x) + f(x)·g'(x)", "f'(x)/g(x) + f(x)/g'(x)", "f'(x)·g'(x)"],
+      "correct": 1,
+      "section": "Product Rule"
+    },
+    {
+      "id": 20,
+      "question": "What is d/dx[x^2·sin(x)]?",
+      "options": ["2x·cos(x)", "2x·sin(x) + x^2·cos(x)", "2x·sin(x)", "x^2·cos(x)"],
+      "correct": 1,
+      "section": "Product Rule"
+    },
+    {
+      "id": 21,
+      "question": "What is d/dx[x·e^x]?",
+      "options": ["e^x", "x·e^x", "e^x(1 + x)", "e^(x+1)"],
+      "correct": 2,
+      "section": "Product Rule"
+    },
+    {
+      "id": 22,
+      "question": "What is d/dx[x^3·ln(x)]?",
+      "options": ["3x^2·ln(x)", "x^2", "x^2 + 3x^2·ln(x)", "3x^3·ln(x)"],
+      "correct": 2,
+      "section": "Product Rule"
+    },
+    {
+      "id": 23,
+      "question": "The Product Rule mnemonic is 'first times derivative of second PLUS...'",
+      "options": ["...second times first", "...second times derivative of first", "...derivative of first squared", "...quotient of both"],
+      "correct": 1,
+      "section": "Product Rule"
+    },
+    {
+      "id": 24,
+      "question": "What is d/dx[(x+1)(x^2-1)] using the Product Rule?",
+      "options": ["3x^2 + 2x - 1", "2x + 2x^2", "x^3 + x^2 - x - 1", "3x^2 - 1"],
+      "correct": 0,
+      "section": "Product Rule"
+    },
+    {
+      "id": 25,
+      "question": "What is d/dx[sin(x)·cos(x)] using the Product Rule?",
+      "options": ["-sin^2(x)", "cos^2(x) - sin^2(x)", "1", "-cos(2x)"],
+      "correct": 1,
+      "section": "Product Rule"
+    },
+    {
+      "id": 26,
+      "question": "If h(x) = f(x)·g(x) and f(2)=3, f'(2)=1, g(2)=4, g'(2)=-2, what is h'(2)?",
+      "options": ["-12", "-2", "4", "10"],
+      "correct": 1,
+      "section": "Product Rule"
+    },
+    {
+      "id": 27,
+      "question": "The Quotient Rule for d/dx[f(x)/g(x)] is what?",
+      "options": ["(f'·g + f·g')/g^2", "(f'·g - f·g')/g^2", "(f·g' - f'·g)/g^2", "(f'·g')/(g^2)"],
+      "correct": 1,
+      "section": "Quotient Rule"
+    },
+    {
+      "id": 28,
+      "question": "The Quotient Rule mnemonic is 'low d-high minus high d-low...'",
+      "options": ["...divided by low", "...over the square of what's below", "...times low squared", "...plus high over low"],
+      "correct": 1,
+      "section": "Quotient Rule"
+    },
+    {
+      "id": 29,
+      "question": "What is d/dx[sin(x)/x]?",
+      "options": ["cos(x)/x", "(x·cos(x) - sin(x))/x^2", "(cos(x) - sin(x))/x", "cos(x)"],
+      "correct": 1,
+      "section": "Quotient Rule"
+    },
+    {
+      "id": 30,
+      "question": "What is d/dx[x^2/(x+1)]?",
+      "options": ["(x^2 + 2x)/(x+1)^2", "2x/(x+1)", "x/(x+1)^2", "(2x+2)/(x+1)^2"],
+      "correct": 0,
+      "section": "Quotient Rule"
+    },
+    {
+      "id": 31,
+      "question": "What is d/dx[e^x/x]?",
+      "options": ["e^x/x", "e^x(x+1)/x^2", "e^x(x-1)/x^2", "e^x"],
+      "correct": 2,
+      "section": "Quotient Rule"
+    },
+    {
+      "id": 32,
+      "question": "What does d/dx[1/g(x)] simplify to by the Quotient Rule?",
+      "options": ["1/g'(x)", "-g'(x)/[g(x)]^2", "g'(x)/[g(x)]^2", "-1/g(x)"],
+      "correct": 1,
+      "section": "Quotient Rule"
+    },
+    {
+      "id": 33,
+      "question": "What is d/dx[tan(x)] derived using the Quotient Rule on sin(x)/cos(x)?",
+      "options": ["sin^2(x)", "-csc^2(x)", "sec^2(x)", "tan(x)/cos(x)"],
+      "correct": 2,
+      "section": "Quotient Rule"
+    },
+    {
+      "id": 34,
+      "question": "What is d/dx[ln(x)/x]?",
+      "options": ["1/x^2", "(1 - ln(x))/x^2", "ln(x)/x^2", "(1 + ln(x))/x^2"],
+      "correct": 1,
+      "section": "Quotient Rule"
+    },
+    {
+      "id": 35,
+      "question": "The Chain Rule states d/dx[f(g(x))] equals what?",
+      "options": ["f'(x)·g'(x)", "f(g'(x))", "f'(g(x))·g'(x)", "f'(g(x)) + g'(x)"],
+      "correct": 2,
+      "section": "Chain Rule"
+    },
+    {
+      "id": 36,
+      "question": "What is d/dx[(x^2 + 1)^5]?",
+      "options": ["5(x^2+1)^4", "10x(x^2+1)^4", "5x(x^2+1)^4", "(x^2+1)^5"],
+      "correct": 1,
+      "section": "Chain Rule"
+    },
+    {
+      "id": 37,
+      "question": "What is d/dx[sin(x^2)]?",
+      "options": ["cos(x^2)", "2x·cos(x^2)", "sin(2x)", "-2x·sin(x^2)"],
+      "correct": 1,
+      "section": "Chain Rule"
+    },
+    {
+      "id": 38,
+      "question": "What is d/dx[e^(3x)]?",
+      "options": ["e^(3x)", "3x·e^(3x)", "3·e^(3x)", "e^(3x) + 3"],
+      "correct": 2,
+      "section": "Chain Rule"
+    },
+    {
+      "id": 39,
+      "question": "What is d/dx[ln(x^2 + 1)]?",
+      "options": ["1/(x^2+1)", "2x/(x^2+1)", "1/x", "ln(2x)"],
+      "correct": 1,
+      "section": "Chain Rule"
+    },
+    {
+      "id": 40,
+      "question": "What is d/dx[sqrt(x^3 + 1)]?",
+      "options": ["1/(2·sqrt(x^3+1))", "(3x^2)/(2·sqrt(x^3+1))", "sqrt(3x^2)", "(x^3+1)^(-1/2)"],
+      "correct": 1,
+      "section": "Chain Rule"
+    },
+    {
+      "id": 41,
+      "question": "What is d/dx[cos(5x)]?",
+      "options": ["-sin(5x)", "sin(5x)", "-5·sin(5x)", "5·cos(5x)"],
+      "correct": 2,
+      "section": "Chain Rule"
+    },
+    {
+      "id": 42,
+      "question": "What is d/dx[(2x + 3)^4]?",
+      "options": ["4(2x+3)^3", "8(2x+3)^3", "4(2x+3)^4", "8(2x+3)^4"],
+      "correct": 1,
+      "section": "Chain Rule"
+    },
+    {
+      "id": 43,
+      "question": "What is d/dx[e^(x^2)]?",
+      "options": ["e^(x^2)", "x^2·e^x", "2x·e^(x^2)", "2·e^(x^2)"],
+      "correct": 2,
+      "section": "Chain Rule"
+    },
+    {
+      "id": 44,
+      "question": "What is d/dx[ln(sin(x))]?",
+      "options": ["1/sin(x)", "-cot(x)", "cot(x)", "tan(x)"],
+      "correct": 2,
+      "section": "Chain Rule"
+    },
+    {
+      "id": 45,
+      "question": "What is d/dx[e^x]?",
+      "options": ["e^x", "x·e^(x-1)", "e^x·ln(x)", "e^(x-1)"],
+      "correct": 0,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 46,
+      "question": "What is d/dx[a^x] where a > 0 and a ≠ 1?",
+      "options": ["a^x", "a^x·ln(a)", "x·a^(x-1)", "ln(a)"],
+      "correct": 1,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 47,
+      "question": "What is d/dx[ln(x)]?",
+      "options": ["1/x", "ln(x)/x", "x", "e^x"],
+      "correct": 0,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 48,
+      "question": "What is d/dx[log_a(x)]?",
+      "options": ["1/x", "1/(x·ln(x))", "1/(x·ln(a))", "ln(a)/x"],
+      "correct": 2,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 49,
+      "question": "What is d/dx[e^(2x)]?",
+      "options": ["e^(2x)", "2·e^(2x)", "2x·e^(2x)", "e^(2x)/2"],
+      "correct": 1,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 50,
+      "question": "What is d/dx[2^x]?",
+      "options": ["2^x", "2^x·ln(2)", "x·2^(x-1)", "2^(x-1)"],
+      "correct": 1,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 51,
+      "question": "What is d/dx[ln(3x)] by the Chain Rule?",
+      "options": ["3/x", "1/x", "1/(3x)", "ln(3)"],
+      "correct": 1,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 52,
+      "question": "What is d/dx[ln(x^2)]?",
+      "options": ["1/x^2", "2/x", "2x/x^2", "1/(2x)"],
+      "correct": 1,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 53,
+      "question": "What is d/dx[e^(-x)]?",
+      "options": ["e^(-x)", "-e^(-x)", "e^(-x-1)", "-e^x"],
+      "correct": 1,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 54,
+      "question": "What is d/dx[10^x]?",
+      "options": ["10^x", "10^x·ln(10)", "10·x^9", "10^(x-1)"],
+      "correct": 1,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 55,
+      "question": "What is d/dx[log_10(x)]?",
+      "options": ["1/x", "10/x", "1/(x·log_10(e))", "1/(x·ln(10))"],
+      "correct": 3,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 56,
+      "question": "What is d/dx[ln|x|] for x ≠ 0?",
+      "options": ["1/|x|", "1/x", "-1/x  (x < 0)", "|x|/x^2"],
+      "correct": 1,
+      "section": "Exponential & Logarithmic Derivatives"
+    },
+    {
+      "id": 57,
+      "question": "What is ln(e^x)?",
+      "options": ["e^x", "x·e", "x", "1/x"],
+      "correct": 2,
+      "section": "Logarithm & Exponent Properties"
+    },
+    {
+      "id": 58,
+      "question": "What is e^(ln(x))?",
+      "options": ["ln(x)", "e·x", "x", "1/ln(x)"],
+      "correct": 2,
+      "section": "Logarithm & Exponent Properties"
+    },
+    {
+      "id": 59,
+      "question": "ln(a·b) equals what?",
+      "options": ["ln(a)·ln(b)", "ln(a) + ln(b)", "ln(a - b)", "ln(a)/ln(b)"],
+      "correct": 1,
+      "section": "Logarithm & Exponent Properties"
+    },
+    {
+      "id": 60,
+      "question": "ln(a/b) equals what?",
+      "options": ["ln(a)/ln(b)", "ln(a)·ln(b)", "ln(a) - ln(b)", "ln(a + b)"],
+      "correct": 2,
+      "section": "Logarithm & Exponent Properties"
+    },
+    {
+      "id": 61,
+      "question": "ln(a^n) equals what?",
+      "options": ["n + ln(a)", "ln(a)/n", "n·ln(a)", "ln(n·a)"],
+      "correct": 2,
+      "section": "Logarithm & Exponent Properties"
+    },
+    {
+      "id": 62,
+      "question": "What is ln(1)?",
+      "options": ["1", "e", "0", "undefined"],
+      "correct": 2,
+      "section": "Logarithm & Exponent Properties"
+    },
+    {
+      "id": 63,
+      "question": "What is ln(e)?",
+      "options": ["0", "e", "1", "1/e"],
+      "correct": 2,
+      "section": "Logarithm & Exponent Properties"
+    },
+    {
+      "id": 64,
+      "question": "What is e^0?",
+      "options": ["0", "e", "1", "undefined"],
+      "correct": 2,
+      "section": "Logarithm & Exponent Properties"
+    },
+    {
+      "id": 65,
+      "question": "What is e^1?",
+      "options": ["0", "1", "e", "e^2"],
+      "correct": 2,
+      "section": "Logarithm & Exponent Properties"
+    },
+    {
+      "id": 66,
+      "question": "What is log_b(b) for any valid base b?",
+      "options": ["0", "b", "1", "b^2"],
+      "correct": 2,
+      "section": "Logarithm & Exponent Properties"
+    },
+    {
+      "id": 67,
+      "question": "What is d/dx[sin(x)]?",
+      "options": ["-cos(x)", "cos(x)", "-sin(x)", "sin(x)"],
+      "correct": 1,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 68,
+      "question": "What is d/dx[cos(x)]?",
+      "options": ["sin(x)", "-sin(x)", "cos(x)", "-cos(x)"],
+      "correct": 1,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 69,
+      "question": "What is d/dx[tan(x)]?",
+      "options": ["sec(x)·tan(x)", "-csc^2(x)", "sec^2(x)", "cot(x)"],
+      "correct": 2,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 70,
+      "question": "What is d/dx[csc(x)]?",
+      "options": ["-csc(x)·cot(x)", "csc(x)·cot(x)", "-sec(x)·tan(x)", "csc^2(x)"],
+      "correct": 0,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 71,
+      "question": "What is d/dx[sec(x)]?",
+      "options": ["-sec(x)·tan(x)", "csc(x)·cot(x)", "sec(x)·tan(x)", "sec^2(x)"],
+      "correct": 2,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 72,
+      "question": "What is d/dx[cot(x)]?",
+      "options": ["-csc^2(x)", "csc^2(x)", "-sec^2(x)", "sec(x)·tan(x)"],
+      "correct": 0,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 73,
+      "question": "What is d/dx[sin(3x)] by the Chain Rule?",
+      "options": ["cos(3x)", "3·cos(3x)", "-3·sin(3x)", "3·sin(3x)"],
+      "correct": 1,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 74,
+      "question": "What is d/dx[cos(x^2)] by the Chain Rule?",
+      "options": ["-sin(x^2)", "2x·cos(x^2)", "-2x·sin(x^2)", "sin(x^2)·2x"],
+      "correct": 2,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 75,
+      "question": "Which two trig functions have derivatives that involve the factor sec(x)?",
+      "options": ["sin and cos", "tan and csc", "tan and sec", "sec and cot"],
+      "correct": 2,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 76,
+      "question": "What is the fundamental Pythagorean trig identity?",
+      "options": ["sin^2(x) + cos^2(x) = 2", "tan^2(x) + 1 = cos^2(x)", "sin^2(x) + cos^2(x) = 1", "sin(x)·cos(x) = 1"],
+      "correct": 2,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 77,
+      "question": "What is d/dx[tan^2(x)] using the Chain Rule?",
+      "options": ["sec^2(x)", "2·tan(x)·sec^2(x)", "sec^2(x)·2", "tan^2(x)·sec(x)"],
+      "correct": 1,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 78,
+      "question": "What is d/dx[sec^2(x)] using the Chain Rule?",
+      "options": ["2·sec(x)·tan(x)", "2·sec^2(x)·tan(x)", "sec^2(x)·tan(x)", "2·sec(x)"],
+      "correct": 1,
+      "section": "Trigonometric Derivatives"
+    },
+    {
+      "id": 79,
+      "question": "What is d/dx[arcsin(x)]?",
+      "options": ["1/sqrt(1 + x^2)", "-1/sqrt(1 - x^2)", "1/sqrt(1 - x^2)", "1/(1 + x^2)"],
+      "correct": 2,
+      "section": "Inverse Trig Derivatives"
+    },
+    {
+      "id": 80,
+      "question": "What is d/dx[arccos(x)]?",
+      "options": ["1/sqrt(1 - x^2)", "-1/sqrt(1 - x^2)", "1/sqrt(1 + x^2)", "1/(1 - x^2)"],
+      "correct": 1,
+      "section": "Inverse Trig Derivatives"
+    },
+    {
+      "id": 81,
+      "question": "What is d/dx[arctan(x)]?",
+      "options": ["1/sqrt(1 - x^2)", "1/(1 - x^2)", "1/sqrt(1 + x^2)", "1/(1 + x^2)"],
+      "correct": 3,
+      "section": "Inverse Trig Derivatives"
+    },
+    {
+      "id": 82,
+      "question": "What is d/dx[arccot(x)]?",
+      "options": ["1/(1 + x^2)", "-1/(1 + x^2)", "1/(1 - x^2)", "-1/sqrt(1 + x^2)"],
+      "correct": 1,
+      "section": "Inverse Trig Derivatives"
+    },
+    {
+      "id": 83,
+      "question": "What is d/dx[arcsec(x)]?",
+      "options": ["1/(|x|·sqrt(x^2 - 1))", "-1/(|x|·sqrt(x^2 - 1))", "1/(x·sqrt(x^2 + 1))", "1/sqrt(x^2 - 1)"],
+      "correct": 0,
+      "section": "Inverse Trig Derivatives"
+    },
+    {
+      "id": 84,
+      "question": "What is d/dx[arccsc(x)]?",
+      "options": ["1/(|x|·sqrt(x^2 - 1))", "-1/(|x|·sqrt(x^2 - 1))", "1/(x^2 - 1)", "-1/sqrt(x^2 - 1)"],
+      "correct": 1,
+      "section": "Inverse Trig Derivatives"
+    },
+    {
+      "id": 85,
+      "question": "What is d/dx[arctan(2x)] by the Chain Rule?",
+      "options": ["1/(1 + 4x^2)", "2/(1 + 4x^2)", "1/(1 + 2x^2)", "2/(1 + 2x^2)"],
+      "correct": 1,
+      "section": "Inverse Trig Derivatives"
+    },
+    {
+      "id": 86,
+      "question": "What is d/dx[arcsin(3x)] by the Chain Rule?",
+      "options": ["1/sqrt(1 - 3x^2)", "3/sqrt(1 - 9x^2)", "1/sqrt(1 - 9x^2)", "3/sqrt(1 - 3x^2)"],
+      "correct": 1,
+      "section": "Inverse Trig Derivatives"
+    },
+    {
+      "id": 87,
+      "question": "What is d/dx[arcsin(x)] + d/dx[arccos(x)]?",
+      "options": ["2/sqrt(1 - x^2)", "1", "0", "2/(1 + x^2)"],
+      "correct": 2,
+      "section": "Inverse Trig Derivatives"
+    },
+    {
+      "id": 88,
+      "question": "For which domain is arctan(x) defined as a function?",
+      "options": ["x > 0 only", "|x| ≤ 1", "All real numbers", "x ≠ 0"],
+      "correct": 2,
+      "section": "Inverse Trig Derivatives"
+    },
+    {
+      "id": 89,
+      "question": "In implicit differentiation, what does d/dx[y] equal?",
+      "options": ["0", "1", "dy/dx", "y"],
+      "correct": 2,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 90,
+      "question": "What is d/dx[y^2] in implicit differentiation?",
+      "options": ["2y", "2y·(dy/dx)", "y^2", "2·(dy/dx)"],
+      "correct": 1,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 91,
+      "question": "What is d/dx[y^3] in implicit differentiation?",
+      "options": ["3y^2", "3y^2·(dy/dx)", "3y·(dy/dx)", "y^3·(dy/dx)"],
+      "correct": 1,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 92,
+      "question": "The general form d/dx[y^n] in implicit differentiation equals what?",
+      "options": ["n·y^n·(dy/dx)", "n·y^(n-1)", "n·y^(n-1)·(dy/dx)", "(n-1)·y^n"],
+      "correct": 2,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 93,
+      "question": "What is d/dx[sin(y)] in implicit differentiation?",
+      "options": ["cos(y)", "-sin(y)·(dy/dx)", "sin(y)·(dy/dx)", "cos(y)·(dy/dx)"],
+      "correct": 3,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 94,
+      "question": "What is d/dx[e^y] in implicit differentiation?",
+      "options": ["e^y", "e·(dy/dx)", "e^y·(dy/dx)", "y·e^(y-1)·(dy/dx)"],
+      "correct": 2,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 95,
+      "question": "What is d/dx[ln(y)] in implicit differentiation?",
+      "options": ["1/y", "(1/y)·(dy/dx)", "ln(y)·(dy/dx)", "y·(dy/dx)"],
+      "correct": 1,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 96,
+      "question": "What is d/dx[x·y] by the Product Rule in implicit differentiation?",
+      "options": ["y·(dy/dx)", "y + x·(dy/dx)", "x·(dy/dx)", "y - x·(dy/dx)"],
+      "correct": 1,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 97,
+      "question": "For x^2 + y^2 = r^2 (circle), what is dy/dx by implicit differentiation?",
+      "options": ["-x/y", "x/y", "-y/x", "y/x"],
+      "correct": 0,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 98,
+      "question": "What is d/dx[x^2·y] by the Product Rule (implicit differentiation)?",
+      "options": ["2x·y", "x^2·(dy/dx)", "2x·y + x^2·(dy/dx)", "2xy·(dy/dx)"],
+      "correct": 2,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 99,
+      "question": "What is d/dx[cos(y)] in implicit differentiation?",
+      "options": ["sin(y)·(dy/dx)", "-cos(y)·(dy/dx)", "-sin(y)·(dy/dx)", "cos(y)"],
+      "correct": 2,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 100,
+      "question": "For y^3 + x^3 = 8, what is dy/dx by implicit differentiation?",
+      "options": ["-y^2/x^2", "-x^2/y^2", "x^2/y^2", "y^2/x^2"],
+      "correct": 1,
+      "section": "Implicit Differentiation"
+    },
+    {
+      "id": 101,
+      "question": "For parametric equations x(t) and y(t), what is dy/dx?",
+      "options": ["(dx/dt)/(dy/dt)", "(dy/dt)/(dx/dt)", "dy·dx/dt^2", "dt/(dy·dx)"],
+      "correct": 1,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 102,
+      "question": "In related rates, what is d/dt[x^2]?",
+      "options": ["2x", "2x·(dx/dt)", "x^2·dt", "2·(dx/dt)"],
+      "correct": 1,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 103,
+      "question": "In related rates, what is d/dt[y^2]?",
+      "options": ["2y", "y^2", "2y·(dy/dt)", "2·dt"],
+      "correct": 2,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 104,
+      "question": "What is d/dt[x^2 + y^2] in related rates?",
+      "options": ["2x + 2y", "2x·(dx/dt) + 2y·(dy/dt)", "2(x + y)·dt", "2xy·dt"],
+      "correct": 1,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 105,
+      "question": "For parametric x = t^2, y = t^3, what is dy/dx?",
+      "options": ["3t/2", "2t/3", "3t^2/(2t)", "3/2"],
+      "correct": 0,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 106,
+      "question": "For parametric x = cos(t), y = sin(t), what is dy/dx?",
+      "options": ["cot(t)", "-cot(t)", "tan(t)", "-tan(t)"],
+      "correct": 1,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 107,
+      "question": "If V = (4/3)π·r^3 (sphere volume), what is dV/dt in related rates?",
+      "options": ["(4/3)π·r^2·(dr/dt)", "4π·r^2·(dr/dt)", "(4/3)π·r^2", "4π·r^3"],
+      "correct": 1,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 108,
+      "question": "If A = π·r^2 (circle area), what is dA/dt in related rates?",
+      "options": ["2π·r", "π·r·(dr/dt)", "2π·r·(dr/dt)", "π·r^2·(dr/dt)"],
+      "correct": 2,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 109,
+      "question": "If c^2 = a^2 + b^2, differentiating with respect to t gives c·(dc/dt) equals what?",
+      "options": ["a + b", "a·(da/dt) - b·(db/dt)", "a·(da/dt) + b·(db/dt)", "a^2·(da/dt) + b^2·(db/dt)"],
+      "correct": 2,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 110,
+      "question": "For parametric x = e^t, y = t^2, what is dy/dx?",
+      "options": ["2t·e^t", "e^t/(2t)", "2t/e^t", "2/e^t"],
+      "correct": 2,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 111,
+      "question": "The second derivative d^2y/dx^2 for parametric curves equals what?",
+      "options": ["(d^2y/dt^2)/(d^2x/dt^2)", "[d/dt(dy/dx)] / (dx/dt)", "d^2y/dt^2", "(dy/dt)^2/(dx/dt)^2"],
+      "correct": 1,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 112,
+      "question": "At what condition does dy/dx fail to exist for a parametric curve?",
+      "options": ["When dy/dt = 0", "When dx/dt = 0", "When x = y", "When t = 0"],
+      "correct": 1,
+      "section": "Parametric & Related Rates"
+    },
+    {
+      "id": 113,
+      "question": "What is the formula for the volume of a sphere with radius r?",
+      "options": ["(2/3)π·r^3", "4π·r^2", "(4/3)π·r^3", "2π·r^3"],
+      "correct": 2,
+      "section": "Geometric Formulas"
+    },
+    {
+      "id": 114,
+      "question": "What is the formula for the surface area of a sphere with radius r?",
+      "options": ["4π·r^2", "2π·r^2", "π·r^2", "4π·r^3"],
+      "correct": 0,
+      "section": "Geometric Formulas"
+    },
+    {
+      "id": 115,
+      "question": "What is the formula for the volume of a cone with radius r and height h?",
+      "options": ["π·r^2·h", "(1/3)π·r^2·h", "(2/3)π·r^2·h", "(1/2)π·r^2·h"],
+      "correct": 1,
+      "section": "Geometric Formulas"
+    },
+    {
+      "id": 116,
+      "question": "What is the formula for the volume of a cylinder with radius r and height h?",
+      "options": ["(1/3)π·r^2·h", "(2/3)π·r^3", "π·r^2·h", "2π·r·h"],
+      "correct": 2,
+      "section": "Geometric Formulas"
+    },
+    {
+      "id": 117,
+      "question": "What is the formula for the area of a circle with radius r?",
+      "options": ["2π·r", "π·r^2", "π·r", "2π·r^2"],
+      "correct": 1,
+      "section": "Geometric Formulas"
+    },
+    {
+      "id": 118,
+      "question": "What is the circumference of a circle with radius r?",
+      "options": ["π·r", "2π·r", "π·r^2", "2·r"],
+      "correct": 1,
+      "section": "Geometric Formulas"
+    },
+    {
+      "id": 119,
+      "question": "The Pythagorean theorem for a right triangle with legs a, b and hypotenuse c states what?",
+      "options": ["a^2 + b^2 = 2c", "a + b = c", "a^2 + b^2 = c^2", "a^2 - b^2 = c^2"],
+      "correct": 2,
+      "section": "Geometric Formulas"
+    },
+    {
+      "id": 120,
+      "question": "What is the formula for the area of a triangle with base b and height h?",
+      "options": ["b·h", "(1/2)·b·h", "(1/3)·b·h", "2·b·h"],
+      "correct": 1,
+      "section": "Geometric Formulas"
+    }
+  ]
+}

@@ -286,6 +286,8 @@ function goToHome() {
         document.getElementById('quiz-container').classList.add('hidden');
         document.getElementById('progress-section').classList.add('hidden');
         document.getElementById('results-container').classList.add('hidden');
+        document.getElementById('formula-sheet-screen').classList.add('hidden');
+        document.getElementById('flashcard-screen').classList.add('hidden');
         document.getElementById('setup-screen').classList.remove('hidden');
         toggleProfileMenu();
     } else {
@@ -293,6 +295,8 @@ function goToHome() {
         document.getElementById('leaderboard-screen').classList.add('hidden');
         document.getElementById('review-screen').classList.add('hidden');
         document.getElementById('settings-screen').classList.add('hidden');
+        document.getElementById('formula-sheet-screen').classList.add('hidden');
+        document.getElementById('flashcard-screen').classList.add('hidden');
         document.getElementById('name-screen').classList.remove('hidden');
     }
 }
@@ -1103,6 +1107,246 @@ function getFlaggedQuestions() {
     });
 
     return flaggedList.sort((a, b) => b.flagData.flagCount - a.flagData.flagCount);
+}
+
+// ============================================
+// FORMULA DATA — all standard derivative rules
+// ============================================
+const FORMULAS = [
+  {
+    section: "Constant & Power Rules",
+    cards: [
+      { front: "d/dx[ c ]",               back: "0",                      note: "c is any constant" },
+      { front: "d/dx[ x ]",               back: "1" },
+      { front: "d/dx[ x^n ]",             back: "n · x^(n−1)",            note: "Power Rule" },
+      { front: "d/dx[ x^5 ]",             back: "5x^4" },
+      { front: "d/dx[ sqrt(x) ]",         back: "1 / (2·sqrt(x))" },
+      { front: "d/dx[ 1/x ] = d/dx[x⁻¹]",back: "−1/x²" },
+    ]
+  },
+  {
+    section: "Combination Rules",
+    cards: [
+      { front: "d/dx[ c · f(x) ]",         back: "c · f′(x)",              note: "Constant Multiple Rule" },
+      { front: "d/dx[ f + g ]",            back: "f′(x) + g′(x)",          note: "Sum Rule" },
+      { front: "d/dx[ f − g ]",            back: "f′(x) − g′(x)",          note: "Difference Rule" },
+      { front: "d/dx[ f · g ]",            back: "f′g + fg′",              note: "Product Rule" },
+      { front: "d/dx[ f / g ]",            back: "(f′g − fg′) / g²",       note: "Quotient Rule" },
+      { front: "d/dx[ f(g(x)) ]",          back: "f′(g(x)) · g′(x)",       note: "Chain Rule" },
+    ]
+  },
+  {
+    section: "Exponential & Logarithmic",
+    cards: [
+      { front: "d/dx[ e^x ]",              back: "e^x" },
+      { front: "d/dx[ a^x ]",              back: "a^x · ln(a)",            note: "a > 0, a ≠ 1" },
+      { front: "d/dx[ ln(x) ]",            back: "1/x" },
+      { front: "d/dx[ log_a(x) ]",         back: "1 / (x · ln(a))" },
+      { front: "d/dx[ e^(kx) ]",           back: "k · e^(kx)",             note: "Chain Rule applied" },
+      { front: "d/dx[ ln|x| ]",            back: "1/x",                   note: "Valid for x ≠ 0" },
+    ]
+  },
+  {
+    section: "Log & Exponent Properties",
+    cards: [
+      { front: "ln(e^x)",                  back: "x" },
+      { front: "e^(ln x)",                 back: "x" },
+      { front: "ln(ab)",                   back: "ln(a) + ln(b)" },
+      { front: "ln(a/b)",                  back: "ln(a) − ln(b)" },
+      { front: "ln(a^n)",                  back: "n · ln(a)" },
+      { front: "ln(1)",                    back: "0" },
+      { front: "ln(e)",                    back: "1" },
+      { front: "e^0",                      back: "1" },
+      { front: "e^1",                      back: "e  ≈ 2.718..." },
+    ]
+  },
+  {
+    section: "Trigonometric Derivatives",
+    cards: [
+      { front: "d/dx[ sin(x) ]",           back: "cos(x)" },
+      { front: "d/dx[ cos(x) ]",           back: "−sin(x)" },
+      { front: "d/dx[ tan(x) ]",           back: "sec²(x)" },
+      { front: "d/dx[ csc(x) ]",           back: "−csc(x) · cot(x)" },
+      { front: "d/dx[ sec(x) ]",           back: "sec(x) · tan(x)" },
+      { front: "d/dx[ cot(x) ]",           back: "−csc²(x)" },
+    ]
+  },
+  {
+    section: "Inverse Trig Derivatives",
+    cards: [
+      { front: "d/dx[ arcsin(x) ]",        back: "1 / sqrt(1 − x²)" },
+      { front: "d/dx[ arccos(x) ]",        back: "−1 / sqrt(1 − x²)" },
+      { front: "d/dx[ arctan(x) ]",        back: "1 / (1 + x²)" },
+      { front: "d/dx[ arccot(x) ]",        back: "−1 / (1 + x²)" },
+      { front: "d/dx[ arcsec(x) ]",        back: "1 / (|x| · sqrt(x²−1))" },
+      { front: "d/dx[ arccsc(x) ]",        back: "−1 / (|x| · sqrt(x²−1))" },
+    ]
+  },
+  {
+    section: "Implicit Differentiation",
+    cards: [
+      { front: "d/dx[ y ]",               back: "dy/dx",                  note: "y is a function of x" },
+      { front: "d/dx[ y^n ]",             back: "n · y^(n−1) · (dy/dx)" },
+      { front: "d/dx[ y² ]",              back: "2y · (dy/dx)" },
+      { front: "d/dx[ sin(y) ]",          back: "cos(y) · (dy/dx)" },
+      { front: "d/dx[ cos(y) ]",          back: "−sin(y) · (dy/dx)" },
+      { front: "d/dx[ e^y ]",             back: "e^y · (dy/dx)" },
+      { front: "d/dx[ ln(y) ]",           back: "(1/y) · (dy/dx)" },
+      { front: "d/dx[ x · y ]",           back: "y + x · (dy/dx)",        note: "Product Rule" },
+    ]
+  },
+  {
+    section: "Parametric & Related Rates",
+    cards: [
+      { front: "dy/dx  (parametric)",      back: "(dy/dt) / (dx/dt)" },
+      { front: "d²y/dx²  (parametric)",    back: "[d/dt(dy/dx)] / (dx/dt)" },
+      { front: "d/dt[ x^n ]",             back: "n · x^(n−1) · (dx/dt)" },
+      { front: "d/dt[ y² ]",              back: "2y · (dy/dt)" },
+      { front: "d/dt[ (4/3)πr³ ]",        back: "4πr² · (dr/dt)",         note: "Sphere volume" },
+      { front: "d/dt[ πr² ]",             back: "2πr · (dr/dt)",           note: "Circle area" },
+    ]
+  },
+  {
+    section: "Geometric Formulas",
+    cards: [
+      { front: "Volume — Sphere",          back: "(4/3)πr³" },
+      { front: "Surface Area — Sphere",    back: "4πr²" },
+      { front: "Volume — Cone",            back: "(1/3)πr²h" },
+      { front: "Volume — Cylinder",        back: "πr²h" },
+      { front: "Area — Circle",            back: "πr²" },
+      { front: "Circumference — Circle",   back: "2πr" },
+      { front: "Pythagorean Theorem",      back: "a² + b² = c²" },
+      { front: "Area — Triangle",          back: "(1/2) · b · h" },
+    ]
+  },
+];
+
+// Flashcard state
+let allFlashcards = [];
+let currentFlashcardIdx = 0;
+let flashcardRevealed = false;
+
+function buildFlashcardList(sectionFilter) {
+    if (sectionFilter === null) {
+        allFlashcards = [];
+        FORMULAS.forEach(sec => sec.cards.forEach(c => allFlashcards.push({ ...c, section: sec.section })));
+    } else {
+        const sec = FORMULAS.find(s => s.section === sectionFilter);
+        allFlashcards = sec ? sec.cards.map(c => ({ ...c, section: sec.section })) : [];
+    }
+}
+
+function hideAllScreens() {
+    ['name-screen','setup-screen','quiz-container','progress-section',
+     'results-container','leaderboard-screen','review-screen','settings-screen',
+     'formula-sheet-screen','flashcard-screen'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+    });
+}
+
+function viewFormulaSheet() {
+    hideAllScreens();
+    document.getElementById('formula-sheet-screen').classList.remove('hidden');
+    const body = document.getElementById('formula-sheet-body');
+    let html = '';
+    FORMULAS.forEach(sec => {
+        html += `<div class="formula-section-block"><div class="formula-section-header">${sec.section}</div>`;
+        sec.cards.forEach(card => {
+            html += `<div class="formula-row">
+                <span class="formula-front">${card.front}</span>
+                <span class="formula-eq">=</span>
+                <span class="formula-back">${card.back}</span>
+                ${card.note ? `<span class="formula-note">${card.note}</span>` : ''}
+            </div>`;
+        });
+        html += '</div>';
+    });
+    body.innerHTML = html;
+}
+
+function backFromFormulaSheet() {
+    document.getElementById('formula-sheet-screen').classList.add('hidden');
+    if (studentName) { document.getElementById('setup-screen').classList.remove('hidden'); }
+    else { document.getElementById('name-screen').classList.remove('hidden'); }
+}
+
+function viewFlashcards() {
+    hideAllScreens();
+    document.getElementById('flashcard-screen').classList.remove('hidden');
+    buildFlashcardList(null);
+    currentFlashcardIdx = 0;
+    flashcardRevealed = false;
+    renderFlashcardSectionNav();
+    renderFlashcard();
+}
+
+function renderFlashcardSectionNav() {
+    const nav = document.getElementById('flashcard-section-nav');
+    let html = `<button class="fc-sec-btn active" onclick="filterFlashcardSection(null, this)">All (${allFlashcards.length})</button>`;
+    FORMULAS.forEach(sec => {
+        const escaped = sec.section.replace(/'/g, "\\'");
+        html += `<button class="fc-sec-btn" onclick="filterFlashcardSection('${escaped}', this)">${sec.section} (${sec.cards.length})</button>`;
+    });
+    nav.innerHTML = html;
+}
+
+function filterFlashcardSection(sectionName, btn) {
+    document.querySelectorAll('.fc-sec-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    buildFlashcardList(sectionName);
+    currentFlashcardIdx = 0;
+    flashcardRevealed = false;
+    renderFlashcard();
+}
+
+function renderFlashcard() {
+    const container = document.getElementById('flashcard-container');
+    const progress  = document.getElementById('flashcard-progress');
+    const total = allFlashcards.length;
+    if (total === 0) { container.innerHTML = '<div class="fc-card"><div class="fc-front">No cards.</div></div>'; return; }
+    const card = allFlashcards[currentFlashcardIdx];
+    progress.textContent = `Card ${currentFlashcardIdx + 1} of ${total}`;
+    const answerHTML = flashcardRevealed
+        ? `<div class="fc-answer">
+               <div class="fc-answer-label">Answer</div>
+               <div class="fc-answer-text">${card.back}</div>
+               ${card.note ? `<div class="fc-note">${card.note}</div>` : ''}
+           </div>`
+        : `<div class="fc-hint">Click card · or press <strong>Reveal</strong></div>`;
+    const actionBtn = flashcardRevealed
+        ? `<button class="btn btn-primary" onclick="nextFlashcard()">${currentFlashcardIdx === total - 1 ? '🎉 Finished' : 'Next →'}</button>`
+        : `<button class="btn btn-primary" onclick="revealFlashcard()">Reveal</button>`;
+    container.innerHTML = `
+        <div class="fc-section-label">${card.section}</div>
+        <div class="fc-card ${flashcardRevealed ? 'revealed' : ''}" onclick="revealFlashcard()">
+            <div class="fc-front">${card.front}</div>
+            ${answerHTML}
+        </div>
+        <div class="fc-nav">
+            <button class="btn btn-secondary" onclick="prevFlashcard()" ${currentFlashcardIdx === 0 ? 'disabled' : ''}>← Prev</button>
+            ${actionBtn}
+        </div>`;
+}
+
+function revealFlashcard() { if (!flashcardRevealed) { flashcardRevealed = true; renderFlashcard(); } }
+
+function nextFlashcard() {
+    if (currentFlashcardIdx < allFlashcards.length - 1) {
+        currentFlashcardIdx++; flashcardRevealed = false; renderFlashcard(); window.scrollTo(0,0);
+    }
+}
+
+function prevFlashcard() {
+    if (currentFlashcardIdx > 0) {
+        currentFlashcardIdx--; flashcardRevealed = false; renderFlashcard(); window.scrollTo(0,0);
+    }
+}
+
+function backFromFlashcards() {
+    document.getElementById('flashcard-screen').classList.add('hidden');
+    if (studentName) { document.getElementById('setup-screen').classList.remove('hidden'); }
+    else { document.getElementById('name-screen').classList.remove('hidden'); }
 }
 
 // ============================================

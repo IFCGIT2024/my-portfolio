@@ -1607,3 +1607,165 @@ body[data-theme="dark"] .text-answer-input.input-incorrect {
     }
 }
 
+/* ============================================================
+   FORMULA SHEET
+   ============================================================ */
+.formula-sheet-screen {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+}
+.formula-sheet-content h2 {
+    text-align: center;
+    font-size: 1.7rem;
+    color: var(--text-color);
+    margin-bottom: 6px;
+}
+.formula-sheet-subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 28px;
+    font-size: 0.95rem;
+}
+.formula-section-block {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.formula-section-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 9px 16px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.formula-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 9px 16px;
+    border-bottom: 1px solid var(--border-color);
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.92rem;
+}
+.formula-row:last-child { border-bottom: none; }
+.formula-front  { flex: 1; min-width: 160px; color: var(--text-color); font-weight: 500; }
+.formula-eq     { color: var(--primary-color); font-weight: 700; padding: 0 4px; }
+.formula-back   { flex: 1; min-width: 120px; color: var(--success-color); font-weight: 600; }
+.formula-note   { font-size: 0.76rem; color: #9ca3af; font-style: italic; white-space: nowrap; }
+
+/* ============================================================
+   FLASHCARD DRILL
+   ============================================================ */
+.flashcard-screen {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+}
+.flashcard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.flashcard-header h2 { font-size: 1.5rem; color: var(--text-color); }
+#flashcard-progress  { font-size: 0.88rem; color: #6b7280; font-weight: 500; }
+
+.flashcard-section-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+.fc-sec-btn {
+    font-size: 0.75rem;
+    padding: 4px 11px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+}
+.fc-sec-btn:hover, .fc-sec-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+.fc-section-label {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+.fc-card {
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 40px 28px;
+    text-align: center;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.fc-card:hover        { border-color: var(--primary-color); box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+.fc-card.revealed     { border-color: var(--success-color); }
+.fc-front {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+.fc-hint {
+    margin-top: 18px;
+    font-size: 0.83rem;
+    color: #9ca3af;
+}
+.fc-answer {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 2px dashed var(--border-color);
+    width: 100%;
+}
+.fc-answer-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9ca3af;
+    margin-bottom: 6px;
+}
+.fc-answer-text {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--success-color);
+}
+.fc-note {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: 6px;
+    font-style: italic;
+}
+.fc-nav {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+

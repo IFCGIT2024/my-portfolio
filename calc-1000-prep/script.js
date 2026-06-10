@@ -1112,111 +1112,119 @@ function getFlaggedQuestions() {
 // ============================================
 // FORMULA DATA — all standard derivative rules
 // ============================================
+function renderMath(latex, display) {
+    if (typeof katex !== 'undefined') {
+        try { return katex.renderToString(latex, { throwOnError: false, displayMode: !!display }); }
+        catch(e) { return latex; }
+    }
+    return latex;
+}
+
 const FORMULAS = [
   {
     section: "Constant & Power Rules",
     cards: [
-      { front: "d/dx[ c ]",               back: "0",                      note: "c is any constant" },
-      { front: "d/dx[ x ]",               back: "1" },
-      { front: "d/dx[ x^n ]",             back: "n · x^(n−1)",            note: "Power Rule" },
-      { front: "d/dx[ x^5 ]",             back: "5x^4" },
-      { front: "d/dx[ sqrt(x) ]",         back: "1 / (2·sqrt(x))" },
-      { front: "d/dx[ 1/x ] = d/dx[x⁻¹]",back: "−1/x²" },
+      { front: "\\dfrac{d}{dx}\\left[c\\right]",                    back: "0",                                  note: "c is any constant" },
+      { front: "\\dfrac{d}{dx}\\left[x\\right]",                    back: "1" },
+      { front: "\\dfrac{d}{dx}\\left[x^n\\right]",                  back: "n \\cdot x^{n-1}",                   note: "Power Rule" },
+      { front: "\\dfrac{d}{dx}\\left[x^5\\right]",                  back: "5x^4" },
+      { front: "\\dfrac{d}{dx}\\left[\\sqrt{x}\\right]",            back: "\\dfrac{1}{2\\sqrt{x}}" },
+      { front: "\\dfrac{d}{dx}\\left[x^{-1}\\right]",               back: "-\\dfrac{1}{x^2}" },
     ]
   },
   {
     section: "Combination Rules",
     cards: [
-      { front: "d/dx[ c · f(x) ]",         back: "c · f′(x)",              note: "Constant Multiple Rule" },
-      { front: "d/dx[ f + g ]",            back: "f′(x) + g′(x)",          note: "Sum Rule" },
-      { front: "d/dx[ f − g ]",            back: "f′(x) − g′(x)",          note: "Difference Rule" },
-      { front: "d/dx[ f · g ]",            back: "f′g + fg′",              note: "Product Rule" },
-      { front: "d/dx[ f / g ]",            back: "(f′g − fg′) / g²",       note: "Quotient Rule" },
-      { front: "d/dx[ f(g(x)) ]",          back: "f′(g(x)) · g′(x)",       note: "Chain Rule" },
+      { front: "\\dfrac{d}{dx}\\left[c \\cdot f(x)\\right]",        back: "c \\cdot f'(x)",                     note: "Constant Multiple Rule" },
+      { front: "\\dfrac{d}{dx}\\left[f + g\\right]",               back: "f'(x) + g'(x)",                      note: "Sum Rule" },
+      { front: "\\dfrac{d}{dx}\\left[f - g\\right]",               back: "f'(x) - g'(x)",                      note: "Difference Rule" },
+      { front: "\\dfrac{d}{dx}\\left[f \\cdot g\\right]",          back: "f'g + fg'",                          note: "Product Rule" },
+      { front: "\\dfrac{d}{dx}\\left[\\dfrac{f}{g}\\right]",       back: "\\dfrac{f'g - fg'}{g^2}",            note: "Quotient Rule" },
+      { front: "\\dfrac{d}{dx}\\left[f(g(x))\\right]",             back: "f'(g(x)) \\cdot g'(x)",              note: "Chain Rule" },
     ]
   },
   {
     section: "Exponential & Logarithmic",
     cards: [
-      { front: "d/dx[ e^x ]",              back: "e^x" },
-      { front: "d/dx[ a^x ]",              back: "a^x · ln(a)",            note: "a > 0, a ≠ 1" },
-      { front: "d/dx[ ln(x) ]",            back: "1/x" },
-      { front: "d/dx[ log_a(x) ]",         back: "1 / (x · ln(a))" },
-      { front: "d/dx[ e^(kx) ]",           back: "k · e^(kx)",             note: "Chain Rule applied" },
-      { front: "d/dx[ ln|x| ]",            back: "1/x",                   note: "Valid for x ≠ 0" },
+      { front: "\\dfrac{d}{dx}\\left[e^x\\right]",                  back: "e^x" },
+      { front: "\\dfrac{d}{dx}\\left[a^x\\right]",                  back: "a^x \\cdot \\ln(a)",                 note: "a > 0, a ≠ 1" },
+      { front: "\\dfrac{d}{dx}\\left[\\ln(x)\\right]",              back: "\\dfrac{1}{x}" },
+      { front: "\\dfrac{d}{dx}\\left[\\log_a(x)\\right]",           back: "\\dfrac{1}{x \\cdot \\ln(a)}" },
+      { front: "\\dfrac{d}{dx}\\left[e^{kx}\\right]",               back: "k \\cdot e^{kx}",                    note: "Chain Rule applied" },
+      { front: "\\dfrac{d}{dx}\\left[\\ln|x|\\right]",              back: "\\dfrac{1}{x}",                     note: "Valid for x ≠ 0" },
     ]
   },
   {
     section: "Log & Exponent Properties",
     cards: [
-      { front: "ln(e^x)",                  back: "x" },
-      { front: "e^(ln x)",                 back: "x" },
-      { front: "ln(ab)",                   back: "ln(a) + ln(b)" },
-      { front: "ln(a/b)",                  back: "ln(a) − ln(b)" },
-      { front: "ln(a^n)",                  back: "n · ln(a)" },
-      { front: "ln(1)",                    back: "0" },
-      { front: "ln(e)",                    back: "1" },
-      { front: "e^0",                      back: "1" },
-      { front: "e^1",                      back: "e  ≈ 2.718..." },
+      { front: "\\ln(e^x)",                                         back: "x" },
+      { front: "e^{\\ln x}",                                        back: "x" },
+      { front: "\\ln(ab)",                                          back: "\\ln(a) + \\ln(b)" },
+      { front: "\\ln\\!\\left(\\dfrac{a}{b}\\right)",              back: "\\ln(a) - \\ln(b)" },
+      { front: "\\ln(a^n)",                                         back: "n \\cdot \\ln(a)" },
+      { front: "\\ln(1)",                                           back: "0" },
+      { front: "\\ln(e)",                                           back: "1" },
+      { front: "e^0",                                               back: "1" },
+      { front: "e^1",                                               back: "e \\approx 2.718" },
     ]
   },
   {
     section: "Trigonometric Derivatives",
     cards: [
-      { front: "d/dx[ sin(x) ]",           back: "cos(x)" },
-      { front: "d/dx[ cos(x) ]",           back: "−sin(x)" },
-      { front: "d/dx[ tan(x) ]",           back: "sec²(x)" },
-      { front: "d/dx[ csc(x) ]",           back: "−csc(x) · cot(x)" },
-      { front: "d/dx[ sec(x) ]",           back: "sec(x) · tan(x)" },
-      { front: "d/dx[ cot(x) ]",           back: "−csc²(x)" },
+      { front: "\\dfrac{d}{dx}\\left[\\sin(x)\\right]",             back: "\\cos(x)" },
+      { front: "\\dfrac{d}{dx}\\left[\\cos(x)\\right]",             back: "-\\sin(x)" },
+      { front: "\\dfrac{d}{dx}\\left[\\tan(x)\\right]",             back: "\\sec^2(x)" },
+      { front: "\\dfrac{d}{dx}\\left[\\csc(x)\\right]",             back: "-\\csc(x)\\cot(x)" },
+      { front: "\\dfrac{d}{dx}\\left[\\sec(x)\\right]",             back: "\\sec(x)\\tan(x)" },
+      { front: "\\dfrac{d}{dx}\\left[\\cot(x)\\right]",             back: "-\\csc^2(x)" },
     ]
   },
   {
     section: "Inverse Trig Derivatives",
     cards: [
-      { front: "d/dx[ arcsin(x) ]",        back: "1 / sqrt(1 − x²)" },
-      { front: "d/dx[ arccos(x) ]",        back: "−1 / sqrt(1 − x²)" },
-      { front: "d/dx[ arctan(x) ]",        back: "1 / (1 + x²)" },
-      { front: "d/dx[ arccot(x) ]",        back: "−1 / (1 + x²)" },
-      { front: "d/dx[ arcsec(x) ]",        back: "1 / (|x| · sqrt(x²−1))" },
-      { front: "d/dx[ arccsc(x) ]",        back: "−1 / (|x| · sqrt(x²−1))" },
+      { front: "\\dfrac{d}{dx}\\left[\\arcsin(x)\\right]",          back: "\\dfrac{1}{\\sqrt{1-x^2}}" },
+      { front: "\\dfrac{d}{dx}\\left[\\arccos(x)\\right]",          back: "-\\dfrac{1}{\\sqrt{1-x^2}}" },
+      { front: "\\dfrac{d}{dx}\\left[\\arctan(x)\\right]",          back: "\\dfrac{1}{1+x^2}" },
+      { front: "\\dfrac{d}{dx}\\left[\\text{arccot}(x)\\right]",    back: "-\\dfrac{1}{1+x^2}" },
+      { front: "\\dfrac{d}{dx}\\left[\\text{arcsec}(x)\\right]",    back: "\\dfrac{1}{|x|\\sqrt{x^2-1}}" },
+      { front: "\\dfrac{d}{dx}\\left[\\text{arccsc}(x)\\right]",    back: "-\\dfrac{1}{|x|\\sqrt{x^2-1}}" },
     ]
   },
   {
     section: "Implicit Differentiation",
     cards: [
-      { front: "d/dx[ y ]",               back: "dy/dx",                  note: "y is a function of x" },
-      { front: "d/dx[ y^n ]",             back: "n · y^(n−1) · (dy/dx)" },
-      { front: "d/dx[ y² ]",              back: "2y · (dy/dx)" },
-      { front: "d/dx[ sin(y) ]",          back: "cos(y) · (dy/dx)" },
-      { front: "d/dx[ cos(y) ]",          back: "−sin(y) · (dy/dx)" },
-      { front: "d/dx[ e^y ]",             back: "e^y · (dy/dx)" },
-      { front: "d/dx[ ln(y) ]",           back: "(1/y) · (dy/dx)" },
-      { front: "d/dx[ x · y ]",           back: "y + x · (dy/dx)",        note: "Product Rule" },
+      { front: "\\dfrac{d}{dx}\\left[y\\right]",                    back: "\\dfrac{dy}{dx}",                   note: "y is a function of x" },
+      { front: "\\dfrac{d}{dx}\\left[y^n\\right]",                  back: "n \\cdot y^{n-1} \\cdot \\dfrac{dy}{dx}" },
+      { front: "\\dfrac{d}{dx}\\left[y^2\\right]",                  back: "2y \\cdot \\dfrac{dy}{dx}" },
+      { front: "\\dfrac{d}{dx}\\left[\\sin(y)\\right]",             back: "\\cos(y) \\cdot \\dfrac{dy}{dx}" },
+      { front: "\\dfrac{d}{dx}\\left[\\cos(y)\\right]",             back: "-\\sin(y) \\cdot \\dfrac{dy}{dx}" },
+      { front: "\\dfrac{d}{dx}\\left[e^y\\right]",                  back: "e^y \\cdot \\dfrac{dy}{dx}" },
+      { front: "\\dfrac{d}{dx}\\left[\\ln(y)\\right]",              back: "\\dfrac{1}{y} \\cdot \\dfrac{dy}{dx}" },
+      { front: "\\dfrac{d}{dx}\\left[xy\\right]",                   back: "y + x \\cdot \\dfrac{dy}{dx}",        note: "Product Rule" },
     ]
   },
   {
     section: "Parametric & Related Rates",
     cards: [
-      { front: "dy/dx  (parametric)",      back: "(dy/dt) / (dx/dt)" },
-      { front: "d²y/dx²  (parametric)",    back: "[d/dt(dy/dx)] / (dx/dt)" },
-      { front: "d/dt[ x^n ]",             back: "n · x^(n−1) · (dx/dt)" },
-      { front: "d/dt[ y² ]",              back: "2y · (dy/dt)" },
-      { front: "d/dt[ (4/3)πr³ ]",        back: "4πr² · (dr/dt)",         note: "Sphere volume" },
-      { front: "d/dt[ πr² ]",             back: "2πr · (dr/dt)",           note: "Circle area" },
+      { front: "\\dfrac{dy}{dx} \ \ \\text{(parametric)}",          back: "\\dfrac{dy/dt}{dx/dt}" },
+      { front: "\\dfrac{d^2y}{dx^2} \ \ \\text{(parametric)}",      back: "\\dfrac{\\frac{d}{dt}\\!\\left(\\frac{dy}{dx}\\right)}{dx/dt}" },
+      { front: "\\dfrac{d}{dt}\\left[x^n\\right]",                  back: "n \\cdot x^{n-1} \\cdot \\dfrac{dx}{dt}" },
+      { front: "\\dfrac{d}{dt}\\left[y^2\\right]",                  back: "2y \\cdot \\dfrac{dy}{dt}" },
+      { front: "\\dfrac{d}{dt}\\left[\\tfrac{4}{3}\\pi r^3\\right]", back: "4\\pi r^2 \\cdot \\dfrac{dr}{dt}",    note: "Sphere volume" },
+      { front: "\\dfrac{d}{dt}\\left[\\pi r^2\\right]",             back: "2\\pi r \\cdot \\dfrac{dr}{dt}",      note: "Circle area" },
     ]
   },
   {
     section: "Geometric Formulas",
     cards: [
-      { front: "Volume — Sphere",          back: "(4/3)πr³" },
-      { front: "Surface Area — Sphere",    back: "4πr²" },
-      { front: "Volume — Cone",            back: "(1/3)πr²h" },
-      { front: "Volume — Cylinder",        back: "πr²h" },
-      { front: "Area — Circle",            back: "πr²" },
-      { front: "Circumference — Circle",   back: "2πr" },
-      { front: "Pythagorean Theorem",      back: "a² + b² = c²" },
-      { front: "Area — Triangle",          back: "(1/2) · b · h" },
+      { front: "V_{\\text{sphere}}",                                back: "\\dfrac{4}{3}\\pi r^3" },
+      { front: "SA_{\\text{sphere}}",                               back: "4\\pi r^2" },
+      { front: "V_{\\text{cone}}",                                  back: "\\dfrac{1}{3}\\pi r^2 h" },
+      { front: "V_{\\text{cylinder}}",                              back: "\\pi r^2 h" },
+      { front: "A_{\\text{circle}}",                                back: "\\pi r^2" },
+      { front: "C_{\\text{circle}}",                                back: "2\\pi r" },
+      { front: "\\text{Pythagorean Theorem}",                       back: "a^2 + b^2 = c^2" },
+      { front: "A_{\\text{triangle}}",                              back: "\\dfrac{1}{2}bh" },
     ]
   },
 ];
@@ -1254,9 +1262,9 @@ function viewFormulaSheet() {
         html += `<div class="formula-section-block"><div class="formula-section-header">${sec.section}</div>`;
         sec.cards.forEach(card => {
             html += `<div class="formula-row">
-                <span class="formula-front">${card.front}</span>
+                <span class="formula-front">${renderMath(card.front, false)}</span>
                 <span class="formula-eq">=</span>
-                <span class="formula-back">${card.back}</span>
+                <span class="formula-back">${renderMath(card.back, false)}</span>
                 ${card.note ? `<span class="formula-note">${card.note}</span>` : ''}
             </div>`;
         });
@@ -1310,7 +1318,7 @@ function renderFlashcard() {
     const answerHTML = flashcardRevealed
         ? `<div class="fc-answer">
                <div class="fc-answer-label">Answer</div>
-               <div class="fc-answer-text">${card.back}</div>
+               <div class="fc-answer-text">${renderMath(card.back, true)}</div>
                ${card.note ? `<div class="fc-note">${card.note}</div>` : ''}
            </div>`
         : `<div class="fc-hint">Click card · or press <strong>Reveal</strong></div>`;
@@ -1320,7 +1328,7 @@ function renderFlashcard() {
     container.innerHTML = `
         <div class="fc-section-label">${card.section}</div>
         <div class="fc-card ${flashcardRevealed ? 'revealed' : ''}" onclick="revealFlashcard()">
-            <div class="fc-front">${card.front}</div>
+            <div class="fc-front">${renderMath(card.front, true)}</div>
             ${answerHTML}
         </div>
         <div class="fc-nav">

@@ -1769,3 +1769,11 @@ body[data-theme="dark"] .text-answer-input.input-incorrect {
     flex-wrap: wrap;
 }
 
+/* KaTeX layout overrides */
+.fc-front .katex-display,
+.fc-answer-text .katex-display { margin: 0; }
+.fc-front { font-size: 1.25rem; }
+.fc-answer-text { font-size: 1.4rem; }
+.formula-front .katex,
+.formula-back .katex  { font-size: 1em; }
+

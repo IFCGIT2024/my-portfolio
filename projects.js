@@ -111,4 +111,15 @@ const PROJECTS = [
     badgeColor: "#8b5cf6",
     icon: "∂",
   },
+  {
+    id: "canadian-funding-database",
+    title: "Canadian Funding Database",
+    description:
+      "A comprehensive searchable database of 141 verified funding programs for housing and climate initiatives across Canada. Features advanced filtering, status tracking, and real-time search.",
+    path: "canadian-funding-database/funding-portal.html",
+    tags: ["Database", "Flask", "Python", "SQLite", "Web App"],
+    badge: "New",
+    badgeColor: "#10b981",
+    icon: "💰",
+  },
 ];

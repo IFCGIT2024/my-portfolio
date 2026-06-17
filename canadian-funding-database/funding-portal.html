@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Funding Database - 141 Programs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #f5f7fa;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .app-container {
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 24px 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+        
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .stats-bar {
+            display: flex;
+            gap: 32px;
+            padding: 16px 32px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        /* Sidebar Filters */
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        
+        .sidebar h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #1e3c72;
+        }
+        
+        .filter-section {
+            margin-bottom: 24px;
+        }
+        
+        .filter-section label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .search-box, select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            background: white;
+            transition: all 0.2s;
+        }
+        
+        .search-box:focus, select:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #1e3c72;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #152a52;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results Area */
+        .results-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .results-header {
+            padding: 20px 32px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .results-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        
+        .results-count {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .sort-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .sort-controls label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+        }
+        
+        .sort-controls select {
+            width: auto;
+            min-width: 180px;
+        }
+        
+        .programs-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 32px;
+            background: #f5f7fa;
+        }
+        
+        /* Program Cards */
+        .program-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+        
+        .program-card:hover {
+            border-color: #1e3c72;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .program-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            gap: 16px;
+        }
+        
+        .program-title {
+            flex: 1;
+        }
+        
+        .program-title h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        
+        .program-id {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            font-weight: 500;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        
+        .status-open {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-rolling {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-closed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .status-periodic {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-invitation {
+            background: #e9d5ff;
+            color: #6b21a8;
+        }
+        
+        .program-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .meta-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        
+        .meta-value {
+            color: #1a1a1a;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .program-description {
+            color: #4b5563;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            font-size: 0.9375rem;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .tag {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .program-footer {
+            display: flex;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #f3f4f6;
+        }
+        
+        .btn-link {
+            padding: 8px 16px;
+            background: #1e3c72;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-link:hover {
+            background: #152a52;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            color: #9ca3af;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.25rem;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        
+        .empty-state p {
+            font-size: 0.9375rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 80px;
+            color: #6b7280;
+            font-size: 1.125rem;
+        }
+        
+        /* Scrollbar Styling */
+        .programs-list::-webkit-scrollbar, .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .programs-list::-webkit-scrollbar-track, .sidebar::-webkit-scrollbar-track {
+            background: #f5f7fa;
+        }
+        
+        .programs-list::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+        
+        .programs-list::-webkit-scrollbar-thumb:hover, .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+        
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 280px;
+            }
+            
+            .program-meta {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+                max-height: 300px;
+            }
+            
+            .programs-list {
+                padding: 16px;
+            }
+            
+            .program-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Canadian Funding Database</h1>
+            <p>Comprehensive funding opportunities for housing and climate initiatives</p>
+        </header>
+        
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <span class="stat-number">141</span>
+                <span class="stat-label">Total Programs</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="statOpen">0</span>
+                <span class="stat-label">Open/Rolling</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="statAmount">$10M+</span>
+                <span class="stat-label">Avg Max Amount</span>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- Sidebar Filters -->
+            <aside class="sidebar">
+                <h2>Search & Filters</h2>
+                
+                <div class="filter-section">
+                    <label for="searchBox">Search Programs</label>
+                    <input type="text" 
+                           id="searchBox" 
+                           class="search-box" 
+                           placeholder="Search by name, tags, or description...">
+                </div>
+                
+                <div class="filter-section">
+                    <label for="statusFilter">Status</label>
+                    <select id="statusFilter" onchange="applyFilters()">
+                        <option value="">All Statuses</option>
+                        <option value="OPEN">Open</option>
+                        <option value="ROLLING">Rolling</option>
+                        <option value="PERIODIC">Periodic</option>
+                        <option value="CLOSED">Closed</option>
+                        <option value="INVITATION">Invitation Only</option>
+                    </select>
+                </div>
+                
+                <div class="filter-section">
+                    <label for="geographyFilter">Geography</label>
+                    <select id="geographyFilter" onchange="applyFilters()">
+                        <option value="">All Regions</option>
+                        <option value="Federal">Federal</option>
+                        <option value="Ontario">Ontario</option>
+                        <option value="Quebec">Quebec</option>
+                        <option value="British Columbia">British Columbia</option>
+                        <option value="Alberta">Alberta</option>
+                        <option value="Atlantic">Atlantic Canada</option>
+                        <option value="National">National</option>
+                    </select>
+                </div>
+                
+                <div class="filter-section">
+                    <label for="sectorFilter">Sector</label>
+                    <select id="sectorFilter" onchange="applyFilters()">
+                        <option value="">All Sectors</option>
+                        <option value="Federal">Federal</option>
+                        <option value="Provincial">Provincial</option>
+                        <option value="Private">Private/Foundation</option>
+                        <option value="Investor">Investor/Accelerator</option>
+                        <option value="Social Finance">Social Finance</option>
+                        <option value="Corporate">Corporate</option>
+                    </select>
+                </div>
+                
+                <div class="filter-section">
+                    <label for="typeFilter">Funding Type</label>
+                    <select id="typeFilter" onchange="applyFilters()">
+                        <option value="">All Types</option>
+                        <option value="Grant">Grant</option>
+                        <option value="Loan">Loan</option>
+                        <option value="Equity">Equity Investment</option>
+                        <option value="Tax Credit">Tax Credit</option>
+                        <option value="Bond">Community Bond</option>
+                    </select>
+                </div>
+                
+                <div class="filter-section">
+                    <label for="minAmount">Minimum Amount ($)</label>
+                    <input type="number" id="minAmount" class="search-box" placeholder="e.g., 50000" onchange="applyFilters()">
+                </div>
+                
+                <div class="filter-section">
+                    <label for="maxAmount">Maximum Amount ($)</label>
+                    <input type="number" id="maxAmount" class="search-box" placeholder="e.g., 500000" onchange="applyFilters()">
+                </div>
+                
+                <div class="filter-section">
+                    <label>Eligibility</label>
+                    <select id="eligibilityFilter" onchange="applyFilters()">
+                        <option value="">All Organizations</option>
+                        <option value="non-profit">Non-Profit</option>
+                        <option value="for-profit">For-Profit</option>
+                        <option value="both">Both Eligible</option>
+                    </select>
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="btn btn-primary" onclick="applyFilters()">Apply</button>
+                    <button class="btn btn-secondary" onclick="resetFilters()">Reset</button>
+                </div>
+            </aside>
+            
+            <!-- Results Area -->
+            <div class="results-area">
+                <div class="results-header">
+                    <div>
+                        <h2>Programs</h2>
+                        <div class="results-count" id="resultsCount">Loading...</div>
+                    </div>
+                    <div class="sort-controls">
+                        <label for="sortBy">Sort by:</label>
+                        <select id="sortBy" onchange="applyFilters()">
+                            <option value="status" selected>Status</option>
+                            <option value="name">Name (A-Z)</option>
+                            <option value="amount_desc">Amount (High to Low)</option>
+                            <option value="amount_asc">Amount (Low to High)</option>
+                            <option value="geography">Geography</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="programs-list" id="programsList">
+                    <div class="loading">Loading programs...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allPrograms = [];
+        const API_URL = 'http://localhost:8000/api';
+
+        // Fetch all programs on load
+        async function loadPrograms() {
+            try {
+                const response = await fetch(`${API_URL}/programs`);
+                if (!response.ok) throw new Error('Failed to fetch programs');
+                const data = await response.json();
+                allPrograms = data.programs || data; // Handle both {programs: [...]} and [...]
+                updateStats();
+                applyFilters();
+            } catch (error) {
+                console.error('Error loading programs:', error);
+                document.getElementById('programsList').innerHTML = `
+                    <div class="empty-state">
+                        <h3>Connection Error</h3>
+                        <p>Unable to load funding programs. Please ensure the server is running.</p>
+                        <p style="margin-top: 12px; font-size: 0.875rem;">Run: <code style="background: #f3f4f6; padding: 4px 8px; border-radius: 4px;">python3 server.py</code></p>
+                    </div>
+                `;
+            }
+        }
+
+        function updateStats() {
+            const openRolling = allPrograms.filter(p => 
+                p.status === 'OPEN' || p.status === 'ROLLING'
+            ).length;
+            
+            document.getElementById('statOpen').textContent = openRolling;
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('searchBox').value.toLowerCase();
+            const status = document.getElementById('statusFilter').value;
+            const geography = document.getElementById('geographyFilter').value;
+            const sector = document.getElementById('sectorFilter').value;
+            const type = document.getElementById('typeFilter').value;
+            const minAmount = parseInt(document.getElementById('minAmount').value) || 0;
+            const maxAmount = parseInt(document.getElementById('maxAmount').value) || Infinity;
+            const eligibility = document.getElementById('eligibilityFilter').value;
+            const sortBy = document.getElementById('sortBy').value;
+
+            let filtered = allPrograms.filter(program => {
+                // Search filter
+                if (search && !program.program_name.toLowerCase().includes(search) && 
+                    !program.tags.toLowerCase().includes(search) &&
+                    !program.quick_description.toLowerCase().includes(search)) {
+                    return false;
+                }
+                
+                // Status filter
+                if (status && program.status !== status) return false;
+                
+                // Geography filter
+                if (geography && !program.geography.includes(geography)) return false;
+                
+                // Sector filter
+                if (sector && program.federal_provincial_private !== sector) return false;
+                
+                // Type filter
+                if (type && !program.funding_type.includes(type)) return false;
+                
+                // Amount filter
+                if (program.amount_max && (program.amount_max < minAmount || program.amount_max > maxAmount)) {
+                    return false;
+                }
+                
+                // Eligibility filter
+                if (eligibility === 'non-profit' && program.non_profit_eligible !== 'Yes') return false;
+                if (eligibility === 'for-profit' && program.for_profit_eligible !== 'Yes') return false;
+                if (eligibility === 'both' && (program.non_profit_eligible !== 'Yes' || program.for_profit_eligible !== 'Yes')) return false;
+                
+                return true;
+            });
+
+            // Apply sorting
+            filtered.sort((a, b) => {
+                switch(sortBy) {
+                    case 'name':
+                        return a.program_name.localeCompare(b.program_name);
+                    case 'amount_desc':
+                        return (b.amount_max || 0) - (a.amount_max || 0);
+                    case 'amount_asc':
+                        return (a.amount_max || 0) - (b.amount_max || 0);
+                    case 'status':
+                        // Status priority: OPEN > ROLLING > PERIODIC > INVITATION > SELECTIVE > CLOSED
+                        const statusOrder = { 'OPEN': 1, 'ROLLING': 2, 'PERIODIC': 3, 'INVITATION': 4, 'SELECTIVE': 5, 'CLOSED': 6 };
+                        const orderA = statusOrder[a.status] || 99;
+                        const orderB = statusOrder[b.status] || 99;
+                        return orderA - orderB;
+                    case 'geography':
+                        return a.geography.localeCompare(b.geography);
+                    default:
+                        return 0;
+                }
+            });
+
+            displayPrograms(filtered);
+        }
+
+        function displayPrograms(programs) {
+            const container = document.getElementById('programsList');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            resultsCount.textContent = `${programs.length} program${programs.length !== 1 ? 's' : ''} found`;
+            
+            if (programs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No Programs Found</h3>
+                        <p>Try adjusting your search or filter criteria</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = programs.map(program => `
+                <div class="program-card">
+                    <div class="program-header">
+                        <div class="program-title">
+                            <h3>${program.program_name}</h3>
+                            <div class="program-id">${program.id}</div>
+                        </div>
+                        <div class="status-badge status-${program.status.toLowerCase()}">
+                            ${program.status}
+                        </div>
+                    </div>
+                    
+                    <div class="program-meta">
+                        <div class="meta-item">
+                            <div class="meta-label">Geography</div>
+                            <div class="meta-value">${program.geography}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Funding Type</div>
+                            <div class="meta-value">${program.funding_type}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Amount Range</div>
+                            <div class="meta-value">${formatAmount(program.amount_min, program.amount_max)}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Deadline</div>
+                            <div class="meta-value">${program.deadline || 'See website'}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="program-description">
+                        ${program.quick_description}
+                    </div>
+                    
+                    <div class="tags">
+                        ${program.tags.split('#').filter(t => t.trim()).map(tag => 
+                            `<span class="tag">#${tag.trim()}</span>`
+                        ).join('')}
+                    </div>
+                    
+                    <div class="program-footer">
+                        <a href="${program.official_url}" target="_blank" class="btn-link">
+                            Visit Website →
+                        </a>
+                        ${program.contact ? `<span style="color: #6b7280; font-size: 0.875rem;">Contact: ${program.contact}</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatAmount(min, max) {
+            const formatNum = (num) => {
+                if (!num) return 'Varies';
+                if (num >= 1000000) return `$${(num / 1000000).toFixed(1)}M`;
+                if (num >= 1000) return `$${(num / 1000).toFixed(0)}K`;
+                return `$${num.toLocaleString()}`;
+            };
+            
+            if (!max) return 'Varies';
+            if (!min || min === 0) return `Up to ${formatNum(max)}`;
+            if (min === max) return formatNum(max);
+            return `${formatNum(min)} - ${formatNum(max)}`;
+        }
+
+        function resetFilters() {
+            document.getElementById('searchBox').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('geographyFilter').value = '';
+            document.getElementById('sectorFilter').value = '';
+            document.getElementById('typeFilter').value = '';
+            document.getElementById('minAmount').value = '';
+            document.getElementById('maxAmount').value = '';
+            document.getElementById('eligibilityFilter').value = '';
+            document.getElementById('sortBy').value = 'status';
+            applyFilters();
+        }
+
+        // Real-time search
+        document.getElementById('searchBox').addEventListener('input', applyFilters);
+
+        // Load programs on page load
+        loadPrograms();
+    </script>
+</body>
+</html>

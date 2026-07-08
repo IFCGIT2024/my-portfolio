@@ -122,4 +122,15 @@ const PROJECTS = [
     badgeColor: "#10b981",
     icon: "💰",
   },
+  {
+    id: "simply-the-best-house-sitters",
+    title: "Simply the Best House-Sitters",
+    description:
+      "Boutique in-home pet + property care site for Halifax, NS. Editorial design (Fraunces + Inter), fully navigable static demo of the production Node.js/Express + JSON-driven SPA. Includes home, services, pricing, reviews, FAQ, and a working quote form (demo mode).",
+    path: "docs/projects/simply-the-best-house-sitters/index.html",
+    tags: ["Web Design", "SPA", "Node.js", "Express", "Editorial"],
+    badge: "New",
+    badgeColor: "#C9A961",
+    icon: "🏡",
+  },
 ];

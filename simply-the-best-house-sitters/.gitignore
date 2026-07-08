@@ -1,0 +1,8 @@
+node_modules/
+.env
+data/quotes.json
+data/*.bak
+public/images/uploads/*
+!public/images/uploads/.gitkeep
+.DS_Store
+Thumbs.db

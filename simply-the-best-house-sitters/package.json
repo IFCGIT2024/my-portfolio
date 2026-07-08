@@ -1,0 +1,18 @@
+{
+  "name": "simply-the-best-house-sitters",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Marketing site + light CMS for Simply the Best House-Sitters (Halifax).",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "4.19.2",
+    "multer": "^2.0.0"
+  }
+}

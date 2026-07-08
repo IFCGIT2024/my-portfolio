@@ -1,0 +1,471 @@
+{
+  "site": {
+    "name": "Simply the Best House-Sitters",
+    "shortName": "Simply the Best",
+    "tagline": "Boutique in-home pet & property care.",
+    "email": "hello@simplythebesthousesitters.com",
+    "phone": "",
+    "hours": "Weekdays 9am – 7pm Atlantic",
+    "serviceArea": "Halifax, NS & surrounding areas",
+    "instagram": "",
+    "facebook": "",
+    "google": ""
+  },
+  "nav": [
+    { "label": "Home",       "url": "/" },
+    { "label": "Services",   "url": "/services" },
+    { "label": "Pricing",    "url": "/pricing" },
+    { "label": "Is This Right For You?", "url": "/is-this-right-for-you" },
+    { "label": "About",      "url": "/about" },
+    { "label": "Reviews",    "url": "/reviews" },
+    { "label": "FAQ",        "url": "/faq" },
+    { "label": "Contact",    "url": "/contact" }
+  ],
+  "primaryCta": { "label": "Request a Quote", "url": "/request-a-quote" },
+  "footer": {
+    "tagline": "Trusted, in-home care for the pets and homes that matter most.",
+    "columns": [
+      {
+        "heading": "Services",
+        "links": [
+          { "label": "Overview",              "url": "/services" },
+          { "label": "Pet Sitting",           "url": "/services#pet-sitting" },
+          { "label": "House Sitting",         "url": "/services#house-sitting" },
+          { "label": "Property Care",         "url": "/services#property-care" },
+          { "label": "Overnight Care",        "url": "/services#overnight-care" }
+        ]
+      },
+      {
+        "heading": "Company",
+        "links": [
+          { "label": "About",   "url": "/about" },
+          { "label": "Reviews", "url": "/reviews" },
+          { "label": "FAQ",     "url": "/faq" },
+          { "label": "Careers", "url": "/careers" }
+        ]
+      },
+      {
+        "heading": "Get in touch",
+        "links": [
+          { "label": "Request a Quote", "url": "/request-a-quote" },
+          { "label": "Contact",         "url": "/contact" }
+        ]
+      }
+    ],
+    "legal": [
+      { "label": "Privacy", "url": "/privacy" },
+      { "label": "Terms",   "url": "/terms" }
+    ]
+  },
+
+  "pages": {
+    "home": {
+      "hero": {
+        "eyebrow": "Halifax & surrounding areas",
+        "title": "In-home pet & property care, done properly.",
+        "subtitle": "We stay in your home, keep your routines steady, and treat your pets like family, so you can travel with peace of mind.",
+        "primaryCta": { "label": "Request a Quote", "url": "/request-a-quote" },
+        "secondaryCta": { "label": "How we work", "url": "/is-this-right-for-you" },
+        "image": ""
+      },
+      "intro": {
+        "eyebrow": "Who we are",
+        "heading": "A calmer way to be away from home.",
+        "body": "We are a small, boutique service specialising in overnight, in-home pet and house sitting. We are not an app, an agency, or a rotating pool of strangers. We are the people who will stay in your home, keep your pets on their normal schedule, and hand your keys back exactly the way you left them."
+      },
+      "servicesTeaser": {
+        "heading": "What we do",
+        "body": "Every stay is built around the pets and the home. These are the services most of our clients start with."
+      },
+      "benefits": {
+        "heading": "Why clients choose us",
+        "items": [
+          { "icon": "home",     "title": "Routines kept intact",     "body": "Your pets stay in their own beds, on their own schedule, in the environment they trust." },
+          { "icon": "clock",    "title": "Overnight, in-home care",  "body": "Someone is present morning, evening, and through the night. Not just a drop-in." },
+          { "icon": "message",  "title": "Clear communication",      "body": "Daily updates and photos, and a real person on the other end of the phone." },
+          { "icon": "leaf",     "title": "Property care included",   "body": "Plants, mail, packages, garbage, and a general eye on the home while we're there." },
+          { "icon": "star",     "title": "Boutique, by design",      "body": "We take a limited number of bookings so every stay gets our full attention." }
+        ]
+      },
+      "included": {
+        "heading": "What's included in a standard stay",
+        "items": [
+          { "title": "Overnight stay in your home",       "body": "We sleep at your home for the duration of the booking." },
+          { "title": "Daily feeding, medication, walks",  "body": "We keep to your written care instructions to the letter." },
+          { "title": "Fresh water and clean bowls",       "body": "Every day, without asking." },
+          { "title": "Play, cuddles, and enrichment",     "body": "Time spent with your pets is the whole point." },
+          { "title": "Litter, waste, and yard clean-up",  "body": "We leave things as you'd want to find them." },
+          { "title": "Plants, mail, garbage, packages",   "body": "Light property care throughout the stay." },
+          { "title": "Daily photo and note update",       "body": "Sent by text or email. You pick the format." },
+          { "title": "24/7 emergency contact",            "body": "You can reach us any hour if something changes." }
+        ]
+      },
+      "howItWorks": {
+        "heading": "How it works",
+        "steps": [
+          { "number": 1, "title": "Request a quote",   "body": "Tell us your dates and a few details about your pets and home." },
+          { "number": 2, "title": "Receive your quote","body": "We confirm availability and send a clear, itemised quote. No surprises." },
+          { "number": 3, "title": "Meet & greet",      "body": "We meet in your home, learn the routine, and walk through the details together." },
+          { "number": 4, "title": "Booking & payment", "body": "A short intake, a deposit, and the dates are yours." },
+          { "number": 5, "title": "The stay",          "body": "We move in for the duration. Daily updates. Real availability if anything changes." },
+          { "number": 6, "title": "Handover",          "body": "Keys returned. Home tidy. A short note on how everyone did." }
+        ]
+      },
+      "longTerm": {
+        "eyebrow": "Long-term & snowbirds",
+        "heading": "Looking for something more long term?",
+        "body": "For snowbirds and clients away for a month or longer, we offer live-in pet sitting and full property management. One trusted sitter stays in your home for the length of the trip, keeping routines steady and the property well cared for the whole time. Rates and scope are quoted per booking.",
+        "cta": { "label": "Ask about long-term stays", "url": "/request-a-quote" }
+      },
+      "pricingPreview": {
+        "heading": "Straightforward pricing",
+        "body": "Every quote is written for the specific booking, but our base rates and add-ons are published so you always know roughly what to expect before you contact us.",
+        "cta": { "label": "See pricing", "url": "/pricing" }
+      },
+      "faqPreview": {
+        "heading": "Questions people ask before booking",
+        "cta": { "label": "Full FAQ", "url": "/faq" }
+      },
+      "cta": {
+        "heading": "Ready to see if we're the right fit?",
+        "body": "Requesting a quote takes about three minutes and never obligates you to anything.",
+        "primaryCta": { "label": "Request a Quote", "url": "/request-a-quote" }
+      }
+    },
+
+    "about": {
+      "hero": {
+        "eyebrow": "About",
+        "title": "A small, careful service — on purpose.",
+        "subtitle": "We built Simply the Best House-Sitters around a simple idea: your pets and your home deserve the same care you would give them yourself."
+      },
+      "sections": [
+        {
+          "heading": "Our philosophy",
+          "body": "We believe that consistency matters. Pets are generally most comfortable when they can remain in familiar surroundings and maintain their normal routines. The same principle applies to homes. A property that is occupied, monitored, and cared for tends to function more smoothly than one left entirely unattended.\n\nOur role is to provide that continuity. We maintain routines, monitor the property, communicate clearly, and respond when issues arise. Everything else flows from that foundation."
+        },
+        {
+          "heading": "Why in-home care",
+          "body": "Kennels, day-cares, and rotating drop-in visits work for some households. But many pets simply do not travel well, do not sleep alone well, or do not adjust to unfamiliar spaces. In-home overnight care removes almost all of that stress. Your pets stay where they belong, and we come to them."
+        },
+        {
+          "heading": "Why property care matters",
+          "body": "An empty home is more than an empty home. Mail piles up, plants dry out, packages sit at the door, and small issues can become bigger ones. When we are in your home we quietly take care of all of that, so you are not returning to a to-do list."
+        },
+        {
+          "heading": "Why routines matter",
+          "body": "Feeding times, walk times, medication times, quiet times. We follow the schedule you have already built. We do not improvise on your pets."
+        },
+        {
+          "heading": "Who we work with",
+          "body": "We are best suited to homeowners who value professionalism, punctuality, and a service that behaves the same whether it is a two-night stay or a three-week one. If that sounds like you, we would love to hear from you."
+        }
+      ]
+    },
+
+    "services": {
+      "hero": {
+        "eyebrow": "Services",
+        "title": "In-home care, tailored to your household.",
+        "subtitle": "Most bookings combine several of these. Tell us what you need and we'll build the right stay."
+      },
+      "note": "Every service below is delivered in your own home, on your own routine.",
+      "items": [
+        { "id": "pet-sitting",            "icon": "paw",     "name": "Pet Sitting",           "blurb": "Daily care for one or more pets while you're away. Feeding, walks, medication, play, and clean-up." },
+        { "id": "house-sitting",          "icon": "home",    "name": "House Sitting",         "blurb": "Someone in the home overnight, plus plants, mail, packages, and general upkeep." },
+        { "id": "property-care",          "icon": "shield",  "name": "Property Care",         "blurb": "Home-watch style visits for owners who need eyes on the property but not a full overnight stay." },
+        { "id": "overnight-care",         "icon": "moon",    "name": "Overnight Care",        "blurb": "We sleep at the home. Ideal for pets who do not do well alone at night." },
+        { "id": "cat-care",               "icon": "cat",     "name": "Cat Care",              "blurb": "Feeding, litter, medication, play, and lots of quiet, respectful company." },
+        { "id": "dog-care",               "icon": "dog",     "name": "Dog Care",              "blurb": "Structured walks, meals, medication, and enrichment, kept to your dog's normal schedule." },
+        { "id": "vacation-care",          "icon": "plane",   "name": "Vacation Care",         "blurb": "The most common request. Everything covered while you travel, from a weekend to a month." },
+        { "id": "business-travel-care",   "icon": "briefcase","name": "Business Travel Care", "blurb": "Regular, reliable coverage for professionals who travel often and do not want to think about the details." },
+        { "id": "wedding-travel-care",    "icon": "heart",   "name": "Wedding Travel Care",   "blurb": "Cover for the wedding itself and any surrounding travel. Often booked well in advance." },
+        { "id": "long-term-stays",        "icon": "calendar","name": "Long-term & Snowbird Stays", "blurb": "Multi-week or multi-month live-in coverage for pet care and full property management." },
+        { "id": "emergency-coverage",     "icon": "alert",   "name": "Emergency Coverage",    "blurb": "Short-notice help for hospital stays, family emergencies, and unavoidable last-minute travel, subject to availability." }
+      ]
+    },
+
+    "pricing": {
+      "hero": {
+        "eyebrow": "Pricing",
+        "title": "Honest, published, easy to read.",
+        "subtitle": "We publish base rates and add-ons so you always have a sense of the range before you get in touch. Every actual quote is written for the specific booking."
+      },
+      "base": {
+        "heading": "Base overnight rate",
+        "priceLine": "Starting at $110 / night",
+        "body": "Includes one overnight stay in your home with up to two well-mannered pets, daily feeding and walks, medications, waste clean-up, plants, mail, and daily update messages. Bookings run noon to noon, so your sitter arrives at 12 pm on your start date and leaves by 12 pm on your end date."
+      },
+      "included": {
+        "heading": "What's always included",
+        "items": [
+          "Overnight, in-home stay",
+          "All standard feeding, medication, walks and clean-up",
+          "Plants, mail, packages, garbage",
+          "Daily photo & note update",
+          "24/7 emergency line"
+        ]
+      },
+      "addons": {
+        "heading": "Common add-ons",
+        "items": [
+          { "name": "Additional pet",              "price": "+ $30 / night" },
+          { "name": "Puppy or high-needs care",    "price": "quoted per booking" },
+          { "name": "Medication administration",   "price": "included" },
+          { "name": "Insulin or injections",       "price": "+ $15 / night" },
+          { "name": "Extra long walks",            "price": "+ $25 / walk" },
+          { "name": "Airport drop-off / pick-up",  "price": "quoted per trip" },
+          { "name": "Deep clean before your return","price": "quoted per home" }
+        ]
+      },
+      "surcharges": {
+        "heading": "Holiday & short-notice rates",
+        "items": [
+          "Holiday nights (statutory holidays and Dec 22 – Jan 2): +25% per night.",
+          "Bookings confirmed less than 7 days out: +15% per night (subject to availability).",
+          "Long-stay discount (14+ consecutive nights): -10% per night."
+        ]
+      },
+      "examples": {
+        "heading": "A few example quotes",
+        "items": [
+          { "label": "Long weekend, one cat",            "detail": "3 nights, 1 cat, plants + mail",                    "price": "≈ $330" },
+          { "label": "Week away, dog + cat",             "detail": "7 nights, 1 dog + 1 cat, daily walks, medication",  "price": "≈ $770" },
+          { "label": "Two weeks abroad, three dogs",     "detail": "14 nights, 3 dogs, walks + property care",          "price": "≈ $1,764 (long-stay rate applied)" }
+        ]
+      },
+      "note": "All prices are in Canadian dollars and shown for reference only. Your actual quote will always be sent in writing before you commit."
+    },
+
+    "isThisRight": {
+      "hero": {
+        "eyebrow": "Read this before you book",
+        "title": "Is Simply the Best right for you?",
+        "subtitle": "The clearest way to know is to read how we actually work. If the way we run our service matches what you're looking for, we'll be a great fit."
+      },
+      "sections": [
+        {
+          "heading": "Who we are",
+          "body": "Simply the Best House-Sitters is a premium pet and property care service designed for clients who value professionalism, reliability, communication, and peace of mind while away from home. We are a small, boutique service based in Halifax. We take a limited number of clients so every booking gets our full attention. We are the people who will actually be in your home. Not a marketplace, not a broker."
+        },
+        {
+          "heading": "Our philosophy",
+          "body": "Pets are calmest in their own home, on their own schedule, with someone they have met. Homes are safer when there is a real person in them. That is what we sell. Presence, routine, and steadiness.\n\nOur goal is simple. Provide exceptional care for your pets and home so you can enjoy your time away with complete confidence."
+        },
+        {
+          "heading": "Who we serve",
+          "body": "Our services are particularly well suited for destination wedding attendees, honeymoon travellers, business travellers, families on vacation, seasonal property owners, professionals with demanding schedules, and pet owners who prefer in-home care over kennels.\n\nMore broadly, we work with homeowners who value professionalism, reliability, and quiet competence over the lowest possible price. Households where the pets and the home are both worth caring for properly."
+        },
+        {
+          "heading": "How booking works",
+          "body": "You request a quote. We confirm availability and send a written quote. We meet you and your pets in your home for a proper handover. You confirm, pay the deposit, and the dates are yours."
+        },
+        {
+          "heading": "What is included",
+          "body": "Everything a well-run overnight stay should include. Feeding, walks, medication, waste, plants, mail, packages, garbage, and daily updates. Additional services are quoted openly."
+        },
+        {
+          "heading": "Communication",
+          "body": "Some clients prefer daily photo updates and detailed communication. Others prefer to disconnect completely while travelling and only be contacted in the event of an emergency. We tailor our communication style to your preferences.\n\nBy default, we send one photo and note per day, more if the situation calls for it, and a 24/7 line if anything changes. You will never wonder how your pets are doing."
+        },
+        {
+          "heading": "Home requirements",
+          "body": "Because overnight care is included in our service, we ask that a clean and comfortable space be available for the sitter during the stay.\n\nThis includes a private sleeping area, a clean bed with fresh linens, a comfortable mattress suitable for overnight sleeping, access to a bathroom with basic necessities, and a bedroom with an operable window.\n\nWe also ask that garbage and recycling be emptied prior to the stay, and that any food likely to spoil during an extended absence be removed or secured.\n\nThese expectations are not intended to be burdensome. They simply help ensure that our sitters can focus their attention on caring for your pets and property throughout the booking."
+        },
+        {
+          "heading": "Client requirements",
+          "body": "A meet-and-greet in your home before the first booking. Clear written instructions for feeding, medication, and emergency vet. Pets who are safe to be around."
+        },
+        {
+          "heading": "Booking policies",
+          "body": "A 25% deposit confirms the booking. Balance is due the day the stay begins. Full refunds up to 14 days out, partial after that. Holiday bookings should be confirmed early. We do book up."
+        },
+        {
+          "heading": "Next steps",
+          "body": "If everything above sounds like the kind of service you would want in your home, requesting a quote is the right next step. If any of it sounds off, we would rather be honest with each other now than after a booking."
+        }
+      ],
+      "cta": {
+        "heading": "Sound like the right fit?",
+        "primaryCta": { "label": "Request a Quote", "url": "/request-a-quote" }
+      }
+    },
+
+    "requestQuote": {
+      "hero": {
+        "eyebrow": "Request a quote",
+        "title": "Tell us about your stay.",
+        "subtitle": "Three minutes to fill out. No obligation. We'll get back to you within one business day with availability and a written quote."
+      },
+      "helperText": "Everything below stays private and is never shared. If we can't take your dates we'll say so honestly.",
+      "successHeading": "Request received.",
+      "successBody": "Thank you. We've received your details and will follow up by email within one business day. If your travel is imminent, please also give us a call.",
+      "addons": [
+        "Extra long walks",
+        "Puppy / high-needs care",
+        "Insulin or injections",
+        "Airport drop-off / pick-up",
+        "Deep clean before your return"
+      ]
+    },
+
+    "reviews": {
+      "hero": {
+        "eyebrow": "Reviews",
+        "title": "What clients say.",
+        "subtitle": "A short selection of notes from recent stays. All reviews below are shared with permission."
+      },
+      "googleUrl": "",
+      "cta": {
+        "heading": "Have you stayed with us?",
+        "body": "If we've cared for your home and pets, a short review — even a sentence — helps enormously.",
+        "primaryCta": { "label": "Leave a review", "url": "#" }
+      }
+    },
+
+    "faq": {
+      "hero": {
+        "eyebrow": "Frequently asked",
+        "title": "Answers to what most people ask first.",
+        "subtitle": "If you do not see your question here, ask us directly. We would rather answer it now than after you have booked."
+      }
+    },
+
+    "careers": {
+      "hero": {
+        "eyebrow": "Careers",
+        "title": "Interested in joining us?",
+        "subtitle": "If you have extensive experience caring for pets and homes, and think you would be a good fit for how we work, send us a short introduction. We hire slowly and carefully, and will let you know if we are currently taking on new sitters."
+      },
+      "cta": {
+        "heading": "Get in touch",
+        "body": "Email careers@simplythebesthousesitters.com with a short note about yourself, your experience with pets and property care, and any relevant references. We reply to every note.",
+        "primaryCta": { "label": "Email careers", "url": "mailto:careers@simplythebesthousesitters.com" }
+      }
+    },
+
+    "contact": {
+      "hero": {
+        "eyebrow": "Contact",
+        "title": "Get in touch.",
+        "subtitle": "For quotes, use the Request a Quote form. It gives us everything we need to reply quickly. For anything else, the fastest way is email."
+      },
+      "details": {
+        "email":       "hello@simplythebesthousesitters.com",
+        "phone":       "",
+        "hours":       "Weekdays 9am – 7pm Atlantic",
+        "serviceArea": "Halifax, NS & surrounding areas",
+        "responseNote": "We reply to all emails within one business day."
+      }
+    }
+  },
+
+  "testimonials": [
+    {
+      "name":     "Kate M.",
+      "location": "Halifax, NS",
+      "date":     "2025-11-12",
+      "rating":   5,
+      "quote":    "Ten days away and I came home to a cat who wasn't upset with me for once. The house was tidier than I left it. I've already booked our March trip."
+    },
+    {
+      "name":     "David R.",
+      "location": "Bedford, NS",
+      "date":     "2025-09-04",
+      "rating":   5,
+      "quote":    "Our dog is anxious and slow to trust new people. The meet-and-greet was the difference. Daily photos, calm handovers, everything you'd want."
+    },
+    {
+      "name":     "Priya S.",
+      "location": "Dartmouth, NS",
+      "date":     "2025-06-21",
+      "rating":   5,
+      "quote":    "We travel for work most months. Having a single service we can rely on has genuinely changed how much we enjoy being away."
+    }
+  ],
+
+  "faq": [
+    {
+      "category": "Pricing",
+      "items": [
+        { "q": "Why do you charge what you charge?",
+          "a": "Our rate reflects overnight, in-home care. A sitter stays in your home for the full length of the booking, keeps your pets on their normal routine, and quietly looks after the property throughout. It is closer in scope to a trusted house guest than a drop-in visit, and the pricing reflects that." },
+        { "q": "Do you have a cheaper drop-in option?",
+          "a": "Not at this time. Our whole model is built around overnight, in-home care because that is what actually keeps most pets calm." },
+        { "q": "How does holiday pricing work?",
+          "a": "Statutory holidays and December 22 – January 2 are billed at +25% per night. It's the only time of year our rates change." }
+      ]
+    },
+    {
+      "category": "Policies",
+      "items": [
+        { "q": "How far in advance should I book?",
+          "a": "For summer and holiday travel, as far in advance as possible, often several months. For a random Tuesday in October, a couple of weeks is usually fine." },
+        { "q": "What happens if I need to cancel?",
+          "a": "Full refunds up to 14 days out. Partial refunds up to 48 hours out. Cancellations closer than that are non-refundable, mostly because we have turned other bookings away to hold your dates." },
+        { "q": "Do you require a meet-and-greet?",
+          "a": "Yes, before every new client's first booking. It's how we learn your pets' routines properly and how you get comfortable with us." }
+      ]
+    },
+    {
+      "category": "Pets",
+      "items": [
+        { "q": "Do you care for cats and dogs both?",
+          "a": "Yes. Cats, dogs, and most small mammals and birds. If you have something less common, ask us." },
+        { "q": "Do you administer medication?",
+          "a": "Yes. Oral, topical, and by-injection medications (including insulin) are all fine, with clear written instructions." },
+        { "q": "What about reactive or aggressive dogs?",
+          "a": "We handle a lot of nervous or reactive dogs, but genuinely aggressive dogs or dogs with recent bite history are outside our scope. We'll always be honest about fit." }
+      ]
+    },
+    {
+      "category": "Communication",
+      "items": [
+        { "q": "How often will I hear from you?",
+          "a": "At minimum, one photo-and-note update per day. More if there's anything worth flagging. You can also reach us at any hour if you need to." },
+        { "q": "Do you send updates by text or email?",
+          "a": "Whichever you prefer. We ask at the meet-and-greet." }
+      ]
+    },
+    {
+      "category": "Emergencies",
+      "items": [
+        { "q": "What happens if my pet gets sick during a stay?",
+          "a": "We follow the written protocol you leave with us, take your pet to your preferred vet or the nearest emergency clinic, and stay with them. You'll hear from us immediately." },
+        { "q": "What if there's a problem with the house?",
+          "a": "Small things like a lightbulb, a rearranged rug, or an overzealous plant, we handle quietly. Anything real (a leak, a break-in, a power issue) you will hear about immediately, and we will coordinate with the trades you prefer." }
+        ]
+    },
+    {
+      "category": "Booking",
+      "items": [
+        { "q": "When does a stay start and end?",
+          "a": "Our standard booking runs from 12 pm on your start date to 12 pm on your end date. Your sitter arrives at noon on day one to settle in and pick up the routine, and leaves by noon on the final day. If you need earlier or later arrival or departure times, just tell us at the quote stage and we can usually accommodate." },
+        { "q": "How do I request a quote?",
+          "a": "Use the Request a Quote form. It captures everything we need. We reply within one business day." },
+        { "q": "How do I pay?",
+          "a": "A 25% deposit at booking (e-transfer or credit card). Balance is due the first day of the stay." },
+        { "q": "Do you sit for households you haven't met yet on holidays?",
+          "a": "Yes, but we strongly recommend booking the meet-and-greet well in advance for holiday dates — those weeks fill up early." }
+      ]
+    }
+  ],
+
+  "iconSet": {
+    "shield":    "M12 3l8 4v6c0 5-3.5 7.5-8 8-4.5-.5-8-3-8-8V7l8-4z",
+    "home":      "M3 11l9-7 9 7v9a2 2 0 0 1-2 2h-4v-6H10v6H6a2 2 0 0 1-2-2v-9z",
+    "clock":     "M12 6v6l4 2M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z",
+    "message":   "M4 5h16v10H8l-4 4V5z",
+    "leaf":      "M20 4c0 8-6 14-14 14 0-8 6-14 14-14zM4 20l7-7",
+    "star":      "M12 3l2.9 6 6.6.6-5 4.4 1.5 6.5L12 17l-6 3.5L7.5 14l-5-4.4L9.1 9 12 3z",
+    "paw":       "M5 13a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm14 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm8 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM12 22c-3 0-6-2-6-5 0-2 2-3 3-4a4 4 0 0 1 6 0c1 1 3 2 3 4 0 3-3 5-6 5z",
+    "moon":      "M20 14A8 8 0 1 1 10 4a7 7 0 0 0 10 10z",
+    "cat":       "M5 3l3 4h8l3-4v10a7 7 0 0 1-14 0V3zM9 12v.01M15 12v.01M10 16c.7.7 3.3.7 4 0",
+    "dog":       "M4 8l3-3 3 3h4l3-3 3 3v6a6 6 0 0 1-12 0V8H4zM9 12v.01M15 12v.01M12 16h.01",
+    "plane":     "M2 12l20-8-8 20-2-8-10-4z",
+    "briefcase": "M4 8h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8zM9 8V6a3 3 0 0 1 6 0v2",
+    "heart":     "M12 21s-8-4.5-8-11a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.5-8 11-8 11z",
+    "alert":     "M12 3l10 18H2L12 3zM12 10v5M12 18v.01",
+    "calendar":  "M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7zM4 7V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2M8 3v4M16 3v4M4 12h16"
+  }
+}

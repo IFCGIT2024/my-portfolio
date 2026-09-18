@@ -1,0 +1,15 @@
+{
+  "code": "CSCI 2115",
+  "title": "Theory of Computer Science",
+  "description": "Starter practice for regular languages and finite automata.",
+  "questions": [
+    {"id": 1, "question": "Which operation is part of the inductive definition of regular languages?", "options": ["Differentiation", "Concatenation", "Matrix inversion", "Prime factorization"], "correct": 1, "section": "Regular Languages", "explanation": "Regular languages are closed under operations including union, concatenation, and Kleene star."},
+    {"id": 2, "question": "Why is the language described by [A-Z][0-9][A-Z][0-9][A-Z][0-9] finite?", "options": ["It contains no digits", "Every word has a fixed length and every position has finitely many choices", "All regular expressions describe finite languages", "It contains only one word"], "correct": 1, "section": "Regular Languages", "explanation": "There are six fixed positions and each position draws from a finite set."},
+    {"id": 3, "question": "What does the Kleene star L* include for every language L?", "options": ["Only nonempty strings", "The empty string", "Only strings of length one", "Every possible alphabet"], "correct": 1, "section": "Regular Expressions", "explanation": "Zero repetitions are allowed, so epsilon is always in L*."},
+    {"id": 4, "question": "What information must a DFA use to decide its next state?", "options": ["Its current state and current input symbol", "The entire future input", "A random choice", "Only the length of the input"], "correct": 0, "section": "Finite Automata", "explanation": "A DFA transition is determined by exactly one current state and one input symbol."},
+    {"id": 5, "question": "A DFA recognizing binary strings whose number of 1s is a multiple of three naturally tracks what?", "options": ["The exact input string", "The count of 0s", "The count of 1s modulo three", "Whether the first symbol is 1"], "correct": 2, "section": "Finite Automata", "explanation": "Three states can represent remainders 0, 1, and 2 modulo three."},
+    {"id": 6, "question": "What is the core idea of subset construction?", "options": ["Turn each DFA state into a symbol", "Represent a DFA state as a set of possible NFA states", "Remove every accepting state", "Replace transitions with regular expressions only"], "correct": 1, "section": "NFA to DFA", "explanation": "Each constructed DFA state records all NFA states reachable after reading the same input."},
+    {"id": 7, "question": "To disprove a universal claim, what is normally sufficient?", "options": ["One valid counterexample", "One supporting example", "A larger alphabet", "A diagram without labels"], "correct": 0, "section": "Proof Strategy", "explanation": "A single case satisfying the premise but violating the conclusion refutes a universal statement."},
+    {"id": 8, "question": "Which models recognize exactly the regular languages?", "options": ["DFAs only", "Regular expressions only", "DFAs, NFAs, and regular expressions", "Pushdown automata only"], "correct": 2, "section": "Equivalence", "explanation": "DFAs, NFAs, and regular expressions have equivalent expressive power."}
+  ]
+}

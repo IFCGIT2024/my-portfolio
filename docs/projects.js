@@ -77,4 +77,15 @@ const PROJECTS = [
     badgeColor: "#8b5cf6",
     icon: "∂",
   },
+  {
+    id: "fall-2026-practice",
+    title: "Fall 2026 Practice Hub",
+    description:
+      "Organized practice tests for CSCI 2115, 2122, 2134, and 2141, with independent JSON question banks and one shared quiz interface.",
+    path: "projects/fall-2026/index.html",
+    tags: ["Fall 2026", "Practice Exams", "Quiz", "CSCI"],
+    badge: "New",
+    badgeColor: "#4f46e5",
+    icon: "📚",
+  },
 ];

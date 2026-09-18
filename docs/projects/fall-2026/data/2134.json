@@ -1,0 +1,15 @@
+{
+  "code": "CSCI 2134",
+  "title": "Software Development",
+  "description": "Starter practice for Git workflow and software-quality fundamentals.",
+  "questions": [
+    {"id": 1, "question": "Which Git command copies a remote repository onto your computer?", "options": ["git merge", "git clone", "git status", "git add"], "correct": 1, "section": "Git", "explanation": "git clone creates a local copy and configures the remote."},
+    {"id": 2, "question": "What does git add -A do before a commit?", "options": ["Deletes the repository", "Stages current changes", "Pushes directly to main", "Creates a remote account"], "correct": 1, "section": "Git", "explanation": "Staging selects the current changes that the next commit will record."},
+    {"id": 3, "question": "Why make changes on a development branch before merging into main?", "options": ["To isolate work until it is ready", "To avoid saving any history", "To disable testing", "To remove the remote repository"], "correct": 0, "section": "Git", "explanation": "A branch isolates a line of work so it can be reviewed or tested before integration."},
+    {"id": 4, "question": "Which quality is primarily concerned with how easily developers can understand source code?", "options": ["Readability", "Latency", "Bandwidth", "Encryption"], "correct": 0, "section": "Software Quality", "explanation": "Readability is a developer-oriented quality that supports understanding and maintenance."},
+    {"id": 5, "question": "Which is mainly a user-facing software quality?", "options": ["Readability", "Maintainability", "Correctness", "Reusability"], "correct": 2, "section": "Software Quality", "explanation": "Correctness concerns whether the software behaves according to its requirements."},
+    {"id": 6, "question": "What does the single-responsibility principle encourage?", "options": ["One component should have one focused reason to change", "Every class should contain all program logic", "Tests should be removed after coding", "Names should be as short as possible"], "correct": 0, "section": "Design Principles", "explanation": "A focused responsibility makes components easier to understand, test, and change."},
+    {"id": 7, "question": "What is the purpose of a unit test?", "options": ["Test a focused program component against expected behavior", "Replace version control", "Measure network speed only", "Compile every programming language"], "correct": 0, "section": "Testing", "explanation": "Unit tests check small components in isolation or near-isolation."},
+    {"id": 8, "question": "What does refactoring aim to change?", "options": ["The internal structure while preserving observable behavior", "The requirements without telling users", "Only the programming language", "Correct output into incorrect output"], "correct": 0, "section": "Refactoring", "explanation": "Refactoring improves design without intentionally changing external behavior."}
+  ]
+}

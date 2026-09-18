@@ -1,0 +1,15 @@
+{
+  "code": "CSCI 2122",
+  "title": "Systems Programming",
+  "description": "Starter practice for C organization, libraries, memory, and pointers.",
+  "questions": [
+    {"id": 1, "question": "What is the main role of a C header file?", "options": ["Store only executable machine code", "Provide shared type definitions and declarations", "Replace the linker", "Allocate heap memory automatically"], "correct": 1, "section": "Files and Headers", "explanation": "Headers share compile-time information and declarations with the code files that include them."},
+    {"id": 2, "question": "Which include form is normally used for a standard library header?", "options": ["#include <stdio.h>", "#include (stdio.h)", "import stdio.h", "using stdio.h"], "correct": 0, "section": "Files and Headers", "explanation": "Angle brackets conventionally identify standard or system headers."},
+    {"id": 3, "question": "What combines separately compiled object files into an executable?", "options": ["The preprocessor", "The debugger", "The linker", "The text editor"], "correct": 2, "section": "Build Process", "explanation": "The linker resolves symbols and combines object files and libraries."},
+    {"id": 4, "question": "Which library supplies malloc and related memory-allocation functions?", "options": ["stdio.h", "stdlib.h", "string.h", "time.h"], "correct": 1, "section": "C Libraries", "explanation": "The general-purpose standard library declares dynamic-memory functions such as malloc and free."},
+    {"id": 5, "question": "If int value = 42, what does &value produce?", "options": ["The value 42", "The address of value", "A copy of value", "The size of value"], "correct": 1, "section": "Pointers", "explanation": "The unary address-of operator returns the variable's memory address."},
+    {"id": 6, "question": "If int *ptr points to an integer, what does *ptr mean in an expression?", "options": ["The address stored beside ptr", "The integer value at the pointed-to address", "The number of bytes in ptr", "A new pointer"], "correct": 1, "section": "Pointers", "explanation": "Dereferencing follows the address and accesses the pointed-to value."},
+    {"id": 7, "question": "How are C strings terminated?", "options": ["With a newline", "With a space", "With the nul character \\0", "With two quotation marks"], "correct": 2, "section": "Arrays and Strings", "explanation": "A C string is a char sequence ending with a zero-valued nul character."},
+    {"id": 8, "question": "Which operator accesses a struct field through a pointer?", "options": [".", "->", "::", "&"], "correct": 1, "section": "Structs", "explanation": "Use . for a struct value and -> for a pointer to a struct."}
+  ]
+}

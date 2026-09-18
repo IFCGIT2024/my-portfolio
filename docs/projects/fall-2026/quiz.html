@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fall 2026 Practice Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="topbar">
+    <a href="index.html">← Fall 2026 Hub</a>
+    <span id="nav-course">Practice Test</span>
+  </nav>
+  <main class="quiz-shell">
+    <section id="loading" class="panel status-panel">Loading question bank…</section>
+
+    <section id="setup" class="panel hidden">
+      <p class="eyebrow" id="course-code"></p>
+      <h1 id="course-title"></h1>
+      <p id="course-description" class="muted"></p>
+
+      <div class="setup-block">
+        <div class="row-between">
+          <h2>Choose topics</h2>
+          <button id="toggle-all" class="text-button" type="button">Deselect all</button>
+        </div>
+        <div id="section-options" class="section-options"></div>
+      </div>
+
+      <div class="settings-row">
+        <label>
+          Questions
+          <select id="question-count"></select>
+        </label>
+        <label class="check-setting">
+          <input id="shuffle-options" type="checkbox" checked>
+          Shuffle answer choices
+        </label>
+      </div>
+
+      <p id="setup-message" class="error" role="alert"></p>
+      <button id="start-button" class="primary-button" type="button">Start practice test</button>
+    </section>
+
+    <section id="quiz" class="panel hidden">
+      <div class="row-between progress-copy">
+        <span id="progress-text"></span>
+        <span id="topic-text" class="topic-pill"></span>
+      </div>
+      <div class="progress-track"><div id="progress-fill"></div></div>
+      <h1 id="question-text" class="question-text"></h1>
+      <div id="answer-options" class="answer-options"></div>
+      <div id="feedback" class="feedback hidden" aria-live="polite"></div>
+      <button id="next-button" class="primary-button hidden" type="button">Next question</button>
+    </section>
+
+    <section id="results" class="panel hidden">
+      <p class="eyebrow">Practice complete</p>
+      <h1 id="result-heading"></h1>
+      <div class="score-card">
+        <strong id="score-percent"></strong>
+        <span id="score-fraction"></span>
+      </div>
+      <div id="breakdown" class="breakdown"></div>
+      <div class="result-actions">
+        <button id="retry-button" class="primary-button" type="button">Practice again</button>
+        <a class="secondary-button" href="index.html">Choose another course</a>
+      </div>
+    </section>
+
+    <section id="error" class="panel status-panel hidden">
+      <h1>Question bank unavailable</h1>
+      <p id="error-message"></p>
+      <a class="secondary-button" href="index.html">Return to the hub</a>
+    </section>
+  </main>
+  <script src="quiz.js"></script>
+</body>
+</html>

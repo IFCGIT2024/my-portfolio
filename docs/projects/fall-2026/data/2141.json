@@ -1,0 +1,15 @@
+{
+  "code": "CSCI 2141",
+  "title": "Introduction to Database Systems",
+  "description": "Starter practice for data models, ERDs, DDL, DML, and SQL.",
+  "questions": [
+    {"id": 1, "question": "What is a central role of a DBMS?", "options": ["Translate requests while managing access to structured data", "Replace every application program", "Store only unstructured images", "Guarantee zero network latency"], "correct": 0, "section": "DBMS Fundamentals", "explanation": "A DBMS mediates between users or applications and the database while managing structure and access."},
+    {"id": 2, "question": "Which model shows implementation details such as table names, columns, and data types?", "options": ["Conceptual model", "Physical model", "Conversation model", "Color model"], "correct": 1, "section": "Data Models", "explanation": "The physical or internal model captures the implementation-level schema."},
+    {"id": 3, "question": "In an ER diagram, what does cardinality describe?", "options": ["The color of an entity", "Minimum and maximum relationship participation", "The database password", "The order rows are stored"], "correct": 1, "section": "ER Diagrams", "explanation": "Cardinality expresses how many instances may or must participate on each side of a relationship."},
+    {"id": 4, "question": "Which SQL category defines or changes tables and other schema objects?", "options": ["DDL", "DML", "HTML", "CSS"], "correct": 0, "section": "DDL and DML", "explanation": "Data Definition Language includes operations such as CREATE, ALTER, and DROP."},
+    {"id": 5, "question": "Which DML operation retrieves rows?", "options": ["DROP", "ALTER", "SELECT", "CREATE TABLE"], "correct": 2, "section": "DDL and DML", "explanation": "SELECT reads data from one or more tables."},
+    {"id": 6, "question": "Which clause restricts rows returned by a SELECT query?", "options": ["WHERE", "ORDER BY", "LIMIT", "FROM"], "correct": 0, "section": "SQL SELECT", "explanation": "WHERE applies conditions that rows must satisfy."},
+    {"id": 7, "question": "Which clause controls the ordering of a query result?", "options": ["INSERT", "ORDER BY", "DESCRIBE", "DROP"], "correct": 1, "section": "SQL SELECT", "explanation": "ORDER BY sorts the result using one or more expressions."},
+    {"id": 8, "question": "What kind of problem occurs when deleting one fact unintentionally deletes another needed fact?", "options": ["Deletion anomaly", "Syntax highlighting", "Query pagination", "Authentication success"], "correct": 0, "section": "Data Integrity", "explanation": "A deletion anomaly is an unintended loss caused by poorly organized data."}
+  ]
+}

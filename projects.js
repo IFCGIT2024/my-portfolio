@@ -144,4 +144,15 @@ const PROJECTS = [
     badgeColor: "#4f46e5",
     icon: "📚",
   },
+  {
+    id: "assembly-lab",
+    title: "C → x86 Assembly Lab",
+    description:
+      "Translate C into 32-bit AT&T assembly with execution-based feedback, branch and loop tests, pointer exercises, and concept questions. Runs entirely in your browser.",
+    path: "docs/projects/assembly-lab/index.html",
+    tags: ["CSCI 1120", "Assembly", "C", "Practice Exams", "Interactive"],
+    badge: "New",
+    badgeColor: "#5a42d6",
+    icon: "⚙",
+  },
 ];

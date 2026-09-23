@@ -1,0 +1,515 @@
+{
+  "schemaVersion": 1,
+  "questions": [
+    {
+      "id": "mcq-01",
+      "category": "syntax",
+      "question": "What symbol is used to mark an immediate value in AT&T syntax?",
+      "options": [
+        "$",
+        "%",
+        "#",
+        "@"
+      ],
+      "correctAnswer": 0,
+      "explanation": "In AT&T syntax, immediate values use $ prefix (e.g., $5, $100)",
+      "type": "mcq",
+      "title": "Concept 01"
+    },
+    {
+      "id": "mcq-02",
+      "category": "syntax",
+      "question": "What symbol is used before register names in AT&T syntax?",
+      "options": [
+        "#",
+        "$",
+        "%",
+        "&"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Registers use % prefix in AT&T syntax (e.g., %eax, %ebx)",
+      "type": "mcq",
+      "title": "Concept 02"
+    },
+    {
+      "id": "mcq-03",
+      "category": "instructions",
+      "question": "What does the 'movl' instruction do?",
+      "options": [
+        "Compare two values",
+        "Move/copy data",
+        "Add two values",
+        "Jump to a label"
+      ],
+      "correctAnswer": 1,
+      "explanation": "movl copies data from source to destination (movl source, dest)",
+      "type": "mcq",
+      "title": "Concept 03"
+    },
+    {
+      "id": "mcq-04",
+      "category": "instructions",
+      "question": "What does the 'cmpl' instruction do?",
+      "options": [
+        "Copy data",
+        "Compare by subtracting",
+        "Complete operation",
+        "Clear register"
+      ],
+      "correctAnswer": 1,
+      "explanation": "cmpl compares by subtracting first operand from second and setting flags",
+      "type": "mcq",
+      "title": "Concept 04"
+    },
+    {
+      "id": "mcq-05",
+      "category": "instructions",
+      "question": "What does 'addl $5, %eax' do?",
+      "options": [
+        "Set eax to 5",
+        "Add eax to 5",
+        "Add 5 to eax",
+        "Subtract 5 from eax"
+      ],
+      "correctAnswer": 2,
+      "explanation": "addl adds the source ($5) to the destination (%eax)",
+      "type": "mcq",
+      "title": "Concept 05"
+    },
+    {
+      "id": "mcq-06",
+      "category": "jumps",
+      "question": "What does 'jg' stand for?",
+      "options": [
+        "Jump if Greater",
+        "Jump if Good",
+        "Jump to General",
+        "Just Go"
+      ],
+      "correctAnswer": 0,
+      "explanation": "jg = Jump if Greater (used after cmpl for signed comparison)",
+      "type": "mcq",
+      "title": "Concept 06"
+    },
+    {
+      "id": "mcq-07",
+      "category": "jumps",
+      "question": "What does 'je' stand for?",
+      "options": [
+        "Jump if Error",
+        "Jump Everywhere",
+        "Jump if Equal",
+        "Jump to End"
+      ],
+      "correctAnswer": 2,
+      "explanation": "je = Jump if Equal (also called jz - Jump if Zero)",
+      "type": "mcq",
+      "title": "Concept 07"
+    },
+    {
+      "id": "mcq-08",
+      "category": "jumps",
+      "question": "What does 'jne' do?",
+      "options": [
+        "Jump if Not Equal",
+        "Jump if Negative",
+        "Jump if New",
+        "Jump to Next Entry"
+      ],
+      "correctAnswer": 0,
+      "explanation": "jne = Jump if Not Equal (also called jnz - Jump if Not Zero)",
+      "type": "mcq",
+      "title": "Concept 08"
+    },
+    {
+      "id": "mcq-09",
+      "category": "jumps",
+      "question": "What does 'js' check for?",
+      "options": [
+        "Jump to Start",
+        "Jump if Sign (negative)",
+        "JavaScript",
+        "Jump if Safe"
+      ],
+      "correctAnswer": 1,
+      "explanation": "js = Jump if Sign flag set (result is negative)",
+      "type": "mcq",
+      "title": "Concept 09"
+    },
+    {
+      "id": "mcq-10",
+      "category": "jumps",
+      "question": "After 'cmpl $0, %eax', which instruction jumps if eax > 0?",
+      "options": [
+        "jl",
+        "je",
+        "jg",
+        "jmp"
+      ],
+      "correctAnswer": 2,
+      "explanation": "jg (Jump if Greater) jumps when the comparison shows greater than",
+      "type": "mcq",
+      "title": "Concept 10"
+    },
+    {
+      "id": "mcq-11",
+      "category": "registers",
+      "question": "Which is a valid 32-bit register in x86?",
+      "options": [
+        "%rax",
+        "%eax",
+        "%ax16",
+        "%r32"
+      ],
+      "correctAnswer": 1,
+      "explanation": "%eax is the 32-bit accumulator register (e = extended)",
+      "type": "mcq",
+      "title": "Concept 11"
+    },
+    {
+      "id": "mcq-12",
+      "category": "registers",
+      "question": "What does %ebp typically point to?",
+      "options": [
+        "Heap memory",
+        "Stack base/frame pointer",
+        "Code segment",
+        "Data segment"
+      ],
+      "correctAnswer": 1,
+      "explanation": "%ebp is the base pointer, used to access stack variables",
+      "type": "mcq",
+      "title": "Concept 12"
+    },
+    {
+      "id": "mcq-13",
+      "category": "memory",
+      "question": "What does '(%edx)' mean in AT&T syntax?",
+      "options": [
+        "The value in edx",
+        "Memory at address in edx",
+        "Immediate value edx",
+        "Label named edx"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Parentheses mean 'memory at address stored in register' (register indirect)",
+      "type": "mcq",
+      "title": "Concept 13"
+    },
+    {
+      "id": "mcq-14",
+      "category": "memory",
+      "question": "What does '-4(%ebp)' access?",
+      "options": [
+        "ebp minus 4",
+        "Memory 4 bytes before ebp",
+        "The 4th element",
+        "Function -4"
+      ],
+      "correctAnswer": 1,
+      "explanation": "This is base+displacement addressing: memory at address (ebp - 4)",
+      "type": "mcq",
+      "title": "Concept 14"
+    },
+    {
+      "id": "mcq-15",
+      "category": "memory",
+      "question": "What does leal A, %eax load?",
+      "options": [
+        "The value stored in A",
+        "The address of A",
+        "The address of eax",
+        "The value zero"
+      ],
+      "correctAnswer": 1,
+      "explanation": "lea computes the address of its memory operand; it does not read the value at that address.",
+      "type": "mcq",
+      "title": "Concept 15"
+    },
+    {
+      "id": "mcq-16",
+      "category": "instructions",
+      "question": "What does 'subl $1, %eax' do?",
+      "options": [
+        "Add 1 to eax",
+        "Subtract eax from 1",
+        "Subtract 1 from eax",
+        "Set eax to 1"
+      ],
+      "correctAnswer": 2,
+      "explanation": "subl subtracts source from destination: eax = eax - 1",
+      "type": "mcq",
+      "title": "Concept 16"
+    },
+    {
+      "id": "mcq-17",
+      "category": "instructions",
+      "question": "What does 'imull $2, %ebx' do?",
+      "options": [
+        "Divide ebx by 2",
+        "Multiply ebx by 2",
+        "Add 2 to ebx",
+        "Set ebx to 2"
+      ],
+      "correctAnswer": 1,
+      "explanation": "imull multiplies destination by source: ebx = ebx * 2",
+      "type": "mcq",
+      "title": "Concept 17"
+    },
+    {
+      "id": "mcq-18",
+      "category": "jumps",
+      "question": "What does 'jmp' do?",
+      "options": [
+        "Jump if Match",
+        "Jump Maybe",
+        "Unconditional jump",
+        "Jump if Positive"
+      ],
+      "correctAnswer": 2,
+      "explanation": "jmp always jumps to the specified label (unconditional)",
+      "type": "mcq",
+      "title": "Concept 18"
+    },
+    {
+      "id": "mcq-19",
+      "category": "syntax",
+      "question": "In 'movl %eax, %ebx', which is the source?",
+      "options": [
+        "%ebx",
+        "%eax",
+        "Both",
+        "Neither"
+      ],
+      "correctAnswer": 1,
+      "explanation": "In AT&T syntax: instruction source, destination (opposite of Intel syntax)",
+      "type": "mcq",
+      "title": "Concept 19"
+    },
+    {
+      "id": "mcq-20",
+      "category": "syntax",
+      "question": "How do you mark a label in assembly?",
+      "options": [
+        "[label]",
+        "label:",
+        "#label",
+        "$label"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Labels end with a colon: loop_start:, end_if:, etc.",
+      "type": "mcq",
+      "title": "Concept 20"
+    },
+    {
+      "id": "mcq-21",
+      "category": "instructions",
+      "question": "Which instruction would you use for 'A = A + B'?",
+      "options": [
+        "movl",
+        "addl",
+        "subl",
+        "cmpl"
+      ],
+      "correctAnswer": 1,
+      "explanation": "addl adds values: addl %ebx, %eax (if eax=A, ebx=B)",
+      "type": "mcq",
+      "title": "Concept 21"
+    },
+    {
+      "id": "mcq-22",
+      "category": "memory",
+      "question": "What does 'movl $10, A' do?",
+      "options": [
+        "Load A into register 10",
+        "Store 10 at memory location A",
+        "Compare 10 with A",
+        "Add 10 to A"
+      ],
+      "correctAnswer": 1,
+      "explanation": "This stores the immediate value 10 into memory location A",
+      "type": "mcq",
+      "title": "Concept 22"
+    },
+    {
+      "id": "mcq-23",
+      "category": "jumps",
+      "question": "After cmpl $0, %eax, which jump enters a loop body when signed eax > 0?",
+      "options": [
+        "je",
+        "jl",
+        "jg",
+        "jne"
+      ],
+      "correctAnswer": 2,
+      "explanation": "jg takes the branch when ZF = 0 and SF = OF. An inverse jle branch can instead exit the loop.",
+      "type": "mcq",
+      "title": "Concept 23"
+    },
+    {
+      "id": "mcq-24",
+      "category": "jumps",
+      "question": "What does 'jl' check for after a comparison?",
+      "options": [
+        "Jump if Less than",
+        "Jump if Label",
+        "Jump to Line",
+        "Jump if Long"
+      ],
+      "correctAnswer": 0,
+      "explanation": "jl = Jump if Less than (signed comparison)",
+      "type": "mcq",
+      "title": "Concept 24"
+    },
+    {
+      "id": "mcq-25",
+      "category": "instructions",
+      "question": "What happens to the operands after 'cmpl'?",
+      "options": [
+        "They are swapped",
+        "They are unchanged",
+        "They are added",
+        "They are cleared"
+      ],
+      "correctAnswer": 1,
+      "explanation": "cmpl only sets flags for conditional jumps, doesn't modify operands",
+      "type": "mcq",
+      "title": "Concept 25"
+    },
+    {
+      "id": "mcq-26",
+      "category": "syntax",
+      "question": "What does the 'l' suffix in 'movl' indicate?",
+      "options": [
+        "Long (32-bit)",
+        "Loop",
+        "Load",
+        "Label"
+      ],
+      "correctAnswer": 0,
+      "explanation": "l = long (32-bit). Other suffixes: b=byte, w=word, q=quad",
+      "type": "mcq",
+      "title": "Concept 26"
+    },
+    {
+      "id": "mcq-27",
+      "category": "memory",
+      "question": "Which addressing mode is 'movl A, %eax'?",
+      "options": [
+        "Immediate",
+        "Register",
+        "Direct memory",
+        "Register indirect"
+      ],
+      "correctAnswer": 2,
+      "explanation": "This is direct addressing - accessing memory location by name (A)",
+      "type": "mcq",
+      "title": "Concept 27"
+    },
+    {
+      "id": "mcq-28",
+      "category": "memory",
+      "question": "Which addressing mode is 'movl (%edx), %eax'?",
+      "options": [
+        "Immediate",
+        "Direct",
+        "Register indirect",
+        "Displacement"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Register indirect - edx contains an address, () dereferences it",
+      "type": "mcq",
+      "title": "Concept 28"
+    },
+    {
+      "id": "mcq-29",
+      "category": "instructions",
+      "question": "To translate 'if(A == 0)', which instruction compares?",
+      "options": [
+        "movl $0, %eax",
+        "cmpl $0, %eax",
+        "jmp equal",
+        "addl $0, %eax"
+      ],
+      "correctAnswer": 1,
+      "explanation": "cmpl compares A (in eax) with 0, then use je to jump if equal",
+      "type": "mcq",
+      "title": "Concept 29"
+    },
+    {
+      "id": "mcq-30",
+      "category": "jumps",
+      "question": "After 'cmpl $5, %eax', when does 'je' jump?",
+      "options": [
+        "Always",
+        "When eax = 5",
+        "When eax \u2260 5",
+        "When eax > 5"
+      ],
+      "correctAnswer": 1,
+      "explanation": "je (Jump if Equal) jumps when the comparison shows equality",
+      "type": "mcq",
+      "title": "Concept 30"
+    },
+    {
+      "id": "mcq-31",
+      "type": "mcq",
+      "title": "Concept 31",
+      "category": "syntax",
+      "question": "Are movb and movl interchangeable?",
+      "options": [
+        "Yes, their suffixes are decoration",
+        "No: movb moves 8 bits; movl moves 32 bits",
+        "Only when using memory",
+        "Both move 64 bits"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Operand size changes the operation. This practice interpreter supports only 32-bit instructions."
+    },
+    {
+      "id": "mcq-32",
+      "type": "mcq",
+      "title": "Concept 32",
+      "category": "jumps",
+      "question": "When does jne take its branch?",
+      "options": [
+        "When ZF = 1",
+        "When ZF = 0",
+        "When SF = 1",
+        "Always"
+      ],
+      "correctAnswer": 1,
+      "explanation": "jne/jnz branches when the Zero Flag is clear. Equality sets ZF, so jne does not jump on equality."
+    },
+    {
+      "id": "mcq-33",
+      "type": "mcq",
+      "title": "Concept 33",
+      "category": "jumps",
+      "question": "What signed condition does jge mean after cmp?",
+      "options": [
+        "Greater than or equal",
+        "Less than or equal",
+        "Strictly greater",
+        "Negative"
+      ],
+      "correctAnswer": 0,
+      "explanation": "jge tests SF = OF: signed greater than or equal. jle means less than or equal."
+    },
+    {
+      "id": "mcq-34",
+      "type": "mcq",
+      "title": "Concept 34",
+      "category": "memory",
+      "question": "With edx = 4096 and ecx = 2, what address does 4(%edx,%ecx,4) use?",
+      "options": [
+        "4100",
+        "4104",
+        "4108",
+        "4098"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Effective address = displacement + base + index \u00d7 scale = 4 + 4096 + 2 \u00d7 4 = 4108."
+    }
+  ]
+}

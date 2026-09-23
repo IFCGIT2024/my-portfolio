@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Practice C to x86 assembly with browser-based execution checks, branching, loops, pointers, and concept questions.">
+  <title>C → x86 Assembly Lab</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="engine.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Main navigation">
+      <a href="../../../index.html">← Portfolio</a>
+      <a href="../fall-2026/index.html">Fall 2026 practice hub ↗</a>
+    </nav>
+    <header class="hero">
+      <div><p class="eyebrow">COMPUTER SYSTEMS / PRACTICE LAB</p>
+        <h1>C <span>→</span> x86 Assembly</h1>
+        <p>Translate the logic. Check the result. Understand the machine.</p>
+      </div>
+      <div class="architecture"><strong>32-bit</strong><span>AT&amp;T syntax</span><span>Runs in your browser</span></div>
+    </header>
+    <noscript><p class="notice">Enable JavaScript to use this practice lab.</p></noscript>
+    <div id="load-status" class="notice" role="status">Loading question banks…</div>
+    <div id="storage-status" class="notice" role="status" hidden></div>
+    <div id="app" hidden>
+      <div class="toolbar">
+        <div class="modes" role="group" aria-label="Practice mode">
+          <button id="code-mode" aria-pressed="true">Code translation <span id="code-total"></span></button>
+          <button id="mcq-mode" aria-pressed="false">Concept questions <span id="mcq-total"></span></button>
+        </div>
+        <label class="topic-label">Topic <select id="topic"><option value="all">All topics</option></select></label>
+      </div>
+      <div class="progress-row"><p id="progress-text"></p><p id="stats"></p></div>
+      <progress id="progress" max="1" value="0" aria-label="Questions solved independently"></progress>
+      <main id="exercise">
+        <div class="question-heading"><div><p id="question-meta" class="eyebrow"></p><h2 id="question-title"></h2></div>
+          <label class="jump-label">Jump to <select id="question-select"></select></label>
+        </div>
+        <div id="code-exercise">
+          <div class="contract"><strong>Your task</strong><p>Translate the C operations below. Starting values are already in memory. Read the inputs by name; do not hard-code the example values. Store changed variables back to memory and preserve everything else.</p>
+            <p id="output-contract"></p></div>
+          <div class="code-panels">
+            <section class="panel"><div class="panel-heading"><h3>C operations</h3><span>signed 32-bit integers</span></div>
+              <pre><code id="c-code"></code></pre>
+              <details id="case-details"><summary id="case-summary">Starting state &amp; test cases</summary><div id="cases"></div></details>
+            </section>
+            <section class="panel"><div class="panel-heading"><label for="assembly-input">Your assembly</label><span>source, destination</span></div>
+              <textarea id="assembly-input" maxlength="50000" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="editor-help" placeholder="movl A, %eax&#10;addl B, %eax&#10;movl %eax, A"></textarea>
+              <p id="editor-help" class="small">Use any supported temporary registers and label names. Ctrl/⌘ + Enter checks your answer.</p>
+            </section>
+          </div>
+        </div>
+        <fieldset id="mcq-exercise" hidden><legend id="mcq-prompt"></legend><div id="options"></div></fieldset>
+        <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+        <div id="hint" class="hint" hidden></div>
+        <div id="solution" class="solution" hidden><h3>One valid solution</h3><p>Other instruction sequences can pass the same tests. Viewing this marks the question as reviewed.</p><pre><code id="solution-code"></code></pre></div>
+        <div class="actions"><div class="action-group"><button id="check" class="primary">Check answer</button><button id="hint-button">Show hint</button><button id="solution-button">Show solution</button></div>
+          <div class="action-group"><button id="previous">← Previous</button><button id="next">Next →</button></div></div>
+      </main>
+      <section id="summary" class="summary" hidden><p class="eyebrow">PRACTICE CHECKPOINT</p><h2>End of this set</h2><p id="summary-text"></p><p>Skipped questions and viewed solutions remain available to practice.</p><button id="return-to-questions" class="primary">Return to questions</button></section>
+      <section class="reference">
+        <details><summary>Syntax reference &amp; what the checker supports</summary>
+          <div class="reference-grid"><div><h3>Operands</h3><p><code>$5</code> immediate · <code>%eax</code> register · <code>A</code> named memory</p><p><code>(%edx)</code> indirect · <code>-4(%ebp)</code> displacement · <code>8(%edx,%ecx,4)</code> base + index × scale + displacement</p><p>Registers: eax, ebx, ecx, edx, esi, edi, ebp, esp. Prefix them with <code>%</code>.</p></div>
+            <div><h3>Instructions</h3><p>mov, lea, add, sub, imul (two or three operands), cmp, test, and, or, xor, neg, inc, dec, not, nop.</p><p>jmp; je/jz; jne/jnz; jg, jge, jl, jle; js, jns; jo, jno; ja, jae, jb, jbe and their usual aliases.</p><p>Use the <code>l</code> suffix or no suffix. 8-, 16-, and 64-bit operations, shifts, calls, stack push/pop, directives, and system calls are outside this lab's subset.</p></div></div>
+          <p><code>cmp source, destination</code> sets flags from destination − source. Arithmetic updates flags too; mov and lea preserve them. Symbols and labels are case-sensitive. Use <code>#</code> or <code>//</code> for comments; a semicolon separates instructions.</p>
+          <p>Checks execute up to 10,000 instructions per case. Passing means the listed cases match; it is not a proof for every possible input or a full C compiler. Assembly arithmetic wraps to 32 bits; ordinary C signed overflow is undefined, so the C exercises avoid it.</p>
+        </details>
+        <details><summary>Add your own questions</summary><p>Question banks are JSON, separate from the interface and interpreter. Add an entry to an existing bank, or list a new bank in <code>data/manifest.json</code>. Topic filters and counts update automatically.</p>
+          <p><a href="data/example.json" download>Download a working question template</a> · <a href="https://github.com/IFCGIT2024/my-portfolio/blob/main/docs/projects/assembly-lab/README.md" target="_blank" rel="noopener noreferrer">Read the authoring guide ↗</a></p>
+          <label class="import-label">Try a JSON bank on this device <input id="import-bank" type="file" accept="application/json,.json"></label><p class="small">Imported questions are kept for this session only. Publishing them for everyone requires adding the JSON file to the repository.</p><p id="import-status" role="status"></p>
+        </details>
+        <details><summary>Progress &amp; study notes</summary><p>Drafts, attempts, and solved question IDs are saved in this browser when storage is available. Repeating a solved question cannot inflate the total. Viewed solutions and explained MCQs count as reviewed; only answers passed before a solution was revealed count as solved independently.</p><p>Adapted from the uploaded practice app and the CSCI 1120 Assembly Instructions and Branching slides. This is a separate assembly refresher, useful alongside later systems courses.</p><p>The slides contain two jump-description typos: <code>jne</code> branches when ZF is 0, and <code>jge</code> means signed greater than or equal. The checker follows the documented x86 semantics.</p><button id="reset" class="danger">Reset this lab's progress</button></details>
+      </section>
+    </div>
+    <footer><span>Assembly Lab · CSCI 1120 foundations</span><span>Practice stays on your device.</span></footer>
+  </div>
+</body>
+</html>

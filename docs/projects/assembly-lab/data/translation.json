@@ -1,0 +1,1872 @@
+{
+  "schemaVersion": 1,
+  "questions": [
+    {
+      "id": "code-01",
+      "type": "code",
+      "title": "Add two variables",
+      "category": "arithmetic",
+      "cCode": "A = A + B;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl A, %eax\naddl B, %eax\nmovl %eax, A"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 5,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "A": 8
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": -4,
+            "B": 9
+          },
+          "expected": {
+            "memory": {
+              "A": 5
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 0,
+            "B": -7
+          },
+          "expected": {
+            "memory": {
+              "A": -7
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-02",
+      "type": "code",
+      "title": "Subtract into B",
+      "category": "arithmetic",
+      "cCode": "B = A - B;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl A, %eax\nsubl B, %eax\nmovl %eax, B"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 10,
+            "B": 4
+          },
+          "expected": {
+            "memory": {
+              "B": 6
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 2,
+            "B": 9
+          },
+          "expected": {
+            "memory": {
+              "B": -7
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -3,
+            "B": -3
+          },
+          "expected": {
+            "memory": {
+              "B": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-03",
+      "type": "code",
+      "title": "Multiply two variables",
+      "category": "arithmetic",
+      "cCode": "A = A * B;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl A, %eax\nimull B, %eax\nmovl %eax, A"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 3,
+            "B": 7
+          },
+          "expected": {
+            "memory": {
+              "A": 21
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": -4,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "A": -12
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 12,
+            "B": 0
+          },
+          "expected": {
+            "memory": {
+              "A": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-04",
+      "type": "code",
+      "title": "Add a constant",
+      "category": "arithmetic",
+      "cCode": "A = A + 10;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "addl $10, A"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 15
+          },
+          "expected": {
+            "memory": {
+              "A": 25
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": -10
+          },
+          "expected": {
+            "memory": {
+              "A": 0
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 0
+          },
+          "expected": {
+            "memory": {
+              "A": 10
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-05",
+      "type": "code",
+      "title": "Store a sum in C",
+      "category": "arithmetic",
+      "cCode": "C = A + B;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl A, %eax\naddl B, %eax\nmovl %eax, C"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 20,
+            "B": 5,
+            "C": null
+          },
+          "expected": {
+            "memory": {
+              "C": 25
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": -6,
+            "B": 3,
+            "C": null
+          },
+          "expected": {
+            "memory": {
+              "C": -3
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 0,
+            "B": 0,
+            "C": null
+          },
+          "expected": {
+            "memory": {
+              "C": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-06",
+      "type": "code",
+      "title": "Subtract a constant",
+      "category": "arithmetic",
+      "cCode": "A = A - 3;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "subl $3, A"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 8
+          },
+          "expected": {
+            "memory": {
+              "A": 5
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 3
+          },
+          "expected": {
+            "memory": {
+              "A": 0
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -2
+          },
+          "expected": {
+            "memory": {
+              "A": -5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-07",
+      "type": "code",
+      "title": "Store a product in C",
+      "category": "arithmetic",
+      "cCode": "C = A * B;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl A, %eax\nimull B, %eax\nmovl %eax, C"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 2,
+            "B": 4,
+            "C": null
+          },
+          "expected": {
+            "memory": {
+              "C": 8
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": -2,
+            "B": 7,
+            "C": null
+          },
+          "expected": {
+            "memory": {
+              "C": -14
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 5,
+            "B": 0,
+            "C": null
+          },
+          "expected": {
+            "memory": {
+              "C": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-08",
+      "type": "code",
+      "title": "Nonzero or zero",
+      "category": "if-else",
+      "cCode": "if (A != 0) {\n  B += 2;\n} else {\n  B -= 1;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "cmpl $0, A\nje zero\naddl $2, B\njmp done\nzero: subl $1, B\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": -10,
+            "B": 0
+          },
+          "expected": {
+            "memory": {
+              "B": 2
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 0,
+            "B": 5
+          },
+          "expected": {
+            "memory": {
+              "B": 4
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 8,
+            "B": -3
+          },
+          "expected": {
+            "memory": {
+              "B": -1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-09",
+      "type": "code",
+      "title": "Choose which variable to clear",
+      "category": "if-else",
+      "cCode": "if (A == B) {\n  A = 0;\n} else {\n  B = 0;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl A, %eax\ncmpl B, %eax\nje equal\nmovl $0, B\njmp done\nequal: movl $0, A\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 5,
+            "B": 10
+          },
+          "expected": {
+            "memory": {
+              "A": 5,
+              "B": 0
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 3,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "A": 0,
+              "B": 3
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -2,
+            "B": 4
+          },
+          "expected": {
+            "memory": {
+              "A": -2,
+              "B": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-10",
+      "type": "code",
+      "title": "Increment only when greater",
+      "category": "if-else",
+      "cCode": "if (A > B) {\n  A = A + 1;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl A, %eax\ncmpl B, %eax\njle done\naddl $1, A\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 7,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "A": 8
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 3,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "A": 3
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -5,
+            "B": 2
+          },
+          "expected": {
+            "memory": {
+              "A": -5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-11",
+      "type": "code",
+      "title": "Make a negative value positive",
+      "category": "if-else",
+      "cCode": "if (A < 0) {\n  A = -A;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "cmpl $0, A\njge done\nnegl A\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": -5
+          },
+          "expected": {
+            "memory": {
+              "A": 5
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 0
+          },
+          "expected": {
+            "memory": {
+              "A": 0
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 9
+          },
+          "expected": {
+            "memory": {
+              "A": 9
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-12",
+      "type": "code",
+      "title": "Subtract or add after comparison",
+      "category": "if-else",
+      "cCode": "if (A != B) {\n  A = A - B;\n} else {\n  B = A + B;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl A, %eax\ncmpl B, %eax\nje equal\nsubl B, %eax\nmovl %eax, A\njmp done\nequal: addl %eax, B\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 10,
+            "B": 5
+          },
+          "expected": {
+            "memory": {
+              "A": 5,
+              "B": 5
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 4,
+            "B": 4
+          },
+          "expected": {
+            "memory": {
+              "A": 4,
+              "B": 8
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -3,
+            "B": 1
+          },
+          "expected": {
+            "memory": {
+              "A": -4,
+              "B": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-13",
+      "type": "code",
+      "title": "Set B only when A is zero",
+      "category": "if-else",
+      "cCode": "if (A == 0) {\n  B = 10;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "cmpl $0, A\njne done\nmovl $10, B\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 0,
+            "B": 1
+          },
+          "expected": {
+            "memory": {
+              "B": 10
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 2,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "B": 3
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -1,
+            "B": 6
+          },
+          "expected": {
+            "memory": {
+              "B": 6
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-14",
+      "type": "code",
+      "title": "Clear both equal variables",
+      "category": "if-else",
+      "cCode": "if (A == B) {\n  A = 0;\n  B = 0;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl A, %eax\ncmpl B, %eax\njne done\nmovl $0, A\nmovl $0, B\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 3,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "A": 0,
+              "B": 0
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 3,
+            "B": 4
+          },
+          "expected": {
+            "memory": {
+              "A": 3,
+              "B": 4
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -2,
+            "B": -2
+          },
+          "expected": {
+            "memory": {
+              "A": 0,
+              "B": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-15",
+      "type": "code",
+      "title": "Branch around a threshold",
+      "category": "if-else",
+      "cCode": "if (A > 10) {\n  A = A - 10;\n} else {\n  A = A + 10;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "cmpl $10, A\njg greater\naddl $10, A\njmp done\ngreater: subl $10, A\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 15
+          },
+          "expected": {
+            "memory": {
+              "A": 5
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 10
+          },
+          "expected": {
+            "memory": {
+              "A": 20
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -4
+          },
+          "expected": {
+            "memory": {
+              "A": 6
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-16",
+      "type": "code",
+      "title": "Double B for negative A",
+      "category": "if-else",
+      "cCode": "if (A < 0) {\n  B = B * 2;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "cmpl $0, A\njge done\nmovl B, %eax\nimull $2, %eax\nmovl %eax, B\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": -3,
+            "B": 5
+          },
+          "expected": {
+            "memory": {
+              "B": 10
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 0,
+            "B": 5
+          },
+          "expected": {
+            "memory": {
+              "B": 5
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 2,
+            "B": -4
+          },
+          "expected": {
+            "memory": {
+              "B": -4
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-17",
+      "type": "code",
+      "title": "Add when A is nonnegative",
+      "category": "if-else",
+      "cCode": "if (A >= 0) {\n  A = A + B;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "cmpl $0, A\njl done\nmovl A, %eax\naddl B, %eax\nmovl %eax, A\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 8,
+            "B": 4
+          },
+          "expected": {
+            "memory": {
+              "A": 12
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 0,
+            "B": -4
+          },
+          "expected": {
+            "memory": {
+              "A": -4
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -2,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "A": -2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-18",
+      "type": "code",
+      "title": "Count down and count up",
+      "category": "while-loop",
+      "cCode": "while (A > 0) {\n  B = B + 1;\n  A = A - 1;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "loop: cmpl $0, A\njle done\nincl B\ndecl A\njmp loop\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 5,
+            "B": 0
+          },
+          "expected": {
+            "memory": {
+              "A": 0,
+              "B": 5
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 0,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "A": 0,
+              "B": 3
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -2,
+            "B": 1
+          },
+          "expected": {
+            "memory": {
+              "A": -2,
+              "B": 1
+            }
+          }
+        },
+        {
+          "name": "Case 4",
+          "memory": {
+            "A": 1,
+            "B": -1
+          },
+          "expected": {
+            "memory": {
+              "A": 0,
+              "B": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-19",
+      "type": "code",
+      "title": "Count down by two",
+      "category": "while-loop",
+      "cCode": "// A starts as a nonnegative even integer.\nwhile (A != 0) {\n  A = A - 2;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "loop: cmpl $0, A\nje done\nsubl $2, A\njmp loop\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 10
+          },
+          "expected": {
+            "memory": {
+              "A": 0
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 0
+          },
+          "expected": {
+            "memory": {
+              "A": 0
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 2
+          },
+          "expected": {
+            "memory": {
+              "A": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-20",
+      "type": "code",
+      "title": "Repeated doubling",
+      "category": "while-loop",
+      "cCode": "while (A > 1) {\n  B = B * 2;\n  A = A - 1;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "loop: cmpl $1, A\njle done\nmovl B, %eax\nimull $2, %eax\nmovl %eax, B\ndecl A\njmp loop\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 3,
+            "B": 1
+          },
+          "expected": {
+            "memory": {
+              "A": 1,
+              "B": 4
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 1,
+            "B": 7
+          },
+          "expected": {
+            "memory": {
+              "A": 1,
+              "B": 7
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 4,
+            "B": -2
+          },
+          "expected": {
+            "memory": {
+              "A": 1,
+              "B": -16
+            }
+          }
+        },
+        {
+          "name": "Case 4",
+          "memory": {
+            "A": 0,
+            "B": 5
+          },
+          "expected": {
+            "memory": {
+              "A": 0,
+              "B": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-21",
+      "type": "code",
+      "title": "Accumulate groups of three",
+      "category": "while-loop",
+      "cCode": "while (B > 0) {\n  A = A + 3;\n  B = B - 1;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "loop: cmpl $0, B\njle done\naddl $3, A\ndecl B\njmp loop\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 0,
+            "B": 5
+          },
+          "expected": {
+            "memory": {
+              "A": 15,
+              "B": 0
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 4,
+            "B": 0
+          },
+          "expected": {
+            "memory": {
+              "A": 4,
+              "B": 0
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -5,
+            "B": 2
+          },
+          "expected": {
+            "memory": {
+              "A": 1,
+              "B": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-22",
+      "type": "code",
+      "title": "Stop at one",
+      "category": "while-loop",
+      "cCode": "// A starts at 1 or greater.\nwhile (A != 1) {\n  A = A - 1;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "loop: cmpl $1, A\nje done\ndecl A\njmp loop\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 8
+          },
+          "expected": {
+            "memory": {
+              "A": 1
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 1
+          },
+          "expected": {
+            "memory": {
+              "A": 1
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 2
+          },
+          "expected": {
+            "memory": {
+              "A": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-23",
+      "type": "code",
+      "title": "Count up from a negative number",
+      "category": "while-loop",
+      "cCode": "while (A < 0) {\n  B = B + 1;\n  A = A + 1;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "loop: cmpl $0, A\njge done\nincl B\nincl A\njmp loop\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": -5,
+            "B": 0
+          },
+          "expected": {
+            "memory": {
+              "A": 0,
+              "B": 5
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 0,
+            "B": 2
+          },
+          "expected": {
+            "memory": {
+              "A": 0,
+              "B": 2
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 3,
+            "B": 1
+          },
+          "expected": {
+            "memory": {
+              "A": 3,
+              "B": 1
+            }
+          }
+        },
+        {
+          "name": "Case 4",
+          "memory": {
+            "A": -1,
+            "B": -1
+          },
+          "expected": {
+            "memory": {
+              "A": 0,
+              "B": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-24",
+      "type": "code",
+      "title": "Count down to another variable",
+      "category": "while-loop",
+      "cCode": "while (A > B) {\n  A = A - 1;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "loop: movl A, %eax\ncmpl B, %eax\njle done\ndecl A\njmp loop\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 4,
+            "B": 2
+          },
+          "expected": {
+            "memory": {
+              "A": 2
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 2,
+            "B": 2
+          },
+          "expected": {
+            "memory": {
+              "A": 2
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -1,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "A": -1
+            }
+          }
+        },
+        {
+          "name": "Case 4",
+          "memory": {
+            "A": 2,
+            "B": -2
+          },
+          "expected": {
+            "memory": {
+              "A": -2
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-25",
+      "type": "code",
+      "title": "Read through a pointer",
+      "category": "memory-addressing",
+      "cCode": "// ptr is supplied in %edx.\nB = *ptr;",
+      "hint": "Parentheses dereference the address in %edx. Store the loaded value in B.",
+      "solutions": [
+        "movl (%edx), %eax\nmovl %eax, B"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 10,
+            "B": null
+          },
+          "expected": {
+            "memory": {
+              "B": 10
+            }
+          },
+          "registers": {
+            "edx": 4096
+          },
+          "symbols": {
+            "A": 4096,
+            "B": 4100
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": -7,
+            "B": null
+          },
+          "expected": {
+            "memory": {
+              "B": -7
+            }
+          },
+          "registers": {
+            "edx": 12288
+          },
+          "symbols": {
+            "A": 12288,
+            "B": 12292
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-26",
+      "type": "code",
+      "title": "Write through a pointer",
+      "category": "memory-addressing",
+      "cCode": "// ptr is supplied in %edx.\n*ptr = 20;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl $20, (%edx)"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 5
+          },
+          "expected": {
+            "memory": {
+              "A": 20
+            }
+          },
+          "registers": {
+            "edx": 4096
+          },
+          "symbols": {
+            "A": 4096
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": -4
+          },
+          "expected": {
+            "memory": {
+              "A": 20
+            }
+          },
+          "registers": {
+            "edx": 12288
+          },
+          "symbols": {
+            "A": 12288
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-27",
+      "type": "code",
+      "title": "Read a stack variable",
+      "category": "memory-addressing",
+      "cCode": "// local_var is at -4(%ebp).\nA = local_var;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl -4(%ebp), %eax\nmovl %eax, A"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "local_var": 15,
+            "A": null
+          },
+          "expected": {
+            "memory": {
+              "A": 15
+            }
+          },
+          "registers": {
+            "ebp": 8192
+          },
+          "symbols": {
+            "local_var": 8188
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "local_var": -8,
+            "A": null
+          },
+          "expected": {
+            "memory": {
+              "A": -8
+            }
+          },
+          "registers": {
+            "ebp": 12288
+          },
+          "symbols": {
+            "local_var": 12284
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-28",
+      "type": "code",
+      "title": "Write a stack variable",
+      "category": "memory-addressing",
+      "cCode": "// result is at -8(%ebp).\nresult = 42;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl $42, -8(%ebp)"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "result": null
+          },
+          "expected": {
+            "memory": {
+              "result": 42
+            }
+          },
+          "registers": {
+            "ebp": 8192
+          },
+          "symbols": {
+            "result": 8184
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "result": 2
+          },
+          "expected": {
+            "memory": {
+              "result": 42
+            }
+          },
+          "registers": {
+            "ebp": 12288
+          },
+          "symbols": {
+            "result": 12280
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-29",
+      "type": "code",
+      "title": "Read the first array element",
+      "category": "memory-addressing",
+      "cCode": "// arr begins at the address supplied in %edx.\nA = arr[0];",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl (%edx), %eax\nmovl %eax, A"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "arr": 10,
+            "arr+4": 20,
+            "A": null
+          },
+          "expected": {
+            "memory": {
+              "A": 10
+            }
+          },
+          "registers": {
+            "edx": 12288
+          },
+          "symbols": {
+            "arr": 12288,
+            "A": 12296
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "arr": -5,
+            "arr+4": 4,
+            "A": null
+          },
+          "expected": {
+            "memory": {
+              "A": -5
+            }
+          },
+          "registers": {
+            "edx": 16384
+          },
+          "symbols": {
+            "arr": 16384,
+            "A": 16392
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-30",
+      "type": "code",
+      "title": "Update through a pointer",
+      "category": "memory-addressing",
+      "cCode": "// ptr is supplied in %edx.\n*ptr = *ptr + 3;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "addl $3, (%edx)"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 5
+          },
+          "expected": {
+            "memory": {
+              "A": 8
+            }
+          },
+          "registers": {
+            "edx": 4096
+          },
+          "symbols": {
+            "A": 4096
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": -3
+          },
+          "expected": {
+            "memory": {
+              "A": 0
+            }
+          },
+          "registers": {
+            "edx": 12288
+          },
+          "symbols": {
+            "A": 12288
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-31",
+      "type": "code",
+      "title": "Add two stack variables",
+      "category": "memory-addressing",
+      "cCode": "// var1 is at -4(%ebp); var2 is at -8(%ebp).\nx = var1 + var2;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl -4(%ebp), %eax\naddl -8(%ebp), %eax\nmovl %eax, x"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "var1": 7,
+            "var2": 3,
+            "x": null
+          },
+          "expected": {
+            "memory": {
+              "x": 10
+            }
+          },
+          "registers": {
+            "ebp": 8192
+          },
+          "symbols": {
+            "var1": 8188,
+            "var2": 8184
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "var1": -2,
+            "var2": 9,
+            "x": null
+          },
+          "expected": {
+            "memory": {
+              "x": 7
+            }
+          },
+          "registers": {
+            "ebp": 12288
+          },
+          "symbols": {
+            "var1": 12284,
+            "var2": 12280
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-32",
+      "type": "code",
+      "title": "Double through a pointer",
+      "category": "memory-addressing",
+      "cCode": "// ptr is supplied in %edx.\n*ptr = *ptr * 2;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl (%edx), %eax\nimull $2, %eax\nmovl %eax, (%edx)"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 10
+          },
+          "expected": {
+            "memory": {
+              "A": 20
+            }
+          },
+          "registers": {
+            "edx": 4096
+          },
+          "symbols": {
+            "A": 4096
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": -4
+          },
+          "expected": {
+            "memory": {
+              "A": -8
+            }
+          },
+          "registers": {
+            "edx": 12288
+          },
+          "symbols": {
+            "A": 12288
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-33",
+      "type": "code",
+      "title": "Store an immediate on the stack",
+      "category": "memory-addressing",
+      "cCode": "// stack_val is at -4(%ebp).\nstack_val = 99;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl $99, -4(%ebp)"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "stack_val": null
+          },
+          "expected": {
+            "memory": {
+              "stack_val": 99
+            }
+          },
+          "registers": {
+            "ebp": 8192
+          },
+          "symbols": {
+            "stack_val": 8188
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "stack_val": 3
+          },
+          "expected": {
+            "memory": {
+              "stack_val": 99
+            }
+          },
+          "registers": {
+            "ebp": 12288
+          },
+          "symbols": {
+            "stack_val": 12284
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-34",
+      "type": "code",
+      "title": "Branch on pointed-to memory",
+      "category": "memory-addressing",
+      "cCode": "// ptr is supplied in %edx.\nif (*ptr > 5) {\n  *ptr = 0;\n}",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "cmpl $5, (%edx)\njle done\nmovl $0, (%edx)\ndone:"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 7
+          },
+          "expected": {
+            "memory": {
+              "A": 0
+            }
+          },
+          "registers": {
+            "edx": 4096
+          },
+          "symbols": {
+            "A": 4096
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": 5
+          },
+          "expected": {
+            "memory": {
+              "A": 5
+            }
+          },
+          "registers": {
+            "edx": 12288
+          },
+          "symbols": {
+            "A": 12288
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": -3
+          },
+          "expected": {
+            "memory": {
+              "A": -3
+            }
+          },
+          "registers": {
+            "edx": 16384
+          },
+          "symbols": {
+            "A": 16384
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-35",
+      "type": "code",
+      "title": "Use scaled array indexing",
+      "category": "memory-addressing",
+      "cCode": "// arr starts in %edx; i is supplied in %ecx.\n// Each int occupies 4 bytes.\nA = arr[i];",
+      "hint": "Use base + index \u00d7 scale. The commas inside (%edx,%ecx,4) belong to one memory operand.",
+      "solutions": [
+        "movl (%edx,%ecx,4), %eax\nmovl %eax, A"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "arr": 10,
+            "arr+4": 20,
+            "arr+8": 30,
+            "A": null
+          },
+          "expected": {
+            "memory": {
+              "A": 20
+            }
+          },
+          "registers": {
+            "edx": 12288,
+            "ecx": 1
+          },
+          "symbols": {
+            "arr": 12288,
+            "A": 12300
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "arr": -4,
+            "arr+4": 9,
+            "arr+8": 7,
+            "A": null
+          },
+          "expected": {
+            "memory": {
+              "A": 7
+            }
+          },
+          "registers": {
+            "edx": 16384,
+            "ecx": 2
+          },
+          "symbols": {
+            "arr": 16384,
+            "A": 16396
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "arr": 3,
+            "arr+4": 8,
+            "arr+8": 6,
+            "A": null
+          },
+          "expected": {
+            "memory": {
+              "A": 3
+            }
+          },
+          "registers": {
+            "edx": 20480,
+            "ecx": 0
+          },
+          "symbols": {
+            "arr": 20480,
+            "A": 20492
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-36",
+      "type": "code",
+      "title": "Compute an address with lea",
+      "category": "memory-addressing",
+      "cCode": "// arr is an array of 32-bit int.\n// Store the address of arr[1] in ptr.\nptr = &arr[1];",
+      "hint": "lea computes an address without loading the value at that address.",
+      "solutions": [
+        "leal arr+4, %eax\nmovl %eax, ptr"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "arr": 10,
+            "arr+4": 20,
+            "ptr": null
+          },
+          "expected": {
+            "memory": {
+              "ptr": 12292
+            }
+          },
+          "symbols": {
+            "arr": 12288,
+            "ptr": 12296
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "arr": 5,
+            "arr+4": -6,
+            "ptr": null
+          },
+          "expected": {
+            "memory": {
+              "ptr": 16388
+            }
+          },
+          "symbols": {
+            "arr": 16384,
+            "ptr": 16392
+          }
+        }
+      ]
+    }
+  ]
+}

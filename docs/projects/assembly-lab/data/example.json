@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "questions": [
+    {
+      "id": "custom-add",
+      "type": "code",
+      "title": "My addition question",
+      "category": "custom-practice",
+      "cCode": "A = A + B;",
+      "hint": "Load the current input values from memory. Follow the C operations and store every changed variable back to its named memory location.",
+      "solutions": [
+        "movl A, %eax\naddl B, %eax\nmovl %eax, A"
+      ],
+      "cases": [
+        {
+          "name": "Case 1",
+          "memory": {
+            "A": 5,
+            "B": 3
+          },
+          "expected": {
+            "memory": {
+              "A": 8
+            }
+          }
+        },
+        {
+          "name": "Case 2",
+          "memory": {
+            "A": -4,
+            "B": 9
+          },
+          "expected": {
+            "memory": {
+              "A": 5
+            }
+          }
+        },
+        {
+          "name": "Case 3",
+          "memory": {
+            "A": 0,
+            "B": -7
+          },
+          "expected": {
+            "memory": {
+              "A": -7
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

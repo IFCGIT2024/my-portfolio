@@ -1,0 +1,3226 @@
+{
+  "questions": [
+    {
+      "id": "T31-01",
+      "topic": "T31",
+      "title": "Pumping lemma",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which quantifier order describes the pumping lemma for a regular L?",
+      "options": [
+        {
+          "value": "A",
+          "label": "For every split there exists p making all words pumpable."
+        },
+        {
+          "value": "B",
+          "label": "For every p there exists a split of every word outside L."
+        },
+        {
+          "value": "C",
+          "label": "There exists one word and one k proving regularity."
+        },
+        {
+          "value": "D",
+          "label": "There exists p; for every long enough w∈L there exists a legal split; for every k≥0 the pumped word stays in L."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The split may depend on w, and p depends on L. The universal pumping claim applies to all k for that chosen split.",
+      "sources": "S05 pp. 3-13; S01 Q10"
+    },
+    {
+      "id": "T31-02",
+      "topic": "T31",
+      "title": "Pumping lemma",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which conditions must a legal split w=xyz satisfy?",
+      "options": [
+        {
+          "value": "A",
+          "label": "|y|=0 and |z|≤p"
+        },
+        {
+          "value": "B",
+          "label": "|xy|≤p and |y|>0"
+        },
+        {
+          "value": "C",
+          "label": "|x|=p and |y|=p"
+        },
+        {
+          "value": "D",
+          "label": "|xyz|≤p"
+        }
+      ],
+      "answer": "B",
+      "explanation": "y must be nonempty and must end within the first p symbols. x and z may be empty, and w is at least p symbols long.",
+      "sources": "S05 pp. 3-13; S01 Q10"
+    },
+    {
+      "id": "T31-03",
+      "topic": "T31",
+      "title": "Pumping lemma",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is xy^0z?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ε always"
+        },
+        {
+          "value": "B",
+          "label": "xyz"
+        },
+        {
+          "value": "C",
+          "label": "x^0y^0z^0"
+        },
+        {
+          "value": "D",
+          "label": "xz"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Pumping with k=0 deletes y only. k=1 restores the original word and cannot create a contradiction for w∈L.",
+      "sources": "S05 pp. 3-13; S01 Q10"
+    },
+    {
+      "id": "T31-04",
+      "topic": "T31",
+      "title": "Pumping lemma",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "In a nonregularity proof, who effectively determines the legal split?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The proof must work for every legal split, not just a convenient one."
+        },
+        {
+          "value": "B",
+          "label": "The split must always have x=ε and |y|=1."
+        },
+        {
+          "value": "C",
+          "label": "The input alphabet uniquely fixes it."
+        },
+        {
+          "value": "D",
+          "label": "The prover may choose one arbitrary split and ignore the others."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Negating the lemma requires defeating every allowed decomposition of the chosen witness. A bad single split can occur even in a regular language.",
+      "sources": "S05 pp. 3-13; S01 Q10"
+    },
+    {
+      "id": "T31-05",
+      "topic": "T31",
+      "title": "Pumping lemma",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For L={0^n1^n:n≥0} and w=0^p1^p, what must y look like in every legal split?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ε"
+        },
+        {
+          "value": "B",
+          "label": "A string containing both 0 and 1"
+        },
+        {
+          "value": "C",
+          "label": "1^d for some 1≤d≤p"
+        },
+        {
+          "value": "D",
+          "label": "0^d for some 1≤d≤p"
+        }
+      ],
+      "answer": "D",
+      "explanation": "|xy|≤p keeps the pumping segment inside the initial zero block; |y|>0 supplies a positive d.",
+      "sources": "S05 pp. 3-13; S01 Q10"
+    },
+    {
+      "id": "T31-06",
+      "topic": "T31",
+      "title": "Pumping lemma",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For L={0^n1^n:n≥0}, take witness w=0^p1^p and any legal split w=xyz with y=0^d, 1≤d≤p. What happens at k=2?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It must remain in L because d≤p."
+        },
+        {
+          "value": "B",
+          "label": "The word has p+d zeros and p ones, so it is outside L."
+        },
+        {
+          "value": "C",
+          "label": "The word has p zeros and p+d ones."
+        },
+        {
+          "value": "D",
+          "label": "Both counts increase by d."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Only y repeats; z's ones are unchanged. Unequal counts contradict the required language membership.",
+      "sources": "S05 pp. 3-13; S01 Q10"
+    },
+    {
+      "id": "T31-07",
+      "topic": "T31",
+      "title": "Pumping lemma",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For L={a^i b^j:i<j}, use w=a^p b^(p+1). Why does k=2 work for every legal y=a^d?",
+      "options": [
+        {
+          "value": "A",
+          "label": "p+d is always less than p+1."
+        },
+        {
+          "value": "B",
+          "label": "p+d≥p+1, so the strict inequality fails."
+        },
+        {
+          "value": "C",
+          "label": "The number of b symbols becomes p."
+        },
+        {
+          "value": "D",
+          "label": "d can be chosen to be zero."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Since d≥1, the new a count is at least the b count. Equality already violates i<j.",
+      "sources": "S05 pp. 3-13; S01 Q10"
+    },
+    {
+      "id": "T31-08",
+      "topic": "T31",
+      "title": "Pumping lemma",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If a language satisfies the pumping condition, can that alone prove it regular?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes, if the alphabet is finite."
+        },
+        {
+          "value": "B",
+          "label": "Yes; the converse is part of the lemma."
+        },
+        {
+          "value": "C",
+          "label": "Only if ε is absent, then yes."
+        },
+        {
+          "value": "D",
+          "label": "No; the lemma gives a necessary condition, not an equivalence."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The implication is regular ⇒ pumpable. A separate representation or theorem is needed to prove regularity.",
+      "sources": "S05 pp. 3-13; S01 Q10"
+    },
+    {
+      "id": "T31-09",
+      "topic": "T31",
+      "title": "Pumping lemma",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "How can a finite language satisfy the lemma?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every word must contain a nonempty loop."
+        },
+        {
+          "value": "B",
+          "label": "Finite languages are exceptions to the lemma."
+        },
+        {
+          "value": "C",
+          "label": "Choose y=ε for every word."
+        },
+        {
+          "value": "D",
+          "label": "Choose p larger than every word length, leaving no eligible witness to check."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The quantified statement is then vacuously true. Empty language also satisfies it for any positive p.",
+      "sources": "S05 pp. 3-13; S01 Q10"
+    },
+    {
+      "id": "T31-10",
+      "topic": "T31",
+      "title": "Pumping lemma",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Why does a DFA with N states support a pumping bound p=N?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every accepted word has length N."
+        },
+        {
+          "value": "B",
+          "label": "Its first N transitions visit N+1 states counting the initial visit, so some state repeats."
+        },
+        {
+          "value": "C",
+          "label": "Every loop contains exactly N symbols."
+        },
+        {
+          "value": "D",
+          "label": "Every state must be accepting."
+        }
+      ],
+      "answer": "B",
+      "explanation": "The repeated-state segment consumes a nonempty y within the first N symbols. Repeating or omitting this loop preserves the final destination. Larger bounds such as N+1 also work.",
+      "sources": "S05 pp. 3-13; S01 Q10"
+    },
+    {
+      "id": "A01-01",
+      "topic": "A01",
+      "title": "Count fixed-length words",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "A code has 2 letter positions followed by 2 digit positions. Each letter position independently has 26 choices and each digit position independently has 10 choices. Repetition is allowed and every choice is a single symbol. Prove finiteness and calculate the exact number of words.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Infinite because repetitions are allowed"
+        },
+        {
+          "value": "B",
+          "label": "Finite; 776 words"
+        },
+        {
+          "value": "C",
+          "label": "Finite; 67,600 words"
+        },
+        {
+          "value": "D",
+          "label": "Finite; 72 words"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The positions are fixed in number. Choices multiply across independent positions; allowing repeated symbols does not allow unlimited length.",
+      "sources": "S01 Q1(a), p. 1; S06 pp. 13-14",
+      "worked_solution": [
+        "There are 26^2 letter prefixes and 10^2 digit suffixes.",
+        "The total is 26^2 × 10^2 = 67,600. Every code has length 4, so the set is finite."
+      ]
+    },
+    {
+      "id": "A01-02",
+      "topic": "A01",
+      "title": "Count fixed-length words",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "A code has 3 letter positions followed by 2 digit positions. Each letter position independently has 4 choices and each digit position independently has 3 choices. Repetition is allowed and every choice is a single symbol. Prove finiteness and calculate the exact number of words.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Finite; 18 words"
+        },
+        {
+          "value": "B",
+          "label": "Infinite because repetitions are allowed"
+        },
+        {
+          "value": "C",
+          "label": "Finite; 576 words"
+        },
+        {
+          "value": "D",
+          "label": "Finite; 73 words"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The positions are fixed in number. Choices multiply across independent positions; allowing repeated symbols does not allow unlimited length.",
+      "sources": "S01 Q1(a), p. 1; S06 pp. 13-14",
+      "worked_solution": [
+        "There are 4^3 letter prefixes and 3^2 digit suffixes.",
+        "The total is 4^3 × 3^2 = 576. Every code has length 5, so the set is finite."
+      ]
+    },
+    {
+      "id": "A01-03",
+      "topic": "A01",
+      "title": "Count fixed-length words",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "A code has 4 letter positions followed by 3 digit positions. Each letter position independently has 2 choices and each digit position independently has 2 choices. Repetition is allowed and every choice is a single symbol. Prove finiteness and calculate the exact number of words.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Finite; 14 words"
+        },
+        {
+          "value": "B",
+          "label": "Finite; 128 words"
+        },
+        {
+          "value": "C",
+          "label": "Finite; 24 words"
+        },
+        {
+          "value": "D",
+          "label": "Infinite because repetitions are allowed"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The positions are fixed in number. Choices multiply across independent positions; allowing repeated symbols does not allow unlimited length.",
+      "sources": "S01 Q1(a), p. 1; S06 pp. 13-14",
+      "worked_solution": [
+        "There are 2^4 letter prefixes and 2^3 digit suffixes.",
+        "The total is 2^4 × 2^3 = 128. Every code has length 7, so the set is finite."
+      ]
+    },
+    {
+      "id": "A01-04",
+      "topic": "A01",
+      "title": "Count fixed-length words",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "A code has 1 letter positions followed by 4 digit positions. Each letter position independently has 5 choices and each digit position independently has 10 choices. Repetition is allowed and every choice is a single symbol. Prove finiteness and calculate the exact number of words.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Finite; 50,000 words"
+        },
+        {
+          "value": "B",
+          "label": "Infinite because repetitions are allowed"
+        },
+        {
+          "value": "C",
+          "label": "Finite; 10,005 words"
+        },
+        {
+          "value": "D",
+          "label": "Finite; 45 words"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The positions are fixed in number. Choices multiply across independent positions; allowing repeated symbols does not allow unlimited length.",
+      "sources": "S01 Q1(a), p. 1; S06 pp. 13-14",
+      "worked_solution": [
+        "There are 5^1 letter prefixes and 10^4 digit suffixes.",
+        "The total is 5^1 × 10^4 = 50,000. Every code has length 5, so the set is finite."
+      ]
+    },
+    {
+      "id": "A01-05",
+      "topic": "A01",
+      "title": "Count fixed-length words",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "A code has 2 letter positions followed by 3 digit positions. Each letter position independently has 3 choices and each digit position independently has 4 choices. Repetition is allowed and every choice is a single symbol. Prove finiteness and calculate the exact number of words.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Finite; 576 words"
+        },
+        {
+          "value": "B",
+          "label": "Finite; 18 words"
+        },
+        {
+          "value": "C",
+          "label": "Infinite because repetitions are allowed"
+        },
+        {
+          "value": "D",
+          "label": "Finite; 73 words"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The positions are fixed in number. Choices multiply across independent positions; allowing repeated symbols does not allow unlimited length.",
+      "sources": "S01 Q1(a), p. 1; S06 pp. 13-14",
+      "worked_solution": [
+        "There are 3^2 letter prefixes and 4^3 digit suffixes.",
+        "The total is 3^2 × 4^3 = 576. Every code has length 5, so the set is finite."
+      ]
+    },
+    {
+      "id": "A01-06",
+      "topic": "A01",
+      "title": "Count fixed-length words",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "A code has 3 letter positions followed by 1 digit positions. Each letter position independently has 6 choices and each digit position independently has 2 choices. Repetition is allowed and every choice is a single symbol. Prove finiteness and calculate the exact number of words.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Infinite because repetitions are allowed"
+        },
+        {
+          "value": "B",
+          "label": "Finite; 218 words"
+        },
+        {
+          "value": "C",
+          "label": "Finite; 20 words"
+        },
+        {
+          "value": "D",
+          "label": "Finite; 432 words"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The positions are fixed in number. Choices multiply across independent positions; allowing repeated symbols does not allow unlimited length.",
+      "sources": "S01 Q1(a), p. 1; S06 pp. 13-14",
+      "worked_solution": [
+        "There are 6^3 letter prefixes and 2^1 digit suffixes.",
+        "The total is 6^3 × 2^1 = 432. Every code has length 4, so the set is finite."
+      ]
+    },
+    {
+      "id": "A01-07",
+      "topic": "A01",
+      "title": "Reason about repeated blocks",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Analyze L((110*)*). Derive a structural invariant, test ε and the shortest nonempty all-1 word, and select the correct conclusion. A maximal run is the entire uninterrupted block of 1s.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every word contains at least one 0; maximal 1-runs have exactly 2 symbols."
+        },
+        {
+          "value": "B",
+          "label": "Every maximal 1-run has length divisible by 2; ε and 11 belong."
+        },
+        {
+          "value": "C",
+          "label": "Every word has total length divisible by 2; ε is excluded."
+        },
+        {
+          "value": "D",
+          "label": "The substring 111 never occurs, even inside longer runs."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Each factor contributes 2 consecutive 1s. Zero-length zero blocks allow adjacent factors to merge, so a maximal run can contain any positive multiple of 2 ones.",
+      "sources": "S01 Q1(b), pp. 1-2; S06 p. 9",
+      "worked_solution": [
+        "Zero outer repetitions give ε. One factor with zero zero-block repetitions gives 11.",
+        "If k adjacent factors meet without zeros, their 1-run has length 2k. A positive zero block ends a run; it never changes the number of 1s already in it.",
+        "Two factors with no zeros produce 1111, which contains the shorter substring 111. Substring occurrence is not the same as maximal-run length."
+      ]
+    },
+    {
+      "id": "A01-08",
+      "topic": "A01",
+      "title": "Reason about repeated blocks",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Analyze L((1110*)*). Derive a structural invariant, test ε and the shortest nonempty all-1 word, and select the correct conclusion. A maximal run is the entire uninterrupted block of 1s.",
+      "options": [
+        {
+          "value": "A",
+          "label": "The substring 1111 never occurs, even inside longer runs."
+        },
+        {
+          "value": "B",
+          "label": "Every word has total length divisible by 3; ε is excluded."
+        },
+        {
+          "value": "C",
+          "label": "Every maximal 1-run has length divisible by 3; ε and 111 belong."
+        },
+        {
+          "value": "D",
+          "label": "Every word contains at least one 0; maximal 1-runs have exactly 3 symbols."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Each factor contributes 3 consecutive 1s. Zero-length zero blocks allow adjacent factors to merge, so a maximal run can contain any positive multiple of 3 ones.",
+      "sources": "S01 Q1(b), pp. 1-2; S06 p. 9",
+      "worked_solution": [
+        "Zero outer repetitions give ε. One factor with zero zero-block repetitions gives 111.",
+        "If k adjacent factors meet without zeros, their 1-run has length 3k. A positive zero block ends a run; it never changes the number of 1s already in it.",
+        "Two factors with no zeros produce 111111, which contains the shorter substring 1111. Substring occurrence is not the same as maximal-run length."
+      ]
+    },
+    {
+      "id": "A01-09",
+      "topic": "A01",
+      "title": "Reason about repeated blocks",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Analyze L((11110*)*). Derive a structural invariant, test ε and the shortest nonempty all-1 word, and select the correct conclusion. A maximal run is the entire uninterrupted block of 1s.",
+      "options": [
+        {
+          "value": "A",
+          "label": "The substring 11111 never occurs, even inside longer runs."
+        },
+        {
+          "value": "B",
+          "label": "Every word has total length divisible by 4; ε is excluded."
+        },
+        {
+          "value": "C",
+          "label": "Every word contains at least one 0; maximal 1-runs have exactly 4 symbols."
+        },
+        {
+          "value": "D",
+          "label": "Every maximal 1-run has length divisible by 4; ε and 1111 belong."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Each factor contributes 4 consecutive 1s. Zero-length zero blocks allow adjacent factors to merge, so a maximal run can contain any positive multiple of 4 ones.",
+      "sources": "S01 Q1(b), pp. 1-2; S06 p. 9",
+      "worked_solution": [
+        "Zero outer repetitions give ε. One factor with zero zero-block repetitions gives 1111.",
+        "If k adjacent factors meet without zeros, their 1-run has length 4k. A positive zero block ends a run; it never changes the number of 1s already in it.",
+        "Two factors with no zeros produce 11111111, which contains the shorter substring 11111. Substring occurrence is not the same as maximal-run length."
+      ]
+    },
+    {
+      "id": "A01-10",
+      "topic": "A01",
+      "title": "Reason about repeated blocks",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Analyze L((11(00)*)*). Derive a structural invariant, test ε and the shortest nonempty all-1 word, and select the correct conclusion. A maximal run is the entire uninterrupted block of 1s.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every word has total length divisible by 2; ε is excluded."
+        },
+        {
+          "value": "B",
+          "label": "The substring 111 never occurs, even inside longer runs."
+        },
+        {
+          "value": "C",
+          "label": "Every word contains at least one 0; maximal 1-runs have exactly 2 symbols."
+        },
+        {
+          "value": "D",
+          "label": "Every maximal 1-run has length divisible by 2; ε and 11 belong."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Each factor contributes 2 consecutive 1s. Zero-length zero blocks allow adjacent factors to merge, so a maximal run can contain any positive multiple of 2 ones.",
+      "sources": "S01 Q1(b), pp. 1-2; S06 p. 9",
+      "worked_solution": [
+        "Zero outer repetitions give ε. One factor with zero zero-block repetitions gives 11.",
+        "If k adjacent factors meet without zeros, their 1-run has length 2k. A positive zero block ends a run; it never changes the number of 1s already in it.",
+        "Two factors with no zeros produce 1111, which contains the shorter substring 111. Substring occurrence is not the same as maximal-run length."
+      ]
+    },
+    {
+      "id": "A01-11",
+      "topic": "A01",
+      "title": "Reason about repeated blocks",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Analyze L((111(00)*)*). Derive a structural invariant, test ε and the shortest nonempty all-1 word, and select the correct conclusion. A maximal run is the entire uninterrupted block of 1s.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every maximal 1-run has length divisible by 3; ε and 111 belong."
+        },
+        {
+          "value": "B",
+          "label": "Every word contains at least one 0; maximal 1-runs have exactly 3 symbols."
+        },
+        {
+          "value": "C",
+          "label": "The substring 1111 never occurs, even inside longer runs."
+        },
+        {
+          "value": "D",
+          "label": "Every word has total length divisible by 3; ε is excluded."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Each factor contributes 3 consecutive 1s. Zero-length zero blocks allow adjacent factors to merge, so a maximal run can contain any positive multiple of 3 ones.",
+      "sources": "S01 Q1(b), pp. 1-2; S06 p. 9",
+      "worked_solution": [
+        "Zero outer repetitions give ε. One factor with zero zero-block repetitions gives 111.",
+        "If k adjacent factors meet without zeros, their 1-run has length 3k. A positive zero block ends a run; it never changes the number of 1s already in it.",
+        "Two factors with no zeros produce 111111, which contains the shorter substring 1111. Substring occurrence is not the same as maximal-run length."
+      ]
+    },
+    {
+      "id": "A01-12",
+      "topic": "A01",
+      "title": "Reason about repeated blocks",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Analyze L((1111(00)*)*). Derive a structural invariant, test ε and the shortest nonempty all-1 word, and select the correct conclusion. A maximal run is the entire uninterrupted block of 1s.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every word has total length divisible by 4; ε is excluded."
+        },
+        {
+          "value": "B",
+          "label": "Every word contains at least one 0; maximal 1-runs have exactly 4 symbols."
+        },
+        {
+          "value": "C",
+          "label": "The substring 11111 never occurs, even inside longer runs."
+        },
+        {
+          "value": "D",
+          "label": "Every maximal 1-run has length divisible by 4; ε and 1111 belong."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Each factor contributes 4 consecutive 1s. Zero-length zero blocks allow adjacent factors to merge, so a maximal run can contain any positive multiple of 4 ones.",
+      "sources": "S01 Q1(b), pp. 1-2; S06 p. 9",
+      "worked_solution": [
+        "Zero outer repetitions give ε. One factor with zero zero-block repetitions gives 1111.",
+        "If k adjacent factors meet without zeros, their 1-run has length 4k. A positive zero block ends a run; it never changes the number of 1s already in it.",
+        "Two factors with no zeros produce 11111111, which contains the shorter substring 11111. Substring occurrence is not the same as maximal-run length."
+      ]
+    },
+    {
+      "id": "A02-01",
+      "topic": "A02",
+      "title": "Construct an endpoint language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over Σ={0,1}, construct the language of nonempty words whose first symbol is 0 and last symbol is 0. A one-symbol word is allowed if it satisfies both conditions. Which expression is exact?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ε|0|0(0|1)*0"
+        },
+        {
+          "value": "B",
+          "label": "0(0|1)*0"
+        },
+        {
+          "value": "C",
+          "label": "0|0(0|1)*0"
+        },
+        {
+          "value": "D",
+          "label": "0(0|1)*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(a), p. 3; S06 pp. 16-18",
+      "worked_solution": [
+        "Begin with singleton symbol languages and form Σ by union. Then Σ* is regular by star.",
+        "The length-at-least-two portion is 0(0|1)*0; it uses concatenation of regular languages.",
+        "Add 0 as a singleton alternative.",
+        "Every constructed word has the required endpoints; conversely, every eligible longer word has some middle word in Σ*. Thus the expression is exact and the language is regular."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ε: target rejects, but this expression accepts.",
+        "B": "Counterexample 0: target accepts, but this expression rejects.",
+        "C": "This expression describes exactly the target language.",
+        "D": "Counterexample 01: target rejects, but this expression accepts."
+      }
+    },
+    {
+      "id": "A02-02",
+      "topic": "A02",
+      "title": "Construct an endpoint language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over Σ={0,1}, construct the language of nonempty words whose first symbol is 1 and last symbol is 1. A one-symbol word is allowed if it satisfies both conditions. Which expression is exact?",
+      "options": [
+        {
+          "value": "A",
+          "label": "1|1(0|1)*1"
+        },
+        {
+          "value": "B",
+          "label": "ε|1|1(0|1)*1"
+        },
+        {
+          "value": "C",
+          "label": "1(0|1)*1"
+        },
+        {
+          "value": "D",
+          "label": "1(0|1)*"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(a), p. 3; S06 pp. 16-18",
+      "worked_solution": [
+        "Begin with singleton symbol languages and form Σ by union. Then Σ* is regular by star.",
+        "The length-at-least-two portion is 1(0|1)*1; it uses concatenation of regular languages.",
+        "Add 1 as a singleton alternative.",
+        "Every constructed word has the required endpoints; conversely, every eligible longer word has some middle word in Σ*. Thus the expression is exact and the language is regular."
+      ],
+      "option_feedback": {
+        "A": "This expression describes exactly the target language.",
+        "B": "Counterexample ε: target rejects, but this expression accepts.",
+        "C": "Counterexample 1: target accepts, but this expression rejects.",
+        "D": "Counterexample 10: target rejects, but this expression accepts."
+      }
+    },
+    {
+      "id": "A02-03",
+      "topic": "A02",
+      "title": "Construct an endpoint language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over Σ={0,1}, construct the language of nonempty words whose first symbol is 0 and last symbol is 1. A one-symbol word is allowed if it satisfies both conditions. Which expression is exact?",
+      "options": [
+        {
+          "value": "A",
+          "label": "0|0(0|1)*1"
+        },
+        {
+          "value": "B",
+          "label": "0(0|1)*1"
+        },
+        {
+          "value": "C",
+          "label": "ε|0(0|1)*1"
+        },
+        {
+          "value": "D",
+          "label": "0(0|1)*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(a), p. 3; S06 pp. 16-18",
+      "worked_solution": [
+        "Begin with singleton symbol languages and form Σ by union. Then Σ* is regular by star.",
+        "The length-at-least-two portion is 0(0|1)*1; it uses concatenation of regular languages.",
+        "Different endpoint symbols make length one impossible.",
+        "Every constructed word has the required endpoints; conversely, every eligible longer word has some middle word in Σ*. Thus the expression is exact and the language is regular."
+      ],
+      "option_feedback": {
+        "A": "Counterexample 0: target rejects, but this expression accepts.",
+        "B": "This expression describes exactly the target language.",
+        "C": "Counterexample ε: target rejects, but this expression accepts.",
+        "D": "Counterexample 0: target rejects, but this expression accepts."
+      }
+    },
+    {
+      "id": "A02-04",
+      "topic": "A02",
+      "title": "Construct an endpoint language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over Σ={0,1}, construct the language of nonempty words whose first symbol is 1 and last symbol is 0. A one-symbol word is allowed if it satisfies both conditions. Which expression is exact?",
+      "options": [
+        {
+          "value": "A",
+          "label": "1(0|1)*0"
+        },
+        {
+          "value": "B",
+          "label": "1|1(0|1)*0"
+        },
+        {
+          "value": "C",
+          "label": "1(0|1)*"
+        },
+        {
+          "value": "D",
+          "label": "ε|1(0|1)*0"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(a), p. 3; S06 pp. 16-18",
+      "worked_solution": [
+        "Begin with singleton symbol languages and form Σ by union. Then Σ* is regular by star.",
+        "The length-at-least-two portion is 1(0|1)*0; it uses concatenation of regular languages.",
+        "Different endpoint symbols make length one impossible.",
+        "Every constructed word has the required endpoints; conversely, every eligible longer word has some middle word in Σ*. Thus the expression is exact and the language is regular."
+      ],
+      "option_feedback": {
+        "A": "This expression describes exactly the target language.",
+        "B": "Counterexample 1: target rejects, but this expression accepts.",
+        "C": "Counterexample 1: target rejects, but this expression accepts.",
+        "D": "Counterexample ε: target rejects, but this expression accepts."
+      }
+    },
+    {
+      "id": "A02-05",
+      "topic": "A02",
+      "title": "Construct an endpoint language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over Σ={a,b}, construct the language of nonempty words whose first symbol is a and last symbol is a. A one-symbol word is allowed if it satisfies both conditions. Which expression is exact?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ε|a|a(a|b)*a"
+        },
+        {
+          "value": "B",
+          "label": "a(a|b)*a"
+        },
+        {
+          "value": "C",
+          "label": "a|a(a|b)*a"
+        },
+        {
+          "value": "D",
+          "label": "a(a|b)*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(a), p. 3; S06 pp. 16-18",
+      "worked_solution": [
+        "Begin with singleton symbol languages and form Σ by union. Then Σ* is regular by star.",
+        "The length-at-least-two portion is a(a|b)*a; it uses concatenation of regular languages.",
+        "Add a as a singleton alternative.",
+        "Every constructed word has the required endpoints; conversely, every eligible longer word has some middle word in Σ*. Thus the expression is exact and the language is regular."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ε: target rejects, but this expression accepts.",
+        "B": "Counterexample a: target accepts, but this expression rejects.",
+        "C": "This expression describes exactly the target language.",
+        "D": "Counterexample ab: target rejects, but this expression accepts."
+      }
+    },
+    {
+      "id": "A02-06",
+      "topic": "A02",
+      "title": "Construct an endpoint language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over Σ={a,b}, construct the language of nonempty words whose first symbol is b and last symbol is b. A one-symbol word is allowed if it satisfies both conditions. Which expression is exact?",
+      "options": [
+        {
+          "value": "A",
+          "label": "b(a|b)*"
+        },
+        {
+          "value": "B",
+          "label": "ε|b|b(a|b)*b"
+        },
+        {
+          "value": "C",
+          "label": "b(a|b)*b"
+        },
+        {
+          "value": "D",
+          "label": "b|b(a|b)*b"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(a), p. 3; S06 pp. 16-18",
+      "worked_solution": [
+        "Begin with singleton symbol languages and form Σ by union. Then Σ* is regular by star.",
+        "The length-at-least-two portion is b(a|b)*b; it uses concatenation of regular languages.",
+        "Add b as a singleton alternative.",
+        "Every constructed word has the required endpoints; conversely, every eligible longer word has some middle word in Σ*. Thus the expression is exact and the language is regular."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ba: target rejects, but this expression accepts.",
+        "B": "Counterexample ε: target rejects, but this expression accepts.",
+        "C": "Counterexample b: target accepts, but this expression rejects.",
+        "D": "This expression describes exactly the target language."
+      }
+    },
+    {
+      "id": "A02-07",
+      "topic": "A02",
+      "title": "Construct modular symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct, using regular operations, the words over {0,1} whose number of 0 symbols is congruent to 1 modulo 2. Occurrences of 1 may appear anywhere. Choose an exact expression.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(1*01*01*)*"
+        },
+        {
+          "value": "B",
+          "label": "1*(01*01*)*"
+        },
+        {
+          "value": "C",
+          "label": "(0|1)*"
+        },
+        {
+          "value": "D",
+          "label": "1*01*(01*01*)*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(b), p. 3; S03 p. 15",
+      "worked_solution": [
+        "Let B=01*. Each B contributes one 0 with any following 1 symbols. A leading 1* handles symbols before the first 0.",
+        "Use 1 copies of B, followed by zero or more groups of 2 copies. The count is 1+2k, k≥0.",
+        "Conversely, split any word at its 0 positions into this form. All pieces use only singleton languages, concatenation and star."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ε: target rejects, but this expression accepts.",
+        "B": "Counterexample ε: target rejects, but this expression accepts.",
+        "C": "Counterexample ε: target rejects, but this expression accepts.",
+        "D": "This expression describes exactly the target language."
+      }
+    },
+    {
+      "id": "A02-08",
+      "topic": "A02",
+      "title": "Construct modular symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct, using regular operations, the words over {0,1} whose number of 1 symbols is congruent to 0 modulo 2. Occurrences of 0 may appear anywhere. Choose an exact expression.",
+      "options": [
+        {
+          "value": "A",
+          "label": "0*(10*10*)*"
+        },
+        {
+          "value": "B",
+          "label": "0*10*(10*10*)*"
+        },
+        {
+          "value": "C",
+          "label": "(0*10*10*)*"
+        },
+        {
+          "value": "D",
+          "label": "(0|1)*"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(b), p. 3; S03 p. 15",
+      "worked_solution": [
+        "Let B=10*. Each B contributes one 1 with any following 0 symbols. A leading 0* handles symbols before the first 1.",
+        "Use 0 copies of B, followed by zero or more groups of 2 copies. The count is 0+2k, k≥0.",
+        "Conversely, split any word at its 1 positions into this form. All pieces use only singleton languages, concatenation and star."
+      ],
+      "option_feedback": {
+        "A": "This expression describes exactly the target language.",
+        "B": "Counterexample ε: target accepts, but this expression rejects.",
+        "C": "Counterexample 0: target accepts, but this expression rejects.",
+        "D": "Counterexample 1: target rejects, but this expression accepts."
+      }
+    },
+    {
+      "id": "A02-09",
+      "topic": "A02",
+      "title": "Construct modular symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct, using regular operations, the words over {a,b} whose number of a symbols is congruent to 1 modulo 3. Occurrences of b may appear anywhere. Choose an exact expression.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(b*ab*ab*ab*)*"
+        },
+        {
+          "value": "B",
+          "label": "b*ab*(ab*ab*ab*)*"
+        },
+        {
+          "value": "C",
+          "label": "b*ab*ab*(ab*ab*ab*)*"
+        },
+        {
+          "value": "D",
+          "label": "b*(ab*ab*ab*)*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(b), p. 3; S03 p. 15",
+      "worked_solution": [
+        "Let B=ab*. Each B contributes one a with any following b symbols. A leading b* handles symbols before the first a.",
+        "Use 1 copies of B, followed by zero or more groups of 3 copies. The count is 1+3k, k≥0.",
+        "Conversely, split any word at its a positions into this form. All pieces use only singleton languages, concatenation and star."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ε: target rejects, but this expression accepts.",
+        "B": "This expression describes exactly the target language.",
+        "C": "Counterexample a: target accepts, but this expression rejects.",
+        "D": "Counterexample ε: target rejects, but this expression accepts."
+      }
+    },
+    {
+      "id": "A02-10",
+      "topic": "A02",
+      "title": "Construct modular symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct, using regular operations, the words over {a,b} whose number of b symbols is congruent to 2 modulo 3. Occurrences of a may appear anywhere. Choose an exact expression.",
+      "options": [
+        {
+          "value": "A",
+          "label": "a*ba*ba*(ba*ba*ba*)*"
+        },
+        {
+          "value": "B",
+          "label": "(a*ba*ba*ba*)*"
+        },
+        {
+          "value": "C",
+          "label": "(a|b)*"
+        },
+        {
+          "value": "D",
+          "label": "a*(ba*ba*ba*)*"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(b), p. 3; S03 p. 15",
+      "worked_solution": [
+        "Let B=ba*. Each B contributes one b with any following a symbols. A leading a* handles symbols before the first b.",
+        "Use 2 copies of B, followed by zero or more groups of 3 copies. The count is 2+3k, k≥0.",
+        "Conversely, split any word at its b positions into this form. All pieces use only singleton languages, concatenation and star."
+      ],
+      "option_feedback": {
+        "A": "This expression describes exactly the target language.",
+        "B": "Counterexample ε: target rejects, but this expression accepts.",
+        "C": "Counterexample ε: target rejects, but this expression accepts.",
+        "D": "Counterexample ε: target rejects, but this expression accepts."
+      }
+    },
+    {
+      "id": "A02-11",
+      "topic": "A02",
+      "title": "Construct modular symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct, using regular operations, the words over {0,1} whose number of 0 symbols is congruent to 0 modulo 4. Occurrences of 1 may appear anywhere. Choose an exact expression.",
+      "options": [
+        {
+          "value": "A",
+          "label": "1*(01*01*01*01*)*"
+        },
+        {
+          "value": "B",
+          "label": "(0|1)*"
+        },
+        {
+          "value": "C",
+          "label": "1*01*(01*01*01*01*)*"
+        },
+        {
+          "value": "D",
+          "label": "(1*01*01*01*01*)*"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(b), p. 3; S03 p. 15",
+      "worked_solution": [
+        "Let B=01*. Each B contributes one 0 with any following 1 symbols. A leading 1* handles symbols before the first 0.",
+        "Use 0 copies of B, followed by zero or more groups of 4 copies. The count is 0+4k, k≥0.",
+        "Conversely, split any word at its 0 positions into this form. All pieces use only singleton languages, concatenation and star."
+      ],
+      "option_feedback": {
+        "A": "This expression describes exactly the target language.",
+        "B": "Counterexample 0: target rejects, but this expression accepts.",
+        "C": "Counterexample ε: target accepts, but this expression rejects.",
+        "D": "Counterexample 1: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A02-12",
+      "topic": "A02",
+      "title": "Construct modular symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct, using regular operations, the words over {0,1} whose number of 1 symbols is congruent to 3 modulo 4. Occurrences of 0 may appear anywhere. Choose an exact expression.",
+      "options": [
+        {
+          "value": "A",
+          "label": "0*(10*10*10*10*)*"
+        },
+        {
+          "value": "B",
+          "label": "(0|1)*"
+        },
+        {
+          "value": "C",
+          "label": "(0*10*10*10*10*)*"
+        },
+        {
+          "value": "D",
+          "label": "0*10*10*10*(10*10*10*10*)*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q2(b), p. 3; S03 p. 15",
+      "worked_solution": [
+        "Let B=10*. Each B contributes one 1 with any following 0 symbols. A leading 0* handles symbols before the first 1.",
+        "Use 3 copies of B, followed by zero or more groups of 4 copies. The count is 3+4k, k≥0.",
+        "Conversely, split any word at its 1 positions into this form. All pieces use only singleton languages, concatenation and star."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ε: target rejects, but this expression accepts.",
+        "B": "Counterexample ε: target rejects, but this expression accepts.",
+        "C": "Counterexample ε: target rejects, but this expression accepts.",
+        "D": "This expression describes exactly the target language."
+      }
+    },
+    {
+      "id": "A03-01",
+      "topic": "A03",
+      "title": "Use closure for length restrictions",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let D be the language of single decimal digits. Consider digit strings whose length is divisible by 2 or 5, but not by 10. Leading zeros are allowed. Give a regularity proof without the pumping lemma.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Nonregular: the language has infinitely many lengths."
+        },
+        {
+          "value": "B",
+          "label": "Regular: D^7"
+        },
+        {
+          "value": "C",
+          "label": "Regular: ((D^2)* ∪ (D^5)*) \\ (D^10)*"
+        },
+        {
+          "value": "D",
+          "label": "Regular: (D^2)* ∩ (D^5)* ∩ (D^10)*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Star constructs multiples of each block length, union represents OR, and difference removes the excluded multiples.",
+      "sources": "S01 Q3(a), p. 4; S07 p. 11",
+      "worked_solution": [
+        "D is finite, so it is regular. Fixed powers are repeated concatenations.",
+        "The target is ((D^2)* ∪ (D^5)*) \\ (D^10)*, regular by closure.",
+        "As a check, allowed residues modulo 10 are [2, 4, 5, 6, 8]. Length zero is excluded because it is divisible by 10."
+      ]
+    },
+    {
+      "id": "A03-02",
+      "topic": "A03",
+      "title": "Use closure for length restrictions",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let D be the language of single decimal digits. Consider digit strings whose length is divisible by 3 or 4, but not by 12. Leading zeros are allowed. Give a regularity proof without the pumping lemma.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Regular: (D^3)* ∩ (D^4)* ∩ (D^12)*"
+        },
+        {
+          "value": "B",
+          "label": "Regular: D^7"
+        },
+        {
+          "value": "C",
+          "label": "Regular: ((D^3)* ∪ (D^4)*) \\ (D^12)*"
+        },
+        {
+          "value": "D",
+          "label": "Nonregular: the language has infinitely many lengths."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Star constructs multiples of each block length, union represents OR, and difference removes the excluded multiples.",
+      "sources": "S01 Q3(a), p. 4; S07 p. 11",
+      "worked_solution": [
+        "D is finite, so it is regular. Fixed powers are repeated concatenations.",
+        "The target is ((D^3)* ∪ (D^4)*) \\ (D^12)*, regular by closure.",
+        "As a check, allowed residues modulo 12 are [3, 4, 6, 8, 9]. Length zero is excluded because it is divisible by 12."
+      ]
+    },
+    {
+      "id": "A03-03",
+      "topic": "A03",
+      "title": "Use closure for length restrictions",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let D be the language of single decimal digits. Consider digit strings whose length is divisible by 4 or 6, but not by 12. Leading zeros are allowed. Give a regularity proof without the pumping lemma.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Nonregular: the language has infinitely many lengths."
+        },
+        {
+          "value": "B",
+          "label": "Regular: ((D^4)* ∪ (D^6)*) \\ (D^12)*"
+        },
+        {
+          "value": "C",
+          "label": "Regular: (D^4)* ∩ (D^6)* ∩ (D^12)*"
+        },
+        {
+          "value": "D",
+          "label": "Regular: D^10"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Star constructs multiples of each block length, union represents OR, and difference removes the excluded multiples.",
+      "sources": "S01 Q3(a), p. 4; S07 p. 11",
+      "worked_solution": [
+        "D is finite, so it is regular. Fixed powers are repeated concatenations.",
+        "The target is ((D^4)* ∪ (D^6)*) \\ (D^12)*, regular by closure.",
+        "As a check, allowed residues modulo 12 are [4, 6, 8]. Length zero is excluded because it is divisible by 12."
+      ]
+    },
+    {
+      "id": "A03-04",
+      "topic": "A03",
+      "title": "Isolate prime lengths",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let P={a^p:p is prime}, known nonregular, and E=(aa)*. Classify E∪P without the pumping lemma and identify a useful regular intersection filter.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Nonregular; intersect with E to obtain P."
+        },
+        {
+          "value": "B",
+          "label": "Regular; a union is regular regardless of its inputs."
+        },
+        {
+          "value": "C",
+          "label": "Regular; P contains only finite words."
+        },
+        {
+          "value": "D",
+          "label": "Nonregular; intersect with (aa)*a | aa."
+        }
+      ],
+      "answer": "D",
+      "explanation": "All primes except 2 are odd. The regular filter keeps every prime and removes every nonprime even length.",
+      "sources": "S01 Q3(b), p. 4; S07 pp. 13-16",
+      "worked_solution": [
+        "Assume E∪P is regular. Let H=(aa)*a | aa, regular by an expression.",
+        "(E∪P)∩H=P: length 2 is retained, odd prime lengths are retained, and all other even lengths are removed.",
+        "Intersection closure would make P regular, contradicting the given fact. Therefore the union is nonregular."
+      ]
+    },
+    {
+      "id": "A03-05",
+      "topic": "A03",
+      "title": "Isolate prime lengths",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let P={b^p:p is prime}, known nonregular, and E=(bb)*. Classify E∪P without the pumping lemma and identify a useful regular intersection filter.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Regular; a union is regular regardless of its inputs."
+        },
+        {
+          "value": "B",
+          "label": "Nonregular; intersect with (bb)*b | bb."
+        },
+        {
+          "value": "C",
+          "label": "Regular; P contains only finite words."
+        },
+        {
+          "value": "D",
+          "label": "Nonregular; intersect with E to obtain P."
+        }
+      ],
+      "answer": "B",
+      "explanation": "All primes except 2 are odd. The regular filter keeps every prime and removes every nonprime even length.",
+      "sources": "S01 Q3(b), p. 4; S07 pp. 13-16",
+      "worked_solution": [
+        "Assume E∪P is regular. Let H=(bb)*b | bb, regular by an expression.",
+        "(E∪P)∩H=P: length 2 is retained, odd prime lengths are retained, and all other even lengths are removed.",
+        "Intersection closure would make P regular, contradicting the given fact. Therefore the union is nonregular."
+      ]
+    },
+    {
+      "id": "A03-06",
+      "topic": "A03",
+      "title": "Isolate prime lengths",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let P={c^p:p is prime}, known nonregular, and E=(cc)*. Classify E∪P without the pumping lemma and identify a useful regular intersection filter.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Regular; P contains only finite words."
+        },
+        {
+          "value": "B",
+          "label": "Nonregular; intersect with (cc)*c | cc."
+        },
+        {
+          "value": "C",
+          "label": "Regular; a union is regular regardless of its inputs."
+        },
+        {
+          "value": "D",
+          "label": "Nonregular; intersect with E to obtain P."
+        }
+      ],
+      "answer": "B",
+      "explanation": "All primes except 2 are odd. The regular filter keeps every prime and removes every nonprime even length.",
+      "sources": "S01 Q3(b), p. 4; S07 pp. 13-16",
+      "worked_solution": [
+        "Assume E∪P is regular. Let H=(cc)*c | cc, regular by an expression.",
+        "(E∪P)∩H=P: length 2 is retained, odd prime lengths are retained, and all other even lengths are removed.",
+        "Intersection closure would make P regular, contradicting the given fact. Therefore the union is nonregular."
+      ]
+    },
+    {
+      "id": "A03-07",
+      "topic": "A03",
+      "title": "A nonregular ingredient can yield a regular result",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let Σ={0,1} and K={0^n1^n:n≥1}. Simplify Σ*KΣ* and select its exact regex. Then justify regularity without the pumping lemma.",
+      "options": [
+        {
+          "value": "A",
+          "label": "01(0|1)*"
+        },
+        {
+          "value": "B",
+          "label": "0*1*"
+        },
+        {
+          "value": "C",
+          "label": "(0|1)*0011(0|1)*"
+        },
+        {
+          "value": "D",
+          "label": "(0|1)*01(0|1)*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q3(c), p. 5; S07 p. 12",
+      "worked_solution": [
+        "Every central block 0^n1^n contains the adjacent pair 01; thus Σ*KΣ* is contained in the language containing 01.",
+        "Conversely, if a word contains 01, choose n=1 and absorb the surrounding symbols into the two Σ* portions.",
+        "The languages are equal. The displayed regex proves the result regular, despite K being nonregular."
+      ],
+      "option_feedback": {
+        "A": "Counterexample 001: target accepts, but this expression rejects.",
+        "B": "Counterexample ε: target rejects, but this expression accepts.",
+        "C": "Counterexample 01: target accepts, but this expression rejects.",
+        "D": "This expression describes exactly the target language."
+      }
+    },
+    {
+      "id": "A03-08",
+      "topic": "A03",
+      "title": "A nonregular ingredient can yield a regular result",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let Σ={a,b} and K={a^nb^n:n≥1}. Simplify Σ*KΣ* and select its exact regex. Then justify regularity without the pumping lemma.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(a|b)*aabb(a|b)*"
+        },
+        {
+          "value": "B",
+          "label": "a*b*"
+        },
+        {
+          "value": "C",
+          "label": "(a|b)*ab(a|b)*"
+        },
+        {
+          "value": "D",
+          "label": "ab(a|b)*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q3(c), p. 5; S07 p. 12",
+      "worked_solution": [
+        "Every central block a^nb^n contains the adjacent pair ab; thus Σ*KΣ* is contained in the language containing ab.",
+        "Conversely, if a word contains ab, choose n=1 and absorb the surrounding symbols into the two Σ* portions.",
+        "The languages are equal. The displayed regex proves the result regular, despite K being nonregular."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ab: target accepts, but this expression rejects.",
+        "B": "Counterexample ε: target rejects, but this expression accepts.",
+        "C": "This expression describes exactly the target language.",
+        "D": "Counterexample aab: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A03-09",
+      "topic": "A03",
+      "title": "A nonregular ingredient can yield a regular result",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let Σ={x,y} and K={x^ny^n:n≥1}. Simplify Σ*KΣ* and select its exact regex. Then justify regularity without the pumping lemma.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(x|y)*xxyy(x|y)*"
+        },
+        {
+          "value": "B",
+          "label": "x*y*"
+        },
+        {
+          "value": "C",
+          "label": "xy(x|y)*"
+        },
+        {
+          "value": "D",
+          "label": "(x|y)*xy(x|y)*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q3(c), p. 5; S07 p. 12",
+      "worked_solution": [
+        "Every central block x^ny^n contains the adjacent pair xy; thus Σ*KΣ* is contained in the language containing xy.",
+        "Conversely, if a word contains xy, choose n=1 and absorb the surrounding symbols into the two Σ* portions.",
+        "The languages are equal. The displayed regex proves the result regular, despite K being nonregular."
+      ],
+      "option_feedback": {
+        "A": "Counterexample xy: target accepts, but this expression rejects.",
+        "B": "Counterexample ε: target rejects, but this expression accepts.",
+        "C": "Counterexample xxy: target accepts, but this expression rejects.",
+        "D": "This expression describes exactly the target language."
+      }
+    },
+    {
+      "id": "A03-10",
+      "topic": "A03",
+      "title": "Filter a comparison language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "L consists of words over {a,b,c,d} satisfying |w|a+|w|b < |w|c+|w|d. Use a regular filter to classify L. You may use nonregularity of equal-count and strict-inequality two-block languages (with symbols renamed).",
+      "options": [
+        {
+          "value": "A",
+          "label": "Nonregular; L∩a*c* = {a^ic^j:i<j}."
+        },
+        {
+          "value": "B",
+          "label": "Regular; its alphabet has four symbols."
+        },
+        {
+          "value": "C",
+          "label": "Regular; each word has finite length."
+        },
+        {
+          "value": "D",
+          "label": "Nonregular; L∩∅ equals L."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Intersecting an assumed-regular L with the regular block-pattern language isolates a known nonregular count comparison.",
+      "sources": "S01 Q3(d), p. 5; S07 pp. 13-16",
+      "worked_solution": [
+        "Assume L regular. The filter a*c* is regular by its regex.",
+        "In the intersection, the unused two symbol counts are zero and the remaining counts are i and j. Hence the intersection is exactly {a^ic^j:i<j}.",
+        "For the > case, nonregularity also follows from the < case by reversal and swapping symbol names. For =, use the given equal-block language.",
+        "Closure under intersection contradicts the established nonregularity. Therefore L is nonregular."
+      ]
+    },
+    {
+      "id": "A03-11",
+      "topic": "A03",
+      "title": "Filter a comparison language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "L consists of words over {0,1,2,3} satisfying |w|0+|w|1 > |w|2+|w|3. Use a regular filter to classify L. You may use nonregularity of equal-count and strict-inequality two-block languages (with symbols renamed).",
+      "options": [
+        {
+          "value": "A",
+          "label": "Regular; its alphabet has four symbols."
+        },
+        {
+          "value": "B",
+          "label": "Regular; each word has finite length."
+        },
+        {
+          "value": "C",
+          "label": "Nonregular; L∩0*2* = {0^i2^j:i>j}."
+        },
+        {
+          "value": "D",
+          "label": "Nonregular; L∩∅ equals L."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Intersecting an assumed-regular L with the regular block-pattern language isolates a known nonregular count comparison.",
+      "sources": "S01 Q3(d), p. 5; S07 pp. 13-16",
+      "worked_solution": [
+        "Assume L regular. The filter 0*2* is regular by its regex.",
+        "In the intersection, the unused two symbol counts are zero and the remaining counts are i and j. Hence the intersection is exactly {0^i2^j:i>j}.",
+        "For the > case, nonregularity also follows from the < case by reversal and swapping symbol names. For =, use the given equal-block language.",
+        "Closure under intersection contradicts the established nonregularity. Therefore L is nonregular."
+      ]
+    },
+    {
+      "id": "A03-12",
+      "topic": "A03",
+      "title": "Filter a comparison language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "L consists of words over {t,x,y,z} satisfying |w|x+|w|y = |w|z+|w|t. Use a regular filter to classify L. You may use nonregularity of equal-count and strict-inequality two-block languages (with symbols renamed).",
+      "options": [
+        {
+          "value": "A",
+          "label": "Regular; its alphabet has four symbols."
+        },
+        {
+          "value": "B",
+          "label": "Nonregular; L∩∅ equals L."
+        },
+        {
+          "value": "C",
+          "label": "Nonregular; L∩x*z* = {x^iz^j:i=j}."
+        },
+        {
+          "value": "D",
+          "label": "Regular; each word has finite length."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Intersecting an assumed-regular L with the regular block-pattern language isolates a known nonregular count comparison.",
+      "sources": "S01 Q3(d), p. 5; S07 pp. 13-16",
+      "worked_solution": [
+        "Assume L regular. The filter x*z* is regular by its regex.",
+        "In the intersection, the unused two symbol counts are zero and the remaining counts are i and j. Hence the intersection is exactly {x^iz^j:i=j}.",
+        "For the > case, nonregularity also follows from the < case by reversal and swapping symbol names. For =, use the given equal-block language.",
+        "Closure under intersection contradicts the established nonregularity. Therefore L is nonregular."
+      ]
+    },
+    {
+      "id": "A04-01",
+      "topic": "A04",
+      "title": "Disprove a false closure converse",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Disprove: \"If RS is regular, then R and S are regular.\" Here N is any known nonregular language over Σ; P={a^p:p prime}. Select a counterexample that makes the premise true and the conclusion false.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Use only R=S={a} and L=Lprime={a}; every relevant language is regular."
+        },
+        {
+          "value": "B",
+          "label": "Choose a case in which the premise is false; no conclusion needs checking."
+        },
+        {
+          "value": "C",
+          "label": "R=N, S=∅; RS=∅."
+        },
+        {
+          "value": "D",
+          "label": "Use only R=S=∅ and L=Lprime=∅; every relevant language is regular."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The product is empty regardless of the nonregular left factor.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Counterexample: R=N, S=∅; RS=∅.",
+        "The product is empty regardless of the nonregular left factor.",
+        "A valid counterexample satisfies the hypothesis and violates at least one claimed conclusion. Cases where everything is regular do not refute a claimed regularity conclusion."
+      ]
+    },
+    {
+      "id": "A04-02",
+      "topic": "A04",
+      "title": "Diagnose a failed counterexample",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "For the false statement \"If RS is regular, then R and S are regular.\", a student proposes R={ε}, S=N. N is nonregular. Why does this proposed example fail as a counterexample?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It is invalid because ∅ is not regular."
+        },
+        {
+          "value": "B",
+          "label": "RS=N, so the regular-result premise is false."
+        },
+        {
+          "value": "C",
+          "label": "It is valid because any mention of a nonregular language refutes the theorem."
+        },
+        {
+          "value": "D",
+          "label": "It is invalid because finite languages are never regular."
+        }
+      ],
+      "answer": "B",
+      "explanation": "RS=N, so the regular-result premise is false.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Write down the premise and conclusion separately. Substitute R={ε}, S=N.",
+        "RS=N, so the regular-result premise is false.",
+        "A working counterexample is: R=N, S=∅; RS=∅."
+      ]
+    },
+    {
+      "id": "A04-03",
+      "topic": "A04",
+      "title": "Disprove a false closure converse",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Disprove: \"If R∪S is regular, then R and S are regular.\" Here N is any known nonregular language over Σ; P={a^p:p prime}. Select a counterexample that makes the premise true and the conclusion false.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Use only R=S={a} and L=Lprime={a}; every relevant language is regular."
+        },
+        {
+          "value": "B",
+          "label": "R=N, S=Σ*\\N; R∪S=Σ*."
+        },
+        {
+          "value": "C",
+          "label": "Choose a case in which the premise is false; no conclusion needs checking."
+        },
+        {
+          "value": "D",
+          "label": "Use only R=S=∅ and L=Lprime=∅; every relevant language is regular."
+        }
+      ],
+      "answer": "B",
+      "explanation": "The union fills the entire regular universe; the component N remains nonregular.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Counterexample: R=N, S=Σ*\\N; R∪S=Σ*.",
+        "The union fills the entire regular universe; the component N remains nonregular.",
+        "A valid counterexample satisfies the hypothesis and violates at least one claimed conclusion. Cases where everything is regular do not refute a claimed regularity conclusion."
+      ]
+    },
+    {
+      "id": "A04-04",
+      "topic": "A04",
+      "title": "Diagnose a failed counterexample",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "For the false statement \"If R∪S is regular, then R and S are regular.\", a student proposes R=N, S=∅. N is nonregular. Why does this proposed example fail as a counterexample?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R∪S=N, so the regular-result premise is false."
+        },
+        {
+          "value": "B",
+          "label": "It is invalid because ∅ is not regular."
+        },
+        {
+          "value": "C",
+          "label": "It is invalid because finite languages are never regular."
+        },
+        {
+          "value": "D",
+          "label": "It is valid because any mention of a nonregular language refutes the theorem."
+        }
+      ],
+      "answer": "A",
+      "explanation": "R∪S=N, so the regular-result premise is false.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Write down the premise and conclusion separately. Substitute R=N, S=∅.",
+        "R∪S=N, so the regular-result premise is false.",
+        "A working counterexample is: R=N, S=Σ*\\N; R∪S=Σ*."
+      ]
+    },
+    {
+      "id": "A04-05",
+      "topic": "A04",
+      "title": "Disprove a false closure converse",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Disprove: \"If R* is regular, then R is regular.\" Here N is any known nonregular language over Σ; P={a^p:p prime}. Select a counterexample that makes the premise true and the conclusion false.",
+      "options": [
+        {
+          "value": "A",
+          "label": "R=P; R*=Σ*\\{a}, with Σ={a}."
+        },
+        {
+          "value": "B",
+          "label": "Use only R=S={a} and L=Lprime={a}; every relevant language is regular."
+        },
+        {
+          "value": "C",
+          "label": "Choose a case in which the premise is false; no conclusion needs checking."
+        },
+        {
+          "value": "D",
+          "label": "Use only R=S=∅ and L=Lprime=∅; every relevant language is regular."
+        }
+      ],
+      "answer": "A",
+      "explanation": "P contains lengths 2 and 3, so its star contains ε and every length at least two, but not length one.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Counterexample: R=P; R*=Σ*\\{a}, with Σ={a}.",
+        "P contains lengths 2 and 3, so its star contains ε and every length at least two, but not length one.",
+        "A valid counterexample satisfies the hypothesis and violates at least one claimed conclusion. Cases where everything is regular do not refute a claimed regularity conclusion."
+      ]
+    },
+    {
+      "id": "A04-06",
+      "topic": "A04",
+      "title": "Diagnose a failed counterexample",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "For the false statement \"If R* is regular, then R is regular.\", a student proposes R={a}. N is nonregular. Why does this proposed example fail as a counterexample?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It is invalid because finite languages are never regular."
+        },
+        {
+          "value": "B",
+          "label": "It is valid because any mention of a nonregular language refutes the theorem."
+        },
+        {
+          "value": "C",
+          "label": "R is already regular, so it cannot violate the conclusion."
+        },
+        {
+          "value": "D",
+          "label": "It is invalid because ∅ is not regular."
+        }
+      ],
+      "answer": "C",
+      "explanation": "R is already regular, so it cannot violate the conclusion.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Write down the premise and conclusion separately. Substitute R={a}.",
+        "R is already regular, so it cannot violate the conclusion.",
+        "A working counterexample is: R=P; R*=Σ*\\{a}, with Σ={a}."
+      ]
+    },
+    {
+      "id": "A04-07",
+      "topic": "A04",
+      "title": "Disprove a false closure converse",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Disprove: \"If R∩S is regular, then R and S are regular.\" Here N is any known nonregular language over Σ; P={a^p:p prime}. Select a counterexample that makes the premise true and the conclusion false.",
+      "options": [
+        {
+          "value": "A",
+          "label": "R=N, S=∅; R∩S=∅."
+        },
+        {
+          "value": "B",
+          "label": "Choose a case in which the premise is false; no conclusion needs checking."
+        },
+        {
+          "value": "C",
+          "label": "Use only R=S=∅ and L=Lprime=∅; every relevant language is regular."
+        },
+        {
+          "value": "D",
+          "label": "Use only R=S={a} and L=Lprime={a}; every relevant language is regular."
+        }
+      ],
+      "answer": "A",
+      "explanation": "An empty intersection does not force either operand to be regular.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Counterexample: R=N, S=∅; R∩S=∅.",
+        "An empty intersection does not force either operand to be regular.",
+        "A valid counterexample satisfies the hypothesis and violates at least one claimed conclusion. Cases where everything is regular do not refute a claimed regularity conclusion."
+      ]
+    },
+    {
+      "id": "A04-08",
+      "topic": "A04",
+      "title": "Diagnose a failed counterexample",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "For the false statement \"If R∩S is regular, then R and S are regular.\", a student proposes R=N, S=Σ*. N is nonregular. Why does this proposed example fail as a counterexample?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R∩S=N, so the regular-result premise is false."
+        },
+        {
+          "value": "B",
+          "label": "It is invalid because ∅ is not regular."
+        },
+        {
+          "value": "C",
+          "label": "It is invalid because finite languages are never regular."
+        },
+        {
+          "value": "D",
+          "label": "It is valid because any mention of a nonregular language refutes the theorem."
+        }
+      ],
+      "answer": "A",
+      "explanation": "R∩S=N, so the regular-result premise is false.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Write down the premise and conclusion separately. Substitute R=N, S=Σ*.",
+        "R∩S=N, so the regular-result premise is false.",
+        "A working counterexample is: R=N, S=∅; R∩S=∅."
+      ]
+    },
+    {
+      "id": "A04-09",
+      "topic": "A04",
+      "title": "Disprove a false closure converse",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Disprove: \"If R\\S is regular, then R and S are regular.\" Here N is any known nonregular language over Σ; P={a^p:p prime}. Select a counterexample that makes the premise true and the conclusion false.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Use only R=S={a} and L=Lprime={a}; every relevant language is regular."
+        },
+        {
+          "value": "B",
+          "label": "R=N, S=N; R\\S=∅."
+        },
+        {
+          "value": "C",
+          "label": "Use only R=S=∅ and L=Lprime=∅; every relevant language is regular."
+        },
+        {
+          "value": "D",
+          "label": "Choose a case in which the premise is false; no conclusion needs checking."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Subtracting the same set from itself gives a regular empty result, even for nonregular N.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Counterexample: R=N, S=N; R\\S=∅.",
+        "Subtracting the same set from itself gives a regular empty result, even for nonregular N.",
+        "A valid counterexample satisfies the hypothesis and violates at least one claimed conclusion. Cases where everything is regular do not refute a claimed regularity conclusion."
+      ]
+    },
+    {
+      "id": "A04-10",
+      "topic": "A04",
+      "title": "Diagnose a failed counterexample",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "For the false statement \"If R\\S is regular, then R and S are regular.\", a student proposes R=N, S=∅. N is nonregular. Why does this proposed example fail as a counterexample?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It is invalid because ∅ is not regular."
+        },
+        {
+          "value": "B",
+          "label": "It is invalid because finite languages are never regular."
+        },
+        {
+          "value": "C",
+          "label": "It is valid because any mention of a nonregular language refutes the theorem."
+        },
+        {
+          "value": "D",
+          "label": "R\\S=N, so the regular-result premise is false."
+        }
+      ],
+      "answer": "D",
+      "explanation": "R\\S=N, so the regular-result premise is false.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Write down the premise and conclusion separately. Substitute R=N, S=∅.",
+        "R\\S=N, so the regular-result premise is false.",
+        "A working counterexample is: R=N, S=N; R\\S=∅."
+      ]
+    },
+    {
+      "id": "A04-11",
+      "topic": "A04",
+      "title": "Disprove a false closure converse",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Disprove: \"If L⊆Lprime and L is regular, then Lprime is regular.\" Here N is any known nonregular language over Σ; P={a^p:p prime}. Select a counterexample that makes the premise true and the conclusion false.",
+      "options": [
+        {
+          "value": "A",
+          "label": "L=∅, Lprime=N."
+        },
+        {
+          "value": "B",
+          "label": "Use only R=S=∅ and L=Lprime=∅; every relevant language is regular."
+        },
+        {
+          "value": "C",
+          "label": "Choose a case in which the premise is false; no conclusion needs checking."
+        },
+        {
+          "value": "D",
+          "label": "Use only R=S={a} and L=Lprime={a}; every relevant language is regular."
+        }
+      ],
+      "answer": "A",
+      "explanation": "The empty regular language is contained in every language, including N.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Counterexample: L=∅, Lprime=N.",
+        "The empty regular language is contained in every language, including N.",
+        "A valid counterexample satisfies the hypothesis and violates at least one claimed conclusion. Cases where everything is regular do not refute a claimed regularity conclusion."
+      ]
+    },
+    {
+      "id": "A04-12",
+      "topic": "A04",
+      "title": "Diagnose a failed counterexample",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "For the false statement \"If L⊆Lprime and L is regular, then Lprime is regular.\", a student proposes L=N, Lprime=Σ*. N is nonregular. Why does this proposed example fail as a counterexample?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It is invalid because ∅ is not regular."
+        },
+        {
+          "value": "B",
+          "label": "It is valid because any mention of a nonregular language refutes the theorem."
+        },
+        {
+          "value": "C",
+          "label": "It is invalid because finite languages are never regular."
+        },
+        {
+          "value": "D",
+          "label": "The hypothesis that the smaller language L is regular is false."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The hypothesis that the smaller language L is regular is false.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Write down the premise and conclusion separately. Substitute L=N, Lprime=Σ*.",
+        "The hypothesis that the smaller language L is regular is false.",
+        "A working counterexample is: L=∅, Lprime=N."
+      ]
+    },
+    {
+      "id": "A04-13",
+      "topic": "A04",
+      "title": "Disprove a false closure converse",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Disprove: \"If L⊆Lprime and Lprime is regular, then L is regular.\" Here N is any known nonregular language over Σ; P={a^p:p prime}. Select a counterexample that makes the premise true and the conclusion false.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Choose a case in which the premise is false; no conclusion needs checking."
+        },
+        {
+          "value": "B",
+          "label": "Use only R=S={a} and L=Lprime={a}; every relevant language is regular."
+        },
+        {
+          "value": "C",
+          "label": "L=N, Lprime=Σ*."
+        },
+        {
+          "value": "D",
+          "label": "Use only R=S=∅ and L=Lprime=∅; every relevant language is regular."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Every language over Σ is a subset of the regular language Σ*.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Counterexample: L=N, Lprime=Σ*.",
+        "Every language over Σ is a subset of the regular language Σ*.",
+        "A valid counterexample satisfies the hypothesis and violates at least one claimed conclusion. Cases where everything is regular do not refute a claimed regularity conclusion."
+      ]
+    },
+    {
+      "id": "A04-14",
+      "topic": "A04",
+      "title": "Diagnose a failed counterexample",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "For the false statement \"If L⊆Lprime and Lprime is regular, then L is regular.\", a student proposes L=∅, Lprime=N. N is nonregular. Why does this proposed example fail as a counterexample?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The hypothesis that the larger language Lprime is regular is false."
+        },
+        {
+          "value": "B",
+          "label": "It is invalid because ∅ is not regular."
+        },
+        {
+          "value": "C",
+          "label": "It is valid because any mention of a nonregular language refutes the theorem."
+        },
+        {
+          "value": "D",
+          "label": "It is invalid because finite languages are never regular."
+        }
+      ],
+      "answer": "A",
+      "explanation": "The hypothesis that the larger language Lprime is regular is false.",
+      "sources": "S01 Q4, pp. 5-6; S07 p. 12",
+      "worked_solution": [
+        "Write down the premise and conclusion separately. Substitute L=∅, Lprime=N.",
+        "The hypothesis that the larger language Lprime is regular is false.",
+        "A working counterexample is: L=N, Lprime=Σ*."
+      ]
+    },
+    {
+      "id": "A05-01",
+      "topic": "A05",
+      "title": "Design a DFA for endpoint conditions",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA over {0,1} for nonempty words with equal first and last symbols. Use S for no symbols read and a two-symbol state uv to mean first symbol u, last symbol v. One-symbol words are eligible when they satisfy the condition. Which final-state set is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{00,11,S}"
+        },
+        {
+          "value": "B",
+          "label": "∅"
+        },
+        {
+          "value": "C",
+          "label": "{01,10,S}"
+        },
+        {
+          "value": "D",
+          "label": "{00,11}"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The state records both endpoints seen so far. Reading a new symbol changes only the remembered last symbol.",
+      "sources": "S01 Q5(a), pp. 6-7; S03 pp. 8, 12",
+      "worked_solution": [
+        "Start at S, which is nonfinal because the empty word has no endpoints. The first symbol c moves to cc.",
+        "From uv, input c moves to uc. Mark final precisely those endpoint pairs satisfying the requested condition.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "S",
+              "start nonfinal",
+              "00",
+              "11"
+            ],
+            [
+              "00",
+              "final",
+              "00",
+              "01"
+            ],
+            [
+              "01",
+              "nonfinal",
+              "00",
+              "01"
+            ],
+            [
+              "10",
+              "nonfinal",
+              "10",
+              "11"
+            ],
+            [
+              "11",
+              "final",
+              "10",
+              "11"
+            ]
+          ]
+        },
+        "This invariant proves both acceptance of all eligible words and rejection of every other word."
+      ]
+    },
+    {
+      "id": "A05-02",
+      "topic": "A05",
+      "title": "Design a DFA for endpoint conditions",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA over {a,b} for nonempty words with different first and last symbols. Use S for no symbols read and a two-symbol state uv to mean first symbol u, last symbol v. One-symbol words are eligible when they satisfy the condition. Which final-state set is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{ab,ba}"
+        },
+        {
+          "value": "B",
+          "label": "{S,ab,ba}"
+        },
+        {
+          "value": "C",
+          "label": "{S,aa,bb}"
+        },
+        {
+          "value": "D",
+          "label": "∅"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The state records both endpoints seen so far. Reading a new symbol changes only the remembered last symbol.",
+      "sources": "S01 Q5(a), pp. 6-7; S03 pp. 8, 12",
+      "worked_solution": [
+        "Start at S, which is nonfinal because the empty word has no endpoints. The first symbol c moves to cc.",
+        "From uv, input c moves to uc. Mark final precisely those endpoint pairs satisfying the requested condition.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "S",
+              "start nonfinal",
+              "aa",
+              "bb"
+            ],
+            [
+              "aa",
+              "nonfinal",
+              "aa",
+              "ab"
+            ],
+            [
+              "ab",
+              "final",
+              "aa",
+              "ab"
+            ],
+            [
+              "ba",
+              "final",
+              "ba",
+              "bb"
+            ],
+            [
+              "bb",
+              "nonfinal",
+              "ba",
+              "bb"
+            ]
+          ]
+        },
+        "This invariant proves both acceptance of all eligible words and rejection of every other word."
+      ]
+    },
+    {
+      "id": "A05-03",
+      "topic": "A05",
+      "title": "Design a DFA for endpoint conditions",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA over {0,1} for nonempty words with first and last symbols both 0. Use S for no symbols read and a two-symbol state uv to mean first symbol u, last symbol v. One-symbol words are eligible when they satisfy the condition. Which final-state set is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{00}"
+        },
+        {
+          "value": "B",
+          "label": "{00,S}"
+        },
+        {
+          "value": "C",
+          "label": "∅"
+        },
+        {
+          "value": "D",
+          "label": "{01,10,11,S}"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The state records both endpoints seen so far. Reading a new symbol changes only the remembered last symbol.",
+      "sources": "S01 Q5(a), pp. 6-7; S03 pp. 8, 12",
+      "worked_solution": [
+        "Start at S, which is nonfinal because the empty word has no endpoints. The first symbol c moves to cc.",
+        "From uv, input c moves to uc. Mark final precisely those endpoint pairs satisfying the requested condition.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "S",
+              "start nonfinal",
+              "00",
+              "11"
+            ],
+            [
+              "00",
+              "final",
+              "00",
+              "01"
+            ],
+            [
+              "01",
+              "nonfinal",
+              "00",
+              "01"
+            ],
+            [
+              "10",
+              "nonfinal",
+              "10",
+              "11"
+            ],
+            [
+              "11",
+              "nonfinal",
+              "10",
+              "11"
+            ]
+          ]
+        },
+        "This invariant proves both acceptance of all eligible words and rejection of every other word."
+      ]
+    },
+    {
+      "id": "A05-04",
+      "topic": "A05",
+      "title": "Design a DFA for endpoint conditions",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA over {a,b} for nonempty words with first and last symbols both b. Use S for no symbols read and a two-symbol state uv to mean first symbol u, last symbol v. One-symbol words are eligible when they satisfy the condition. Which final-state set is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{S,bb}"
+        },
+        {
+          "value": "B",
+          "label": "{bb}"
+        },
+        {
+          "value": "C",
+          "label": "{S,aa,ab,ba}"
+        },
+        {
+          "value": "D",
+          "label": "∅"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The state records both endpoints seen so far. Reading a new symbol changes only the remembered last symbol.",
+      "sources": "S01 Q5(a), pp. 6-7; S03 pp. 8, 12",
+      "worked_solution": [
+        "Start at S, which is nonfinal because the empty word has no endpoints. The first symbol c moves to cc.",
+        "From uv, input c moves to uc. Mark final precisely those endpoint pairs satisfying the requested condition.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "S",
+              "start nonfinal",
+              "aa",
+              "bb"
+            ],
+            [
+              "aa",
+              "nonfinal",
+              "aa",
+              "ab"
+            ],
+            [
+              "ab",
+              "nonfinal",
+              "aa",
+              "ab"
+            ],
+            [
+              "ba",
+              "nonfinal",
+              "ba",
+              "bb"
+            ],
+            [
+              "bb",
+              "final",
+              "ba",
+              "bb"
+            ]
+          ]
+        },
+        "This invariant proves both acceptance of all eligible words and rejection of every other word."
+      ]
+    },
+    {
+      "id": "A05-05",
+      "topic": "A05",
+      "title": "Design a suffix DFA with overlaps",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA for words over {0,1} ending in 010. State qj records the length j of the longest suffix that is a prefix of 010. Which row gives the destinations from q2 on inputs 0 and 1, in that order?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(q0,q0)"
+        },
+        {
+          "value": "B",
+          "label": "(q2,q2)"
+        },
+        {
+          "value": "C",
+          "label": "(q3,q3)"
+        },
+        {
+          "value": "D",
+          "label": "(q3,q0)"
+        }
+      ],
+      "answer": "D",
+      "explanation": "After appending a symbol, retain the longest suffix that remains a prefix of the target pattern; do not blindly reset on every mismatch.",
+      "sources": "S01 Q5(b), pp. 7-8; S03 p. 15",
+      "worked_solution": [
+        "The start is q0 and the sole final state is q3. A final state still has outgoing transitions because extra input can destroy or restore the suffix.",
+        "From q2, append each input to the remembered prefix 01. The longest valid suffix lengths are [3, 0].",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "q0",
+              "start nonfinal",
+              "q1",
+              "q0"
+            ],
+            [
+              "q1",
+              "nonfinal",
+              "q1",
+              "q2"
+            ],
+            [
+              "q2",
+              "nonfinal",
+              "q3",
+              "q0"
+            ],
+            [
+              "q3",
+              "final",
+              "q1",
+              "q2"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A05-06",
+      "topic": "A05",
+      "title": "Design a suffix DFA with overlaps",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA for words over {0,1} ending in 1011. State qj records the length j of the longest suffix that is a prefix of 1011. Which row gives the destinations from q4 on inputs 0 and 1, in that order?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(q2,q1)"
+        },
+        {
+          "value": "B",
+          "label": "(q3,q2)"
+        },
+        {
+          "value": "C",
+          "label": "(q0,q0)"
+        },
+        {
+          "value": "D",
+          "label": "(q4,q4)"
+        }
+      ],
+      "answer": "A",
+      "explanation": "After appending a symbol, retain the longest suffix that remains a prefix of the target pattern; do not blindly reset on every mismatch.",
+      "sources": "S01 Q5(b), pp. 7-8; S03 p. 15",
+      "worked_solution": [
+        "The start is q0 and the sole final state is q4. A final state still has outgoing transitions because extra input can destroy or restore the suffix.",
+        "From q4, append each input to the remembered prefix 1011. The longest valid suffix lengths are [2, 1].",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "q0",
+              "start nonfinal",
+              "q0",
+              "q1"
+            ],
+            [
+              "q1",
+              "nonfinal",
+              "q2",
+              "q1"
+            ],
+            [
+              "q2",
+              "nonfinal",
+              "q0",
+              "q3"
+            ],
+            [
+              "q3",
+              "nonfinal",
+              "q2",
+              "q4"
+            ],
+            [
+              "q4",
+              "final",
+              "q2",
+              "q1"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A05-07",
+      "topic": "A05",
+      "title": "Design a suffix DFA with overlaps",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA for words over {a,b} ending in ababa. State qj records the length j of the longest suffix that is a prefix of ababa. Which row gives the destinations from q5 on inputs a and b, in that order?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(q1,q4)"
+        },
+        {
+          "value": "B",
+          "label": "(q2,q5)"
+        },
+        {
+          "value": "C",
+          "label": "(q0,q0)"
+        },
+        {
+          "value": "D",
+          "label": "(q5,q5)"
+        }
+      ],
+      "answer": "A",
+      "explanation": "After appending a symbol, retain the longest suffix that remains a prefix of the target pattern; do not blindly reset on every mismatch.",
+      "sources": "S01 Q5(b), pp. 7-8; S03 p. 15",
+      "worked_solution": [
+        "The start is q0 and the sole final state is q5. A final state still has outgoing transitions because extra input can destroy or restore the suffix.",
+        "From q5, append each input to the remembered prefix ababa. The longest valid suffix lengths are [1, 4].",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "q0",
+              "start nonfinal",
+              "q1",
+              "q0"
+            ],
+            [
+              "q1",
+              "nonfinal",
+              "q1",
+              "q2"
+            ],
+            [
+              "q2",
+              "nonfinal",
+              "q3",
+              "q0"
+            ],
+            [
+              "q3",
+              "nonfinal",
+              "q1",
+              "q4"
+            ],
+            [
+              "q4",
+              "nonfinal",
+              "q5",
+              "q0"
+            ],
+            [
+              "q5",
+              "final",
+              "q1",
+              "q4"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A05-08",
+      "topic": "A05",
+      "title": "Design a suffix DFA with overlaps",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA for words over {c,s} ending in csc. State qj records the length j of the longest suffix that is a prefix of csc. Which row gives the destinations from q3 on inputs c and s, in that order?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(q0,q0)"
+        },
+        {
+          "value": "B",
+          "label": "(q1,q2)"
+        },
+        {
+          "value": "C",
+          "label": "(q3,q3)"
+        },
+        {
+          "value": "D",
+          "label": "(q2,q3)"
+        }
+      ],
+      "answer": "B",
+      "explanation": "After appending a symbol, retain the longest suffix that remains a prefix of the target pattern; do not blindly reset on every mismatch.",
+      "sources": "S01 Q5(b), pp. 7-8; S03 p. 15",
+      "worked_solution": [
+        "The start is q0 and the sole final state is q3. A final state still has outgoing transitions because extra input can destroy or restore the suffix.",
+        "From q3, append each input to the remembered prefix csc. The longest valid suffix lengths are [1, 2].",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "c",
+            "s"
+          ],
+          "rows": [
+            [
+              "q0",
+              "start nonfinal",
+              "q1",
+              "q0"
+            ],
+            [
+              "q1",
+              "nonfinal",
+              "q1",
+              "q2"
+            ],
+            [
+              "q2",
+              "nonfinal",
+              "q3",
+              "q0"
+            ],
+            [
+              "q3",
+              "final",
+              "q1",
+              "q2"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A05-09",
+      "topic": "A05",
+      "title": "Design a DFA for nonoverlapping prefix and suffix",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA for the regex 10(0|1)*01. The fixed prefix and suffix occupy separate positions, so words have length at least four. Which word is accepted?",
+      "options": [
+        {
+          "value": "A",
+          "label": "1001"
+        },
+        {
+          "value": "B",
+          "label": "0001"
+        },
+        {
+          "value": "C",
+          "label": "10010"
+        },
+        {
+          "value": "D",
+          "label": "101"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The middle star may contribute ε, giving 1001. It does not permit the required prefix and suffix to overlap.",
+      "sources": "S01 Q5(c), pp. 8-9; S03 pp. 10-12",
+      "worked_solution": [
+        "P0 and P1 verify the fixed prefix 10; a mismatch enters X. After consuming the prefix, enter T0.",
+        "Tj remembers the matched prefix length of the suffix 01 within the remaining input. Only T2 is final.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "P0",
+              "start nonfinal",
+              "X",
+              "P1"
+            ],
+            [
+              "P1",
+              "nonfinal",
+              "T0",
+              "X"
+            ],
+            [
+              "T0",
+              "nonfinal",
+              "T1",
+              "T0"
+            ],
+            [
+              "T1",
+              "nonfinal",
+              "T1",
+              "T2"
+            ],
+            [
+              "T2",
+              "final",
+              "T1",
+              "T0"
+            ],
+            [
+              "X",
+              "nonfinal",
+              "X",
+              "X"
+            ]
+          ]
+        },
+        "The shortest accepted word is 1001. This proves that a mere overlapping start/end occurrence is insufficient for this regex."
+      ]
+    },
+    {
+      "id": "A05-10",
+      "topic": "A05",
+      "title": "Design a DFA for nonoverlapping prefix and suffix",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA for the regex 01(0|1)*10. The fixed prefix and suffix occupy separate positions, so words have length at least four. Which word is accepted?",
+      "options": [
+        {
+          "value": "A",
+          "label": "010"
+        },
+        {
+          "value": "B",
+          "label": "0110"
+        },
+        {
+          "value": "C",
+          "label": "1110"
+        },
+        {
+          "value": "D",
+          "label": "01101"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The middle star may contribute ε, giving 0110. It does not permit the required prefix and suffix to overlap.",
+      "sources": "S01 Q5(c), pp. 8-9; S03 pp. 10-12",
+      "worked_solution": [
+        "P0 and P1 verify the fixed prefix 01; a mismatch enters X. After consuming the prefix, enter T0.",
+        "Tj remembers the matched prefix length of the suffix 10 within the remaining input. Only T2 is final.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "P0",
+              "start nonfinal",
+              "P1",
+              "X"
+            ],
+            [
+              "P1",
+              "nonfinal",
+              "X",
+              "T0"
+            ],
+            [
+              "T0",
+              "nonfinal",
+              "T0",
+              "T1"
+            ],
+            [
+              "T1",
+              "nonfinal",
+              "T2",
+              "T1"
+            ],
+            [
+              "T2",
+              "final",
+              "T0",
+              "T1"
+            ],
+            [
+              "X",
+              "nonfinal",
+              "X",
+              "X"
+            ]
+          ]
+        },
+        "The shortest accepted word is 0110. This proves that a mere overlapping start/end occurrence is insufficient for this regex."
+      ]
+    },
+    {
+      "id": "A05-11",
+      "topic": "A05",
+      "title": "Design a DFA for nonoverlapping prefix and suffix",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA for the regex 00(0|1)*11. The fixed prefix and suffix occupy separate positions, so words have length at least four. Which word is accepted?",
+      "options": [
+        {
+          "value": "A",
+          "label": "001"
+        },
+        {
+          "value": "B",
+          "label": "00110"
+        },
+        {
+          "value": "C",
+          "label": "1011"
+        },
+        {
+          "value": "D",
+          "label": "0011"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The middle star may contribute ε, giving 0011. It does not permit the required prefix and suffix to overlap.",
+      "sources": "S01 Q5(c), pp. 8-9; S03 pp. 10-12",
+      "worked_solution": [
+        "P0 and P1 verify the fixed prefix 00; a mismatch enters X. After consuming the prefix, enter T0.",
+        "Tj remembers the matched prefix length of the suffix 11 within the remaining input. Only T2 is final.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "P0",
+              "start nonfinal",
+              "P1",
+              "X"
+            ],
+            [
+              "P1",
+              "nonfinal",
+              "T0",
+              "X"
+            ],
+            [
+              "T0",
+              "nonfinal",
+              "T0",
+              "T1"
+            ],
+            [
+              "T1",
+              "nonfinal",
+              "T0",
+              "T2"
+            ],
+            [
+              "T2",
+              "final",
+              "T0",
+              "T2"
+            ],
+            [
+              "X",
+              "nonfinal",
+              "X",
+              "X"
+            ]
+          ]
+        },
+        "The shortest accepted word is 0011. This proves that a mere overlapping start/end occurrence is insufficient for this regex."
+      ]
+    },
+    {
+      "id": "A05-12",
+      "topic": "A05",
+      "title": "Design a DFA for nonoverlapping prefix and suffix",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA for the regex 11(0|1)*00. The fixed prefix and suffix occupy separate positions, so words have length at least four. Which word is accepted?",
+      "options": [
+        {
+          "value": "A",
+          "label": "110"
+        },
+        {
+          "value": "B",
+          "label": "1100"
+        },
+        {
+          "value": "C",
+          "label": "0100"
+        },
+        {
+          "value": "D",
+          "label": "11001"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The middle star may contribute ε, giving 1100. It does not permit the required prefix and suffix to overlap.",
+      "sources": "S01 Q5(c), pp. 8-9; S03 pp. 10-12",
+      "worked_solution": [
+        "P0 and P1 verify the fixed prefix 11; a mismatch enters X. After consuming the prefix, enter T0.",
+        "Tj remembers the matched prefix length of the suffix 00 within the remaining input. Only T2 is final.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "P0",
+              "start nonfinal",
+              "X",
+              "P1"
+            ],
+            [
+              "P1",
+              "nonfinal",
+              "X",
+              "T0"
+            ],
+            [
+              "T0",
+              "nonfinal",
+              "T1",
+              "T0"
+            ],
+            [
+              "T1",
+              "nonfinal",
+              "T2",
+              "T0"
+            ],
+            [
+              "T2",
+              "final",
+              "T2",
+              "T0"
+            ],
+            [
+              "X",
+              "nonfinal",
+              "X",
+              "X"
+            ]
+          ]
+        },
+        "The shortest accepted word is 1100. This proves that a mere overlapping start/end occurrence is insufficient for this regex."
+      ]
+    },
+    {
+      "id": "A05-13",
+      "topic": "A05",
+      "title": "Complement a complete DFA",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA over {0,1} for words NOT matching 00(0|1)*10. Use prefix states P0,P1, tail states T0,T1,T2, and rejecting-error state X of the original positive-language DFA. Which final set should the complemented DFA have?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{P0,P1,T0,T1}"
+        },
+        {
+          "value": "B",
+          "label": "{P0,P1,T0,T1,T2,X}"
+        },
+        {
+          "value": "C",
+          "label": "{P0,P1,T0,T1,X}"
+        },
+        {
+          "value": "D",
+          "label": "{T2}"
+        }
+      ],
+      "answer": "C",
+      "explanation": "First complete the positive-language DFA, then swap final and nonfinal membership for every state. Its old rejecting sink must become accepting too.",
+      "sources": "S01 Q5(d), pp. 9-10; S07 p. 11",
+      "worked_solution": [
+        "The positive-language DFA has only T2 final. Its complete state set is {P0,P1,T0,T1,T2,X}.",
+        "The complement uses all states except T2 as finals: {P0,P1,T0,T1,X}. It includes ε and words too short to match the original regex.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "P0",
+              "start final",
+              "P1",
+              "X"
+            ],
+            [
+              "P1",
+              "final",
+              "T0",
+              "X"
+            ],
+            [
+              "T0",
+              "final",
+              "T0",
+              "T1"
+            ],
+            [
+              "T1",
+              "final",
+              "T2",
+              "T1"
+            ],
+            [
+              "T2",
+              "nonfinal",
+              "T0",
+              "T1"
+            ],
+            [
+              "X",
+              "final",
+              "X",
+              "X"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A05-14",
+      "topic": "A05",
+      "title": "Complement a complete DFA",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA over {0,1} for words NOT matching 01(0|1)*11. Use prefix states P0,P1, tail states T0,T1,T2, and rejecting-error state X of the original positive-language DFA. Which final set should the complemented DFA have?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{P0,P1,T0,T1,T2,X}"
+        },
+        {
+          "value": "B",
+          "label": "{P0,P1,T0,T1,X}"
+        },
+        {
+          "value": "C",
+          "label": "{T2}"
+        },
+        {
+          "value": "D",
+          "label": "{P0,P1,T0,T1}"
+        }
+      ],
+      "answer": "B",
+      "explanation": "First complete the positive-language DFA, then swap final and nonfinal membership for every state. Its old rejecting sink must become accepting too.",
+      "sources": "S01 Q5(d), pp. 9-10; S07 p. 11",
+      "worked_solution": [
+        "The positive-language DFA has only T2 final. Its complete state set is {P0,P1,T0,T1,T2,X}.",
+        "The complement uses all states except T2 as finals: {P0,P1,T0,T1,X}. It includes ε and words too short to match the original regex.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "P0",
+              "start final",
+              "P1",
+              "X"
+            ],
+            [
+              "P1",
+              "final",
+              "X",
+              "T0"
+            ],
+            [
+              "T0",
+              "final",
+              "T0",
+              "T1"
+            ],
+            [
+              "T1",
+              "final",
+              "T0",
+              "T2"
+            ],
+            [
+              "T2",
+              "nonfinal",
+              "T0",
+              "T2"
+            ],
+            [
+              "X",
+              "final",
+              "X",
+              "X"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A05-15",
+      "topic": "A05",
+      "title": "Complement a complete DFA",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA over {0,1} for words NOT matching 10(0|1)*00. Use prefix states P0,P1, tail states T0,T1,T2, and rejecting-error state X of the original positive-language DFA. Which final set should the complemented DFA have?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{P0,P1,T0,T1,T2,X}"
+        },
+        {
+          "value": "B",
+          "label": "{T2}"
+        },
+        {
+          "value": "C",
+          "label": "{P0,P1,T0,T1,X}"
+        },
+        {
+          "value": "D",
+          "label": "{P0,P1,T0,T1}"
+        }
+      ],
+      "answer": "C",
+      "explanation": "First complete the positive-language DFA, then swap final and nonfinal membership for every state. Its old rejecting sink must become accepting too.",
+      "sources": "S01 Q5(d), pp. 9-10; S07 p. 11",
+      "worked_solution": [
+        "The positive-language DFA has only T2 final. Its complete state set is {P0,P1,T0,T1,T2,X}.",
+        "The complement uses all states except T2 as finals: {P0,P1,T0,T1,X}. It includes ε and words too short to match the original regex.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "P0",
+              "start final",
+              "X",
+              "P1"
+            ],
+            [
+              "P1",
+              "final",
+              "T0",
+              "X"
+            ],
+            [
+              "T0",
+              "final",
+              "T1",
+              "T0"
+            ],
+            [
+              "T1",
+              "final",
+              "T2",
+              "T0"
+            ],
+            [
+              "T2",
+              "nonfinal",
+              "T2",
+              "T0"
+            ],
+            [
+              "X",
+              "final",
+              "X",
+              "X"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

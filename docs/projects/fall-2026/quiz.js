@@ -29,6 +29,20 @@
     show("error");
   };
 
+  const assignment2115Groups = {
+    A01: "Counting words and repeated blocks",
+    A02: "Constructing regular expressions",
+    A03: "Closure and nonregularity",
+    A04: "Nonregularity proof pitfalls",
+    A05: "DFA constructions",
+    A06: "NFA constructions",
+    A07: "Representations and regularity",
+    A08: "GNFA state elimination",
+    A09: "Subset construction and minimization",
+    A10: "Pumping-lemma proofs",
+    A11: "Scanner execution"
+  };
+
   function normalize2115Question(q, topicMap) {
     if (!q || typeof q !== "object" || !Array.isArray(q.options) || q.options.length !== 4) {
       throw new Error("Invalid CSCI 2115 question record.");
@@ -43,7 +57,7 @@
     if (q.part === "Core" && !meta) throw new Error(`${q.id}: missing core topic.`);
     const section = q.part === "Core"
       ? `Core — ${meta.section}`
-      : `Assignment — ${q.topic}: ${q.title}`;
+      : `Assignment — ${q.topic}: ${assignment2115Groups[q.topic] || q.title}`;
     return {
       id: q.id,
       section,
@@ -142,6 +156,7 @@
     $("course-title").textContent = title;
     $("course-description").textContent = `${description} ${questions.length} questions available.`;
     $("course-quizzes").classList.toggle("hidden", course !== "2122");
+    $("2115-presets").classList.toggle("hidden", course !== "2115");
     document.querySelectorAll("#course-quizzes a").forEach((link) => {
       const active = link.dataset.quiz === (isA1 ? "a1" : "general");
       if (active) link.setAttribute("aria-current", "page");
@@ -331,6 +346,16 @@
     show("results");
   }
 
+  function select2115Group(group) {
+    if (course !== "2115") return;
+    const inputs = [...document.querySelectorAll("#section-options input")];
+    inputs.forEach((input) => {
+      input.checked = group === "all"
+        || input.value.startsWith(group === "core" ? "Core — " : "Assignment — ");
+    });
+    updateCountOptions();
+  }
+
   function toggleAllSections() {
     const inputs = [...document.querySelectorAll("#section-options input")];
     const allChecked = inputs.every((input) => input.checked);
@@ -347,5 +372,8 @@
   $("next-button").addEventListener("click", nextQuestion);
   $("retry-button").addEventListener("click", () => show("setup"));
   $("toggle-all").addEventListener("click", toggleAllSections);
+  $("select-2115-core").addEventListener("click", () => select2115Group("core"));
+  $("select-2115-assignment").addEventListener("click", () => select2115Group("assignment"));
+  $("select-2115-all").addEventListener("click", () => select2115Group("all"));
   loadBank();
 })();

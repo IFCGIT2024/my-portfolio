@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "lessons": [
+    {
+      "id": "01-machine",
+      "title": "The machine behind C",
+      "pages": "1\u20138, 11\u201317",
+      "goals": [
+        "Distinguish ISA from implementation",
+        "Track registers, memory, flags and instruction position",
+        "Recognize assembly and object code"
+      ],
+      "paragraphs": [
+        "The instruction set architecture (ISA) describes the software-visible machine: registers, memory addressing, instructions and their effects. Microarchitecture is how a processor implements that contract, including caches and execution hardware. Different processors can execute the same ISA.",
+        "C expresses an algorithm with types and variables. A compiler chooses registers and instruction sequences; assembly names those operations; an assembler encodes them into bytes. There is usually no one-to-one relationship between C statements and instructions. Optimization can remove unused calculations entirely.",
+        "x86-64 has 16 general-purpose 64-bit registers, plus the instruction pointer RIP and status flags. Memory is byte-addressed: an 8-byte long occupies eight consecutive addresses. Arrays and structs are layouts of bytes, not special aggregate instructions. Floating-point and SIMD use other register sets and are outside this integer simulator.",
+        "CISC and RISC describe design traditions, not a universal performance ranking. x86 instructions have variable lengths up to 15 bytes; the slide\u2019s 1\u20138-byte range is not a general x86 limit. Many RISC encodings are regular, but \u201call RISC instructions are the same size\u201d is not universal.",
+        "In this lab, each test case supplies inputs. A snippet starts at the first instruction and may finish at the end; a function starts with a simulated return address and must execute ret. The trace shows instruction positions, not real machine-code byte addresses."
+      ],
+      "exampleC": "long sum(long x, long y) { return x + y; }",
+      "exampleAssembly": "movq %rdi, %rax\naddq %rsi, %rax\nret",
+      "walkthrough": "With x=6 in RDI and y=4 in RSI, mov copies 6 to RAX. add changes RAX to 10 and sets flags. ret resumes the caller, which reads the result from RAX.",
+      "pitfall": "Register names describe storage, not permanently assigned C variables. RAX is commonly a return register, but can also hold temporary data."
+    },
+    {
+      "id": "02-widths",
+      "title": "AT&T syntax and register widths",
+      "pages": "9\u201310, 13, 18\u201320",
+      "goals": [
+        "Read source before destination",
+        "Choose b/w/l/q correctly",
+        "Understand register alias writes"
+      ],
+      "paragraphs": [
+        "AT&T writes source, destination. $ introduces an immediate constant; % introduces a register; bare names denote memory in this lab. movq $7,%rax copies the value 7. movq A,%rax loads A\u2019s contents. movq $A,%rax loads A\u2019s address.",
+        "The suffix selects the data width: b = 1 byte (8 bits), w = 2 bytes (16), l = 4 bytes (32), q = 8 bytes (64). A quadword is eight bytes, not four. The l suffix does not mean the C type long: on this course\u2019s Linux x86-64 LP64 model, long is eight bytes and int is four.",
+        "RAX, EAX, AX and AL overlap: they name the full 64 bits, low 32, low 16 and low 8 bits. AH names bits 8\u201315. Writing EAX clears RAX\u2019s upper 32 bits. Writing AX or AL preserves the other bits. All 16 register families are available; R8 has R8D, R8W and R8B aliases.",
+        "A mov copies; it does not erase its source and it does not set arithmetic flags. Both operand sizes must match. For memory-to-memory copies, use a temporary register. The checker rejects mismatched widths and uninitialized reads; a narrow write alone does not initialize the untouched bits."
+      ],
+      "exampleC": "unsigned long x = 0xffffffffffffffffUL;\n// Replace the low 32 bits with 5.",
+      "exampleAssembly": "movq $-1, %rax\nmovl $5, %eax",
+      "walkthrough": "After the first instruction RAX contains 64 one bits. The second writes EAX and zeroes the upper half, so the whole RAX becomes 5.",
+      "pitfall": "movl $-1,%eax makes RAX = 0x00000000ffffffff, not a 64-bit -1. Use movq for a 64-bit negative constant."
+    },
+    {
+      "id": "03-pointers",
+      "title": "Loads, stores and swap",
+      "pages": "20\u201328",
+      "goals": [
+        "Distinguish a pointer from its pointee",
+        "Translate *p and assignment",
+        "Preserve values during a swap"
+      ],
+      "paragraphs": [
+        "A pointer is an address value. If RDI contains xp, (%rdi) means memory at that address: *xp. movq %rdi,%rax copies the pointer; movq (%rdi),%rax copies the long it points to. Parentheses cause a memory access for mov.",
+        "For *p = value, first obtain the value in a register, then store that register to (%p-register). For value = *p, load from the parenthesized register. The address register remains unchanged unless you explicitly modify it.",
+        "Swap requires remembering a value before overwriting it. Read both pointees into temporaries, then store each into the opposite location. Two pointers may alias the same location: swapping a value with itself must leave it unchanged.",
+        "Slide 20\u2019s memory-to-register C-equivalent is reversed: with varA in RAX and ptrD in RDX, movq (%rax),%rdx does not mean varA = *ptrD. Translate the assembly literally: RDX receives memory at the address in RAX."
+      ],
+      "exampleC": "void store(long *p, long x) { *p = x; }",
+      "exampleAssembly": "movq %rsi, (%rdi)\nret",
+      "walkthrough": "The calling convention places p in RDI and x in RSI. The store writes x\u2019s eight bytes at p. It changes memory, not RDI. ret returns; a void function has no required RAX result.",
+      "pitfall": "Do not confuse movq %rsi,%rdi with a store: that overwrites the pointer register."
+    },
+    {
+      "id": "04-addresses",
+      "title": "Displacement, indexing and arrays",
+      "pages": "21, 29\u201330, 34\u201335",
+      "goals": [
+        "Compute D + base + index \u00d7 scale",
+        "Translate array indexing for int and long",
+        "Read little-endian memory"
+      ],
+      "paragraphs": [
+        "The general address operand is D(base,index,scale). Compute the byte address as D + base + index \u00d7 scale. Displacement D is a byte offset, not a count of array elements. Scale can be 1, 2, 4 or 8.",
+        "If RDI points to long a[], then a[i] lives at RDI + i\u00d78. For int a[], use scale 4 and movl. A 32-bit data operation can still use 64-bit address registers: movl (%rdi,%rsi,4),%eax is valid.",
+        "You can omit components: 8(%rdi), (%rdi,%rsi), or 16(,%rsi,4). RSP cannot be an index. Base and index sizes must agree; the mixed RBP/EAX spelling shown on slide 35 is not a valid address. Use RBP/RAX for a 64-bit address.",
+        "x86 uses little-endian storage. The least significant byte is at the lowest address. Loading with a different width or an overlapping offset reads the bytes actually there; it does not remember a C variable type. Array bounds are a C-level responsibility; this lab rejects accesses outside allocated test memory."
+      ],
+      "exampleC": "long get_next(long *a, long i) { return a[i+1]; }",
+      "exampleAssembly": "movq 8(%rdi,%rsi,8), %rax\nret",
+      "walkthrough": "For a=0x1000 and i=2, compute 8 + 0x1000 + 2\u00d78 = 0x1018. movq reads eight bytes there. The +1 element becomes an eight-byte displacement.",
+      "pitfall": "Scale follows element size, not the size of the index register. Long arrays use 8 even when i is small."
+    },
+    {
+      "id": "05-lea",
+      "title": "LEA: compute without loading",
+      "pages": "31\u201332, 36",
+      "goals": [
+        "Separate address calculation from dereferencing",
+        "Translate &a[i]",
+        "Use LEA for scaled arithmetic"
+      ],
+      "paragraphs": [
+        "lea means load effective address. It evaluates the address expression and writes the number into a register. It does not read memory. The same parentheses have a different role in lea and mov: lea computes; mov dereferences.",
+        "For p=&a[i], compute a + i*sizeof(element) with lea. For x=a[i], use mov to read the element. The destination of lea must be a register. lea does not change condition flags.",
+        "Because lea does arithmetic, it can compute 3*x as x+2*x, 5*x as x+4*x, and 9*x as x+8*x without touching memory. For 12*x, compute 3*x and then shift left by 2. Scale 12 itself is not allowed.",
+        "Slide 32\u2019s example has RDX=0x100 and RCX=4: leaq (%rdx,%rcx,4),%rax yields 0x110; movq with the same operand loads 0x8. leaq (%rdx),%rdi yields 0x100; movq (%rdx),%rsi loads 1."
+      ],
+      "exampleC": "long *element(long *a, long i) { return &a[i]; }",
+      "exampleAssembly": "leaq (%rdi,%rsi,8), %rax\nret",
+      "walkthrough": "With a=0x1000 and i=3, RAX becomes 0x1018. No bytes at 0x1018 are read. The pointer, rather than an element\u2019s contents, is the return value.",
+      "pitfall": "lea has no automatic C-type awareness. You must supply the right scale yourself."
+    },
+    {
+      "id": "06-arithmetic",
+      "title": "Arithmetic and faithful C translation",
+      "pages": "12, 31, 33",
+      "goals": [
+        "Respect subtraction order",
+        "Track overwritten values",
+        "Find a mismatched C/assembly example"
+      ],
+      "paragraphs": [
+        "addq source,destination means destination += source. subq source,destination means destination -= source. To return x-y, copy x into RAX then subtract y. Copying y first would compute the opposite difference.",
+        "Two-operand imul keeps the low destination-width bits of a signed product. Three-operand imul $constant,source,destination scales a source into a different register. The simulator tracks signed overflow and carry for imul; other branch flags are undefined afterward.",
+        "Machine arithmetic wraps at the selected width. C unsigned arithmetic also wraps, but ordinary signed overflow is undefined in C. The signed C exercises choose values whose specified arithmetic is representable; unsigned exercises intentionally test wraparound.",
+        "Slide 33\u2019s C and assembly do not match. The C returns (x+y+z)*(5*y). The assembly computes 48*y into RDX but never uses it, computes 2*x+4 into RCX, and returns (x+y+z)*(2*x+4). These are different functions. Both are practiced explicitly, rather than silently treating the slide as correct."
+      ],
+      "exampleC": "long difference(long x, long y) { return x-y; }",
+      "exampleAssembly": "movq %rdi, %rax\nsubq %rsi, %rax\nret",
+      "walkthrough": "RAX starts with x. Subtracting RSI computes x-y. RDI and RSI are inputs; only RAX is required as the result.",
+      "pitfall": "A correct final value in a temporary register is not enough: put the result where the contract requires it."
+    },
+    {
+      "id": "07-bits",
+      "title": "Masks, AND, OR, XOR and NOT",
+      "pages": "12 plus requested bit-operation extension",
+      "goals": [
+        "Set, clear, toggle and extract bits",
+        "Distinguish bitwise from logical operators",
+        "Use test without modifying data"
+      ],
+      "paragraphs": [
+        "Bitwise operators act on corresponding bits: AND keeps a bit only if both inputs have 1; OR sets it if either has 1; XOR sets it if the inputs differ; NOT flips every bit. Number bits from zero at the least significant end.",
+        "A mask selects positions. x & 0xff extracts the low byte. x | (1UL<<k) sets bit k; x & ~(1UL<<k) clears it; x ^ (1UL<<k) toggles it. For a 64-bit C mask use 1UL in this LP64 model, and ensure k is in 0..63.",
+        "C & and | are bitwise; && and || test truth and short-circuit. For example 2 & 4 is zero while 2 && 4 is one. A bit-mask test often becomes testq $mask,%reg followed by a conditional branch.",
+        "test performs an AND only for flags and leaves both operands unchanged. AND/OR/XOR set ZF and SF and clear CF/OF. NOT preserves flags. XORing a register with itself produces zero without needing its old value."
+      ],
+      "exampleC": "unsigned long set_low_bit(unsigned long x) { return x | 1UL; }",
+      "exampleAssembly": "movq %rdi,%rax\norq $1,%rax\nret",
+      "walkthrough": "The mask has only bit 0 set. OR forces that bit to 1 while every other bit keeps its old value. With x=10 (1010 binary), the result is 11 (1011).",
+      "pitfall": "Clearing a bit uses AND with an inverted mask, not XOR. XOR would turn a zero bit on."
+    },
+    {
+      "id": "08-shifts",
+      "title": "Shifts and signedness",
+      "pages": "31, 33 plus requested bit-operation extension",
+      "goals": [
+        "Choose SHL/SAL, SHR or SAR",
+        "Use CL for variable counts",
+        "Respect C shift restrictions"
+      ],
+      "paragraphs": [
+        "SHL and SAL are names for the same left shift. Zeros enter at the low end and high bits fall off. For unsigned values it corresponds to multiplication by a power of two modulo the width. SHR shifts right and inserts zeros; SAR shifts right and replicates the sign bit.",
+        "For 64-bit x86 shifts, the hardware uses the low six bits of the count; for 8-, 16- and 32-bit shifts it uses five. A variable count must be in CL. In C, a shift count must be nonnegative and less than the promoted left operand\u2019s width; x86 count masking does not legalize an out-of-range C shift.",
+        "SAR of a negative integer rounds toward negative infinity. C signed division rounds toward zero, so -7 >> 1 under arithmetic-shift behavior yields -4 while -7/2 is -3. Do not replace arbitrary signed division with SAR without a correction. In pre-C23 C, right-shifting a negative signed value is implementation-defined; these lessons explicitly use the x86 arithmetic behavior.",
+        "A zero effective count leaves data and flags unchanged. For nonzero counts, shifts update ZF/SF; OF is defined only for a count of one. This lab refuses branches that depend on undefined flags."
+      ],
+      "exampleC": "unsigned long half(unsigned long x) { return x >> 1; }",
+      "exampleAssembly": "movq %rdi,%rax\nshrq $1,%rax\nret",
+      "walkthrough": "Unsigned input calls for a logical right shift. With x=0x8000000000000000, SHR yields 0x4000000000000000; SAR would yield 0xc000000000000000.",
+      "pitfall": "A variable shift uses %cl, not %rcx. Move the count into RCX, then name CL in the shift instruction."
+    },
+    {
+      "id": "09-branches",
+      "title": "Flags, comparisons and loops",
+      "pages": "6, 12 plus control-flow bridge",
+      "goals": [
+        "Read cmp as destination minus source",
+        "Choose signed versus unsigned branches",
+        "Translate zero-iteration loops"
+      ],
+      "paragraphs": [
+        "cmp source,destination sets flags as if subtracting source from destination, but does not store the result. ZF means zero; SF is the sign bit; CF indicates unsigned carry/borrow; OF indicates signed overflow.",
+        "Signed comparisons use JL/JLE/JG/JGE, which account for SF and OF together. Unsigned comparisons use JB/JBE/JA/JAE, which use CF and ZF. JE/JNE compare equality regardless of signedness. For unsigned x>y after cmpq %rsi,%rdi, use ja.",
+        "Translate if/else by comparing, branching to one path, and jumping around the other. Translate a while loop by checking before the body so zero iterations remain possible. Verify negative, equal and boundary cases rather than just the example.",
+        "mov, lea, push, pop, call and ret do not themselves change arithmetic flags. Instructions inside a called function can change them. add/sub update flags; inc/dec preserve CF but update several other flags."
+      ],
+      "exampleC": "long max(long x,long y) { return x > y ? x : y; }",
+      "exampleAssembly": "movq %rsi,%rax\ncmpq %rsi,%rdi\njle done\nmovq %rdi,%rax\ndone: ret",
+      "walkthrough": "RAX defaults to y. cmp computes x-y for flags. If x<=y, keep y; otherwise replace the result with x.",
+      "pitfall": "Use signed branches for signed C and unsigned branches for unsigned C, especially when the high bit is set."
+    },
+    {
+      "id": "10-stack",
+      "title": "PUSH, POP and stack frames",
+      "pages": "15 plus stack mechanics extension",
+      "goals": [
+        "Track downward stack growth",
+        "Save and restore registers",
+        "Allocate and release local storage"
+      ],
+      "paragraphs": [
+        "RSP holds the address of the top of the stack. pushq first subtracts 8 from RSP, then stores eight bytes at the new address. popq loads eight bytes at RSP, then adds 8. Values come back in last-in, first-out order. Neither operation clears old memory bytes.",
+        "You do not initialize the process stack yourself in an ordinary hosted program: the operating system and runtime provide it. The lab supplies a bounded 4096-byte stack. Snippets start at RSP=0x8000; function exercises start at 0x7ff8 with a simulated return address already on the stack.",
+        "If you push A then B, pop B before A. A balanced function restores its stack before ret, so ret sees the return address rather than a saved register or local variable. Stack scratch bytes may change; non-output input memory must remain intact.",
+        "A conventional frame uses pushq %rbp; movq %rsp,%rbp; subq $16,%rsp. RBP becomes a stable reference for locals such as -8(%rbp). To tear down, movq %rbp,%rsp; popq %rbp, or leave. Frames are a convention, not a requirement for every function."
+      ],
+      "exampleC": "// Save x while computing a temporary value, then recover x.",
+      "exampleAssembly": "pushq %rdi\nmovq $99,%rdi\npopq %rdi",
+      "walkthrough": "Starting at 0x8000, push stores x at 0x7ff8. RDI is overwritten temporarily. pop reloads x and restores RSP to 0x8000. The old stack bytes remain but are no longer live.",
+      "pitfall": "Do not use pushl/pop l to mean a 32-bit value on this 64-bit stack. This lab supports pushq/popq; their register operands must be 64-bit."
+    },
+    {
+      "id": "11-calls",
+      "title": "CALL, RET and the lecture\u2019s sumstore",
+      "pages": "15\u201316, 22\u201328 plus System V ABI detail",
+      "goals": [
+        "Follow nested calls and return addresses",
+        "Preserve callee-saved registers",
+        "Translate the complete sumstore example"
+      ],
+      "paragraphs": [
+        "call pushes the address of the next instruction, then transfers control to the target. ret pops a return address and resumes there. The return value is a separate convention: an integer or pointer result up to 64 bits is returned in RAX. ret does not put a value into RAX.",
+        "For the Linux x86-64 System V convention used here, the first six integer/pointer arguments are RDI, RSI, RDX, RCX, R8 and R9. RBX, RBP and R12\u2013R15 are callee-saved: a function that changes them must restore the incoming values. RAX, RCX, RDX, RSI, RDI and R8\u2013R11 may be clobbered by a call. The checker seeds callee-saved registers with visible test sentinels and verifies restoration, including across helper returns.",
+        "At ordinary function entry, RSP is 8 modulo 16 because call just pushed a return address. Before another ordinary call, the caller must make RSP a multiple of 16. One push from entry often supplies the needed eight bytes. SIMD/stack arguments can require additional alignment; these exercises use integer-register arguments.",
+        "Slide 15 contains pushq, call, popq and ret inside an image. sumstore receives dest in RDX, but plus may overwrite RDX. It saves the caller\u2019s RBX, moves dest into RBX, calls plus, stores RAX through RBX, restores RBX, and returns. Saving dest across the call is essential.",
+        "All helper functions must be present as named labels in the submitted program; this lab does not call libc or execute native code. Return addresses are simulated instruction indexes stored as eight-byte values. A real CPU stores code byte addresses."
+      ],
+      "exampleC": "long plus(long x,long y) { return x+y; }\nvoid sumstore(long x,long y,long *dest) { *dest=plus(x,y); }",
+      "exampleAssembly": "sumstore:\n  pushq %rbx\n  movq %rdx,%rbx\n  call plus\n  movq %rax,(%rbx)\n  popq %rbx\n  ret\nplus:\n  leaq (%rdi,%rsi),%rax\n  ret",
+      "walkthrough": "sumstore enters with an outer return address on its stack. push RBX both preserves RBX and aligns RSP. call adds a second return address. plus returns to the store; pop restores RBX; the final ret returns to the original caller.",
+      "pitfall": "Never assume a caller-saved pointer survives a helper call just because one simple helper happens not to overwrite it."
+    },
+    {
+      "id": "12-integration",
+      "title": "Exam rehearsal: combine the concepts",
+      "pages": "Whole lecture + requested extensions",
+      "goals": [
+        "Combine pointers, masks, loops and calls",
+        "Explain each instruction before running it",
+        "Review known slide corrections"
+      ],
+      "paragraphs": [
+        "Use the same translation checklist every time: identify the C types and widths; map inputs and outputs; distinguish values from addresses; choose instructions; plan control flow; preserve live values across calls; balance the stack; and test boundary cases.",
+        "For each program, predict registers and memory before checking. Use the trace on a failing case to find the first step where your prediction differs. A passing result only covers the listed test cases; it is not a proof of general correctness.",
+        "This course covers the lecture\u2019s integer machine model, syntax, register widths, encodings/disassembly concepts, data movement, pointers/swap, addressing, LEA and arithmetic, with expanded bit and stack/call practice. Floating-point/SIMD, real instruction encoding, system calls, arbitrary C compilation and the rest of CSCI 2122 remain outside this lab.",
+        "Corrections to remember: x86\u2019s instruction-length limit is 15 bytes, slide 20\u2019s load mapping is reversed, slide 33\u2019s C/assembly results differ, and slide 35 mixes address-register widths. Course answers follow actual instruction semantics."
+      ],
+      "exampleC": "unsigned long normalize(unsigned long x) { return (x >> 4) & 0xffUL; }",
+      "exampleAssembly": "movq %rdi,%rax\nshrq $4,%rax\nandq $255,%rax\nret",
+      "walkthrough": "Identify unsigned width first, shift the target field into place, mask it, then return. Check 0, all-one bits, a single boundary bit and a typical value.",
+      "pitfall": "Do not memorize just the solution text. Explain why each operand has its prefix, width, order and addressing mode."
+    }
+  ]
+}

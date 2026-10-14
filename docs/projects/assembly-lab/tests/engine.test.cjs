@@ -73,7 +73,7 @@ test('wrong operand arity rejected',()=>{
   for(const p of ['movl $1','nop %eax','jmp','movl $1,,%eax']) assert.throws(()=>E.parse(p));
 });
 test('illegal operand forms and sizes rejected',()=>{
-  for(const p of ['movl A,B','movl %eax,$5','imull $2,A','leal $5,%eax','leal A,B','movb $1,%eax','movw $1,%eax','movq $1,%rax','movl $1,%ax','movl (%edx,%esp,4),%eax','movl (%edx,%ecx,3),%eax','movl (%edx,,4),%eax','testl A,%eax']) assert.throws(()=>E.parse(p),p);
+  for(const p of ['movl A,B','movl %eax,$5','imull $2,A','leal $5,%eax','leal A,B','movb $1,%eax','movw $1,%eax','movl $1,%ax','movl (%edx,%esp,4),%eax','movl (%edx,%ecx,3),%eax','movl (%edx,,4),%eax','testl A,%eax']) assert.throws(()=>E.parse(p),p);
 });
 test('no arbitrary C, directives, or unknown opcode fallback',()=>{
   for(const p of ['.text','alert(1)','eval $1,%eax','call printf','movl $2xyz,%eax']) assert.throws(()=>E.parse(p));

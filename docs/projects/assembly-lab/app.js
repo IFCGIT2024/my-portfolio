@@ -4,6 +4,7 @@
   const $ = id => document.getElementById(id);
   const KEY = 'mizel:assembly-lab:progress:v1';
   const engine = window.AssemblyEngine;
+  let lessons=[], lessonId='01-machine', trace=[];
   let bank = [], mode = 'code', topic = 'all', currentId = null, completedView = false;
   let saved = {records:{}, last:{}, mode:'code'};
   const fingerprints = new Map();
@@ -26,7 +27,7 @@
     return saved.records[q.id] = {fingerprint:fingerprints.get(q.id), attempts:0, passed:false, revealed:false, draft:'', selected:null};
   }
   function persist() {
-    saved.mode = mode; saved.last[mode] = currentId;
+    saved.lesson=lessonId; saved.mode = mode; saved.last[mode] = currentId;
     try { localStorage.setItem(KEY,JSON.stringify(saved)); }
     catch { $('storage-status').hidden=false; $('storage-status').textContent='Browser storage is unavailable or full. You can keep practicing, but progress may not survive a refresh.'; }
   }
@@ -44,12 +45,14 @@
       }
       for (const type of ['code','mcq']) if (bank.some(q=>q.type===type && q.id===data.last?.[type])) saved.last[type]=data.last[type];
       if (['code','mcq'].includes(data.mode)) mode=data.mode;
+      if(['all','original',...lessons.map(l=>l.id)].includes(data.lesson)) lessonId=data.lesson;
     } catch {
       $('storage-status').hidden=false;
       $('storage-status').textContent='Saved progress could not be read. This session starts with a clean progress record.';
     }
   }
-  function filtered() { return bank.filter(q=>q.type===mode && (topic==='all'||q.category===topic)); }
+  function inLesson(q) {return lessonId==='all'||(lessonId==='original'?!q.lesson:q.lesson===lessonId);}
+  function filtered() { return bank.filter(q=>inLesson(q) && q.type===mode && (topic==='all'||q.category===topic)); }
   function current() { return bank.find(q=>q.id===currentId); }
   function counters(list) {
     const records=list.map(record);
@@ -59,6 +62,7 @@
     const list=filtered(), count=counters(list);
     $('stats').textContent=`${count.solved} solved independently · ${count.reviewed} reviewed · ${count.attempts} attempts`;
     $('progress').max=list.length||1; $('progress').value=count.solved;
+    renderCourseProgress();
     $('progress-text').textContent=list.length?`Question ${list.findIndex(q=>q.id===currentId)+1} of ${list.length}`:'No questions in this mode';
     $('question-select').replaceChildren(...list.map((q,i)=>{
       const r=record(q), option=node('option',`${i+1}. ${q.title}${r.passed&&!r.revealed?' ✓':r.revealed?' · reviewed':''}`);
@@ -66,20 +70,22 @@
     }));
   }
   function updateFilters() {
-    const categories=[...new Set(bank.filter(q=>q.type===mode).map(q=>q.category))];
+    const categories=[...new Set(bank.filter(q=>inLesson(q)&&q.type===mode).map(q=>q.category))];
     if(!categories.includes(topic)) topic='all';
     $('topic').replaceChildren(...['all',...categories].map(category=>{
       const option=node('option',category==='all'?'All topics':label(category)); option.value=category; return option;
     })); $('topic').value=topic;
-    $('code-total').textContent=bank.filter(q=>q.type==='code').length;
-    $('mcq-total').textContent=bank.filter(q=>q.type==='mcq').length;
-    for(const type of ['code','mcq']) $(type+'-mode').setAttribute('aria-pressed',String(type===mode));
+    $('code-total').textContent=bank.filter(q=>inLesson(q)&&q.type==='code').length;
+    $('mcq-total').textContent=bank.filter(q=>inLesson(q)&&q.type==='mcq').length;
+    for(const type of ['code','mcq']) {$(type+'-mode').setAttribute('aria-pressed',String(type===mode));$(type+'-mode').disabled=!bank.some(q=>inLesson(q)&&q.type===type);}
   }
   function renderCases(q) {
     $('case-summary').textContent=`Starting state & ${q.cases.length} test cases`;
     $('cases').replaceChildren();
     for (const fixture of q.cases) {
       const block=node('div',undefined,'case'); block.append(node('h4',fixture.name));
+      block.append(node('p',`${fixture.function?'Function: return with ret. Entry '+(fixture.entry||'first instruction')+'. RSP starts at 0x7ff8.':'Snippet: finish at the end. RSP starts at 0x8000.'} ${fixture.function?'The checker supplies callee-saved register sentinels and verifies RBX, RBP, R12–R15 are restored. ':''}Memory cells: ${fixture.memoryWidth||4} bytes unless overridden.${fixture.abi?' Check 16-byte alignment before calls.':''}${fixture.preserveRegisters?.length?' Preserve: '+fixture.preserveRegisters.join(', ')+'.':''}`));
+      if(fixture.memoryWidths) block.append(node('p','Cell width overrides: '+JSON.stringify(fixture.memoryWidths)));
       const table=node('table'), head=node('thead'), tr=node('tr');
       for(const title of ['Memory','Starts as','Required result']) {const th=node('th',title);th.scope='col';tr.append(th);} head.append(tr);table.append(head);
       const body=node('tbody');
@@ -116,6 +122,7 @@
     const list=filtered();
     if(!list.some(q=>q.id===currentId)) currentId=list[0]?.id||null;
     const q=current();
+    $('trace-panel').hidden=true;
     $('exercise').hidden=!q;
     updateStats();
     if(!q) return;
@@ -124,15 +131,18 @@
     $('question-title').textContent=q.title;
     $('code-exercise').hidden=mode!=='code'; $('mcq-exercise').hidden=mode!=='mcq';
     for(const id of ['feedback','hint','solution']) $(id).hidden=true;
+    $('trace-button').hidden=mode!=='code';
     $('hint-button').hidden=mode!=='code'; $('solution-button').hidden=mode!=='code';
     $('check').disabled=false; $('check').textContent='Check answer';
     $('previous').disabled=list[0].id===q.id;
     $('next').textContent=list.at(-1).id===q.id?'View summary →':'Next →';
     if(mode==='code') {
+      $('data-model').textContent=q.dataModel||'signed 32-bit integers';
+      $('solution-explanation').textContent=q.explanation||'Follow each instruction from the supplied inputs to the required outputs. Temporary registers can differ from this example.';
       $('c-code').textContent=q.cCode; $('assembly-input').value=r.draft;
       $('hint').textContent=q.hint; $('solution-code').textContent=q.solutions[0];
       const outputs=[...new Set(q.cases.flatMap(c=>[...Object.keys(c.expected.memory||{}),...Object.keys(c.expected.registers||{}).map(k=>'%'+k)]))];
-      $('output-contract').textContent=`Required outputs: ${outputs.join(', ')}. Each case starts fresh; other memory must keep its initial value.`;
+      $('output-contract').textContent=`Required outputs: ${outputs.join(', ')}. Each case starts fresh; other input memory must keep its initial value. Stack must be balanced.${q.requirements?.length ? " Practice requirement: use "+q.requirements.join(", ")+"." : ""}`;
       renderCases(q);
       if(r.passed) feedback(r.revealed?'Previously passed after reviewing the solution. You can keep practicing.':'Previously solved independently. You can try another implementation.','success');
       else if(r.revealed) feedback('You reviewed the solution for this question. Try reconstructing it from memory.');
@@ -190,7 +200,9 @@
     if(index>=list.length) {summary();return;}
     if(index>=0) {currentId=list[index].id;render();}
   }
-  function changeMode(next) { saved.last[mode]=currentId;mode=next;topic='all';currentId=saved.last[mode];updateFilters();render(); }
+  function changeMode(next) { saved.last[mode]=currentId;mode=next;topic='all';currentId=saved.last[mode];
+    if(!bank.some(q=>inLesson(q)&&q.type===mode)) mode=bank.find(inLesson)?.type||'code';
+    renderLesson();updateFilters();render(); }
   async function fetchJSON(url) {
     const response=await fetch(url);
     if(!response.ok) throw Error(`Could not load ${url} (HTTP ${response.status}).`);
@@ -204,11 +216,56 @@
     for(const b of banks) engine.validateBank(b);
     const combined=engine.validateBank({schemaVersion:1,questions:banks.flatMap(b=>b.questions)});
     bank=combined.questions;
+    const course=await fetchJSON('data/lessons.json'); lessons=course.lessons;
     for(const q of bank) fingerprints.set(q.id,fingerprint(q));
     restore();
-    currentId=saved.last[mode];updateFilters();render();
+    currentId=saved.last[mode];
+    if(!bank.some(q=>inLesson(q)&&q.type===mode)) mode=bank.find(inLesson)?.type||'code';
+    renderLesson();updateFilters();render();
     $('load-status').hidden=true;$('app').hidden=false;
   }
+  function renderCourseProgress() {
+    if(!lessons.length) return;
+    const list=bank.filter(q=>q.lesson), count=counters(list);
+    $('course-progress').textContent=`12 lessons · ${list.length} new exercises · ${count.solved} solved independently · ${count.reviewed} reviewed. Start with the introduction, try the worked example, then practice both modes.`;
+  }
+  function renderLesson() {
+    $('lesson-select').replaceChildren(...[...lessons.map((l,i)=>({id:l.id,title:`${i+1}. ${l.title}`})),{id:'original',title:'Original practice — all preserved exercises'},{id:'all',title:'All practice — course and original'}].map(l=>{const o=node('option',l.title);o.value=l.id;o.selected=l.id===lessonId;return o;}));
+    const area=$('lesson-content');area.replaceChildren();
+    const l=lessons.find(l=>l.id===lessonId),index=lessons.indexOf(l);
+    $('lesson-prev').disabled=index<=0;$('lesson-next').disabled=index<0||index===lessons.length-1;
+    if(!l) {area.append(node('p','Choose a guided lesson above for introductions and worked examples, or use the filters below to practice the full question banks.'));return;}
+    area.append(node('p',`Lecture pages: ${l.pages}`,'eyebrow'),node('h3',l.title));
+    const goals=node('ul');for(const goal of l.goals)goals.append(node('li',goal));area.append(goals);
+    const intro=node('details');intro.open=true;intro.append(node('summary','Introduction — read this first'));
+    for(const paragraph of l.paragraphs)intro.append(node('p',paragraph));area.append(intro);
+    const example=node('details');example.append(node('summary','Worked C → assembly example'));
+    const columns=node('div',undefined,'code-panels');
+    for(const [heading,text] of [['C / goal',l.exampleC],['Assembly',l.exampleAssembly]]) {const panel=node('div',undefined,'panel');panel.append(node('h4',heading));const pre=node('pre');pre.append(node('code',text));panel.append(pre);columns.append(panel);}
+    example.append(columns,node('p',l.walkthrough),node('p','Watch for: '+l.pitfall,'hint'));area.append(example);
+  }
+  function chooseLesson(id) {
+    lessonId=id;topic='all';currentId=null;
+    if(!bank.some(q=>inLesson(q)&&q.type===mode)) mode=bank.find(inLesson)?.type||'code';
+    renderLesson();updateFilters();render();
+  }
+  function showTraceStep() {
+    const t=trace[Number($('trace-step').value)];
+    if(!t){$('trace-state').textContent='No trace available.';return;}
+    const registers=Object.entries(t.registers).map(([k,v])=>{const n=BigInt(v);return `%${k.padEnd(3)}  ${v}   (0x${BigInt.asUintN(64,n).toString(16).padStart(16,'0')})`;});
+    $('trace-state').textContent=`Step ${t.step} · line ${t.line} · ${t.instruction}\n\nRegisters before instruction\n${registers.join('\n')}\n\nFlags: ${Object.entries(t.flags).map(([k,v])=>k+'='+v).join(' · ')||'undefined'}\n\nStack from RSP\n${t.stack.join('\n')||'(empty)'}\n\nQuestion memory\n${Object.entries(t.memory||{}).map(([k,v])=>k+' = '+v).join('\n')||'(none)'}`;
+  }
+  function runTrace() {
+    const q=current();if(!q||q.type!=='code')return;
+    const fixture=q.cases[Number($('trace-case').value)||0];
+    try {const state=engine.execute($('assembly-input').value,fixture,{trace:true});trace=state.trace;$('trace-status').textContent=`Executed ${state.steps} instructions. Showing ${trace.length} pre-instruction states. Use Check answer to grade all cases.`;}
+    catch(e){trace=e.trace||[];$('trace-status').textContent=e.message+' Fix the error and rerun; any captured steps are shown below.';}
+    $('trace-step').max=Math.max(0,trace.length-1);$('trace-step').value=0;showTraceStep();
+  }
+  $('lesson-select').addEventListener('change',()=>chooseLesson($('lesson-select').value));
+  for(const [id,delta] of [['lesson-prev',-1],['lesson-next',1]]) $(id).addEventListener('click',()=>{const index=lessons.findIndex(l=>l.id===lessonId);if(lessons[index+delta])chooseLesson(lessons[index+delta].id);});
+  $('trace-button').addEventListener('click',()=>{const q=current();if(!q||q.type!=='code')return;$('trace-panel').hidden=false;$('trace-case').replaceChildren(...q.cases.map((c,i)=>{const o=node('option',c.name);o.value=i;return o;}));runTrace();});
+  $('trace-run').addEventListener('click',runTrace);$('trace-step').addEventListener('input',showTraceStep);
   $('code-mode').addEventListener('click',()=>changeMode('code'));
   $('mcq-mode').addEventListener('click',()=>changeMode('mcq'));
   $('topic').addEventListener('change',()=>{topic=$('topic').value;currentId=null;render();});

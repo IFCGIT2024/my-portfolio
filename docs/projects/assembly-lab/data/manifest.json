@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "banks": [
     "translation.json",
-    "concepts.json"
+    "concepts.json",
+    "lecture10.json"
   ]
 }

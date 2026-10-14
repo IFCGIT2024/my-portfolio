@@ -1,0 +1,4273 @@
+{
+  "schemaVersion": 1,
+  "questions": [
+    {
+      "id": "l10-isa",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "ISA versus implementation",
+      "question": "Which belongs to the ISA?",
+      "options": [
+        "The behavior of addq",
+        "The L1 cache size",
+        "The clock frequency"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The ISA defines instruction effects. Cache capacity and clock frequency are implementation choices."
+    },
+    {
+      "id": "l10-state",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Machine state",
+      "question": "What does RIP represent?",
+      "options": [
+        "A general-purpose C integer variable",
+        "The top stack value",
+        "The instruction pointer"
+      ],
+      "correctAnswer": 2,
+      "explanation": "RIP tracks instruction execution. RSP points at the stack; RAX is a general-purpose register commonly used for returns."
+    },
+    {
+      "id": "l10-bytes",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Values are made of bytes",
+      "question": "An 8-byte long begins at address 0x100. Which addresses does it occupy?",
+      "options": [
+        "0x100 through 0x108",
+        "0x100 through 0x107",
+        "Only 0x100"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Addresses count bytes. Eight bytes occupy offsets 0 through 7."
+    },
+    {
+      "id": "l10-forms",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Assembly versus machine code",
+      "question": "What does an assembler primarily produce?",
+      "options": [
+        "Encoded instruction bytes",
+        "The original C source",
+        "Only a list of C variable names"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Assembly is text describing instructions. The assembler encodes it; linking resolves connections between object files."
+    },
+    {
+      "id": "l10-encoding",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Decode the lecture\u2019s store",
+      "question": "The bytes 48 89 03 encode movq %rax,(%rbx). What is 0x40059e in the slide?",
+      "options": [
+        "The value being stored from RAX",
+        "The destination data address in RBX",
+        "The address where the instruction bytes are stored"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Code bytes have addresses too. The operand (%rbx) separately selects the data address. This instruction is three bytes long; q describes its eight-byte data transfer."
+    },
+    {
+      "id": "l10-disassembly",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Read object code",
+      "question": "Which tool command disassembles an executable named sum?",
+      "options": [
+        "movq sum, %rax",
+        "objdump -d sum",
+        "gcc -E sum"
+      ],
+      "correctAnswer": 1,
+      "explanation": "objdump -d displays disassembled executable sections. In GDB, disassemble sum shows the named function; x/14xb sum examines 14 raw bytes. Disassembly does not reconstruct the original C exactly."
+    },
+    {
+      "id": "l10-risc",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Avoid overgeneralizing",
+      "question": "Which statement is reliable?",
+      "options": [
+        "CISC/RISC alone does not determine speed or power",
+        "Every RISC instruction in every ISA has the same length",
+        "x86 instructions never exceed eight bytes"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Implementation, workload and encoding details matter. x86 permits instructions up to 15 bytes; some RISC ISAs offer compressed encodings."
+    },
+    {
+      "id": "l10-copy64",
+      "type": "code",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "Copy a long without truncation",
+      "cCode": "// long A, B;\nB = A;",
+      "hint": "Use an eight-byte load and store.",
+      "solutions": [
+        "movq A, %rax\nmovq %rax, B"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: ",
+          "memory": {
+            "A": "7",
+            "B": null
+          },
+          "registers": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "B": "7"
+            }
+          }
+        },
+        {
+          "name": "Inputs: ",
+          "memory": {
+            "A": "-9",
+            "B": null
+          },
+          "registers": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "B": "-9"
+            }
+          }
+        },
+        {
+          "name": "Inputs: ",
+          "memory": {
+            "A": "9007199254740993",
+            "B": null
+          },
+          "registers": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "B": "9007199254740993"
+            }
+          }
+        }
+      ],
+      "explanation": "movq reads all eight bytes of A into RAX, then writes eight bytes to B. A must stay unchanged. The large case detects accidental 32-bit truncation and JavaScript precision loss.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-constant64",
+      "type": "code",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "Return a full-width constant",
+      "cCode": "unsigned long marker(void) { return 0x123456789abcdef0UL; }",
+      "hint": "Use $ for the hexadecimal constant and RAX for the result.",
+      "solutions": [
+        "movq $0x123456789abcdef0, %rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: ",
+          "memory": {},
+          "registers": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0x123456789abcdef0"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "A register-destination movq can carry a full 64-bit immediate. Most other q instructions accept only a sign-extended 32-bit immediate. ret returns to the supplied caller.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-lowbyte",
+      "type": "code",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "Replace only the low byte",
+      "cCode": "// Machine-level update: RAX contains x.\n// Replace bits 0\u20137 with 0x5a; preserve all other bits.",
+      "hint": "Use the byte alias, not the full register.",
+      "solutions": [
+        "movb $0x5a, %al"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rax=1234605616436508552",
+          "memory": {},
+          "registers": {
+            "rax": "1234605616436508552"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1234605616436508506"
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rax=18446744073709551615",
+          "memory": {},
+          "registers": {
+            "rax": "18446744073709551615"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "18446744073709551450"
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rax=0",
+          "memory": {},
+          "registers": {
+            "rax": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "90"
+            },
+            "memory": {}
+          }
+        }
+      ],
+      "explanation": "AL is the low byte of RAX. A byte write preserves bits 8\u201363; writing EAX would clear the upper 32 bits.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-lowword",
+      "type": "code",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "Replace the low word",
+      "cCode": "// RAX contains x. Replace bits 0\u201315 with 0x1234.",
+      "hint": "Use AX with the w suffix.",
+      "solutions": [
+        "movw $0x1234, %ax"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rax=12379813738877118345",
+          "memory": {},
+          "registers": {
+            "rax": "12379813738877118345"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "12379813738877096500"
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rax=0",
+          "memory": {},
+          "registers": {
+            "rax": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4660"
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rax=18446744073709551615",
+          "memory": {},
+          "registers": {
+            "rax": "18446744073709551615"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "18446744073709490740"
+            },
+            "memory": {}
+          }
+        }
+      ],
+      "explanation": "AX selects the low 16 bits. A word is two bytes in x86 terminology.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-quad",
+      "type": "mcq",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "How large is q?",
+      "question": "How many bytes does movq transfer?",
+      "options": [
+        "16",
+        "8",
+        "4"
+      ],
+      "correctAnswer": 1,
+      "explanation": "q means quadword: four two-byte words = eight bytes. It does not specify instruction length."
+    },
+    {
+      "id": "l10-alias",
+      "type": "mcq",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "What is AX?",
+      "question": "Which part of RAX is AX?",
+      "options": [
+        "The low 16 bits",
+        "A separate unrelated register",
+        "The high 32 bits"
+      ],
+      "correctAnswer": 0,
+      "explanation": "RAX/EAX/AX/AL are overlapping views, not independent storage."
+    },
+    {
+      "id": "l10-zeroextend",
+      "type": "mcq",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "A 32-bit write",
+      "question": "After movq $-1,%rax; movl $1,%eax, what is RAX?",
+      "options": [
+        "0xffffffff00000001",
+        "-1",
+        "1"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The EAX write clears RAX bits 32\u201363."
+    },
+    {
+      "id": "l10-syntax",
+      "type": "mcq",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "Identify an immediate",
+      "question": "Which operand is the numeric constant 42?",
+      "options": [
+        "%42",
+        "$42",
+        "42"
+      ],
+      "correctAnswer": 1,
+      "explanation": "$42 is an immediate. Bare 42 refers to memory at address 42; %42 is not a register."
+    },
+    {
+      "id": "l10-long",
+      "type": "mcq",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "C long versus l",
+      "question": "Under Linux x86-64 LP64, which suffix copies a C long?",
+      "options": [
+        "q",
+        "l",
+        "w"
+      ],
+      "correctAnswer": 0,
+      "explanation": "LP64 makes long and pointers 64-bit. Other ABIs can differ; the lab states its data model."
+    },
+    {
+      "id": "l10-memcopy",
+      "type": "mcq",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "An illegal move",
+      "question": "Why is movq A,B invalid for this exercise?",
+      "options": [
+        "q cannot be used with variables",
+        "mov changes its source",
+        "Both operands refer to memory"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The ordinary mov form cannot copy directly between two memory operands. Load A into a register, then store to B."
+    },
+    {
+      "id": "l10-loadptr",
+      "type": "code",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Read through a pointer",
+      "cCode": "long read_value(long *p) { return *p; }",
+      "hint": "Dereference RDI using parentheses.",
+      "solutions": [
+        "movq (%rdi), %rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096",
+          "memory": {
+            "X": "19"
+          },
+          "registers": {
+            "rdi": "4096"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "19"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "X": 4096
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096",
+          "memory": {
+            "X": "-4"
+          },
+          "registers": {
+            "rdi": "4096"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-4"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "X": 4096
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096",
+          "memory": {
+            "X": "4294967297"
+          },
+          "registers": {
+            "rdi": "4096"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4294967297"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "X": 4096
+          }
+        }
+      ],
+      "explanation": "RDI is the address, and (%rdi) is the eight-byte value at that address. Load into the return register, then return.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-storeptr",
+      "type": "code",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Write through a pointer",
+      "cCode": "void store(long *p, long x) { *p = x; }",
+      "hint": "Put the parenthesized pointer last.",
+      "solutions": [
+        "movq %rsi, (%rdi)\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096, rsi=11",
+          "memory": {
+            "X": 1
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "11"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "X": "11"
+            }
+          },
+          "symbols": {
+            "X": 4096
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=-8",
+          "memory": {
+            "X": 1
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "-8"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "X": "-8"
+            }
+          },
+          "symbols": {
+            "X": 4096
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=4294967297",
+          "memory": {
+            "X": 1
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "4294967297"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "X": "4294967297"
+            }
+          },
+          "symbols": {
+            "X": 4096
+          },
+          "function": true
+        }
+      ],
+      "explanation": "The source is RSI, the destination is memory at RDI. This function returns no value but must return correctly.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-ptrcopy",
+      "type": "code",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Copy between pointees",
+      "cCode": "void copy(long *dst, long *src) { *dst = *src; }",
+      "hint": "Use a temporary register between the two memory locations.",
+      "solutions": [
+        "movq (%rsi), %rax\nmovq %rax, (%rdi)\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096, rsi=4104",
+          "memory": {
+            "A": 0,
+            "B": 3
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "4104"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "A": 3
+            }
+          },
+          "symbols": {
+            "A": 4096,
+            "B": 4104
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=4104",
+          "memory": {
+            "A": 0,
+            "B": -7
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "4104"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "A": -7
+            }
+          },
+          "symbols": {
+            "A": 4096,
+            "B": 4104
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=4104",
+          "memory": {
+            "A": 0,
+            "B": 91
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "4104"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "A": 91
+            }
+          },
+          "symbols": {
+            "A": 4096,
+            "B": 4104
+          },
+          "function": true
+        }
+      ],
+      "explanation": "The load saves *src in RAX. The store writes that value to *dst. The source memory must remain unchanged.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-swap",
+      "type": "code",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Swap two longs, including aliases",
+      "cCode": "void swap(long *xp, long *yp) {\n  long t = *xp; *xp = *yp; *yp = t;\n}",
+      "hint": "Save both values before overwriting either pointee.",
+      "solutions": [
+        "movq (%rdi), %rax\nmovq (%rsi), %rdx\nmovq %rdx, (%rdi)\nmovq %rax, (%rsi)\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096, rsi=4104",
+          "memory": {
+            "X": 5,
+            "Y": 9
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "4104"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "X": 9,
+              "Y": 5
+            }
+          },
+          "symbols": {
+            "X": 4096,
+            "Y": 4104
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=4104",
+          "memory": {
+            "X": -3,
+            "Y": 8
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "4104"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "X": 8,
+              "Y": -3
+            }
+          },
+          "symbols": {
+            "X": 4096,
+            "Y": 4104
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=4104",
+          "memory": {
+            "X": 0,
+            "Y": 0
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "4104"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "X": 0,
+              "Y": 0
+            }
+          },
+          "symbols": {
+            "X": 4096,
+            "Y": 4104
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=4096",
+          "memory": {
+            "X": 17
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "4096"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "X": 17
+            }
+          },
+          "symbols": {
+            "X": 4096
+          },
+          "function": true
+        }
+      ],
+      "explanation": "RAX preserves the old *xp while RDX captures the old *yp. Only after both loads do the stores occur. The alias case confirms that xp == yp is safe.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-addressvalue",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Address or value?",
+      "question": "RDI=0x100 and memory[0x100]=23. What does movq %rdi,%rax copy?",
+      "options": [
+        "0x100",
+        "23",
+        "The address of RDI"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Without parentheses it copies the register\u2019s address value. Registers themselves do not have normal memory addresses."
+    },
+    {
+      "id": "l10-deref",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Dereference",
+      "question": "RDI=0x100 and memory[0x100]=23. What does movq (%rdi),%rax copy?",
+      "options": [
+        "0x100",
+        "0",
+        "23"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Parentheses tell mov to read memory at the address in RDI."
+    },
+    {
+      "id": "l10-storeorder",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Store direction",
+      "question": "Which stores RAX to the address in RDX?",
+      "options": [
+        "movq %rax,%rdx",
+        "movq %rax,(%rdx)",
+        "movq (%rdx),%rax"
+      ],
+      "correctAnswer": 1,
+      "explanation": "AT&T destination is last. Parentheses on the destination make it a memory store."
+    },
+    {
+      "id": "l10-swaporder",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Why a temporary?",
+      "question": "Why not perform *xp=*yp; *yp=*xp; as a swap?",
+      "options": [
+        "The first assignment destroys the original *xp",
+        "Pointers cannot be used twice",
+        "The assignments run in parallel"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The second load sees the already-overwritten value. Preserve the original before the store."
+    },
+    {
+      "id": "l10-arraylong",
+      "type": "code",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Load a long array element",
+      "cCode": "long get(long *a, long i) { return a[i]; }",
+      "hint": "Use RDI as base and RSI as index.",
+      "solutions": [
+        "movq (%rdi,%rsi,8), %rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096, rsi=0",
+          "memory": {
+            "a": 4,
+            "a+8": -7,
+            "a+16": 39
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=1",
+          "memory": {
+            "a": 4,
+            "a+8": -7,
+            "a+16": 39
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "1"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-7"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=2",
+          "memory": {
+            "a": 4,
+            "a+8": -7,
+            "a+16": 39
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "39"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        }
+      ],
+      "explanation": "The index is multiplied by sizeof(long)=8. movq dereferences that address and returns the selected element.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-arrayint",
+      "type": "code",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Load an int with a 64-bit address",
+      "cCode": "int get(int *a, long i) { return a[i]; }",
+      "hint": "Data width and address-register width are different decisions.",
+      "solutions": [
+        "movl (%rdi,%rsi,4), %eax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096, rsi=0",
+          "memory": {
+            "a": -2,
+            "a+4": 8,
+            "a+8": 31
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": "-2"
+            },
+            "memory": {}
+          },
+          "symbols": {
+            "a": 4096
+          },
+          "function": true,
+          "memoryWidths": {
+            "a": 4,
+            "a+4": 4,
+            "a+8": 4
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=1",
+          "memory": {
+            "a": -2,
+            "a+4": 8,
+            "a+8": 31
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "1"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": "8"
+            },
+            "memory": {}
+          },
+          "symbols": {
+            "a": 4096
+          },
+          "function": true,
+          "memoryWidths": {
+            "a": 4,
+            "a+4": 4,
+            "a+8": 4
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=2",
+          "memory": {
+            "a": -2,
+            "a+4": 8,
+            "a+8": 31
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": "31"
+            },
+            "memory": {}
+          },
+          "symbols": {
+            "a": 4096
+          },
+          "function": true,
+          "memoryWidths": {
+            "a": 4,
+            "a+4": 4,
+            "a+8": 4
+          }
+        }
+      ],
+      "explanation": "int is four bytes, so scale 4 and movl match. The return is checked in EAX because the declared result is int. Address registers are still 64-bit.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-arraystore",
+      "type": "code",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Store into a long array",
+      "cCode": "void set(long *a, long i, long v) { a[i] = v; }",
+      "hint": "Only one array element is an output.",
+      "solutions": [
+        "movq %rdx, (%rdi,%rsi,8)\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096, rsi=0, rdx=9",
+          "memory": {
+            "a": 1,
+            "a+8": 2,
+            "a+16": 3
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "0",
+            "rdx": "9"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "a": 9
+            }
+          },
+          "symbols": {
+            "a": 4096
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=1, rdx=-4",
+          "memory": {
+            "a": 1,
+            "a+8": 2,
+            "a+16": 3
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "1",
+            "rdx": "-4"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "a+8": -4
+            }
+          },
+          "symbols": {
+            "a": 4096
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=2, rdx=0",
+          "memory": {
+            "a": 1,
+            "a+8": 2,
+            "a+16": 3
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "2",
+            "rdx": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "a+16": 0
+            }
+          },
+          "symbols": {
+            "a": 4096
+          },
+          "function": true
+        }
+      ],
+      "explanation": "RDX is the third argument. Compute the selected element address and store; other elements are checked for preservation.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-displaced",
+      "type": "code",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Combine an index and displacement",
+      "cCode": "long next(long *a, long i) { return a[i+1]; }",
+      "hint": "Expand (i+1)*8.",
+      "solutions": [
+        "movq 8(%rdi,%rsi,8), %rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096, rsi=0",
+          "memory": {
+            "a": 4,
+            "a+8": 9,
+            "a+16": -5
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "9"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=1",
+          "memory": {
+            "a": 4,
+            "a+8": 9,
+            "a+16": -5
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "1"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-5"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        }
+      ],
+      "explanation": "8*i accounts for i elements; the extra displacement 8 accounts for one more long.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-addrmath",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Compute an address",
+      "question": "RDX=0xf000, RCX=0x100. What address is 8(%rdx,%rcx,4)?",
+      "options": [
+        "0x3c008",
+        "0xf408",
+        "0xf108"
+      ],
+      "correctAnswer": 1,
+      "explanation": "0xf000 + 0x100\u00d74 + 8 = 0xf408. This computes an address, not the memory contents."
+    },
+    {
+      "id": "l10-nobase",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Omitted base",
+      "question": "RDX=0xf000. What is 0x80(,%rdx,2)?",
+      "options": [
+        "Address 0x1e080",
+        "Address 0xf082",
+        "An invalid scale"
+      ],
+      "correctAnswer": 0,
+      "explanation": "There is no base register. The address is 0x80 + 2\u00d70xf000."
+    },
+    {
+      "id": "l10-scales",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Legal scales",
+      "question": "Which scale is invalid in an x86 address?",
+      "options": [
+        "4",
+        "8",
+        "9"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The hardware encoding permits 1, 2, 4 and 8. To compute 9*x, use x + 8*x."
+    },
+    {
+      "id": "l10-endian",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Little endian",
+      "question": "An eight-byte value is 0x1122334455667788. Which byte is stored first?",
+      "options": [
+        "0x78",
+        "0x88",
+        "0x11"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The low-order byte occupies the lowest memory address."
+    },
+    {
+      "id": "l10-mixedaddr",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Correct slide 35\u2019s register sizes",
+      "question": "Which is a valid 64-bit address for a four-byte array element?",
+      "options": [
+        "20(%rbp,%rax,4)",
+        "20(%rbp,%eax,4)",
+        "20(%rbp,%rax,3)"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Use matching address-register widths. The scale remains 4 for int, regardless of the 64-bit registers."
+    },
+    {
+      "id": "l10-elementptr",
+      "type": "code",
+      "lesson": "05-lea",
+      "category": "05-lea",
+      "title": "Return an element address",
+      "cCode": "long *element(long *a, long i) { return &a[i]; }",
+      "hint": "Use lea, not a load.",
+      "solutions": [
+        "leaq (%rdi,%rsi,8), %rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096, rsi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "4096",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4096"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=2",
+          "memory": {},
+          "registers": {
+            "rdi": "4096",
+            "rsi": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4112"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=7",
+          "memory": {},
+          "registers": {
+            "rdi": "4096",
+            "rsi": "7"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4152"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "The test supplies an address but no array data, so an accidental mov fails. lea computes the pointer without a memory access.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-times9",
+      "type": "code",
+      "lesson": "05-lea",
+      "category": "05-lea",
+      "title": "Multiply by nine with LEA",
+      "cCode": "long times9(long x) { return x*9; }",
+      "hint": "9 = 1 + 8.",
+      "solutions": [
+        "leaq (%rdi,%rdi,8), %rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=7",
+          "memory": {},
+          "registers": {
+            "rdi": "7"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "63"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-3",
+          "memory": {},
+          "registers": {
+            "rdi": "-3"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-27"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=1000000000",
+          "memory": {},
+          "registers": {
+            "rdi": "1000000000"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "9000000000"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Use the same register as base and index: x+8*x. The x86 address calculation wraps to 64 bits; these C test values avoid signed overflow.",
+      "requirements": [
+        "lea"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-affine",
+      "type": "code",
+      "lesson": "05-lea",
+      "category": "05-lea",
+      "title": "Compute x + 4*y + 12",
+      "cCode": "long combine(long x, long y) { return x + 4*y + 12; }",
+      "hint": "Map each arithmetic term onto one address component.",
+      "solutions": [
+        "leaq 12(%rdi,%rsi,4), %rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=3, rsi=2",
+          "memory": {},
+          "registers": {
+            "rdi": "3",
+            "rsi": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "23"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-8, rsi=5",
+          "memory": {},
+          "registers": {
+            "rdi": "-8",
+            "rsi": "5"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "24"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=0, rsi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "12"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Displacement=12, base=x, index=y and scale=4 match the expression directly. No memory is read.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-times12",
+      "type": "code",
+      "lesson": "05-lea",
+      "category": "05-lea",
+      "title": "Build 12*x in two stages",
+      "cCode": "long times12(long x) { return x*12; }",
+      "hint": "First compute three times x; then multiply by four.",
+      "solutions": [
+        "leaq (%rdi,%rdi,2), %rax\nsalq $2, %rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=5",
+          "memory": {},
+          "registers": {
+            "rdi": "5"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "60"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-7",
+          "memory": {},
+          "registers": {
+            "rdi": "-7"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-84"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "lea computes 3*x. salq shifts the bit pattern left by two, producing 12*x for these representable inputs. This is a machine translation of multiplication; it does not require writing a negative signed left shift in C.",
+      "requirements": [
+        "lea",
+        "sal"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-leamov",
+      "type": "mcq",
+      "lesson": "05-lea",
+      "category": "05-lea",
+      "title": "LEA or MOV?",
+      "question": "RDX=0x100, RCX=4, memory[0x110]=8. leaq (%rdx,%rcx,4),%rax gives?",
+      "options": [
+        "0x104",
+        "0x110",
+        "8"
+      ],
+      "correctAnswer": 1,
+      "explanation": "lea computes 0x100+4\u00d74. movq with the same source would load 8."
+    },
+    {
+      "id": "l10-leamem",
+      "type": "mcq",
+      "lesson": "05-lea",
+      "category": "05-lea",
+      "title": "Does LEA need allocated memory?",
+      "question": "Why can LEA compute an address where no test memory is allocated?",
+      "options": [
+        "It only performs address arithmetic",
+        "It silently allocates new memory",
+        "It reads zero from missing memory"
+      ],
+      "correctAnswer": 0,
+      "explanation": "No dereference happens. A later load/store would require a valid allocated address."
+    },
+    {
+      "id": "l10-nine",
+      "type": "mcq",
+      "lesson": "05-lea",
+      "category": "05-lea",
+      "title": "Lecture self-check",
+      "question": "Which computes RAX=9*RDI without a memory read?",
+      "options": [
+        "leaq (,%rdi,9),%rax",
+        "movq (%rdi,%rdi,8),%rax",
+        "leaq (%rdi,%rdi,8),%rax"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The legal scale 8 plus the base gives nine times the input. movq would dereference; scale 9 is invalid."
+    },
+    {
+      "id": "l10-leaflags",
+      "type": "mcq",
+      "lesson": "05-lea",
+      "category": "05-lea",
+      "title": "Preserved flags",
+      "question": "After cmpq, does leaq change the flags used by a branch?",
+      "options": [
+        "Only CF",
+        "No",
+        "Yes, it sets ZF from its result"
+      ],
+      "correctAnswer": 1,
+      "explanation": "lea and mov preserve flags; add and sub update them."
+    },
+    {
+      "id": "l10-subtract",
+      "type": "code",
+      "lesson": "06-arithmetic",
+      "category": "06-arithmetic",
+      "title": "Return x minus y",
+      "cCode": "long difference(long x,long y) { return x-y; }",
+      "hint": "The destination supplies the left side of subtraction.",
+      "solutions": [
+        "movq %rdi,%rax\nsubq %rsi,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=9, rsi=4",
+          "memory": {},
+          "registers": {
+            "rdi": "9",
+            "rsi": "4"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "5"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-2, rsi=7",
+          "memory": {},
+          "registers": {
+            "rdi": "-2",
+            "rsi": "7"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-9"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=3, rsi=3",
+          "memory": {},
+          "registers": {
+            "rdi": "3",
+            "rsi": "3"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Copy the minuend x, then subtract y. AT&T operand order matters for sub.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-multiply",
+      "type": "code",
+      "lesson": "06-arithmetic",
+      "category": "06-arithmetic",
+      "title": "Multiply two longs",
+      "cCode": "long product(long x,long y) { return x*y; }",
+      "hint": "Use the two-operand imul form.",
+      "solutions": [
+        "movq %rdi,%rax\nimulq %rsi,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=7, rsi=8",
+          "memory": {},
+          "registers": {
+            "rdi": "7",
+            "rsi": "8"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "56"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-4, rsi=9",
+          "memory": {},
+          "registers": {
+            "rdi": "-4",
+            "rsi": "9"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-36"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=0, rsi=11",
+          "memory": {},
+          "registers": {
+            "rdi": "0",
+            "rsi": "11"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=1000000000, rsi=3",
+          "memory": {},
+          "registers": {
+            "rdi": "1000000000",
+            "rsi": "3"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "3000000000"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Copy x into RAX and multiply by y. The cases include zero, a negative result and a value beyond signed 32-bit range.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-slide33c",
+      "type": "code",
+      "lesson": "06-arithmetic",
+      "category": "06-arithmetic",
+      "title": "Correct translation of slide 33\u2019s C",
+      "cCode": "long arith(long x,long y,long z) {\n  return (x+y+z)*(5*y);\n}",
+      "hint": "Compute 5*y, not 2*x+4.",
+      "solutions": [
+        "leaq (%rdi,%rsi),%rax\naddq %rdx,%rax\nleaq (%rsi,%rsi,4),%rcx\nimulq %rcx,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=1, rsi=2, rdx=3",
+          "memory": {},
+          "registers": {
+            "rdi": "1",
+            "rsi": "2",
+            "rdx": "3"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "60"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-2, rsi=3, rdx=1",
+          "memory": {},
+          "registers": {
+            "rdi": "-2",
+            "rsi": "3",
+            "rdx": "1"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "30"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=7, rsi=0, rdx=2",
+          "memory": {},
+          "registers": {
+            "rdi": "7",
+            "rsi": "0",
+            "rdx": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "RAX accumulates x+y+z. RCX gets y+4*y. Multiply those two values. The unused t3 and t4 in the slide C have no effect on the result.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-slide33asm",
+      "type": "code",
+      "lesson": "06-arithmetic",
+      "category": "06-arithmetic",
+      "title": "Translate what the slide assembly actually does",
+      "cCode": "long actual(long x,long y,long z) {\n  return (x+y+z)*(2*x+4);\n}",
+      "hint": "Trace data dependencies rather than variable names in the C column.",
+      "solutions": [
+        "leaq (%rdi,%rsi),%rax\naddq %rdx,%rax\nleaq 4(%rdi,%rdi),%rcx\nimulq %rcx,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=1, rsi=2, rdx=3",
+          "memory": {},
+          "registers": {
+            "rdi": "1",
+            "rsi": "2",
+            "rdx": "3"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "36"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-2, rsi=3, rdx=1",
+          "memory": {},
+          "registers": {
+            "rdi": "-2",
+            "rsi": "3",
+            "rdx": "1"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=7, rsi=0, rdx=2",
+          "memory": {},
+          "registers": {
+            "rdi": "7",
+            "rsi": "0",
+            "rdx": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "162"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "leaq 4(%rdi,%rdi),%rcx computes 4+x+x. The original 48*y calculation is dead: removing it does not change the returned value.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-suborder",
+      "type": "mcq",
+      "lesson": "06-arithmetic",
+      "category": "06-arithmetic",
+      "title": "Subtraction direction",
+      "question": "What does subq %rsi,%rax compute?",
+      "options": [
+        "RSI = RSI - RAX",
+        "RAX = RSI - RAX",
+        "RAX = RAX - RSI"
+      ],
+      "correctAnswer": 2,
+      "explanation": "AT&T destination is last and is also an input to two-operand subtraction."
+    },
+    {
+      "id": "l10-overflow",
+      "type": "mcq",
+      "lesson": "06-arithmetic",
+      "category": "06-arithmetic",
+      "title": "C versus assembly",
+      "question": "Which statement about signed C overflow is correct?",
+      "options": [
+        "q operations cannot overflow",
+        "It is undefined; assembly wraparound does not make it valid C",
+        "C signed arithmetic always wraps identically to x86"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The machine has fixed-width bit behavior. C\u2019s language rules are a separate contract."
+    },
+    {
+      "id": "l10-slide33audit",
+      "type": "mcq",
+      "lesson": "06-arithmetic",
+      "category": "06-arithmetic",
+      "title": "Spot the slide mismatch",
+      "question": "Which expression does slide 33\u2019s final imul use as its second factor?",
+      "options": [
+        "2*x+4",
+        "5*y",
+        "48*y"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The live RCX value comes from leaq 4(%rdi,%rdi). RDX\u2019s 48*y value is not used by that imul."
+    },
+    {
+      "id": "l10-extract",
+      "type": "code",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "Extract the low byte",
+      "cCode": "unsigned long bits(unsigned long x) { return x & 0xffUL; }",
+      "hint": "Copy x, then apply the appropriate mask.",
+      "solutions": [
+        "movq %rdi,%rax\nandq $255,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=291",
+          "memory": {},
+          "registers": {
+            "rdi": "291"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "35"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615",
+          "memory": {},
+          "registers": {
+            "rdi": "18446744073709551615"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "255"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=9223372036854775808",
+          "memory": {},
+          "registers": {
+            "rdi": "9223372036854775808"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=8",
+          "memory": {},
+          "registers": {
+            "rdi": "8"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "The mask operation implements x & 0xffUL. Cases exercise zero, a set bit, a clear bit, and upper bits that must not be lost.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-setbit",
+      "type": "code",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "Set bit 3",
+      "cCode": "unsigned long bits(unsigned long x) { return x | 8UL; }",
+      "hint": "Copy x, then apply the appropriate mask.",
+      "solutions": [
+        "movq %rdi,%rax\norq $8,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=291",
+          "memory": {},
+          "registers": {
+            "rdi": "291"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "299"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615",
+          "memory": {},
+          "registers": {
+            "rdi": "18446744073709551615"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "18446744073709551615"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=9223372036854775808",
+          "memory": {},
+          "registers": {
+            "rdi": "9223372036854775808"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "9223372036854775816"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=8",
+          "memory": {},
+          "registers": {
+            "rdi": "8"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "The mask operation implements x | 8UL. Cases exercise zero, a set bit, a clear bit, and upper bits that must not be lost.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-clearbit",
+      "type": "code",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "Clear bit 3",
+      "cCode": "unsigned long bits(unsigned long x) { return x & ~8UL; }",
+      "hint": "Copy x, then apply the appropriate mask.",
+      "solutions": [
+        "movq %rdi,%rax\nandq $-9,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=291",
+          "memory": {},
+          "registers": {
+            "rdi": "291"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "291"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615",
+          "memory": {},
+          "registers": {
+            "rdi": "18446744073709551615"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "18446744073709551607"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=9223372036854775808",
+          "memory": {},
+          "registers": {
+            "rdi": "9223372036854775808"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "9223372036854775808"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=8",
+          "memory": {},
+          "registers": {
+            "rdi": "8"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "The mask operation implements x & ~8UL. Cases exercise zero, a set bit, a clear bit, and upper bits that must not be lost.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-togglebit",
+      "type": "code",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "Toggle bit 3",
+      "cCode": "unsigned long bits(unsigned long x) { return x ^ 8UL; }",
+      "hint": "Copy x, then apply the appropriate mask.",
+      "solutions": [
+        "movq %rdi,%rax\nxorq $8,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=291",
+          "memory": {},
+          "registers": {
+            "rdi": "291"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "299"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615",
+          "memory": {},
+          "registers": {
+            "rdi": "18446744073709551615"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "18446744073709551607"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=9223372036854775808",
+          "memory": {},
+          "registers": {
+            "rdi": "9223372036854775808"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "9223372036854775816"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=8",
+          "memory": {},
+          "registers": {
+            "rdi": "8"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "The mask operation implements x ^ 8UL. Cases exercise zero, a set bit, a clear bit, and upper bits that must not be lost.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-complement",
+      "type": "code",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "Complement every bit",
+      "cCode": "unsigned long invert(unsigned long x) { return ~x; }",
+      "hint": "NOT has one operand.",
+      "solutions": [
+        "movq %rdi,%rax\nnotq %rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "18446744073709551615"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=291",
+          "memory": {},
+          "registers": {
+            "rdi": "291"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "18446744073709551324"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615",
+          "memory": {},
+          "registers": {
+            "rdi": "18446744073709551615"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=9223372036854775808",
+          "memory": {},
+          "registers": {
+            "rdi": "9223372036854775808"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "9223372036854775807"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "NOT flips all 64 bits and preserves flags. The unsigned result is compared as a bit pattern, even when the signed display is negative.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-bittest",
+      "type": "code",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "Return whether bit 3 is set",
+      "cCode": "int has_bit(unsigned long x) { return (x & 8UL) != 0; }",
+      "hint": "Use test and a conditional branch; return 0 or 1.",
+      "solutions": [
+        "movl $0,%eax\ntestq $8,%rdi\nje done\nmovl $1,%eax\ndone: ret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=8",
+          "memory": {},
+          "registers": {
+            "rdi": "8"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": "1"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=16",
+          "memory": {},
+          "registers": {
+            "rdi": "16"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=24",
+          "memory": {},
+          "registers": {
+            "rdi": "24"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": "1"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615",
+          "memory": {},
+          "registers": {
+            "rdi": "18446744073709551615"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": "1"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Initialize the return to false. test leaves x intact and sets ZF according to x&8. If nonzero, return true.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-andtruth",
+      "type": "mcq",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "AND truth rule",
+      "question": "What is 0b1010 & 0b1100?",
+      "options": [
+        "0b1110",
+        "0b0110",
+        "0b1000"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Only bit 3 is one in both operands."
+    },
+    {
+      "id": "l10-xortruth",
+      "type": "mcq",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "XOR truth rule",
+      "question": "What is 0b1010 ^ 0b1100?",
+      "options": [
+        "0b1000",
+        "0b0110",
+        "0b1110"
+      ],
+      "correctAnswer": 1,
+      "explanation": "XOR marks differing bit positions."
+    },
+    {
+      "id": "l10-clear",
+      "type": "mcq",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "Choose a clear mask",
+      "question": "Which C expression always clears bit 5?",
+      "options": [
+        "x & ~(1UL << 5)",
+        "x ^ (1UL << 5)",
+        "x | (1UL << 5)"
+      ],
+      "correctAnswer": 0,
+      "explanation": "AND with a zero in bit 5 clears it; other mask bits are one and preserve x."
+    },
+    {
+      "id": "l10-logical",
+      "type": "mcq",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "Bitwise is not logical",
+      "question": "For x=2 and y=4, what are x&y and x&&y?",
+      "options": [
+        "1 and 1",
+        "0 and 0",
+        "0 and 1"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Bitwise AND finds no shared set bit; logical AND sees two nonzero values."
+    },
+    {
+      "id": "l10-test",
+      "type": "mcq",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "TEST side effects",
+      "question": "What does testq $8,%rax change?",
+      "options": [
+        "RAX only",
+        "Flags only",
+        "RAX and flags"
+      ],
+      "correctAnswer": 1,
+      "explanation": "It computes an AND for flags but discards the numeric result."
+    },
+    {
+      "id": "l10-left",
+      "type": "code",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "Shift left with wraparound",
+      "cCode": "unsigned long times8(unsigned long x) { return x << 3; }",
+      "hint": "Copy x, then shift by an immediate count.",
+      "solutions": [
+        "movq %rdi,%rax\nshlq $3,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=7",
+          "memory": {},
+          "registers": {
+            "rdi": "7"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "56"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4611686018427387905",
+          "memory": {},
+          "registers": {
+            "rdi": "4611686018427387905"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "SHL/SAL inserts three zeros and discards the high three bits. Unsigned C matches this wrapping behavior for a valid count.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-logicalright",
+      "type": "code",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "Unsigned right shift",
+      "cCode": "unsigned long half(unsigned long x) { return x >> 1; }",
+      "hint": "Treat the input as unsigned.",
+      "solutions": [
+        "movq %rdi,%rax\nshrq $1,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=7",
+          "memory": {},
+          "registers": {
+            "rdi": "7"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "3"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=9223372036854775808",
+          "memory": {},
+          "registers": {
+            "rdi": "9223372036854775808"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4611686018427387904"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615",
+          "memory": {},
+          "registers": {
+            "rdi": "18446744073709551615"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "9223372036854775807"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "SHR fills with zero. Upper-bit cases distinguish it from SAR.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-arithmeticright",
+      "type": "code",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "Arithmetic right shift",
+      "cCode": "// x86 arithmetic right shift semantics for signed x\nlong shifted(long x) { return x >> 2; }",
+      "hint": "Preserve the sign bit.",
+      "solutions": [
+        "movq %rdi,%rax\nsarq $2,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=8",
+          "memory": {},
+          "registers": {
+            "rdi": "8"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "2"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-8",
+          "memory": {},
+          "registers": {
+            "rdi": "-8"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-2"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-7",
+          "memory": {},
+          "registers": {
+            "rdi": "-7"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-2"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "SAR replicates the sign bit. For -7 the result is -2, which differs from C -7/4 = -1. This exercise explicitly assumes arithmetic signed right-shift behavior.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-variablecount",
+      "type": "code",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "Shift by a runtime count",
+      "cCode": "// Precondition: 0 <= k < 64\nunsigned long shift(unsigned long x,unsigned long k) { return x << k; }",
+      "hint": "Use RCX/CL for the count.",
+      "solutions": [
+        "movq %rdi,%rax\nmovq %rsi,%rcx\nshlq %cl,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=7, rsi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "7",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "7"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=3, rsi=5",
+          "memory": {},
+          "registers": {
+            "rdi": "3",
+            "rsi": "5"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "96"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=1, rsi=63",
+          "memory": {},
+          "registers": {
+            "rdi": "1",
+            "rsi": "63"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "9223372036854775808"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4294967297, rsi=32",
+          "memory": {},
+          "registers": {
+            "rdi": "4294967297",
+            "rsi": "32"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4294967296"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "The second argument arrives in RSI, but the shift encoding requires CL. Move RSI to RCX, then use its low-byte alias for the count.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-field",
+      "type": "code",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "Extract a four-bit field",
+      "cCode": "unsigned long field(unsigned long x) { return (x >> 8) & 15UL; }",
+      "hint": "Shift first, mask second.",
+      "solutions": [
+        "movq %rdi,%rax\nshrq $8,%rax\nandq $15,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=2748",
+          "memory": {},
+          "registers": {
+            "rdi": "2748"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "10"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615",
+          "memory": {},
+          "registers": {
+            "rdi": "18446744073709551615"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "15"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "First move bits 8\u201311 into positions 0\u20133. Then mask out every other bit. Reversing those operations would erase the field too early.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-shiftsynonym",
+      "type": "mcq",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "SAL versus SHL",
+      "question": "How do salq and shlq differ in result?",
+      "options": [
+        "SHL only works on unsigned registers",
+        "They do not; they are synonyms",
+        "SAL preserves the sign on a left shift"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Registers have bit patterns, not signed types. Both left-shift identically."
+    },
+    {
+      "id": "l10-sarr",
+      "type": "mcq",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "Negative right shift",
+      "question": "What is arithmetic -7 shifted right by one?",
+      "options": [
+        "-4",
+        "-3",
+        "A large positive number"
+      ],
+      "correctAnswer": 0,
+      "explanation": "SAR rounds the mathematical quotient down; signed C division truncates toward zero."
+    },
+    {
+      "id": "l10-count",
+      "type": "mcq",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "Variable count register",
+      "question": "Which is a valid variable-count shift?",
+      "options": [
+        "shlq %rcx,%rax",
+        "shlq %rsi,%rax",
+        "shlq %cl,%rax"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Only CL supplies a variable shift count in these x86 forms."
+    },
+    {
+      "id": "l10-countmask",
+      "type": "mcq",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "Hardware versus C",
+      "question": "What does x86 shlq $64,%rax do to RAX?",
+      "options": [
+        "Always traps",
+        "Leaves it unchanged",
+        "Always makes it zero"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The low six count bits are zero. This is not a valid translation of an unrestricted C x<<64, which has an out-of-range count."
+    },
+    {
+      "id": "l10-shiftflags",
+      "type": "mcq",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "Undefined overflow flag",
+      "question": "After shlq $2,%rax, can jo reliably test signed overflow?",
+      "options": [
+        "No; OF is undefined for that count",
+        "Yes, always",
+        "Only if RAX is positive"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Only count one defines OF for these shifts. The checker refuses to guess it."
+    },
+    {
+      "id": "l10-signedmax",
+      "type": "code",
+      "lesson": "09-branches",
+      "category": "09-branches",
+      "title": "Signed maximum",
+      "cCode": "long max(long x,long y) { return x>y ? x:y; }",
+      "hint": "Default to one result, then conditionally replace it.",
+      "solutions": [
+        "movq %rsi,%rax\ncmpq %rsi,%rdi\njle done\nmovq %rdi,%rax\ndone: ret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=-3, rsi=2",
+          "memory": {},
+          "registers": {
+            "rdi": "-3",
+            "rsi": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "2"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=7, rsi=-9",
+          "memory": {},
+          "registers": {
+            "rdi": "7",
+            "rsi": "-9"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "7"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=4, rsi=4",
+          "memory": {},
+          "registers": {
+            "rdi": "4",
+            "rsi": "4"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-9223372036854775808, rsi=1",
+          "memory": {},
+          "registers": {
+            "rdi": "-9223372036854775808",
+            "rsi": "1"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "The minimum signed input forces subtraction overflow; jle still works because it uses SF and OF correctly.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-unsignedmax",
+      "type": "code",
+      "lesson": "09-branches",
+      "category": "09-branches",
+      "title": "Unsigned maximum",
+      "cCode": "unsigned long max(unsigned long x,unsigned long y) { return x>y ? x:y; }",
+      "hint": "Compare the same way, but choose the unsigned branch family.",
+      "solutions": [
+        "movq %rsi,%rax\ncmpq %rsi,%rdi\njbe done\nmovq %rdi,%rax\ndone: ret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0, rsi=1",
+          "memory": {},
+          "registers": {
+            "rdi": "0",
+            "rsi": "1"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=7, rsi=3",
+          "memory": {},
+          "registers": {
+            "rdi": "7",
+            "rsi": "3"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "7"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=2, rsi=2",
+          "memory": {},
+          "registers": {
+            "rdi": "2",
+            "rsi": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "2"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615, rsi=1",
+          "memory": {},
+          "registers": {
+            "rdi": "18446744073709551615",
+            "rsi": "1"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "18446744073709551615"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "jbe is unsigned below-or-equal. A signed branch would misclassify the all-ones input as negative.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-sumloop",
+      "type": "code",
+      "lesson": "09-branches",
+      "category": "09-branches",
+      "title": "Sum a long array",
+      "cCode": "// n >= 0; result fits in long\nlong sum(long *a,long n) {\n  long s=0; for(long i=0;i<n;i++) s+=a[i]; return s;\n}",
+      "hint": "Use a top-tested loop and scale 8.",
+      "solutions": [
+        "xorq %rax,%rax\nxorq %rcx,%rcx\nloop: cmpq %rsi,%rcx\njge done\naddq (%rdi,%rcx,8),%rax\nincq %rcx\njmp loop\ndone: ret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096, rsi=0",
+          "memory": {
+            "a": 4,
+            "a+8": -6,
+            "a+16": 9
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=1",
+          "memory": {
+            "a": 4,
+            "a+8": -6,
+            "a+16": 9
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "1"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=3",
+          "memory": {
+            "a": 4,
+            "a+8": -6,
+            "a+16": 9
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "3"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "7"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        }
+      ],
+      "explanation": "Initialize sum and index to zero. Check i>=n before accessing memory. Accumulate a[i], increment, and repeat. n=0 must not read an element.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-cmp",
+      "type": "mcq",
+      "lesson": "09-branches",
+      "category": "09-branches",
+      "title": "CMP direction",
+      "question": "After cmpq %rsi,%rdi, which comparison does jg express?",
+      "options": [
+        "Signed RSI > RDI",
+        "Unsigned RDI > RSI",
+        "Signed RDI > RSI"
+      ],
+      "correctAnswer": 2,
+      "explanation": "cmp calculates RDI-RSI for flags. jg interprets the relation as signed."
+    },
+    {
+      "id": "l10-unsigned",
+      "type": "mcq",
+      "lesson": "09-branches",
+      "category": "09-branches",
+      "title": "High-bit comparison",
+      "question": "For RAX=0xffffffffffffffff, cmpq $1,%rax followed by ja will\u2026",
+      "options": [
+        "Depend on the previous flags",
+        "Branch",
+        "Not branch"
+      ],
+      "correctAnswer": 1,
+      "explanation": "As unsigned, all ones is 2^64-1, above 1. Signed jg would not branch."
+    },
+    {
+      "id": "l10-loopzero",
+      "type": "mcq",
+      "lesson": "09-branches",
+      "category": "09-branches",
+      "title": "Zero iterations",
+      "question": "Why test a while condition before the body?",
+      "options": [
+        "The loop may need to execute zero times",
+        "It always makes the program faster",
+        "CMP erases the counter"
+      ],
+      "correctAnswer": 0,
+      "explanation": "A bottom-tested loop executes at least once, which changes the C semantics."
+    },
+    {
+      "id": "l10-pushpop",
+      "type": "code",
+      "lesson": "10-stack",
+      "category": "10-stack",
+      "title": "Save and restore with the stack",
+      "cCode": "// RDI contains x. Save it on the stack, set RDI to 99,\n// then recover the original x into RAX. Finish with balanced RSP.",
+      "hint": "Push the original before the overwrite.",
+      "solutions": [
+        "pushq %rdi\nmovq $99,%rdi\npopq %rax"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=5",
+          "memory": {},
+          "registers": {
+            "rdi": "5"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "5",
+              "rdi": "99"
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=-11",
+          "memory": {},
+          "registers": {
+            "rdi": "-11"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-11",
+              "rdi": "99"
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=4294967297",
+          "memory": {},
+          "registers": {
+            "rdi": "4294967297"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4294967297",
+              "rdi": "99"
+            },
+            "memory": {}
+          }
+        }
+      ],
+      "explanation": "push captures the original value before it is overwritten. pop retrieves it into RAX and restores the stack pointer.",
+      "requirements": [
+        "push",
+        "pop"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-lifo",
+      "type": "code",
+      "lesson": "10-stack",
+      "category": "10-stack",
+      "title": "Reverse two values with PUSH/POP",
+      "cCode": "// RDI=x, RSI=y. Use two pushes and two pops to exchange them.",
+      "hint": "Read the pushes in reverse order when planning the pops.",
+      "solutions": [
+        "pushq %rdi\npushq %rsi\npopq %rdi\npopq %rsi"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=3, rsi=7",
+          "memory": {},
+          "registers": {
+            "rdi": "3",
+            "rsi": "7"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rdi": "7",
+              "rsi": "3"
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=-8, rsi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "-8",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rdi": "0",
+              "rsi": "-8"
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=4, rsi=4",
+          "memory": {},
+          "registers": {
+            "rdi": "4",
+            "rsi": "4"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rdi": "4",
+              "rsi": "4"
+            },
+            "memory": {}
+          }
+        }
+      ],
+      "explanation": "After both pushes y is on top. The first pop gets y; the second gets x. Both stack slots are released.",
+      "requirements": [
+        "push",
+        "pop"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-localframe",
+      "type": "code",
+      "lesson": "10-stack",
+      "category": "10-stack",
+      "title": "Use a frame for a local long",
+      "cCode": "long local(long x) {\n  volatile long t=x; return t+1;\n}\n// Use an RBP frame and an 8-byte local at -8(%rbp).",
+      "hint": "Restore RSP to RBP before popping RBP.",
+      "solutions": [
+        "pushq %rbp\nmovq %rsp,%rbp\nsubq $16,%rsp\nmovq %rdi,-8(%rbp)\nmovq -8(%rbp),%rax\naddq $1,%rax\nleave\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=2, rbp=24576",
+          "memory": {},
+          "registers": {
+            "rdi": "2",
+            "rbp": "24576"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "3"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "preserveRegisters": [
+            "rbp"
+          ]
+        },
+        {
+          "name": "Inputs: rdi=-5, rbp=24576",
+          "memory": {},
+          "registers": {
+            "rdi": "-5",
+            "rbp": "24576"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-4"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "preserveRegisters": [
+            "rbp"
+          ]
+        },
+        {
+          "name": "Inputs: rdi=0, rbp=24576",
+          "memory": {},
+          "registers": {
+            "rdi": "0",
+            "rbp": "24576"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "preserveRegisters": [
+            "rbp"
+          ]
+        }
+      ],
+      "explanation": "Save the caller\u2019s RBP, establish the frame, reserve local space, store and reload t, then add one. leave releases local storage and restores RBP. ret then consumes the return address.",
+      "requirements": [
+        "push",
+        "leave"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-pushdelta",
+      "type": "mcq",
+      "lesson": "10-stack",
+      "category": "10-stack",
+      "title": "PUSH stack movement",
+      "question": "RSP=0x8000. After pushq %rax, where is the value?",
+      "options": [
+        "At 0x8000, and RSP=0x8008",
+        "At 0x7ffc, and RSP=0x7ffc",
+        "At 0x7ff8, and RSP=0x7ff8"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The stack grows toward lower addresses, by eight bytes for pushq."
+    },
+    {
+      "id": "l10-popdelta",
+      "type": "mcq",
+      "lesson": "10-stack",
+      "category": "10-stack",
+      "title": "POP stack movement",
+      "question": "RSP=0x7ff0. After popq %rax, what is RSP?",
+      "options": [
+        "0x7ff0",
+        "0x7ff8",
+        "0x7fe8"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The value at the old top is loaded, then RSP advances eight bytes."
+    },
+    {
+      "id": "l10-initstack",
+      "type": "mcq",
+      "lesson": "10-stack",
+      "category": "10-stack",
+      "title": "Who initializes the stack?",
+      "question": "Must each C function initialize a brand-new stack before using push?",
+      "options": [
+        "No; it receives an existing stack from its caller/runtime",
+        "Yes; push has no stack until the function creates one",
+        "No; push stores inside the CPU only"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The stack is memory addressed by RSP. A function must use and restore the supplied stack correctly."
+    },
+    {
+      "id": "l10-popmemory",
+      "type": "mcq",
+      "lesson": "10-stack",
+      "category": "10-stack",
+      "title": "POP does not erase",
+      "question": "Does popq erase the bytes it reads?",
+      "options": [
+        "Yes; it zeroes eight bytes",
+        "Only if it pops into RAX",
+        "No; it changes RSP and its destination"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Deallocation changes which bytes are live, not their physical contents."
+    },
+    {
+      "id": "l10-unbalanced",
+      "type": "mcq",
+      "lesson": "10-stack",
+      "category": "10-stack",
+      "title": "Why RET fails",
+      "question": "What happens if a saved register remains above the return address when ret executes?",
+      "options": [
+        "RET returns the saved value through RAX",
+        "RET uses those saved bits as the return address",
+        "RET automatically skips saved registers"
+      ],
+      "correctAnswer": 1,
+      "explanation": "RET only pops its target; it does not understand your frame layout."
+    },
+    {
+      "id": "l10-leaf",
+      "type": "code",
+      "lesson": "11-calls",
+      "category": "11-calls",
+      "title": "Write a leaf function",
+      "cCode": "long plus(long x,long y) { return x+y; }",
+      "hint": "A simple leaf can consist of a calculation and ret.",
+      "solutions": [
+        "leaq (%rdi,%rsi),%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=1, rsi=2",
+          "memory": {},
+          "registers": {
+            "rdi": "1",
+            "rsi": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "3"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-8, rsi=3",
+          "memory": {},
+          "registers": {
+            "rdi": "-8",
+            "rsi": "3"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-5"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=0, rsi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "A leaf function makes no other calls. It needs neither a local frame nor a saved register here: compute in RAX and return.",
+      "requirements": [
+        "ret"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-callplus",
+      "type": "code",
+      "lesson": "11-calls",
+      "category": "11-calls",
+      "title": "Call a helper and use its result",
+      "cCode": "long plus(long x,long y) { return x+y; }\nlong caller(long x,long y) { return plus(x,y)+1; }\n// Entry label: caller. Include plus.",
+      "hint": "Balance the alignment adjustment around call.",
+      "solutions": [
+        "caller:\nsubq $8,%rsp\ncall plus\naddq $8,%rsp\naddq $1,%rax\nret\nplus:\nleaq (%rdi,%rsi),%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=3, rsi=4",
+          "memory": {},
+          "registers": {
+            "rdi": "3",
+            "rsi": "4"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "entry": "caller",
+          "abi": true
+        },
+        {
+          "name": "Inputs: rdi=-8, rsi=2",
+          "memory": {},
+          "registers": {
+            "rdi": "-8",
+            "rsi": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-5"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "entry": "caller",
+          "abi": true
+        },
+        {
+          "name": "Inputs: rdi=0, rsi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "0",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "entry": "caller",
+          "abi": true
+        }
+      ],
+      "explanation": "Reserve eight bytes to align the caller\u2019s stack, call plus, release the reservation, and add one to its RAX return value. The helper\u2019s ret resumes inside caller.",
+      "requirements": [
+        "call",
+        "ret"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-sumstore",
+      "type": "code",
+      "lesson": "11-calls",
+      "category": "11-calls",
+      "title": "Complete slide 15: sumstore",
+      "cCode": "long plus(long x,long y) { return x+y; }\nvoid sumstore(long x,long y,long *dest) { *dest=plus(x,y); }\n// Entry: sumstore. Include plus and let it clobber RDX with 123.\n// Preserve the incoming RBX.",
+      "hint": "Save RBX, put dest there, call, store through RBX, restore RBX.",
+      "solutions": [
+        "sumstore:\npushq %rbx\nmovq %rdx,%rbx\ncall plus\nmovq %rax,(%rbx)\npopq %rbx\nret\nplus:\nleaq (%rdi,%rsi),%rax\nmovq $123,%rdx\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=5, rsi=7, rdx=4096, rbx=777",
+          "memory": {
+            "dest": null
+          },
+          "registers": {
+            "rdi": "5",
+            "rsi": "7",
+            "rdx": "4096",
+            "rbx": "777"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rbx": "777",
+              "rdx": "123"
+            },
+            "memory": {
+              "dest": 12
+            }
+          },
+          "symbols": {
+            "dest": 4096
+          },
+          "function": true,
+          "entry": "sumstore",
+          "preserveRegisters": [
+            "rbx"
+          ],
+          "abi": true
+        },
+        {
+          "name": "Inputs: rdi=-6, rsi=2, rdx=4096, rbx=777",
+          "memory": {
+            "dest": null
+          },
+          "registers": {
+            "rdi": "-6",
+            "rsi": "2",
+            "rdx": "4096",
+            "rbx": "777"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rbx": "777",
+              "rdx": "123"
+            },
+            "memory": {
+              "dest": -4
+            }
+          },
+          "symbols": {
+            "dest": 4096
+          },
+          "function": true,
+          "entry": "sumstore",
+          "preserveRegisters": [
+            "rbx"
+          ],
+          "abi": true
+        },
+        {
+          "name": "Inputs: rdi=0, rsi=0, rdx=4096, rbx=777",
+          "memory": {
+            "dest": null
+          },
+          "registers": {
+            "rdi": "0",
+            "rsi": "0",
+            "rdx": "4096",
+            "rbx": "777"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rbx": "777",
+              "rdx": "123"
+            },
+            "memory": {
+              "dest": 0
+            }
+          },
+          "symbols": {
+            "dest": 4096
+          },
+          "function": true,
+          "entry": "sumstore",
+          "preserveRegisters": [
+            "rbx"
+          ],
+          "abi": true
+        }
+      ],
+      "explanation": "RBX safely carries the destination across plus because it is callee-saved. The explicit RDX clobber exposes the bug in keeping dest in a caller-saved register. push/pop preserve the original RBX and maintain call alignment.",
+      "requirements": [
+        "push",
+        "pop",
+        "call",
+        "ret"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-nested",
+      "type": "code",
+      "lesson": "11-calls",
+      "category": "11-calls",
+      "title": "Nested calls with a saved input",
+      "cCode": "long twice(long x) { return 2*x; }\nlong outer(long x) { return twice(x)+x; }\n// Entry: outer. Include twice; twice must set RDI=0.",
+      "hint": "Preserve both the caller\u2019s RBX and your own x.",
+      "solutions": [
+        "outer:\npushq %rbx\nmovq %rdi,%rbx\ncall twice\naddq %rbx,%rax\npopq %rbx\nret\ntwice:\nleaq (%rdi,%rdi),%rax\nmovq $0,%rdi\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=7, rbx=888",
+          "memory": {},
+          "registers": {
+            "rdi": "7",
+            "rbx": "888"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "21"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "entry": "outer",
+          "preserveRegisters": [
+            "rbx"
+          ],
+          "abi": true
+        },
+        {
+          "name": "Inputs: rdi=-3, rbx=888",
+          "memory": {},
+          "registers": {
+            "rdi": "-3",
+            "rbx": "888"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-9"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "entry": "outer",
+          "preserveRegisters": [
+            "rbx"
+          ],
+          "abi": true
+        },
+        {
+          "name": "Inputs: rdi=0, rbx=888",
+          "memory": {},
+          "registers": {
+            "rdi": "0",
+            "rbx": "888"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "entry": "outer",
+          "preserveRegisters": [
+            "rbx"
+          ],
+          "abi": true
+        }
+      ],
+      "explanation": "Save x in a callee-saved register before calling twice. RDI is caller-saved and deliberately clobbered. Add the preserved original x to the helper\u2019s result, restore RBX and return.",
+      "requirements": [
+        "call",
+        "push",
+        "pop"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-callreturn",
+      "type": "mcq",
+      "lesson": "11-calls",
+      "category": "11-calls",
+      "title": "CALL\u2019s saved value",
+      "question": "What does call push?",
+      "options": [
+        "The function\u2019s return value",
+        "All argument registers",
+        "The return address"
+      ],
+      "correctAnswer": 2,
+      "explanation": "call saves where to resume. The callee later supplies its result through the ABI\u2019s return register."
+    },
+    {
+      "id": "l10-retvalue",
+      "type": "mcq",
+      "lesson": "11-calls",
+      "category": "11-calls",
+      "title": "RET versus RAX",
+      "question": "Which action returns a long value 7 correctly?",
+      "options": [
+        "ret $7",
+        "Put 7 in RAX, then ret",
+        "pushq $7; ret"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The numeric result and return address are different things. Pushing 7 before ret would redirect control to address 7 on a real machine."
+    },
+    {
+      "id": "l10-args",
+      "type": "mcq",
+      "lesson": "11-calls",
+      "category": "11-calls",
+      "title": "Argument mapping",
+      "question": "Where does the third integer/pointer argument arrive under this ABI?",
+      "options": [
+        "RDX",
+        "RAX",
+        "R8"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The order is RDI, RSI, RDX, RCX, R8, R9."
+    },
+    {
+      "id": "l10-callee",
+      "type": "mcq",
+      "lesson": "11-calls",
+      "category": "11-calls",
+      "title": "Register preservation",
+      "question": "Which register must a callee restore if it changes it?",
+      "options": [
+        "RAX",
+        "RDI",
+        "RBX"
+      ],
+      "correctAnswer": 2,
+      "explanation": "RBX is callee-saved. RAX and RDI may be clobbered; callers must preserve live values themselves."
+    },
+    {
+      "id": "l10-alignment",
+      "type": "mcq",
+      "lesson": "11-calls",
+      "category": "11-calls",
+      "title": "Alignment before a call",
+      "question": "RSP is 0x7ff8 on entry. What does pushq %rbx do for the next call?",
+      "options": [
+        "It has no effect on alignment",
+        "Makes RSP=0x7ff0, a multiple of 16",
+        "Makes RSP=0x8000"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The eight-byte push changes entry alignment to the standard pre-call alignment."
+    },
+    {
+      "id": "l10-destlive",
+      "type": "mcq",
+      "lesson": "11-calls",
+      "category": "11-calls",
+      "title": "Why save dest?",
+      "question": "Why does sumstore move RDX into RBX before calling plus?",
+      "options": [
+        "RDX may be clobbered by plus",
+        "RDX cannot be used in an address",
+        "RBX is always zero"
+      ],
+      "correctAnswer": 0,
+      "explanation": "dest must survive the call. sumstore also preserves the caller\u2019s original RBX with push/pop."
+    },
+    {
+      "id": "l10-arraybits",
+      "type": "code",
+      "lesson": "12-integration",
+      "category": "12-integration",
+      "title": "Read an array and extract a field",
+      "cCode": "unsigned long field(unsigned long *a,long i) { return (a[i] >> 8) & 255UL; }",
+      "hint": "Separate address calculation from value manipulation.",
+      "solutions": [
+        "movq (%rdi,%rsi,8),%rax\nshrq $8,%rax\nandq $255,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=4096, rsi=0",
+          "memory": {
+            "a": 1193046,
+            "a+8": 0,
+            "a+16": "18446744073709551615"
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "52"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=1",
+          "memory": {
+            "a": 1193046,
+            "a+8": 0,
+            "a+16": "18446744073709551615"
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "1"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        },
+        {
+          "name": "Inputs: rdi=4096, rsi=2",
+          "memory": {
+            "a": 1193046,
+            "a+8": 0,
+            "a+16": "18446744073709551615"
+          },
+          "registers": {
+            "rdi": "4096",
+            "rsi": "2"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "255"
+            },
+            "memory": {}
+          },
+          "function": true,
+          "symbols": {
+            "a": 4096
+          }
+        }
+      ],
+      "explanation": "Use scale 8 for the unsigned-long array, load the value, logically shift, and mask. LEA alone would return an address instead of the field.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-setdynamic",
+      "type": "code",
+      "lesson": "12-integration",
+      "category": "12-integration",
+      "title": "Set a bit chosen at runtime",
+      "cCode": "// 0 <= k < 64\nunsigned long set(unsigned long x,unsigned long k) { return x | (1UL<<k); }",
+      "hint": "Build the mask in a q register.",
+      "solutions": [
+        "movq %rsi,%rcx\nmovq $1,%rax\nshlq %cl,%rax\norq %rdi,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0, rsi=63",
+          "memory": {},
+          "registers": {
+            "rdi": "0",
+            "rsi": "63"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "9223372036854775808"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=8, rsi=3",
+          "memory": {},
+          "registers": {
+            "rdi": "8",
+            "rsi": "3"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=256, rsi=0",
+          "memory": {},
+          "registers": {
+            "rdi": "256",
+            "rsi": "0"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "257"
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615, rsi=12",
+          "memory": {},
+          "registers": {
+            "rdi": "18446744073709551615",
+            "rsi": "12"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "18446744073709551615"
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Build a 64-bit mask starting at 1, shift it by CL, then OR it with x. The k=63 case checks that the mask is not accidentally only 32 bits wide.",
+      "requirements": [],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-callmask",
+      "type": "code",
+      "lesson": "12-integration",
+      "category": "12-integration",
+      "title": "Call, save a destination and store masked data",
+      "cCode": "unsigned long extract(unsigned long x) { return (x>>4)&255UL; }\nvoid write_field(unsigned long x,unsigned long *out) { *out=extract(x); }\n// Entry: write_field. Include extract. Preserve RBX.",
+      "hint": "This combines sumstore\u2019s structure with bit-field extraction.",
+      "solutions": [
+        "write_field:\npushq %rbx\nmovq %rsi,%rbx\ncall extract\nmovq %rax,(%rbx)\npopq %rbx\nret\nextract:\nmovq %rdi,%rax\nshrq $4,%rax\nandq $255,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0, rsi=4096, rbx=101",
+          "memory": {
+            "out": null
+          },
+          "registers": {
+            "rdi": "0",
+            "rsi": "4096",
+            "rbx": "101"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rbx": "101"
+            },
+            "memory": {
+              "out": 0
+            }
+          },
+          "symbols": {
+            "out": 4096
+          },
+          "function": true,
+          "entry": "write_field",
+          "abi": true,
+          "preserveRegisters": [
+            "rbx"
+          ]
+        },
+        {
+          "name": "Inputs: rdi=43981, rsi=4096, rbx=101",
+          "memory": {
+            "out": null
+          },
+          "registers": {
+            "rdi": "43981",
+            "rsi": "4096",
+            "rbx": "101"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rbx": "101"
+            },
+            "memory": {
+              "out": 188
+            }
+          },
+          "symbols": {
+            "out": 4096
+          },
+          "function": true,
+          "entry": "write_field",
+          "abi": true,
+          "preserveRegisters": [
+            "rbx"
+          ]
+        },
+        {
+          "name": "Inputs: rdi=18446744073709551615, rsi=4096, rbx=101",
+          "memory": {
+            "out": null
+          },
+          "registers": {
+            "rdi": "18446744073709551615",
+            "rsi": "4096",
+            "rbx": "101"
+          },
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rbx": "101"
+            },
+            "memory": {
+              "out": 255
+            }
+          },
+          "symbols": {
+            "out": 4096
+          },
+          "function": true,
+          "entry": "write_field",
+          "abi": true,
+          "preserveRegisters": [
+            "rbx"
+          ]
+        }
+      ],
+      "explanation": "Save out in RBX across extract, preserve the incoming RBX, and call with aligned RSP. The helper returns a field in RAX; the caller stores it through the saved pointer.",
+      "requirements": [
+        "push",
+        "pop",
+        "call",
+        "ret"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
+    },
+    {
+      "id": "l10-debug",
+      "type": "mcq",
+      "lesson": "12-integration",
+      "category": "12-integration",
+      "title": "Find the first wrong idea",
+      "question": "A solution uses leaq (%rdi,%rsi,8),%rax for return a[i]. What is wrong?",
+      "options": [
+        "It uses an invalid scale",
+        "It modifies the array",
+        "It returns the address, not the element"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Use movq for a[i], lea for &a[i]."
+    },
+    {
+      "id": "l10-proof",
+      "type": "mcq",
+      "lesson": "12-integration",
+      "category": "12-integration",
+      "title": "What does passing mean?",
+      "question": "All listed tests pass. What can you conclude?",
+      "options": [
+        "The code is a complete native executable",
+        "The tested inputs satisfy the checked outputs and preservation rules",
+        "The solution is correct for every possible input"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Tests give evidence, not a universal proof. The bounded interpreter also does not emit machine code."
+    },
+    {
+      "id": "l10-study",
+      "type": "mcq",
+      "lesson": "12-integration",
+      "category": "12-integration",
+      "title": "A translation checklist",
+      "question": "Which should you decide before choosing movl or movq?",
+      "options": [
+        "The data type width in the stated ABI",
+        "The number of characters in the variable name",
+        "Whether the value happens to be small today"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The declared representation determines width. A long still needs eight bytes even when its current value is 1."
+    }
+  ]
+}

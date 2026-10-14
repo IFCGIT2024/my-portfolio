@@ -1,15 +1,3825 @@
 {
   "code": "CSCI 2134",
-  "title": "Software Development",
-  "description": "Starter practice for Git workflow and software-quality fundamentals.",
+  "title": "Software Development — Lectures 02–10 Review",
+  "description": "269 slide-based practice questions covering tools and Git, software quality, collaborative development, JUnit and unit testing, TDD, broader software testing, debugging, and common coding mistakes.",
+  "context": [
+    "This bank was built from the CSCI 2134 lecture decks for Lectures 02–10. The older course midterms were used as a question-style model; the lecture slides remain the source of the review content.",
+    "The bank includes single-best-answer, Roman-numeral combination, ordered-workflow, scenario/application, code/JUnit interpretation, and select-all-that-apply questions. Explanations include the lecture/slide source range for review."
+  ],
   "questions": [
-    {"id": 1, "question": "Which Git command copies a remote repository onto your computer?", "options": ["git merge", "git clone", "git status", "git add"], "correct": 1, "section": "Git", "explanation": "git clone creates a local copy and configures the remote."},
-    {"id": 2, "question": "What does git add -A do before a commit?", "options": ["Deletes the repository", "Stages current changes", "Pushes directly to main", "Creates a remote account"], "correct": 1, "section": "Git", "explanation": "Staging selects the current changes that the next commit will record."},
-    {"id": 3, "question": "Why make changes on a development branch before merging into main?", "options": ["To isolate work until it is ready", "To avoid saving any history", "To disable testing", "To remove the remote repository"], "correct": 0, "section": "Git", "explanation": "A branch isolates a line of work so it can be reviewed or tested before integration."},
-    {"id": 4, "question": "Which quality is primarily concerned with how easily developers can understand source code?", "options": ["Readability", "Latency", "Bandwidth", "Encryption"], "correct": 0, "section": "Software Quality", "explanation": "Readability is a developer-oriented quality that supports understanding and maintenance."},
-    {"id": 5, "question": "Which is mainly a user-facing software quality?", "options": ["Readability", "Maintainability", "Correctness", "Reusability"], "correct": 2, "section": "Software Quality", "explanation": "Correctness concerns whether the software behaves according to its requirements."},
-    {"id": 6, "question": "What does the single-responsibility principle encourage?", "options": ["One component should have one focused reason to change", "Every class should contain all program logic", "Tests should be removed after coding", "Names should be as short as possible"], "correct": 0, "section": "Design Principles", "explanation": "A focused responsibility makes components easier to understand, test, and change."},
-    {"id": 7, "question": "What is the purpose of a unit test?", "options": ["Test a focused program component against expected behavior", "Replace version control", "Measure network speed only", "Compile every programming language"], "correct": 0, "section": "Testing", "explanation": "Unit tests check small components in isolation or near-isolation."},
-    {"id": 8, "question": "What does refactoring aim to change?", "options": ["The internal structure while preserving observable behavior", "The requirements without telling users", "Only the programming language", "Correct output into incorrect output"], "correct": 0, "section": "Refactoring", "explanation": "Refactoring improves design without intentionally changing external behavior."}
+    {
+      "id": 1,
+      "question": "Which statement best matches the lecture's reason for using software-development tools?",
+      "options": [
+        "Only the implementation phase is too complex to do manually.",
+        "Different phases of software development create different needs that specialized tools can support.",
+        "Tools are mainly useful for large teams, not individual developers.",
+        "A single compiler can replace most other software-development tools."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The lecture places tools across the full development cycle, not just implementation. Source: Lecture 02, slides 4-6.",
+      "source": "Lecture 02, slides 4-6"
+    },
+    {
+      "id": 2,
+      "question": "Which of the following was listed as a testing framework rather than a build tool or version-control \nsystem?",
+      "options": [
+        "JUnit",
+        "Maven",
+        "Git",
+        "gcc <PARSED TEXT FOR PAGE: 5 / 65>"
+      ],
+      "correct": 0,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "JUnit is the testing-framework example; Maven is a build tool, Git version control, and gcc a compiler. Source: Lecture 02, slides 6.",
+      "source": "Lecture 02, slides 6"
+    },
+    {
+      "id": 3,
+      "question": "Which IDE capability is described as typically invoking an external tool such as Git or SVN?",
+      "options": [
+        "Refactoring",
+        "Version control",
+        "Editing",
+        "Profiling"
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The IDE may integrate version control by invoking external systems such as Git or SVN. Source: Lecture 02, slides 7.",
+      "source": "Lecture 02, slides 7"
+    },
+    {
+      "id": 4,
+      "question": "Which of the following IDE features are listed in the lecture?\nI. On-the-fly error detection\nII. Complex find and replace\nIII. Integrated debugging\nIV. Automatic proof that the program is correct\nV. Links to documentation",
+      "options": [
+        "I, II, III, and V",
+        "I, III, and IV",
+        "II, IV, and V",
+        "I, II, III, IV, and V"
+      ],
+      "correct": 0,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The lecture lists I, II, III, and V; it does not claim an IDE proves program correctness. Source: Lecture 02, slides 7-8.",
+      "source": "Lecture 02, slides 7-8"
+    },
+    {
+      "id": 5,
+      "question": "What is the main trade-off the lecture identifies for modern IDEs?",
+      "options": [
+        "They are easy to learn but slow to use.",
+        "They have substantial functionality and can improve productivity, but can be hard to learn.",
+        "They eliminate the need for command-line tools.",
+        "They are useful only when the course requires IntelliJ."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "IDEs are complex because of their many menus/features, but that capability supports productivity. Source: Lecture 02, slides 9.",
+      "source": "Lecture 02, slides 9"
+    },
+    {
+      "id": 6,
+      "question": "For most compiled languages, what is the role of a linker in the diagram shown in lecture?",
+      "options": [
+        "It converts source files directly into comments.",
+        "It combines compiled object files into an executable.",
+        "It formats source code consistently.",
+        "It stores old program versions."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The slide shows multiple source files compiled to object files and then linked into an executable. Source: Lecture 02, slides 10.",
+      "source": "Lecture 02, slides 10"
+    },
+    {
+      "id": 7,
+      "question": "Why is simply making copied folders a poor long-term version-control strategy?",
+      "options": [
+        "Copied folders cannot contain source code.",
+        "It becomes difficult to name, locate, back up, compare, and coordinate many copies as projects and teams grow.",
+        "Operating systems prohibit multiple copies of the same program.",
+        "Copies cannot be shared between developers."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The lecture emphasizes consistency, location/backup, tracking changes, and collaboration problems with copying. Source: Lecture 02, slides 11-12.",
+      "source": "Lecture 02, slides 11-12"
+    },
+    {
+      "id": 8,
+      "question": "The lecture compares a version-control system to a bank primarily because both systems:",
+      "options": [
+        "Require all work to occur on one computer.",
+        "Track transactions/changes, support multiple users, and make it possible to revisit earlier states.",
+        "Store only the most recent state.",
+        "Prevent people from working concurrently."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The bank analogy highlights deposits/withdrawals, transaction tracking, multiple users, and reversibility. Source: Lecture 02, slides 13.",
+      "source": "Lecture 02, slides 13"
+    },
+    {
+      "id": 9,
+      "question": "Which description of a repository is correct according to the lecture?",
+      "options": [
+        "A repository is only a remote server.",
+        "A repository is a collection of files that make up a software project and may be local or remote.",
+        "A repository is only a folder containing compiled executables.",
+        "A repository is the same thing as a single branch."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The lecture defines a repository broadly and explicitly says it may be local or remote. Source: Lecture 02, slides 14.",
+      "source": "Lecture 02, slides 14"
+    },
+    {
+      "id": 10,
+      "question": "Why can a version-control system efficiently preserve many versions without storing a complete \nduplicate for every version?",
+      "options": [
+        "It stores only comments, never code.",
+        "It can store differences between consecutive versions and reconstruct versions as needed.",
+        "It deletes all but the newest version.",
+        "It compresses every project into a single source file."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The slide notes that systems may store diffs between consecutive versions and regenerate versions when required. Source: Lecture 02, slides 15.",
+      "source": "Lecture 02, slides 15"
+    },
+    {
+      "id": 11,
+      "question": "A developer begins work on an existing project. Which sequence best matches the workflow presented \nin the lecture?",
+      "options": [
+        "Push modify pull commit → → →",
+        "Pull modify commit push → → →",
+        "Commit clone push modify → → →",
+        "Modify push pull commit → → →"
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "For existing work, update the working copy, modify, commit locally, then push shared commits. Source: Lecture 02, slides 16-17.",
+      "source": "Lecture 02, slides 16-17"
+    },
+    {
+      "id": 12,
+      "question": "Which statement correctly distinguishes commit, push, and pull?",
+      "options": [
+        "Commit sends changes to the remote; push creates a local checkpoint; pull deletes local changes.",
+        "Commit records a local repository version; push uploads commits to a remote; pull downloads remote changes into the working copy/repository.",
+        "All three commands do the same thing at different speeds.",
+        "Pull is used only when creating a new repository."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "That is the command-role distinction presented on the jargon/workflow slides. Source: Lecture 02, slides 17.",
+      "source": "Lecture 02, slides 17"
+    },
+    {
+      "id": 13,
+      "question": "Which item should normally be excluded from a source repository when it can be regenerated from \nsource?",
+      "options": [
+        "Source code",
+        "Documentation",
+        "Test data",
+        "Compiled object/class files and executables"
+      ],
+      "correct": 3,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The repository should keep originating/non-regenerable artifacts and omit regenerable compiled artifacts. Source: Lecture 02, slides 18.",
+      "source": "Lecture 02, slides 18"
+    },
+    {
+      "id": 14,
+      "question": "Why does branching reduce the risk of experimental feature work?",
+      "options": [
+        "A branch deletes the main branch until the feature is complete.",
+        "A branch provides an independent development line so changes can be made without immediately affecting main.",
+        "Only one developer can use a branch.",
+        "Branches prevent merges."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The branch is a duplicate/independent code base from the current repository and can later be merged. Source: Lecture 02, slides 19-21.",
+      "source": "Lecture 02, slides 19-21"
+    },
+    {
+      "id": 15,
+      "question": "Which practice does the lecture recommend when starting a new feature?",
+      "options": [
+        "Make a fresh branch, develop there, then merge back when finished and tested.",
+        "Edit the main branch directly and make one commit at the end. <PARSED TEXT FOR PAGE: 7 / 65>",
+        "Download a ZIP copy from the Git web interface.",
+        "Create a separate remote repository for every file."
+      ],
+      "correct": 0,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The branch-development-merge pattern is the stated best practice. Source: Lecture 02, slides 21.",
+      "source": "Lecture 02, slides 21"
+    },
+    {
+      "id": 16,
+      "question": "Two developers need to modify the same source file. Which approach is described as more efficient but \nrequiring conflict handling?",
+      "options": [
+        "Lock the file so only one developer can edit it.",
+        "Let both developers modify their copies and merge later.",
+        "Email alternate lines of the file to each other.",
+        "Prevent both developers from committing."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The 'multiple access, merge later' approach improves parallel efficiency but may require merge/conflict resolution. Source: Lecture 02, slides 22.",
+      "source": "Lecture 02, slides 22"
+    },
+    {
+      "id": 17,
+      "question": "Which statement about Git matches the lecture?",
+      "options": [
+        "Git requires centralized locking before any file can be edited.",
+        "Git keeps a local copy of the repository and supports multiple developers working on the same file.",
+        "Git is intended only for single-developer projects.",
+        "Git cannot represent multiple branches."
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "Those are explicit properties listed for Git. Source: Lecture 02, slides 23.",
+      "source": "Lecture 02, slides 23"
+    },
+    {
+      "id": 18,
+      "question": "In the lecture's Git mental model, what is 'origin'?",
+      "options": [
+        "The first commit hash",
+        "The primary local branch",
+        "The primary remote repository",
+        "The current working directory"
+      ],
+      "correct": 2,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The slide identifies master/main as the primary branch and origin as the primary remote repository. Source: Lecture 02, slides 25.",
+      "source": "Lecture 02, slides 25"
+    },
+    {
+      "id": 19,
+      "question": "What does a Git commit hash primarily provide?",
+      "options": [
+        "A human-readable branch description",
+        "A unique identifier for a particular commit/version",
+        "A password for the remote repository",
+        "The number of files in the commit"
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The Git mental-model slide describes each commit/version as having a hash identifier. Source: Lecture 02, slides 25.",
+      "source": "Lecture 02, slides 25"
+    },
+    {
+      "id": 20,
+      "question": "Which action is appropriate when starting from an existing remote repository rather than creating a \nbrand-new repository?",
+      "options": [
+        "git clone the remote repository",
+        "git init and ignore the remote",
+        "git reset --hard before any files exist",
+        "git rm the project directory"
+      ],
+      "correct": 0,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The lecture distinguishes initialization of a new project from cloning an existing repository. Source: Lecture 02, slides 26-27.",
+      "source": "Lecture 02, slides 26-27"
+    },
+    {
+      "id": 21,
+      "question": "After creating a feature branch with `git branch feature-x`, what command moves the working state \nonto that branch in the lecture?",
+      "options": [
+        "git status feature-x",
+        "git checkout feature-x",
+        "git push feature-x",
+        "git log feature-x"
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "`checkout` switches to the specified branch/commit. Source: Lecture 02, slides 28-29.",
+      "source": "Lecture 02, slides 28-29"
+    },
+    {
+      "id": 22,
+      "question": "Which sequence correctly describes Git's local two-step commit process for a modified file?",
+      "options": [
+        "commit the file, then stage it",
+        "stage/add the file, then commit the staged files",
+        "push the file, then commit it",
+        "checkout the file, then pull it"
+      ],
+      "correct": 1,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "Files are first staged with `git add`, then the staged set is committed. Source: Lecture 02, slides 30.",
+      "source": "Lecture 02, slides 30"
+    },
+    {
+      "id": 23,
+      "question": "A feature branch is complete and tested. Which sequence best matches the lecture's completion \nworkflow?",
+      "options": [
+        "On main: merge the feature branch, then push main to the remote.",
+        "Delete main, rename the feature branch, and avoid pushing.",
+        "Push the feature branch, reset main to an old commit, then pull.",
+        "Re-clone the project and copy the feature files into main."
+      ],
+      "correct": 0,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The lecture merges the branch into main and then pushes the updated main branch. Source: Lecture 02, slides 31-33.",
+      "source": "Lecture 02, slides 31-33"
+    },
+    {
+      "id": 24,
+      "question": "Which Git command is most directly used to inspect how two versions/files differ?",
+      "options": [
+        "git diff",
+        "git status",
+        "git branch",
+        "git push"
+      ],
+      "correct": 0,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The difference slide uses `git diff` to compare versions. Source: Lecture 02, slides 34-36.",
+      "source": "Lecture 02, slides 34-36"
+    },
+    {
+      "id": 25,
+      "question": "Which pairing is correct?",
+      "options": [
+        "git log — show commit history; git status — show current branch and file state",
+        "git log — upload changes; git status — merge branches",
+        "git log — remove a file; git status — undo a commit",
+        "git log — create a branch; git status — clone a repository"
+      ],
+      "correct": 0,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "Those are the roles presented for log and status. Source: Lecture 02, slides 34-36.",
+      "source": "Lecture 02, slides 34-36"
+    },
+    {
+      "id": 26,
+      "question": "Select all that apply. Which statements are consistent with the lecture's treatment of removing/undoing \nchanges?",
+      "options": [
+        "`git rm` removes a tracked file from the repository history going forward.",
+        "`git revert` creates a new commit that undoes a specified commit without discarding later history.",
+        "`git reset --hard` can discard succeeding commits and should be used cautiously.",
+        "`git push` is the recommended way to undo a local commit."
+      ],
+      "correct": [
+        0,
+        1,
+        2
+      ],
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "The first three match the removal/revert/reset slides; push is not an undo command. Source: Lecture 02, slides 37-38.",
+      "source": "Lecture 02, slides 37-38"
+    },
+    {
+      "id": 27,
+      "question": "Which behavior is explicitly recommended as a Git best practice in the lecture?",
+      "options": [
+        "Download the code from the Git web interface whenever you want a fresh copy.",
+        "Edit source directly in the Git web interface for convenience.",
+        "Use `git status` often to confirm your branch and what will be committed.",
+        "Avoid branches so the history remains linear."
+      ],
+      "correct": 2,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "Frequent `git status` checks are explicitly recommended; the other options contradict the best-practices slides. Source: Lecture 02, slides 39-42.",
+      "source": "Lecture 02, slides 39-42"
+    },
+    {
+      "id": 28,
+      "question": "A developer is about to begin a risky feature. Which plan best matches the lecture's overall Git \nguidance?",
+      "options": [
+        "Make a feature branch, commit coherent checkpoints as work progresses, verify status, merge when tested, and push the result.",
+        "Make a folder copy, work for a week without commits, then replace the remote repository.",
+        "Work directly on main, never pull, and use the web editor to fix conflicts. <PARSED TEXT FOR PAGE: 9 / 65>",
+        "Create one commit per project regardless of project length."
+      ],
+      "correct": 0,
+      "section": "Lecture 02 — Tools of the Trade",
+      "explanation": "This combines the lecture's branch, commit, status, merge, and push guidance. Source: Lecture 02, slides 39-42.",
+      "source": "Lecture 02, slides 39-42"
+    },
+    {
+      "id": 29,
+      "question": "Why does the lecture question whether first-year quality criteria are sufficient for large software \nsystems?",
+      "options": [
+        "Large systems do not need to function correctly.",
+        "Functionality, algorithm appropriateness, and basic formatting/commenting are useful but do not capture all the quality concerns of large, maintained systems.",
+        "Large systems cannot be tested.",
+        "Formatting is the only relevant quality criterion in large systems."
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The lecture uses the first-year criteria as a starting point and then expands to broader external and internal quality characteristics. Source: Lecture 03, slides 4.",
+      "source": "Lecture 03, slides 4"
+    },
+    {
+      "id": 30,
+      "question": "Which pairing correctly reflects the two software-quality perspectives introduced in the lecture?",
+      "options": [
+        "User perspective = internal implementation; developer perspective = external functionality",
+        "User perspective = external functionality; developer perspective = internal implementation",
+        "User perspective = maintainability only; developer perspective = usability only",
+        "Both perspectives consider exactly the same criteria <PARSED TEXT FOR PAGE: 11 / 65>"
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The slide explicitly labels user quality as external/functionality and developer quality as internal/implementation. Source: Lecture 03, slides 5.",
+      "source": "Lecture 03, slides 5"
+    },
+    {
+      "id": 31,
+      "question": "Which user-perspective quality criterion concerns continuing to function despite invalid inputs or \nstressful environmental conditions?",
+      "options": [
+        "Robustness",
+        "Integrity",
+        "Accuracy",
+        "Adaptability"
+      ],
+      "correct": 0,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "Robustness is defined as functioning in the presence of invalid inputs or stressful conditions. Source: Lecture 03, slides 6.",
+      "source": "Lecture 03, slides 6"
+    },
+    {
+      "id": 32,
+      "question": "Which user-perspective criterion is most directly about preventing unauthorized or improper access to \nprograms and data?",
+      "options": [
+        "Reliability",
+        "Integrity",
+        "Usability",
+        "Efficiency"
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "Integrity is the access-protection criterion on the slide. Source: Lecture 03, slides 6.",
+      "source": "Lecture 03, slides 6"
+    },
+    {
+      "id": 33,
+      "question": "A system produces quantitatively correct results but consumes excessive memory and execution time. \nWhich user-perspective criterion is most clearly poor?",
+      "options": [
+        "Efficiency",
+        "Accuracy",
+        "Reliability",
+        "Usability"
+      ],
+      "correct": 0,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "Efficiency concerns minimal use of system resources such as memory and execution time. Source: Lecture 03, slides 6.",
+      "source": "Lecture 03, slides 6"
+    },
+    {
+      "id": 34,
+      "question": "Which developer-perspective criterion is the ease with which a software system can be modified to add\ncapabilities, improve performance, or correct defects?",
+      "options": [
+        "Maintainability",
+        "Portability",
+        "Reusability",
+        "Testability"
+      ],
+      "correct": 0,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "That is the lecture's definition of maintainability. <PARSED TEXT FOR PAGE: 59 / 65> Source: Lecture 03, slides 7.",
+      "source": "Lecture 03, slides 7"
+    },
+    {
+      "id": 35,
+      "question": "Which developer-perspective criterion focuses on understanding the entire system at both \norganizational and detailed-statement levels?",
+      "options": [
+        "Readability",
+        "Understandability",
+        "Flexibility",
+        "Portability"
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "Understandability extends comprehension to both system organization and detailed statements. Source: Lecture 03, slides 7.",
+      "source": "Lecture 03, slides 7"
+    },
+    {
+      "id": 36,
+      "question": "What caution does the lecture give about software-quality characteristics?",
+      "options": [
+        "All characteristics can always be maximized simultaneously.",
+        "Only user-perspective characteristics matter.",
+        "You may not be able to achieve all characteristics, and some can oppose one another.",
+        "Developer-perspective characteristics are independent of design."
+      ],
+      "correct": 2,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The slide explicitly warns that not all characteristics can necessarily be achieved together. Source: Lecture 03, slides 8.",
+      "source": "Lecture 03, slides 8"
+    },
+    {
+      "id": 37,
+      "question": "What is the General Principle of Software Quality as stated in the lecture?",
+      "options": [
+        "The highest-quality software is always the largest software.",
+        "Improving software quality reduces development costs.",
+        "Quality matters only after release.",
+        "Quality can be measured only by users."
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The lecture explicitly names this cost relationship the General Principle of Software Quality. Source: Lecture 03, slides 9.",
+      "source": "Lecture 03, slides 9"
+    },
+    {
+      "id": 38,
+      "question": "Why does the lecture call software a liability?",
+      "options": [
+        "Software never changes once deployed.",
+        "All software needs maintenance as APIs, standards, user needs, and defects change; more software therefore creates more maintenance cost.",
+        "Software cannot be reused.",
+        "Only hardware creates maintenance costs."
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The slide lists software rot, obsolescence, and defects as ongoing maintenance liabilities. Source: Lecture 03, slides 10.",
+      "source": "Lecture 03, slides 10"
+    },
+    {
+      "id": 39,
+      "question": "According to the lecture, what is a good size for a software project?",
+      "options": [
+        "As large as possible",
+        "Exactly 10,000 lines",
+        "As small as possible while meeting the need",
+        "The size is irrelevant to maintenance cost"
+      ],
+      "correct": 2,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The lecture's answer is 'as small as possible' because more software means more maintenance. Source: Lecture 03, slides 10.",
+      "source": "Lecture 03, slides 10"
+    },
+    {
+      "id": 40,
+      "question": "Which action does the lecture identify as the minimum a new programmer should reliably do on a \nproject?",
+      "options": [
+        "Rewrite the architecture",
+        "Produce readable code",
+        "Replace the test suite",
+        "Commit broken code to reveal problems early"
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The slide contrasts the worst action, committing broken code, with the least you should do: produce readable code. Source: Lecture 03, slides 11-12.",
+      "source": "Lecture 03, slides 11-12"
+    },
+    {
+      "id": 41,
+      "question": "Select all that apply. Which characteristics are associated with readable code in the lecture?",
+      "options": [
+        "Divided into small logical units",
+        "Documented logically",
+        "Consistently formatted using a common standard",
+        "Maximally coupled to other classes",
+        "Easy to comprehend"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        4
+      ],
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "Readable code is easy to comprehend, logically organized, documented, and consistently formatted; high coupling is undesirable. Source: Lecture 03, slides 12.",
+      "source": "Lecture 03, slides 12"
+    },
+    {
+      "id": 42,
+      "question": "What does the lecture mean by testable code?",
+      "options": [
+        "Code that never needs any tests",
+        "Code whose units/components/system can be tested and verified for defects",
+        "Code that uses no methods",
+        "Code that compiles without warnings"
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "Testability is framed as being able to test units, components, and the system. Source: Lecture 03, slides 13.",
+      "source": "Lecture 03, slides 13"
+    },
+    {
+      "id": 43,
+      "question": "Which combination best describes highly understandable code according to the lecture?",
+      "options": [
+        "Readable, logically structured at a high level, low coupling, high cohesion",
+        "Readable, high coupling, low cohesion, no interfaces",
+        "Short, undocumented, and platform-specific",
+        "Only well formatted; design is irrelevant <PARSED TEXT FOR PAGE: 13 / 65>"
+      ],
+      "correct": 0,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The lecture explicitly connects understandability with readability, high-level structure, low coupling, and high cohesion. Source: Lecture 03, slides 14-18.",
+      "source": "Lecture 03, slides 14-18"
+    },
+    {
+      "id": 44,
+      "question": "What is coupling?",
+      "options": [
+        "The degree to which methods within a class support a single purpose",
+        "The density of dependencies among classes",
+        "The number of tests in a suite",
+        "The amount of documentation in a source file"
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "Coupling is defined as the density of dependencies among classes. Source: Lecture 03, slides 15.",
+      "source": "Lecture 03, slides 15"
+    },
+    {
+      "id": 45,
+      "question": "Why is low coupling preferred?",
+      "options": [
+        "It guarantees zero defects.",
+        "Changes to one class are less likely to force changes in many other classes.",
+        "It eliminates the need for interfaces.",
+        "It makes every class larger."
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "High coupling spreads change through dependent classes; low coupling limits that effect. Source: Lecture 03, slides 15.",
+      "source": "Lecture 03, slides 15"
+    },
+    {
+      "id": 46,
+      "question": "What is the central idea of cohesion in the lecture?",
+      "options": [
+        "Each class should represent a single concept and its methods should be directly applicable to that concept.",
+        "Every class should contain as many unrelated responsibilities as possible.",
+        "Cohesion measures the number of classes in a package.",
+        "High cohesion means many dependencies between classes."
+      ],
+      "correct": 0,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The lecture defines cohesion around a focused class purpose and methods that belong to that purpose. Source: Lecture 03, slides 16-17.",
+      "source": "Lecture 03, slides 16-17"
+    },
+    {
+      "id": 47,
+      "question": "A small feature change requires edits to many unrelated parts of the system. What does the lecture \nsuggest this indicates?",
+      "options": [
+        "Excellent maintainability",
+        "Poor maintainability",
+        "High portability",
+        "High usability"
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "Maintainable code should permit small changes without widespread modifications. Source: Lecture 03, slides 19-20.",
+      "source": "Lecture 03, slides 19-20"
+    },
+    {
+      "id": 48,
+      "question": "Which characteristics support highly maintainable code according to the lecture?\nI. Readability\nII. Testability\nIII. Logical high-level structure\nIV. Understandability\nV. Deliberately high coupling",
+      "options": [
+        "I, II, III, and IV",
+        "I, III, and V",
+        "II and V",
+        "I, II, III, IV, and V"
+      ],
+      "correct": 0,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The lecture lists I-IV as supports for maintainability; high coupling works against it. Source: Lecture 03, slides 19-20.",
+      "source": "Lecture 03, slides 19-20"
+    },
+    {
+      "id": 49,
+      "question": "Which characteristic is most important for reusable code according to the lecture?",
+      "options": [
+        "A well-defined interface with general-purpose functionality",
+        "Dependence on many project-specific classes",
+        "No specification of what the code does",
+        "Using as many nonstandard libraries as possible"
+      ],
+      "correct": 0,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "Reusable code needs a well-defined interface, general-purpose functionality, and specification by behavior rather than implementation. Source: Lecture 03, slides 21.",
+      "source": "Lecture 03, slides 21"
+    },
+    {
+      "id": 50,
+      "question": "How does the lecture distinguish flexibility from maintainability?\n<PARSED TEXT FOR PAGE: 14 / 65>",
+      "options": [
+        "Flexibility concerns easy large adaptation to new purposes/environments, while maintainability focuses on smaller changes and fixes.",
+        "Flexibility is a user-perspective criterion; maintainability is not.",
+        "Maintainability requires high coupling; flexibility requires low coupling.",
+        "There is no distinction."
+      ],
+      "correct": 0,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The lecture frames flexibility as adaptation/extension for new uses, while maintainability is ease of making smaller changes. Source: Lecture 03, slides 22.",
+      "source": "Lecture 03, slides 22"
+    },
+    {
+      "id": 51,
+      "question": "Which design choice best supports portability in the lecture?",
+      "options": [
+        "Hard-code platform-specific dependencies throughout the application.",
+        "Encapsulate platform dependencies and avoid unnecessary nonstandard libraries.",
+        "Use only undocumented libraries.",
+        "Rewrite every standard-library function yourself."
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "Portable code encapsulates platform dependencies and avoids unnecessary nonstandard libraries. Source: Lecture 03, slides 23-24.",
+      "source": "Lecture 03, slides 23-24"
+    },
+    {
+      "id": 52,
+      "question": "When should a developer consider implementing functionality instead of using an available library?",
+      "options": [
+        "Always, because libraries reduce readability",
+        "When no suitable third-party/standard functionality exists or the available option does not meet the need",
+        "Whenever a library is standard",
+        "Only when the program has no tests"
+      ],
+      "correct": 1,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The slide recommends first finding third-party/standard functionality, then writing your own only when necessary. Source: Lecture 03, slides 24.",
+      "source": "Lecture 03, slides 24"
+    },
+    {
+      "id": 53,
+      "question": "According to the key takeaways, where can a newer developer have the biggest immediate impact on \nsoftware quality?",
+      "options": [
+        "Readability and testability",
+        "Vendor selection and marketing",
+        "Hardware design and networking",
+        "Only user-interface aesthetics"
+      ],
+      "correct": 0,
+      "section": "Lecture 03 — Introduction to Good Code",
+      "explanation": "The key-takeaway slide explicitly identifies readability and testability as the biggest areas of impact for new developers. Source: Lecture 03, slides 25.",
+      "source": "Lecture 03, slides 25"
+    },
+    {
+      "id": 54,
+      "question": "Which three factors does the lecture identify as primary contributors to readability?",
+      "options": [
+        "Logical structure, documentation, and consistent formatting/layout/style",
+        "Execution speed, memory usage, and file size",
+        "Number of classes, number of comments, and number of tests",
+        "Compiler choice, operating system, and network speed"
+      ],
+      "correct": 0,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "Those three areas are the lecture's organizing framework for readable code. Source: Lecture 04, slides 4.",
+      "source": "Lecture 04, slides 4"
+    },
+    {
+      "id": 55,
+      "question": "Which statement best matches the lecture's guidance on method size?",
+      "options": [
+        "Every method must contain exactly one statement.",
+        "Methods should normally fit on one screen, and large public methods can often call smaller private methods.",
+        "Large methods are more readable because all logic is in one place.",
+        "Only private methods may be decomposed."
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The slide advocates small logical units and decomposition of large public methods/code blocks. Source: Lecture 04, slides 5.",
+      "source": "Lecture 04, slides 5"
+    },
+    {
+      "id": 56,
+      "question": "What does the lecture say about Java source files and public classes?\n<PARSED TEXT FOR PAGE: 16 / 65>",
+      "options": [
+        "A file should contain no more than one public class.",
+        "A file must contain at least five public classes.",
+        "Public classes should never be placed in files.",
+        "All nested classes must be public."
+      ],
+      "correct": 0,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The slide explicitly notes no more than one public class per file. Source: Lecture 04, slides 5.",
+      "source": "Lecture 04, slides 5"
+    },
+    {
+      "id": 57,
+      "question": "A method contains a deeply nested 80-line block. Which refactoring direction best matches the lecture?",
+      "options": [
+        "Add more nesting so the control structure is explicit.",
+        "Move coherent portions into smaller private methods to reduce block size and nesting.",
+        "Remove all method calls.",
+        "Duplicate the block in another class."
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "Large/nested blocks can often be transformed into smaller units that call private methods. Source: Lecture 04, slides 5.",
+      "source": "Lecture 04, slides 5"
+    },
+    {
+      "id": 58,
+      "question": "Select all that apply. Which information belongs in documentation when relevant?",
+      "options": [
+        "Purpose of the code",
+        "Assumptions not obvious from the code",
+        "Authorship and origin/citations",
+        "Reasons for what the code is doing",
+        "A comment restating every assignment statement"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The lecture emphasizes purpose, assumptions, reasoning, authorship, and sources; narration of obvious statements is discouraged. Source: Lecture 04, slides 6-7.",
+      "source": "Lecture 04, slides 6-7"
+    },
+    {
+      "id": 59,
+      "question": "Which information is specifically expected for class-method documentation?",
+      "options": [
+        "Only the author's name",
+        "Purpose/description, method-specific assumptions, parameters and parameter assumptions, and return information",
+        "Only the number of lines in the method",
+        "The complete Git history"
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The documentation table lists those items for class methods. Source: Lecture 04, slides 7.",
+      "source": "Lecture 04, slides 7"
+    },
+    {
+      "id": 60,
+      "question": "Why is a comment such as `// declare integer variable` beside `int size;` considered poor \ndocumentation?",
+      "options": [
+        "Comments are never allowed beside variables.",
+        "It merely restates what the code already says and adds clutter rather than useful intent.",
+        "Integer variables cannot be commented.",
+        "Comments must contain URLs."
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The lecture's rule is that comments that simply restate the code are unnecessary and reduce readability. Source: Lecture 04, slides 8.",
+      "source": "Lecture 04, slides 8"
+    },
+    {
+      "id": 61,
+      "question": "Which principle about layout/style is emphasized most strongly?",
+      "options": [
+        "One brace style is objectively correct for all organizations.",
+        "Consistency with the team's chosen style matters more than personal preference.",
+        "Layout has no connection to program structure.",
+        "Developers should change style from file to file to show authorship."
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The lecture says good style can be subjective, while consistent representation of logical structure is the objective goal. Source: Lecture 04, slides 9-10.",
+      "source": "Lecture 04, slides 9-10"
+    },
+    {
+      "id": 62,
+      "question": "Which are objectives of layout and style?\nI. Accurately represent logical structure\nII. Consistently represent logical structure\nIII. Improve readability\n<PARSED TEXT FOR PAGE: 17 / 65>\n\nIV. Make modifications easier to make and match\nV. Make every file visually unique",
+      "options": [
+        "I, II, III, and IV",
+        "I, III, and V",
+        "II and V",
+        "I, II, III, IV, and V"
+      ],
+      "correct": 0,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "I-IV are stated objectives; V conflicts with consistency. Source: Lecture 04, slides 10.",
+      "source": "Lecture 04, slides 10"
+    },
+    {
+      "id": 63,
+      "question": "Which change would most directly improve the poorly formatted code examples in the lecture?",
+      "options": [
+        "Remove all whitespace",
+        "Use consistent indentation and spacing so the nesting and logical blocks are visually apparent",
+        "Move all code onto one line",
+        "Replace meaningful names with one-letter names"
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The sequence of slides progressively adds indentation/layout to reveal code structure. Source: Lecture 04, slides 11-14.",
+      "source": "Lecture 04, slides 11-14"
+    },
+    {
+      "id": 64,
+      "question": "Why should tabs and spaces not be mixed for indentation?",
+      "options": [
+        "Because Java forbids spaces",
+        "Because mixed indentation can render differently and make structure inconsistent or misleading",
+        "Because tabs disable comments",
+        "Because spaces prevent compilation"
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The lecture explicitly warns not to mix spaces and tabs when indenting. Source: Lecture 04, slides 13.",
+      "source": "Lecture 04, slides 13"
+    },
+    {
+      "id": 65,
+      "question": "What is the purpose of blank lines in readable source code?",
+      "options": [
+        "To increase the source-file line count",
+        "To separate blocks of functionality such as declarations, decisions, loops, and other logical sections",
+        "To replace indentation",
+        "To mark compile errors"
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The blank-lines slide treats whitespace as a visual separator between logical blocks. Source: Lecture 04, slides 15.",
+      "source": "Lecture 04, slides 15"
+    },
+    {
+      "id": 66,
+      "question": "Which item belongs in the identifying block at the top of a source file?",
+      "options": [
+        "Purpose/description of the file or code",
+        "A copy of every test result",
+        "The current CPU temperature",
+        "All previous versions of the file"
+      ],
+      "correct": 0,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The lecture lists authorship, purpose, description, and other identifying information for the file header. Source: Lecture 04, slides 17.",
+      "source": "Lecture 04, slides 17"
+    },
+    {
+      "id": 67,
+      "question": "What should comments inside code primarily describe?",
+      "options": [
+        "The code's purpose and the reason for complex or non-obvious parts",
+        "Every semicolon and brace",
+        "Only the variable types",
+        "Nothing; internal comments are always bad"
+      ],
+      "correct": 0,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "Comments should explain purpose/reasoning and be close to the code they describe. Source: Lecture 04, slides 19.",
+      "source": "Lecture 04, slides 19"
+    },
+    {
+      "id": 68,
+      "question": "A project uses one brace convention, naming scheme, spacing rule, and declaration style. A new \ndeveloper prefers different conventions. What should the developer do?",
+      "options": [
+        "Use personal style in all new files.",
+        "Follow the project's existing coding style unless the team decides to change it.",
+        "Mix both styles within each method. <PARSED TEXT FOR PAGE: 18 / 65>",
+        "Remove formatting entirely."
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "Consistency with the existing code base is the lecture's priority. Source: Lecture 04, slides 21.",
+      "source": "Lecture 04, slides 21"
+    },
+    {
+      "id": 69,
+      "question": "When code was written by someone outside your project/organization and reused, what does the \nlecture require?",
+      "options": [
+        "Delete the original author information.",
+        "Place an attribution/citation near the reused code and identify the source/author as appropriate.",
+        "Rename all variables so no citation is needed.",
+        "Only cite code if it does not compile."
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The code-citation slide treats source attribution as part of proper documentation. <PARSED TEXT FOR PAGE: 60 / 65> Source: Lecture 04, slides 22.",
+      "source": "Lecture 04, slides 22"
+    },
+    {
+      "id": 70,
+      "question": "Why might a complex or duplicated expression be assigned to a local variable?",
+      "options": [
+        "To make the program slower",
+        "To improve readability, avoid repeated subexpressions, and make intent clearer",
+        "To increase coupling",
+        "To eliminate all method calls"
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The lecture recommends local variables to simplify complex/duplicate expressions and reduce recomputation. Source: Lecture 04, slides 23.",
+      "source": "Lecture 04, slides 23"
+    },
+    {
+      "id": 71,
+      "question": "Which statement best matches the lecture's general style guidance?",
+      "options": [
+        "Place multiple unrelated statements on each line to save space.",
+        "Use the language/project conventions; for this course maintain the common CSCI 2134 style guide.",
+        "Ignore existing style when joining a project.",
+        "Line length and formatting never affect readability."
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The lecture emphasizes language/project conventions and the course style guide. Source: Lecture 04, slides 24-26.",
+      "source": "Lecture 04, slides 24-26"
+    },
+    {
+      "id": 72,
+      "question": "If a team has an established style guide, what is the recommended behavior?",
+      "options": [
+        "Follow it when working on the existing project.",
+        "Replace it immediately with your favorite online guide.",
+        "Use a different style for every class.",
+        "Follow it only for comments, not code."
+      ],
+      "correct": 0,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The lecture explicitly says to follow the style guidelines of an existing project. Source: Lecture 04, slides 25.",
+      "source": "Lecture 04, slides 25"
+    },
+    {
+      "id": 73,
+      "question": "Select all that apply. Which are listed costs of bad code?",
+      "options": [
+        "Harder editing/maintenance",
+        "More missed deadlines/opportunities",
+        "Higher defect risk and loss of trust",
+        "Reduced reuse/extensibility/adaptability",
+        "Guaranteed lower CPU temperature"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "The slide lists maintenance, schedule, cost, defects/reputation, and design-quality consequences. Source: Lecture 04, slides 27.",
+      "source": "Lecture 04, slides 27"
+    },
+    {
+      "id": 74,
+      "question": "Which statement best summarizes the lecture's key takeaway?",
+      "options": [
+        "Readability depends only on comments.",
+        "Readability depends on logical structure, source documentation, and layout/style, and supports broader software quality.",
+        "Readable code must always be shorter than unreadable code.",
+        "Formatting is more important than functionality in every context."
+      ],
+      "correct": 1,
+      "section": "Lecture 04 — Good Code II",
+      "explanation": "This matches the lecture's summary and organizing framework. Source: Lecture 04, slides 28.",
+      "source": "Lecture 04, slides 28"
+    },
+    {
+      "id": 75,
+      "question": "What is the key economic reason the lecture gives for finding defects early?",
+      "options": [
+        "Early defects are always simpler algorithms.",
+        "The earlier a defect is identified or avoided, the cheaper it is to fix.",
+        "Late defects cannot be fixed.",
+        "Testing becomes free late in development."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The lecture's central motivation is that defect-fix cost increases the later the defect is detected. Source: Lecture 05, slides 4-5.",
+      "source": "Lecture 05, slides 4-5"
+    },
+    {
+      "id": 76,
+      "question": "Which statement about debugging/fixing cost is emphasized in the lecture?",
+      "options": [
+        "Debugging is a negligible part of development time.",
+        "Debugging can consume more than half of development time, motivating defect prevention and early detection.",
+        "Debugging should occur only after release.",
+        "Debugging cost is unrelated to when defects are found. <PARSED TEXT FOR PAGE: 20 / 65>"
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The slide cites debugging as taking more than 50% of time and stresses early discovery. Source: Lecture 05, slides 5.",
+      "source": "Lecture 05, slides 5"
+    },
+    {
+      "id": 77,
+      "question": "Which activity is categorized primarily as detecting and fixing existing defects rather than avoiding \nthem?",
+      "options": [
+        "Set software quality objectives",
+        "Use software-engineering guidelines",
+        "Perform technical reviews",
+        "Allocate time to meet quality objectives"
+      ],
+      "correct": 2,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Technical reviews are listed under detection/fixing; the others are prevention/QA practices. Source: Lecture 05, slides 6.",
+      "source": "Lecture 05, slides 6"
+    },
+    {
+      "id": 78,
+      "question": "Select all that apply. Which are techniques listed for avoiding software defects?",
+      "options": [
+        "Set software quality objectives",
+        "Measure the quality objectives",
+        "Use software-engineering guidelines",
+        "Use collaborative development",
+        "Wait until system test before looking for defects"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The lecture lists the first four as prevention techniques; delaying detection is not recommended. Source: Lecture 05, slides 6.",
+      "source": "Lecture 05, slides 6"
+    },
+    {
+      "id": 79,
+      "question": "Why should all developers know the project's software-quality objectives?",
+      "options": [
+        "So each developer can choose a different standard.",
+        "Because developers focus on objectives they know are required and measured, and a shared target improves consistency.",
+        "Because objectives replace testing.",
+        "Because objectives are only for managers."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The lecture connects shared, measured objectives to developer focus and consistent outcomes. Source: Lecture 05, slides 7.",
+      "source": "Lecture 05, slides 7"
+    },
+    {
+      "id": 80,
+      "question": "Which set contains only characteristics the lecture requires of good software-quality objectives?",
+      "options": [
+        "Defined/clear, stable, consistent, prioritized, known by all",
+        "Secret, frequently changing, developer-specific, unranked",
+        "Vague, flexible, optional, unmeasured",
+        "Temporary, contradictory, undocumented, private"
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Those five characteristics are explicitly listed. Source: Lecture 05, slides 8.",
+      "source": "Lecture 05, slides 8"
+    },
+    {
+      "id": 81,
+      "question": "Two quality objectives conflict. What should the project have already established?",
+      "options": [
+        "A rule that both are ignored",
+        "A clear precedence/prioritization order",
+        "A different objective for every developer",
+        "A ban on measuring either objective"
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Prioritized objectives allow the team to resolve conflicts consistently. Source: Lecture 05, slides 8.",
+      "source": "Lecture 05, slides 8"
+    },
+    {
+      "id": 82,
+      "question": "What is a project charter in the context of the lecture?",
+      "options": [
+        "A test harness",
+        "A document outlining project goals and team-member responsibilities, functioning like a team constitution",
+        "A Git branch policy only",
+        "A list of compiler warnings"
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "That is the lecture's definition and rationale for using a charter to encode QA objectives. Source: Lecture 05, slides 9.",
+      "source": "Lecture 05, slides 9"
+    },
+    {
+      "id": 83,
+      "question": "Which is an example of a concrete software-quality objective from the lecture?",
+      "options": [
+        "Code should be 'pretty good.'",
+        "All code must compile and pass all tests before being committed or merged. <PARSED TEXT FOR PAGE: 21 / 65>",
+        "Developers should try to remember to test sometimes.",
+        "Only the project manager needs readable code."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The lecture gives compile/pass-all-tests before commit/merge as a specific objective. Source: Lecture 05, slides 10.",
+      "source": "Lecture 05, slides 10"
+    },
+    {
+      "id": 84,
+      "question": "Why does explicit QA activity require measurement?",
+      "options": [
+        "Measurement is needed to know whether the stated quality objectives are actually being achieved.",
+        "Measurement guarantees zero defects.",
+        "Measurement replaces development.",
+        "Only Git commit count can measure quality."
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The lecture asks, 'If you are not measuring, how do you know if you have achieved it?' Source: Lecture 05, slides 11-12.",
+      "source": "Lecture 05, slides 11-12"
+    },
+    {
+      "id": 85,
+      "question": "Which metric is an example the lecture suggests gathering for QA?",
+      "options": [
+        "Number of bugs found in code",
+        "Developer shoe size",
+        "Office temperature only",
+        "Number of characters in employee names"
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Bug counts, debugging time, review corrections, and rejected merges are example QA measurements. Source: Lecture 05, slides 11-12.",
+      "source": "Lecture 05, slides 11-12"
+    },
+    {
+      "id": 86,
+      "question": "What does 'gating' mean in the lecture's QA process?",
+      "options": [
+        "Allow the project to proceed regardless of quality so deadlines are met.",
+        "Do not allow the project to proceed until required objectives/standards are met.",
+        "Delete all quality measurements after each milestone.",
+        "Assign a separate standard to every developer."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Gating stops progress until quality objectives are satisfied. Source: Lecture 05, slides 13.",
+      "source": "Lecture 05, slides 13"
+    },
+    {
+      "id": 87,
+      "question": "Which explicit QA activities are recommended?\nI. Allocate time for reviews/remediation\nII. Enforce standards before merge\nIII. Reward developers for meeting objectives\nIV. Use gates for progress when appropriate\nV. Assume quality work will happen without planning",
+      "options": [
+        "I, II, III, and IV",
+        "I and V",
+        "II, III, and V",
+        "I, II, III, IV, and V"
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "I-IV are recommended; V contradicts the lecture's insistence on explicit QA planning. Source: Lecture 05, slides 13.",
+      "source": "Lecture 05, slides 13"
+    },
+    {
+      "id": 88,
+      "question": "How does the lecture define software-engineering guidelines?",
+      "options": [
+        "Rules and heuristics that help developers make good choices",
+        "A replacement for all judgment",
+        "A list of bugs from one program",
+        "Only externally mandated laws"
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Guidelines are rules/heuristics and may be external or internal. Source: Lecture 05, slides 14.",
+      "source": "Lecture 05, slides 14"
+    },
+    {
+      "id": 89,
+      "question": "If a team has established internal development guidelines, what is the lecture's advice?",
+      "options": [
+        "Ignore them unless you personally agree with every rule.",
+        "Follow them unless there is a very good reason not to.",
+        "Use different guidelines on each branch.",
+        "Replace them with an external guide without discussion. <PARSED TEXT FOR PAGE: 22 / 65>"
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The slide explicitly says to follow team guidelines unless you have a very good reason why not. Source: Lecture 05, slides 14.",
+      "source": "Lecture 05, slides 14"
+    },
+    {
+      "id": 90,
+      "question": "Which benefit is NOT presented as a reason to use development guidelines?",
+      "options": [
+        "Consistency",
+        "Correctness",
+        "Understandability",
+        "Reliability",
+        "Guaranteed elimination of all defects"
+      ],
+      "correct": 4,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Guidelines improve consistency/correctness/understandability/reliability but do not guarantee perfection. Source: Lecture 05, slides 15-16.",
+      "source": "Lecture 05, slides 15-16"
+    },
+    {
+      "id": 91,
+      "question": "Why should defect detection use a combination of techniques?",
+      "options": [
+        "Each technique finds exactly the same defects.",
+        "Different techniques are useful for different defects and stages, and no single technique is 100% effective.",
+        "Testing is the only technique that works.",
+        "Formal reviews make all other techniques unnecessary."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The lecture explicitly argues for combining complementary techniques. Source: Lecture 05, slides 18-20.",
+      "source": "Lecture 05, slides 18-20"
+    },
+    {
+      "id": 92,
+      "question": "According to the lecture, what approximate effectiveness can a combination of defect-detection \ntechniques reach (as cited from McConnell)?",
+      "options": [
+        "About 10%",
+        "About 35%",
+        "About 95%",
+        "Exactly 100%"
+      ],
+      "correct": 2,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The slide states that the combination can be about 95% effective. Source: Lecture 05, slides 19.",
+      "source": "Lecture 05, slides 19"
+    },
+    {
+      "id": 93,
+      "question": "What is collaborative development?",
+      "options": [
+        "A process in which developers share responsibility for creating code and other work products",
+        "A rule that only one developer may ever read a file",
+        "A replacement for source control",
+        "A testing technique performed only by customers"
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The lecture defines collaborative development around shared responsibility for work products. Source: Lecture 05, slides 21.",
+      "source": "Lecture 05, slides 21"
+    },
+    {
+      "id": 94,
+      "question": "Which is a likely benefit of collaboration according to the lecture?",
+      "options": [
+        "Fewer viewpoints",
+        "Shared understanding and ownership of the code",
+        "Guaranteed faster implementation in every case",
+        "No need for defect detection"
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The lecture emphasizes more eyes/viewpoints, shared understanding, and ownership while acknowledging time cost. Source: Lecture 05, slides 21-22.",
+      "source": "Lecture 05, slides 21-22"
+    },
+    {
+      "id": 95,
+      "question": "What is the main general cost of collaborative practices noted in the lecture?",
+      "options": [
+        "They make code impossible to test.",
+        "They may use more people/time because several people participate in work one person could do alone.",
+        "They prevent knowledge sharing.",
+        "They prohibit code review."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The lecture notes increased personnel/time cost despite quality benefits. Source: Lecture 05, slides 22.",
+      "source": "Lecture 05, slides 22"
+    },
+    {
+      "id": 96,
+      "question": "In pair programming, what is the driver's primary role?",
+      "options": [
+        "Write the code at the keyboard",
+        "Manage the Git server",
+        "Grade the code <PARSED TEXT FOR PAGE: 23 / 65>",
+        "Avoid discussing design"
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The driver is the person entering code; the navigator watches, thinks ahead, and supports the driver. Source: Lecture 05, slides 24.",
+      "source": "Lecture 05, slides 24"
+    },
+    {
+      "id": 97,
+      "question": "Select all that apply. Which activities belong to the navigator in pair programming?",
+      "options": [
+        "Catch bugs as they happen",
+        "Think ahead about how the design fits the plan",
+        "Look up supporting information/standards",
+        "Take turns periodically with the driver",
+        "Ignore the code until the end"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Those roles and periodic rotation are described on the pair-programming slide. Source: Lecture 05, slides 24.",
+      "source": "Lecture 05, slides 24"
+    },
+    {
+      "id": 98,
+      "question": "What should technical reviews focus on during the review itself?",
+      "options": [
+        "Detecting defects rather than getting distracted by solving them",
+        "Implementing every fix immediately",
+        "Refactoring the entire program regardless of findings",
+        "Deciding salaries"
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The lecture repeatedly separates defect detection from later defect correction. Source: Lecture 05, slides 25.",
+      "source": "Lecture 05, slides 25"
+    },
+    {
+      "id": 99,
+      "question": "Which review type is an author-led meeting in which the author explains the code/design to reviewers?",
+      "options": [
+        "Code walkthrough",
+        "Code reading",
+        "Informal quick review",
+        "System test"
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The walkthrough is author-led; code reading is independent reading, and an informal review is a quick check. Source: Lecture 05, slides 26-28.",
+      "source": "Lecture 05, slides 26-28"
+    },
+    {
+      "id": 100,
+      "question": "What is a key disadvantage of code reading?",
+      "options": [
+        "Reviewers cannot work independently.",
+        "It does not ensure every reviewer applies the same degree of scrutiny.",
+        "It requires the author to lead a meeting.",
+        "It always takes more time than a formal review."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The slide notes independent reading is convenient but scrutiny can be inconsistent. Source: Lecture 05, slides 27.",
+      "source": "Lecture 05, slides 27"
+    },
+    {
+      "id": 101,
+      "question": "Which description best matches a formal code review?",
+      "options": [
+        "An unstructured one-person scan with no preparation",
+        "A structured meeting with a clear focus/agenda, typically a small prepared review team, and defined review work",
+        "A live debugging session led by the author",
+        "A customer acceptance test"
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Formal reviews are structured, prepared, and role-based. Source: Lecture 05, slides 29.",
+      "source": "Lecture 05, slides 29"
+    },
+    {
+      "id": 102,
+      "question": "What review-team size is presented as a practical formal-review size in the lecture?",
+      "options": [
+        "Exactly 1 person",
+        "About 3-6 people",
+        "At least 25 people",
+        "Unlimited"
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The formal-review slide identifies a team of roughly 3-6 people. Source: Lecture 05, slides 29.",
+      "source": "Lecture 05, slides 29"
+    },
+    {
+      "id": 103,
+      "question": "Who must NOT serve as the moderator in a formal code review?",
+      "options": [
+        "The author of the code",
+        "A reviewer <PARSED TEXT FOR PAGE: 24 / 65>",
+        "A trained facilitator",
+        "A team member who is not the author"
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The moderator keeps the meeting on track and cannot be the author. Source: Lecture 05, slides 30.",
+      "source": "Lecture 05, slides 30"
+    },
+    {
+      "id": 104,
+      "question": "Which formal-review role records defect locations and severity if problems are found?",
+      "options": [
+        "Driver",
+        "Scribe",
+        "Compiler",
+        "Customer"
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The scribe records the defects during the review. Source: Lecture 05, slides 30.",
+      "source": "Lecture 05, slides 30"
+    },
+    {
+      "id": 105,
+      "question": "Why are checklist-based reviews useful?",
+      "options": [
+        "They force reviewers to solve every bug in the meeting.",
+        "They remind reviewers of common defects, make the process more consistent, and help less-experienced reviewers focus.",
+        "They eliminate the need to read the code.",
+        "They prevent the checklist from ever being updated."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Those are the stated purposes of checklists. Source: Lecture 05, slides 31.",
+      "source": "Lecture 05, slides 31"
+    },
+    {
+      "id": 106,
+      "question": "What should happen to most defects discovered during a formal review?",
+      "options": [
+        "Fix them immediately during the meeting.",
+        "Record them for the author to correct after the review, while the meeting stays focused on detection.",
+        "Delete the code immediately.",
+        "Ignore them unless the reviewer can provide a complete fix."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The process records defects and assigns later remediation rather than turning the meeting into a repair session. Source: Lecture 05, slides 32.",
+      "source": "Lecture 05, slides 32"
+    },
+    {
+      "id": 107,
+      "question": "Which preparation is expected before a formal review meeting?",
+      "options": [
+        "No one should look at the code before the meeting.",
+        "Everyone reads/reviews the code beforehand, and the moderator arranges logistics and focus.",
+        "Only the author reads the code.",
+        "The team must first deploy the code to production."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "Advance preparation is a key formal-review step. Source: Lecture 05, slides 32.",
+      "source": "Lecture 05, slides 32"
+    },
+    {
+      "id": 108,
+      "question": "A 14-person review group has trouble coordinating, several people barely speak, and accountability is \nweak. Based on the lecture and sample midterm style, what is the best conclusion?",
+      "options": [
+        "A smaller prepared formal-review group is likely to provide a better balance of roles, viewpoints, participation, and coordination.",
+        "Formal reviews become more effective as the group approaches unlimited size.",
+        "The review should remove all roles and preparation.",
+        "The problem proves that reviews are never useful."
+      ],
+      "correct": 0,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The course material favors small structured review groups and notes coordination/engagement problems in large groups. Source: Lecture 05, slides 29-32.",
+      "source": "Lecture 05, slides 29-32"
+    },
+    {
+      "id": 109,
+      "question": "Which statement best captures the lecture's final takeaway about defect detection?",
+      "options": [
+        "One technique should be selected and used exclusively.",
+        "Use multiple complementary techniques; collaborative development and reviews help find defects earlier and improve shared understanding.",
+        "Only post-release testing matters.",
+        "Defects should be fixed before they are recorded."
+      ],
+      "correct": 1,
+      "section": "Lecture 05 — Defect Detection & Collaborative Development",
+      "explanation": "The key-takeaway slide combines early detection, software-quality objectives, multiple techniques, and collaborative review practices. <PARSED TEXT FOR PAGE: 61 / 65> Source: Lecture 05, slides 35.",
+      "source": "Lecture 05, slides 35"
+    },
+    {
+      "id": 110,
+      "question": "What is the essential comparison performed by a software test?",
+      "options": [
+        "Source code length versus executable size",
+        "Actual result/response versus expected result",
+        "Developer estimate versus manager estimate",
+        "Number of methods versus number of classes"
+      ],
+      "correct": 1,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The test flow compares the observed result with the expected result. Source: Lecture 06, slides 4.",
+      "source": "Lecture 06, slides 4"
+    },
+    {
+      "id": 111,
+      "question": "A test's actual and expected results differ. What should happen next according to the lecture's test \ndiagram?",
+      "options": [
+        "Immediately assume the program is wrong.",
+        "Determine whether the test itself is correct; if the test is correct, the mismatch indicates a bug, otherwise fix the test.",
+        "Delete the expected result.",
+        "Commit the code before investigating. <PARSED TEXT FOR PAGE: 27 / 65>"
+      ],
+      "correct": 1,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The diagram explicitly checks test correctness before concluding that a bug was found. Source: Lecture 06, slides 4.",
+      "source": "Lecture 06, slides 4"
+    },
+    {
+      "id": 112,
+      "question": "What kind of testing had students already seen in earlier courses according to the lecture?",
+      "options": [
+        "Only performance benchmarking",
+        "Input/output tests and runner/class-style tests",
+        "Only formal code inspections",
+        "Only customer acceptance tests"
+      ],
+      "correct": 1,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The lecture reviews Codio/Mimir input-output testing and runner/class tests. Source: Lecture 06, slides 5-6.",
+      "source": "Lecture 06, slides 5-6"
+    },
+    {
+      "id": 113,
+      "question": "Which description best defines unit testing in this lecture?",
+      "options": [
+        "Testing the final deployed system with live users",
+        "Testing small program units, such as methods and small classes, generally written by one developer",
+        "Testing only database connections",
+        "Testing only user interfaces"
+      ],
+      "correct": 1,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "Unit tests target small units owned by a single developer. Source: Lecture 06, slides 7.",
+      "source": "Lecture 06, slides 7"
+    },
+    {
+      "id": 114,
+      "question": "Which JUnit version does the lecture state will be used?",
+      "options": [
+        "JUnit 3",
+        "JUnit 4",
+        "JUnit 5",
+        "JUnit 10"
+      ],
+      "correct": 2,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The course lecture explicitly says JUnit 5. Source: Lecture 06, slides 7.",
+      "source": "Lecture 06, slides 7"
+    },
+    {
+      "id": 115,
+      "question": "A class has one complex method. Which statement about its JUnit test class is most accurate?",
+      "options": [
+        "The test class must contain exactly one test method for that target method.",
+        "The target method may have multiple test methods covering different cases.",
+        "JUnit permits only one test per class.",
+        "Tests must be placed inside the target class."
+      ],
+      "correct": 1,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The JUnit overview shows several test methods aimed at the same target method. Source: Lecture 06, slides 8.",
+      "source": "Lecture 06, slides 8"
+    },
+    {
+      "id": 116,
+      "question": "In the IntelliJ setup shown in the lecture, what is the purpose of marking the `test` directory as a Test \nSources Directory?",
+      "options": [
+        "To tell the IDE where test source files belong",
+        "To compile the application into an executable",
+        "To make Git ignore the tests",
+        "To replace the `src` directory"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The setup establishes a dedicated test-source location for JUnit classes. Source: Lecture 06, slides 10-13.",
+      "source": "Lecture 06, slides 10-13"
+    },
+    {
+      "id": 117,
+      "question": "Which sequence best matches the lecture's IntelliJ workflow for creating a JUnit test class?",
+      "options": [
+        "Open the target class Navigate/Test Create New Test select JUnit and desired methods → → →",
+        "Delete the source class create a text file run Git status → →",
+        "Create a remote repository push open debugger → →",
+        "Run the program rename the class disable JUnit → →"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "That is the workflow shown across the IntelliJ creation slides. Source: Lecture 06, slides 11-13.",
+      "source": "Lecture 06, slides 11-13"
+    },
+    {
+      "id": 118,
+      "question": "Which ordering describes the three main parts of a JUnit test method?",
+      "options": [
+        "Evaluation call setup → →",
+        "Setup call to target method evaluation → →",
+        "Commit push pull → →",
+        "Compile deploy design → → <PARSED TEXT FOR PAGE: 28 / 65>"
+      ],
+      "correct": 1,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The anatomy slide lists setup, call, and evaluation. Source: Lecture 06, slides 15.",
+      "source": "Lecture 06, slides 15"
+    },
+    {
+      "id": 119,
+      "question": "In a JUnit test, what is the purpose of the setup phase?",
+      "options": [
+        "Initialize necessary objects and data structures for the test",
+        "Publish the application to production",
+        "Remove expected results",
+        "Merge the test branch"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "Setup prepares the test state before the target call is made. Source: Lecture 06, slides 15-16.",
+      "source": "Lecture 06, slides 15-16"
+    },
+    {
+      "id": 120,
+      "question": "Which assertion should be used when a test expects a returned object to be null?",
+      "options": [
+        "assertTrue",
+        "assertNull",
+        "assertNotNull",
+        "assertNotEquals"
+      ],
+      "correct": 1,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The assertion table identifies assertNull for a null expectation. Source: Lecture 06, slides 17.",
+      "source": "Lecture 06, slides 17"
+    },
+    {
+      "id": 121,
+      "question": "Which assertion most directly tests that two values are equal?",
+      "options": [
+        "assertEquals",
+        "assertFalse",
+        "assertNull",
+        "assertNotNull"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "assertEquals expresses the expected equality relation. Source: Lecture 06, slides 17.",
+      "source": "Lecture 06, slides 17"
+    },
+    {
+      "id": 122,
+      "question": "Which statement correctly distinguishes white-box from black-box testing?",
+      "options": [
+        "White-box tests use implementation knowledge; black-box tests are based on the specification/interface.",
+        "Black-box tests require source-code knowledge; white-box tests never inspect code structure.",
+        "They are identical terms.",
+        "White-box is only for system tests and black-box only for unit tests."
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "That distinction is the central comparison on the design-a-test slide. Source: Lecture 06, slides 18.",
+      "source": "Lecture 06, slides 18"
+    },
+    {
+      "id": 123,
+      "question": "A developer reads a method's code and designs a test to force execution through a particular `if` \nbranch. What kind of test is this?",
+      "options": [
+        "White-box unit test",
+        "Black-box system test",
+        "Acceptance test",
+        "Usability test"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The test is based on implementation structure and targets a method, so it is white-box unit testing. Source: Lecture 06, slides 19.",
+      "source": "Lecture 06, slides 19"
+    },
+    {
+      "id": 124,
+      "question": "What is the core goal of structured basis testing?",
+      "options": [
+        "Test each part/branch of the method at least once using a structured set of cases",
+        "Test only the most common input",
+        "Avoid looking at control flow",
+        "Maximize the number of redundant tests"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "Structured basis testing enumerates code parts/branches and exercises them. Source: Lecture 06, slides 20.",
+      "source": "Lecture 06, slides 20"
+    },
+    {
+      "id": 125,
+      "question": "Why do smaller methods generally need fewer structured-basis test cases?",
+      "options": [
+        "They usually contain fewer branches/loops/conditions that need independent exercise.",
+        "Small methods cannot fail.",
+        "JUnit skips small methods.",
+        "Small methods never accept parameters. <PARSED TEXT FOR PAGE: 29 / 65>"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The number of structural elements drives the needed cases. Source: Lecture 06, slides 20.",
+      "source": "Lecture 06, slides 20"
+    },
+    {
+      "id": 126,
+      "question": "A method returns null under two distinct dimension-mismatch conditions. Under the lecture's \nstructured-basis approach, why might these require separate tests?",
+      "options": [
+        "Because each distinct branch/condition should be exercised, even if the returned value is the same.",
+        "Because JUnit allows only one assertion per test class.",
+        "Because null cannot be tested twice.",
+        "Because all mismatches must be tested in one giant test."
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "Structural coverage is about exercising distinct code paths/branches, not merely distinct outputs. Source: Lecture 06, slides 21-22.",
+      "source": "Lecture 06, slides 21-22"
+    },
+    {
+      "id": 127,
+      "question": "What information is the primary source for black-box/specification-based unit tests?",
+      "options": [
+        "The method/class specification and interface",
+        "The developer's private implementation notes only",
+        "The compiled machine code",
+        "The Git commit hash"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "Black-box tests use what the code is specified to do, not how it is implemented. Source: Lecture 06, slides 23.",
+      "source": "Lecture 06, slides 23"
+    },
+    {
+      "id": 128,
+      "question": "Which categories should specification-based testing identify?\nI. Common/typical cases\nII. Boundary cases\nIII. Exceptional/error cases when specified\nIV. Only inputs already known to pass\nV. One or more tests per important case/boundary",
+      "options": [
+        "I, II, III, and V",
+        "I, III, and IV",
+        "II and IV",
+        "I, II, III, IV, and V"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "I, II, III, and V match the lecture; IV is the opposite of defect-oriented testing. Source: Lecture 06, slides 23-25.",
+      "source": "Lecture 06, slides 23-25"
+    },
+    {
+      "id": 129,
+      "question": "What is a boundary condition in test design?",
+      "options": [
+        "A value at or around a threshold/minimum/maximum where behavior can change",
+        "Any random value far from all limits",
+        "A comment at the top of a file",
+        "A Git branch boundary"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "Boundary testing focuses on edges/thresholds of valid or invalid behavior. Source: Lecture 06, slides 25.",
+      "source": "Lecture 06, slides 25"
+    },
+    {
+      "id": 130,
+      "question": "Why can a specification-based test suite contain many cases even for one method?",
+      "options": [
+        "Because error cases, boundary conditions, and normal cases can each require distinct tests.",
+        "Because every test must repeat every other test.",
+        "Because JUnit requires 15 tests per method.",
+        "Because implementation knowledge is mandatory."
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The example counts many distinct specification cases and boundaries for one method. Source: Lecture 06, slides 26.",
+      "source": "Lecture 06, slides 26"
+    },
+    {
+      "id": 131,
+      "question": "When adding multiple JUnit tests for the same target method, what naming practice does the lecture \nencourage?",
+      "options": [
+        "Give tests distinct names that describe the specific case being tested.",
+        "Use exactly the same test name for all cases.",
+        "Name every test `test1`.",
+        "Avoid method names because JUnit cannot use them. <PARSED TEXT FOR PAGE: 30 / 65>"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The slide shows adding more tests with case-specific method names. Source: Lecture 06, slides 27.",
+      "source": "Lecture 06, slides 27"
+    },
+    {
+      "id": 132,
+      "question": "Why does the lecture recommend starting with unit testing?",
+      "options": [
+        "Small pieces of code are easier to isolate and test, and unit tests become a basis for higher-level testing.",
+        "Unit tests prove the entire system has no defects.",
+        "Unit tests require a production server.",
+        "Unit tests can be written only by customers."
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The lecture emphasizes isolation, ease, developer ownership, and reuse in higher-level testing. Source: Lecture 06, slides 28-29.",
+      "source": "Lecture 06, slides 28-29"
+    },
+    {
+      "id": 133,
+      "question": "Which statement best summarizes the lecture's testing model?",
+      "options": [
+        "White-box tests are guided by implementation knowledge; black-box tests by the specification; unit tests focus on small isolated code pieces.",
+        "All tests should ignore both implementation and specifications.",
+        "JUnit is a version-control tool.",
+        "Unit testing is the same as deployment testing."
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "This matches the key-takeaway slide. Source: Lecture 06, slides 30.",
+      "source": "Lecture 06, slides 30"
+    },
+    {
+      "id": 134,
+      "question": "What does the following JUnit-style test most directly verify?\n@Test\nvoid emptyQueueSize() {\n Queue q = new Queue();\n assertEquals(0, q.size());\n}",
+      "options": [
+        "A newly created queue reports size 0",
+        "Calling size() throws an exception",
+        "A queue can store exactly one item",
+        "Queue.equals(null) returns false"
+      ],
+      "correct": 0,
+      "section": "Lecture 06 — Testing 101 / JUnit",
+      "explanation": "The setup creates an empty queue, the call is q.size(), and the assertion expects 0. Source: Lecture 06, slides 15-17.",
+      "source": "Lecture 06, slides 15-17"
+    },
+    {
+      "id": 135,
+      "question": "Which statement best distinguishes a method unit test from a class unit test in the lecture?",
+      "options": [
+        "Method tests focus on one operation; class tests can verify expected behavior across a sequence of operations on an object.",
+        "Class tests can only test constructors.",
+        "Method tests require multiple developers; class tests require one.",
+        "There is always a perfectly sharp boundary between the two."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The lecture notes that method tests target an operation while class tests can test behavior over sequences, and that the distinction is sometimes blurry. Source: Lecture 07, slides 4-5.",
+      "source": "Lecture 07, slides 4-5"
+    },
+    {
+      "id": 136,
+      "question": "Which combination best describes a good test suite?",
+      "options": [
+        "High coverage, minimal necessary overlap, understandable tests, and boundary/exceptional cases",
+        "Many redundant tests and only typical inputs",
+        "Only one test per class regardless of complexity <PARSED TEXT FOR PAGE: 32 / 65>",
+        "Maximum code coverage with no concern for test cost or clarity"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "Those are the explicit qualities listed for a good suite. Source: Lecture 07, slides 6-7.",
+      "source": "Lecture 07, slides 6-7"
+    },
+    {
+      "id": 137,
+      "question": "Which coverage measure requires every method to be called by at least one test?",
+      "options": [
+        "Function/method coverage",
+        "Statement coverage",
+        "Path coverage",
+        "Boundary coverage"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "Method coverage is defined as every method being called. Source: Lecture 07, slides 7.",
+      "source": "Lecture 07, slides 7"
+    },
+    {
+      "id": 138,
+      "question": "Which coverage measure requires every branch of `if`, `switch`, and loop-related control flow to be \ntaken?",
+      "options": [
+        "Branch coverage",
+        "Comment coverage",
+        "Interface coverage",
+        "Version coverage"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "Branch/loop coverage focuses on each branch being exercised. Source: Lecture 07, slides 7.",
+      "source": "Lecture 07, slides 7"
+    },
+    {
+      "id": 139,
+      "question": "Why does the lecture prefer the smallest number of tests necessary?",
+      "options": [
+        "Tests take time to write/run/verify, and smaller focused tests are easier to understand and debug.",
+        "JUnit charges per test.",
+        "More tests always reduce coverage.",
+        "A test suite may contain only five tests."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The lecture explicitly connects test cost and clarity to minimizing unnecessary overlap. Source: Lecture 07, slides 7.",
+      "source": "Lecture 07, slides 7"
+    },
+    {
+      "id": 140,
+      "question": "What is the 'clean tests' mindset pitfall?",
+      "options": [
+        "Trying to break the code and expose failures",
+        "Designing tests mainly to confirm the code works instead of actively looking for ways it can fail",
+        "Testing boundary values",
+        "Writing independent tests"
+      ],
+      "correct": 1,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The lecture warns that developers often test to prove success rather than to find defects. Source: Lecture 07, slides 8.",
+      "source": "Lecture 07, slides 8"
+    },
+    {
+      "id": 141,
+      "question": "Which testing pitfall is illustrated by a team claiming 95% coverage without carefully measuring it?",
+      "options": [
+        "Optimistic view of coverage",
+        "Excessive path testing",
+        "Too many requirements",
+        "Using JUnit 5"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The lecture says developers commonly overestimate their true coverage. Source: Lecture 07, slides 8.",
+      "source": "Lecture 07, slides 8"
+    },
+    {
+      "id": 142,
+      "question": "Why is statement coverage alone potentially insufficient?",
+      "options": [
+        "A test can execute every statement while still missing important condition combinations or distinct paths.",
+        "Statements cannot be executed by tests.",
+        "Statement coverage is identical to full path coverage.",
+        "Statement coverage applies only to documentation."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The structured approaches are introduced specifically because simply touching each statement can miss other behaviors. Source: Lecture 07, slides 8-9.",
+      "source": "Lecture 07, slides 8-9"
+    },
+    {
+      "id": 143,
+      "question": "Which pair is correctly categorized?",
+      "options": [
+        "Structured basis/path testing = white-box; requirements testing = black-box",
+        "Structured basis = black-box; requirements testing = white-box",
+        "Both are only system-testing methods <PARSED TEXT FOR PAGE: 33 / 65>",
+        "Both ignore specifications and implementation"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The lecture classifies control-flow approaches as white-box and requirements testing as black-box. Source: Lecture 07, slides 9.",
+      "source": "Lecture 07, slides 9"
+    },
+    {
+      "id": 144,
+      "question": "What does structured basis testing add beyond the naive idea of finding only a few tests that happen \nto execute every statement?",
+      "options": [
+        "It systematically adds cases for control-flow elements such as loops, decisions, Boolean-condition parts, and branches.",
+        "It removes all tests involving conditions.",
+        "It tests only output formatting.",
+        "It avoids reading the implementation."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "Structured basis testing is an enumerated control-flow approach rather than accidental statement coverage. Source: Lecture 07, slides 10-11.",
+      "source": "Lecture 07, slides 10-11"
+    },
+    {
+      "id": 145,
+      "question": "Which element can require an additional structured-basis test according to the lecture's algorithm?",
+      "options": [
+        "A loop",
+        "An `if` statement",
+        "A part of a Boolean condition",
+        "A code branch",
+        "All of the above"
+      ],
+      "correct": 4,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "All are listed as reasons to add tests. Source: Lecture 07, slides 11.",
+      "source": "Lecture 07, slides 11"
+    },
+    {
+      "id": 146,
+      "question": "Why is method decomposition helpful for testing?",
+      "options": [
+        "Smaller methods tend to contain fewer independent control-flow elements and therefore need fewer focused test cases.",
+        "Smaller methods cannot contain bugs.",
+        "JUnit ignores large methods.",
+        "It guarantees complete path coverage automatically."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "This is the observation stated on the structured-basis slide. Source: Lecture 07, slides 11.",
+      "source": "Lecture 07, slides 11"
+    },
+    {
+      "id": 147,
+      "question": "An `if/else-if/else-if/else-if/else` chain has four explicit conditions plus the final 'none matched' case. \nWhat is the natural structured-basis test strategy shown in the warm-up?",
+      "options": [
+        "Use a case that reaches each alternative, including the final fall-through case.",
+        "Test only the first true condition.",
+        "Test only the final else.",
+        "One test always covers all alternatives."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The warm-up uses separate cases for each alternative outcome. Source: Lecture 07, slides 12-14.",
+      "source": "Lecture 07, slides 12-14"
+    },
+    {
+      "id": 148,
+      "question": "Why can compound Boolean expressions require more tests than a simple single-condition branch?",
+      "options": [
+        "Different terms in the compound expression may need to be exercised so the behavior of each part is tested.",
+        "Boolean expressions cannot be tested directly.",
+        "Each Boolean always requires exactly one test.",
+        "Only `OR` expressions matter."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The slides break compound OR/AND conditions into cases that exercise their component terms. Source: Lecture 07, slides 15-16.",
+      "source": "Lecture 07, slides 15-16"
+    },
+    {
+      "id": 149,
+      "question": "What is the main goal of path testing/path coverage?",
+      "options": [
+        "Execute distinct paths through the code, not merely ensure each statement/branch is touched somewhere",
+        "Test only the fastest path",
+        "Ignore loops and decisions",
+        "Replace all black-box testing"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "Path testing is introduced because the same statements can participate in different execution paths. <PARSED TEXT FOR PAGE: 62 / 65> Source: Lecture 07, slides 17.",
+      "source": "Lecture 07, slides 17"
+    },
+    {
+      "id": 150,
+      "question": "Why can loops make exhaustive path testing impractical?\n<PARSED TEXT FOR PAGE: 34 / 65>",
+      "options": [
+        "The number of distinct paths can grow with the number of possible loop iterations and combinations with other decisions.",
+        "Loops are never executed during tests.",
+        "JUnit cannot test loops.",
+        "Every loop has only one possible path."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The path-count slides show that iteration choices multiply the number of paths. Source: Lecture 07, slides 17-20.",
+      "source": "Lecture 07, slides 17-20"
+    },
+    {
+      "id": 151,
+      "question": "How does path testing generally compare with structured basis testing?",
+      "options": [
+        "Path testing usually needs more cases because it distinguishes combinations of branches that basis testing can cover separately.",
+        "Path testing always needs fewer tests.",
+        "They are exactly identical techniques.",
+        "Basis testing tests requirements only."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The comparison slide shows path testing demanding more cases for the same control structure. Source: Lecture 07, slides 21.",
+      "source": "Lecture 07, slides 21"
+    },
+    {
+      "id": 152,
+      "question": "For N independent Boolean conditions, how many truth-value combinations are possible in full \ncombinatorial coverage?",
+      "options": [
+        "N",
+        "N + 1",
+        "2N",
+        "2^N"
+      ],
+      "correct": 3,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The slide explicitly states 2^N combinations. Source: Lecture 07, slides 22.",
+      "source": "Lecture 07, slides 22"
+    },
+    {
+      "id": 153,
+      "question": "Why does the lecture say requirements/specification testing tends to be preferred?",
+      "options": [
+        "It can be used with TDD, avoids implementation-dependent bias, supports standard design principles, and forces attention to the requirements.",
+        "It guarantees every source-code path is executed.",
+        "It requires implementation to be complete first.",
+        "It eliminates the need for all white-box testing."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "Those benefits are listed on the motivation slide. Source: Lecture 07, slides 23.",
+      "source": "Lecture 07, slides 23"
+    },
+    {
+      "id": 154,
+      "question": "Select all that apply. Which categories should be used to create requirements-based test cases?",
+      "options": [
+        "Specified error/exception cases",
+        "Boundary cases",
+        "Common/typical cases",
+        "Only cases that are easy to implement",
+        "Threshold values such as minimum/maximum"
+      ],
+      "correct": [
+        0,
+        1,
+        2,
+        4
+      ],
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The lecture explicitly calls for error, boundary, and common cases, including threshold values. Source: Lecture 07, slides 24-25.",
+      "source": "Lecture 07, slides 24-25"
+    },
+    {
+      "id": 155,
+      "question": "A method's valid input range is 10 through 50 inclusive. Which values best represent boundary￾focused tests?",
+      "options": [
+        "10 and 50, plus values just around the boundaries when relevant",
+        "Only 30",
+        "Only random values between 20 and 40",
+        "No numerical values; boundaries are implementation details"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "Boundary testing targets minima, maxima, thresholds, and values immediately around them when behavior changes. Source: Lecture 07, slides 25.",
+      "source": "Lecture 07, slides 25"
+    },
+    {
+      "id": 156,
+      "question": "In the postage example, why are country and weight combinations broken into multiple tests?",
+      "options": [
+        "Different specification categories/boundaries can produce different outcomes and should be tested independently.",
+        "Because the implementation source code requires one test per line.",
+        "Because only error cases matter.",
+        "Because black-box tests may not use specifications."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The example derives a suite from distinct specification cases and weight/country boundaries. Source: Lecture 07, slides 26.",
+      "source": "Lecture 07, slides 26"
+    },
+    {
+      "id": 157,
+      "question": "Which sequence best represents TDD at a high level?",
+      "options": [
+        "Write requirement-based tests write code to pass them rerun tests/regression repeat with the next → → → requirement",
+        "Write all production code deploy decide on requirements → →",
+        "Write white-box tests only after the project is finished",
+        "Commit failing code, then remove the tests"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The lecture defines TDD as tests before/during/after coding with iterative increments. Source: Lecture 07, slides 27.",
+      "source": "Lecture 07, slides 27"
+    },
+    {
+      "id": 158,
+      "question": "Why are the tests said to 'drive' development in TDD?",
+      "options": [
+        "Implementation is written specifically to make the selected requirements-based tests pass, rather than tests being added only after the code is finished.",
+        "Tests automatically generate all production code.",
+        "Tests replace requirements.",
+        "The programmer never reads test results."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "In TDD, the next tests define the immediate implementation target. Source: Lecture 07, slides 27.",
+      "source": "Lecture 07, slides 27"
+    },
+    {
+      "id": 159,
+      "question": "What does the Select-Write-Test-Commit-Repeat pattern emphasize?",
+      "options": [
+        "Keep each increment small, make the selected tests pass, preserve previously passing tests, commit working code, then move to the next test set.",
+        "Write all features before running any tests.",
+        "Commit only once at the end of the course.",
+        "Discard earlier tests as soon as a new one is selected."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The diagram shows incremental test sets and working commits. Source: Lecture 07, slides 28.",
+      "source": "Lecture 07, slides 28"
+    },
+    {
+      "id": 160,
+      "question": "Which is the correct ordering within the TDD process shown in the lecture?",
+      "options": [
+        "Select requirement write tests include in automated testing write enough code to pass run tests/debug → → → → → → regression test do not proceed until tests pass",
+        "Write code deploy select requirement remove tests → → →",
+        "Run regression select requirement write no tests commit → → →",
+        "Select requirement commit failing code ignore regression → →"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "That sequence follows the numbered TDD-process slide. Source: Lecture 07, slides 29.",
+      "source": "Lecture 07, slides 29"
+    },
+    {
+      "id": 161,
+      "question": "What is meant by writing the 'minimal amount of code to pass the tests' in TDD?",
+      "options": [
+        "Implement only what is currently required by the selected requirement/tests instead of speculative extra functionality.",
+        "Use the fewest characters possible even if unreadable.",
+        "Skip error handling even when required.",
+        "Delete passing tests to reduce work."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The lecture links minimal code to avoiding overdesign and implementing functionality before it is required. Source: Lecture 07, slides 30.",
+      "source": "Lecture 07, slides 30"
+    },
+    {
+      "id": 162,
+      "question": "Why can TDD still require refactoring or rework later?",
+      "options": [
+        "Later requirements can expose design choices that should be improved, and earlier minimal implementations may need to evolve.",
+        "TDD guarantees the first design is always optimal.",
+        "Refactoring is forbidden in TDD.",
+        "Tests cannot be updated or expanded."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The iterative process may reveal better designs and require reworking earlier code. Source: Lecture 07, slides 30.",
+      "source": "Lecture 07, slides 30"
+    },
+    {
+      "id": 163,
+      "question": "What is the purpose of the Matrix-class TDD example?",
+      "options": [
+        "To show how a sequence of requirements/tests can gradually grow the class interface and implementation",
+        "To prove every Matrix implementation needs exactly seven methods",
+        "To show that tests should be written only after all methods exist",
+        "To replace requirements with random tests"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The example incrementally adds tests and class functionality. Source: Lecture 07, slides 31-32.",
+      "source": "Lecture 07, slides 31-32"
+    },
+    {
+      "id": 164,
+      "question": "Which are advantages of TDD listed in the lecture?\nI. Always have some set of working code\nII. Narrow the area to search when bugs appear\nIII. Find defects early and catch related/interleaved defects\nIV. Provide ongoing regression tests\nV. Eliminate the need to maintain tests",
+      "options": [
+        "I, II, III, and IV",
+        "I, III, and V",
+        "II and V",
+        "I, II, III, IV, and V"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "I-IV are listed advantages; test maintenance remains a cost. Source: Lecture 07, slides 33.",
+      "source": "Lecture 07, slides 33"
+    },
+    {
+      "id": 165,
+      "question": "Which is a disadvantage/cost of TDD mentioned in the lecture?",
+      "options": [
+        "Can be difficult to adopt on a code base that already has substantial development",
+        "Tests never need maintenance",
+        "It prevents all redesign",
+        "It makes regression testing impossible"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "Legacy adoption, discipline, test maintenance, and possible redesign/refactoring are listed costs. Source: Lecture 07, slides 33.",
+      "source": "Lecture 07, slides 33"
+    },
+    {
+      "id": 166,
+      "question": "Which statement best summarizes the lecture's final guidance?",
+      "options": [
+        "Unit testing should include boundaries, structured approaches may include basis/path/requirements testing, and TDD integrates tests before implementation and during development.",
+        "Only path testing is useful.",
+        "Requirements should be ignored once coding begins.",
+        "A passing unit-test suite proves the full system is defect-free."
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "This combines the core points on the key-takeaway slide. Source: Lecture 07, slides 34.",
+      "source": "Lecture 07, slides 34"
+    },
+    {
+      "id": 167,
+      "question": "Consider the method:\nboolean sign(int x) {\n if (x > 0) return true;\n else return false;\n}\nWhich pair of tests is the clearest minimum structured-basis set for the single decision?\n<PARSED TEXT FOR PAGE: 37 / 65>",
+      "options": [
+        "x=1 and x=0",
+        "x=1 only",
+        "x=1 and x=2",
+        "x=0 only"
+      ],
+      "correct": 0,
+      "section": "Lecture 07 — Unit Testing & TDD",
+      "explanation": "The two tests exercise both outcomes of the decision: true and false. Source: Lecture 07, slides 10-21.",
+      "source": "Lecture 07, slides 10-21"
+    },
+    {
+      "id": 168,
+      "question": "Why does the lecture recommend combining defect-detection techniques?",
+      "options": [
+        "Each technique finds different defects at different stages, and no single technique is fully effective.",
+        "All techniques are identical, so combining them simplifies training.",
+        "Testing alone detects every defect.",
+        "Reviews are useful only after release."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture emphasizes complementary strengths and cites high effectiveness from combining techniques. Source: Lecture 08, slides 4-5.",
+      "source": "Lecture 08, slides 4-5"
+    },
+    {
+      "id": 169,
+      "question": "Which statement correctly distinguishes testing from debugging?",
+      "options": [
+        "Testing detects defects; debugging diagnoses their causes and corrects them.",
+        "Testing fixes defects; debugging only reports them. <PARSED TEXT FOR PAGE: 39 / 65>",
+        "Testing and debugging are synonyms.",
+        "Debugging must always happen before a defect is detected."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "This is the explicit distinction on the testing-vs-debugging slide. Source: Lecture 08, slides 6.",
+      "source": "Lecture 08, slides 6"
+    },
+    {
+      "id": 170,
+      "question": "Which is a challenge of testing identified in the lecture?",
+      "options": [
+        "Testers must adopt a mindset of trying to break code they believed was correct.",
+        "Testing proves there are no defects in all practical systems.",
+        "Testing automatically improves code quality without fixes.",
+        "Only one testing technique is needed at every stage."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture lists mindset, no guarantee of absence, no automatic quality improvement, and variety of tests as challenges. Source: Lecture 08, slides 7.",
+      "source": "Lecture 08, slides 7"
+    },
+    {
+      "id": 171,
+      "question": "What does testing show on its own?",
+      "options": [
+        "Where quality failed by exposing defects",
+        "That quality has been improved automatically",
+        "That no defects exist anywhere",
+        "That the code is maintainable"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The slide says testing does not itself improve quality; it shows when quality failed. Source: Lecture 08, slides 7.",
+      "source": "Lecture 08, slides 7"
+    },
+    {
+      "id": 172,
+      "question": "Which testing level focuses on code written by one developer, typically methods/functions/simple \nclasses?",
+      "options": [
+        "Unit testing",
+        "Integration testing",
+        "System testing",
+        "Acceptance testing"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "Unit testing targets the smallest building blocks and is typically owned by one developer. Source: Lecture 08, slides 8.",
+      "source": "Lecture 08, slides 8"
+    },
+    {
+      "id": 173,
+      "question": "Which testing level primarily checks code from two or more classes/components coming together?",
+      "options": [
+        "Integration testing",
+        "Unit testing",
+        "Alpha testing",
+        "Usability testing"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "Integration testing is defined around combined components and their interfaces. Source: Lecture 08, slides 8.",
+      "source": "Lecture 08, slides 8"
+    },
+    {
+      "id": 174,
+      "question": "What is regression testing?",
+      "options": [
+        "Re-running previously executed tests to make sure changes have not broken existing behavior",
+        "Testing only performance under load",
+        "Testing a program for the first time",
+        "Inspecting code without executing it"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture defines regression testing as repetition of prior test cases after changes. Source: Lecture 08, slides 8.",
+      "source": "Lecture 08, slides 8"
+    },
+    {
+      "id": 175,
+      "question": "Which testing level exercises the software in its final configuration including integration with other \nsoftware/hardware systems?",
+      "options": [
+        "System testing",
+        "Unit testing",
+        "Code reading",
+        "Pair programming"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "That is the definition of system testing in the lecture. Source: Lecture 08, slides 8.",
+      "source": "Lecture 08, slides 8"
+    },
+    {
+      "id": 176,
+      "question": "Which is a nonfunctional testing category listed in the lecture?",
+      "options": [
+        "Security testing <PARSED TEXT FOR PAGE: 40 / 65>",
+        "Branch creation testing",
+        "Commit testing",
+        "Indentation testing"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "Security is listed alongside performance, scalability, usability, reliability, recovery, and compatibility. Source: Lecture 08, slides 9.",
+      "source": "Lecture 08, slides 9"
+    },
+    {
+      "id": 177,
+      "question": "Load testing and stress testing are presented as subtypes/aspects of which broader category?",
+      "options": [
+        "Performance testing",
+        "Code review",
+        "Unit testing",
+        "Documentation testing"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The slide nests load and stress testing under performance testing. Source: Lecture 08, slides 9.",
+      "source": "Lecture 08, slides 9"
+    },
+    {
+      "id": 178,
+      "question": "Which environment is intended to be similar to production and may contain fixed dummy data for \nregression testing?",
+      "options": [
+        "Test server",
+        "Personal workstation only",
+        "Production server",
+        "Source repository"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The testing-environments slide describes the test server this way. Source: Lecture 08, slides 10.",
+      "source": "Lecture 08, slides 10"
+    },
+    {
+      "id": 179,
+      "question": "Which environment contains live data?",
+      "options": [
+        "Production server",
+        "Personal development workstation",
+        "Test server with fixed dummy data",
+        "Integration server"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "Production is the live-data environment. Source: Lecture 08, slides 10.",
+      "source": "Lecture 08, slides 10"
+    },
+    {
+      "id": 180,
+      "question": "What is the principle behind unit testing stated in the lecture?",
+      "options": [
+        "Smaller pieces of code are generally easier to test.",
+        "Larger systems are always easier to test than methods.",
+        "Unit tests require production deployment.",
+        "Only customers should write unit tests."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture explicitly states that smaller code pieces are easier to test. Source: Lecture 08, slides 11.",
+      "source": "Lecture 08, slides 11"
+    },
+    {
+      "id": 181,
+      "question": "Which mapping is correct?",
+      "options": [
+        "Black box = specification/interface only; white box = specification plus implementation; grey box = specification plus partial implementation knowledge",
+        "Black box = full implementation; white box = no implementation; grey box = no specification",
+        "All three mean the same thing",
+        "Grey box means tests are unfinished"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "This is the lecture's three-way distinction. Source: Lecture 08, slides 11-14.",
+      "source": "Lecture 08, slides 11-14"
+    },
+    {
+      "id": 182,
+      "question": "Why are black-box test cases often more generic?",
+      "options": [
+        "They are derived from what the interface/specification says, without relying on internal implementation details.",
+        "They can only use random inputs.",
+        "They are always written after debugging.",
+        "They are forbidden from testing boundaries. <PARSED TEXT FOR PAGE: 41 / 65>"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "Black-box tests are specification-based, so they do not target internal branches or array sizes unless exposed by the specification. Source: Lecture 08, slides 12.",
+      "source": "Lecture 08, slides 12"
+    },
+    {
+      "id": 183,
+      "question": "A developer knows an internal array expands when it reaches a specific size and writes a test exactly \nat that size. What type of test is this most clearly?",
+      "options": [
+        "White-box test",
+        "Black-box acceptance test",
+        "User-interface test",
+        "System deployment test"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The case is based on knowledge of the implementation. Source: Lecture 08, slides 13.",
+      "source": "Lecture 08, slides 13"
+    },
+    {
+      "id": 184,
+      "question": "What makes a grey-box test different from a white-box test?",
+      "options": [
+        "Grey-box testing uses only partial knowledge/assumptions about the implementation rather than full implementation knowledge.",
+        "Grey-box testing never uses the specification.",
+        "White-box testing cannot inspect code.",
+        "Grey-box testing is always a system test."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture defines grey box as specification plus partial implementation knowledge. Source: Lecture 08, slides 14.",
+      "source": "Lecture 08, slides 14"
+    },
+    {
+      "id": 185,
+      "question": "What is the fundamental difference between unit testing and component testing in this lecture?",
+      "options": [
+        "Scale: component testing covers larger code units and often code produced by multiple developers.",
+        "Unit testing uses no code execution.",
+        "Component testing cannot use black-box methods.",
+        "Unit testing is always performed after system testing."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture says the core difference is scale and multi-developer familiarity. Source: Lecture 08, slides 15.",
+      "source": "Lecture 08, slides 15"
+    },
+    {
+      "id": 186,
+      "question": "Which characteristic is central to integration testing?",
+      "options": [
+        "Testing the interactions/interfaces between multiple components that work individually",
+        "Testing one isolated method only",
+        "Testing only source formatting",
+        "Testing only live production data"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "Integration testing focuses on combined components and their boundaries/interfaces. Source: Lecture 08, slides 16.",
+      "source": "Lecture 08, slides 16"
+    },
+    {
+      "id": 187,
+      "question": "Why is black-box testing commonly useful during integration testing?",
+      "options": [
+        "Developers often need to test component interfaces without being equally familiar with all internal implementations.",
+        "Integration testing forbids all source-code knowledge.",
+        "Black-box tests are the only tests that can run on servers.",
+        "Interfaces are irrelevant during integration."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture notes that cross-team integration often emphasizes externally visible interface behavior. Source: Lecture 08, slides 16.",
+      "source": "Lecture 08, slides 16"
+    },
+    {
+      "id": 188,
+      "question": "What does the 'testing continuum' slide emphasize?",
+      "options": [
+        "Unit, component, and integration testing differ mainly in scale, and each can mix black-, grey-, and white-box approaches.",
+        "Every scale must use a completely different testing philosophy.",
+        "White-box testing is limited to system testing.",
+        "Unit tests can never become part of higher-level tests."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The continuum treats the scales similarly while increasing size and team involvement. Source: Lecture 08, slides 17.",
+      "source": "Lecture 08, slides 17"
+    },
+    {
+      "id": 189,
+      "question": "Which statements about regression testing match the lecture?\nI. It reruns prior tests after code changes.\nII. It checks whether changes broke existing behavior.\n<PARSED TEXT FOR PAGE: 42 / 65>\n\nIII. It can include unit, component, and integration tests.\nIV. It means creating only brand-new tests after every change.\nV. It is often automated.",
+      "options": [
+        "I, II, III, and V",
+        "I, III, and IV",
+        "II, IV, and V",
+        "I, II, III, IV, and V"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "I, II, III, and V are correct; IV is not the definition of regression testing. <PARSED TEXT FOR PAGE: 63 / 65> Source: Lecture 08, slides 18-19.",
+      "source": "Lecture 08, slides 18-19"
+    },
+    {
+      "id": 190,
+      "question": "When should testing be performed according to the lecture?",
+      "options": [
+        "As early as possible once there is something to test",
+        "Only after all coding is complete",
+        "Only after deployment",
+        "Only after documentation is finished"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture states 'as early as possible' because early bugs are easier to fix. Source: Lecture 08, slides 20.",
+      "source": "Lecture 08, slides 20"
+    },
+    {
+      "id": 191,
+      "question": "Which observation is logically necessary before a test can be performed?",
+      "options": [
+        "The test must exist and there must be something implemented to test.",
+        "The final system must be deployed.",
+        "All requirements must be frozen forever.",
+        "A customer must be present."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The slide notes tests cannot be performed before they are created or before code exists. Source: Lecture 08, slides 20.",
+      "source": "Lecture 08, slides 20"
+    },
+    {
+      "id": 192,
+      "question": "If bug count is modeled as B(n)=b·n and time to fix one bug as T(n)=t·n, what is the lecture's model for \ntotal debugging time?",
+      "options": [
+        "D(n)=b·t·n²",
+        "D(n)=b+t+n",
+        "D(n)=n/b",
+        "D(n)=b·t"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "Total time is B(n)×T(n), producing b·t·n². Source: Lecture 08, slides 21.",
+      "source": "Lecture 08, slides 21"
+    },
+    {
+      "id": 193,
+      "question": "Why does testing in small increments reduce total debugging time in the lecture's model?",
+      "options": [
+        "Each defect is found while the relevant code chunk is smaller, so both the number of defects per chunk and the time to isolate/fix each are lower.",
+        "Incremental testing makes bugs impossible.",
+        "Testing cost is unrelated to code size.",
+        "The model assumes no bugs occur in small chunks."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture contrasts quadratic whole-program debugging with lower cumulative cost across small chunks. Source: Lecture 08, slides 21-24.",
+      "source": "Lecture 08, slides 21-24"
+    },
+    {
+      "id": 194,
+      "question": "What does it mean that testing should 'bracket implementation'?",
+      "options": [
+        "Create specification-based tests before coding, run/debug while implementing, and add implementation-aware tests as needed.",
+        "Do no testing during coding and run one final test afterward.",
+        "Test only before writing any code and never again.",
+        "Use only integration tests."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The slide describes tests before, during, and after implementation. Source: Lecture 08, slides 25.",
+      "source": "Lecture 08, slides 25"
+    },
+    {
+      "id": 195,
+      "question": "Why does TDD tend to expose difficult cases and requirement ambiguities earlier?",
+      "options": [
+        "Writing tests first forces attention to what the requirement actually means and what cases must be handled before much code exists.",
+        "TDD removes all requirements.",
+        "TDD delays testing until release.",
+        "TDD uses only white-box tests written after implementation."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture explicitly links pre-code tests to early requirement/design thinking. Source: Lecture 08, slides 26-27.",
+      "source": "Lecture 08, slides 26-27"
+    },
+    {
+      "id": 196,
+      "question": "What is scaffolding in testing?",
+      "options": [
+        "Supporting structure created to let tests run parts of the code",
+        "A permanent feature of the production user interface",
+        "A Git branching strategy",
+        "A documentation style guide"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The scaffolding slide defines it as the structure built so tests can invoke/evaluate the target code. Source: Lecture 08, slides 28.",
+      "source": "Lecture 08, slides 28"
+    },
+    {
+      "id": 197,
+      "question": "When is a shell test script especially appropriate?",
+      "options": [
+        "When a full executable/program is being tested repeatedly with input and expected-output files",
+        "When no executable exists and only one private method can be called",
+        "When performing a code review with no execution",
+        "When designing a class diagram"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture's script example runs a complete executable on test inputs and compares output files. Source: Lecture 08, slides 29-30.",
+      "source": "Lecture 08, slides 29-30"
+    },
+    {
+      "id": 198,
+      "question": "What does the example test script do after running the program on a test input?",
+      "options": [
+        "Compares the produced output with the expected output and reports pass/fail",
+        "Deletes the expected output",
+        "Changes the source code automatically",
+        "Merges the Git branch"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The script's job is automated execution and output comparison. Source: Lecture 08, slides 31.",
+      "source": "Lecture 08, slides 31"
+    },
+    {
+      "id": 199,
+      "question": "What is a test harness?",
+      "options": [
+        "Code that drives a component/piece of software under test and supplies the calls/inputs needed for testing",
+        "A list of source-code comments",
+        "A version-control server",
+        "A deployment environment with live data"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The lecture describes harnesses as drivers that run/support the target piece of code. Source: Lecture 08, slides 32.",
+      "source": "Lecture 08, slides 32"
+    },
+    {
+      "id": 200,
+      "question": "What is a stub used for?",
+      "options": [
+        "To simulate a component/dependency that the code under test calls so the target can be tested in isolation",
+        "To store the production database permanently",
+        "To replace all assertions",
+        "To compile the entire project"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "Stubs stand in for dependencies and provide predictable responses during isolated testing. Source: Lecture 08, slides 32.",
+      "source": "Lecture 08, slides 32"
+    },
+    {
+      "id": 201,
+      "question": "Why use a testing framework such as JUnit?",
+      "options": [
+        "It provides standardized harness/support mechanisms so developers can focus on writing tests instead of rebuilding test infrastructure.",
+        "It removes the need for expected results.",
+        "It prevents tests from being automated.",
+        "It is mainly a version-control client."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "Frameworks package common test-harness functionality and test execution. Source: Lecture 08, slides 34-35.",
+      "source": "Lecture 08, slides 34-35"
+    },
+    {
+      "id": 202,
+      "question": "Which statement best summarizes the lecture's final testing guidance?\n<PARSED TEXT FOR PAGE: 44 / 65>",
+      "options": [
+        "Use multiple test techniques and scales, create tests during development, run regression tests to detect breakage, and combine specification- and implementation-aware approaches.",
+        "Testing should occur only once at the end.",
+        "A single passed unit test proves the system is correct.",
+        "Debugging and testing are the same activity."
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "This integrates the key-takeaway points from the lecture. Source: Lecture 08, slides 36.",
+      "source": "Lecture 08, slides 36"
+    },
+    {
+      "id": 203,
+      "question": "A method is specified to insert an item into a bounded list. A tester knows nothing about the internal \narray size and tests empty, half-full, and full cases from the interface description. How should this test be \nclassified?",
+      "options": [
+        "Black-box unit testing",
+        "White-box unit testing",
+        "Integration testing only",
+        "Debugger-based testing"
+      ],
+      "correct": 0,
+      "section": "Lecture 08 — Software Testing",
+      "explanation": "The test derives cases from the specification/interface without implementation knowledge. Source: Lecture 08, slides 12-14.",
+      "source": "Lecture 08, slides 12-14"
+    },
+    {
+      "id": 204,
+      "question": "What is debugging according to the lecture?",
+      "options": [
+        "Locating and correcting the root cause of defects",
+        "Writing new features",
+        "Running tests without investigating failures",
+        "Reformatting source code"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture defines debugging around root-cause location and correction. Source: Lecture 09, slides 4.",
+      "source": "Lecture 09, slides 4"
+    },
+    {
+      "id": 205,
+      "question": "What should a developer avoid when debugging?",
+      "options": [
+        "Fixing only the visible symptom while leaving the root cause unchanged <PARSED TEXT FOR PAGE: 46 / 65>",
+        "Reproducing the bug",
+        "Gathering evidence",
+        "Testing the fix"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The slide explicitly warns against symptom fixes. Source: Lecture 09, slides 4.",
+      "source": "Lecture 09, slides 4"
+    },
+    {
+      "id": 206,
+      "question": "What can bugs teach a developer according to the lecture?\nI. How the program works\nII. The kinds of mistakes the developer tends to make\nIII. How readable the code is during investigation\nIV. How the developer solves problems and fixes defects\nV. That testing is unnecessary",
+      "options": [
+        "I, II, III, and IV",
+        "I, III, and V",
+        "II and V",
+        "I, II, III, IV, and V"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "I-IV are explicit learning opportunities; V contradicts the course. Source: Lecture 09, slides 5.",
+      "source": "Lecture 09, slides 5"
+    },
+    {
+      "id": 207,
+      "question": "Why are large numbers of print statements a poor default debugging technique?",
+      "options": [
+        "They require code modification/recompilation, can generate lots of output, take time, and can obscure the bug.",
+        "Printing variable values is impossible in Java.",
+        "They always change program semantics in exactly the same way.",
+        "Print statements cannot show program execution."
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture lists modification, output volume, rebuild time, and obscuring effects as disadvantages. Source: Lecture 09, slides 6-8.",
+      "source": "Lecture 09, slides 6-8"
+    },
+    {
+      "id": 208,
+      "question": "Which behavior best characterizes 'how not to debug' in the lecture?",
+      "options": [
+        "Guessing at the defect and applying an obvious fix without understanding the problem",
+        "Forming a hypothesis and testing it",
+        "Using a reproducible test case",
+        "Inspecting program state systematically"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "Unsystematic guessing is the anti-pattern contrasted with scientific debugging. Source: Lecture 09, slides 6.",
+      "source": "Lecture 09, slides 6"
+    },
+    {
+      "id": 209,
+      "question": "Which ordering best matches the core hypothesis cycle in the lecture's scientific debugging method?",
+      "options": [
+        "Gather data form a hypothesis determine how to prove/disprove it test/prove/disprove it → → →",
+        "Fix code deploy gather data form a hypothesis → → →",
+        "Form hypothesis ignore data rewrite program test → → →",
+        "Deploy inspect comments merge debug → → →"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "This is the sequence emphasized both in the lecture and the old exam style. Source: Lecture 09, slides 9.",
+      "source": "Lecture 09, slides 9"
+    },
+    {
+      "id": 210,
+      "question": "What happens after a hypothesis is disproved?",
+      "options": [
+        "Revise/form another hypothesis using what was learned and continue the cycle.",
+        "Stop debugging permanently.",
+        "Fix the symptom anyway.",
+        "Delete the failing test."
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "Scientific debugging is iterative; disproved hypotheses contribute information for the next one. Source: Lecture 09, slides 9.",
+      "source": "Lecture 09, slides 9"
+    },
+    {
+      "id": 211,
+      "question": "What are desirable properties of a stabilized bug?",
+      "options": [
+        "Reproducible and easily duplicatable with a reliable, preferably small, test case",
+        "Intermittent and impossible to reproduce",
+        "Dependent on uninitialized values <PARSED TEXT FOR PAGE: 47 / 65>",
+        "Observable only in production with no test"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture says the best kind of bug is reproducible and easily duplicated. Source: Lecture 09, slides 10.",
+      "source": "Lecture 09, slides 10"
+    },
+    {
+      "id": 212,
+      "question": "Why is a small test case especially useful for debugging?",
+      "options": [
+        "It simplifies the execution/state under investigation and makes hypotheses easier to test.",
+        "It guarantees the bug is in the test.",
+        "It prevents use of a debugger.",
+        "It eliminates the need to understand the program."
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The slide recommends shrinking the reproducer because it simplifies diagnosis. Source: Lecture 09, slides 10.",
+      "source": "Lecture 09, slides 10"
+    },
+    {
+      "id": 213,
+      "question": "In the sorted-employee example, what is the purpose of repeated debugging rounds?",
+      "options": [
+        "Use new evidence each round to narrow the suspected cause until the root defect is isolated",
+        "Apply random fixes after each run",
+        "Replace the entire program immediately",
+        "Collect output without changing the hypothesis"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The example demonstrates evidence-driven narrowing and hypothesis revision. Source: Lecture 09, slides 13-15.",
+      "source": "Lecture 09, slides 13-15"
+    },
+    {
+      "id": 214,
+      "question": "When gathering data for a debugging hypothesis, what evidence should be considered?",
+      "options": [
+        "All available information: what is known, test results including negative results, and patterns among errors",
+        "Only the most recent print statement",
+        "Only data that supports the first hypothesis",
+        "Only compiler warnings"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture advises using all available data and treating negative results as useful evidence. Source: Lecture 09, slides 16.",
+      "source": "Lecture 09, slides 16"
+    },
+    {
+      "id": 215,
+      "question": "Why can patterns across multiple failing tests be valuable?",
+      "options": [
+        "Failures that share a cause may expose a common point or condition, helping generate a stronger hypothesis.",
+        "Patterns prove every failure has a different cause.",
+        "They are relevant only to performance testing.",
+        "They eliminate the need to reproduce the bug."
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture encourages looking for common points among errors. Source: Lecture 09, slides 16.",
+      "source": "Lecture 09, slides 16"
+    },
+    {
+      "id": 216,
+      "question": "Which is a reasonable starting place when forming a bug hypothesis?",
+      "options": [
+        "Code that changed recently or has a history of defects",
+        "The most stable and well-tested code only",
+        "Random code unrelated to the symptom",
+        "Only code written by someone else"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "Recent changes, historically buggy code, complexity, and common mistakes are suggested starting points. Source: Lecture 09, slides 17.",
+      "source": "Lecture 09, slides 17"
+    },
+    {
+      "id": 217,
+      "question": "What is the goal of binary-search debugging?",
+      "options": [
+        "Find the earliest point/region where the bug symptoms begin to appear and repeatedly halve the search region",
+        "Sort the source files alphabetically",
+        "Prove the bug is in the middle statement",
+        "Replace all loops with binary search"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture uses binary search to narrow where symptoms first manifest. Source: Lecture 09, slides 18.",
+      "source": "Lecture 09, slides 18"
+    },
+    {
+      "id": 218,
+      "question": "During binary-search debugging, what are you primarily checking at a midpoint?",
+      "options": [
+        "Whether the bug's symptoms have manifested by that point in execution",
+        "Whether the exact root-cause line is the midpoint",
+        "Whether the code compiles faster",
+        "Whether the branch name is correct <PARSED TEXT FOR PAGE: 48 / 65>"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The search uses symptom presence to choose which half to keep investigating. Source: Lecture 09, slides 18.",
+      "source": "Lecture 09, slides 18"
+    },
+    {
+      "id": 219,
+      "question": "What should you do if your current debugging region appears not to contain the cause?",
+      "options": [
+        "Expand the search and form hypotheses about where the symptoms should first appear.",
+        "Keep testing the same region forever.",
+        "Delete all tests.",
+        "Fix a nearby symptom even if unrelated."
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture's 'expand the search' slide recommends broadening the suspicious region and retesting hypotheses. Source: Lecture 09, slides 19.",
+      "source": "Lecture 09, slides 19"
+    },
+    {
+      "id": 220,
+      "question": "Why is a visual debugger generally preferable to extensive print debugging?",
+      "options": [
+        "It can pause execution, inspect variables/data structures, step through code, and watch state without repeatedly editing source for diagnostic prints.",
+        "It automatically fixes all defects.",
+        "It requires no understanding of program flow.",
+        "It only works on programs with no loops."
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "Those capabilities are the lecture's argument for debugger tools. Source: Lecture 09, slides 20.",
+      "source": "Lecture 09, slides 20"
+    },
+    {
+      "id": 221,
+      "question": "Which debugger concept means 'pause execution at a specified point so program state can be \nexamined'?",
+      "options": [
+        "Breakpoint",
+        "Commit",
+        "Stub",
+        "Merge"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "That is the definition of a breakpoint. Source: Lecture 09, slides 21.",
+      "source": "Lecture 09, slides 21"
+    },
+    {
+      "id": 222,
+      "question": "Which debugger action executes the next line without descending into a called method?",
+      "options": [
+        "Step Over",
+        "Step Into",
+        "Step Out",
+        "Watchpoint"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "Step Over runs the next statement while not entering called methods. Source: Lecture 09, slides 21.",
+      "source": "Lecture 09, slides 21"
+    },
+    {
+      "id": 223,
+      "question": "Which debugger action enters the method being called on the current line?",
+      "options": [
+        "Step Into",
+        "Step Over",
+        "Continue",
+        "Run to cursor"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "Step Into descends into the called method. Source: Lecture 09, slides 21.",
+      "source": "Lecture 09, slides 21"
+    },
+    {
+      "id": 224,
+      "question": "What is a watchpoint?",
+      "options": [
+        "A breakpoint triggered when a watched variable's value changes",
+        "A permanent code comment",
+        "A test that always passes",
+        "A Git tag"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture defines a watchpoint as pausing when a variable changes. Source: Lecture 09, slides 21.",
+      "source": "Lecture 09, slides 21"
+    },
+    {
+      "id": 225,
+      "question": "Which sequence best matches a typical debugger workflow?",
+      "options": [
+        "Set breakpoint execute to breakpoint inspect/step state continue or adjust breakpoints and repeat → → →",
+        "Deploy commit guess print → → →",
+        "Delete tests run once fix symptom → → <PARSED TEXT FOR PAGE: 49 / 65>",
+        "Start at the end and never inspect variables"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The process slide shows iterative breakpoints, execution, inspection, stepping, and continuation. Source: Lecture 09, slides 22.",
+      "source": "Lecture 09, slides 22"
+    },
+    {
+      "id": 226,
+      "question": "If you are stuck on a difficult bug, which response is recommended?",
+      "options": [
+        "Brainstorm hypotheses, make a list, explain the problem to someone, or take a break",
+        "Continue the exact same failed approach indefinitely",
+        "Remove the failing requirement",
+        "Commit a speculative fix without testing"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture gives these as practical ways to reset thinking. Source: Lecture 09, slides 24.",
+      "source": "Lecture 09, slides 24"
+    },
+    {
+      "id": 227,
+      "question": "How can another developer help when you are stuck?",
+      "options": [
+        "Review the code/problem from a fresh perspective or pair with you on the reasoning",
+        "Guarantee the defect disappears without investigation",
+        "Replace the test suite automatically",
+        "Only approve a commit"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture suggests code review/collaboration when individual debugging stalls. Source: Lecture 09, slides 24.",
+      "source": "Lecture 09, slides 24"
+    },
+    {
+      "id": 228,
+      "question": "What is the lecture's rule for brute-force debugging?",
+      "options": [
+        "Use it only for a limited period and stop or change approach if it is not producing information.",
+        "Use it indefinitely until something changes.",
+        "Never rerun tests.",
+        "Always rewrite the entire program first."
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture says brute force can help but should be time-limited to avoid unproductive effort. Source: Lecture 09, slides 25-26.",
+      "source": "Lecture 09, slides 25-26"
+    },
+    {
+      "id": 229,
+      "question": "Which is an example of a brute-force debugging tactic listed in the lecture?",
+      "options": [
+        "Recompile with more warnings and step through execution line by line",
+        "Ignore compiler warnings",
+        "Remove unit tests",
+        "Refuse to reproduce the bug"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The slide lists warnings, line-by-line execution, different environments, backtracking commits, and expanded tests. Source: Lecture 09, slides 25.",
+      "source": "Lecture 09, slides 25"
+    },
+    {
+      "id": 230,
+      "question": "What is rubber-duck debugging?",
+      "options": [
+        "Explain the problem, expected behavior, and reasoning out loud to an inanimate object so the act of explanation may reveal mistaken assumptions.",
+        "Use a debugger shaped like a duck.",
+        "Ask a customer to fix the code.",
+        "Replace the method with random code."
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The method relies on the cognitive benefit of articulating the problem. Source: Lecture 09, slides 27.",
+      "source": "Lecture 09, slides 27"
+    },
+    {
+      "id": 231,
+      "question": "Before implementing a bug fix, what should be done?",
+      "options": [
+        "Understand and reproduce the problem, confirm the bug, and preserve/commit the current version",
+        "Immediately edit multiple unrelated modules",
+        "Delete the failing test",
+        "Disable version control"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The pre-fix steps emphasize understanding, reproduction, and preserving the baseline. <PARSED TEXT FOR PAGE: 64 / 65> Source: Lecture 09, slides 28.",
+      "source": "Lecture 09, slides 28"
+    },
+    {
+      "id": 232,
+      "question": "Which practice best matches the lecture's bug-fix implementation guidance?",
+      "options": [
+        "Fix the root cause with only necessary changes, make one change at a time, verify the fix with tests/regression, and add a test exposing the defect.",
+        "Change as much code as possible at once. <PARSED TEXT FOR PAGE: 50 / 65>",
+        "Fix only the visible symptom.",
+        "Skip testing after the change."
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The implementation slide emphasizes focused root-cause changes and regression protection. Source: Lecture 09, slides 29.",
+      "source": "Lecture 09, slides 29"
+    },
+    {
+      "id": 233,
+      "question": "Why add a new test after finding and fixing a defect?",
+      "options": [
+        "To capture the defect as a regression case so the same failure is detected if it returns",
+        "To increase code size",
+        "To replace the original requirement",
+        "To avoid looking for similar defects"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The lecture explicitly says to add a unit test that exposes the defect. Source: Lecture 09, slides 29.",
+      "source": "Lecture 09, slides 29"
+    },
+    {
+      "id": 234,
+      "question": "What should happen after the immediate bug is fixed and verified?",
+      "options": [
+        "Look for similar errors elsewhere in the code base.",
+        "Delete the test that exposed the bug.",
+        "Assume no related defects can exist.",
+        "Reset the repository to before the fix."
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The scientific-debugging process ends by looking for similar errors. Source: Lecture 09, slides 29-30.",
+      "source": "Lecture 09, slides 29-30"
+    },
+    {
+      "id": 235,
+      "question": "Which ordering best summarizes the debugging process in the key takeaways?",
+      "options": [
+        "Gather data form hypothesis determine how to test it test/disprove/prove it update understanding → → → → → fix and verify",
+        "Fix first gather data later remove tests → →",
+        "Commit random change deploy inspect → →",
+        "Write documentation assume symptom is root cause →"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "The takeaway slide describes iterative hypothesis-driven debugging followed by careful correction. Source: Lecture 09, slides 30.",
+      "source": "Lecture 09, slides 30"
+    },
+    {
+      "id": 236,
+      "question": "A program stops at a breakpoint immediately before `solve()`. You want to execute the call to `solve()` \nwithout entering its internal lines, then inspect the returned state. Which debugger action is most \nappropriate?",
+      "options": [
+        "Step Over",
+        "Step Into",
+        "Watchpoint",
+        "Reset"
+      ],
+      "correct": 0,
+      "section": "Lecture 09 — Debugging",
+      "explanation": "Step Over executes the call as one line without descending into the method. Source: Lecture 09, slides 21-22.",
+      "source": "Lecture 09, slides 21-22"
+    },
+    {
+      "id": 237,
+      "question": "Which set matches the lecture's four broad categories of generic mistakes?",
+      "options": [
+        "Bad code; bad assumptions/poor robustness; logic errors; faulty processes",
+        "Syntax errors; networking; databases; graphics",
+        "Design; testing; deployment; maintenance <PARSED TEXT FOR PAGE: 52 / 65>",
+        "Security; UI; concurrency; hardware only"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "Those four categories organize the lecture. Source: Lecture 10, slides 4-6.",
+      "source": "Lecture 10, slides 4-6"
+    },
+    {
+      "id": 238,
+      "question": "Why does the lecture discuss Therac-25, Ariane 5, and the Boeing 737 MAX?",
+      "options": [
+        "To illustrate that software mistakes can have major financial and human consequences",
+        "To show examples of version-control systems",
+        "To compare programming languages",
+        "To demonstrate unit-test syntax"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The examples motivate learning from software mistakes because failures can cost money and lives. Source: Lecture 10, slides 5.",
+      "source": "Lecture 10, slides 5"
+    },
+    {
+      "id": 239,
+      "question": "What is 'bad code' in the lecture's classification?",
+      "options": [
+        "Code with easily detectable/correctable faults that may lead to other mistakes or bugs",
+        "Any code that contains a difficult algorithm",
+        "Code that has no GUI",
+        "Code written in C rather than Java"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "That is the definition used on the slide. Source: Lecture 10, slides 7.",
+      "source": "Lecture 10, slides 7"
+    },
+    {
+      "id": 240,
+      "question": "Select all that apply. Which are examples of bad code from the lecture?",
+      "options": [
+        "Code that generates warnings",
+        "Code that violates the style guide",
+        "Code that lacks documentation",
+        "Code that handles boundary cases",
+        "Code that follows the specification"
+      ],
+      "correct": [
+        0,
+        1,
+        2
+      ],
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "Warnings, style violations, and missing documentation are the listed examples. Source: Lecture 10, slides 7-8.",
+      "source": "Lecture 10, slides 7-8"
+    },
+    {
+      "id": 241,
+      "question": "What rule does the lecture give for compiler warnings?",
+      "options": [
+        "Code should compile with no warnings.",
+        "Warnings can always be ignored if the program runs.",
+        "Only Java warnings matter.",
+        "Warnings should be disabled before submission."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The lecture states that warning patterns are often error-prone and code should compile warning-free. Source: Lecture 10, slides 8.",
+      "source": "Lecture 10, slides 8"
+    },
+    {
+      "id": 242,
+      "question": "What is wrong with using `if (a = b)` in a C/C++ condition when equality was intended?",
+      "options": [
+        "It performs assignment rather than equality comparison.",
+        "It compares object identity instead of content.",
+        "It causes an off-by-one error.",
+        "It cannot compile in any language."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The example is explicitly 'assignment, not equality' and should use `==`. Source: Lecture 10, slides 9.",
+      "source": "Lecture 10, slides 9"
+    },
+    {
+      "id": 243,
+      "question": "Why is returning a local variable that may never have been assigned a value dangerous?",
+      "options": [
+        "Some control-flow paths may use the variable uninitialized, producing undefined/unintended behavior.",
+        "All local variables are automatically zero in every language.",
+        "It only affects formatting.",
+        "It makes the program too portable."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The warning example shows a variable used uninitialized when a condition is false. Source: Lecture 10, slides 10.",
+      "source": "Lecture 10, slides 10"
+    },
+    {
+      "id": 244,
+      "question": "Which statement about warnings best matches the lecture?",
+      "options": [
+        "Warnings may differ by language/compiler, but they usually have a reason and should be investigated rather than ignored.",
+        "Warnings are always errors in every language. <PARSED TEXT FOR PAGE: 53 / 65>",
+        "Java can never issue warnings.",
+        "A deprecated-API warning proves the code will crash."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The lecture notes language differences while emphasizing that warnings exist for a reason. Source: Lecture 10, slides 11.",
+      "source": "Lecture 10, slides 11"
+    },
+    {
+      "id": 245,
+      "question": "What is a bad assumption in the lecture's sense?",
+      "options": [
+        "An unstated belief about input, method returns, environment, or resources that the code relies on without ensuring it is valid",
+        "A documented precondition that is guaranteed by the specification",
+        "A passing unit test",
+        "A clear interface contract"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The slide lists assumptions about parameters, returns, inputs, and runtime environment as robustness risks. Source: Lecture 10, slides 12.",
+      "source": "Lecture 10, slides 12"
+    },
+    {
+      "id": 246,
+      "question": "A method immediately reads `arr[0]` before checking the array. Which assumptions make the code \nunsafe?",
+      "options": [
+        "That `arr` is non-null and has at least one element",
+        "That the array is sorted",
+        "That the array uses integers",
+        "That the array is local"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The example explicitly assumes non-null and non-empty input. Source: Lecture 10, slides 13.",
+      "source": "Lecture 10, slides 13"
+    },
+    {
+      "id": 247,
+      "question": "Code converts a list to an array and immediately compares `arr[0]` and `arr[1]`. What should be \nchecked first?",
+      "options": [
+        "That the array contains at least two elements",
+        "That the array is sorted",
+        "That the list was committed to Git",
+        "That all strings use uppercase"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The example's fix is to check the returned array length before indexing. Source: Lecture 10, slides 14.",
+      "source": "Lecture 10, slides 14"
+    },
+    {
+      "id": 248,
+      "question": "A program reads a mailbox ID with `Scanner.nextInt()` and then uses it as a list index. Which two \nassumptions should be validated?",
+      "options": [
+        "The user enters an integer and the integer is a valid index/ID",
+        "The user enters a floating-point value and the list is empty",
+        "The input is already sorted and unique",
+        "The program has no tests"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The slide identifies both input-type and valid-range assumptions. Source: Lecture 10, slides 15.",
+      "source": "Lecture 10, slides 15"
+    },
+    {
+      "id": 249,
+      "question": "What robustness issue is illustrated by attempting to allocate a huge fixed-size 3D array?",
+      "options": [
+        "Assuming sufficient memory/resources will always be available",
+        "Using the wrong comparison operator",
+        "Comparing strings by reference",
+        "Forgetting to sort the array"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The example assumes the program can allocate roughly 4GB and recommends handling resource limits. Source: Lecture 10, slides 16.",
+      "source": "Lecture 10, slides 16"
+    },
+    {
+      "id": 250,
+      "question": "Which practices help avoid bad assumptions?\nI. Spell out assumptions in the method specification\nII. Do not assume more than the specification guarantees\nIII. Understand boundary conditions before using/implementing a method\nIV. Use assertions to enforce assumptions where appropriate\nV. Ignore the specification if the code appears to work",
+      "options": [
+        "I, II, III, and IV",
+        "I, III, and V",
+        "II and V",
+        "I, II, III, IV, and V"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "I-IV are lecture recommendations; V is directly contrary to them. Source: Lecture 10, slides 17.",
+      "source": "Lecture 10, slides 17"
+    },
+    {
+      "id": 251,
+      "question": "Which is NOT listed as a common logic error?",
+      "options": [
+        "Off-by-one error",
+        "Incorrect comparator",
+        "Incorrect loop increment",
+        "Forgotten or misordered condition",
+        "Correctly validating every boundary condition"
+      ],
+      "correct": 4,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The other four are examples on the logic-errors slide. Source: Lecture 10, slides 18.",
+      "source": "Lecture 10, slides 18"
+    },
+    {
+      "id": 252,
+      "question": "A grading rule says 80 and above earns A-, but the code uses `percentage > 80`. What kind of error is \nthis?",
+      "options": [
+        "Incorrect comparator / boundary logic error",
+        "Version-control failure",
+        "Documentation error only",
+        "Memory-allocation assumption"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The lecture uses this exact pattern as a comparator/boundary error and fixes it with `>=`. Source: Lecture 10, slides 19.",
+      "source": "Lecture 10, slides 19"
+    },
+    {
+      "id": 253,
+      "question": "Which testing technique is especially suitable for catching the `> 80` versus `>= 80` mistake?",
+      "options": [
+        "A boundary test at exactly 80",
+        "A random test at 95 only",
+        "A style review that never runs code",
+        "A load test"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The lecture calls this a great boundary-condition example. Source: Lecture 10, slides 19.",
+      "source": "Lecture 10, slides 19"
+    },
+    {
+      "id": 254,
+      "question": "Why is `str == s` unreliable for checking whether two Java strings contain the same text?",
+      "options": [
+        "It tests whether the references identify the same object rather than comparing string content.",
+        "`==` performs lexicographic comparison.",
+        "Strings cannot be compared in Java.",
+        "`==` checks only the first character."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The example recommends `str.equals(s)` for content equality. Source: Lecture 10, slides 20.",
+      "source": "Lecture 10, slides 20"
+    },
+    {
+      "id": 255,
+      "question": "Why can a poorly designed unit test fail to catch the broken `==` string comparison?",
+      "options": [
+        "If the exact same String object is added and searched for, reference equality can accidentally pass even though the method is wrong for equal-but-distinct objects.",
+        "JUnit never runs String tests.",
+        "Unit tests cannot compare booleans.",
+        "The method is actually correct."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The slide shows a test using the same object that passes despite the defect. Source: Lecture 10, slides 20.",
+      "source": "Lecture 10, slides 20"
+    },
+    {
+      "id": 256,
+      "question": "What is the off-by-one error in a loop that compares `arr[i]` with `arr[i+1]` while allowing `i < \narr.length`?",
+      "options": [
+        "When `i` reaches `arr.length-1`, `arr[i+1]` is out of bounds.",
+        "The loop starts at zero.",
+        "The array is never modified. <PARSED TEXT FOR PAGE: 55 / 65>",
+        "The comparison operator is reversed."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The fix is to stop at `i < arr.length - 1`. Source: Lecture 10, slides 21.",
+      "source": "Lecture 10, slides 21"
+    },
+    {
+      "id": 257,
+      "question": "Why must a null check appear before evaluating `n.next == null` in `(n.next == null) || (n == null)`?",
+      "options": [
+        "If `n` is null, accessing `n.next` fails before the second condition can protect it; test `n == null` first.",
+        "Java evaluates the right side before the left side.",
+        "`||` does not short-circuit.",
+        "The two conditions are unrelated."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "Condition order matters because short-circuit evaluation can only protect the dereference if the null check comes first. Source: Lecture 10, slides 22.",
+      "source": "Lecture 10, slides 22"
+    },
+    {
+      "id": 258,
+      "question": "Which tools/approaches does the lecture recommend for logic errors?",
+      "options": [
+        "Debugger stepping and variable inspection, additional boundary-focused unit tests, assertions, technical reviews, IDE warnings, and coding standards",
+        "Only print statements",
+        "Only code formatting",
+        "No testing because logic errors are unavoidable"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "These are the debugging and general approaches listed on the two slides. Source: Lecture 10, slides 23-24.",
+      "source": "Lecture 10, slides 23-24"
+    },
+    {
+      "id": 259,
+      "question": "Which is an example of a faulty development process?",
+      "options": [
+        "Infrequent integration",
+        "Clear requirements",
+        "Consistent version control",
+        "Sufficient testing"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "Infrequent integration is listed among rush-to-implementation process failures. Source: Lecture 10, slides 25.",
+      "source": "Lecture 10, slides 25"
+    },
+    {
+      "id": 260,
+      "question": "What root cause does the lecture associate with many faulty-process shortcuts?",
+      "options": [
+        "Time pressure",
+        "Too much unit testing",
+        "Too many requirements",
+        "Excessive documentation quality"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The slide asks this directly and answers with time. Source: Lecture 10, slides 25.",
+      "source": "Lecture 10, slides 25"
+    },
+    {
+      "id": 261,
+      "question": "Why are poor requirements dangerous?",
+      "options": [
+        "They make it hard to know what to build/test, increase change requests, complicate design, and raise conflict risk.",
+        "They guarantee simpler testing.",
+        "They eliminate future changes.",
+        "They only affect documentation, not implementation."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "These consequences are enumerated on the poor-requirements slide. Source: Lecture 10, slides 26.",
+      "source": "Lecture 10, slides 26"
+    },
+    {
+      "id": 262,
+      "question": "What pragmatic approach to requirements does the lecture describe?",
+      "options": [
+        "Have most requirements (about 80%) completed before design, expect some evolution, and allocate time to finish the rest.",
+        "Freeze 100% of requirements before discussing design under all circumstances.",
+        "Start coding with no requirements.",
+        "Let each developer invent requirements independently."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The slide says 100% completeness is impractical and cites an ~80% pre-design practice. Source: Lecture 10, slides 26.",
+      "source": "Lecture 10, slides 26"
+    },
+    {
+      "id": 263,
+      "question": "What high-level design information should be established before proceeding too far into \nimplementation?",
+      "options": [
+        "Architecture, major components, component interactions, and interfaces/APIs",
+        "Every local variable name in every method",
+        "Only the color scheme",
+        "Only the final test report"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "These are the design elements explicitly listed. Source: Lecture 10, slides 27.",
+      "source": "Lecture 10, slides 27"
+    },
+    {
+      "id": 264,
+      "question": "Which poor implementation practices are called out?",
+      "options": [
+        "Inconsistent guidelines, insufficient version control, and infrequent integration",
+        "Frequent commits and integrations",
+        "Consistent coding standards",
+        "Thorough testing"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "Those process problems lead to more work later. Source: Lecture 10, slides 28.",
+      "source": "Lecture 10, slides 28"
+    },
+    {
+      "id": 265,
+      "question": "What is 'gating' in the context of insufficient testing/documentation?",
+      "options": [
+        "Prevent a developer from moving to the next task until the current work reaches acceptable quality levels",
+        "Allow unfinished work to merge faster",
+        "Disable tests to meet deadlines",
+        "Remove documentation requirements"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The lecture proposes gating as enforcement of quality objectives. Source: Lecture 10, slides 29-30.",
+      "source": "Lecture 10, slides 29-30"
+    },
+    {
+      "id": 266,
+      "question": "What quality effects are associated with insufficient documentation?",
+      "options": [
+        "Poor testability, understandability, and maintainability",
+        "Higher robustness automatically",
+        "Better portability automatically",
+        "Fewer future changes"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "Those three quality characteristics are explicitly listed as harmed by insufficient documentation. Source: Lecture 10, slides 30.",
+      "source": "Lecture 10, slides 30"
+    },
+    {
+      "id": 267,
+      "question": "Which category does the lecture describe as 'hard to avoid' and typically requiring debugging tools to \nrectify?",
+      "options": [
+        "Logic errors",
+        "Bad code warnings",
+        "Faulty process shortcuts",
+        "Missing style guides"
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The key-takeaway slide contrasts logic errors with more avoidable bad code/process problems. Source: Lecture 10, slides 31.",
+      "source": "Lecture 10, slides 31"
+    },
+    {
+      "id": 268,
+      "question": "Which statement best summarizes the lecture's prevention message?",
+      "options": [
+        "Bad code and faulty processes are largely avoidable through good development practices; bad assumptions can be reduced by explicit contracts/validation; logic errors still require systematic testing/debugging.",
+        "All errors are equally unavoidable.",
+        "Warnings and process discipline do not matter.",
+        "Only logic errors deserve testing."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "This reflects the lecture's final classification and recommendations. Source: Lecture 10, slides 31.",
+      "source": "Lecture 10, slides 31"
+    },
+    {
+      "id": 269,
+      "question": "What is wrong with this loop if it accesses `a[i+1]` inside the body?\nfor (int i = 0; i < a.length; i++) {\n compare(a[i], a[i+1]);\n}",
+      "options": [
+        "When i reaches a.length-1, a[i+1] is out of bounds. <PARSED TEXT FOR PAGE: 57 / 65>",
+        "The loop never executes.",
+        "The loop starts at the wrong index because arrays start at 1.",
+        "The loop must use <= instead of <."
+      ],
+      "correct": 0,
+      "section": "Lecture 10 — Common Coding Mistakes",
+      "explanation": "The upper bound must stop one element earlier when the body reads i+1. <PARSED TEXT FOR PAGE: 65 / 65> Final Review Checklist  I can distinguish IDE/editor, debugger, compiler/linker, and version-control responsibilities.  I can explain repository/working-copy/remote concepts and put pull, add, commit, push, branch, checkout, merge, status, log, diff, revert/reset in context.  I can distinguish user-facing software quality from developer/internal quality and explain readability, testability, understandability, maintainability, reusability, flexibility, and portability.  I can explain coupling, cohesion, documentation, layout/style, and why readable code lowers maintenance cost.  I can explain quality objectives, QA measurement/gating, guidelines, collaboration, pair programming, and formal-review roles/process.  I can distinguish test levels and black/grey/white-box testing; design common, boundary, exceptional, structured-basis, path, and regression tests.  I can describe TDD in the correct order and explain its advantages and costs.  I can debug systematically: reproduce, gather data, hypothesize, test the hypothesis, use debugger tools, fix the root cause, regression-test, and look for similar errors.  I can recognize warnings/bad code, bad assumptions, common logic errors, and faulty processes before they become expensive defects. Source: Lecture 10, slides 21.",
+      "source": "Lecture 10, slides 21"
+    }
   ]
 }

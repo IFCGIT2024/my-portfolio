@@ -1,0 +1,1092 @@
+{
+  "code": "CSCI 2122 · A1",
+  "title": "A1 — Spellbee Practice",
+  "description": "Practice the C concepts behind the Spellbee word-mask problem, from letter sets to pointers, strings, and composition counting.",
+  "context": [
+    "Assume C17, ASCII character encoding, 8-bit bytes, and a 32-bit int. Input words contain uppercase A–Z. Input conversions succeed and buffers are large enough unless a question asks about failures or overflow.",
+    "letterMask starts with int mask = 0 and sets bit word[i] - 'A' for each letter using mask | (1 << bit). Bits 0–25 represent A–Z. countBits counts the set bits by repeatedly adding (mask & 1) and shifting a non-negative mask right by one.",
+    "The examples use MAX_WORDS = 20000 and MAX_LEN = 30, with char words[MAX_WORDS][MAX_LEN] and an int masks[] array. Each stored word has at most 29 letters plus its null terminator.",
+    "A candidate (called a “panagram” in the supplied bank) has exactly seven distinct letters. Its composition count X includes every dictionary entry whose letters are a subset of those seven, including the candidate itself. Repeated letters are allowed."
+  ],
+  "questions": [
+    {
+      "id": 9,
+      "question": "In spellbee's letterMask, how is a word represented internally?",
+      "options": [
+        "As an array of 26 booleans",
+        "As an int whose lowest 26 bits record whether each letter is present",
+        "As a linked list of chars",
+        "As a hash table of letter counts"
+      ],
+      "correct": 1,
+      "section": "Bitmasks and Letter Sets",
+      "explanation": "Bits 0..25 map to A..Z; a bit is 1 when that letter appears at least once. This 'letter set' idea is the heart of the whole assignment."
+    },
+    {
+      "id": 10,
+      "question": "Which bit position represents the letter 'C' in the mask?",
+      "options": [
+        "bit 0",
+        "bit 2",
+        "bit 3",
+        "bit 67"
+      ],
+      "correct": 1,
+      "section": "Bitmasks and Letter Sets",
+      "explanation": "'C' - 'A' = 2, so letter C uses bit index 2 (value 4)."
+    },
+    {
+      "id": 11,
+      "question": "What integer value does letterMask(\"CAB\") return?",
+      "options": [
+        "3",
+        "7",
+        "6",
+        "111"
+      ],
+      "correct": 1,
+      "section": "Bitmasks and Letter Sets",
+      "explanation": "A,B,C set bits 0,1,2 => 1 + 2 + 4 = 7."
+    },
+    {
+      "id": 12,
+      "question": "Why does letterMask use OR (mask | (1<<bit)) instead of addition to set a bit?",
+      "options": [
+        "Addition is slower on integers",
+        "OR-ing an already-set bit leaves it set, so repeated letters cannot corrupt the mask",
+        "Addition does not work on ints",
+        "OR clears the bit"
+      ],
+      "correct": 1,
+      "section": "Bitmasks and Letter Sets",
+      "explanation": "Setting an already-set bit with | is idempotent. Addition would carry into neighbouring bits for duplicate letters and give a wrong set."
+    },
+    {
+      "id": 13,
+      "question": "What does letterMask(\"BANANA\") return?",
+      "options": [
+        "6 (one per letter typed)",
+        "3",
+        "8195",
+        "0"
+      ],
+      "correct": 2,
+      "section": "Bitmasks and Letter Sets",
+      "explanation": "Distinct letters A,B,N set bits 0,1,13 => 1 + 2 + 8192 = 8195. Duplicate A's and N's just re-set the same bits."
+    },
+    {
+      "id": 14,
+      "question": "The mask produced by letterMask encodes which property of a word?",
+      "options": [
+        "Its length",
+        "The SET of distinct letters it contains",
+        "Its number of vowels",
+        "Its alphabetical rank"
+      ],
+      "correct": 1,
+      "section": "Bitmasks and Letter Sets",
+      "explanation": "Two words with the same distinct letters (in any order, any counts) produce the same mask."
+    },
+    {
+      "id": 15,
+      "question": "Which standard header declares scanf and printf?",
+      "options": [
+        "stdlib.h",
+        "stdio.h",
+        "string.h",
+        "math.h"
+      ],
+      "correct": 1,
+      "section": "Files and Headers",
+      "explanation": "Standard input/output functions such as scanf and printf are declared in <stdio.h>."
+    },
+    {
+      "id": 16,
+      "question": "Which token is the bitwise OR operator in C?",
+      "options": [
+        "||",
+        "|",
+        "&",
+        "^"
+      ],
+      "correct": 1,
+      "section": "Bitwise Operators",
+      "explanation": "A single | is bitwise OR (per-bit); || is logical OR (whole-value, short-circuiting)."
+    },
+    {
+      "id": 17,
+      "question": "Which token is the bitwise AND operator in C?",
+      "options": [
+        "&&",
+        "&",
+        "|",
+        "%"
+      ],
+      "correct": 1,
+      "section": "Bitwise Operators",
+      "explanation": "A single & is bitwise AND; && is logical AND."
+    },
+    {
+      "id": 18,
+      "question": "What does the expression (mask & 1) evaluate to?",
+      "options": [
+        "The whole mask",
+        "1 if the lowest (least-significant) bit is set, otherwise 0",
+        "The number of set bits",
+        "mask divided by 2"
+      ],
+      "correct": 1,
+      "section": "Bitwise Operators",
+      "explanation": "AND-ing with 1 masks off every bit except bit 0, isolating the lowest bit."
+    },
+    {
+      "id": 19,
+      "question": "In countBits, count = count + (mask & 1) adds what on each iteration?",
+      "options": [
+        "Always 1",
+        "The value of the current lowest bit (0 or 1)",
+        "The whole mask",
+        "The current bit index"
+      ],
+      "correct": 1,
+      "section": "Bitwise Operators",
+      "explanation": "It accumulates the lowest bit, then the loop shifts mask right so the next bit becomes the lowest."
+    },
+    {
+      "id": 20,
+      "question": "What is the key difference between & and && in C?",
+      "options": [
+        "There is none",
+        "& operates bit-by-bit on all bits; && is a logical test that yields 0/1 and short-circuits",
+        "&& is the bitwise one",
+        "& only works on booleans"
+      ],
+      "correct": 1,
+      "section": "Bitwise Operators",
+      "explanation": "Mixing them up is a classic bug: a & b and a && b can give very different results."
+    },
+    {
+      "id": 21,
+      "question": "The expression (masks[j] & masks[i]) computes which letter set?",
+      "options": [
+        "Letters in either word (union)",
+        "Letters common to BOTH words (intersection)",
+        "The longer word's letters",
+        "An empty set always"
+      ],
+      "correct": 1,
+      "section": "Bitwise Operators",
+      "explanation": "Bitwise AND keeps only bits set in both operands, i.e. the shared letters. This is the basis of the subset test."
+    },
+    {
+      "id": 22,
+      "question": "What does the bitwise OR of two letter masks give?",
+      "options": [
+        "Their intersection",
+        "Their union (letters appearing in either word)",
+        "Their difference",
+        "Zero"
+      ],
+      "correct": 1,
+      "section": "Bitwise Operators",
+      "explanation": "OR sets a bit if it is on in either operand, giving the union of the two letter sets."
+    },
+    {
+      "id": 23,
+      "question": "With a 32-bit int and 0 <= bit <= 25, what does (1 << bit) compute?",
+      "options": [
+        "1 multiplied by bit",
+        "An integer with only bit number 'bit' set to 1 (i.e. 2^bit)",
+        "bit divided by 1",
+        "1 raised to the power bit"
+      ],
+      "correct": 1,
+      "section": "Bit Shifting",
+      "explanation": "Left-shifting the single 1-bit by 'bit' positions produces a one-hot value of 2^bit, used to target one letter."
+    },
+    {
+      "id": 24,
+      "question": "(1 << 3) equals which value?",
+      "options": [
+        "3",
+        "6",
+        "8",
+        "16"
+      ],
+      "correct": 2,
+      "section": "Bit Shifting",
+      "explanation": "Shifting 1 left by 3 gives binary 1000 = 8 = 2^3."
+    },
+    {
+      "id": 25,
+      "question": "For a non-negative mask in countBits, what does mask = mask >> 1 do?",
+      "options": [
+        "Multiplies mask by 2",
+        "Drops the lowest bit and shifts every other bit one place right",
+        "Clears the whole mask",
+        "Negates mask"
+      ],
+      "correct": 1,
+      "section": "Bit Shifting",
+      "explanation": "Right shift by 1 discards bit 0 and moves bit n to position n-1, letting the loop inspect each bit in turn."
+    },
+    {
+      "id": 26,
+      "question": "For a non-negative int mask, why does while (mask != 0) terminate when every iteration executes mask = mask >> 1?",
+      "options": [
+        "Because count eventually reaches 7",
+        "Each right shift halves the non-negative value, discarding any remainder, until it reaches 0",
+        "Because mask is const",
+        "It is not guaranteed"
+      ],
+      "correct": 1,
+      "section": "Bit Shifting",
+      "explanation": "For non-negative values, right shift by one is integer division by two. A 26-bit non-negative mask reaches zero in at most 26 iterations. Do not assume this for negative signed values."
+    },
+    {
+      "id": 27,
+      "question": "For a NON-NEGATIVE int, mask >> 1 is equivalent to which arithmetic operation?",
+      "options": [
+        "mask * 2",
+        "mask / 2 using integer (truncating) division",
+        "mask % 2",
+        "-mask"
+      ],
+      "correct": 1,
+      "section": "Bit Shifting",
+      "explanation": "Right shift by 1 halves a non-negative integer, discarding any remainder."
+    },
+    {
+      "id": 28,
+      "question": "In C17, right-shifting a NEGATIVE signed int by one bit is:",
+      "options": [
+        "Always zero-filled",
+        "Implementation-defined (commonly arithmetic / sign-extending)",
+        "A compile error",
+        "Guaranteed to wrap to 0"
+      ],
+      "correct": 1,
+      "section": "Bit Shifting",
+      "explanation": "C17 makes this result implementation-defined; many implementations preserve the sign. The letter masks here are non-negative because only bits 0 through 25 are used in a 32-bit int."
+    },
+    {
+      "id": 29,
+      "question": "On the assumed 32-bit-int system, why does setting bit 25 for 'Z' fit safely in int?",
+      "options": [
+        "int is always 8 bits",
+        "2^25 is representable as a positive 32-bit int, and 25 is less than the type width",
+        "Because OR is used",
+        "It does not fit and overflows"
+      ],
+      "correct": 1,
+      "section": "Bit Shifting",
+      "explanation": "C does not guarantee a 32-bit int. On a 16-bit-int system, 1 << 25 has undefined behavior because the shift count is at least the width of the promoted left operand. The quiz explicitly assumes 32-bit int."
+    },
+    {
+      "id": 30,
+      "question": "Why are the parentheses in count = count + (mask & 1) actually required, not just stylistic?",
+      "options": [
+        "They are purely cosmetic",
+        "Because + has HIGHER precedence than &, so count + mask & 1 would wrongly parse as (count + mask) & 1",
+        "Because & cannot compile without them",
+        "Because mask is unsigned"
+      ],
+      "correct": 1,
+      "section": "Operator Precedence",
+      "explanation": "Addition binds tighter than bitwise AND. Without parentheses, the expression groups as (count + mask) & 1, which can produce a different result. Precedence specifies grouping; it does not generally specify operand evaluation order."
+    },
+    {
+      "id": 31,
+      "question": "Why are the parentheses in (masks[j] & masks[i]) == masks[j] required?",
+      "options": [
+        "No reason",
+        "Because == has HIGHER precedence than &, so without them it parses as masks[j] & (masks[i] == masks[j])",
+        "Because & cannot appear next to ==",
+        "To force unsigned math"
+      ],
+      "correct": 1,
+      "section": "Operator Precedence",
+      "explanation": "Equality binds tighter than bitwise AND. Parentheses group the expression as (masks[j] & masks[i]) == masks[j], so the intersection is the left operand of the comparison."
+    },
+    {
+      "id": 32,
+      "question": "In masks[i] & (1 << b), what is the precedence relationship between << and &?",
+      "options": [
+        "<< is higher than &, so even without the parentheses the shift happens before the AND",
+        "& is higher than <<",
+        "They have equal precedence",
+        "It is undefined behaviour"
+      ],
+      "correct": 0,
+      "section": "Operator Precedence",
+      "explanation": "Shift operators bind tighter than bitwise AND, so the grouping would be the same here; the parentheses are kept for clarity/safety."
+    },
+    {
+      "id": 33,
+      "question": "Which of these binds TIGHTEST (highest precedence) in C?",
+      "options": [
+        "Bitwise & | ^",
+        "Equality == !=",
+        "Array subscript [] and function-call ()",
+        "Assignment ="
+      ],
+      "correct": 2,
+      "section": "Operator Precedence",
+      "explanation": "Postfix [] and () are among the highest-precedence operators; assignment is near the lowest."
+    },
+    {
+      "id": 34,
+      "question": "What is the loop condition in letterMask's for (int i = 0; word[i] != '\\0'; i++)?",
+      "options": [
+        "i < length",
+        "word[i] != '\\0' -- stop when the string's nul terminator is reached",
+        "i != 26",
+        "mask != 0"
+      ],
+      "correct": 1,
+      "section": "Loops and Iteration",
+      "explanation": "Walking until the '\\0' is the standard way to traverse a C string of unknown length."
+    },
+    {
+      "id": 35,
+      "question": "The counter i is declared inside the for statement: for (int i = 0; ...). What is its scope?",
+      "options": [
+        "The whole program",
+        "The whole function",
+        "Only that for loop",
+        "Global scope"
+      ],
+      "correct": 2,
+      "section": "Loops and Iteration",
+      "explanation": "Since C99 a variable declared in the for-init clause is visible only within that loop."
+    },
+    {
+      "id": 36,
+      "question": "Which loop construct is used in while (mask != 0) { count += mask & 1; mask >>= 1; }?",
+      "options": [
+        "for",
+        "while",
+        "do-while",
+        "recursion"
+      ],
+      "correct": 1,
+      "section": "Loops and Iteration",
+      "explanation": "It uses while (mask != 0) because the number of iterations depends on where the highest set bit is."
+    },
+    {
+      "id": 37,
+      "question": "How many times does the letter-printing loop for (int b = 0; b < 26; b++) iterate for one panagram?",
+      "options": [
+        "7",
+        "25",
+        "26",
+        "It varies with the word"
+      ],
+      "correct": 2,
+      "section": "Loops and Iteration",
+      "explanation": "It always scans all 26 letter positions A..Z and prints only the ones whose bit is set."
+    },
+    {
+      "id": 38,
+      "question": "For n stored words, each word with seven distinct letters triggers a scan over all n words. What is the worst-case time complexity, treating word length and mask width as bounded?",
+      "options": [
+        "O(1)",
+        "O(n)",
+        "O(n^2): each panagram re-scans all n words",
+        "O(log n)"
+      ],
+      "correct": 2,
+      "section": "Nested Loops and Selection",
+      "explanation": "With up to n panagrams each scanning all n masks, Problem 3's work is quadratic in the dictionary size."
+    },
+    {
+      "id": 39,
+      "question": "What role does if (countBits(masks[i]) == 7) play?",
+      "options": [
+        "It is a loop",
+        "It is a filter/selection that keeps only panagrams (exactly 7 distinct letters)",
+        "It declares a function",
+        "It casts a type"
+      ],
+      "correct": 1,
+      "section": "Nested Loops and Selection",
+      "explanation": "Only words passing this exact-equality test produce output."
+    },
+    {
+      "id": 40,
+      "question": "Why does scanning b from 0 to 25 print the 7 letters already in alphabetical order?",
+      "options": [
+        "printf sorts them",
+        "Because bit 0 = A, bit 1 = B, ... so ascending bit index is ascending alphabet",
+        "Because of the OR operator",
+        "It does not; order is random"
+      ],
+      "correct": 1,
+      "section": "Nested Loops and Selection",
+      "explanation": "The mask stores letters by alphabetical bit position, so a low-to-high scan emits them sorted for free -- no sorting code needed."
+    },
+    {
+      "id": 41,
+      "question": "In the declaration int letterMask(const char *word), what does the leading int specify?",
+      "options": [
+        "A parameter",
+        "The function's RETURN type",
+        "The function name",
+        "A local variable"
+      ],
+      "correct": 1,
+      "section": "Functions and Declarations",
+      "explanation": "A C function declaration reads: return-type name(parameters)."
+    },
+    {
+      "id": 42,
+      "question": "In int letterMask(const char *word), what is 'word'?",
+      "options": [
+        "The return type",
+        "A parameter: a pointer to const char",
+        "A global array",
+        "A macro"
+      ],
+      "correct": 1,
+      "section": "Functions and Declarations",
+      "explanation": "word is the single formal parameter, typed as const char *."
+    },
+    {
+      "id": 43,
+      "question": "What restriction does const impose in the parameter const char *word?",
+      "options": [
+        "The pointer variable itself can never change",
+        "The characters cannot be modified through word; the pointer variable itself can change",
+        "The string is exactly 7 letters",
+        "The string lives in ROM"
+      ],
+      "correct": 1,
+      "section": "Functions and Declarations",
+      "explanation": "const applies to the pointed-to char, not the pointer. Another writable alias can still modify an originally non-const object. This parameter alone does not promise that the function can never change the object by any other route."
+    },
+    {
+      "id": 44,
+      "question": "countBits is declared int countBits(int mask). Inside it, mask = mask >> 1 reassigns the parameter. Does that change the caller's variable?",
+      "options": [
+        "Yes, it edits the caller's mask",
+        "No -- mask is a local copy passed by value, so the caller is unaffected",
+        "Only if it is global",
+        "It causes a compile error"
+      ],
+      "correct": 1,
+      "section": "Functions and Declarations",
+      "explanation": "C passes scalars by value, so countBits mutates its own copy while the caller's masks[i] stays intact."
+    },
+    {
+      "id": 45,
+      "question": "If main calls two helper functions, why can defining those helpers above main avoid the need for separate prototypes?",
+      "options": [
+        "It does not",
+        "A function must be declared (by definition or prototype) before it is called, so defining them first lets main call them",
+        "main must run first regardless",
+        "Functions must be alphabetical"
+      ],
+      "correct": 1,
+      "section": "Functions and Declarations",
+      "explanation": "Without an earlier definition or prototype, the compiler would not know the function's signature at the call site."
+    },
+    {
+      "id": 46,
+      "question": "The function names letterMask and countBits follow which naming convention?",
+      "options": [
+        "ALL_CAPS",
+        "camelCase",
+        "names with spaces",
+        "digits only"
+      ],
+      "correct": 1,
+      "section": "Functions and Declarations",
+      "explanation": "camelCase starts with a lowercase word and capitalizes later words, as in letterMask and countBits."
+    },
+    {
+      "id": 47,
+      "question": "In scanf(\"%d\", &total), why is &total passed rather than total?",
+      "options": [
+        "To print total",
+        "scanf must receive the ADDRESS so it can store the parsed integer into total",
+        "& multiplies total",
+        "total is an array"
+      ],
+      "correct": 1,
+      "section": "Pass by Value vs Address",
+      "explanation": "The %d conversion requires an int pointer so scanf can write into total. Passing the int value total instead is an argument-type mismatch and causes undefined behavior; it is not just an ineffective copy."
+    },
+    {
+      "id": 48,
+      "question": "In scanf(\"%s\", words[i]), why is there NO & before words[i]?",
+      "options": [
+        "It is a bug",
+        "words[i] is an array that already decays to a pointer (an address), so & is unnecessary",
+        "%s ignores its argument",
+        "scanf adds the & itself"
+      ],
+      "correct": 1,
+      "section": "Pass by Value vs Address",
+      "explanation": "An array name used as a value decays to the address of its first element, so words[i] is already the needed pointer."
+    },
+    {
+      "id": 49,
+      "question": "When letterMask(words[i]) is called, what is actually passed to the function?",
+      "options": [
+        "A deep copy of all MAX_LEN chars",
+        "A copy of the POINTER to the first char (the row decays to char*)",
+        "The integer mask",
+        "Nothing"
+      ],
+      "correct": 1,
+      "section": "Pass by Value vs Address",
+      "explanation": "Arrays are never deep-copied as arguments in C; the function receives a pointer to the original storage."
+    },
+    {
+      "id": 50,
+      "question": "What is C's fundamental argument-passing model?",
+      "options": [
+        "Always pass by reference",
+        "Always pass by VALUE (pointers are used to emulate pass-by-reference)",
+        "Pass by name",
+        "Copy-on-write"
+      ],
+      "correct": 1,
+      "section": "Pass by Value vs Address",
+      "explanation": "Everything is copied into parameters; to let a callee modify a caller's object you pass that object's address."
+    },
+    {
+      "id": 51,
+      "question": "Because &total is given to scanf, scanf is able to:",
+      "options": [
+        "Only read total",
+        "Modify total in the caller (store the input count into it)",
+        "Delete total",
+        "Do nothing with total"
+      ],
+      "correct": 1,
+      "section": "Pass by Value vs Address",
+      "explanation": "Holding the address, scanf can write the parsed value straight into the caller's variable."
+    },
+    {
+      "id": 52,
+      "question": "As function parameters, char *word and char word[] are:",
+      "options": [
+        "Completely different types",
+        "Effectively equivalent -- an array parameter is adjusted to a pointer",
+        "Both illegal",
+        "Only usable for 7-letter strings"
+      ],
+      "correct": 1,
+      "section": "Pointers",
+      "explanation": "In a parameter list, char word[] is just another spelling of char *word."
+    },
+    {
+      "id": 53,
+      "question": "For a char *word, the expression word[i] is exactly equivalent to:",
+      "options": [
+        "*(word + i)",
+        "word + i",
+        "&word[i]",
+        "*word * i"
+      ],
+      "correct": 0,
+      "section": "Pointers",
+      "explanation": "Subscripting is pointer arithmetic plus a dereference: word[i] == *(word + i)."
+    },
+    {
+      "id": 54,
+      "question": "What is char words[MAX_WORDS][MAX_LEN]?",
+      "options": [
+        "A 1-D array of ints",
+        "A 2-D char array: MAX_WORDS rows of MAX_LEN chars, each fitting a string of at most MAX_LEN - 1 letters",
+        "A struct",
+        "A pointer-to-pointer"
+      ],
+      "correct": 1,
+      "section": "Arrays and Strings",
+      "explanation": "Each row is a fixed-size character buffer. A valid C string needs a terminating '\u0000', so a 30-char row can store at most 29 letters plus that terminator."
+    },
+    {
+      "id": 55,
+      "question": "Why is MAX_LEN defined as 30 when a word has at most 29 letters?",
+      "options": [
+        "Arbitrary rounding",
+        "To leave room for the terminating '\\0' alongside 29 letters",
+        "For speed",
+        "To match MAX_WORDS"
+      ],
+      "correct": 1,
+      "section": "Arrays and Strings",
+      "explanation": "A C string needs one extra byte for its nul terminator, so capacity must exceed the longest word by at least 1."
+    },
+    {
+      "id": 56,
+      "question": "After a successful scanf(\"%s\", words[i]) with enough buffer space, the stored word is terminated by:",
+      "options": [
+        "A newline",
+        "A space",
+        "The nul character '\\0'",
+        "A period"
+      ],
+      "correct": 2,
+      "section": "Arrays and Strings",
+      "explanation": "scanf(\"%s\") appends '\\0' after the token so it is a valid C string."
+    },
+    {
+      "id": 57,
+      "question": "After skipping leading whitespace, what normally ends the token read by scanf(\"%s\", ...)?",
+      "options": [
+        "Only at end of file",
+        "The next whitespace character, or end-of-file",
+        "After exactly 7 characters",
+        "At the first comma"
+      ],
+      "correct": 1,
+      "section": "Arrays and Strings",
+      "explanation": "%s skips leading whitespace and reads non-whitespace characters until whitespace or end-of-file (or an input error). A successful conversion appends '\u0000'. A field width can also limit the number of characters read."
+    },
+    {
+      "id": 58,
+      "question": "Given char words[MAX_WORDS][MAX_LEN], what is the type of words[i] before array-to-pointer conversion?",
+      "options": [
+        "char",
+        "An array of MAX_LEN chars, which usually converts to a pointer to its first char",
+        "int",
+        "char**"
+      ],
+      "correct": 1,
+      "section": "Arrays and Strings",
+      "explanation": "The row has array type char[MAX_LEN]. Passing it as a function argument normally converts it to char*. sizeof words[i] and &words[i] are examples where that conversion does not occur."
+    },
+    {
+      "id": 59,
+      "question": "If total is an int and scanf(\"%d\", &total) succeeds, what does it read?",
+      "options": [
+        "A string",
+        "An integer, stored into total",
+        "A single char",
+        "A float"
+      ],
+      "correct": 1,
+      "section": "Input and Output",
+      "explanation": "%d parses a decimal integer; &total gives scanf somewhere to put it."
+    },
+    {
+      "id": 60,
+      "question": "A program reads total, then runs for (int i = 0; i < total; i++) to read one word each time. What does the first input number represent?",
+      "options": [
+        "A panagram",
+        "The count W of words that follow",
+        "The final answer",
+        "Nothing used"
+      ],
+      "correct": 1,
+      "section": "Input and Output",
+      "explanation": "total is read first, then the loop reads exactly that many words."
+    },
+    {
+      "id": 61,
+      "question": "In printf(\" %c\", 'A' + b), the %c prints:",
+      "options": [
+        "An integer",
+        "The character whose code is 'A' + b",
+        "A string",
+        "A float"
+      ],
+      "correct": 1,
+      "section": "Input and Output",
+      "explanation": "'A' + b is an int character code; %c tells printf to emit it as a single character."
+    },
+    {
+      "id": 62,
+      "question": "printf(\"%s :\", words[i]) uses %s to print:",
+      "options": [
+        "One char",
+        "The nul-terminated string starting at words[i]",
+        "The address of words[i]",
+        "An int"
+      ],
+      "correct": 1,
+      "section": "Input and Output",
+      "explanation": "%s walks from the given pointer printing chars until it hits '\\0'."
+    },
+    {
+      "id": 63,
+      "question": "In printf(\" ; %d\\n\", composable), what does the \\n do?",
+      "options": [
+        "Prints the two characters backslash and n",
+        "Emits a newline, ending the current output line",
+        "Inserts a tab",
+        "Nothing"
+      ],
+      "correct": 1,
+      "section": "Input and Output",
+      "explanation": "\\n is the newline escape; each panagram's result ends with it so outputs are one per line."
+    },
+    {
+      "id": 64,
+      "question": "The output code prints the word P using \"%s :\", each of seven sorted letters using \" %c\", then the count X using \" ; %d\\n\". What is the line format?",
+      "options": [
+        "P ; C1..C7",
+        "P : C1 C2 C3 C4 C5 C6 C7 ; X",
+        "Just P",
+        "X only"
+      ],
+      "correct": 1,
+      "section": "Input and Output",
+      "explanation": "The panagram, a colon, the 7 sorted letters, a semicolon, then the composable-word count X."
+    },
+    {
+      "id": 65,
+      "question": "In the declaration int mask = 0; inside letterMask, what is the type of mask?",
+      "options": [
+        "char",
+        "int",
+        "float",
+        "double"
+      ],
+      "correct": 1,
+      "section": "Data Types",
+      "explanation": "The declaration explicitly uses int. Under this quiz's 32-bit-int assumption, bits 0 through 25 fit without setting the sign bit."
+    },
+    {
+      "id": 66,
+      "question": "On a typical system with 32-bit int, how many bits are available in mask?",
+      "options": [
+        "8",
+        "16",
+        "32",
+        "64"
+      ],
+      "correct": 2,
+      "section": "Data Types",
+      "explanation": "The assumed int occupies 32 bits. A typical signed 32-bit int uses one bit for its sign; the 26 letter positions fit within its positive value range."
+    },
+    {
+      "id": 67,
+      "question": "On an ASCII system, what are the type and value of the ordinary C character constant 'A'?",
+      "options": [
+        "A one-character string",
+        "An int with value 65",
+        "A float",
+        "A pointer"
+      ],
+      "correct": 1,
+      "section": "Data Types",
+      "explanation": "The ordinary character constant 'A' has type int in C, and its ASCII value is 65. This differs from the string literal \"A\", which is an array containing 'A' and a null terminator."
+    },
+    {
+      "id": 68,
+      "question": "With ASCII uppercase input, why does word[i] - 'A' yield an index from 0 to 25?",
+      "options": [
+        "Letters are stored randomly",
+        "Because uppercase A..Z have consecutive ASCII codes, subtracting 'A' maps A->0 ... Z->25",
+        "Because 'A' equals 0",
+        "Because of the OR operator"
+      ],
+      "correct": 1,
+      "section": "Char Arithmetic and ASCII",
+      "explanation": "ASCII places uppercase A through Z in consecutive positions. C itself does not require alphabetic character codes to be consecutive, so this mapping assumes ASCII."
+    },
+    {
+      "id": 69,
+      "question": "With ASCII encoding, if word[i] is 'D', what is word[i] - 'A'?",
+      "options": [
+        "3",
+        "4",
+        "68",
+        "the char 'D'"
+      ],
+      "correct": 0,
+      "section": "Char Arithmetic and ASCII",
+      "explanation": "'D' is 68 and 'A' is 65, so the difference is 3 -- the bit index for D."
+    },
+    {
+      "id": 70,
+      "question": "With ASCII encoding, which character has the code 'A' + 2?",
+      "options": [
+        "'C'",
+        "the digit '2'",
+        "the string \"A2\"",
+        "nothing valid"
+      ],
+      "correct": 0,
+      "section": "Char Arithmetic and ASCII",
+      "explanation": "'A' is 65, plus 2 is 67, which is 'C'. The print loop uses exactly this to turn a bit index back into a letter."
+    },
+    {
+      "id": 71,
+      "question": "With ASCII encoding, what input restriction keeps word[i] - 'A' within 0..25?",
+      "options": [
+        "Input can be any characters",
+        "Input letters are UPPERCASE A..Z",
+        "Input is lowercase",
+        "Input is digits"
+      ],
+      "correct": 1,
+      "section": "Char Arithmetic and ASCII",
+      "explanation": "Uppercase A through Z give indices 0 through 25. Other characters can produce invalid indices; shifting by a negative count or by a count at least the int width is undefined behavior. Input should be validated when this restriction is not guaranteed."
+    },
+    {
+      "id": 72,
+      "question": "What does #define MAX_WORDS 20000 create?",
+      "options": [
+        "A runtime variable",
+        "A preprocessor macro that is textually substituted before compilation",
+        "A function",
+        "A pointer"
+      ],
+      "correct": 1,
+      "section": "Preprocessor and Constants",
+      "explanation": "In ordinary preprocessing-token use, MAX_WORDS expands to 20000. The macro is not a runtime variable, and its name is not replaced inside string literals."
+    },
+    {
+      "id": 73,
+      "question": "What is a benefit of #define MAX_LEN 30 over writing 30 everywhere?",
+      "options": [
+        "It runs slower",
+        "A single edit point and a self-documenting name make the code clearer and safer to change",
+        "It forces heap use",
+        "scanf requires it"
+      ],
+      "correct": 1,
+      "section": "Preprocessor and Constants",
+      "explanation": "Named constants reduce magic numbers and keep related sizes consistent."
+    },
+    {
+      "id": 74,
+      "question": "Macros such as MAX_WORDS are expanded by which part of the toolchain?",
+      "options": [
+        "The linker",
+        "The preprocessor, before the compiler proper",
+        "The CPU at runtime",
+        "The operating system"
+      ],
+      "correct": 1,
+      "section": "Preprocessor and Constants",
+      "explanation": "Preprocessing (includes, defines, conditionals) happens first, producing a translation unit for the compiler."
+    },
+    {
+      "id": 75,
+      "question": "When is (masks[j] & masks[i]) == masks[j] true?",
+      "options": [
+        "When word j shares exactly one letter with panagram i",
+        "When EVERY letter of word j is also in panagram i (j's letters are a subset of i's)",
+        "When word j equals panagram i",
+        "When word j is longer than i"
+      ],
+      "correct": 1,
+      "section": "Subset and Composition Logic",
+      "explanation": "AND keeps only j's bits that are also in i; if that still equals j's full mask, none of j's bits were lost, so all of j's letters are inside i."
+    },
+    {
+      "id": 76,
+      "question": "Testing (masks[j] & masks[i]) == masks[j] lets the composition-count loop count words that:",
+      "options": [
+        "Have exactly 7 distinct letters",
+        "Can be spelled using ONLY the panagram's letters (a subset is allowed)",
+        "Are themselves panagrams",
+        "Are longer than 7 letters"
+      ],
+      "correct": 1,
+      "section": "Subset and Composition Logic",
+      "explanation": "This test accepts any word whose distinct letters are a subset of the candidate's letters. Repeated letters are allowed. This quiz's rule imposes no additional mandatory-letter condition."
+    },
+    {
+      "id": 77,
+      "question": "Under the subset-only composition rule, does a dictionary word need all seven of a candidate's letters to be counted?",
+      "options": [
+        "Yes, all 7 are required",
+        "No -- any subset of the 7 letters qualifies",
+        "Only if it has exactly 7 distinct letters",
+        "It can never be counted"
+      ],
+      "correct": 1,
+      "section": "Subset and Composition Logic",
+      "explanation": "A 5-distinct-letter word whose letters all lie within the panagram still counts toward X."
+    },
+    {
+      "id": 78,
+      "question": "If the composition loop checks every dictionary entry, including the candidate itself, is that candidate counted in its own total?",
+      "options": [
+        "No",
+        "Yes -- its mask is a subset of itself, so (m & m) == m holds",
+        "Only sometimes",
+        "Only when it has no repeated letters"
+      ],
+      "correct": 1,
+      "section": "Subset and Composition Logic",
+      "explanation": "Every mask is a subset of itself, so a panagram always contributes at least 1 to its own X."
+    },
+    {
+      "id": 79,
+      "question": "In this study bank, what does the filter countBits(mask) == 7 require of a 'panagram'?",
+      "options": [
+        "A word of at least 7 letters",
+        "A word with EXACTLY 7 distinct letters -- no more, no fewer",
+        "A word of exactly 7 characters",
+        "A word made only of vowels"
+      ],
+      "correct": 1,
+      "section": "Filtering and Counting",
+      "explanation": "The exact-equality check countBits(mask) == 7 encodes 'exactly seven distinct letters'."
+    },
+    {
+      "id": 80,
+      "question": "Why is PERFORMANCE (9 distinct letters) rejected as a panagram?",
+      "options": [
+        "It is too short",
+        "countBits returns 9, and 9 != 7 fails the filter",
+        "It has no vowels",
+        "Because of the OR operator"
+      ],
+      "correct": 1,
+      "section": "Filtering and Counting",
+      "explanation": "More than 7 distinct letters fails the exact == 7 test, just as fewer than 7 would."
+    },
+    {
+      "id": 81,
+      "question": "If a loop visits words[i] with i increasing from 0 to total - 1 and immediately prints each qualifying word, in what order are the results printed?",
+      "options": [
+        "Alphabetical order",
+        "The order they appear in the input list",
+        "Reverse input order",
+        "Random order"
+      ],
+      "correct": 1,
+      "section": "Filtering and Counting",
+      "explanation": "The main loop walks words by increasing index, so output follows input order."
+    },
+    {
+      "id": 82,
+      "question": "To count all dictionary entries composable from a candidate's letters using the subset test, which entries must be considered?",
+      "options": [
+        "Only the other panagrams",
+        "ALL words in the dictionary",
+        "Only words appearing after the panagram",
+        "Only the first 7 words"
+      ],
+      "correct": 1,
+      "section": "Filtering and Counting",
+      "explanation": "Every stored word is tested for the subset property, which is why the words are kept in memory."
+    },
+    {
+      "id": 83,
+      "question": "Inside main, char words[20000][30] is declared without static. What storage does it have?",
+      "options": [
+        "On the heap via malloc",
+        "600,000 bytes of automatic storage, typically placed on the stack",
+        "In CPU registers",
+        "In static ROM"
+      ],
+      "correct": 1,
+      "section": "Memory and C Quirks",
+      "explanation": "The array contains 20000 × 30 = 600,000 C bytes. A block-scope declaration without static has automatic storage duration. Implementations commonly use a stack, but the C standard does not require one; stack limits can matter in practice."
+    },
+    {
+      "id": 84,
+      "question": "A program stores words and masks in local arrays with fixed capacities supplied by #define constants. How does it avoid malloc/free for that storage?",
+      "options": [
+        "It uses a global linked list",
+        "It pre-sizes fixed arrays using the #define bounds and stores everything there",
+        "It uses recursion",
+        "It never stores the words"
+      ],
+      "correct": 1,
+      "section": "Memory and C Quirks",
+      "explanation": "Fixed-capacity arrays sidestep dynamic allocation entirely, trading some memory for simplicity."
+    },
+    {
+      "id": 85,
+      "question": "On a system that provides strdup, what does a successful call do?",
+      "options": [
+        "Frees memory",
+        "Allocates new memory and copies a string into it, returning a pointer the caller must later free",
+        "Compares two strings",
+        "Prints a string"
+      ],
+      "correct": 1,
+      "section": "Memory and C Quirks",
+      "explanation": "strdup allocates space for a copy including the null terminator. Check for NULL on allocation failure and free a successful result after use. strdup is provided by POSIX but is not part of the ISO C17 library."
+    },
+    {
+      "id": 86,
+      "question": "If you DID use malloc/strdup to store the words, when should the memory be freed?",
+      "options": [
+        "Never",
+        "Once you are finished using the stored words, before the program exits, to avoid leaks",
+        "Immediately after malloc",
+        "Inside the loop while still using it"
+      ],
+      "correct": 1,
+      "section": "Memory and C Quirks",
+      "explanation": "Free after last use and before exit. Freeing too early invalidates the data; never freeing leaks it."
+    },
+    {
+      "id": 87,
+      "question": "main is declared int and ends with return 0;. What does returning 0 signify?",
+      "options": [
+        "An error occurred",
+        "Successful termination, communicated to the host environment",
+        "The computed answer",
+        "The number of panagrams"
+      ],
+      "correct": 1,
+      "section": "Memory and C Quirks",
+      "explanation": "Returning 0 from the initial call to main indicates successful termination. EXIT_SUCCESS also indicates success, and EXIT_FAILURE indicates failure; the meaning of other exit values depends on the implementation."
+    },
+    {
+      "id": 88,
+      "question": "For a nonzero unsigned mask, which operation clears its lowest set bit, allowing a population-count loop to run once per set bit?",
+      "options": [
+        "mask = mask + 1 each step",
+        "mask &= (mask - 1), which clears the lowest set bit so the loop runs once per set bit",
+        "mask = mask * 2",
+        "mask = -mask"
+      ],
+      "correct": 1,
+      "section": "Memory and C Quirks",
+      "explanation": "mask &= (mask - 1) clears the lowest set bit. In a while (mask != 0) loop, each iteration removes one set bit. This can reduce iterations for sparse masks; it does not guarantee faster execution on every machine."
+    },
+    {
+      "id": 89,
+      "question": "If scanf's return value is ignored, what should a more robust program do?",
+      "options": [
+        "Always ignore it",
+        "Check it to detect malformed input or end-of-file",
+        "Print it to the user",
+        "Pass it to free()"
+      ],
+      "correct": 1,
+      "section": "Memory and C Quirks",
+      "explanation": "scanf returns the number of input items assigned, or EOF if an input failure occurs before the first conversion. For these calls, require a return value of 1 before using the input. Also validate the word count and word lengths."
+    },
+    {
+      "id": 90,
+      "question": "With char words[20000][30], what risk exists if scanf(\"%s\", words[i]) receives a token longer than 29 letters?",
+      "options": [
+        "None; it is always safe",
+        "scanf(\"%s\") has no width limit, so it could overflow words[i] -- a buffer overflow",
+        "It truncates automatically and safely",
+        "It is a compile error"
+      ],
+      "correct": 1,
+      "section": "Memory and C Quirks",
+      "explanation": "The unbounded %s conversion can write beyond the 30-byte row, including its null terminator. %29s bounds this write, but an overlong token leaves characters unread; robust input handling should also detect and reject such input."
+    },
+    {
+      "id": 91,
+      "question": "The study bank uses 'panagram' for a word with seven distinct letters. Which usual term describes text containing every letter of a specified alphabet?",
+      "options": [
+        "A palindrome (same forwards and backwards)",
+        "A pangram",
+        "An anagram (letter rearrangement)",
+        "A homonym"
+      ],
+      "correct": 1,
+      "section": "Memory and C Quirks",
+      "explanation": "The usual term is pangram. This study bank retains 'panagram' from the supplied questions for the seven-distinct-letter candidates; it does not mean a palindrome or an anagram."
+    }
+  ]
+}

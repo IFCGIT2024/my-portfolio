@@ -4,6 +4,8 @@
   const allowedCourses = new Set(["2115", "2122", "2134", "2141"]);
   const params = new URLSearchParams(window.location.search);
   const course = params.get("course");
+  const quiz = params.get("quiz");
+  const isA1 = course === "2122" && quiz === "a1";
   const state = { bank: null, questions: [], index: 0, score: 0, stats: {} };
   const $ = (id) => document.getElementById(id);
 
@@ -32,8 +34,12 @@
       fail("Choose one of the four courses from the Fall 2026 hub.");
       return;
     }
+    if (quiz && !isA1) {
+      fail("This quiz is not available for the selected course. Choose a quiz from the Fall 2026 hub.");
+      return;
+    }
     try {
-      const response = await fetch(`data/${course}.json`, { cache: "no-store" });
+      const response = await fetch(`data/${course}${isA1 ? "-a1" : ""}.json`, { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       state.bank = await response.json();
       if (!Array.isArray(state.bank.questions) || state.bank.questions.length === 0) {
@@ -51,7 +57,16 @@
     $("nav-course").textContent = code;
     $("course-code").textContent = code;
     $("course-title").textContent = title;
-    $("course-description").textContent = `${description} ${questions.length} starter questions available.`;
+    $("course-description").textContent = `${description} ${questions.length} questions available.`;
+    $("course-quizzes").classList.toggle("hidden", course !== "2122");
+    document.querySelectorAll("#course-quizzes a").forEach((link) => {
+      const active = link.dataset.quiz === (isA1 ? "a1" : "general");
+      if (active) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+    const context = state.bank.context || [];
+    $("quiz-context").classList.toggle("hidden", context.length === 0);
+    $("context-content").innerHTML = context.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("");
 
     const sections = [...new Set(questions.map((q) => q.section))];
     $("section-options").innerHTML = sections.map((section) => `
@@ -79,6 +94,8 @@
     const choices = [...new Set([5, 10, 15, available].filter((n) => n > 0 && n <= available))].sort((a, b) => a - b);
     $("question-count").innerHTML = choices.map((n) => `<option value="${n}">${n === available ? `All ${n}` : n}</option>`).join("");
     if (choices.length) $("question-count").value = String(choices[Math.min(1, choices.length - 1)]);
+    $("setup-message").textContent = "";
+    $("toggle-all").textContent = selectedSections().length === document.querySelectorAll("#section-options input").length ? "Deselect all" : "Select all";
   }
 
   function startQuiz() {

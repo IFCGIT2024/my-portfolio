@@ -79,6 +79,15 @@ h1, h2, p { margin-top: 0; }
 .course-card p { min-height: 72px; color: var(--muted); line-height: 1.55; }
 .launch { display: inline-flex; padding: 11px 14px; border-radius: 9px; color: white; background: var(--accent); text-decoration: none; font-weight: 800; }
 .launch:hover { filter: brightness(.92); transform: translateY(-1px); }
+.assignment-quiz { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+.assignment-quiz h3 { margin: 0 0 8px; }
+.assignment-quiz p { min-height: 0; }
+.quiz-links { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+.quiz-links [aria-current="page"] { background: var(--brand); color: white; }
+.quiz-context { margin-bottom: 18px; padding: 16px 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+.quiz-context summary { color: var(--brand-dark); cursor: pointer; font-weight: 700; }
+.quiz-context p { margin: 14px 0 0; line-height: 1.6; }
+.question-text, .answer-button, .feedback, .quiz-context { overflow-wrap: anywhere; }
 
 .note-card { margin-top: 20px; padding: 22px 26px; }
 .note-card p { display: inline; margin-left: 6px; color: var(--muted); }

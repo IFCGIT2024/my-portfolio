@@ -12,6 +12,14 @@
     <span id="nav-course">Practice Test</span>
   </nav>
   <main class="quiz-shell">
+    <nav id="course-quizzes" class="quiz-links hidden" aria-label="CSCI 2122 quizzes">
+      <a class="secondary-button" data-quiz="general" href="quiz.html?course=2122">General practice</a>
+      <a class="secondary-button" data-quiz="a1" href="quiz.html?course=2122&amp;quiz=a1">A1 — Spellbee</a>
+    </nav>
+    <details id="quiz-context" class="quiz-context hidden">
+      <summary>A1 background and assumptions</summary>
+      <div id="context-content"></div>
+    </details>
     <section id="loading" class="panel status-panel">Loading question bank…</section>
 
     <section id="setup" class="panel hidden">
@@ -74,6 +82,6 @@
       <a class="secondary-button" href="index.html">Return to the hub</a>
     </section>
   </main>
-  <script src="quiz.js"></script>
+  <script src="quiz.js?v=a1-1"></script>
 </body>
 </html>

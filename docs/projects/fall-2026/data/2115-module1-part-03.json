@@ -1,0 +1,2179 @@
+{
+  "questions": [
+    {
+      "id": "T16-01",
+      "topic": "T16",
+      "title": "Alphabet in a DFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "A complete DFA has 4 states and an alphabet of 3 symbols. How many state-symbol entries does δ have?",
+      "options": [
+        {
+          "value": "A",
+          "label": "16"
+        },
+        {
+          "value": "B",
+          "label": "7"
+        },
+        {
+          "value": "C",
+          "label": "12"
+        },
+        {
+          "value": "D",
+          "label": "3"
+        }
+      ],
+      "answer": "C",
+      "explanation": "There is one entry for each pair in Q×Σ, giving 4×3=12. A drawing may combine several entries into one arrow.",
+      "sources": "S03 pp. 10-12; S08 p. 12"
+    },
+    {
+      "id": "T16-02",
+      "topic": "T16",
+      "title": "Alphabet in a DFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Over Σ={a,b}, how many outgoing symbol choices must be defined at each state?",
+      "options": [
+        {
+          "value": "A",
+          "label": "|Q|"
+        },
+        {
+          "value": "B",
+          "label": "1"
+        },
+        {
+          "value": "C",
+          "label": "2"
+        },
+        {
+          "value": "D",
+          "label": "It equals the number of final states."
+        }
+      ],
+      "answer": "C",
+      "explanation": "A complete DFA needs one destination on a and one on b, even if both destinations are the same.",
+      "sources": "S03 pp. 10-12; S08 p. 12"
+    },
+    {
+      "id": "T16-03",
+      "topic": "T16",
+      "title": "Alphabet in a DFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "A DFA over {0,1} is to process {0,1,2}. What must be added?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A final state named 2 only"
+        },
+        {
+          "value": "B",
+          "label": "Nothing; Σ automatically includes every character"
+        },
+        {
+          "value": "C",
+          "label": "A defined transition on 2 from every state"
+        },
+        {
+          "value": "D",
+          "label": "An ε transition from the start"
+        }
+      ],
+      "answer": "C",
+      "explanation": "A larger alphabet expands the domain of δ. The intended behavior on the new symbol must be specified.",
+      "sources": "S03 pp. 10-12; S08 p. 12"
+    },
+    {
+      "id": "T16-04",
+      "topic": "T16",
+      "title": "Alphabet in a DFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "When complementing L over Σ, what is the universe?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Σ*"
+        },
+        {
+          "value": "B",
+          "label": "Q"
+        },
+        {
+          "value": "C",
+          "label": "Σ"
+        },
+        {
+          "value": "D",
+          "label": "F"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Complement means all finite words over the selected alphabet that are not in L, including ε when appropriate.",
+      "sources": "S03 pp. 10-12; S08 p. 12"
+    },
+    {
+      "id": "T16-05",
+      "topic": "T16",
+      "title": "Alphabet in a DFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let L=a*. What is its complement over Σ={a}?",
+      "options": [
+        {
+          "value": "A",
+          "label": "b*"
+        },
+        {
+          "value": "B",
+          "label": "{a}"
+        },
+        {
+          "value": "C",
+          "label": "{ε}"
+        },
+        {
+          "value": "D",
+          "label": "∅"
+        }
+      ],
+      "answer": "D",
+      "explanation": "a* already contains every word over the unary alphabet. Changing the universe to {a,b}* would change the complement.",
+      "sources": "S03 pp. 10-12; S08 p. 12"
+    },
+    {
+      "id": "T16-06",
+      "topic": "T16",
+      "title": "Alphabet in a DFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let L=a*. What is its complement over Γ={a,b}?",
+      "options": [
+        {
+          "value": "A",
+          "label": "∅"
+        },
+        {
+          "value": "B",
+          "label": "All words containing at least one a"
+        },
+        {
+          "value": "C",
+          "label": "All words containing at least one b"
+        },
+        {
+          "value": "D",
+          "label": "Only b*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Words made only of a symbols, including ε, are in L. Any b forces a word outside L.",
+      "sources": "S03 pp. 10-12; S08 p. 12"
+    },
+    {
+      "id": "T16-07",
+      "topic": "T16",
+      "title": "Alphabet in a DFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Can two alphabet symbols lead from one state to the same destination in a DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if both symbols are identical."
+        },
+        {
+          "value": "B",
+          "label": "No; destinations must all differ."
+        },
+        {
+          "value": "C",
+          "label": "Only if the destination is rejecting."
+        },
+        {
+          "value": "D",
+          "label": "Yes; determinism requires one destination per symbol, not different destinations."
+        }
+      ],
+      "answer": "D",
+      "explanation": "δ may map different arguments to the same state. It is a function, not necessarily an injective function.",
+      "sources": "S03 pp. 10-12; S08 p. 12"
+    },
+    {
+      "id": "T16-08",
+      "topic": "T16",
+      "title": "Alphabet in a DFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "A DFA has three states and six drawn arrows; some arrows carry several labels. Can |Σ| be inferred from six alone?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No; count the individual symbol transitions instead."
+        },
+        {
+          "value": "B",
+          "label": "Yes; |Σ|=6 necessarily."
+        },
+        {
+          "value": "C",
+          "label": "Yes; |Σ|=2 necessarily."
+        },
+        {
+          "value": "D",
+          "label": "Yes; |Σ|=3 necessarily."
+        }
+      ],
+      "answer": "A",
+      "explanation": "A labeled arrow may represent several δ entries. The equation |Q|×|Σ| counts entries, not graphical arrow objects.",
+      "sources": "S03 pp. 10-12; S08 p. 12"
+    },
+    {
+      "id": "T16-09",
+      "topic": "T16",
+      "title": "Alphabet in a DFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Two automata use alphabets {a} and {a,b}. What should be done before comparing complements over {a,b}?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Make every b transition accepting."
+        },
+        {
+          "value": "B",
+          "label": "Ignore b in both automata."
+        },
+        {
+          "value": "C",
+          "label": "Interpret both over {a,b} and specify rejecting behavior on newly added b inputs."
+        },
+        {
+          "value": "D",
+          "label": "Compare their numbers of states only."
+        }
+      ],
+      "answer": "C",
+      "explanation": "A common universe is required. Completing the smaller-alphabet recognizer with rejection on b preserves its original language as a subset of the larger universe.",
+      "sources": "S03 pp. 10-12; S08 p. 12"
+    },
+    {
+      "id": "T16-10",
+      "topic": "T16",
+      "title": "Alphabet in a DFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If input contains c but Σ={a,b}, what is formally true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "c is automatically treated as ε."
+        },
+        {
+          "value": "B",
+          "label": "c must be accepted because it is a character."
+        },
+        {
+          "value": "C",
+          "label": "c must loop to the current state."
+        },
+        {
+          "value": "D",
+          "label": "The input is outside Σ*, so the specified δ does not define its run."
+        }
+      ],
+      "answer": "D",
+      "explanation": "A recognizer's formal input domain is Σ*. An implementation may report an invalid-symbol error or extend the alphabet with rejecting behavior, but must define that policy.",
+      "sources": "S03 pp. 10-12; S08 p. 12"
+    },
+    {
+      "id": "T17-01",
+      "topic": "T17",
+      "title": "Transition function",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is the type of a complete DFA transition function?",
+      "options": [
+        {
+          "value": "A",
+          "label": "δ:Q×Σ→2^Q"
+        },
+        {
+          "value": "B",
+          "label": "δ:Q×Σ→Q"
+        },
+        {
+          "value": "C",
+          "label": "δ:Σ*→{true,false}"
+        },
+        {
+          "value": "D",
+          "label": "δ:Q→Σ"
+        }
+      ],
+      "answer": "B",
+      "explanation": "δ returns one next state. The powerset codomain is used for NFAs, and whole-word acceptance is a derived function.",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11"
+    },
+    {
+      "id": "T17-02",
+      "topic": "T17",
+      "title": "Transition function",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is δ*(q,ε)?",
+      "options": [
+        {
+          "value": "A",
+          "label": "q0 always"
+        },
+        {
+          "value": "B",
+          "label": "∅"
+        },
+        {
+          "value": "C",
+          "label": "q"
+        },
+        {
+          "value": "D",
+          "label": "A rejecting sink always"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Reading no input leaves the current state unchanged. The current state need not be the designated start.",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11"
+    },
+    {
+      "id": "T17-03",
+      "topic": "T17",
+      "title": "Transition function",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which recurrence correctly extends δ to words?",
+      "options": [
+        {
+          "value": "A",
+          "label": "δ*(q,wa)=δ*(q,w)"
+        },
+        {
+          "value": "B",
+          "label": "δ*(q,wa)=δ(δ*(q,w),a)"
+        },
+        {
+          "value": "C",
+          "label": "δ*(q,wa)=δ*(q,aw) always"
+        },
+        {
+          "value": "D",
+          "label": "δ*(q,wa)=δ(q,a)"
+        }
+      ],
+      "answer": "B",
+      "explanation": "First process the prefix w, then take one transition on the final symbol a. Order generally matters.",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11"
+    },
+    {
+      "id": "T17-04",
+      "topic": "T17",
+      "title": "Transition function",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let δ(A,0)=B, δ(A,1)=A, δ(B,0)=A, δ(B,1)=B. What is δ*(A,010)?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{A,B}"
+        },
+        {
+          "value": "B",
+          "label": "Undefined"
+        },
+        {
+          "value": "C",
+          "label": "A"
+        },
+        {
+          "value": "D",
+          "label": "B"
+        }
+      ],
+      "answer": "C",
+      "explanation": "A --0→ B --1→ B --0→ A. Deterministic transitions yield one state.",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11"
+    },
+    {
+      "id": "T17-05",
+      "topic": "T17",
+      "title": "Transition function",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Using δ(r,0)=2r mod 3 and δ(r,1)=(2r+1) mod 3, what is δ(2,1)?",
+      "options": [
+        {
+          "value": "A",
+          "label": "1"
+        },
+        {
+          "value": "B",
+          "label": "5"
+        },
+        {
+          "value": "C",
+          "label": "2"
+        },
+        {
+          "value": "D",
+          "label": "0"
+        }
+      ],
+      "answer": "C",
+      "explanation": "2×2+1=5 and 5 mod 3=2. The destination is the remainder, not the unreduced value.",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11"
+    },
+    {
+      "id": "T17-06",
+      "topic": "T17",
+      "title": "Transition function",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "What condition makes two drawn transitions violate determinism?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Same destination with different sources"
+        },
+        {
+          "value": "B",
+          "label": "Different sources with the same symbol"
+        },
+        {
+          "value": "C",
+          "label": "Same source with different symbols"
+        },
+        {
+          "value": "D",
+          "label": "Same source and symbol but different destinations"
+        }
+      ],
+      "answer": "D",
+      "explanation": "A function cannot assign two different outputs to one input pair. Sharing labels across different sources is normal.",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11"
+    },
+    {
+      "id": "T17-07",
+      "topic": "T17",
+      "title": "Transition function",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If a DFA table has a blank destination for (q,a), which statement is accurate?",
+      "options": [
+        {
+          "value": "A",
+          "label": "q must be unreachable."
+        },
+        {
+          "value": "B",
+          "label": "It is an ε transition."
+        },
+        {
+          "value": "C",
+          "label": "It is incomplete unless a destination is supplied by an explicit convention."
+        },
+        {
+          "value": "D",
+          "label": "It is automatically an accepting transition."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Under a total δ, every pair requires a value. A blank is not a state or an ε move.",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11"
+    },
+    {
+      "id": "T17-08",
+      "topic": "T17",
+      "title": "Transition function",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "For a parity DFA, δ(E,1)=O and δ(O,1)=E; 0 loops at both states. What is δ*(O,101)?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Undefined"
+        },
+        {
+          "value": "B",
+          "label": "O"
+        },
+        {
+          "value": "C",
+          "label": "{E,O}"
+        },
+        {
+          "value": "D",
+          "label": "E"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Starting at O, the two 1s toggle twice and the 0 leaves parity unchanged: O→E→E→O.",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11"
+    },
+    {
+      "id": "T17-09",
+      "topic": "T17",
+      "title": "Transition function",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which information does δ alone omit?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Which state-symbol pairs have destinations"
+        },
+        {
+          "value": "B",
+          "label": "Which states are accepting"
+        },
+        {
+          "value": "C",
+          "label": "Whether a given pair maps to q"
+        },
+        {
+          "value": "D",
+          "label": "How a changes the current state"
+        }
+      ],
+      "answer": "B",
+      "explanation": "F is a separate component of the DFA. The same transition graph with different final sets can recognize different languages.",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11"
+    },
+    {
+      "id": "T17-10",
+      "topic": "T17",
+      "title": "Transition function",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If δ*(p,w)=δ*(q,w), must p and q be equivalent?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes; all states reaching the same state can be merged."
+        },
+        {
+          "value": "B",
+          "label": "Yes; any common destination proves equivalence."
+        },
+        {
+          "value": "C",
+          "label": "Only if w is nonempty, then always yes."
+        },
+        {
+          "value": "D",
+          "label": "No; agreement after one chosen word is insufficient."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Equivalence requires agreement in acceptance for every suffix, including ε. One common destination does not establish that universal property.",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11"
+    },
+    {
+      "id": "T18-01",
+      "topic": "T18",
+      "title": "NFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is the codomain of an NFA transition function?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{accept,reject}"
+        },
+        {
+          "value": "B",
+          "label": "Q only"
+        },
+        {
+          "value": "C",
+          "label": "Σ*"
+        },
+        {
+          "value": "D",
+          "label": "2^Q"
+        }
+      ],
+      "answer": "D",
+      "explanation": "A transition returns a set of possible destinations, including the empty set. 2^Q means the set of all subsets of Q.",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8"
+    },
+    {
+      "id": "T18-02",
+      "topic": "T18",
+      "title": "NFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is required for NFA acceptance?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A path need only visit a final state before input ends."
+        },
+        {
+          "value": "B",
+          "label": "A majority of paths must accept."
+        },
+        {
+          "value": "C",
+          "label": "Every path must end in a final state."
+        },
+        {
+          "value": "D",
+          "label": "At least one complete consuming path can end in a final state."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Acceptance is existential over complete paths. Rejecting or unfinished alternatives do not cancel an accepting path.",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8"
+    },
+    {
+      "id": "T18-03",
+      "topic": "T18",
+      "title": "NFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Must an NFA have an ε transition?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No; multiple same-symbol successors alone can make it nondeterministic."
+        },
+        {
+          "value": "B",
+          "label": "Yes; every state needs one."
+        },
+        {
+          "value": "C",
+          "label": "Only accepting states need one."
+        },
+        {
+          "value": "D",
+          "label": "Yes; otherwise it cannot be an NFA."
+        }
+      ],
+      "answer": "A",
+      "explanation": "ε moves are permitted, not mandatory. A DFA interpreted with singleton destination sets is also an NFA.",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8"
+    },
+    {
+      "id": "T18-04",
+      "topic": "T18",
+      "title": "NFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "NFA: start s is nonfinal and loops on 0 and 1; s --1→ f; f is the only final state and has no outgoing edges. What language is recognized?",
+      "options": [
+        {
+          "value": "A",
+          "label": "All binary words"
+        },
+        {
+          "value": "B",
+          "label": "Binary words ending in 1"
+        },
+        {
+          "value": "C",
+          "label": "Binary words containing 1 anywhere"
+        },
+        {
+          "value": "D",
+          "label": "Only the word 1"
+        }
+      ],
+      "answer": "B",
+      "explanation": "An accepting branch chooses the transition to f on the last symbol. If input remains, that branch dies, while the s branch keeps trying.",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8"
+    },
+    {
+      "id": "T18-05",
+      "topic": "T18",
+      "title": "NFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "An NFA has nonfinal start s looping on 0 and 1, an extra s --1→ f edge, and only f final with no outgoing edges. Why is 10 rejected?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A final state automatically rejects its entering symbol."
+        },
+        {
+          "value": "B",
+          "label": "Every path accepts 10."
+        },
+        {
+          "value": "C",
+          "label": "The NFA cannot read 1."
+        },
+        {
+          "value": "D",
+          "label": "The branch at f after 1 cannot consume the final 0, and s is nonfinal."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Reaching f early is not enough. The only surviving state after the whole word is the nonfinal looping state s.",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8"
+    },
+    {
+      "id": "T18-06",
+      "topic": "T18",
+      "title": "NFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which is guaranteed for every NFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "An equivalent DFA with no more states exists."
+        },
+        {
+          "value": "B",
+          "label": "It has fewer states than every equivalent DFA."
+        },
+        {
+          "value": "C",
+          "label": "An equivalent DFA exists."
+        },
+        {
+          "value": "D",
+          "label": "It recognizes a nonregular language."
+        }
+      ],
+      "answer": "C",
+      "explanation": "NFAs and DFAs have the same language power. A DFA may need exponentially more states, and an NFA need not be smaller.",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8"
+    },
+    {
+      "id": "T18-07",
+      "topic": "T18",
+      "title": "NFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "To combine disjoint NFAs for R and S into one for R|S, which construction is safe?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Add a new start with ε edges to both old starts; retain both final sets."
+        },
+        {
+          "value": "B",
+          "label": "Connect every final of R to S and retain only S finals."
+        },
+        {
+          "value": "C",
+          "label": "Delete all final states."
+        },
+        {
+          "value": "D",
+          "label": "Require both branches to accept the same run."
+        }
+      ],
+      "answer": "A",
+      "explanation": "The new start chooses either component, implementing union. Connecting R's finals to S's start implements concatenation instead.",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8"
+    },
+    {
+      "id": "T18-08",
+      "topic": "T18",
+      "title": "NFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "For disjoint NFAs recognizing R and S, how is concatenation RS constructed?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Link R finals to S start by ε and make only S finals accepting."
+        },
+        {
+          "value": "B",
+          "label": "Require equal numbers of states."
+        },
+        {
+          "value": "C",
+          "label": "Keep all R finals accepting without qualification."
+        },
+        {
+          "value": "D",
+          "label": "Link both starts to a new start by ordinary a edges."
+        }
+      ],
+      "answer": "A",
+      "explanation": "A successful run must finish an R word and then an S word. Retaining R finals can wrongly accept an R word without the S portion when ε∉S.",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8"
+    },
+    {
+      "id": "T18-09",
+      "topic": "T18",
+      "title": "NFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "For a safe star construction on an arbitrary NFA, why use a fresh accepting start?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It makes every word acceptable."
+        },
+        {
+          "value": "B",
+          "label": "It admits zero repetitions without treating a return to the old start as a completed factor."
+        },
+        {
+          "value": "C",
+          "label": "It requires the original language to contain ε."
+        },
+        {
+          "value": "D",
+          "label": "It removes the need to consume symbols."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Add ε from the new start to the old start, and from old finals back to the old start and to a new final as needed. Reusing an old start with incoming edges can admit incomplete factors.",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8"
+    },
+    {
+      "id": "T18-10",
+      "topic": "T18",
+      "title": "NFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If every NFA branch dies before consuming all input, what is the result?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Undefined language"
+        },
+        {
+          "value": "B",
+          "label": "Rejection"
+        },
+        {
+          "value": "C",
+          "label": "Acceptance by ε automatically"
+        },
+        {
+          "value": "D",
+          "label": "Acceptance if one branch once visited a final state"
+        }
+      ],
+      "answer": "B",
+      "explanation": "No complete accepting path exists. A dead branch cannot ignore the unread suffix.",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8"
+    },
+    {
+      "id": "T19-01",
+      "topic": "T19",
+      "title": "Nondeterminism",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Does NFA acceptance depend on a random branch being lucky?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No; it asks whether any accepting path exists."
+        },
+        {
+          "value": "B",
+          "label": "Yes; acceptance means probability above one half."
+        },
+        {
+          "value": "C",
+          "label": "Yes; each run accepts with a probability."
+        },
+        {
+          "value": "D",
+          "label": "Only when ε edges are used."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Nondeterminism defines existence, not a randomized algorithm. A simulator must preserve all relevant possibilities.",
+      "sources": "S04 pp. 7-16"
+    },
+    {
+      "id": "T19-02",
+      "topic": "T19",
+      "title": "Nondeterminism",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "One complete path accepts and 99 complete paths reject. What does the NFA do?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept with probability 1/100 as its formal result"
+        },
+        {
+          "value": "B",
+          "label": "Require a tie-breaking rule"
+        },
+        {
+          "value": "C",
+          "label": "Accept"
+        },
+        {
+          "value": "D",
+          "label": "Reject"
+        }
+      ],
+      "answer": "C",
+      "explanation": "One witness path suffices. The number of rejecting alternatives does not affect language membership.",
+      "sources": "S04 pp. 7-16"
+    },
+    {
+      "id": "T19-03",
+      "topic": "T19",
+      "title": "Nondeterminism",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "No complete path accepts, but one reaches a final state with unread input. What happens?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept only if the unread part repeats"
+        },
+        {
+          "value": "B",
+          "label": "Accept"
+        },
+        {
+          "value": "C",
+          "label": "The machine becomes a DFA"
+        },
+        {
+          "value": "D",
+          "label": "Reject"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The full input must be consumed. An early final state does not satisfy acceptance for the longer word.",
+      "sources": "S04 pp. 7-16"
+    },
+    {
+      "id": "T19-04",
+      "topic": "T19",
+      "title": "Nondeterminism",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which simulation strategy is correct in general?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Update the entire set of possible states at each input position."
+        },
+        {
+          "value": "B",
+          "label": "Choose the shortest path and stop at its first final state."
+        },
+        {
+          "value": "C",
+          "label": "Reject whenever any branch dies."
+        },
+        {
+          "value": "D",
+          "label": "Choose the first outgoing edge and discard the others."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Set simulation retains every path's possible current state. Greedy selection can lose the only accepting path.",
+      "sources": "S04 pp. 7-16"
+    },
+    {
+      "id": "T19-05",
+      "topic": "T19",
+      "title": "Nondeterminism",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Why can an NFA for an ending pattern be compact?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It can store an unbounded integer in one state."
+        },
+        {
+          "value": "B",
+          "label": "It can recognize nonregular patterns."
+        },
+        {
+          "value": "C",
+          "label": "It can keep scanning while also trying candidate starts of the final pattern."
+        },
+        {
+          "value": "D",
+          "label": "It can read the input backward for free."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Branching lets the machine guess where the final pattern begins while another branch continues scanning. It does not add unbounded memory.",
+      "sources": "S04 pp. 7-16"
+    },
+    {
+      "id": "T19-06",
+      "topic": "T19",
+      "title": "Nondeterminism",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If an NFA has only one successor per symbol and no ε moves but some missing transitions, what is it?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Not a finite automaton"
+        },
+        {
+          "value": "B",
+          "label": "A deterministic partial transition structure, valid as an NFA"
+        },
+        {
+          "value": "C",
+          "label": "A machine that accepts all missing inputs"
+        },
+        {
+          "value": "D",
+          "label": "A complete DFA under the course definition"
+        }
+      ],
+      "answer": "B",
+      "explanation": "It has no branching, but completeness is missing for a formal DFA. Adding a rejecting sink completes it.",
+      "sources": "S04 pp. 7-16"
+    },
+    {
+      "id": "T19-07",
+      "topic": "T19",
+      "title": "Nondeterminism",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For a union construction, what does choosing either component mean?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Each branch must consume a different word."
+        },
+        {
+          "value": "B",
+          "label": "Both branches must accept."
+        },
+        {
+          "value": "C",
+          "label": "The same whole input is tested by one branch or the other."
+        },
+        {
+          "value": "D",
+          "label": "Half the input goes to each branch automatically."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Union tests membership in at least one language. Splitting the word into consecutive parts is concatenation, not union.",
+      "sources": "S04 pp. 7-16"
+    },
+    {
+      "id": "T19-08",
+      "topic": "T19",
+      "title": "Nondeterminism",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Can two distinct paths merge into the same state at the same input position?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes, but the word must then be accepted."
+        },
+        {
+          "value": "B",
+          "label": "No; path identity must be stored forever."
+        },
+        {
+          "value": "C",
+          "label": "Only if they used no symbols."
+        },
+        {
+          "value": "D",
+          "label": "Yes; keeping one copy of that state preserves future acceptance possibilities."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Future behavior depends on state and remaining input, not the history of how the state was reached.",
+      "sources": "S04 pp. 7-16"
+    },
+    {
+      "id": "T19-09",
+      "topic": "T19",
+      "title": "Nondeterminism",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which property makes subset simulation finite even when ε cycles exist?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It bans ε from regular expressions."
+        },
+        {
+          "value": "B",
+          "label": "It records visited states, so repeated visits add no new state."
+        },
+        {
+          "value": "C",
+          "label": "It treats every cycle as acceptance."
+        },
+        {
+          "value": "D",
+          "label": "It limits input length to |Q|."
+        }
+      ],
+      "answer": "B",
+      "explanation": "ε-closure is reachability in a finite graph. Repeating a state does not require a new configuration at the same input position.",
+      "sources": "S04 pp. 7-16"
+    },
+    {
+      "id": "T19-10",
+      "topic": "T19",
+      "title": "Nondeterminism",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If one NFA has more paths than another, must it recognize more words?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes; each path contributes a distinct word."
+        },
+        {
+          "value": "B",
+          "label": "Only if their alphabets agree, then yes."
+        },
+        {
+          "value": "C",
+          "label": "No; extra paths may accept no new word."
+        },
+        {
+          "value": "D",
+          "label": "Yes; all loops add ε to the language."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Multiple paths can spell the same word, or be nonaccepting. Languages record words rather than path counts.",
+      "sources": "S04 pp. 7-16"
+    },
+    {
+      "id": "T20-01",
+      "topic": "T20",
+      "title": "Multiple successor states",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "If δ(q,a)={r,s}, how many input symbols are consumed on either branch?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Two a symbols"
+        },
+        {
+          "value": "B",
+          "label": "One a"
+        },
+        {
+          "value": "C",
+          "label": "One symbol on r and zero on s"
+        },
+        {
+          "value": "D",
+          "label": "Zero symbols"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Both possible transitions are labeled a. Each alternative consumes the same one input symbol.",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21"
+    },
+    {
+      "id": "T20-02",
+      "topic": "T20",
+      "title": "Multiple successor states",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Let δ(p,a)={p,r} and δ(q,a)={r,s}. From {p,q}, what is the successor set before ε-closure?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{p,r,s}"
+        },
+        {
+          "value": "B",
+          "label": "{r}"
+        },
+        {
+          "value": "C",
+          "label": "{{p,r},{r,s}}"
+        },
+        {
+          "value": "D",
+          "label": "{p,q,r,s}"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Take the union of destination sets. Do not intersect them, keep a set of sets, or retain q merely because it was previously active.",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21"
+    },
+    {
+      "id": "T20-03",
+      "topic": "T20",
+      "title": "Multiple successor states",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What does δ(q,a)=∅ mean in an NFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "q has an ε self-loop."
+        },
+        {
+          "value": "B",
+          "label": "The whole NFA must reject every word."
+        },
+        {
+          "value": "C",
+          "label": "a is accepted automatically."
+        },
+        {
+          "value": "D",
+          "label": "No path from q can consume a."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The branch at q dies on a. Other simultaneously active states may still have valid a transitions.",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21"
+    },
+    {
+      "id": "T20-04",
+      "topic": "T20",
+      "title": "Multiple successor states",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "NFA: δ(s,0)={s,t}, δ(t,0)={u}; no ε edges. Starting at s, what states are possible after 00?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{u}"
+        },
+        {
+          "value": "B",
+          "label": "{s,t}"
+        },
+        {
+          "value": "C",
+          "label": "{s,t,u}"
+        },
+        {
+          "value": "D",
+          "label": "{s,u}"
+        }
+      ],
+      "answer": "C",
+      "explanation": "After the first 0 the set is {s,t}; the second produces {s,t} from s and {u} from t.",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21"
+    },
+    {
+      "id": "T20-05",
+      "topic": "T20",
+      "title": "Multiple successor states",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "NFA with start s: δ(s,0)={s,t}, δ(t,0)={u}, δ(u,0)=∅; there are no ε edges and only u is final. Is 00 accepted?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No; every active state must be final."
+        },
+        {
+          "value": "B",
+          "label": "Yes; u is possible after the whole word."
+        },
+        {
+          "value": "C",
+          "label": "Yes; because all paths end at u."
+        },
+        {
+          "value": "D",
+          "label": "No; s is also possible and nonfinal."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Acceptance requires at least one final state in the reached set. Here other nonfinal possibilities do not matter.",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21"
+    },
+    {
+      "id": "T20-06",
+      "topic": "T20",
+      "title": "Multiple successor states",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Suppose the current set is {p,q}, δ(p,b)=∅ and δ(q,b)={r}. What happens on b?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The whole NFA rejects immediately."
+        },
+        {
+          "value": "B",
+          "label": "The new set before closure is {r}."
+        },
+        {
+          "value": "C",
+          "label": "The new set remains {p,q}."
+        },
+        {
+          "value": "D",
+          "label": "p becomes an accepting sink."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Only the p branch disappears. The q branch consumes b and survives at r.",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21"
+    },
+    {
+      "id": "T20-07",
+      "topic": "T20",
+      "title": "Multiple successor states",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If two edges from q on a both lead to r, how many copies of r are stored in δ(q,a)?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Zero"
+        },
+        {
+          "value": "B",
+          "label": "Infinitely many"
+        },
+        {
+          "value": "C",
+          "label": "One"
+        },
+        {
+          "value": "D",
+          "label": "Two"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Transition results are sets. Duplicate identical edges do not change the recognized language.",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21"
+    },
+    {
+      "id": "T20-08",
+      "topic": "T20",
+      "title": "Multiple successor states",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If S contains five NFA states and each has two a-successors, how many distinct successors are possible at most before ε-closure?",
+      "options": [
+        {
+          "value": "A",
+          "label": "2^5 always"
+        },
+        {
+          "value": "B",
+          "label": "Exactly 5"
+        },
+        {
+          "value": "C",
+          "label": "min(10,|Q|)"
+        },
+        {
+          "value": "D",
+          "label": "Exactly 10"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The union has at most ten entries before deduplication and cannot exceed the entire NFA state set.",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21"
+    },
+    {
+      "id": "T20-09",
+      "topic": "T20",
+      "title": "Multiple successor states",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which rule correctly tests whether an active subset S is accepting?",
+      "options": [
+        {
+          "value": "A",
+          "label": "S=F"
+        },
+        {
+          "value": "B",
+          "label": "F⊆S"
+        },
+        {
+          "value": "C",
+          "label": "S⊆F"
+        },
+        {
+          "value": "D",
+          "label": "S∩F≠∅"
+        }
+      ],
+      "answer": "D",
+      "explanation": "At least one active state must be final. The other conditions are either too strong or wrong for empty sets.",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21"
+    },
+    {
+      "id": "T20-10",
+      "topic": "T20",
+      "title": "Multiple successor states",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "From the empty active set ∅, what is the successor on any symbol?",
+      "options": [
+        {
+          "value": "A",
+          "label": "F"
+        },
+        {
+          "value": "B",
+          "label": "{q0}"
+        },
+        {
+          "value": "C",
+          "label": "Q"
+        },
+        {
+          "value": "D",
+          "label": "∅"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The union over no active states is empty, and ε-closure of the empty set is empty. No branch restarts automatically.",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21"
+    },
+    {
+      "id": "T21-01",
+      "topic": "T21",
+      "title": "Epsilon transitions",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What does an ε transition consume?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The entire input"
+        },
+        {
+          "value": "B",
+          "label": "The next available symbol"
+        },
+        {
+          "value": "C",
+          "label": "No input symbols"
+        },
+        {
+          "value": "D",
+          "label": "One blank character"
+        }
+      ],
+      "answer": "C",
+      "explanation": "ε means the empty word, not whitespace or a wildcard.",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18"
+    },
+    {
+      "id": "T21-02",
+      "topic": "T21",
+      "title": "Epsilon transitions",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Does ε-closure({q}) contain q if q has no ε edges?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if q is final."
+        },
+        {
+          "value": "B",
+          "label": "No; at least one move is required."
+        },
+        {
+          "value": "C",
+          "label": "Only if q is the start."
+        },
+        {
+          "value": "D",
+          "label": "Yes; zero moves are allowed."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Reachability by zero or more ε moves includes the starting state itself.",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18"
+    },
+    {
+      "id": "T21-03",
+      "topic": "T21",
+      "title": "Epsilon transitions",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Given p --ε→ q --ε→ r and no other ε edges, what is ε-closure({p})?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{q,r}"
+        },
+        {
+          "value": "B",
+          "label": "{p,q}"
+        },
+        {
+          "value": "C",
+          "label": "{q}"
+        },
+        {
+          "value": "D",
+          "label": "{p,q,r}"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Follow the full chain and include p. Looking only one edge ahead misses r.",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18"
+    },
+    {
+      "id": "T21-04",
+      "topic": "T21",
+      "title": "Epsilon transitions",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Given p --ε→ q and q --a→ r, what is ε-closure({p})?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{r}"
+        },
+        {
+          "value": "B",
+          "label": "∅"
+        },
+        {
+          "value": "C",
+          "label": "{p,q,r}"
+        },
+        {
+          "value": "D",
+          "label": "{p,q}"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Closure follows ε edges only. Reaching r requires consuming a.",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18"
+    },
+    {
+      "id": "T21-05",
+      "topic": "T21",
+      "title": "Epsilon transitions",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If q0 is nonfinal but ε-closure({q0}) contains a final state, is ε accepted?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if a loop exists"
+        },
+        {
+          "value": "B",
+          "label": "Only if all closure states are final"
+        },
+        {
+          "value": "C",
+          "label": "Yes"
+        },
+        {
+          "value": "D",
+          "label": "No; q0 must itself be final in every NFA"
+        }
+      ],
+      "answer": "C",
+      "explanation": "An NFA can reach a final state without consuming input. The DFA criterion q0∈F is a special case with no ε moves.",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18"
+    },
+    {
+      "id": "T21-06",
+      "topic": "T21",
+      "title": "Epsilon transitions",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Given p --ε→ q and q --ε→ p, does computing closure require infinitely many stored states?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if p is final."
+        },
+        {
+          "value": "B",
+          "label": "Yes; ε has infinite length."
+        },
+        {
+          "value": "C",
+          "label": "No; the closure is {p,q}."
+        },
+        {
+          "value": "D",
+          "label": "Yes; each loop creates a fresh state."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Repeated graph visits do not create new states. Track visited states to terminate.",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18"
+    },
+    {
+      "id": "T21-07",
+      "topic": "T21",
+      "title": "Epsilon transitions",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "An NFA takes a --symbol transition into r, then r --ε→ f with f final. Can this help acceptance after the last input symbol?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if a is the empty word."
+        },
+        {
+          "value": "B",
+          "label": "Only if r is also final."
+        },
+        {
+          "value": "C",
+          "label": "Yes; ε moves may occur after input is consumed."
+        },
+        {
+          "value": "D",
+          "label": "No; all ε moves must precede the first symbol."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Acceptance allows a path whose consumed labels form exactly the input, including trailing ε edges.",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18"
+    },
+    {
+      "id": "T21-08",
+      "topic": "T21",
+      "title": "Epsilon transitions",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which identity is true for ε-closure E?",
+      "options": [
+        {
+          "value": "A",
+          "label": "E(S)=S for every NFA"
+        },
+        {
+          "value": "B",
+          "label": "E(∅)=Q"
+        },
+        {
+          "value": "C",
+          "label": "E(S) removes all nonfinal states"
+        },
+        {
+          "value": "D",
+          "label": "E(E(S))=E(S)"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Once every ε-reachable state is included, applying closure again adds nothing. Closure is independent of final status.",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18"
+    },
+    {
+      "id": "T21-09",
+      "topic": "T21",
+      "title": "Epsilon transitions",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "How is ε-closure of a set S obtained?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Intersect the ε-closures of its member states."
+        },
+        {
+          "value": "B",
+          "label": "Union the ε-closures of its member states."
+        },
+        {
+          "value": "C",
+          "label": "Add every state with an incoming symbol edge."
+        },
+        {
+          "value": "D",
+          "label": "Keep only the first state's closure."
+        }
+      ],
+      "answer": "B",
+      "explanation": "A state is reachable from S if reachable from any member. This gives a union.",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18"
+    },
+    {
+      "id": "T21-10",
+      "topic": "T21",
+      "title": "Epsilon transitions",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which is the correct NFA update for an ε-closed active set S on a?",
+      "options": [
+        {
+          "value": "A",
+          "label": "E(⋃q∈S δ(q,a))"
+        },
+        {
+          "value": "B",
+          "label": "E(S) without consuming a"
+        },
+        {
+          "value": "C",
+          "label": "δ(q0,a) regardless of S"
+        },
+        {
+          "value": "D",
+          "label": "⋂q∈S δ(q,a)"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Consume one a from every currently possible state, combine destinations, then include all ε continuations.",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18"
+    },
+    {
+      "id": "T22-01",
+      "topic": "T22",
+      "title": "Scanner or lexer",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is the primary input/output transformation of a scanner?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Source program to proof of correctness"
+        },
+        {
+          "value": "B",
+          "label": "Character stream to token stream"
+        },
+        {
+          "value": "C",
+          "label": "Token stream to parse tree"
+        },
+        {
+          "value": "D",
+          "label": "Parse tree to machine code"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Lexical analysis groups characters into tokens. Parsing and code generation are later compiler responsibilities.",
+      "sources": "S08 pp. 3-7, 15"
+    },
+    {
+      "id": "T22-02",
+      "topic": "T22",
+      "title": "Scanner or lexer",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which pair names the same compiler stage here?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Scanner and parser"
+        },
+        {
+          "value": "B",
+          "label": "Parser and assembler"
+        },
+        {
+          "value": "C",
+          "label": "Scanner and lexer"
+        },
+        {
+          "value": "D",
+          "label": "Lexer and optimizer"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Scanner and lexer are synonyms for the lexical-analysis component.",
+      "sources": "S08 pp. 3-7, 15"
+    },
+    {
+      "id": "T22-03",
+      "topic": "T22",
+      "title": "Scanner or lexer",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which task belongs primarily to a parser rather than a basic scanner?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Reporting an unrecognized input character"
+        },
+        {
+          "value": "B",
+          "label": "Checking how tokens fit the language's grammar"
+        },
+        {
+          "value": "C",
+          "label": "Skipping a comment under the lexical rules"
+        },
+        {
+          "value": "D",
+          "label": "Recognizing a run of digits as an integer token"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Grammar operates on token structure. The other tasks are lexical.",
+      "sources": "S08 pp. 3-7, 15"
+    },
+    {
+      "id": "T22-04",
+      "topic": "T22",
+      "title": "Scanner or lexer",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "With tokens ID=[a-z]+, INT=[0-9]+ and PLUS='+', which input contains a lexical error if spaces are skipped?",
+      "options": [
+        {
+          "value": "A",
+          "label": "x+2"
+        },
+        {
+          "value": "B",
+          "label": "x@2"
+        },
+        {
+          "value": "C",
+          "label": "123"
+        },
+        {
+          "value": "D",
+          "label": "x 2"
+        }
+      ],
+      "answer": "B",
+      "explanation": "@ matches no declared token. x 2 may later be a syntax error, but both lexemes can still be tokenized.",
+      "sources": "S08 pp. 3-7, 15"
+    },
+    {
+      "id": "T22-05",
+      "topic": "T22",
+      "title": "Scanner or lexer",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Does successful tokenization guarantee a syntactically correct program?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes; DFAs check every grammar rule."
+        },
+        {
+          "value": "B",
+          "label": "No; valid tokens can appear in an invalid order."
+        },
+        {
+          "value": "C",
+          "label": "Only if the scanner is generated."
+        },
+        {
+          "value": "D",
+          "label": "Only if tokens carry values."
+        }
+      ],
+      "answer": "B",
+      "explanation": "For example, valid operator and operand tokens may still form a malformed expression. Parser and semantic checks remain separate.",
+      "sources": "S08 pp. 3-7, 15"
+    },
+    {
+      "id": "T22-06",
+      "topic": "T22",
+      "title": "Scanner or lexer",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "What is complete-pass scanning?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Produce the entire token stream before returning it."
+        },
+        {
+          "value": "B",
+          "label": "Accept only if every DFA state is final."
+        },
+        {
+          "value": "C",
+          "label": "Produce exactly one token per source character."
+        },
+        {
+          "value": "D",
+          "label": "Parse the program's entire grammar."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Complete-pass and iterative scanning describe output scheduling, not different token languages.",
+      "sources": "S08 pp. 3-7, 15"
+    },
+    {
+      "id": "T22-07",
+      "topic": "T22",
+      "title": "Scanner or lexer",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "What is iterative scanning?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Repeat a token until a parser accepts it."
+        },
+        {
+          "value": "B",
+          "label": "Reread the whole file once per token type."
+        },
+        {
+          "value": "C",
+          "label": "Return the next token when requested."
+        },
+        {
+          "value": "D",
+          "label": "Return only the final token."
+        }
+      ],
+      "answer": "C",
+      "explanation": "A parser can request tokens one at a time while the scanner retains its input position.",
+      "sources": "S08 pp. 3-7, 15"
+    },
+    {
+      "id": "T22-08",
+      "topic": "T22",
+      "title": "Scanner or lexer",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "When may a scanner safely discard whitespace?",
+      "options": [
+        {
+          "value": "A",
+          "label": "When the language's lexical rules declare that whitespace insignificant at that position."
+        },
+        {
+          "value": "B",
+          "label": "Only when whitespace is not in the character alphabet."
+        },
+        {
+          "value": "C",
+          "label": "Never, in any language."
+        },
+        {
+          "value": "D",
+          "label": "Always, including inside string literals."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Spaces inside a string can be part of its value, and some languages give indentation meaning. The course examples simplify this policy.",
+      "sources": "S08 pp. 3-7, 15"
+    },
+    {
+      "id": "T22-09",
+      "topic": "T22",
+      "title": "Scanner or lexer",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Why does a scanner need more than a bare yes/no DFA recognizer?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Scanners must recognize nonregular token patterns."
+        },
+        {
+          "value": "B",
+          "label": "A DFA can recognize only one-word languages."
+        },
+        {
+          "value": "C",
+          "label": "It must identify token boundaries and types and often return values."
+        },
+        {
+          "value": "D",
+          "label": "A DFA cannot read characters."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The automaton supports recognition, while scanner logic handles repeated tokens, outputs, errors, and selection policies.",
+      "sources": "S08 pp. 3-7, 15"
+    },
+    {
+      "id": "T22-10",
+      "topic": "T22",
+      "title": "Scanner or lexer",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which statement about comments is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "They can be removed without considering string-literal boundaries."
+        },
+        {
+          "value": "B",
+          "label": "They are always passed unchanged to the parser."
+        },
+        {
+          "value": "C",
+          "label": "They can be recognized and skipped while still affecting source position tracking."
+        },
+        {
+          "value": "D",
+          "label": "Every slash begins a comment in every language."
+        }
+      ],
+      "answer": "C",
+      "explanation": "A scanner follows the specified comment and string rules. Skipping a comment does not remove the need to maintain line/column locations.",
+      "sources": "S08 pp. 3-7, 15"
+    },
+    {
+      "id": "T23-01",
+      "topic": "T23",
+      "title": "Token and token stream",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "For (IDENTIFIER,\"myVar\"), which is the token type?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Both concatenated together"
+        },
+        {
+          "value": "B",
+          "label": "myVar"
+        },
+        {
+          "value": "C",
+          "label": "IDENTIFIER"
+        },
+        {
+          "value": "D",
+          "label": "The quote characters"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The type classifies the lexeme; the value or spelling carries its particular content.",
+      "sources": "S08 pp. 4-7, 13, 15"
+    },
+    {
+      "id": "T23-02",
+      "topic": "T23",
+      "title": "Token and token stream",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is a token stream?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A set of all regexes"
+        },
+        {
+          "value": "B",
+          "label": "An ordered sequence of tokens"
+        },
+        {
+          "value": "C",
+          "label": "A single accepting DFA state"
+        },
+        {
+          "value": "D",
+          "label": "An unordered set of token types"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Order matters for parsing. Repeated tokens remain repeated sequence elements.",
+      "sources": "S08 pp. 4-7, 13, 15"
+    },
+    {
+      "id": "T23-03",
+      "topic": "T23",
+      "title": "Token and token stream",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "With ID=[a-z][a-z0-9]* and INT=[0-9]+, how is abc42 tokenized by maximal munch?",
+      "options": [
+        {
+          "value": "A",
+          "label": "One ID token with lexeme abc42"
+        },
+        {
+          "value": "B",
+          "label": "Five one-character tokens"
+        },
+        {
+          "value": "C",
+          "label": "ID abc followed by INT 42"
+        },
+        {
+          "value": "D",
+          "label": "A lexical error because digits occur"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The entire five-character lexeme matches ID, so it beats the shorter accepted prefix abc.",
+      "sources": "S08 pp. 4-7, 13, 15"
+    },
+    {
+      "id": "T23-04",
+      "topic": "T23",
+      "title": "Token and token stream",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "With operators '=' and '==', what is the first token in === under longest-match scanning?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ε"
+        },
+        {
+          "value": "B",
+          "label": "="
+        },
+        {
+          "value": "C",
+          "label": "=="
+        },
+        {
+          "value": "D",
+          "label": "==="
+        }
+      ],
+      "answer": "C",
+      "explanation": "The longest declared operator prefix is two characters. A subsequent '=' token remains.",
+      "sources": "S08 pp. 4-7, 13, 15"
+    },
+    {
+      "id": "T23-05",
+      "topic": "T23",
+      "title": "Token and token stream",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Rules include keyword if and ID=[a-z]+. With longest match first and keyword priority on ties, how is ifx tokenized?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ID(if) followed by ID(x)"
+        },
+        {
+          "value": "B",
+          "label": "KW_IF followed by a lexical error"
+        },
+        {
+          "value": "C",
+          "label": "ID(ifx)"
+        },
+        {
+          "value": "D",
+          "label": "KW_IF followed by ID(x)"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The three-character ID is longer than the two-character keyword. Tie priority does not override a longer match.",
+      "sources": "S08 pp. 4-7, 13, 15"
+    }
+  ]
+}

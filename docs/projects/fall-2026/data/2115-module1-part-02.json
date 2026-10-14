@@ -1,0 +1,2179 @@
+{
+  "questions": [
+    {
+      "id": "T08-06",
+      "topic": "T08",
+      "title": "Regular language",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let L={0^n1^n:0≤n≤20}. Is L regular?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if n=0 is removed."
+        },
+        {
+          "value": "B",
+          "label": "No; it contains ε."
+        },
+        {
+          "value": "C",
+          "label": "No; matching two counts is always nonregular."
+        },
+        {
+          "value": "D",
+          "label": "Yes; it is finite."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The bound 20 is fixed, so only 21 words occur. Unbounded equality is the obstruction in {0^n1^n:n≥0}.",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7"
+    },
+    {
+      "id": "T08-07",
+      "topic": "T08",
+      "title": "Regular language",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which recognizer pairing matches the language-class table?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Regular languages - DFAs"
+        },
+        {
+          "value": "B",
+          "label": "All recursively enumerable languages - DFAs"
+        },
+        {
+          "value": "C",
+          "label": "Regular languages - only Turing machines"
+        },
+        {
+          "value": "D",
+          "label": "Context-free languages - only DFAs"
+        }
+      ],
+      "answer": "A",
+      "explanation": "DFAs characterize regular languages. The table associates context-free languages with pushdown automata, context-sensitive languages with linearly bounded nondeterministic Turing machines, and recursively enumerable languages with Turing machines; larger models can also recognize regular languages.",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7"
+    },
+    {
+      "id": "T08-08",
+      "topic": "T08",
+      "title": "Regular language",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Why does a regular token vocabulary not imply a regular programming-language grammar?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Token vocabularies are never regular."
+        },
+        {
+          "value": "B",
+          "label": "A finite alphabet makes all syntax regular."
+        },
+        {
+          "value": "C",
+          "label": "Every token stream must already be a legal program."
+        },
+        {
+          "value": "D",
+          "label": "Combining tokens into nested structures may require unbounded matching."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Lexical patterns and full program structure are different languages. Unbounded matching of nested delimiters cannot in general be handled by a DFA alone.",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7"
+    },
+    {
+      "id": "T08-09",
+      "topic": "T08",
+      "title": "Regular language",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If L is not regular, which conclusion follows?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No finite DFA recognizes exactly L."
+        },
+        {
+          "value": "B",
+          "label": "L has an infinite word."
+        },
+        {
+          "value": "C",
+          "label": "No algorithm can recognize L."
+        },
+        {
+          "value": "D",
+          "label": "L has no alphabet."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Nonregular means outside the expressive power of finite automata and formal regexes. It does not imply uncomputability or infinite individual words.",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7"
+    },
+    {
+      "id": "T08-10",
+      "topic": "T08",
+      "title": "Regular language",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Can a regular language have a nonregular subset?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes; {0^n1^n:n≥0} is a subset of {0,1}*."
+        },
+        {
+          "value": "B",
+          "label": "No; regularity passes to all subsets."
+        },
+        {
+          "value": "C",
+          "label": "Only if the regular language is finite."
+        },
+        {
+          "value": "D",
+          "label": "Only if the subset contains infinite words."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Σ* is regular and contains every language over Σ, including nonregular ones. A finite language cannot have a nonregular subset because its subsets are finite.",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7"
+    },
+    {
+      "id": "T09-01",
+      "topic": "T09",
+      "title": "Regular-language proofs",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which is enough to prove L regular?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Fail to find a pumping-lemma contradiction."
+        },
+        {
+          "value": "B",
+          "label": "Show L is a subset of Σ*."
+        },
+        {
+          "value": "C",
+          "label": "Construct a regex and prove its language equals L."
+        },
+        {
+          "value": "D",
+          "label": "List ten accepted examples."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Every language over Σ is a subset of Σ*. Exact equality with a regex language is a regularity proof; finite tests and unsuccessful proof attempts are not.",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7"
+    },
+    {
+      "id": "T09-02",
+      "topic": "T09",
+      "title": "Regular-language proofs",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What must be established when claiming L=L(R)?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only one word of L matches R."
+        },
+        {
+          "value": "B",
+          "label": "Only L and L(R) are both infinite."
+        },
+        {
+          "value": "C",
+          "label": "Only every word of L matches R."
+        },
+        {
+          "value": "D",
+          "label": "Every word of L matches R and every match of R belongs to L."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Two set inclusions establish equality. A construction that accepts too much or too little does not recognize the target exactly.",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7"
+    },
+    {
+      "id": "T09-03",
+      "topic": "T09",
+      "title": "Regular-language proofs",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which regex proves that unary words whose length is divisible by 4 are regular?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(aaaa)*"
+        },
+        {
+          "value": "B",
+          "label": "aaaa"
+        },
+        {
+          "value": "C",
+          "label": "aaaa*"
+        },
+        {
+          "value": "D",
+          "label": "a*aaaa"
+        }
+      ],
+      "answer": "A",
+      "explanation": "(aaaa)* builds lengths 0,4,8,... . aaaa* means at least three a symbols, a*aaaa means at least four, and aaaa has one length only.",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7"
+    },
+    {
+      "id": "T09-04",
+      "topic": "T09",
+      "title": "Regular-language proofs",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which expression describes unary words whose length is not divisible by 3?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a(aa)*"
+        },
+        {
+          "value": "B",
+          "label": "(aaa)*"
+        },
+        {
+          "value": "C",
+          "label": "(aaa)*(a|aa)"
+        },
+        {
+          "value": "D",
+          "label": "a*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The residue is 1 or 2 modulo 3. ε is excluded because zero is divisible by 3.",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7"
+    },
+    {
+      "id": "T09-05",
+      "topic": "T09",
+      "title": "Regular-language proofs",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "A proof uses {0},{1}, union, concatenation and star. What justifies the last construction step?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A chosen word has finite length"
+        },
+        {
+          "value": "B",
+          "label": "The language has a finite alphabet"
+        },
+        {
+          "value": "C",
+          "label": "A graph could probably be drawn"
+        },
+        {
+          "value": "D",
+          "label": "Closure of regular languages under the operation actually used"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Base languages are regular, and each subsequent operation must preserve regularity. A finite alphabet alone does not suffice.",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7"
+    },
+    {
+      "id": "T09-06",
+      "topic": "T09",
+      "title": "Regular-language proofs",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which is the correct regex for nonempty binary words with equal first and last symbols, including length one?",
+      "options": [
+        {
+          "value": "A",
+          "label": "0(0|1)*0|1(0|1)*1"
+        },
+        {
+          "value": "B",
+          "label": "0|1|0(0|1)*0|1(0|1)*1"
+        },
+        {
+          "value": "C",
+          "label": "(0|1)*"
+        },
+        {
+          "value": "D",
+          "label": "ε|0(0|1)*0|1(0|1)*1"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The two one-symbol words need separate alternatives. The endpoint alternatives require at least two symbols, and ε has no first or last symbol.",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7"
+    },
+    {
+      "id": "T09-07",
+      "topic": "T09",
+      "title": "Regular-language proofs",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which regex describes an even number of 1s with arbitrary 0s, including zero 1s?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(0*10*10*)*"
+        },
+        {
+          "value": "B",
+          "label": "(10*)*"
+        },
+        {
+          "value": "C",
+          "label": "0*10*"
+        },
+        {
+          "value": "D",
+          "label": "0*(10*10*)*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "A leading 0* covers all-zero words, and each repeated block contributes two 1s. The second expression misses nonempty all-zero words.",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7"
+    },
+    {
+      "id": "T09-08",
+      "topic": "T09",
+      "title": "Regular-language proofs",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "To prove Σ*{0^n1^n:n≥1}Σ*=Σ*01Σ*, which missing direction matters?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The nonregular middle language forces the product to be nonregular."
+        },
+        {
+          "value": "B",
+          "label": "Every word containing 01 contains 0011."
+        },
+        {
+          "value": "C",
+          "label": "Every word containing 01 is included by choosing n=1."
+        },
+        {
+          "value": "D",
+          "label": "Every word is in both languages."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The forward direction uses the boundary 01 inside each 0^n1^n. The reverse direction uses n=1; nonregular components can yield a regular product.",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7"
+    },
+    {
+      "id": "T09-09",
+      "topic": "T09",
+      "title": "Regular-language proofs",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "For positive integers m,n, which construction describes lengths divisible by both m and n?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(Σ^(m+n))*"
+        },
+        {
+          "value": "B",
+          "label": "(Σ^m)*∪(Σ^n)*"
+        },
+        {
+          "value": "C",
+          "label": "(Σ^lcm(m,n))*"
+        },
+        {
+          "value": "D",
+          "label": "Σ^mΣ^n"
+        }
+      ],
+      "answer": "C",
+      "explanation": "A common multiple is a multiple of lcm(m,n). Union expresses 'or'; a single concatenation has fixed length m+n.",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7"
+    },
+    {
+      "id": "T09-10",
+      "topic": "T09",
+      "title": "Regular-language proofs",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "A proposed DFA passes 100 test words. What is the strongest justified conclusion?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It is necessarily minimal."
+        },
+        {
+          "value": "B",
+          "label": "It recognizes the intended language for all inputs."
+        },
+        {
+          "value": "C",
+          "label": "It cannot contain a dead state."
+        },
+        {
+          "value": "D",
+          "label": "It has passed those tests; a general correctness argument is still needed."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Finite tests may miss a longer counterexample. State invariants or exact equivalence checking can establish correctness for all inputs.",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7"
+    },
+    {
+      "id": "T10-01",
+      "topic": "T10",
+      "title": "Closure properties",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "If R and S are regular over the same alphabet, which is guaranteed regular?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every subset of R"
+        },
+        {
+          "value": "B",
+          "label": "R\\S"
+        },
+        {
+          "value": "C",
+          "label": "Every superset of S"
+        },
+        {
+          "value": "D",
+          "label": "Every arbitrary infinite union of regular languages"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Difference is a closure operation. Arbitrary subsets, supersets and infinite unions may be nonregular.",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4"
+    },
+    {
+      "id": "T10-02",
+      "topic": "T10",
+      "title": "Closure properties",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which identity correctly expresses intersection using union and complement?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R∩S=overline(R)∪overline(S)"
+        },
+        {
+          "value": "B",
+          "label": "R∩S=R∪S"
+        },
+        {
+          "value": "C",
+          "label": "R∩S=overline(overline(R)∪overline(S))"
+        },
+        {
+          "value": "D",
+          "label": "R∩S=overline(R∪S)"
+        }
+      ],
+      "answer": "C",
+      "explanation": "De Morgan's law requires complementing each input and the union. All complements use the same universe Σ*.",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4"
+    },
+    {
+      "id": "T10-03",
+      "topic": "T10",
+      "title": "Closure properties",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which identity expresses set difference?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R\\S=R∩overline(S)"
+        },
+        {
+          "value": "B",
+          "label": "R\\S=R∪S"
+        },
+        {
+          "value": "C",
+          "label": "R\\S=overline(R)∩S"
+        },
+        {
+          "value": "D",
+          "label": "R\\S=S\\R"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Keep words in R that are not in S. Difference is not generally symmetric.",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4"
+    },
+    {
+      "id": "T10-04",
+      "topic": "T10",
+      "title": "Closure properties",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If R is regular, what can be said about its reversal R^rev?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It is always finite."
+        },
+        {
+          "value": "B",
+          "label": "It is always equal to R."
+        },
+        {
+          "value": "C",
+          "label": "It is regular."
+        },
+        {
+          "value": "D",
+          "label": "It is regular only if ε∈R."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Regular languages are closed under reversal. For R={ab}, its reversal is {ba}, so equality is not guaranteed.",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4"
+    },
+    {
+      "id": "T10-05",
+      "topic": "T10",
+      "title": "Closure properties",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let N be nonregular. Which expression is necessarily nonregular?",
+      "options": [
+        {
+          "value": "A",
+          "label": "N\\N"
+        },
+        {
+          "value": "B",
+          "label": "N∪Σ*"
+        },
+        {
+          "value": "C",
+          "label": "N∩∅"
+        },
+        {
+          "value": "D",
+          "label": "overline(N)"
+        }
+      ],
+      "answer": "D",
+      "explanation": "If the complement were regular, complementing again would make N regular. The other three expressions are Σ*, ∅ and ∅.",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4"
+    },
+    {
+      "id": "T10-06",
+      "topic": "T10",
+      "title": "Closure properties",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If N is nonregular and F is finite, what is N∪F?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Always finite"
+        },
+        {
+          "value": "B",
+          "label": "Always regular"
+        },
+        {
+          "value": "C",
+          "label": "Nonregular"
+        },
+        {
+          "value": "D",
+          "label": "Necessarily equal to N"
+        }
+      ],
+      "answer": "C",
+      "explanation": "If N∪F were regular, then N=((N∪F)\\F)∪(N∩F) would be regular because N∩F is finite. This is a contradiction.",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4"
+    },
+    {
+      "id": "T10-07",
+      "topic": "T10",
+      "title": "Closure properties",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If N is nonregular and R is regular, what can be said about N∩R?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It is always empty."
+        },
+        {
+          "value": "B",
+          "label": "It may be regular or nonregular."
+        },
+        {
+          "value": "C",
+          "label": "It is always nonregular."
+        },
+        {
+          "value": "D",
+          "label": "It is always regular."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Taking R=∅ gives ∅; taking R=Σ* gives N. Closure does not apply when one input is already nonregular.",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4"
+    },
+    {
+      "id": "T10-08",
+      "topic": "T10",
+      "title": "Closure properties",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which example disproves 'a regular union must have regular components'?",
+      "options": [
+        {
+          "value": "A",
+          "label": "∅∪∅=∅"
+        },
+        {
+          "value": "B",
+          "label": "a*∪a*=a*"
+        },
+        {
+          "value": "C",
+          "label": "{a}∪{b}={a,b}"
+        },
+        {
+          "value": "D",
+          "label": "N∪overline(N)=Σ*, with N nonregular"
+        }
+      ],
+      "answer": "D",
+      "explanation": "A counterexample must satisfy the premise and violate the conclusion. Only the first has a regular result with a nonregular component.",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4"
+    },
+    {
+      "id": "T10-09",
+      "topic": "T10",
+      "title": "Closure properties",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which claim is valid about arbitrary infinite unions?",
+      "options": [
+        {
+          "value": "A",
+          "label": "They are always regular by union closure."
+        },
+        {
+          "value": "B",
+          "label": "They are never regular."
+        },
+        {
+          "value": "C",
+          "label": "They are finite whenever the alphabet is finite."
+        },
+        {
+          "value": "D",
+          "label": "They can be nonregular even when every component is regular."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The union over n≥0 of the singletons {0^n1^n} is nonregular, although each singleton is regular. Closure guarantees finite unions.",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4"
+    },
+    {
+      "id": "T10-10",
+      "topic": "T10",
+      "title": "Closure properties",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If R^rev is regular, what follows about R?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R may be nonregular because all converse closure statements fail."
+        },
+        {
+          "value": "B",
+          "label": "R contains only palindromes."
+        },
+        {
+          "value": "C",
+          "label": "R is finite."
+        },
+        {
+          "value": "D",
+          "label": "R is regular because reversal twice returns R."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Reversal, like complement, is an involution. Some backward arguments are valid; do not generalize failures of union or star to every operation.",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4"
+    },
+    {
+      "id": "T11-01",
+      "topic": "T11",
+      "title": "Nonregular languages",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which is a standard nonregular language from this module?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{0011}"
+        },
+        {
+          "value": "B",
+          "label": "{0^n1^n:n≥0}"
+        },
+        {
+          "value": "C",
+          "label": "(01)*"
+        },
+        {
+          "value": "D",
+          "label": "0*1*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The first requires equal unbounded block lengths. The others have regexes or are finite.",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3"
+    },
+    {
+      "id": "T11-02",
+      "topic": "T11",
+      "title": "Nonregular languages",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Why is 'L is infinite, so L is nonregular' invalid?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a* is infinite and regular."
+        },
+        {
+          "value": "B",
+          "label": "Nonregular languages contain infinite words."
+        },
+        {
+          "value": "C",
+          "label": "Every language is finite."
+        },
+        {
+          "value": "D",
+          "label": "No regular language contains ε."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Infinite cardinality is compatible with a finite repeating automaton. Individual words remain finite.",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3"
+    },
+    {
+      "id": "T11-03",
+      "topic": "T11",
+      "title": "Nonregular languages",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "In a closure-based contradiction, which language should be used as a filter?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A finite sample of accepted words"
+        },
+        {
+          "value": "B",
+          "label": "Any nonregular language"
+        },
+        {
+          "value": "C",
+          "label": "The target itself without further justification"
+        },
+        {
+          "value": "D",
+          "label": "A known regular language that isolates a known nonregular part"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Assuming the target regular then intersecting with a known regular filter forces a regular result, contradicting a known nonregular identity.",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3"
+    },
+    {
+      "id": "T11-04",
+      "topic": "T11",
+      "title": "Nonregular languages",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let L={w∈{a,b,c,d}*:|w|a+|w|b<|w|c+|w|d}. What is L∩a*c*?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{a^i c^j:i<j}"
+        },
+        {
+          "value": "B",
+          "label": "∅"
+        },
+        {
+          "value": "C",
+          "label": "a*c*"
+        },
+        {
+          "value": "D",
+          "label": "{a^i c^i:i≥0}"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The filter removes b and d and puts all a symbols before c symbols, leaving the strict comparison i<j.",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3"
+    },
+    {
+      "id": "T11-05",
+      "topic": "T11",
+      "title": "Nonregular languages",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let P={a^p:p prime}. Why is a*\\P nonregular?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every complement is nonregular."
+        },
+        {
+          "value": "B",
+          "label": "If it were regular, complementing within a* would make P regular."
+        },
+        {
+          "value": "C",
+          "label": "Removing any infinite subset destroys regularity."
+        },
+        {
+          "value": "D",
+          "label": "It contains ε."
+        }
+      ],
+      "answer": "B",
+      "explanation": "The argument uses complement closure and known nonregularity of P. The other reasons are not valid general rules.",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3"
+    },
+    {
+      "id": "T11-06",
+      "topic": "T11",
+      "title": "Nonregular languages",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let L={a^i b^j:i,j≥0 and i or j is prime}. What is L∩a*?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{ε}"
+        },
+        {
+          "value": "B",
+          "label": "{a^p:p prime}"
+        },
+        {
+          "value": "C",
+          "label": "∅"
+        },
+        {
+          "value": "D",
+          "label": "a*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The filter forces j=0, which is not prime. Thus membership depends exactly on i being prime.",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3"
+    },
+    {
+      "id": "T11-07",
+      "topic": "T11",
+      "title": "Nonregular languages",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let P be the unary prime-length language and E=(aa)*. What is (E∪P)∩((aa)*a|aa)?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{aa}"
+        },
+        {
+          "value": "B",
+          "label": "P"
+        },
+        {
+          "value": "C",
+          "label": "E"
+        },
+        {
+          "value": "D",
+          "label": "a*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The filter retains odd lengths and length 2. These remove nonprime even lengths while preserving every prime length, so the intersection is P.",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3"
+    },
+    {
+      "id": "T11-08",
+      "topic": "T11",
+      "title": "Nonregular languages",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which statement is correct about 'DFAs cannot count'?",
+      "options": [
+        {
+          "value": "A",
+          "label": "They cannot recognize even length."
+        },
+        {
+          "value": "B",
+          "label": "They cannot distinguish ε from a."
+        },
+        {
+          "value": "C",
+          "label": "They cannot recognize exactly three a symbols."
+        },
+        {
+          "value": "D",
+          "label": "They can track fixed remainders and bounded counts, but not arbitrary exact counts."
+        }
+      ],
+      "answer": "D",
+      "explanation": "A finite set of states can store a finite number of possibilities, such as parity or counts up to three plus overflow.",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3"
+    },
+    {
+      "id": "T11-09",
+      "topic": "T11",
+      "title": "Nonregular languages",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which language is regular despite mentioning equal-sized blocks?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{a^n:n is prime}"
+        },
+        {
+          "value": "B",
+          "label": "Σ*{0^n1^n:n≥1}Σ*, for Σ={0,1}"
+        },
+        {
+          "value": "C",
+          "label": "{w∈{0,1}*:|w|0=|w|1}"
+        },
+        {
+          "value": "D",
+          "label": "{0^n1^n:n≥1}"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The first is exactly the language containing 01, since n=1 is allowed and every larger block contains 01. The surrounding freedom changes the problem.",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3"
+    },
+    {
+      "id": "T11-10",
+      "topic": "T11",
+      "title": "Nonregular languages",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If no regex has occurred to you for L, what may you conclude?",
+      "options": [
+        {
+          "value": "A",
+          "label": "L is nonregular."
+        },
+        {
+          "value": "B",
+          "label": "L has no DFA."
+        },
+        {
+          "value": "C",
+          "label": "L requires infinitely many alphabet symbols."
+        },
+        {
+          "value": "D",
+          "label": "Nothing about regularity without further reasoning."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Failure to discover a representation is not a proof that none exists. Use a construction or a valid nonregularity argument.",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3"
+    },
+    {
+      "id": "T12-01",
+      "topic": "T12",
+      "title": "DFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which components specify a DFA in the lecture's order?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(alphabet,regex,parser)"
+        },
+        {
+          "value": "B",
+          "label": "(Σ,Q,δ,q0,F)"
+        },
+        {
+          "value": "C",
+          "label": "(Q,F) only"
+        },
+        {
+          "value": "D",
+          "label": "(Σ,Q,ε,R)"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The five components are alphabet, states, transition function, start state and final-state set. Other tuple orders are acceptable only when explicitly defined.",
+      "sources": "S03 pp. 3-12, 15"
+    },
+    {
+      "id": "T12-02",
+      "topic": "T12",
+      "title": "DFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What makes a finite automaton deterministic?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Each state-symbol pair has exactly one next state."
+        },
+        {
+          "value": "B",
+          "label": "It never revisits a state."
+        },
+        {
+          "value": "C",
+          "label": "It has exactly one accepting state."
+        },
+        {
+          "value": "D",
+          "label": "It accepts every word."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Determinism concerns the transition choice. A DFA may have several final states, loops, and rejected words.",
+      "sources": "S03 pp. 3-12, 15"
+    },
+    {
+      "id": "T12-03",
+      "topic": "T12",
+      "title": "DFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Can a DFA have no final states?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes; it then recognizes {ε}."
+        },
+        {
+          "value": "B",
+          "label": "No; it must have exactly one."
+        },
+        {
+          "value": "C",
+          "label": "Yes; it recognizes ∅."
+        },
+        {
+          "value": "D",
+          "label": "Yes; it then recognizes Σ*."
+        }
+      ],
+      "answer": "C",
+      "explanation": "With F=∅, no run ends in an accepting state, including the empty-input run.",
+      "sources": "S03 pp. 3-12, 15"
+    },
+    {
+      "id": "T12-04",
+      "topic": "T12",
+      "title": "DFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "A one-state complete DFA has its single state accepting. What language does it recognize?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{ε}"
+        },
+        {
+          "value": "B",
+          "label": "∅"
+        },
+        {
+          "value": "C",
+          "label": "Σ*"
+        },
+        {
+          "value": "D",
+          "label": "Only length-one words"
+        }
+      ],
+      "answer": "C",
+      "explanation": "All transitions loop to its only state, and that state is accepting before and after every finite input.",
+      "sources": "S03 pp. 3-12, 15"
+    },
+    {
+      "id": "T12-05",
+      "topic": "T12",
+      "title": "DFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For 'an odd number of b symbols' over {a,b}, what information is sufficient?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Entire prefix"
+        },
+        {
+          "value": "B",
+          "label": "Parity of the b count"
+        },
+        {
+          "value": "C",
+          "label": "Exact unbounded b count"
+        },
+        {
+          "value": "D",
+          "label": "Last symbol only"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Two states track even versus odd b counts. a preserves parity; b toggles it.",
+      "sources": "S03 pp. 3-12, 15"
+    },
+    {
+      "id": "T12-06",
+      "topic": "T12",
+      "title": "DFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For binary numeric value modulo 3, what update follows reading bit d from remainder r?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(2r+d) mod 3"
+        },
+        {
+          "value": "B",
+          "label": "(3r+d) mod 3"
+        },
+        {
+          "value": "C",
+          "label": "(r+2d) mod 3"
+        },
+        {
+          "value": "D",
+          "label": "(r+d) mod 3"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Appending a bit multiplies the previous value by 2 and adds the bit. Length modulo 3 and number of 1s modulo 3 are different tasks.",
+      "sources": "S03 pp. 3-12, 15"
+    },
+    {
+      "id": "T12-07",
+      "topic": "T12",
+      "title": "DFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "To recognize words ending in zz over {x,y,z}, which state information is sufficient?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Whether z occurred anywhere"
+        },
+        {
+          "value": "B",
+          "label": "Total number of z symbols ever read"
+        },
+        {
+          "value": "C",
+          "label": "Whether the current suffix matches zero, one, or at least two trailing z symbols"
+        },
+        {
+          "value": "D",
+          "label": "First symbol of the word"
+        }
+      ],
+      "answer": "C",
+      "explanation": "A new x or y resets the suffix; z extends it. Arbitrarily many total z symbols do not imply the word ends in zz.",
+      "sources": "S03 pp. 3-12, 15"
+    },
+    {
+      "id": "T12-08",
+      "topic": "T12",
+      "title": "DFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Does a DFA need a separate state for every possible input word?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if ε is accepted."
+        },
+        {
+          "value": "B",
+          "label": "No; prefixes with the same relevant future behavior can share a state."
+        },
+        {
+          "value": "C",
+          "label": "Only for infinite regular languages."
+        },
+        {
+          "value": "D",
+          "label": "Yes; otherwise different words cannot be processed."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Finite-state compression is the point of the model. Many different prefixes lead to the same state.",
+      "sources": "S03 pp. 3-12, 15"
+    },
+    {
+      "id": "T12-09",
+      "topic": "T12",
+      "title": "DFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which change preserves the language of a DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Delete a reachable final state."
+        },
+        {
+          "value": "B",
+          "label": "Change the start state arbitrarily."
+        },
+        {
+          "value": "C",
+          "label": "Consistently rename every state in transitions, start state and final set."
+        },
+        {
+          "value": "D",
+          "label": "Flip final and nonfinal states."
+        }
+      ],
+      "answer": "C",
+      "explanation": "State names are labels, not semantics. The other changes can alter which words are accepted; flipping finals complements a complete DFA.",
+      "sources": "S03 pp. 3-12, 15"
+    },
+    {
+      "id": "T12-10",
+      "topic": "T12",
+      "title": "DFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "What must be checked when a drawn DFA has omitted transitions?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Whether every missing transition accepts."
+        },
+        {
+          "value": "B",
+          "label": "Whether missing transitions are ε moves."
+        },
+        {
+          "value": "C",
+          "label": "Whether a rejecting sink was intended; formally the DFA must be completed."
+        },
+        {
+          "value": "D",
+          "label": "Whether it has too many final states."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The course definition uses a total δ. Missing labeled transitions may be diagram shorthand for a rejecting sink, but are not ε transitions.",
+      "sources": "S03 pp. 3-12, 15"
+    },
+    {
+      "id": "T13-01",
+      "topic": "T13",
+      "title": "Accepts, rejects and recognizes",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "When does a DFA accept w?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Whenever one character is read."
+        },
+        {
+          "value": "B",
+          "label": "After all of w is read, the current state is final."
+        },
+        {
+          "value": "C",
+          "label": "Whenever the start state has an outgoing edge."
+        },
+        {
+          "value": "D",
+          "label": "As soon as any final state is visited."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Acceptance is tested at the end of the entire input. A later transition can leave a final state.",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10"
+    },
+    {
+      "id": "T13-02",
+      "topic": "T13",
+      "title": "Accepts, rejects and recognizes",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What does M recognizes L mean?",
+      "options": [
+        {
+          "value": "A",
+          "label": "M has a final state named L."
+        },
+        {
+          "value": "B",
+          "label": "M accepts exactly the words in L."
+        },
+        {
+          "value": "C",
+          "label": "M accepts all words in L, possibly others."
+        },
+        {
+          "value": "D",
+          "label": "M accepts at least one word in L."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Recognition requires both accepting every member and rejecting every nonmember.",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10"
+    },
+    {
+      "id": "T13-03",
+      "topic": "T13",
+      "title": "Accepts, rejects and recognizes",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "For a DFA, when is ε accepted?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Exactly when there is a self-loop"
+        },
+        {
+          "value": "B",
+          "label": "Exactly when F is nonempty"
+        },
+        {
+          "value": "C",
+          "label": "Never"
+        },
+        {
+          "value": "D",
+          "label": "Exactly when q0∈F"
+        }
+      ],
+      "answer": "D",
+      "explanation": "No symbols are consumed, so the run remains at the start state. Other final states need not be reachable without input.",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10"
+    },
+    {
+      "id": "T13-04",
+      "topic": "T13",
+      "title": "Accepts, rejects and recognizes",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "A DFA recognizes binary words ending in 1. It reads 10. What happens?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept; 1 occurs somewhere."
+        },
+        {
+          "value": "B",
+          "label": "Reject; the final symbol is 0."
+        },
+        {
+          "value": "C",
+          "label": "Reject; every two-symbol word is rejected."
+        },
+        {
+          "value": "D",
+          "label": "Accept; a final state was reached after the first symbol."
+        }
+      ],
+      "answer": "B",
+      "explanation": "The prefix 1 is accepted, but the full word 10 is not. Acceptance is not permanent unless the automaton's structure makes it so.",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10"
+    },
+    {
+      "id": "T13-05",
+      "topic": "T13",
+      "title": "Accepts, rejects and recognizes",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "A DFA recognizes binary words with no adjacent 1s. Which word is rejected?",
+      "options": [
+        {
+          "value": "A",
+          "label": "10101"
+        },
+        {
+          "value": "B",
+          "label": "000"
+        },
+        {
+          "value": "C",
+          "label": "0110"
+        },
+        {
+          "value": "D",
+          "label": "ε"
+        }
+      ],
+      "answer": "C",
+      "explanation": "0110 contains 11. Isolated 1s are permitted, and ε has no forbidden adjacent pair.",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10"
+    },
+    {
+      "id": "T13-06",
+      "topic": "T13",
+      "title": "Accepts, rejects and recognizes",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "A DFA accepts every word in L but also accepts a word outside L. Which statement is true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It recognizes L because it has no false negatives."
+        },
+        {
+          "value": "B",
+          "label": "It does not recognize L."
+        },
+        {
+          "value": "C",
+          "label": "It recognizes L if the extra word is short."
+        },
+        {
+          "value": "D",
+          "label": "It recognizes L if L is infinite."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Exact recognition rules out both false positives and false negatives, regardless of word length or language size.",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10"
+    },
+    {
+      "id": "T13-07",
+      "topic": "T13",
+      "title": "Accepts, rejects and recognizes",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For the DFA q0:0→q0,1→q1; q1:0→q0,1→q1, with start q0 and F={q1}, where does 1011 end?",
+      "options": [
+        {
+          "value": "A",
+          "label": "q1, rejecting"
+        },
+        {
+          "value": "B",
+          "label": "q0, accepting"
+        },
+        {
+          "value": "C",
+          "label": "q1, accepting"
+        },
+        {
+          "value": "D",
+          "label": "q0, rejecting"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The state sequence is q0,q1,q0,q1,q1. Only q1 is final.",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10"
+    },
+    {
+      "id": "T13-08",
+      "topic": "T13",
+      "title": "Accepts, rejects and recognizes",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If a complete DFA rejects w, what does flipping all final-state memberships do?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It may have no run on w."
+        },
+        {
+          "value": "B",
+          "label": "It still rejects w because transitions are unchanged."
+        },
+        {
+          "value": "C",
+          "label": "It accepts w."
+        },
+        {
+          "value": "D",
+          "label": "It accepts only if w is nonempty."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The unique complete run is unchanged, but the status of its ending state is reversed, even for ε.",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10"
+    },
+    {
+      "id": "T13-09",
+      "topic": "T13",
+      "title": "Accepts, rejects and recognizes",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Can two different DFAs recognize the same language?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only for finite languages."
+        },
+        {
+          "value": "B",
+          "label": "Only if their transition tables are identical."
+        },
+        {
+          "value": "C",
+          "label": "Yes, even with different numbers of states."
+        },
+        {
+          "value": "D",
+          "label": "No; the language fixes every state name."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Unreachable or equivalent states can create larger presentations of the same language. A minimal complete DFA is unique only up to consistent renaming.",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10"
+    },
+    {
+      "id": "T13-10",
+      "topic": "T13",
+      "title": "Accepts, rejects and recognizes",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which claim is stronger than 'M accepts 101'?",
+      "options": [
+        {
+          "value": "A",
+          "label": "M recognizes {101}."
+        },
+        {
+          "value": "B",
+          "label": "M has some accepting run."
+        },
+        {
+          "value": "C",
+          "label": "M accepts at least one word."
+        },
+        {
+          "value": "D",
+          "label": "M's language is nonempty."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Recognizing {101} additionally requires rejection of every other word. Acceptance of 101 alone only establishes one membership fact.",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10"
+    },
+    {
+      "id": "T14-01",
+      "topic": "T14",
+      "title": "State, start state and final state",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "How many start states does a standard DFA have?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Any number"
+        },
+        {
+          "value": "B",
+          "label": "Exactly one"
+        },
+        {
+          "value": "C",
+          "label": "Zero or one"
+        },
+        {
+          "value": "D",
+          "label": "One for each alphabet symbol"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The definition specifies one distinguished q0∈Q. Multiple final states are allowed.",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13"
+    },
+    {
+      "id": "T14-02",
+      "topic": "T14",
+      "title": "State, start state and final state",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "How many final states may a DFA have?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Exactly two"
+        },
+        {
+          "value": "B",
+          "label": "At least one but never all"
+        },
+        {
+          "value": "C",
+          "label": "Exactly one"
+        },
+        {
+          "value": "D",
+          "label": "Any number from zero through |Q|"
+        }
+      ],
+      "answer": "D",
+      "explanation": "F is any subset of Q, including ∅ and Q.",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13"
+    },
+    {
+      "id": "T14-03",
+      "topic": "T14",
+      "title": "State, start state and final state",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Can the start state also be final?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes, and then ε is accepted."
+        },
+        {
+          "value": "B",
+          "label": "Yes, but then no nonempty input is accepted."
+        },
+        {
+          "value": "C",
+          "label": "Yes, but only in an NFA."
+        },
+        {
+          "value": "D",
+          "label": "No; start and final are disjoint roles."
+        }
+      ],
+      "answer": "A",
+      "explanation": "These roles can overlap. Acceptance of nonempty words still depends on transitions.",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13"
+    },
+    {
+      "id": "T14-04",
+      "topic": "T14",
+      "title": "State, start state and final state",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "In a DFA for no adjacent 1s, what can a nonfinal sink record?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The last symbol is 0 and no violation occurred."
+        },
+        {
+          "value": "B",
+          "label": "A pair 11 has already occurred."
+        },
+        {
+          "value": "C",
+          "label": "The word is currently empty."
+        },
+        {
+          "value": "D",
+          "label": "Exactly one isolated 1 occurred."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Once 11 occurs, no suffix can remove it. That irreversible violation makes a rejecting sink appropriate.",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13"
+    },
+    {
+      "id": "T14-05",
+      "topic": "T14",
+      "title": "State, start state and final state",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which statement about final states is true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "They are always reached only at end of input."
+        },
+        {
+          "value": "B",
+          "label": "They must loop on every symbol."
+        },
+        {
+          "value": "C",
+          "label": "They may have outgoing transitions to nonfinal states."
+        },
+        {
+          "value": "D",
+          "label": "They have no outgoing transitions."
+        }
+      ],
+      "answer": "C",
+      "explanation": "A complete DFA defines outgoing transitions from all states. A final state merely indicates acceptance if the input ends there.",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13"
+    },
+    {
+      "id": "T14-06",
+      "topic": "T14",
+      "title": "State, start state and final state",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "In a parity DFA over {a,b}, qEven records an even number of a symbols. What should b do?",
+      "options": [
+        {
+          "value": "A",
+          "label": "End the run."
+        },
+        {
+          "value": "B",
+          "label": "Always move to qOdd."
+        },
+        {
+          "value": "C",
+          "label": "Keep the automaton in qEven."
+        },
+        {
+          "value": "D",
+          "label": "Erase the current state."
+        }
+      ],
+      "answer": "C",
+      "explanation": "b does not change the a count. The automaton still consumes b.",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13"
+    },
+    {
+      "id": "T14-07",
+      "topic": "T14",
+      "title": "State, start state and final state",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "What does an unreachable state contribute to the recognized language?",
+      "options": [
+        {
+          "value": "A",
+          "label": "An extra alphabet symbol."
+        },
+        {
+          "value": "B",
+          "label": "Nothing, because no run from q0 visits it."
+        },
+        {
+          "value": "C",
+          "label": "At least one accepted word."
+        },
+        {
+          "value": "D",
+          "label": "A mandatory rejection of ε."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Reachability is measured from the designated start state. Removing unreachable states preserves all actual runs.",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13"
+    },
+    {
+      "id": "T14-08",
+      "topic": "T14",
+      "title": "State, start state and final state",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Can a sink state be accepting?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only when the alphabet is empty."
+        },
+        {
+          "value": "B",
+          "label": "No; 'sink' always means rejecting."
+        },
+        {
+          "value": "C",
+          "label": "Only in a GNFA."
+        },
+        {
+          "value": "D",
+          "label": "Yes; then every continuation from it is accepted."
+        }
+      ],
+      "answer": "D",
+      "explanation": "A sink is defined by self-loops on every symbol, not by final status. A rejecting sink is a particular kind of sink.",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13"
+    },
+    {
+      "id": "T14-09",
+      "topic": "T14",
+      "title": "State, start state and final state",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Why can states 'first symbol 0, last symbol 0' and 'first symbol 1, last symbol 1' still be different?",
+      "options": [
+        {
+          "value": "A",
+          "label": "They are both final, so they cannot be compared."
+        },
+        {
+          "value": "B",
+          "label": "Their printed names must have equal length to merge."
+        },
+        {
+          "value": "C",
+          "label": "A common suffix can make one accepted and the other rejected."
+        },
+        {
+          "value": "D",
+          "label": "Every final state requires its own alphabet."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Both prefixes currently meet the endpoint condition, but appending 0 preserves equality only for the first-symbol-0 state. Current acceptance alone does not determine equivalence.",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13"
+    },
+    {
+      "id": "T14-10",
+      "topic": "T14",
+      "title": "State, start state and final state",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If every reachable state is final in a complete DFA, what is recognized?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The empty language"
+        },
+        {
+          "value": "B",
+          "label": "A finite language"
+        },
+        {
+          "value": "C",
+          "label": "Only ε"
+        },
+        {
+          "value": "D",
+          "label": "Σ*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Every complete finite run ends in a reachable state, all of which are accepting. Unreachable nonfinal states do not change this.",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13"
+    },
+    {
+      "id": "T15-01",
+      "topic": "T15",
+      "title": "Symbols and input consumption",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "How many input symbols does one standard DFA transition consume?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Any number"
+        },
+        {
+          "value": "B",
+          "label": "The entire remaining word"
+        },
+        {
+          "value": "C",
+          "label": "Zero"
+        },
+        {
+          "value": "D",
+          "label": "One"
+        }
+      ],
+      "answer": "D",
+      "explanation": "A standard DFA transition is indexed by one symbol. ε transitions belong to the NFA model used here.",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9"
+    },
+    {
+      "id": "T15-02",
+      "topic": "T15",
+      "title": "Symbols and input consumption",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What does an edge labeled 0,1 usually abbreviate over Σ={0,1}?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A transition consuming ε"
+        },
+        {
+          "value": "B",
+          "label": "Two transitions with the same source and destination"
+        },
+        {
+          "value": "C",
+          "label": "A choice between accepting and rejecting"
+        },
+        {
+          "value": "D",
+          "label": "One transition consuming 01"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The comma lists alternative single-symbol labels, not a two-symbol word.",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9"
+    },
+    {
+      "id": "T15-03",
+      "topic": "T15",
+      "title": "Symbols and input consumption",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Over Σ={0,1}, is a single edge labeled 01 a standard DFA transition?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No; it represents two input symbols."
+        },
+        {
+          "value": "B",
+          "label": "Only if the destination is final."
+        },
+        {
+          "value": "C",
+          "label": "Yes; it consumes no input."
+        },
+        {
+          "value": "D",
+          "label": "Yes; all finite words are DFA labels."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Standard DFA edges consume one symbol. A path with two edges, or a GNFA edge with regex 01, can express this behavior.",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9"
+    },
+    {
+      "id": "T15-04",
+      "topic": "T15",
+      "title": "Symbols and input consumption",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If a DFA reads a word of length n, how many symbol transitions occur?",
+      "options": [
+        {
+          "value": "A",
+          "label": "n"
+        },
+        {
+          "value": "B",
+          "label": "|Q|"
+        },
+        {
+          "value": "C",
+          "label": "At most n-1"
+        },
+        {
+          "value": "D",
+          "label": "n+1"
+        }
+      ],
+      "answer": "A",
+      "explanation": "There are n consumed symbols and n transitions. Including the initial state gives n+1 state visits.",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9"
+    },
+    {
+      "id": "T15-05",
+      "topic": "T15",
+      "title": "Symbols and input consumption",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If a loop labeled a is traversed three times, what input is consumed?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a"
+        },
+        {
+          "value": "B",
+          "label": "a3"
+        },
+        {
+          "value": "C",
+          "label": "aaa"
+        },
+        {
+          "value": "D",
+          "label": "ε"
+        }
+      ],
+      "answer": "C",
+      "explanation": "A self-loop still consumes its label each time. Returning to the same state does not mean consuming nothing.",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9"
+    },
+    {
+      "id": "T15-06",
+      "topic": "T15",
+      "title": "Symbols and input consumption",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Does a transition on a inspect the next unread symbol after a too?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes; it automatically reads two symbols."
+        },
+        {
+          "value": "B",
+          "label": "Only when a appears twice in the alphabet."
+        },
+        {
+          "value": "C",
+          "label": "No; its destination depends only on current state and a."
+        },
+        {
+          "value": "D",
+          "label": "Only when the destination is final."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The standard DFA transition function has two inputs: current state and current symbol. Any needed history is encoded in the state.",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9"
+    },
+    {
+      "id": "T15-07",
+      "topic": "T15",
+      "title": "Symbols and input consumption",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For Σ={ID,PLUS,NUM} with each listed token kind atomic, may an edge labeled PLUS consume one symbol?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if the source is final."
+        },
+        {
+          "value": "B",
+          "label": "Yes; atomicity comes from the alphabet definition."
+        },
+        {
+          "value": "C",
+          "label": "Only in a nondeterministic automaton."
+        },
+        {
+          "value": "D",
+          "label": "No; PLUS has four printed letters."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Symbol names can be multi-character strings on paper. They represent one alphabet element when declared atomic.",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9"
+    },
+    {
+      "id": "T15-08",
+      "topic": "T15",
+      "title": "Symbols and input consumption",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which edge consumes no input?",
+      "options": [
+        {
+          "value": "A",
+          "label": "An edge labeled 0,1"
+        },
+        {
+          "value": "B",
+          "label": "An ε edge in an NFA"
+        },
+        {
+          "value": "C",
+          "label": "A self-loop labeled 0"
+        },
+        {
+          "value": "D",
+          "label": "An edge into a final state labeled a"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Consumption depends on the label, not on whether the state changes or is accepting.",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9"
+    },
+    {
+      "id": "T15-09",
+      "topic": "T15",
+      "title": "Symbols and input consumption",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If δ(q,a)=q, which statement is true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The computation must stop."
+        },
+        {
+          "value": "B",
+          "label": "a is consumed and the state remains q."
+        },
+        {
+          "value": "C",
+          "label": "a remains unread."
+        },
+        {
+          "value": "D",
+          "label": "q must be final."
+        }
+      ],
+      "answer": "B",
+      "explanation": "A self-loop updates the input position while preserving the state; no acceptance status is implied.",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9"
+    },
+    {
+      "id": "T15-10",
+      "topic": "T15",
+      "title": "Symbols and input consumption",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "When computing a transition, which distinction matters?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Equal printed names always mean equal mathematical objects."
+        },
+        {
+          "value": "B",
+          "label": "A state name is not an input symbol merely because both are written 'a'."
+        },
+        {
+          "value": "C",
+          "label": "Every alphabet symbol belongs to F."
+        },
+        {
+          "value": "D",
+          "label": "Every state belongs to Σ."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Q and Σ play different roles. Clear naming prevents confusing state identities with the symbols used to select transitions.",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9"
+    }
+  ]
+}

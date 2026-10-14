@@ -162,3 +162,20 @@ h1, h2, p { margin-top: 0; }
   .panel { border-radius: 14px; }
   .topic-pill { max-width: 55%; text-align: right; }
 }
+
+/* CSCI 2115: preserve tabular automata, language constructions and worked steps. */
+.question-support { margin-top: 20px; }
+.study-table-wrap { width: 100%; max-width: 100%; overflow-x: auto; margin: 15px 0; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
+.study-table { border-collapse: collapse; width: 100%; font-size: .87rem; }
+.study-table th, .study-table td { padding: 9px 12px; text-align: left; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); vertical-align: top; white-space: pre-wrap; overflow-wrap: anywhere; }
+.study-table th { font-weight: 800; background: #eef2f8; color: var(--ink); }
+.study-table tr:last-child td { border-bottom: 0; }
+.study-table th:last-child, .study-table td:last-child { border-right: 0; }
+.worked-solution { margin-top: 16px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: white; color: var(--ink); }
+.worked-solution summary { cursor: pointer; font-weight: 800; color: var(--brand-dark); }
+.worked-solution > div { padding-top: 12px; }
+.worked-solution p { margin: 0 0 12px; line-height: 1.6; white-space: pre-wrap; }
+.worked-solution .study-table-wrap { margin: 14px 0; }
+.option-detail { margin: 12px 0 0; line-height: 1.6; }
+.source-note { margin: 16px 0 0; padding-top: 9px; border-top: 1px solid var(--line); font-size: .81rem; color: var(--muted); }
+.section-chip { max-width: 100%; }

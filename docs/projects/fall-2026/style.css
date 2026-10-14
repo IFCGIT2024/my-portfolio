@@ -137,6 +137,9 @@ h1, h2, p { margin-top: 0; }
 .answer-options { display: grid; gap: 12px; margin: 28px 0 20px; }
 .answer-button { width: 100%; padding: 15px 17px; text-align: left; color: var(--ink); background: white; border: 1px solid var(--line); border-radius: 11px; font: inherit; cursor: pointer; }
 .answer-button:hover:not(:disabled) { border-color: var(--brand); background: #fafaff; }
+.answer-button.selected { color: var(--brand-dark); background: #eeecff; border-color: #aaa5ff; font-weight: 800; }
+.multi-check-button { justify-self: start; margin-top: 6px; }
+.question-text { white-space: pre-line; }
 .answer-button.correct { color: var(--correct); background: var(--correct-bg); border-color: #77cbaa; font-weight: 800; }
 .answer-button.wrong { color: var(--wrong); background: var(--wrong-bg); border-color: #ee9a93; }
 .answer-button:disabled { cursor: default; }

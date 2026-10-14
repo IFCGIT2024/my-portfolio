@@ -1,0 +1,6443 @@
+{
+  "questions": [
+    {
+      "id": "A05-16",
+      "topic": "A05",
+      "title": "Complement a complete DFA",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct a complete DFA over {0,1} for words NOT matching 11(0|1)*01. Use prefix states P0,P1, tail states T0,T1,T2, and rejecting-error state X of the original positive-language DFA. Which final set should the complemented DFA have?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{P0,P1,T0,T1,T2,X}"
+        },
+        {
+          "value": "B",
+          "label": "{P0,P1,T0,T1}"
+        },
+        {
+          "value": "C",
+          "label": "{T2}"
+        },
+        {
+          "value": "D",
+          "label": "{P0,P1,T0,T1,X}"
+        }
+      ],
+      "answer": "D",
+      "explanation": "First complete the positive-language DFA, then swap final and nonfinal membership for every state. Its old rejecting sink must become accepting too.",
+      "sources": "S01 Q5(d), pp. 9-10; S07 p. 11",
+      "worked_solution": [
+        "The positive-language DFA has only T2 final. Its complete state set is {P0,P1,T0,T1,T2,X}.",
+        "The complement uses all states except T2 as finals: {P0,P1,T0,T1,X}. It includes ε and words too short to match the original regex.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "P0",
+              "start final",
+              "X",
+              "P1"
+            ],
+            [
+              "P1",
+              "final",
+              "X",
+              "T0"
+            ],
+            [
+              "T0",
+              "final",
+              "T1",
+              "T0"
+            ],
+            [
+              "T1",
+              "final",
+              "T1",
+              "T2"
+            ],
+            [
+              "T2",
+              "nonfinal",
+              "T1",
+              "T0"
+            ],
+            [
+              "X",
+              "final",
+              "X",
+              "X"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A05-17",
+      "topic": "A05",
+      "title": "Design a DFA for modular symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Build a DFA over {0,1} whose number of 1 symbols has residue in {0} modulo 3. Let qr mean residue r and start at q0. After 101101, which state and verdict are correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "q2; accept"
+        },
+        {
+          "value": "B",
+          "label": "q1; accept"
+        },
+        {
+          "value": "C",
+          "label": "q1; reject"
+        },
+        {
+          "value": "D",
+          "label": "q2; reject"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Count the specified symbol, not total length or the binary numeric value.",
+      "sources": "S01 Q5(e), p. 10; S03 p. 15",
+      "worked_solution": [
+        "State r records the count modulo 3. Reading 1 increments it modulo 3; reading the other bit leaves it unchanged.",
+        "The input has 4 occurrences of 1, so its remainder is 1. The final residues are {0}.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "0",
+              "start final",
+              "0",
+              "1"
+            ],
+            [
+              "1",
+              "nonfinal",
+              "1",
+              "2"
+            ],
+            [
+              "2",
+              "nonfinal",
+              "2",
+              "0"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A05-18",
+      "topic": "A05",
+      "title": "Design a DFA for modular symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Build a DFA over {0,1} whose number of 0 symbols has residue in {1,3} modulo 4. Let qr mean residue r and start at q0. After 0010100, which state and verdict are correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "q1; accept"
+        },
+        {
+          "value": "B",
+          "label": "q2; accept"
+        },
+        {
+          "value": "C",
+          "label": "q1; reject"
+        },
+        {
+          "value": "D",
+          "label": "q2; reject"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Count the specified symbol, not total length or the binary numeric value.",
+      "sources": "S01 Q5(e), p. 10; S03 p. 15",
+      "worked_solution": [
+        "State r records the count modulo 4. Reading 0 increments it modulo 4; reading the other bit leaves it unchanged.",
+        "The input has 5 occurrences of 0, so its remainder is 1. The final residues are {1,3}.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "0",
+              "start nonfinal",
+              "1",
+              "0"
+            ],
+            [
+              "1",
+              "final",
+              "2",
+              "1"
+            ],
+            [
+              "2",
+              "nonfinal",
+              "3",
+              "2"
+            ],
+            [
+              "3",
+              "final",
+              "0",
+              "3"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A05-19",
+      "topic": "A05",
+      "title": "Design a DFA for modular symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Build a DFA over {0,1} whose number of 1 symbols has residue in {2,4} modulo 5. Let qr mean residue r and start at q0. After 1101011, which state and verdict are correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "q0; accept"
+        },
+        {
+          "value": "B",
+          "label": "q1; accept"
+        },
+        {
+          "value": "C",
+          "label": "q0; reject"
+        },
+        {
+          "value": "D",
+          "label": "q1; reject"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Count the specified symbol, not total length or the binary numeric value.",
+      "sources": "S01 Q5(e), p. 10; S03 p. 15",
+      "worked_solution": [
+        "State r records the count modulo 5. Reading 1 increments it modulo 5; reading the other bit leaves it unchanged.",
+        "The input has 5 occurrences of 1, so its remainder is 0. The final residues are {2,4}.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "0",
+              "start nonfinal",
+              "0",
+              "1"
+            ],
+            [
+              "1",
+              "nonfinal",
+              "1",
+              "2"
+            ],
+            [
+              "2",
+              "final",
+              "2",
+              "3"
+            ],
+            [
+              "3",
+              "nonfinal",
+              "3",
+              "4"
+            ],
+            [
+              "4",
+              "final",
+              "4",
+              "0"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A05-20",
+      "topic": "A05",
+      "title": "Design a DFA for modular symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Build a DFA over {0,1} whose number of 0 symbols has residue in {0,3} modulo 6. Let qr mean residue r and start at q0. After 0001000, which state and verdict are correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "q1; accept"
+        },
+        {
+          "value": "B",
+          "label": "q0; accept"
+        },
+        {
+          "value": "C",
+          "label": "q0; reject"
+        },
+        {
+          "value": "D",
+          "label": "q1; reject"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Count the specified symbol, not total length or the binary numeric value.",
+      "sources": "S01 Q5(e), p. 10; S03 p. 15",
+      "worked_solution": [
+        "State r records the count modulo 6. Reading 0 increments it modulo 6; reading the other bit leaves it unchanged.",
+        "The input has 6 occurrences of 0, so its remainder is 0. The final residues are {0,3}.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "0",
+              "start final",
+              "1",
+              "0"
+            ],
+            [
+              "1",
+              "nonfinal",
+              "2",
+              "1"
+            ],
+            [
+              "2",
+              "nonfinal",
+              "3",
+              "2"
+            ],
+            [
+              "3",
+              "final",
+              "4",
+              "3"
+            ],
+            [
+              "4",
+              "nonfinal",
+              "5",
+              "4"
+            ],
+            [
+              "5",
+              "nonfinal",
+              "0",
+              "5"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A06-01",
+      "topic": "A06",
+      "title": "Construct an NFA for a prefix and suffix",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct an NFA for abΣ*ba over Σ={a,b}. Keep the fixed prefix and suffix nonoverlapping. Use it to classify these words: 1: abba; 2: aba; 3: ababa; 4: abbaa.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 1; reject 2, 3, 4."
+        },
+        {
+          "value": "B",
+          "label": "Accept 1, 3; reject 2, 4."
+        },
+        {
+          "value": "C",
+          "label": "Accept 1, 2, 3; reject 4."
+        },
+        {
+          "value": "D",
+          "label": "Accept 3; reject 1, 2, 4."
+        }
+      ],
+      "answer": "B",
+      "explanation": "The middle state both loops on the alphabet and nondeterministically starts the suffix path when its first symbol appears.",
+      "sources": "S01 Q6(a), p. 11; S04 pp. 8, 11-12",
+      "worked_solution": [
+        "First build a path spelling ab. At its endpoint add a loop for every alphabet symbol and a separate path spelling ba to the only final state.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start nonfinal",
+              "{p1}",
+              "∅",
+              "∅"
+            ],
+            [
+              "p1",
+              "nonfinal",
+              "∅",
+              "{p2}",
+              "∅"
+            ],
+            [
+              "p2",
+              "nonfinal",
+              "{p2}",
+              "{f1,p2}",
+              "∅"
+            ],
+            [
+              "f1",
+              "nonfinal",
+              "{f2}",
+              "∅",
+              "∅"
+            ],
+            [
+              "f2",
+              "final",
+              "∅",
+              "∅",
+              "∅"
+            ]
+          ]
+        },
+        "All missing NFA transitions have destination set ∅. A branch accepting early cannot ignore remaining input.",
+        "abba: accept",
+        "aba: reject",
+        "ababa: accept",
+        "abbaa: reject"
+      ]
+    },
+    {
+      "id": "A06-02",
+      "topic": "A06",
+      "title": "Construct an NFA for a prefix and suffix",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct an NFA for xyΣ*yx over Σ={x,y}. Keep the fixed prefix and suffix nonoverlapping. Use it to classify these words: 1: xyyx; 2: xyx; 3: xyxyx; 4: xyyxx.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 1, 2, 3; reject 4."
+        },
+        {
+          "value": "B",
+          "label": "Accept 1, 3; reject 2, 4."
+        },
+        {
+          "value": "C",
+          "label": "Accept 3; reject 1, 2, 4."
+        },
+        {
+          "value": "D",
+          "label": "Accept 1; reject 2, 3, 4."
+        }
+      ],
+      "answer": "B",
+      "explanation": "The middle state both loops on the alphabet and nondeterministically starts the suffix path when its first symbol appears.",
+      "sources": "S01 Q6(a), p. 11; S04 pp. 8, 11-12",
+      "worked_solution": [
+        "First build a path spelling xy. At its endpoint add a loop for every alphabet symbol and a separate path spelling yx to the only final state.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "x",
+            "y",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start nonfinal",
+              "{p1}",
+              "∅",
+              "∅"
+            ],
+            [
+              "p1",
+              "nonfinal",
+              "∅",
+              "{p2}",
+              "∅"
+            ],
+            [
+              "p2",
+              "nonfinal",
+              "{p2}",
+              "{f1,p2}",
+              "∅"
+            ],
+            [
+              "f1",
+              "nonfinal",
+              "{f2}",
+              "∅",
+              "∅"
+            ],
+            [
+              "f2",
+              "final",
+              "∅",
+              "∅",
+              "∅"
+            ]
+          ]
+        },
+        "All missing NFA transitions have destination set ∅. A branch accepting early cannot ignore remaining input.",
+        "xyyx: accept",
+        "xyx: reject",
+        "xyxyx: accept",
+        "xyyxx: reject"
+      ]
+    },
+    {
+      "id": "A06-03",
+      "topic": "A06",
+      "title": "Construct an NFA for a prefix and suffix",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct an NFA for aacΣ*cab over Σ={a,b,c}. Keep the fixed prefix and suffix nonoverlapping. Use it to classify these words: 1: aaccab; 2: aacab; 3: aacacab; 4: aaccaba.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 3; reject 1, 2, 4."
+        },
+        {
+          "value": "B",
+          "label": "Accept 1; reject 2, 3, 4."
+        },
+        {
+          "value": "C",
+          "label": "Accept 1, 3; reject 2, 4."
+        },
+        {
+          "value": "D",
+          "label": "Accept 1, 2, 3; reject 4."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The middle state both loops on the alphabet and nondeterministically starts the suffix path when its first symbol appears.",
+      "sources": "S01 Q6(a), p. 11; S04 pp. 8, 11-12",
+      "worked_solution": [
+        "First build a path spelling aac. At its endpoint add a loop for every alphabet symbol and a separate path spelling cab to the only final state.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b",
+            "c",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start nonfinal",
+              "{p1}",
+              "∅",
+              "∅",
+              "∅"
+            ],
+            [
+              "p1",
+              "nonfinal",
+              "{p2}",
+              "∅",
+              "∅",
+              "∅"
+            ],
+            [
+              "p2",
+              "nonfinal",
+              "∅",
+              "∅",
+              "{p3}",
+              "∅"
+            ],
+            [
+              "p3",
+              "nonfinal",
+              "{p3}",
+              "{p3}",
+              "{f1,p3}",
+              "∅"
+            ],
+            [
+              "f1",
+              "nonfinal",
+              "{f2}",
+              "∅",
+              "∅",
+              "∅"
+            ],
+            [
+              "f2",
+              "nonfinal",
+              "∅",
+              "{f3}",
+              "∅",
+              "∅"
+            ],
+            [
+              "f3",
+              "final",
+              "∅",
+              "∅",
+              "∅",
+              "∅"
+            ]
+          ]
+        },
+        "All missing NFA transitions have destination set ∅. A branch accepting early cannot ignore remaining input.",
+        "aaccab: accept",
+        "aacab: reject",
+        "aacacab: accept",
+        "aaccaba: reject"
+      ]
+    },
+    {
+      "id": "A06-04",
+      "topic": "A06",
+      "title": "Construct an NFA for a prefix and suffix",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct an NFA for 001Σ*110 over Σ={0,1}. Keep the fixed prefix and suffix nonoverlapping. Use it to classify these words: 1: 001110; 2: 00110; 3: 0010110; 4: 0011100.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 3; reject 1, 2, 4."
+        },
+        {
+          "value": "B",
+          "label": "Accept 1; reject 2, 3, 4."
+        },
+        {
+          "value": "C",
+          "label": "Accept 1, 2, 3; reject 4."
+        },
+        {
+          "value": "D",
+          "label": "Accept 1, 3; reject 2, 4."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The middle state both loops on the alphabet and nondeterministically starts the suffix path when its first symbol appears.",
+      "sources": "S01 Q6(a), p. 11; S04 pp. 8, 11-12",
+      "worked_solution": [
+        "First build a path spelling 001. At its endpoint add a loop for every alphabet symbol and a separate path spelling 110 to the only final state.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start nonfinal",
+              "{p1}",
+              "∅",
+              "∅"
+            ],
+            [
+              "p1",
+              "nonfinal",
+              "{p2}",
+              "∅",
+              "∅"
+            ],
+            [
+              "p2",
+              "nonfinal",
+              "∅",
+              "{p3}",
+              "∅"
+            ],
+            [
+              "p3",
+              "nonfinal",
+              "{p3}",
+              "{f1,p3}",
+              "∅"
+            ],
+            [
+              "f1",
+              "nonfinal",
+              "∅",
+              "{f2}",
+              "∅"
+            ],
+            [
+              "f2",
+              "nonfinal",
+              "{f3}",
+              "∅",
+              "∅"
+            ],
+            [
+              "f3",
+              "final",
+              "∅",
+              "∅",
+              "∅"
+            ]
+          ]
+        },
+        "All missing NFA transitions have destination set ∅. A branch accepting early cannot ignore remaining input.",
+        "001110: accept",
+        "00110: reject",
+        "0010110: accept",
+        "0011100: reject"
+      ]
+    },
+    {
+      "id": "A06-05",
+      "topic": "A06",
+      "title": "Construct an NFA for repeated alternative blocks",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct an ε-NFA for (001|110)*. Classify: 1: ε; 2: 001110; 3: 00; 4: 0011100. Treat each parenthesized alternative as a complete block.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 1, 2, 3; reject 4."
+        },
+        {
+          "value": "B",
+          "label": "Accept 2; reject 1, 3, 4."
+        },
+        {
+          "value": "C",
+          "label": "Accept 1; reject 2, 3, 4."
+        },
+        {
+          "value": "D",
+          "label": "Accept 1, 2; reject 3, 4."
+        }
+      ],
+      "answer": "D",
+      "explanation": "A fresh common accepting start permits zero blocks. Every finished block returns by ε to choose the next complete block.",
+      "sources": "S01 Q6(b), p. 12; S04 pp. 17-19",
+      "worked_solution": [
+        "Use s as the only final state. Add ε edges to the beginning of each separate block path; return to s by ε only after a whole block is consumed.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start final",
+              "∅",
+              "∅",
+              "{b0_0,b1_0}"
+            ],
+            [
+              "b0_0",
+              "nonfinal",
+              "{b0_1}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b0_1",
+              "nonfinal",
+              "{b0_2}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b0_2",
+              "nonfinal",
+              "∅",
+              "{b0_3}",
+              "∅"
+            ],
+            [
+              "b0_3",
+              "nonfinal",
+              "∅",
+              "∅",
+              "{s}"
+            ],
+            [
+              "b1_0",
+              "nonfinal",
+              "∅",
+              "{b1_1}",
+              "∅"
+            ],
+            [
+              "b1_1",
+              "nonfinal",
+              "∅",
+              "{b1_2}",
+              "∅"
+            ],
+            [
+              "b1_2",
+              "nonfinal",
+              "{b1_3}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b1_3",
+              "nonfinal",
+              "∅",
+              "∅",
+              "{s}"
+            ]
+          ]
+        },
+        "Each block has length 3. This supplies a quick necessary length check, but the symbols within each block still matter.",
+        "ε: accept",
+        "001110: accept",
+        "00: reject",
+        "0011100: reject"
+      ]
+    },
+    {
+      "id": "A06-06",
+      "topic": "A06",
+      "title": "Construct an NFA for repeated alternative blocks",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct an ε-NFA for (ab|ba)*. Classify: 1: ε; 2: abba; 3: a; 4: abbaa. Treat each parenthesized alternative as a complete block.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 2; reject 1, 3, 4."
+        },
+        {
+          "value": "B",
+          "label": "Accept 1, 2, 3; reject 4."
+        },
+        {
+          "value": "C",
+          "label": "Accept 1; reject 2, 3, 4."
+        },
+        {
+          "value": "D",
+          "label": "Accept 1, 2; reject 3, 4."
+        }
+      ],
+      "answer": "D",
+      "explanation": "A fresh common accepting start permits zero blocks. Every finished block returns by ε to choose the next complete block.",
+      "sources": "S01 Q6(b), p. 12; S04 pp. 17-19",
+      "worked_solution": [
+        "Use s as the only final state. Add ε edges to the beginning of each separate block path; return to s by ε only after a whole block is consumed.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start final",
+              "∅",
+              "∅",
+              "{b0_0,b1_0}"
+            ],
+            [
+              "b0_0",
+              "nonfinal",
+              "{b0_1}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b0_1",
+              "nonfinal",
+              "∅",
+              "{b0_2}",
+              "∅"
+            ],
+            [
+              "b0_2",
+              "nonfinal",
+              "∅",
+              "∅",
+              "{s}"
+            ],
+            [
+              "b1_0",
+              "nonfinal",
+              "∅",
+              "{b1_1}",
+              "∅"
+            ],
+            [
+              "b1_1",
+              "nonfinal",
+              "{b1_2}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b1_2",
+              "nonfinal",
+              "∅",
+              "∅",
+              "{s}"
+            ]
+          ]
+        },
+        "Each block has length 2. This supplies a quick necessary length check, but the symbols within each block still matter.",
+        "ε: accept",
+        "abba: accept",
+        "a: reject",
+        "abbaa: reject"
+      ]
+    },
+    {
+      "id": "A06-07",
+      "topic": "A06",
+      "title": "Construct an NFA for repeated alternative blocks",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct an ε-NFA for (0100|1011)*. Classify: 1: ε; 2: 01001011; 3: 010; 4: 010010110. Treat each parenthesized alternative as a complete block.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 2; reject 1, 3, 4."
+        },
+        {
+          "value": "B",
+          "label": "Accept 1; reject 2, 3, 4."
+        },
+        {
+          "value": "C",
+          "label": "Accept 1, 2; reject 3, 4."
+        },
+        {
+          "value": "D",
+          "label": "Accept 1, 2, 3; reject 4."
+        }
+      ],
+      "answer": "C",
+      "explanation": "A fresh common accepting start permits zero blocks. Every finished block returns by ε to choose the next complete block.",
+      "sources": "S01 Q6(b), p. 12; S04 pp. 17-19",
+      "worked_solution": [
+        "Use s as the only final state. Add ε edges to the beginning of each separate block path; return to s by ε only after a whole block is consumed.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start final",
+              "∅",
+              "∅",
+              "{b0_0,b1_0}"
+            ],
+            [
+              "b0_0",
+              "nonfinal",
+              "{b0_1}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b0_1",
+              "nonfinal",
+              "∅",
+              "{b0_2}",
+              "∅"
+            ],
+            [
+              "b0_2",
+              "nonfinal",
+              "{b0_3}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b0_3",
+              "nonfinal",
+              "{b0_4}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b0_4",
+              "nonfinal",
+              "∅",
+              "∅",
+              "{s}"
+            ],
+            [
+              "b1_0",
+              "nonfinal",
+              "∅",
+              "{b1_1}",
+              "∅"
+            ],
+            [
+              "b1_1",
+              "nonfinal",
+              "{b1_2}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b1_2",
+              "nonfinal",
+              "∅",
+              "{b1_3}",
+              "∅"
+            ],
+            [
+              "b1_3",
+              "nonfinal",
+              "∅",
+              "{b1_4}",
+              "∅"
+            ],
+            [
+              "b1_4",
+              "nonfinal",
+              "∅",
+              "∅",
+              "{s}"
+            ]
+          ]
+        },
+        "Each block has length 4. This supplies a quick necessary length check, but the symbols within each block still matter.",
+        "ε: accept",
+        "01001011: accept",
+        "010: reject",
+        "010010110: reject"
+      ]
+    },
+    {
+      "id": "A06-08",
+      "topic": "A06",
+      "title": "Construct an NFA for repeated alternative blocks",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Construct an ε-NFA for (aa|bb)*. Classify: 1: ε; 2: aabb; 3: a; 4: aabba. Treat each parenthesized alternative as a complete block.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 1; reject 2, 3, 4."
+        },
+        {
+          "value": "B",
+          "label": "Accept 1, 2, 3; reject 4."
+        },
+        {
+          "value": "C",
+          "label": "Accept 1, 2; reject 3, 4."
+        },
+        {
+          "value": "D",
+          "label": "Accept 2; reject 1, 3, 4."
+        }
+      ],
+      "answer": "C",
+      "explanation": "A fresh common accepting start permits zero blocks. Every finished block returns by ε to choose the next complete block.",
+      "sources": "S01 Q6(b), p. 12; S04 pp. 17-19",
+      "worked_solution": [
+        "Use s as the only final state. Add ε edges to the beginning of each separate block path; return to s by ε only after a whole block is consumed.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start final",
+              "∅",
+              "∅",
+              "{b0_0,b1_0}"
+            ],
+            [
+              "b0_0",
+              "nonfinal",
+              "{b0_1}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b0_1",
+              "nonfinal",
+              "{b0_2}",
+              "∅",
+              "∅"
+            ],
+            [
+              "b0_2",
+              "nonfinal",
+              "∅",
+              "∅",
+              "{s}"
+            ],
+            [
+              "b1_0",
+              "nonfinal",
+              "∅",
+              "{b1_1}",
+              "∅"
+            ],
+            [
+              "b1_1",
+              "nonfinal",
+              "∅",
+              "{b1_2}",
+              "∅"
+            ],
+            [
+              "b1_2",
+              "nonfinal",
+              "∅",
+              "∅",
+              "{s}"
+            ]
+          ]
+        },
+        "Each block has length 2. This supplies a quick necessary length check, but the symbols within each block still matter.",
+        "ε: accept",
+        "aabb: accept",
+        "a: reject",
+        "aabba: reject"
+      ]
+    },
+    {
+      "id": "A06-09",
+      "topic": "A06",
+      "title": "Construct an NFA for a modular OR",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over {a,b}, accept when the a count has residue in {1} modulo 3, OR the b count has residue in {0} modulo 2. Construct an ε-NFA with two counting branches and classify: 1: ε; 2: aaaabbb; 3: aaabb; 4: aabb.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 2, 3, 4; reject 1."
+        },
+        {
+          "value": "B",
+          "label": "Accept 1, 2, 3, 4; reject none."
+        },
+        {
+          "value": "C",
+          "label": "Accept 1, 2, 4; reject 3."
+        },
+        {
+          "value": "D",
+          "label": "Accept 1, 3, 4; reject 2."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Each branch checks one condition on the same whole input. An accepting branch suffices, including when both conditions hold.",
+      "sources": "S01 Q6(c), pp. 13-14; S04 pp. 14, 17",
+      "worked_solution": [
+        "From fresh s, ε-branch to A0 and B0. A states count a modulo 3 and loop on b; B states count b modulo 2 and loop on a.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start nonfinal",
+              "∅",
+              "∅",
+              "{A0,B0}"
+            ],
+            [
+              "A0",
+              "nonfinal",
+              "{A1}",
+              "{A0}",
+              "∅"
+            ],
+            [
+              "A1",
+              "final",
+              "{A2}",
+              "{A1}",
+              "∅"
+            ],
+            [
+              "A2",
+              "nonfinal",
+              "{A0}",
+              "{A2}",
+              "∅"
+            ],
+            [
+              "B0",
+              "final",
+              "{B0}",
+              "{B1}",
+              "∅"
+            ],
+            [
+              "B1",
+              "nonfinal",
+              "{B1}",
+              "{B0}",
+              "∅"
+            ]
+          ]
+        },
+        "ε: remainders (0,0); accept",
+        "aaaabbb: remainders (1,1); accept",
+        "aaabb: remainders (0,0); accept",
+        "aabb: remainders (2,0); accept"
+      ]
+    },
+    {
+      "id": "A06-10",
+      "topic": "A06",
+      "title": "Construct an NFA for a modular OR",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over {a,b}, accept when the a count has residue in {2,3} modulo 4, OR the b count has residue in {1} modulo 3. Construct an ε-NFA with two counting branches and classify: 1: ε; 2: aaaaabbbb; 3: aaaabbb; 4: aabb.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 4; reject 1, 2, 3."
+        },
+        {
+          "value": "B",
+          "label": "Accept 2, 4; reject 1, 3."
+        },
+        {
+          "value": "C",
+          "label": "Accept 2, 3, 4; reject 1."
+        },
+        {
+          "value": "D",
+          "label": "Accept 1, 2, 4; reject 3."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Each branch checks one condition on the same whole input. An accepting branch suffices, including when both conditions hold.",
+      "sources": "S01 Q6(c), pp. 13-14; S04 pp. 14, 17",
+      "worked_solution": [
+        "From fresh s, ε-branch to A0 and B0. A states count a modulo 4 and loop on b; B states count b modulo 3 and loop on a.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start nonfinal",
+              "∅",
+              "∅",
+              "{A0,B0}"
+            ],
+            [
+              "A0",
+              "nonfinal",
+              "{A1}",
+              "{A0}",
+              "∅"
+            ],
+            [
+              "A1",
+              "nonfinal",
+              "{A2}",
+              "{A1}",
+              "∅"
+            ],
+            [
+              "A2",
+              "final",
+              "{A3}",
+              "{A2}",
+              "∅"
+            ],
+            [
+              "A3",
+              "final",
+              "{A0}",
+              "{A3}",
+              "∅"
+            ],
+            [
+              "B0",
+              "nonfinal",
+              "{B0}",
+              "{B1}",
+              "∅"
+            ],
+            [
+              "B1",
+              "final",
+              "{B1}",
+              "{B2}",
+              "∅"
+            ],
+            [
+              "B2",
+              "nonfinal",
+              "{B2}",
+              "{B0}",
+              "∅"
+            ]
+          ]
+        },
+        "ε: remainders (0,0); reject",
+        "aaaaabbbb: remainders (1,1); accept",
+        "aaaabbb: remainders (0,0); reject",
+        "aabb: remainders (2,2); accept"
+      ]
+    },
+    {
+      "id": "A06-11",
+      "topic": "A06",
+      "title": "Construct an NFA for a modular OR",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over {a,b}, accept when the a count has residue in {0,2} modulo 5, OR the b count has residue in {2} modulo 3. Construct an ε-NFA with two counting branches and classify: 1: ε; 2: aaaaaabbbb; 3: aaaaabbb; 4: aabb.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 1, 2, 3, 4; reject none."
+        },
+        {
+          "value": "B",
+          "label": "Accept 3, 4; reject 1, 2."
+        },
+        {
+          "value": "C",
+          "label": "Accept 1, 3, 4; reject 2."
+        },
+        {
+          "value": "D",
+          "label": "Accept 1, 4; reject 2, 3."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Each branch checks one condition on the same whole input. An accepting branch suffices, including when both conditions hold.",
+      "sources": "S01 Q6(c), pp. 13-14; S04 pp. 14, 17",
+      "worked_solution": [
+        "From fresh s, ε-branch to A0 and B0. A states count a modulo 5 and loop on b; B states count b modulo 3 and loop on a.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start nonfinal",
+              "∅",
+              "∅",
+              "{A0,B0}"
+            ],
+            [
+              "A0",
+              "final",
+              "{A1}",
+              "{A0}",
+              "∅"
+            ],
+            [
+              "A1",
+              "nonfinal",
+              "{A2}",
+              "{A1}",
+              "∅"
+            ],
+            [
+              "A2",
+              "final",
+              "{A3}",
+              "{A2}",
+              "∅"
+            ],
+            [
+              "A3",
+              "nonfinal",
+              "{A4}",
+              "{A3}",
+              "∅"
+            ],
+            [
+              "A4",
+              "nonfinal",
+              "{A0}",
+              "{A4}",
+              "∅"
+            ],
+            [
+              "B0",
+              "nonfinal",
+              "{B0}",
+              "{B1}",
+              "∅"
+            ],
+            [
+              "B1",
+              "nonfinal",
+              "{B1}",
+              "{B2}",
+              "∅"
+            ],
+            [
+              "B2",
+              "final",
+              "{B2}",
+              "{B0}",
+              "∅"
+            ]
+          ]
+        },
+        "ε: remainders (0,0); accept",
+        "aaaaaabbbb: remainders (1,1); reject",
+        "aaaaabbb: remainders (0,0); accept",
+        "aabb: remainders (2,2); accept"
+      ]
+    },
+    {
+      "id": "A06-12",
+      "topic": "A06",
+      "title": "Construct an NFA for a modular OR",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over {a,b}, accept when the a count has residue in {0} modulo 3, OR the b count has residue in {1,2} modulo 4. Construct an ε-NFA with two counting branches and classify: 1: ε; 2: aaaabbbbb; 3: aaabbbb; 4: aabb.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Accept 1, 2, 3, 4; reject none."
+        },
+        {
+          "value": "B",
+          "label": "Accept 2, 3, 4; reject 1."
+        },
+        {
+          "value": "C",
+          "label": "Accept 1, 3, 4; reject 2."
+        },
+        {
+          "value": "D",
+          "label": "Accept 1, 2, 4; reject 3."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Each branch checks one condition on the same whole input. An accepting branch suffices, including when both conditions hold.",
+      "sources": "S01 Q6(c), pp. 13-14; S04 pp. 14, 17",
+      "worked_solution": [
+        "From fresh s, ε-branch to A0 and B0. A states count a modulo 3 and loop on b; B states count b modulo 4 and loop on a.",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b",
+            "ε"
+          ],
+          "rows": [
+            [
+              "s",
+              "start nonfinal",
+              "∅",
+              "∅",
+              "{A0,B0}"
+            ],
+            [
+              "A0",
+              "final",
+              "{A1}",
+              "{A0}",
+              "∅"
+            ],
+            [
+              "A1",
+              "nonfinal",
+              "{A2}",
+              "{A1}",
+              "∅"
+            ],
+            [
+              "A2",
+              "nonfinal",
+              "{A0}",
+              "{A2}",
+              "∅"
+            ],
+            [
+              "B0",
+              "nonfinal",
+              "{B0}",
+              "{B1}",
+              "∅"
+            ],
+            [
+              "B1",
+              "final",
+              "{B1}",
+              "{B2}",
+              "∅"
+            ],
+            [
+              "B2",
+              "final",
+              "{B2}",
+              "{B3}",
+              "∅"
+            ],
+            [
+              "B3",
+              "nonfinal",
+              "{B3}",
+              "{B0}",
+              "∅"
+            ]
+          ]
+        },
+        "ε: remainders (0,0); accept",
+        "aaaabbbbb: remainders (1,1); accept",
+        "aaabbbb: remainders (0,0); accept",
+        "aabb: remainders (2,2); accept"
+      ]
+    },
+    {
+      "id": "A07-01",
+      "topic": "A07",
+      "title": "Choose a representation to prove regularity",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the equivalence theorem to prove that words over {0,1} with length congruent to 1 modulo 2 form a regular language. Choose an exact regex; R^k here would mean k concatenated copies, not Kleene star.",
+      "options": [
+        {
+          "value": "A",
+          "label": "((0|1)(0|1))*"
+        },
+        {
+          "value": "B",
+          "label": "(0|1)*"
+        },
+        {
+          "value": "C",
+          "label": "(0|1)(0|1)"
+        },
+        {
+          "value": "D",
+          "label": "(0|1)((0|1)(0|1))*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q7(a), p. 14; S09 pp. 4-5, 23",
+      "worked_solution": [
+        "Let B=(0|1), describing one arbitrary alphabet symbol. Use 1 leading copies, then any number of groups of 2 copies.",
+        "The lengths are exactly 1+2k for k≥0. Every word of such a length can be divided this way.",
+        "The constructed regular expression specifies precisely the target, so the equivalence theorem implies the language is regular. A remainder DFA gives an alternative proof."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ε: target rejects, but this expression accepts.",
+        "B": "Counterexample ε: target rejects, but this expression accepts.",
+        "C": "Counterexample 0: target accepts, but this expression rejects.",
+        "D": "This expression describes exactly the target language."
+      }
+    },
+    {
+      "id": "A07-02",
+      "topic": "A07",
+      "title": "Choose a representation to prove regularity",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the equivalence theorem to prove that words over {a,b} with length congruent to 2 modulo 3 form a regular language. Choose an exact regex; R^k here would mean k concatenated copies, not Kleene star.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(a|b)*"
+        },
+        {
+          "value": "B",
+          "label": "(a|b)(a|b)((a|b)(a|b)(a|b))*"
+        },
+        {
+          "value": "C",
+          "label": "(a|b)(a|b)(a|b)"
+        },
+        {
+          "value": "D",
+          "label": "((a|b)(a|b)(a|b))*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q7(a), p. 14; S09 pp. 4-5, 23",
+      "worked_solution": [
+        "Let B=(a|b), describing one arbitrary alphabet symbol. Use 2 leading copies, then any number of groups of 3 copies.",
+        "The lengths are exactly 2+3k for k≥0. Every word of such a length can be divided this way.",
+        "The constructed regular expression specifies precisely the target, so the equivalence theorem implies the language is regular. A remainder DFA gives an alternative proof."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ε: target rejects, but this expression accepts.",
+        "B": "This expression describes exactly the target language.",
+        "C": "Counterexample aa: target accepts, but this expression rejects.",
+        "D": "Counterexample ε: target rejects, but this expression accepts."
+      }
+    },
+    {
+      "id": "A07-03",
+      "topic": "A07",
+      "title": "Choose a representation to prove regularity",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the equivalence theorem to prove that words over {x,y} with length congruent to 1 modulo 4 form a regular language. Choose an exact regex; R^k here would mean k concatenated copies, not Kleene star.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(x|y)(x|y)((x|y)(x|y)(x|y)(x|y))*"
+        },
+        {
+          "value": "B",
+          "label": "(x|y)*"
+        },
+        {
+          "value": "C",
+          "label": "(x|y)((x|y)(x|y)(x|y)(x|y))*"
+        },
+        {
+          "value": "D",
+          "label": "(x|y)(x|y)(x|y)(x|y)"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q7(a), p. 14; S09 pp. 4-5, 23",
+      "worked_solution": [
+        "Let B=(x|y), describing one arbitrary alphabet symbol. Use 1 leading copies, then any number of groups of 4 copies.",
+        "The lengths are exactly 1+4k for k≥0. Every word of such a length can be divided this way.",
+        "The constructed regular expression specifies precisely the target, so the equivalence theorem implies the language is regular. A remainder DFA gives an alternative proof."
+      ],
+      "option_feedback": {
+        "A": "Counterexample x: target accepts, but this expression rejects.",
+        "B": "Counterexample ε: target rejects, but this expression accepts.",
+        "C": "This expression describes exactly the target language.",
+        "D": "Counterexample x: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A07-04",
+      "topic": "A07",
+      "title": "Choose a representation to prove regularity",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the equivalence theorem to prove that words over {0,1} with length congruent to 0 modulo 5 form a regular language. Choose an exact regex; R^k here would mean k concatenated copies, not Kleene star.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(0|1)(0|1)(0|1)(0|1)(0|1)"
+        },
+        {
+          "value": "B",
+          "label": "(0|1)*"
+        },
+        {
+          "value": "C",
+          "label": "(0|1)((0|1)(0|1)(0|1)(0|1)(0|1))*"
+        },
+        {
+          "value": "D",
+          "label": "((0|1)(0|1)(0|1)(0|1)(0|1))*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q7(a), p. 14; S09 pp. 4-5, 23",
+      "worked_solution": [
+        "Let B=(0|1), describing one arbitrary alphabet symbol. Use 0 leading copies, then any number of groups of 5 copies.",
+        "The lengths are exactly 0+5k for k≥0. Every word of such a length can be divided this way.",
+        "The constructed regular expression specifies precisely the target, so the equivalence theorem implies the language is regular. A remainder DFA gives an alternative proof."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ε: target accepts, but this expression rejects.",
+        "B": "Counterexample 0: target rejects, but this expression accepts.",
+        "C": "Counterexample ε: target accepts, but this expression rejects.",
+        "D": "This expression describes exactly the target language."
+      }
+    },
+    {
+      "id": "A07-05",
+      "topic": "A07",
+      "title": "Avoid drawing a huge length DFA",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over a fixed finite nonempty alphabet, words must have length divisible by 4, 6 AND 9. Leading positions have no other restrictions and ε is allowed. Select the exact expression and justify regularity.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Regular; (Σ^36)*"
+        },
+        {
+          "value": "B",
+          "label": "Regular; (Σ^19)*"
+        },
+        {
+          "value": "C",
+          "label": "Regular; (Σ^9)*"
+        },
+        {
+          "value": "D",
+          "label": "Regular; (Σ^216)*"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The required block length is the least common multiple, which need not equal the product when the divisors share factors.",
+      "sources": "S01 Q7(b), pp. 14-15; S09 p. 23",
+      "worked_solution": [
+        "lcm(4, 6, 9)=36. A length satisfies all three divisibilities exactly when it is a multiple of 36.",
+        "Σ^36 is a fixed concatenation of a finite regular symbol language; its star is regular.",
+        "Equivalently, intersect the three regular multiple-length languages. A DFA can track length modulo 36, but drawing it is unnecessary."
+      ]
+    },
+    {
+      "id": "A07-06",
+      "topic": "A07",
+      "title": "Avoid drawing a huge length DFA",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over a fixed finite nonempty alphabet, words must have length divisible by 5, 7 AND 9. Leading positions have no other restrictions and ε is allowed. Select the exact expression and justify regularity.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Regular; (Σ^21)*"
+        },
+        {
+          "value": "B",
+          "label": "Regular; (Σ^9)*"
+        },
+        {
+          "value": "C",
+          "label": "Regular; (Σ^316)*"
+        },
+        {
+          "value": "D",
+          "label": "Regular; (Σ^315)*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The required block length is the least common multiple, which need not equal the product when the divisors share factors.",
+      "sources": "S01 Q7(b), pp. 14-15; S09 p. 23",
+      "worked_solution": [
+        "lcm(5, 7, 9)=315. A length satisfies all three divisibilities exactly when it is a multiple of 315.",
+        "Σ^315 is a fixed concatenation of a finite regular symbol language; its star is regular.",
+        "Equivalently, intersect the three regular multiple-length languages. A DFA can track length modulo 315, but drawing it is unnecessary."
+      ]
+    },
+    {
+      "id": "A07-07",
+      "topic": "A07",
+      "title": "Avoid drawing a huge length DFA",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over a fixed finite nonempty alphabet, words must have length divisible by 6, 10 AND 15. Leading positions have no other restrictions and ε is allowed. Select the exact expression and justify regularity.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Regular; (Σ^15)*"
+        },
+        {
+          "value": "B",
+          "label": "Regular; (Σ^30)*"
+        },
+        {
+          "value": "C",
+          "label": "Regular; (Σ^900)*"
+        },
+        {
+          "value": "D",
+          "label": "Regular; (Σ^31)*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The required block length is the least common multiple, which need not equal the product when the divisors share factors.",
+      "sources": "S01 Q7(b), pp. 14-15; S09 p. 23",
+      "worked_solution": [
+        "lcm(6, 10, 15)=30. A length satisfies all three divisibilities exactly when it is a multiple of 30.",
+        "Σ^30 is a fixed concatenation of a finite regular symbol language; its star is regular.",
+        "Equivalently, intersect the three regular multiple-length languages. A DFA can track length modulo 30, but drawing it is unnecessary."
+      ]
+    },
+    {
+      "id": "A07-08",
+      "topic": "A07",
+      "title": "Avoid drawing a huge length DFA",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Over a fixed finite nonempty alphabet, words must have length divisible by 8, 12 AND 18. Leading positions have no other restrictions and ε is allowed. Select the exact expression and justify regularity.",
+      "options": [
+        {
+          "value": "A",
+          "label": "Regular; (Σ^18)*"
+        },
+        {
+          "value": "B",
+          "label": "Regular; (Σ^1728)*"
+        },
+        {
+          "value": "C",
+          "label": "Regular; (Σ^72)*"
+        },
+        {
+          "value": "D",
+          "label": "Regular; (Σ^38)*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The required block length is the least common multiple, which need not equal the product when the divisors share factors.",
+      "sources": "S01 Q7(b), pp. 14-15; S09 p. 23",
+      "worked_solution": [
+        "lcm(8, 12, 18)=72. A length satisfies all three divisibilities exactly when it is a multiple of 72.",
+        "Σ^72 is a fixed concatenation of a finite regular symbol language; its star is regular.",
+        "Equivalently, intersect the three regular multiple-length languages. A DFA can track length modulo 72, but drawing it is unnecessary."
+      ]
+    },
+    {
+      "id": "A08-01",
+      "topic": "A08",
+      "title": "Eliminate two interior GNFA states",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "The GNFA below has start s and sole final f. Unlisted edges mean ∅. Eliminate p first and q second, keeping direct alternatives and loops. Which regex describes the complete language?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(ε)|(a)(b)*(b)|((b)|(a)(b)*(a))(b)*(a)"
+        },
+        {
+          "value": "B",
+          "label": "(ε)|(a)(b)(b)|((b)|(a)(b)(a))(b)(a)"
+        },
+        {
+          "value": "C",
+          "label": "(ε)|(a)(b)|((b)|(a)(a))(a)"
+        },
+        {
+          "value": "D",
+          "label": "(a)(b)*(b)|((b)|(a)(b)*(a))(b)*(a)"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(a), pp. 15-17; S09 pp. 10-12",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "p",
+            "a"
+          ],
+          [
+            "p",
+            "p",
+            "b"
+          ],
+          [
+            "p",
+            "q",
+            "a"
+          ],
+          [
+            "q",
+            "q",
+            "b"
+          ],
+          [
+            "q",
+            "f",
+            "a"
+          ],
+          [
+            "s",
+            "q",
+            "b"
+          ],
+          [
+            "p",
+            "f",
+            "b"
+          ],
+          [
+            "s",
+            "f",
+            "ε"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "After removing p: s→q becomes (b)|(a)(b)*(a); s→f becomes (ε)|(a)(b)*(b). The q loop and q→f remain unchanged.",
+        "After removing q, append the through-q term ((b)|(a)(b)*(a))(b)*(a) to the existing s→f alternative.",
+        "The result is (ε)|(a)(b)*(b)|((b)|(a)(b)*(a))(b)*(a). Since s has no incoming edge and f no outgoing edge, this sole final edge is the answer."
+      ],
+      "option_feedback": {
+        "A": "This expression describes exactly the target language.",
+        "B": "Counterexample ab: target accepts, but this expression rejects.",
+        "C": "Counterexample abb: target accepts, but this expression rejects.",
+        "D": "Counterexample ε: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A08-02",
+      "topic": "A08",
+      "title": "Eliminate two interior GNFA states",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "The GNFA below has start s and sole final f. Unlisted edges mean ∅. Eliminate p first and q second, keeping direct alternatives and loops. Which regex describes the complete language?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(00)"
+        },
+        {
+          "value": "B",
+          "label": "(00)|(0)(0)|((1)|(0)(0))(1)"
+        },
+        {
+          "value": "C",
+          "label": "(00)|(0)(1)*(0)|((1)|(0)(1)*(0))(1)*(1)"
+        },
+        {
+          "value": "D",
+          "label": "(00)|(0)(1)(0)|((1)|(0)(1)(0))(1)(1)"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(a), pp. 15-17; S09 pp. 10-12",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "p",
+            "0"
+          ],
+          [
+            "p",
+            "p",
+            "1"
+          ],
+          [
+            "p",
+            "q",
+            "0"
+          ],
+          [
+            "q",
+            "q",
+            "1"
+          ],
+          [
+            "q",
+            "f",
+            "1"
+          ],
+          [
+            "s",
+            "q",
+            "1"
+          ],
+          [
+            "p",
+            "f",
+            "0"
+          ],
+          [
+            "s",
+            "f",
+            "00"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "After removing p: s→q becomes (1)|(0)(1)*(0); s→f becomes (00)|(0)(1)*(0). The q loop and q→f remain unchanged.",
+        "After removing q, append the through-q term ((1)|(0)(1)*(0))(1)*(1) to the existing s→f alternative.",
+        "The result is (00)|(0)(1)*(0)|((1)|(0)(1)*(0))(1)*(1). Since s has no incoming edge and f no outgoing edge, this sole final edge is the answer."
+      ],
+      "option_feedback": {
+        "A": "Counterexample 11: target accepts, but this expression rejects.",
+        "B": "Counterexample 010: target accepts, but this expression rejects.",
+        "C": "This expression describes exactly the target language.",
+        "D": "Counterexample 11: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A08-03",
+      "topic": "A08",
+      "title": "Eliminate two interior GNFA states",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "The GNFA below has start s and sole final f. Unlisted edges mean ∅. Eliminate p first and q second, keeping direct alternatives and loops. Which regex describes the complete language?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(b)|(a)(a)(b)|((ε)|(a)(a)(b))(b)(a)"
+        },
+        {
+          "value": "B",
+          "label": "(b)|(a)(a)*(b)|((ε)|(a)(a)*(b))(b)*(a)"
+        },
+        {
+          "value": "C",
+          "label": "(b)|(a)(b)|((ε)|(a)(b))(a)"
+        },
+        {
+          "value": "D",
+          "label": "(a)(a)*(b)|((ε)|(a)(a)*(b))(b)*(a)"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(a), pp. 15-17; S09 pp. 10-12",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "p",
+            "a"
+          ],
+          [
+            "p",
+            "p",
+            "a"
+          ],
+          [
+            "p",
+            "q",
+            "b"
+          ],
+          [
+            "q",
+            "q",
+            "b"
+          ],
+          [
+            "q",
+            "f",
+            "a"
+          ],
+          [
+            "s",
+            "q",
+            "ε"
+          ],
+          [
+            "p",
+            "f",
+            "b"
+          ],
+          [
+            "s",
+            "f",
+            "b"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "After removing p: s→q becomes (ε)|(a)(a)*(b); s→f becomes (b)|(a)(a)*(b). The q loop and q→f remain unchanged.",
+        "After removing q, append the through-q term ((ε)|(a)(a)*(b))(b)*(a) to the existing s→f alternative.",
+        "The result is (b)|(a)(a)*(b)|((ε)|(a)(a)*(b))(b)*(a). Since s has no incoming edge and f no outgoing edge, this sole final edge is the answer."
+      ],
+      "option_feedback": {
+        "A": "Counterexample a: target accepts, but this expression rejects.",
+        "B": "This expression describes exactly the target language.",
+        "C": "Counterexample ba: target accepts, but this expression rejects.",
+        "D": "Counterexample b: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A08-04",
+      "topic": "A08",
+      "title": "Eliminate two interior GNFA states",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "The GNFA below has start s and sole final f. Unlisted edges mean ∅. Eliminate p first and q second, keeping direct alternatives and loops. Which regex describes the complete language?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(0)(0)*(ε)|((1)|(0)(0)*(1))(0)*(1)"
+        },
+        {
+          "value": "B",
+          "label": "(01)|(0)(0)(ε)|((1)|(0)(0)(1))(0)(1)"
+        },
+        {
+          "value": "C",
+          "label": "(01)|(0)(ε)|((1)|(0)(1))(1)"
+        },
+        {
+          "value": "D",
+          "label": "(01)|(0)(0)*(ε)|((1)|(0)(0)*(1))(0)*(1)"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(a), pp. 15-17; S09 pp. 10-12",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "p",
+            "0"
+          ],
+          [
+            "p",
+            "p",
+            "0"
+          ],
+          [
+            "p",
+            "q",
+            "1"
+          ],
+          [
+            "q",
+            "q",
+            "0"
+          ],
+          [
+            "q",
+            "f",
+            "1"
+          ],
+          [
+            "s",
+            "q",
+            "1"
+          ],
+          [
+            "p",
+            "f",
+            "ε"
+          ],
+          [
+            "s",
+            "f",
+            "01"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "After removing p: s→q becomes (1)|(0)(0)*(1); s→f becomes (01)|(0)(0)*(ε). The q loop and q→f remain unchanged.",
+        "After removing q, append the through-q term ((1)|(0)(0)*(1))(0)*(1) to the existing s→f alternative.",
+        "The result is (01)|(0)(0)*(ε)|((1)|(0)(0)*(1))(0)*(1). Since s has no incoming edge and f no outgoing edge, this sole final edge is the answer."
+      ],
+      "option_feedback": {
+        "A": "Counterexample 01: target accepts, but this expression rejects.",
+        "B": "Counterexample 0: target accepts, but this expression rejects.",
+        "C": "Counterexample 00: target accepts, but this expression rejects.",
+        "D": "This expression describes exactly the target language."
+      }
+    },
+    {
+      "id": "A08-05",
+      "topic": "A08",
+      "title": "Eliminate two interior GNFA states",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "The GNFA below has start s and sole final f. Unlisted edges mean ∅. Eliminate p first and q second, keeping direct alternatives and loops. Which regex describes the complete language?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(a)(b)*(ε)|((a)|(a)(b)*(b))(a)*(b)"
+        },
+        {
+          "value": "B",
+          "label": "(aa)|(a)(b)(ε)|((a)|(a)(b)(b))(a)(b)"
+        },
+        {
+          "value": "C",
+          "label": "(aa)|(a)(b)*(ε)|((a)|(a)(b)*(b))(a)*(b)"
+        },
+        {
+          "value": "D",
+          "label": "(aa)|(a)(ε)|((a)|(a)(b))(b)"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(a), pp. 15-17; S09 pp. 10-12",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "p",
+            "a"
+          ],
+          [
+            "p",
+            "p",
+            "b"
+          ],
+          [
+            "p",
+            "q",
+            "b"
+          ],
+          [
+            "q",
+            "q",
+            "a"
+          ],
+          [
+            "q",
+            "f",
+            "b"
+          ],
+          [
+            "s",
+            "q",
+            "a"
+          ],
+          [
+            "p",
+            "f",
+            "ε"
+          ],
+          [
+            "s",
+            "f",
+            "aa"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "After removing p: s→q becomes (a)|(a)(b)*(b); s→f becomes (aa)|(a)(b)*(ε). The q loop and q→f remain unchanged.",
+        "After removing q, append the through-q term ((a)|(a)(b)*(b))(a)*(b) to the existing s→f alternative.",
+        "The result is (aa)|(a)(b)*(ε)|((a)|(a)(b)*(b))(a)*(b). Since s has no incoming edge and f no outgoing edge, this sole final edge is the answer."
+      ],
+      "option_feedback": {
+        "A": "Counterexample aa: target accepts, but this expression rejects.",
+        "B": "Counterexample a: target accepts, but this expression rejects.",
+        "C": "This expression describes exactly the target language.",
+        "D": "Counterexample aab: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A08-06",
+      "topic": "A08",
+      "title": "Eliminate two interior GNFA states",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "The GNFA below has start s and sole final f. Unlisted edges mean ∅. Eliminate p first and q second, keeping direct alternatives and loops. Which regex describes the complete language?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(ε)|(1)(1)|((0)|(1)(1))(0)"
+        },
+        {
+          "value": "B",
+          "label": "(1)(0)*(1)|((0)|(1)(0)*(1))(1)*(0)"
+        },
+        {
+          "value": "C",
+          "label": "(ε)|(1)(0)*(1)|((0)|(1)(0)*(1))(1)*(0)"
+        },
+        {
+          "value": "D",
+          "label": "(ε)|(1)(0)(1)|((0)|(1)(0)(1))(1)(0)"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(a), pp. 15-17; S09 pp. 10-12",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "p",
+            "1"
+          ],
+          [
+            "p",
+            "p",
+            "0"
+          ],
+          [
+            "p",
+            "q",
+            "1"
+          ],
+          [
+            "q",
+            "q",
+            "1"
+          ],
+          [
+            "q",
+            "f",
+            "0"
+          ],
+          [
+            "s",
+            "q",
+            "0"
+          ],
+          [
+            "p",
+            "f",
+            "1"
+          ],
+          [
+            "s",
+            "f",
+            "ε"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "After removing p: s→q becomes (0)|(1)(0)*(1); s→f becomes (ε)|(1)(0)*(1). The q loop and q→f remain unchanged.",
+        "After removing q, append the through-q term ((0)|(1)(0)*(1))(1)*(0) to the existing s→f alternative.",
+        "The result is (ε)|(1)(0)*(1)|((0)|(1)(0)*(1))(1)*(0). Since s has no incoming edge and f no outgoing edge, this sole final edge is the answer."
+      ],
+      "option_feedback": {
+        "A": "Counterexample 010: target accepts, but this expression rejects.",
+        "B": "Counterexample ε: target accepts, but this expression rejects.",
+        "C": "This expression describes exactly the target language.",
+        "D": "Counterexample 00: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A08-07",
+      "topic": "A08",
+      "title": "Eliminate with loops and return edges",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "This GNFA has distinct start s and sole final f; loops and edges returning from f are allowed. Eliminate p, then account for all remaining cycles. Which full regex is correct? Unlisted edges mean ∅.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(0)*((00)|(1)(0)*(1))(1)*"
+        },
+        {
+          "value": "B",
+          "label": "(0)*((00)|(1)(0)*(1))((0)(0)*((00)|(1)(0)*(1))|(1))*"
+        },
+        {
+          "value": "C",
+          "label": "(0)*((00)|(1)(0)*(1))((0)((00)|(1)(0)*(1))|(1))*"
+        },
+        {
+          "value": "D",
+          "label": "(0)*((00)|(1)(0)*(1))"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(b), pp. 17-19; S09 pp. 10-14",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "s",
+            "0"
+          ],
+          [
+            "s",
+            "p",
+            "1"
+          ],
+          [
+            "p",
+            "p",
+            "0"
+          ],
+          [
+            "p",
+            "f",
+            "1"
+          ],
+          [
+            "f",
+            "s",
+            "0"
+          ],
+          [
+            "f",
+            "f",
+            "1"
+          ],
+          [
+            "s",
+            "f",
+            "00"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Eliminate p: the s→f label is R=((00)|(1)(0)*(1)). The s loop is 0, the f→s return is 0, and the f loop is 1.",
+        "First reach f by (0)*R. At f, repeat either its local loop 1 or a return excursion 0(0)*R.",
+        "Therefore the language is described by (0)*((00)|(1)(0)*(1))((0)(0)*((00)|(1)(0)*(1))|(1))*. Removing the return-excursion term would lose accepting paths."
+      ],
+      "option_feedback": {
+        "A": "Counterexample 11000: target accepts, but this expression rejects.",
+        "B": "This expression describes exactly the target language.",
+        "C": "Counterexample 110000: target accepts, but this expression rejects.",
+        "D": "Counterexample 001: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A08-08",
+      "topic": "A08",
+      "title": "Eliminate with loops and return edges",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "This GNFA has distinct start s and sole final f; loops and edges returning from f are allowed. Eliminate p, then account for all remaining cycles. Which full regex is correct? Unlisted edges mean ∅.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(a)*((ε)|(b)(a)*(b))((a)(a)*((ε)|(b)(a)*(b))|(b))"
+        },
+        {
+          "value": "B",
+          "label": "(a)*((ε)|(b)(a)*(b))"
+        },
+        {
+          "value": "C",
+          "label": "(a)*((ε)|(b)(a)*(b))((a)(a)*((ε)|(b)(a)*(b))|(b))*"
+        },
+        {
+          "value": "D",
+          "label": "(a)*((ε)|(b)(a)*(b))(b)*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(b), pp. 17-19; S09 pp. 10-14",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "s",
+            "a"
+          ],
+          [
+            "s",
+            "p",
+            "b"
+          ],
+          [
+            "p",
+            "p",
+            "a"
+          ],
+          [
+            "p",
+            "f",
+            "b"
+          ],
+          [
+            "f",
+            "s",
+            "a"
+          ],
+          [
+            "f",
+            "f",
+            "b"
+          ],
+          [
+            "s",
+            "f",
+            "ε"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Eliminate p: the s→f label is R=((ε)|(b)(a)*(b)). The s loop is a, the f→s return is a, and the f loop is b.",
+        "First reach f by (a)*R. At f, repeat either its local loop b or a return excursion a(a)*R.",
+        "Therefore the language is described by (a)*((ε)|(b)(a)*(b))((a)(a)*((ε)|(b)(a)*(b))|(b))*. Removing the return-excursion term would lose accepting paths."
+      ],
+      "option_feedback": {
+        "A": "Counterexample ε: target accepts, but this expression rejects.",
+        "B": "Counterexample b: target accepts, but this expression rejects.",
+        "C": "This expression describes exactly the target language.",
+        "D": "Counterexample ba: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A08-09",
+      "topic": "A08",
+      "title": "Eliminate with loops and return edges",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "This GNFA has distinct start s and sole final f; loops and edges returning from f are allowed. Eliminate p, then account for all remaining cycles. Which full regex is correct? Unlisted edges mean ∅.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(1)*((11)|(0)(1)*(0))(0)*"
+        },
+        {
+          "value": "B",
+          "label": "(1)*((11)|(0)(1)*(0))((1)((11)|(0)(1)*(0))|(0))*"
+        },
+        {
+          "value": "C",
+          "label": "(1)*((11)|(0)(1)*(0))"
+        },
+        {
+          "value": "D",
+          "label": "(1)*((11)|(0)(1)*(0))((1)(1)*((11)|(0)(1)*(0))|(0))*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(b), pp. 17-19; S09 pp. 10-14",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "s",
+            "1"
+          ],
+          [
+            "s",
+            "p",
+            "0"
+          ],
+          [
+            "p",
+            "p",
+            "1"
+          ],
+          [
+            "p",
+            "f",
+            "0"
+          ],
+          [
+            "f",
+            "s",
+            "1"
+          ],
+          [
+            "f",
+            "f",
+            "0"
+          ],
+          [
+            "s",
+            "f",
+            "11"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Eliminate p: the s→f label is R=((11)|(0)(1)*(0)). The s loop is 1, the f→s return is 1, and the f loop is 0.",
+        "First reach f by (1)*R. At f, repeat either its local loop 0 or a return excursion 1(1)*R.",
+        "Therefore the language is described by (1)*((11)|(0)(1)*(0))((1)(1)*((11)|(0)(1)*(0))|(0))*. Removing the return-excursion term would lose accepting paths."
+      ],
+      "option_feedback": {
+        "A": "Counterexample 00100: target accepts, but this expression rejects.",
+        "B": "Counterexample 001100: target accepts, but this expression rejects.",
+        "C": "Counterexample 000: target accepts, but this expression rejects.",
+        "D": "This expression describes exactly the target language."
+      }
+    },
+    {
+      "id": "A08-10",
+      "topic": "A08",
+      "title": "Eliminate with loops and return edges",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "This GNFA has distinct start s and sole final f; loops and edges returning from f are allowed. Eliminate p, then account for all remaining cycles. Which full regex is correct? Unlisted edges mean ∅.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(b)*((bb)|(a)(b)*(a))(a)*"
+        },
+        {
+          "value": "B",
+          "label": "(b)*((bb)|(a)(b)*(a))"
+        },
+        {
+          "value": "C",
+          "label": "(b)*((bb)|(a)(b)*(a))((b)(b)*((bb)|(a)(b)*(a))|(a))*"
+        },
+        {
+          "value": "D",
+          "label": "(b)*((bb)|(a)(b)*(a))((b)((bb)|(a)(b)*(a))|(a))*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(b), pp. 17-19; S09 pp. 10-14",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "s",
+            "b"
+          ],
+          [
+            "s",
+            "p",
+            "a"
+          ],
+          [
+            "p",
+            "p",
+            "b"
+          ],
+          [
+            "p",
+            "f",
+            "a"
+          ],
+          [
+            "f",
+            "s",
+            "b"
+          ],
+          [
+            "f",
+            "f",
+            "a"
+          ],
+          [
+            "s",
+            "f",
+            "bb"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Eliminate p: the s→f label is R=((bb)|(a)(b)*(a)). The s loop is b, the f→s return is b, and the f loop is a.",
+        "First reach f by (b)*R. At f, repeat either its local loop a or a return excursion b(b)*R.",
+        "Therefore the language is described by (b)*((bb)|(a)(b)*(a))((b)(b)*((bb)|(a)(b)*(a))|(a))*. Removing the return-excursion term would lose accepting paths."
+      ],
+      "option_feedback": {
+        "A": "Counterexample aabaa: target accepts, but this expression rejects.",
+        "B": "Counterexample aaa: target accepts, but this expression rejects.",
+        "C": "This expression describes exactly the target language.",
+        "D": "Counterexample aabbaa: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A08-11",
+      "topic": "A08",
+      "title": "Eliminate with loops and return edges",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "This GNFA has distinct start s and sole final f; loops and edges returning from f are allowed. Eliminate p, then account for all remaining cycles. Which full regex is correct? Unlisted edges mean ∅.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(0)*((10)|(ε)(1)*(0))((1)(0)*((10)|(ε)(1)*(0))|(0))*"
+        },
+        {
+          "value": "B",
+          "label": "(0)*((10)|(ε)(1)*(0))((1)(0)*((10)|(ε)(1)*(0))|(0))"
+        },
+        {
+          "value": "C",
+          "label": "(0)*((10)|(ε)(1)*(0))"
+        },
+        {
+          "value": "D",
+          "label": "(0)*((10)|(ε)(1)*(0))(0)*"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(b), pp. 17-19; S09 pp. 10-14",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "s",
+            "0"
+          ],
+          [
+            "s",
+            "p",
+            "ε"
+          ],
+          [
+            "p",
+            "p",
+            "1"
+          ],
+          [
+            "p",
+            "f",
+            "0"
+          ],
+          [
+            "f",
+            "s",
+            "1"
+          ],
+          [
+            "f",
+            "f",
+            "0"
+          ],
+          [
+            "s",
+            "f",
+            "10"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Eliminate p: the s→f label is R=((10)|(ε)(1)*(0)). The s loop is 0, the f→s return is 1, and the f loop is 0.",
+        "First reach f by (0)*R. At f, repeat either its local loop 0 or a return excursion 1(0)*R.",
+        "Therefore the language is described by (0)*((10)|(ε)(1)*(0))((1)(0)*((10)|(ε)(1)*(0))|(0))*. Removing the return-excursion term would lose accepting paths."
+      ],
+      "option_feedback": {
+        "A": "This expression describes exactly the target language.",
+        "B": "Counterexample 0: target accepts, but this expression rejects.",
+        "C": "Counterexample 100: target accepts, but this expression rejects.",
+        "D": "Counterexample 1010: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A08-12",
+      "topic": "A08",
+      "title": "Eliminate with loops and return edges",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "This GNFA has distinct start s and sole final f; loops and edges returning from f are allowed. Eliminate p, then account for all remaining cycles. Which full regex is correct? Unlisted edges mean ∅.",
+      "options": [
+        {
+          "value": "A",
+          "label": "(a)*((ab)|(b)(b)*(a))((b)(a)*((ab)|(b)(b)*(a))|(a))*"
+        },
+        {
+          "value": "B",
+          "label": "(a)*((ab)|(b)(b)*(a))(a)*"
+        },
+        {
+          "value": "C",
+          "label": "(a)*((ab)|(b)(b)*(a))((b)((ab)|(b)(b)*(a))|(a))*"
+        },
+        {
+          "value": "D",
+          "label": "(a)*((ab)|(b)(b)*(a))"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The construction in the worked solution preserves exactly the required words.",
+      "sources": "S01 Q8(b), pp. 17-19; S09 pp. 10-14",
+      "table": {
+        "headers": [
+          "From",
+          "To",
+          "Regex label"
+        ],
+        "rows": [
+          [
+            "s",
+            "s",
+            "a"
+          ],
+          [
+            "s",
+            "p",
+            "b"
+          ],
+          [
+            "p",
+            "p",
+            "b"
+          ],
+          [
+            "p",
+            "f",
+            "a"
+          ],
+          [
+            "f",
+            "s",
+            "b"
+          ],
+          [
+            "f",
+            "f",
+            "a"
+          ],
+          [
+            "s",
+            "f",
+            "ab"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Eliminate p: the s→f label is R=((ab)|(b)(b)*(a)). The s loop is a, the f→s return is b, and the f loop is a.",
+        "First reach f by (a)*R. At f, repeat either its local loop a or a return excursion b(a)*R.",
+        "Therefore the language is described by (a)*((ab)|(b)(b)*(a))((b)(a)*((ab)|(b)(b)*(a))|(a))*. Removing the return-excursion term would lose accepting paths."
+      ],
+      "option_feedback": {
+        "A": "This expression describes exactly the target language.",
+        "B": "Counterexample abbab: target accepts, but this expression rejects.",
+        "C": "Counterexample abbaab: target accepts, but this expression rejects.",
+        "D": "Counterexample baa: target accepts, but this expression rejects."
+      }
+    },
+    {
+      "id": "A09-01",
+      "topic": "A09",
+      "title": "Build every reachable subset state",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the complete NFA table below to construct the reachable equivalent DFA. ∅ means no successor. Include ε-closure before input and after each symbol move. Work out every row before selecting the correct summary.",
+      "options": [
+        {
+          "value": "A",
+          "label": "3 reachable states; 1 final states; empty subset reachable."
+        },
+        {
+          "value": "B",
+          "label": "3 reachable states; 2 final states; empty subset unreachable."
+        },
+        {
+          "value": "C",
+          "label": "4 reachable states; 1 final states; empty subset unreachable."
+        },
+        {
+          "value": "D",
+          "label": "3 reachable states; 1 final states; empty subset unreachable."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Reachability starts at the start closure. Finality requires at least one NFA final state, and duplicate subsets count once.",
+      "sources": "S01 Q9(a), pp. 19-20; S09 pp. 16-21",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "a",
+          "b",
+          "ε"
+        ],
+        "rows": [
+          [
+            "s",
+            "start nonfinal",
+            "{p,s}",
+            "{s}",
+            "∅"
+          ],
+          [
+            "p",
+            "nonfinal",
+            "∅",
+            "{f}",
+            "∅"
+          ],
+          [
+            "f",
+            "final",
+            "∅",
+            "∅",
+            "∅"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "The start closure is {s}. Name it q0.",
+        "For each discovered subset S and each symbol c, compute E(⋃δ(q,c):q∈S). Continue until no new set appears.",
+        {
+          "headers": [
+            "DFA state",
+            "NFA subset",
+            "Final?",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "q0",
+              "{s}",
+              "no",
+              "q1",
+              "q0"
+            ],
+            [
+              "q1",
+              "{p,s}",
+              "no",
+              "q1",
+              "q2"
+            ],
+            [
+              "q2",
+              "{f,s}",
+              "yes",
+              "q1",
+              "q0"
+            ]
+          ]
+        },
+        "The result has 3 reachable states and 1 final states. The empty subset is unreachable and need not be added to this reachable table."
+      ]
+    },
+    {
+      "id": "A09-02",
+      "topic": "A09",
+      "title": "Build every reachable subset state",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the complete NFA table below to construct the reachable equivalent DFA. ∅ means no successor. Include ε-closure before input and after each symbol move. Work out every row before selecting the correct summary.",
+      "options": [
+        {
+          "value": "A",
+          "label": "8 reachable states; 3 final states; empty subset reachable."
+        },
+        {
+          "value": "B",
+          "label": "7 reachable states; 3 final states; empty subset reachable."
+        },
+        {
+          "value": "C",
+          "label": "7 reachable states; 3 final states; empty subset unreachable."
+        },
+        {
+          "value": "D",
+          "label": "7 reachable states; 4 final states; empty subset reachable."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Reachability starts at the start closure. Finality requires at least one NFA final state, and duplicate subsets count once.",
+      "sources": "S01 Q9(a), pp. 19-20; S09 pp. 16-21",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "a",
+          "b",
+          "ε"
+        ],
+        "rows": [
+          [
+            "s",
+            "start nonfinal",
+            "∅",
+            "∅",
+            "{p,r}"
+          ],
+          [
+            "p",
+            "nonfinal",
+            "{p}",
+            "{f}",
+            "∅"
+          ],
+          [
+            "r",
+            "nonfinal",
+            "{f}",
+            "{r}",
+            "∅"
+          ],
+          [
+            "f",
+            "final",
+            "∅",
+            "∅",
+            "∅"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "The start closure is {p,r,s}. Name it q0.",
+        "For each discovered subset S and each symbol c, compute E(⋃δ(q,c):q∈S). Continue until no new set appears.",
+        {
+          "headers": [
+            "DFA state",
+            "NFA subset",
+            "Final?",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "q0",
+              "{p,r,s}",
+              "no",
+              "q1",
+              "q2"
+            ],
+            [
+              "q1",
+              "{f,p}",
+              "yes",
+              "q3",
+              "q4"
+            ],
+            [
+              "q2",
+              "{f,r}",
+              "yes",
+              "q4",
+              "q5"
+            ],
+            [
+              "q3",
+              "{p}",
+              "no",
+              "q3",
+              "q4"
+            ],
+            [
+              "q4",
+              "{f}",
+              "yes",
+              "q6",
+              "q6"
+            ],
+            [
+              "q5",
+              "{r}",
+              "no",
+              "q4",
+              "q5"
+            ],
+            [
+              "q6",
+              "∅",
+              "no",
+              "q6",
+              "q6"
+            ]
+          ]
+        },
+        "The result has 7 reachable states and 3 final states. The empty subset is reachable and is a rejecting sink."
+      ]
+    },
+    {
+      "id": "A09-03",
+      "topic": "A09",
+      "title": "Build every reachable subset state",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the complete NFA table below to construct the reachable equivalent DFA. ∅ means no successor. Include ε-closure before input and after each symbol move. Work out every row before selecting the correct summary.",
+      "options": [
+        {
+          "value": "A",
+          "label": "5 reachable states; 1 final states; empty subset reachable."
+        },
+        {
+          "value": "B",
+          "label": "4 reachable states; 1 final states; empty subset reachable."
+        },
+        {
+          "value": "C",
+          "label": "4 reachable states; 1 final states; empty subset unreachable."
+        },
+        {
+          "value": "D",
+          "label": "4 reachable states; 2 final states; empty subset reachable."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Reachability starts at the start closure. Finality requires at least one NFA final state, and duplicate subsets count once.",
+      "sources": "S01 Q9(a), pp. 19-20; S09 pp. 16-21",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "a",
+          "b",
+          "ε"
+        ],
+        "rows": [
+          [
+            "s",
+            "start nonfinal",
+            "∅",
+            "∅",
+            "{p}"
+          ],
+          [
+            "p",
+            "nonfinal",
+            "{p,q}",
+            "∅",
+            "∅"
+          ],
+          [
+            "q",
+            "nonfinal",
+            "∅",
+            "{f}",
+            "∅"
+          ],
+          [
+            "f",
+            "final",
+            "∅",
+            "∅",
+            "{q}"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "The start closure is {p,s}. Name it q0.",
+        "For each discovered subset S and each symbol c, compute E(⋃δ(q,c):q∈S). Continue until no new set appears.",
+        {
+          "headers": [
+            "DFA state",
+            "NFA subset",
+            "Final?",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "q0",
+              "{p,s}",
+              "no",
+              "q1",
+              "q2"
+            ],
+            [
+              "q1",
+              "{p,q}",
+              "no",
+              "q1",
+              "q3"
+            ],
+            [
+              "q2",
+              "∅",
+              "no",
+              "q2",
+              "q2"
+            ],
+            [
+              "q3",
+              "{f,q}",
+              "yes",
+              "q2",
+              "q3"
+            ]
+          ]
+        },
+        "The result has 4 reachable states and 1 final states. The empty subset is reachable and is a rejecting sink."
+      ]
+    },
+    {
+      "id": "A09-04",
+      "topic": "A09",
+      "title": "Build every reachable subset state",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the complete NFA table below to construct the reachable equivalent DFA. ∅ means no successor. Include ε-closure before input and after each symbol move. Work out every row before selecting the correct summary.",
+      "options": [
+        {
+          "value": "A",
+          "label": "8 reachable states; 4 final states; empty subset reachable."
+        },
+        {
+          "value": "B",
+          "label": "8 reachable states; 5 final states; empty subset unreachable."
+        },
+        {
+          "value": "C",
+          "label": "9 reachable states; 4 final states; empty subset unreachable."
+        },
+        {
+          "value": "D",
+          "label": "8 reachable states; 4 final states; empty subset unreachable."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Reachability starts at the start closure. Finality requires at least one NFA final state, and duplicate subsets count once.",
+      "sources": "S01 Q9(a), pp. 19-20; S09 pp. 16-21",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "0",
+          "1",
+          "ε"
+        ],
+        "rows": [
+          [
+            "s",
+            "start nonfinal",
+            "{s}",
+            "{p,s}",
+            "∅"
+          ],
+          [
+            "p",
+            "nonfinal",
+            "{q}",
+            "{q}",
+            "∅"
+          ],
+          [
+            "q",
+            "nonfinal",
+            "{f}",
+            "{f}",
+            "∅"
+          ],
+          [
+            "f",
+            "final",
+            "∅",
+            "∅",
+            "∅"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "The start closure is {s}. Name it q0.",
+        "For each discovered subset S and each symbol c, compute E(⋃δ(q,c):q∈S). Continue until no new set appears.",
+        {
+          "headers": [
+            "DFA state",
+            "NFA subset",
+            "Final?",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "q0",
+              "{s}",
+              "no",
+              "q0",
+              "q1"
+            ],
+            [
+              "q1",
+              "{p,s}",
+              "no",
+              "q2",
+              "q3"
+            ],
+            [
+              "q2",
+              "{q,s}",
+              "no",
+              "q4",
+              "q5"
+            ],
+            [
+              "q3",
+              "{p,q,s}",
+              "no",
+              "q6",
+              "q7"
+            ],
+            [
+              "q4",
+              "{f,s}",
+              "yes",
+              "q0",
+              "q1"
+            ],
+            [
+              "q5",
+              "{f,p,s}",
+              "yes",
+              "q2",
+              "q3"
+            ],
+            [
+              "q6",
+              "{f,q,s}",
+              "yes",
+              "q4",
+              "q5"
+            ],
+            [
+              "q7",
+              "{f,p,q,s}",
+              "yes",
+              "q6",
+              "q7"
+            ]
+          ]
+        },
+        "The result has 8 reachable states and 4 final states. The empty subset is unreachable and need not be added to this reachable table."
+      ]
+    },
+    {
+      "id": "A09-05",
+      "topic": "A09",
+      "title": "Build every reachable subset state",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the complete NFA table below to construct the reachable equivalent DFA. ∅ means no successor. Include ε-closure before input and after each symbol move. Work out every row before selecting the correct summary.",
+      "options": [
+        {
+          "value": "A",
+          "label": "6 reachable states; 3 final states; empty subset unreachable."
+        },
+        {
+          "value": "B",
+          "label": "6 reachable states; 4 final states; empty subset reachable."
+        },
+        {
+          "value": "C",
+          "label": "6 reachable states; 3 final states; empty subset reachable."
+        },
+        {
+          "value": "D",
+          "label": "7 reachable states; 3 final states; empty subset reachable."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Reachability starts at the start closure. Finality requires at least one NFA final state, and duplicate subsets count once.",
+      "sources": "S01 Q9(a), pp. 19-20; S09 pp. 16-21",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "a",
+          "b",
+          "ε"
+        ],
+        "rows": [
+          [
+            "s",
+            "start final",
+            "∅",
+            "∅",
+            "{b0_0,b1_0}"
+          ],
+          [
+            "b0_0",
+            "nonfinal",
+            "{b0_1}",
+            "∅",
+            "∅"
+          ],
+          [
+            "b0_1",
+            "nonfinal",
+            "∅",
+            "{b0_2}",
+            "∅"
+          ],
+          [
+            "b0_2",
+            "nonfinal",
+            "∅",
+            "∅",
+            "{s}"
+          ],
+          [
+            "b1_0",
+            "nonfinal",
+            "∅",
+            "{b1_1}",
+            "∅"
+          ],
+          [
+            "b1_1",
+            "nonfinal",
+            "{b1_2}",
+            "∅",
+            "∅"
+          ],
+          [
+            "b1_2",
+            "nonfinal",
+            "∅",
+            "∅",
+            "{s}"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "The start closure is {b0_0,b1_0,s}. Name it q0.",
+        "For each discovered subset S and each symbol c, compute E(⋃δ(q,c):q∈S). Continue until no new set appears.",
+        {
+          "headers": [
+            "DFA state",
+            "NFA subset",
+            "Final?",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "q0",
+              "{b0_0,b1_0,s}",
+              "yes",
+              "q1",
+              "q2"
+            ],
+            [
+              "q1",
+              "{b0_1}",
+              "no",
+              "q3",
+              "q4"
+            ],
+            [
+              "q2",
+              "{b1_1}",
+              "no",
+              "q5",
+              "q3"
+            ],
+            [
+              "q3",
+              "∅",
+              "no",
+              "q3",
+              "q3"
+            ],
+            [
+              "q4",
+              "{b0_0,b0_2,b1_0,s}",
+              "yes",
+              "q1",
+              "q2"
+            ],
+            [
+              "q5",
+              "{b0_0,b1_0,b1_2,s}",
+              "yes",
+              "q1",
+              "q2"
+            ]
+          ]
+        },
+        "The result has 6 reachable states and 3 final states. The empty subset is reachable and is a rejecting sink."
+      ]
+    },
+    {
+      "id": "A09-06",
+      "topic": "A09",
+      "title": "Build every reachable subset state",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the complete NFA table below to construct the reachable equivalent DFA. ∅ means no successor. Include ε-closure before input and after each symbol move. Work out every row before selecting the correct summary.",
+      "options": [
+        {
+          "value": "A",
+          "label": "4 reachable states; 1 final states; empty subset unreachable."
+        },
+        {
+          "value": "B",
+          "label": "4 reachable states; 2 final states; empty subset reachable."
+        },
+        {
+          "value": "C",
+          "label": "4 reachable states; 1 final states; empty subset reachable."
+        },
+        {
+          "value": "D",
+          "label": "5 reachable states; 1 final states; empty subset reachable."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Reachability starts at the start closure. Finality requires at least one NFA final state, and duplicate subsets count once.",
+      "sources": "S01 Q9(a), pp. 19-20; S09 pp. 16-21",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "a",
+          "b",
+          "ε"
+        ],
+        "rows": [
+          [
+            "s",
+            "start nonfinal",
+            "∅",
+            "∅",
+            "{p}"
+          ],
+          [
+            "p",
+            "nonfinal",
+            "{q}",
+            "∅",
+            "{s}"
+          ],
+          [
+            "q",
+            "nonfinal",
+            "{q}",
+            "{f}",
+            "∅"
+          ],
+          [
+            "f",
+            "final",
+            "∅",
+            "{f}",
+            "∅"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "The start closure is {p,s}. Name it q0.",
+        "For each discovered subset S and each symbol c, compute E(⋃δ(q,c):q∈S). Continue until no new set appears.",
+        {
+          "headers": [
+            "DFA state",
+            "NFA subset",
+            "Final?",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "q0",
+              "{p,s}",
+              "no",
+              "q1",
+              "q2"
+            ],
+            [
+              "q1",
+              "{q}",
+              "no",
+              "q1",
+              "q3"
+            ],
+            [
+              "q2",
+              "∅",
+              "no",
+              "q2",
+              "q2"
+            ],
+            [
+              "q3",
+              "{f}",
+              "yes",
+              "q2",
+              "q3"
+            ]
+          ]
+        },
+        "The result has 4 reachable states and 1 final states. The empty subset is reachable and is a rejecting sink."
+      ]
+    },
+    {
+      "id": "A09-07",
+      "topic": "A09",
+      "title": "Build every reachable subset state",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the complete NFA table below to construct the reachable equivalent DFA. ∅ means no successor. Include ε-closure before input and after each symbol move. Work out every row before selecting the correct summary.",
+      "options": [
+        {
+          "value": "A",
+          "label": "6 reachable states; 3 final states; empty subset reachable."
+        },
+        {
+          "value": "B",
+          "label": "5 reachable states; 3 final states; empty subset unreachable."
+        },
+        {
+          "value": "C",
+          "label": "5 reachable states; 3 final states; empty subset reachable."
+        },
+        {
+          "value": "D",
+          "label": "5 reachable states; 4 final states; empty subset reachable."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Reachability starts at the start closure. Finality requires at least one NFA final state, and duplicate subsets count once.",
+      "sources": "S01 Q9(a), pp. 19-20; S09 pp. 16-21",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "a",
+          "b",
+          "ε"
+        ],
+        "rows": [
+          [
+            "s",
+            "start final",
+            "{p,s}",
+            "∅",
+            "∅"
+          ],
+          [
+            "p",
+            "nonfinal",
+            "∅",
+            "{f}",
+            "∅"
+          ],
+          [
+            "f",
+            "final",
+            "{p}",
+            "∅",
+            "∅"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "The start closure is {s}. Name it q0.",
+        "For each discovered subset S and each symbol c, compute E(⋃δ(q,c):q∈S). Continue until no new set appears.",
+        {
+          "headers": [
+            "DFA state",
+            "NFA subset",
+            "Final?",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "q0",
+              "{s}",
+              "yes",
+              "q1",
+              "q2"
+            ],
+            [
+              "q1",
+              "{p,s}",
+              "yes",
+              "q1",
+              "q3"
+            ],
+            [
+              "q2",
+              "∅",
+              "no",
+              "q2",
+              "q2"
+            ],
+            [
+              "q3",
+              "{f}",
+              "yes",
+              "q4",
+              "q2"
+            ],
+            [
+              "q4",
+              "{p}",
+              "no",
+              "q2",
+              "q3"
+            ]
+          ]
+        },
+        "The result has 5 reachable states and 3 final states. The empty subset is reachable and is a rejecting sink."
+      ]
+    },
+    {
+      "id": "A09-08",
+      "topic": "A09",
+      "title": "Build every reachable subset state",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Use the complete NFA table below to construct the reachable equivalent DFA. ∅ means no successor. Include ε-closure before input and after each symbol move. Work out every row before selecting the correct summary.",
+      "options": [
+        {
+          "value": "A",
+          "label": "5 reachable states; 2 final states; empty subset reachable."
+        },
+        {
+          "value": "B",
+          "label": "5 reachable states; 2 final states; empty subset unreachable."
+        },
+        {
+          "value": "C",
+          "label": "6 reachable states; 2 final states; empty subset reachable."
+        },
+        {
+          "value": "D",
+          "label": "5 reachable states; 3 final states; empty subset reachable."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Reachability starts at the start closure. Finality requires at least one NFA final state, and duplicate subsets count once.",
+      "sources": "S01 Q9(a), pp. 19-20; S09 pp. 16-21",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "a",
+          "b",
+          "ε"
+        ],
+        "rows": [
+          [
+            "s",
+            "start nonfinal",
+            "{p,q}",
+            "{s}",
+            "∅"
+          ],
+          [
+            "p",
+            "nonfinal",
+            "{p}",
+            "{f}",
+            "∅"
+          ],
+          [
+            "q",
+            "final",
+            "∅",
+            "∅",
+            "{p}"
+          ],
+          [
+            "f",
+            "final",
+            "∅",
+            "{q}",
+            "∅"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "The start closure is {s}. Name it q0.",
+        "For each discovered subset S and each symbol c, compute E(⋃δ(q,c):q∈S). Continue until no new set appears.",
+        {
+          "headers": [
+            "DFA state",
+            "NFA subset",
+            "Final?",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "q0",
+              "{s}",
+              "no",
+              "q1",
+              "q0"
+            ],
+            [
+              "q1",
+              "{p,q}",
+              "yes",
+              "q2",
+              "q3"
+            ],
+            [
+              "q2",
+              "{p}",
+              "no",
+              "q2",
+              "q3"
+            ],
+            [
+              "q3",
+              "{f}",
+              "yes",
+              "q4",
+              "q1"
+            ],
+            [
+              "q4",
+              "∅",
+              "no",
+              "q4",
+              "q4"
+            ]
+          ]
+        },
+        "The result has 5 reachable states and 2 final states. The empty subset is reachable and is a rejecting sink."
+      ]
+    },
+    {
+      "id": "A09-09",
+      "topic": "A09",
+      "title": "Minimize a complete DFA by partition refinement",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Minimize the complete DFA below. First remove unreachable states, then show the initial final/nonfinal partition and every strict refinement. How many states remain in the minimal reachable complete DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "4"
+        },
+        {
+          "value": "B",
+          "label": "3"
+        },
+        {
+          "value": "C",
+          "label": "5"
+        },
+        {
+          "value": "D",
+          "label": "2"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Equivalent states agree on every continuation. The proof of minimality uses distinguishing suffixes between every pair of distinct quotient states.",
+      "sources": "S01 Q9(b), pp. 21-23; S02 pp. 10-18",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "0",
+          "1"
+        ],
+        "rows": [
+          [
+            "0A",
+            "start nonfinal",
+            "1B",
+            "0B"
+          ],
+          [
+            "0B",
+            "nonfinal",
+            "1A",
+            "0A"
+          ],
+          [
+            "1A",
+            "nonfinal",
+            "1B",
+            "2B"
+          ],
+          [
+            "1B",
+            "nonfinal",
+            "1A",
+            "2A"
+          ],
+          [
+            "2A",
+            "final",
+            "1B",
+            "0B"
+          ],
+          [
+            "2B",
+            "final",
+            "1A",
+            "0A"
+          ],
+          [
+            "U",
+            "nonfinal",
+            "U",
+            "U"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Remove unreachable states: {U}.",
+        "Partition 0: {0A,0B,1A,1B} | {2A,2B}",
+        "Partition 1: {0A,0B} | {1A,1B} | {2A,2B}",
+        "The final partition is stable. Each block becomes one state:",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "C0",
+              "start nonfinal",
+              "C1",
+              "C0"
+            ],
+            [
+              "C1",
+              "nonfinal",
+              "C1",
+              "C2"
+            ],
+            [
+              "C2",
+              "final",
+              "C1",
+              "C0"
+            ]
+          ]
+        },
+        "Minimality check: each pair of distinct quotient states has a distinguishing suffix. C0/C1: 1; C0/C2: ε; C1/C2: ε."
+      ]
+    },
+    {
+      "id": "A09-10",
+      "topic": "A09",
+      "title": "Minimize a complete DFA by partition refinement",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Minimize the complete DFA below. First remove unreachable states, then show the initial final/nonfinal partition and every strict refinement. How many states remain in the minimal reachable complete DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "5"
+        },
+        {
+          "value": "B",
+          "label": "3"
+        },
+        {
+          "value": "C",
+          "label": "6"
+        },
+        {
+          "value": "D",
+          "label": "4"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Equivalent states agree on every continuation. The proof of minimality uses distinguishing suffixes between every pair of distinct quotient states.",
+      "sources": "S01 Q9(b), pp. 21-23; S02 pp. 10-18",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "0",
+          "1"
+        ],
+        "rows": [
+          [
+            "0A",
+            "start nonfinal",
+            "1B",
+            "0B"
+          ],
+          [
+            "0B",
+            "nonfinal",
+            "1A",
+            "0A"
+          ],
+          [
+            "1A",
+            "nonfinal",
+            "2B",
+            "0B"
+          ],
+          [
+            "1B",
+            "nonfinal",
+            "2A",
+            "0A"
+          ],
+          [
+            "2A",
+            "nonfinal",
+            "2B",
+            "3B"
+          ],
+          [
+            "2B",
+            "nonfinal",
+            "2A",
+            "3A"
+          ],
+          [
+            "3A",
+            "final",
+            "1B",
+            "0B"
+          ],
+          [
+            "3B",
+            "final",
+            "1A",
+            "0A"
+          ],
+          [
+            "U",
+            "nonfinal",
+            "U",
+            "U"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Remove unreachable states: {U}.",
+        "Partition 0: {0A,0B,1A,1B,2A,2B} | {3A,3B}",
+        "Partition 1: {0A,0B,1A,1B} | {2A,2B} | {3A,3B}",
+        "Partition 2: {0A,0B} | {1A,1B} | {2A,2B} | {3A,3B}",
+        "The final partition is stable. Each block becomes one state:",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "C0",
+              "start nonfinal",
+              "C1",
+              "C0"
+            ],
+            [
+              "C1",
+              "nonfinal",
+              "C2",
+              "C0"
+            ],
+            [
+              "C2",
+              "nonfinal",
+              "C2",
+              "C3"
+            ],
+            [
+              "C3",
+              "final",
+              "C1",
+              "C0"
+            ]
+          ]
+        },
+        "Minimality check: each pair of distinct quotient states has a distinguishing suffix. C0/C1: 01; C0/C2: 1; C0/C3: ε; C1/C2: 1; C1/C3: ε; C2/C3: ε."
+      ]
+    },
+    {
+      "id": "A09-11",
+      "topic": "A09",
+      "title": "Minimize a complete DFA by partition refinement",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Minimize the complete DFA below. First remove unreachable states, then show the initial final/nonfinal partition and every strict refinement. How many states remain in the minimal reachable complete DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "6"
+        },
+        {
+          "value": "B",
+          "label": "5"
+        },
+        {
+          "value": "C",
+          "label": "3"
+        },
+        {
+          "value": "D",
+          "label": "4"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Equivalent states agree on every continuation. The proof of minimality uses distinguishing suffixes between every pair of distinct quotient states.",
+      "sources": "S01 Q9(b), pp. 21-23; S02 pp. 10-18",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "0",
+          "1"
+        ],
+        "rows": [
+          [
+            "0A",
+            "start nonfinal",
+            "0B",
+            "1B"
+          ],
+          [
+            "0B",
+            "nonfinal",
+            "0A",
+            "1A"
+          ],
+          [
+            "1A",
+            "nonfinal",
+            "2B",
+            "1B"
+          ],
+          [
+            "1B",
+            "nonfinal",
+            "2A",
+            "1A"
+          ],
+          [
+            "2A",
+            "nonfinal",
+            "0B",
+            "3B"
+          ],
+          [
+            "2B",
+            "nonfinal",
+            "0A",
+            "3A"
+          ],
+          [
+            "3A",
+            "final",
+            "2B",
+            "1B"
+          ],
+          [
+            "3B",
+            "final",
+            "2A",
+            "1A"
+          ],
+          [
+            "U",
+            "nonfinal",
+            "U",
+            "U"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Remove unreachable states: {U}.",
+        "Partition 0: {0A,0B,1A,1B,2A,2B} | {3A,3B}",
+        "Partition 1: {0A,0B,1A,1B} | {2A,2B} | {3A,3B}",
+        "Partition 2: {0A,0B} | {1A,1B} | {2A,2B} | {3A,3B}",
+        "The final partition is stable. Each block becomes one state:",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "C0",
+              "start nonfinal",
+              "C0",
+              "C1"
+            ],
+            [
+              "C1",
+              "nonfinal",
+              "C2",
+              "C1"
+            ],
+            [
+              "C2",
+              "nonfinal",
+              "C0",
+              "C3"
+            ],
+            [
+              "C3",
+              "final",
+              "C2",
+              "C1"
+            ]
+          ]
+        },
+        "Minimality check: each pair of distinct quotient states has a distinguishing suffix. C0/C1: 01; C0/C2: 1; C0/C3: ε; C1/C2: 1; C1/C3: ε; C2/C3: ε."
+      ]
+    },
+    {
+      "id": "A09-12",
+      "topic": "A09",
+      "title": "Minimize a complete DFA by partition refinement",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Minimize the complete DFA below. First remove unreachable states, then show the initial final/nonfinal partition and every strict refinement. How many states remain in the minimal reachable complete DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "5"
+        },
+        {
+          "value": "B",
+          "label": "3"
+        },
+        {
+          "value": "C",
+          "label": "6"
+        },
+        {
+          "value": "D",
+          "label": "4"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Equivalent states agree on every continuation. The proof of minimality uses distinguishing suffixes between every pair of distinct quotient states.",
+      "sources": "S01 Q9(b), pp. 21-23; S02 pp. 10-18",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "a",
+          "b"
+        ],
+        "rows": [
+          [
+            "0A",
+            "start nonfinal",
+            "1B",
+            "0B"
+          ],
+          [
+            "0B",
+            "nonfinal",
+            "1A",
+            "0A"
+          ],
+          [
+            "1A",
+            "nonfinal",
+            "1B",
+            "2B"
+          ],
+          [
+            "1B",
+            "nonfinal",
+            "1A",
+            "2A"
+          ],
+          [
+            "2A",
+            "nonfinal",
+            "3B",
+            "0B"
+          ],
+          [
+            "2B",
+            "nonfinal",
+            "3A",
+            "0A"
+          ],
+          [
+            "3A",
+            "final",
+            "1B",
+            "2B"
+          ],
+          [
+            "3B",
+            "final",
+            "1A",
+            "2A"
+          ],
+          [
+            "U",
+            "nonfinal",
+            "U",
+            "U"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Remove unreachable states: {U}.",
+        "Partition 0: {0A,0B,1A,1B,2A,2B} | {3A,3B}",
+        "Partition 1: {0A,0B,1A,1B} | {2A,2B} | {3A,3B}",
+        "Partition 2: {0A,0B} | {1A,1B} | {2A,2B} | {3A,3B}",
+        "The final partition is stable. Each block becomes one state:",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "C0",
+              "start nonfinal",
+              "C1",
+              "C0"
+            ],
+            [
+              "C1",
+              "nonfinal",
+              "C1",
+              "C2"
+            ],
+            [
+              "C2",
+              "nonfinal",
+              "C3",
+              "C0"
+            ],
+            [
+              "C3",
+              "final",
+              "C1",
+              "C2"
+            ]
+          ]
+        },
+        "Minimality check: each pair of distinct quotient states has a distinguishing suffix. C0/C1: ba; C0/C2: a; C0/C3: ε; C1/C2: a; C1/C3: ε; C2/C3: ε."
+      ]
+    },
+    {
+      "id": "A09-13",
+      "topic": "A09",
+      "title": "Minimize a complete DFA by partition refinement",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Minimize the complete DFA below. First remove unreachable states, then show the initial final/nonfinal partition and every strict refinement. How many states remain in the minimal reachable complete DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "6"
+        },
+        {
+          "value": "B",
+          "label": "4"
+        },
+        {
+          "value": "C",
+          "label": "5"
+        },
+        {
+          "value": "D",
+          "label": "3"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Equivalent states agree on every continuation. The proof of minimality uses distinguishing suffixes between every pair of distinct quotient states.",
+      "sources": "S01 Q9(b), pp. 21-23; S02 pp. 10-18",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "a",
+          "b"
+        ],
+        "rows": [
+          [
+            "0A",
+            "start nonfinal",
+            "1B",
+            "0B"
+          ],
+          [
+            "0B",
+            "nonfinal",
+            "1A",
+            "0A"
+          ],
+          [
+            "1A",
+            "nonfinal",
+            "2B",
+            "0B"
+          ],
+          [
+            "1B",
+            "nonfinal",
+            "2A",
+            "0A"
+          ],
+          [
+            "2A",
+            "nonfinal",
+            "2B",
+            "3B"
+          ],
+          [
+            "2B",
+            "nonfinal",
+            "2A",
+            "3A"
+          ],
+          [
+            "3A",
+            "final",
+            "1B",
+            "0B"
+          ],
+          [
+            "3B",
+            "final",
+            "1A",
+            "0A"
+          ],
+          [
+            "U",
+            "nonfinal",
+            "U",
+            "U"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Remove unreachable states: {U}.",
+        "Partition 0: {0A,0B,1A,1B,2A,2B} | {3A,3B}",
+        "Partition 1: {0A,0B,1A,1B} | {2A,2B} | {3A,3B}",
+        "Partition 2: {0A,0B} | {1A,1B} | {2A,2B} | {3A,3B}",
+        "The final partition is stable. Each block becomes one state:",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "C0",
+              "start nonfinal",
+              "C1",
+              "C0"
+            ],
+            [
+              "C1",
+              "nonfinal",
+              "C2",
+              "C0"
+            ],
+            [
+              "C2",
+              "nonfinal",
+              "C2",
+              "C3"
+            ],
+            [
+              "C3",
+              "final",
+              "C1",
+              "C0"
+            ]
+          ]
+        },
+        "Minimality check: each pair of distinct quotient states has a distinguishing suffix. C0/C1: ab; C0/C2: b; C0/C3: ε; C1/C2: b; C1/C3: ε; C2/C3: ε."
+      ]
+    },
+    {
+      "id": "A09-14",
+      "topic": "A09",
+      "title": "Minimize a complete DFA by partition refinement",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Minimize the complete DFA below. First remove unreachable states, then show the initial final/nonfinal partition and every strict refinement. How many states remain in the minimal reachable complete DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "6"
+        },
+        {
+          "value": "B",
+          "label": "5"
+        },
+        {
+          "value": "C",
+          "label": "4"
+        },
+        {
+          "value": "D",
+          "label": "3"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Equivalent states agree on every continuation. The proof of minimality uses distinguishing suffixes between every pair of distinct quotient states.",
+      "sources": "S01 Q9(b), pp. 21-23; S02 pp. 10-18",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "0",
+          "1"
+        ],
+        "rows": [
+          [
+            "0A",
+            "start nonfinal",
+            "1B",
+            "0B"
+          ],
+          [
+            "0B",
+            "nonfinal",
+            "1A",
+            "0A"
+          ],
+          [
+            "1A",
+            "nonfinal",
+            "1B",
+            "2B"
+          ],
+          [
+            "1B",
+            "nonfinal",
+            "1A",
+            "2A"
+          ],
+          [
+            "2A",
+            "nonfinal",
+            "1B",
+            "3B"
+          ],
+          [
+            "2B",
+            "nonfinal",
+            "1A",
+            "3A"
+          ],
+          [
+            "3A",
+            "final",
+            "1B",
+            "0B"
+          ],
+          [
+            "3B",
+            "final",
+            "1A",
+            "0A"
+          ],
+          [
+            "U",
+            "nonfinal",
+            "U",
+            "U"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Remove unreachable states: {U}.",
+        "Partition 0: {0A,0B,1A,1B,2A,2B} | {3A,3B}",
+        "Partition 1: {0A,0B,1A,1B} | {2A,2B} | {3A,3B}",
+        "Partition 2: {0A,0B} | {1A,1B} | {2A,2B} | {3A,3B}",
+        "The final partition is stable. Each block becomes one state:",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "C0",
+              "start nonfinal",
+              "C1",
+              "C0"
+            ],
+            [
+              "C1",
+              "nonfinal",
+              "C1",
+              "C2"
+            ],
+            [
+              "C2",
+              "nonfinal",
+              "C1",
+              "C3"
+            ],
+            [
+              "C3",
+              "final",
+              "C1",
+              "C0"
+            ]
+          ]
+        },
+        "Minimality check: each pair of distinct quotient states has a distinguishing suffix. C0/C1: 11; C0/C2: 1; C0/C3: ε; C1/C2: 1; C1/C3: ε; C2/C3: ε."
+      ]
+    },
+    {
+      "id": "A09-15",
+      "topic": "A09",
+      "title": "Minimize a complete DFA by partition refinement",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Minimize the complete DFA below. First remove unreachable states, then show the initial final/nonfinal partition and every strict refinement. How many states remain in the minimal reachable complete DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "6"
+        },
+        {
+          "value": "B",
+          "label": "7"
+        },
+        {
+          "value": "C",
+          "label": "5"
+        },
+        {
+          "value": "D",
+          "label": "4"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Equivalent states agree on every continuation. The proof of minimality uses distinguishing suffixes between every pair of distinct quotient states.",
+      "sources": "S01 Q9(b), pp. 21-23; S02 pp. 10-18",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "a",
+          "b"
+        ],
+        "rows": [
+          [
+            "0A",
+            "start nonfinal",
+            "1B",
+            "0B"
+          ],
+          [
+            "0B",
+            "nonfinal",
+            "1A",
+            "0A"
+          ],
+          [
+            "1A",
+            "nonfinal",
+            "1B",
+            "2B"
+          ],
+          [
+            "1B",
+            "nonfinal",
+            "1A",
+            "2A"
+          ],
+          [
+            "2A",
+            "nonfinal",
+            "1B",
+            "3B"
+          ],
+          [
+            "2B",
+            "nonfinal",
+            "1A",
+            "3A"
+          ],
+          [
+            "3A",
+            "nonfinal",
+            "4B",
+            "0B"
+          ],
+          [
+            "3B",
+            "nonfinal",
+            "4A",
+            "0A"
+          ],
+          [
+            "4A",
+            "final",
+            "1B",
+            "2B"
+          ],
+          [
+            "4B",
+            "final",
+            "1A",
+            "2A"
+          ],
+          [
+            "U",
+            "nonfinal",
+            "U",
+            "U"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Remove unreachable states: {U}.",
+        "Partition 0: {0A,0B,1A,1B,2A,2B,3A,3B} | {4A,4B}",
+        "Partition 1: {0A,0B,1A,1B,2A,2B} | {3A,3B} | {4A,4B}",
+        "Partition 2: {0A,0B,1A,1B} | {2A,2B} | {3A,3B} | {4A,4B}",
+        "Partition 3: {0A,0B} | {1A,1B} | {2A,2B} | {3A,3B} | {4A,4B}",
+        "The final partition is stable. Each block becomes one state:",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "a",
+            "b"
+          ],
+          "rows": [
+            [
+              "C0",
+              "start nonfinal",
+              "C1",
+              "C0"
+            ],
+            [
+              "C1",
+              "nonfinal",
+              "C1",
+              "C2"
+            ],
+            [
+              "C2",
+              "nonfinal",
+              "C1",
+              "C3"
+            ],
+            [
+              "C3",
+              "nonfinal",
+              "C4",
+              "C0"
+            ],
+            [
+              "C4",
+              "final",
+              "C1",
+              "C2"
+            ]
+          ]
+        },
+        "Minimality check: each pair of distinct quotient states has a distinguishing suffix. C0/C1: bba; C0/C2: ba; C0/C3: a; C0/C4: ε; C1/C2: ba; C1/C3: a; C1/C4: ε; C2/C3: a; C2/C4: ε; C3/C4: ε."
+      ]
+    },
+    {
+      "id": "A09-16",
+      "topic": "A09",
+      "title": "Minimize a complete DFA by partition refinement",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Minimize the complete DFA below. First remove unreachable states, then show the initial final/nonfinal partition and every strict refinement. How many states remain in the minimal reachable complete DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "5"
+        },
+        {
+          "value": "B",
+          "label": "6"
+        },
+        {
+          "value": "C",
+          "label": "4"
+        },
+        {
+          "value": "D",
+          "label": "7"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Equivalent states agree on every continuation. The proof of minimality uses distinguishing suffixes between every pair of distinct quotient states.",
+      "sources": "S01 Q9(b), pp. 21-23; S02 pp. 10-18",
+      "table": {
+        "headers": [
+          "State",
+          "Start/final",
+          "0",
+          "1"
+        ],
+        "rows": [
+          [
+            "0A",
+            "start nonfinal",
+            "0B",
+            "1B"
+          ],
+          [
+            "0B",
+            "nonfinal",
+            "0A",
+            "1A"
+          ],
+          [
+            "1A",
+            "nonfinal",
+            "2B",
+            "1B"
+          ],
+          [
+            "1B",
+            "nonfinal",
+            "2A",
+            "1A"
+          ],
+          [
+            "2A",
+            "nonfinal",
+            "0B",
+            "3B"
+          ],
+          [
+            "2B",
+            "nonfinal",
+            "0A",
+            "3A"
+          ],
+          [
+            "3A",
+            "nonfinal",
+            "2B",
+            "4B"
+          ],
+          [
+            "3B",
+            "nonfinal",
+            "2A",
+            "4A"
+          ],
+          [
+            "4A",
+            "final",
+            "2B",
+            "1B"
+          ],
+          [
+            "4B",
+            "final",
+            "2A",
+            "1A"
+          ],
+          [
+            "U",
+            "nonfinal",
+            "U",
+            "U"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "Remove unreachable states: {U}.",
+        "Partition 0: {0A,0B,1A,1B,2A,2B,3A,3B} | {4A,4B}",
+        "Partition 1: {0A,0B,1A,1B,2A,2B} | {3A,3B} | {4A,4B}",
+        "Partition 2: {0A,0B,1A,1B} | {2A,2B} | {3A,3B} | {4A,4B}",
+        "Partition 3: {0A,0B} | {1A,1B} | {2A,2B} | {3A,3B} | {4A,4B}",
+        "The final partition is stable. Each block becomes one state:",
+        {
+          "headers": [
+            "State",
+            "Start/final",
+            "0",
+            "1"
+          ],
+          "rows": [
+            [
+              "C0",
+              "start nonfinal",
+              "C0",
+              "C1"
+            ],
+            [
+              "C1",
+              "nonfinal",
+              "C2",
+              "C1"
+            ],
+            [
+              "C2",
+              "nonfinal",
+              "C0",
+              "C3"
+            ],
+            [
+              "C3",
+              "nonfinal",
+              "C2",
+              "C4"
+            ],
+            [
+              "C4",
+              "final",
+              "C2",
+              "C1"
+            ]
+          ]
+        },
+        "Minimality check: each pair of distinct quotient states has a distinguishing suffix. C0/C1: 011; C0/C2: 11; C0/C3: 1; C0/C4: ε; C1/C2: 11; C1/C3: 1; C1/C4: ε; C2/C3: 1; C2/C4: ε; C3/C4: ε."
+      ]
+    },
+    {
+      "id": "A10-01",
+      "topic": "A10",
+      "title": "Pump equal constrained symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Prove nonregularity of L={w∈{0,1}*:|w|0=|w|1=n^2 for some integer n≥1}. Assume pumping length p≥1 and choose w=0^(p^2)1^(p^2). For an arbitrary legal split w=xyz, which k=2 conclusion supplies the contradiction?",
+      "options": [
+        {
+          "value": "A",
+          "label": "|xy^2z|0=p^2+d and |xy^2z|1=p^2, where 1≤d≤p; unequal counts violate L."
+        },
+        {
+          "value": "B",
+          "label": "Choose y=ε; pumping deletes all the 0s."
+        },
+        {
+          "value": "C",
+          "label": "y must contain equal numbers of 0s and 1s, so pumping is impossible."
+        },
+        {
+          "value": "D",
+          "label": "Both counts become p^2+d, so they are unequal."
+        }
+      ],
+      "answer": "A",
+      "explanation": "The chosen zero block has at least p symbols. Every legal y lies entirely in it and has positive length, so pumping changes only the zero count.",
+      "sources": "S01 Q10, p. 23; S05 pp. 4, 9, 11",
+      "worked_solution": [
+        "Suppose L is regular, and let p≥1 be its pumping length.",
+        "The witness w belongs to L by taking n=p, and its length is at least p.",
+        "Let w=xyz be any split with |xy|≤p and |y|>0. Since the first p^2 symbols are 0 and p^2≥p, y=0^d for some 1≤d≤p.",
+        "Choose k=2. The pumped word has p^2+d zeros and p^2 ones. They are unequal, so no value of n can satisfy the definition.",
+        "This contradicts the pumping lemma for every legal split. Thus L is not regular."
+      ]
+    },
+    {
+      "id": "A10-02",
+      "topic": "A10",
+      "title": "Pump equal constrained symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Prove nonregularity of L={w∈{0,1}*:|w|0=|w|1=n^3 for some integer n≥1}. Assume pumping length p≥1 and choose w=0^(p^3)1^(p^3). For an arbitrary legal split w=xyz, which k=2 conclusion supplies the contradiction?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Both counts become p^3+d, so they are unequal."
+        },
+        {
+          "value": "B",
+          "label": "Choose y=ε; pumping deletes all the 0s."
+        },
+        {
+          "value": "C",
+          "label": "y must contain equal numbers of 0s and 1s, so pumping is impossible."
+        },
+        {
+          "value": "D",
+          "label": "|xy^2z|0=p^3+d and |xy^2z|1=p^3, where 1≤d≤p; unequal counts violate L."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The chosen zero block has at least p symbols. Every legal y lies entirely in it and has positive length, so pumping changes only the zero count.",
+      "sources": "S01 Q10, p. 23; S05 pp. 4, 9, 11",
+      "worked_solution": [
+        "Suppose L is regular, and let p≥1 be its pumping length.",
+        "The witness w belongs to L by taking n=p, and its length is at least p.",
+        "Let w=xyz be any split with |xy|≤p and |y|>0. Since the first p^3 symbols are 0 and p^3≥p, y=0^d for some 1≤d≤p.",
+        "Choose k=2. The pumped word has p^3+d zeros and p^3 ones. They are unequal, so no value of n can satisfy the definition.",
+        "This contradicts the pumping lemma for every legal split. Thus L is not regular."
+      ]
+    },
+    {
+      "id": "A10-03",
+      "topic": "A10",
+      "title": "Pump equal constrained symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Prove nonregularity of L={w∈{0,1}*:|w|0=|w|1=2n for some integer n≥1}. Assume pumping length p≥1 and choose w=0^(2p)1^(2p). For an arbitrary legal split w=xyz, which k=2 conclusion supplies the contradiction?",
+      "options": [
+        {
+          "value": "A",
+          "label": "|xy^2z|0=2p+d and |xy^2z|1=2p, where 1≤d≤p; unequal counts violate L."
+        },
+        {
+          "value": "B",
+          "label": "Both counts become 2p+d, so they are unequal."
+        },
+        {
+          "value": "C",
+          "label": "Choose y=ε; pumping deletes all the 0s."
+        },
+        {
+          "value": "D",
+          "label": "y must contain equal numbers of 0s and 1s, so pumping is impossible."
+        }
+      ],
+      "answer": "A",
+      "explanation": "The chosen zero block has at least p symbols. Every legal y lies entirely in it and has positive length, so pumping changes only the zero count.",
+      "sources": "S01 Q10, p. 23; S05 pp. 4, 9, 11",
+      "worked_solution": [
+        "Suppose L is regular, and let p≥1 be its pumping length.",
+        "The witness w belongs to L by taking n=p, and its length is at least p.",
+        "Let w=xyz be any split with |xy|≤p and |y|>0. Since the first 2p symbols are 0 and 2p≥p, y=0^d for some 1≤d≤p.",
+        "Choose k=2. The pumped word has 2p+d zeros and 2p ones. They are unequal, so no value of n can satisfy the definition.",
+        "This contradicts the pumping lemma for every legal split. Thus L is not regular."
+      ]
+    },
+    {
+      "id": "A10-04",
+      "topic": "A10",
+      "title": "Pump equal constrained symbol counts",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Prove nonregularity of L={w∈{0,1}*:|w|0=|w|1=2n+1 for some integer n≥1}. Assume pumping length p≥1 and choose w=0^(2p+1)1^(2p+1). For an arbitrary legal split w=xyz, which k=2 conclusion supplies the contradiction?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Choose y=ε; pumping deletes all the 0s."
+        },
+        {
+          "value": "B",
+          "label": "Both counts become 2p+1+d, so they are unequal."
+        },
+        {
+          "value": "C",
+          "label": "|xy^2z|0=2p+1+d and |xy^2z|1=2p+1, where 1≤d≤p; unequal counts violate L."
+        },
+        {
+          "value": "D",
+          "label": "y must contain equal numbers of 0s and 1s, so pumping is impossible."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The chosen zero block has at least p symbols. Every legal y lies entirely in it and has positive length, so pumping changes only the zero count.",
+      "sources": "S01 Q10, p. 23; S05 pp. 4, 9, 11",
+      "worked_solution": [
+        "Suppose L is regular, and let p≥1 be its pumping length.",
+        "The witness w belongs to L by taking n=p, and its length is at least p.",
+        "Let w=xyz be any split with |xy|≤p and |y|>0. Since the first 2p+1 symbols are 0 and 2p+1≥p, y=0^d for some 1≤d≤p.",
+        "Choose k=2. The pumped word has 2p+1+d zeros and 2p+1 ones. They are unequal, so no value of n can satisfy the definition.",
+        "This contradicts the pumping lemma for every legal split. Thus L is not regular."
+      ]
+    },
+    {
+      "id": "A10-05",
+      "topic": "A10",
+      "title": "Pump a fixed count ratio",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let L={a^i b^j:i=2j, j≥1}. Assume pumping length p and choose w=a^(2p)b^p. Which reasoning proves L nonregular for every legal split?",
+      "options": [
+        {
+          "value": "A",
+          "label": "y=a^d with 1≤d≤p; pumping k=2 makes i=2p+d while j=p, violating i=2j."
+        },
+        {
+          "value": "B",
+          "label": "y=b^d; pumping k=2 always preserves the ratio."
+        },
+        {
+          "value": "C",
+          "label": "Choose y=ε and k=0 to change the ratio."
+        },
+        {
+          "value": "D",
+          "label": "The language is nonregular merely because 2 is greater than one."
+        }
+      ],
+      "answer": "A",
+      "explanation": "The pumping segment is forced into the initial a block; the b block and therefore the required a count remain fixed.",
+      "sources": "S05 p. 11; S01 Q10",
+      "worked_solution": [
+        "Assume regularity and let p be a pumping length.",
+        "w=a^(2p)b^p belongs to L and has length at least p.",
+        "For every legal split, |xy|≤p forces y=a^d for 1≤d≤p. At k=2 the a count becomes 2p+d, while the b count stays p.",
+        "The equality i=2j fails because d>0. Therefore the pumped word leaves L, contradicting the lemma."
+      ]
+    },
+    {
+      "id": "A10-06",
+      "topic": "A10",
+      "title": "Pump a fixed count ratio",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let L={a^i b^j:i=3j, j≥1}. Assume pumping length p and choose w=a^(3p)b^p. Which reasoning proves L nonregular for every legal split?",
+      "options": [
+        {
+          "value": "A",
+          "label": "y=b^d; pumping k=2 always preserves the ratio."
+        },
+        {
+          "value": "B",
+          "label": "y=a^d with 1≤d≤p; pumping k=2 makes i=3p+d while j=p, violating i=3j."
+        },
+        {
+          "value": "C",
+          "label": "Choose y=ε and k=0 to change the ratio."
+        },
+        {
+          "value": "D",
+          "label": "The language is nonregular merely because 3 is greater than one."
+        }
+      ],
+      "answer": "B",
+      "explanation": "The pumping segment is forced into the initial a block; the b block and therefore the required a count remain fixed.",
+      "sources": "S05 p. 11; S01 Q10",
+      "worked_solution": [
+        "Assume regularity and let p be a pumping length.",
+        "w=a^(3p)b^p belongs to L and has length at least p.",
+        "For every legal split, |xy|≤p forces y=a^d for 1≤d≤p. At k=2 the a count becomes 3p+d, while the b count stays p.",
+        "The equality i=3j fails because d>0. Therefore the pumped word leaves L, contradicting the lemma."
+      ]
+    },
+    {
+      "id": "A10-07",
+      "topic": "A10",
+      "title": "Pump a strict inequality",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Prove L={a^i b^j:i<j} nonregular using witness a^p b^(p+1). For arbitrary legal y=a^d with 1≤d≤p, choose k=2. What establishes the contradiction?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The a and b counts both change by d."
+        },
+        {
+          "value": "B",
+          "label": "It is enough to check only d=1 and ignore all other splits."
+        },
+        {
+          "value": "C",
+          "label": "The a count becomes p+d≥p+1 while the b count stays p+1."
+        },
+        {
+          "value": "D",
+          "label": "The witness must have exactly p total symbols."
+        }
+      ],
+      "answer": "C",
+      "explanation": "A strict inequality fails as soon as equality is reached. The selected k=2 moves the first count across that boundary for every d≥1.",
+      "sources": "S05 p. 13; S01 Q10",
+      "worked_solution": [
+        "Assume regularity and take pumping length p≥1.",
+        "The witness a^p b^(p+1) lies in L and is long enough. Every legal pumping block is a nonempty run of a symbols in the first p positions.",
+        "At k=2: The a count becomes p+d≥p+1 while the b count stays p+1.",
+        "The defining relation i<j is false. This works for every legal split, contradicting the lemma."
+      ]
+    },
+    {
+      "id": "A10-08",
+      "topic": "A10",
+      "title": "Pump a strict inequality",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Prove L={a^i b^j:i>j} nonregular using witness a^(p+1)b^p. For arbitrary legal y=a^d with 1≤d≤p, choose k=0. What establishes the contradiction?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The a and b counts both change by d."
+        },
+        {
+          "value": "B",
+          "label": "The a count becomes p+1-d≤p while the b count stays p."
+        },
+        {
+          "value": "C",
+          "label": "It is enough to check only d=1 and ignore all other splits."
+        },
+        {
+          "value": "D",
+          "label": "The witness must have exactly p total symbols."
+        }
+      ],
+      "answer": "B",
+      "explanation": "A strict inequality fails as soon as equality is reached. The selected k=0 moves the first count across that boundary for every d≥1.",
+      "sources": "S05 p. 13; S01 Q10",
+      "worked_solution": [
+        "Assume regularity and take pumping length p≥1.",
+        "The witness a^(p+1)b^p lies in L and is long enough. Every legal pumping block is a nonempty run of a symbols in the first p positions.",
+        "At k=0: The a count becomes p+1-d≤p while the b count stays p.",
+        "The defining relation i>j is false. This works for every legal split, contradicting the lemma."
+      ]
+    },
+    {
+      "id": "A10-09",
+      "topic": "A10",
+      "title": "Pump a unary power-length language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "L={a^(n^2):n≥1}. Assume pumping length p≥1 and choose w=a^(p^2). Every legal y=a^d has 1≤d≤p. Which k=2 conclusion proves the pumped length is not a square?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every nonempty unary language is nonregular."
+        },
+        {
+          "value": "B",
+          "label": "p^2 < p^2+d < (p+1)^2"
+        },
+        {
+          "value": "C",
+          "label": "p^2+d = (p+1)^2 for every d"
+        },
+        {
+          "value": "D",
+          "label": "p^2+d < p^2"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The next square is 2p+1 symbols farther away, which exceeds the maximum d=p.",
+      "sources": "S05 pp. 4, 9, 11-12; transfer practice from S01 Q10",
+      "worked_solution": [
+        "Assume regularity and let p be a pumping length. Choose the stated witness, which belongs to L and has length at least p.",
+        "For any legal split, the length of y is d with 1≤d≤p. At k=2, the new length is p^2+d.",
+        "The gap (p+1)^2-p^2 equals 2p+1, which is greater than p≥d.",
+        "Therefore the new length lies strictly between consecutive integer squares. It is outside L for every legal split, a contradiction."
+      ]
+    },
+    {
+      "id": "A10-10",
+      "topic": "A10",
+      "title": "Pump a unary power-length language",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "L={a^(n^3):n≥1}. Assume pumping length p≥1 and choose w=a^(p^3). Every legal y=a^d has 1≤d≤p. Which k=2 conclusion proves the pumped length is not a cube?",
+      "options": [
+        {
+          "value": "A",
+          "label": "p^3+d < p^3"
+        },
+        {
+          "value": "B",
+          "label": "Every nonempty unary language is nonregular."
+        },
+        {
+          "value": "C",
+          "label": "p^3 < p^3+d < (p+1)^3"
+        },
+        {
+          "value": "D",
+          "label": "p^3+d = (p+1)^3 for every d"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The next cube is 3p^2+3p+1 symbols farther away, which exceeds the maximum d=p.",
+      "sources": "S05 pp. 4, 9, 11-12; transfer practice from S01 Q10",
+      "worked_solution": [
+        "Assume regularity and let p be a pumping length. Choose the stated witness, which belongs to L and has length at least p.",
+        "For any legal split, the length of y is d with 1≤d≤p. At k=2, the new length is p^3+d.",
+        "The gap (p+1)^3-p^3 equals 3p^2+3p+1, which is greater than p≥d.",
+        "Therefore the new length lies strictly between consecutive integer cubes. It is outside L for every legal split, a contradiction."
+      ]
+    },
+    {
+      "id": "A10-11",
+      "topic": "A10",
+      "title": "Pump exponential unary lengths",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let L={a^(2^n):n≥0}. Assume pumping length p≥1 and choose w=a^(2^p). For every legal split with |y|=d, 1≤d≤p. Which interval contains the length after pumping k=2?",
+      "options": [
+        {
+          "value": "A",
+          "label": "At least 2^(p+2)"
+        },
+        {
+          "value": "B",
+          "label": "Exactly 2^(p+1)"
+        },
+        {
+          "value": "C",
+          "label": "At most 2^p"
+        },
+        {
+          "value": "D",
+          "label": "Strictly between 2^p and 2^(p+1)"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The pumped length is 2^p+d, and 1≤d≤p<2^p. It lies between consecutive powers of two.",
+      "sources": "S05 pp. 4, 9, 12; extension of unary-length proof technique",
+      "worked_solution": [
+        "Suppose L regular. Pick w=a^(2^p), which belongs to L and is long enough.",
+        "Any legal y has length d in [1,p]. Choose k=2; the new length is 2^p+d.",
+        "Since p<2^p for p≥1, 2^p<2^p+d<2^p+2^p=2^(p+1). The length is not a power of two.",
+        "Every legal split fails the pumping requirement, so L is nonregular."
+      ]
+    },
+    {
+      "id": "A10-12",
+      "topic": "A10",
+      "title": "Pump prime lengths to a composite length",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let L={a^q:q prime}. Assume pumping length p≥1; choose a prime q with q≥p+2 and witness a^q. Every legal split has |y|=d with 1≤d≤p. Pump with k=q-d. What is the resulting length, in a form proving it composite?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(q-d)(d+1)"
+        },
+        {
+          "value": "B",
+          "label": "qd"
+        },
+        {
+          "value": "C",
+          "label": "q+d"
+        },
+        {
+          "value": "D",
+          "label": "q-d"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Use |xy^kz|=q+(k-1)d, then factor and verify that both factors exceed one.",
+      "sources": "S05 p. 12; S01 Q10 proof style",
+      "worked_solution": [
+        "Choose a prime q satisfying q≥p+2; primes are unbounded. The witness a^q is in L and has length at least p.",
+        "For an arbitrary legal split, 1≤d≤p. The unpumped xz portion has length q-d.",
+        "At k=q-d, the length is q+(k-1)d=(q-d)(d+1).",
+        "Here q-d≥2 and d+1≥2.",
+        "Thus the new length is a product of integers greater than one, not prime. This contradicts the pumping lemma for every legal split."
+      ]
+    },
+    {
+      "id": "A10-13",
+      "topic": "A10",
+      "title": "Pump prime lengths to a composite length",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let L={a^q:q prime}. Assume pumping length p≥1; choose a prime q with q≥p and witness a^q. Every legal split has |y|=d with 1≤d≤p. Pump with k=q+1. What is the resulting length, in a form proving it composite?",
+      "options": [
+        {
+          "value": "A",
+          "label": "q(d+1)"
+        },
+        {
+          "value": "B",
+          "label": "q+d"
+        },
+        {
+          "value": "C",
+          "label": "q-d"
+        },
+        {
+          "value": "D",
+          "label": "qd"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Use |xy^kz|=q+(k-1)d, then factor and verify that both factors exceed one.",
+      "sources": "S05 p. 12; S01 Q10 proof style",
+      "worked_solution": [
+        "Choose a prime q satisfying q≥p; primes are unbounded. The witness a^q is in L and has length at least p.",
+        "For an arbitrary legal split, 1≤d≤p. The unpumped xz portion has length q-d.",
+        "At k=q+1, the length is q+(k-1)d=q(d+1).",
+        "Here q≥2 and d+1≥2.",
+        "Thus the new length is a product of integers greater than one, not prime. This contradicts the pumping lemma for every legal split."
+      ]
+    },
+    {
+      "id": "A10-14",
+      "topic": "A10",
+      "title": "Pump prime lengths to a composite length",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Let L={a^q:q prime}. Assume pumping length p≥1; choose a prime q with q≥p and witness a^q. Every legal split has |y|=d with 1≤d≤p. Pump with k=2q+1. What is the resulting length, in a form proving it composite?",
+      "options": [
+        {
+          "value": "A",
+          "label": "q(2d+1)"
+        },
+        {
+          "value": "B",
+          "label": "q+d"
+        },
+        {
+          "value": "C",
+          "label": "qd"
+        },
+        {
+          "value": "D",
+          "label": "q-d"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Use |xy^kz|=q+(k-1)d, then factor and verify that both factors exceed one.",
+      "sources": "S05 p. 12; S01 Q10 proof style",
+      "worked_solution": [
+        "Choose a prime q satisfying q≥p; primes are unbounded. The witness a^q is in L and has length at least p.",
+        "For an arbitrary legal split, 1≤d≤p. The unpumped xz portion has length q-d.",
+        "At k=2q+1, the length is q+(k-1)d=q(2d+1).",
+        "Here q≥2 and 2d+1≥3.",
+        "Thus the new length is a product of integers greater than one, not prime. This contradicts the pumping lemma for every legal split."
+      ]
+    },
+    {
+      "id": "A10-15",
+      "topic": "A10",
+      "title": "Repair the quantifier error in a false proof",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "A student claims (aa)* is nonregular: \"Let p≥2 be a pumping length; choose w=a^(2p), x=ε, y=a, z=a^(2p-1). Pumping k=0 gives odd length, so the language is nonregular.\" What is the decisive error?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The word a^(2p) is not in (aa)*."
+        },
+        {
+          "value": "B",
+          "label": "One failing split is insufficient; the legal split x=ε, y=aa, z=a^(2p-2) pumps within (aa)* for every k≥0."
+        },
+        {
+          "value": "C",
+          "label": "The pumping segment must always have length exactly p."
+        },
+        {
+          "value": "D",
+          "label": "k=0 is forbidden."
+        }
+      ],
+      "answer": "B",
+      "explanation": "A regular language only needs some good split of each sufficiently long word. The proposed proof must defeat every legal split, not just its chosen bad one.",
+      "sources": "S05 pp. 4, 9; S06 p. 18",
+      "worked_solution": [
+        "The chosen word is a valid member and k=0 is allowed. Those are not the errors.",
+        "With y=aa, |xy|=2≤p and |y|>0. The length after pumping is 2p+2(k-1), an even nonnegative number for every k≥0.",
+        "This legal split defeats the attempted contradiction. Independently, (aa)* is itself a regex, so its language is regular."
+      ]
+    },
+    {
+      "id": "A10-16",
+      "topic": "A10",
+      "title": "Repair an invalid pumping witness",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "For L={a^n b^n:n≥0}, a proposed proof chooses w=a^p b^(p+1) and forces y into the a block. What is the necessary first repair?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Choose a witness in L, such as a^p b^p, before applying the lemma."
+        },
+        {
+          "value": "B",
+          "label": "Keep the witness because only its length matters."
+        },
+        {
+          "value": "C",
+          "label": "Assume p=1 because pumping lengths are chosen by the prover."
+        },
+        {
+          "value": "D",
+          "label": "Set y=ε to balance the counts."
+        }
+      ],
+      "answer": "A",
+      "explanation": "The lemma applies only to words in the assumed-regular language. The proposed witness has unequal counts, so the lemma promises nothing about it.",
+      "sources": "S05 pp. 4, 11; S01 Q10",
+      "worked_solution": [
+        "First assume L regular and let p be its pumping length.",
+        "Use w=a^p b^p, which is both in L and at least p symbols long.",
+        "For every legal split, y=a^d with 1≤d≤p. Pumping k=2 gives a^(p+d)b^p, outside L. Now the contradiction is valid."
+      ]
+    },
+    {
+      "id": "A11-01",
+      "topic": "A11",
+      "title": "Execute a scanner with explicit rules",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Scan the source 'if ifx==007;'. Use the rules below. At each position choose the longest valid prefix; on equal length choose the earlier listed rule. Skip WS and COMMENT. Emit all other tokens as TYPE(original lexeme), including a pending token at EOF. Comments do not nest. Which complete token stream is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "KW_IF(if), KW_IF(if), ID(x), EQ(==), INT(007), SEMI(;)"
+        },
+        {
+          "value": "B",
+          "label": "KW_IF(if), ID(ifx), EQ(==), INT(007), SEMI(;)"
+        },
+        {
+          "value": "C",
+          "label": "KW_IF(if), ID(ifx), ASSIGN(=), ASSIGN(=), INT(007), SEMI(;)"
+        },
+        {
+          "value": "D",
+          "label": "ID(if), ID(ifx), EQ(==), INT(007), SEMI(;)"
+        }
+      ],
+      "answer": "B",
+      "explanation": "ifx is a longer identifier match; exact if ties with ID and the earlier keyword rule wins.",
+      "sources": "S08 pp. 4-15; additional worked scanner practice",
+      "table": {
+        "headers": [
+          "Priority order",
+          "Token",
+          "Pattern"
+        ],
+        "rows": [
+          [
+            "1",
+            "COMMENT",
+            "/\\*.*?\\*/"
+          ],
+          [
+            "2",
+            "WS",
+            "\\s+"
+          ],
+          [
+            "3",
+            "KW_IF",
+            "if"
+          ],
+          [
+            "4",
+            "ID",
+            "[A-Za-z_][A-Za-z0-9_]*"
+          ],
+          [
+            "5",
+            "REAL",
+            "[0-9]+\\.[0-9]+"
+          ],
+          [
+            "6",
+            "INT",
+            "[0-9]+"
+          ],
+          [
+            "7",
+            "EQ",
+            "=="
+          ],
+          [
+            "8",
+            "ASSIGN",
+            "="
+          ],
+          [
+            "9",
+            "PLUS",
+            "\\+"
+          ],
+          [
+            "10",
+            "MINUS",
+            "-"
+          ],
+          [
+            "11",
+            "DOT",
+            "\\."
+          ],
+          [
+            "12",
+            "LP",
+            "\\("
+          ],
+          [
+            "13",
+            "RP",
+            "\\)"
+          ],
+          [
+            "14",
+            "SEMI",
+            ";"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "ifx is a longer identifier match; exact if ties with ID and the earlier keyword rule wins.",
+        {
+          "headers": [
+            "Zero-based offset",
+            "Lexeme",
+            "Type",
+            "Action"
+          ],
+          "rows": [
+            [
+              "0",
+              "'if'",
+              "KW_IF",
+              "emit"
+            ],
+            [
+              "2",
+              "' '",
+              "WS",
+              "skip"
+            ],
+            [
+              "3",
+              "'ifx'",
+              "ID",
+              "emit"
+            ],
+            [
+              "6",
+              "'=='",
+              "EQ",
+              "emit"
+            ],
+            [
+              "8",
+              "'007'",
+              "INT",
+              "emit"
+            ],
+            [
+              "11",
+              "';'",
+              "SEMI",
+              "emit"
+            ]
+          ]
+        },
+        "The output is a token sequence. Whether the sequence is a grammatically valid program is a separate parser question."
+      ]
+    },
+    {
+      "id": "A11-02",
+      "topic": "A11",
+      "title": "Execute a scanner with explicit rules",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Scan the source 'a=12.5+3;'. Use the rules below. At each position choose the longest valid prefix; on equal length choose the earlier listed rule. Skip WS and COMMENT. Emit all other tokens as TYPE(original lexeme), including a pending token at EOF. Comments do not nest. Which complete token stream is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ID(a), ASSIGN(=), REAL(12.5), INT(3), SEMI(;)"
+        },
+        {
+          "value": "B",
+          "label": "ID(a), ASSIGN(=), INT(12), DOT(.), INT(5), PLUS(+), INT(3), SEMI(;)"
+        },
+        {
+          "value": "C",
+          "label": "ID(a), EQ(=), REAL(12.5), PLUS(+), INT(3), SEMI(;)"
+        },
+        {
+          "value": "D",
+          "label": "ID(a), ASSIGN(=), REAL(12.5), PLUS(+), INT(3), SEMI(;)"
+        }
+      ],
+      "answer": "D",
+      "explanation": "12.5 is a longer REAL lexeme than the accepted INT prefix 12.",
+      "sources": "S08 pp. 4-15; additional worked scanner practice",
+      "table": {
+        "headers": [
+          "Priority order",
+          "Token",
+          "Pattern"
+        ],
+        "rows": [
+          [
+            "1",
+            "COMMENT",
+            "/\\*.*?\\*/"
+          ],
+          [
+            "2",
+            "WS",
+            "\\s+"
+          ],
+          [
+            "3",
+            "KW_IF",
+            "if"
+          ],
+          [
+            "4",
+            "ID",
+            "[A-Za-z_][A-Za-z0-9_]*"
+          ],
+          [
+            "5",
+            "REAL",
+            "[0-9]+\\.[0-9]+"
+          ],
+          [
+            "6",
+            "INT",
+            "[0-9]+"
+          ],
+          [
+            "7",
+            "EQ",
+            "=="
+          ],
+          [
+            "8",
+            "ASSIGN",
+            "="
+          ],
+          [
+            "9",
+            "PLUS",
+            "\\+"
+          ],
+          [
+            "10",
+            "MINUS",
+            "-"
+          ],
+          [
+            "11",
+            "DOT",
+            "\\."
+          ],
+          [
+            "12",
+            "LP",
+            "\\("
+          ],
+          [
+            "13",
+            "RP",
+            "\\)"
+          ],
+          [
+            "14",
+            "SEMI",
+            ";"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "12.5 is a longer REAL lexeme than the accepted INT prefix 12.",
+        {
+          "headers": [
+            "Zero-based offset",
+            "Lexeme",
+            "Type",
+            "Action"
+          ],
+          "rows": [
+            [
+              "0",
+              "'a'",
+              "ID",
+              "emit"
+            ],
+            [
+              "1",
+              "'='",
+              "ASSIGN",
+              "emit"
+            ],
+            [
+              "2",
+              "'12.5'",
+              "REAL",
+              "emit"
+            ],
+            [
+              "6",
+              "'+'",
+              "PLUS",
+              "emit"
+            ],
+            [
+              "7",
+              "'3'",
+              "INT",
+              "emit"
+            ],
+            [
+              "8",
+              "';'",
+              "SEMI",
+              "emit"
+            ]
+          ]
+        },
+        "The output is a token sequence. Whether the sequence is a grammatically valid program is a separate parser question."
+      ]
+    },
+    {
+      "id": "A11-03",
+      "topic": "A11",
+      "title": "Execute a scanner with explicit rules",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Scan the source 'x=12.;'. Use the rules below. At each position choose the longest valid prefix; on equal length choose the earlier listed rule. Skip WS and COMMENT. Emit all other tokens as TYPE(original lexeme), including a pending token at EOF. Comments do not nest. Which complete token stream is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ID(x), ASSIGN(=), INT(1), INT(2), DOT(.), SEMI(;)"
+        },
+        {
+          "value": "B",
+          "label": "ID(x), ASSIGN(=), REAL(12.), SEMI(;)"
+        },
+        {
+          "value": "C",
+          "label": "ID(x), ASSIGN(=), INT(12), DOT(.), SEMI(;)"
+        },
+        {
+          "value": "D",
+          "label": "ID(x), ASSIGN(=), INT(12), SEMI(;)"
+        }
+      ],
+      "answer": "C",
+      "explanation": "REAL requires digits after the dot. Restore to the last accepted INT boundary after 12, then scan DOT separately.",
+      "sources": "S08 pp. 4-15; additional worked scanner practice",
+      "table": {
+        "headers": [
+          "Priority order",
+          "Token",
+          "Pattern"
+        ],
+        "rows": [
+          [
+            "1",
+            "COMMENT",
+            "/\\*.*?\\*/"
+          ],
+          [
+            "2",
+            "WS",
+            "\\s+"
+          ],
+          [
+            "3",
+            "KW_IF",
+            "if"
+          ],
+          [
+            "4",
+            "ID",
+            "[A-Za-z_][A-Za-z0-9_]*"
+          ],
+          [
+            "5",
+            "REAL",
+            "[0-9]+\\.[0-9]+"
+          ],
+          [
+            "6",
+            "INT",
+            "[0-9]+"
+          ],
+          [
+            "7",
+            "EQ",
+            "=="
+          ],
+          [
+            "8",
+            "ASSIGN",
+            "="
+          ],
+          [
+            "9",
+            "PLUS",
+            "\\+"
+          ],
+          [
+            "10",
+            "MINUS",
+            "-"
+          ],
+          [
+            "11",
+            "DOT",
+            "\\."
+          ],
+          [
+            "12",
+            "LP",
+            "\\("
+          ],
+          [
+            "13",
+            "RP",
+            "\\)"
+          ],
+          [
+            "14",
+            "SEMI",
+            ";"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "REAL requires digits after the dot. Restore to the last accepted INT boundary after 12, then scan DOT separately.",
+        {
+          "headers": [
+            "Zero-based offset",
+            "Lexeme",
+            "Type",
+            "Action"
+          ],
+          "rows": [
+            [
+              "0",
+              "'x'",
+              "ID",
+              "emit"
+            ],
+            [
+              "1",
+              "'='",
+              "ASSIGN",
+              "emit"
+            ],
+            [
+              "2",
+              "'12'",
+              "INT",
+              "emit"
+            ],
+            [
+              "4",
+              "'.'",
+              "DOT",
+              "emit"
+            ],
+            [
+              "5",
+              "';'",
+              "SEMI",
+              "emit"
+            ]
+          ]
+        },
+        "The output is a token sequence. Whether the sequence is a grammatically valid program is a separate parser question."
+      ]
+    },
+    {
+      "id": "A11-04",
+      "topic": "A11",
+      "title": "Execute a scanner with explicit rules",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Scan the source 'foo+9'. Use the rules below. At each position choose the longest valid prefix; on equal length choose the earlier listed rule. Skip WS and COMMENT. Emit all other tokens as TYPE(original lexeme), including a pending token at EOF. Comments do not nest. Which complete token stream is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ID(foo), PLUS(+), INT(9)"
+        },
+        {
+          "value": "B",
+          "label": "ID(foo), PLUS(+)"
+        },
+        {
+          "value": "C",
+          "label": "ID(f), ID(o), ID(o), PLUS(+), INT(9)"
+        },
+        {
+          "value": "D",
+          "label": "ID(foo), INT(9)"
+        }
+      ],
+      "answer": "A",
+      "explanation": "End of file completes the pending INT token even though there is no trailing delimiter.",
+      "sources": "S08 pp. 4-15; additional worked scanner practice",
+      "table": {
+        "headers": [
+          "Priority order",
+          "Token",
+          "Pattern"
+        ],
+        "rows": [
+          [
+            "1",
+            "COMMENT",
+            "/\\*.*?\\*/"
+          ],
+          [
+            "2",
+            "WS",
+            "\\s+"
+          ],
+          [
+            "3",
+            "KW_IF",
+            "if"
+          ],
+          [
+            "4",
+            "ID",
+            "[A-Za-z_][A-Za-z0-9_]*"
+          ],
+          [
+            "5",
+            "REAL",
+            "[0-9]+\\.[0-9]+"
+          ],
+          [
+            "6",
+            "INT",
+            "[0-9]+"
+          ],
+          [
+            "7",
+            "EQ",
+            "=="
+          ],
+          [
+            "8",
+            "ASSIGN",
+            "="
+          ],
+          [
+            "9",
+            "PLUS",
+            "\\+"
+          ],
+          [
+            "10",
+            "MINUS",
+            "-"
+          ],
+          [
+            "11",
+            "DOT",
+            "\\."
+          ],
+          [
+            "12",
+            "LP",
+            "\\("
+          ],
+          [
+            "13",
+            "RP",
+            "\\)"
+          ],
+          [
+            "14",
+            "SEMI",
+            ";"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "End of file completes the pending INT token even though there is no trailing delimiter.",
+        {
+          "headers": [
+            "Zero-based offset",
+            "Lexeme",
+            "Type",
+            "Action"
+          ],
+          "rows": [
+            [
+              "0",
+              "'foo'",
+              "ID",
+              "emit"
+            ],
+            [
+              "3",
+              "'+'",
+              "PLUS",
+              "emit"
+            ],
+            [
+              "4",
+              "'9'",
+              "INT",
+              "emit"
+            ]
+          ]
+        },
+        "The output is a token sequence. Whether the sequence is a grammatically valid program is a separate parser question."
+      ]
+    },
+    {
+      "id": "A11-05",
+      "topic": "A11",
+      "title": "Execute a scanner with explicit rules",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Scan the source 'x===2;'. Use the rules below. At each position choose the longest valid prefix; on equal length choose the earlier listed rule. Skip WS and COMMENT. Emit all other tokens as TYPE(original lexeme), including a pending token at EOF. Comments do not nest. Which complete token stream is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ID(x), EQ(==), ASSIGN(=), INT(2), SEMI(;)"
+        },
+        {
+          "value": "B",
+          "label": "ID(x), EQ(===), INT(2), SEMI(;)"
+        },
+        {
+          "value": "C",
+          "label": "ID(x), ASSIGN(=), EQ(==), INT(2), SEMI(;)"
+        },
+        {
+          "value": "D",
+          "label": "ID(x), ASSIGN(=), ASSIGN(=), ASSIGN(=), INT(2), SEMI(;)"
+        }
+      ],
+      "answer": "A",
+      "explanation": "At the first equals sign, == is the longest valid prefix; a separate = remains for the next token.",
+      "sources": "S08 pp. 4-15; additional worked scanner practice",
+      "table": {
+        "headers": [
+          "Priority order",
+          "Token",
+          "Pattern"
+        ],
+        "rows": [
+          [
+            "1",
+            "COMMENT",
+            "/\\*.*?\\*/"
+          ],
+          [
+            "2",
+            "WS",
+            "\\s+"
+          ],
+          [
+            "3",
+            "KW_IF",
+            "if"
+          ],
+          [
+            "4",
+            "ID",
+            "[A-Za-z_][A-Za-z0-9_]*"
+          ],
+          [
+            "5",
+            "REAL",
+            "[0-9]+\\.[0-9]+"
+          ],
+          [
+            "6",
+            "INT",
+            "[0-9]+"
+          ],
+          [
+            "7",
+            "EQ",
+            "=="
+          ],
+          [
+            "8",
+            "ASSIGN",
+            "="
+          ],
+          [
+            "9",
+            "PLUS",
+            "\\+"
+          ],
+          [
+            "10",
+            "MINUS",
+            "-"
+          ],
+          [
+            "11",
+            "DOT",
+            "\\."
+          ],
+          [
+            "12",
+            "LP",
+            "\\("
+          ],
+          [
+            "13",
+            "RP",
+            "\\)"
+          ],
+          [
+            "14",
+            "SEMI",
+            ";"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "At the first equals sign, == is the longest valid prefix; a separate = remains for the next token.",
+        {
+          "headers": [
+            "Zero-based offset",
+            "Lexeme",
+            "Type",
+            "Action"
+          ],
+          "rows": [
+            [
+              "0",
+              "'x'",
+              "ID",
+              "emit"
+            ],
+            [
+              "1",
+              "'=='",
+              "EQ",
+              "emit"
+            ],
+            [
+              "3",
+              "'='",
+              "ASSIGN",
+              "emit"
+            ],
+            [
+              "4",
+              "'2'",
+              "INT",
+              "emit"
+            ],
+            [
+              "5",
+              "';'",
+              "SEMI",
+              "emit"
+            ]
+          ]
+        },
+        "The output is a token sequence. Whether the sequence is a grammatically valid program is a separate parser question."
+      ]
+    },
+    {
+      "id": "A11-06",
+      "topic": "A11",
+      "title": "Execute a scanner with explicit rules",
+      "part": "Assignment",
+      "difficulty": "Worked problem",
+      "question": "Scan the source 'sum/*x*/+2'. Use the rules below. At each position choose the longest valid prefix; on equal length choose the earlier listed rule. Skip WS and COMMENT. Emit all other tokens as TYPE(original lexeme), including a pending token at EOF. Comments do not nest. Which complete token stream is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ID(sum), PLUS(+), INT(2)"
+        },
+        {
+          "value": "B",
+          "label": "ID(sum), PLUS(+)"
+        },
+        {
+          "value": "C",
+          "label": "ID(sum), COMMENT(/*x*/), PLUS(+), INT(2)"
+        },
+        {
+          "value": "D",
+          "label": "ID(sum), ID(x), PLUS(+), INT(2)"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The complete nonnested comment is recognized and skipped; it is neither an identifier token nor an emitted comment token.",
+      "sources": "S08 pp. 4-15; additional worked scanner practice",
+      "table": {
+        "headers": [
+          "Priority order",
+          "Token",
+          "Pattern"
+        ],
+        "rows": [
+          [
+            "1",
+            "COMMENT",
+            "/\\*.*?\\*/"
+          ],
+          [
+            "2",
+            "WS",
+            "\\s+"
+          ],
+          [
+            "3",
+            "KW_IF",
+            "if"
+          ],
+          [
+            "4",
+            "ID",
+            "[A-Za-z_][A-Za-z0-9_]*"
+          ],
+          [
+            "5",
+            "REAL",
+            "[0-9]+\\.[0-9]+"
+          ],
+          [
+            "6",
+            "INT",
+            "[0-9]+"
+          ],
+          [
+            "7",
+            "EQ",
+            "=="
+          ],
+          [
+            "8",
+            "ASSIGN",
+            "="
+          ],
+          [
+            "9",
+            "PLUS",
+            "\\+"
+          ],
+          [
+            "10",
+            "MINUS",
+            "-"
+          ],
+          [
+            "11",
+            "DOT",
+            "\\."
+          ],
+          [
+            "12",
+            "LP",
+            "\\("
+          ],
+          [
+            "13",
+            "RP",
+            "\\)"
+          ],
+          [
+            "14",
+            "SEMI",
+            ";"
+          ]
+        ]
+      },
+      "worked_solution": [
+        "The complete nonnested comment is recognized and skipped; it is neither an identifier token nor an emitted comment token.",
+        {
+          "headers": [
+            "Zero-based offset",
+            "Lexeme",
+            "Type",
+            "Action"
+          ],
+          "rows": [
+            [
+              "0",
+              "'sum'",
+              "ID",
+              "emit"
+            ],
+            [
+              "3",
+              "'/*x*/'",
+              "COMMENT",
+              "skip"
+            ],
+            [
+              "8",
+              "'+'",
+              "PLUS",
+              "emit"
+            ],
+            [
+              "9",
+              "'2'",
+              "INT",
+              "emit"
+            ]
+          ]
+        },
+        "The output is a token sequence. Whether the sequence is a grammatically valid program is a separate parser question."
+      ]
+    }
+  ]
+}

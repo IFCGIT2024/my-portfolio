@@ -1,0 +1,687 @@
+{
+  "schemaVersion": 1,
+  "questions": [
+    {
+      "id": "p-state",
+      "type": "mcq",
+      "lesson": "00-foundations",
+      "category": "foundations",
+      "title": "Track one changed place",
+      "question": "x=4 and y=7. Replace x with 9. What is the new state?",
+      "options": [
+        "x=13, y=7",
+        "x=9, y=7",
+        "x=9, y=9"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Replacement changes x to 9. Nothing in the operation writes y, so y remains 7."
+    },
+    {
+      "id": "p-assignment",
+      "type": "mcq",
+      "lesson": "00-foundations",
+      "category": "foundations",
+      "title": "Copy, then change the original",
+      "question": "After x=4; y=x; x=x+3;, what is y?",
+      "options": [
+        "7",
+        "3",
+        "4"
+      ],
+      "correctAnswer": 2,
+      "explanation": "y received a copy of the value 4. The final assignment only writes x."
+    },
+    {
+      "id": "p-byte",
+      "type": "mcq",
+      "lesson": "00-foundations",
+      "category": "foundations",
+      "title": "Bits versus bytes",
+      "question": "How many bits are in an eight-byte value?",
+      "options": [
+        "8",
+        "64",
+        "16"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Multiply eight bytes by eight bits per byte: 64 bits."
+    },
+    {
+      "id": "p-binary",
+      "type": "mcq",
+      "lesson": "00-foundations",
+      "category": "foundations",
+      "title": "Read a bit pattern",
+      "question": "What unsigned number is 0b1101?",
+      "options": [
+        "11",
+        "13",
+        "14"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The set positions contribute 8+4+1=13."
+    },
+    {
+      "id": "p-hex",
+      "type": "mcq",
+      "lesson": "00-foundations",
+      "category": "foundations",
+      "title": "Read a hexadecimal value",
+      "question": "What is 0x2A in decimal?",
+      "options": [
+        "210",
+        "42",
+        "26"
+      ],
+      "correctAnswer": 1,
+      "explanation": "2\u00d716+A, with A=10, gives 42."
+    },
+    {
+      "id": "p-signed",
+      "type": "mcq",
+      "lesson": "00-foundations",
+      "category": "foundations",
+      "title": "One pattern, two interpretations",
+      "question": "An eight-bit pattern is 0xFE. Its unsigned value is 254. What is its signed two\u2019s-complement value?",
+      "options": [
+        "\u22122",
+        "\u2212254",
+        "126"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The top bit is set, so subtract 256: 254\u2212256=\u22122. Width is essential to this calculation."
+    },
+    {
+      "id": "p-mov-constant",
+      "type": "code",
+      "lesson": "02-widths",
+      "category": "foundations",
+      "title": "Your first instruction",
+      "cCode": "// Put the constant 12 in RAX.\n// This is a snippet: stop at the end.",
+      "hint": "Write the immediate first and the register destination second.",
+      "solutions": [
+        "movq $12,%rax"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: ",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {},
+          "expected": {
+            "registers": {
+              "rax": 12
+            },
+            "memory": {}
+          }
+        }
+      ],
+      "explanation": "movq selects 64 bits, $12 is the immediate, and %rax is the destination.",
+      "dataModel": "64-bit integer registers; AT&T source, destination"
+    },
+    {
+      "id": "p-regcopy",
+      "type": "code",
+      "lesson": "02-widths",
+      "category": "foundations",
+      "title": "Copy the supplied input",
+      "cCode": "// RDI contains x. Copy x into RAX; keep RDI unchanged.",
+      "hint": "Use the register as the source, not a constant.",
+      "solutions": [
+        "movq %rdi,%rax"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=7",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 7
+          },
+          "expected": {
+            "registers": {
+              "rax": 7,
+              "rdi": 7
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=-3",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": -3
+          },
+          "expected": {
+            "registers": {
+              "rax": -3,
+              "rdi": -3
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=9007199254740993",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": "9007199254740993"
+          },
+          "expected": {
+            "registers": {
+              "rax": "9007199254740993",
+              "rdi": "9007199254740993"
+            },
+            "memory": {}
+          }
+        }
+      ],
+      "explanation": "A register-to-register MOV copies all 64 bits, including values larger than 32 bits.",
+      "dataModel": "64-bit integer registers; AT&T source, destination"
+    },
+    {
+      "id": "p-r8-alias",
+      "type": "mcq",
+      "lesson": "02-widths",
+      "category": "foundations",
+      "title": "Apply the rule to a different family",
+      "question": "R8 contains all 64 one bits. After movl $3,%r8d, what is R8?",
+      "options": [
+        "0xffffffff00000003",
+        "3",
+        "\u22121"
+      ],
+      "correctAnswer": 1,
+      "explanation": "R8D is the 32-bit view of R8. Its write clears the upper 32 bits, just as writing EAX does for RAX."
+    },
+    {
+      "id": "p-add",
+      "type": "code",
+      "lesson": "06-arithmetic",
+      "category": "foundations",
+      "title": "Add to a copy",
+      "cCode": "// RDI=x. Put x+3 in RAX and preserve RDI.",
+      "hint": "Initialize the result before adding.",
+      "solutions": [
+        "movq %rdi,%rax\naddq $3,%rax"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=6",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 6
+          },
+          "expected": {
+            "registers": {
+              "rax": 9,
+              "rdi": 6
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=-5",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": -5
+          },
+          "expected": {
+            "registers": {
+              "rax": -2,
+              "rdi": -5
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=0",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 0
+          },
+          "expected": {
+            "registers": {
+              "rax": 3,
+              "rdi": 0
+            },
+            "memory": {}
+          }
+        }
+      ],
+      "explanation": "MOV initializes RAX from x; ADD reads that old RAX and adds the constant.",
+      "dataModel": "64-bit integer registers; AT&T source, destination"
+    },
+    {
+      "id": "p-subtract",
+      "type": "code",
+      "lesson": "06-arithmetic",
+      "category": "foundations",
+      "title": "Keep subtraction order",
+      "cCode": "// RDI=x; RSI=y. Put x-y in RAX.",
+      "hint": "Write destination = destination - source on paper.",
+      "solutions": [
+        "movq %rdi,%rax\nsubq %rsi,%rax"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=9, rsi=4",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 9,
+            "rsi": 4
+          },
+          "expected": {
+            "registers": {
+              "rax": 5
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=2, rsi=7",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 2,
+            "rsi": 7
+          },
+          "expected": {
+            "registers": {
+              "rax": -5
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=-3, rsi=-3",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": -3,
+            "rsi": -3
+          },
+          "expected": {
+            "registers": {
+              "rax": 0
+            },
+            "memory": {}
+          }
+        }
+      ],
+      "explanation": "Initializing with x makes the subtraction compute x\u2212y rather than y\u2212x.",
+      "dataModel": "64-bit integer registers; AT&T source, destination"
+    },
+    {
+      "id": "p-multiply",
+      "type": "code",
+      "lesson": "06-arithmetic",
+      "category": "foundations",
+      "title": "Multiply two supplied inputs",
+      "cCode": "// RDI=x; RSI=y. Put x*y in RAX.",
+      "hint": "Copy one factor to the result, then multiply by the other.",
+      "solutions": [
+        "movq %rdi,%rax\nimulq %rsi,%rax"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=7, rsi=8",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 7,
+            "rsi": 8
+          },
+          "expected": {
+            "registers": {
+              "rax": 56
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=-3, rsi=4",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": -3,
+            "rsi": 4
+          },
+          "expected": {
+            "registers": {
+              "rax": -12
+            },
+            "memory": {}
+          }
+        },
+        {
+          "name": "Inputs: rdi=0, rsi=9",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 0,
+            "rsi": 9
+          },
+          "expected": {
+            "registers": {
+              "rax": 0
+            },
+            "memory": {}
+          }
+        }
+      ],
+      "explanation": "The two-operand IMUL reads the old destination as a factor.",
+      "dataModel": "64-bit integer registers; AT&T source, destination"
+    },
+    {
+      "id": "p-wrap",
+      "type": "mcq",
+      "lesson": "06-arithmetic",
+      "category": "foundations",
+      "title": "Keep only the destination width",
+      "question": "What eight-bit unsigned result remains after 255+2?",
+      "options": [
+        "257",
+        "1",
+        "\u22121"
+      ],
+      "correctAnswer": 1,
+      "explanation": "257 modulo 256 is 1. The bit beyond the eight-bit width cannot stay in that destination."
+    },
+    {
+      "id": "p-function",
+      "type": "mcq",
+      "lesson": "03-functions",
+      "category": "foundations",
+      "title": "Read inputs and result",
+      "question": "In long difference(long x,long y) { return x-y; }, what does difference(9,4) produce?",
+      "options": [
+        "4",
+        "9",
+        "5"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The arguments initialize x=9 and y=4. The returned expression is 9\u22124=5."
+    },
+    {
+      "id": "p-return-register",
+      "type": "mcq",
+      "lesson": "03-functions",
+      "category": "foundations",
+      "title": "Place the result where the caller expects it",
+      "question": "A function returns a long. In which register should its result be placed?",
+      "options": [
+        "RDI",
+        "RAX",
+        "RSP"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The integer result register for this convention is RAX. RDI supplies the first argument; RSP has a separate stack role."
+    },
+    {
+      "id": "p-return-sum",
+      "type": "code",
+      "lesson": "03-functions",
+      "category": "foundations",
+      "title": "Write your first complete translation",
+      "cCode": "long plus(long x,long y) { return x+y; }",
+      "hint": "Compute the sum in RAX, then return control.",
+      "solutions": [
+        "movq %rdi,%rax\naddq %rsi,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=6, rsi=4",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 6,
+            "rsi": 4
+          },
+          "expected": {
+            "registers": {
+              "rax": 10
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-8, rsi=3",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": -8,
+            "rsi": 3
+          },
+          "expected": {
+            "registers": {
+              "rax": -5
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=0, rsi=0",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 0,
+            "rsi": 0
+          },
+          "expected": {
+            "registers": {
+              "rax": 0
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "RDI/RSI provide the arguments. MOV and ADD produce the result in RAX; RET finishes the function.",
+      "dataModel": "64-bit integer registers; AT&T source, destination"
+    },
+    {
+      "id": "p-endian-offset",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "foundations",
+      "title": "Read the next stored byte",
+      "question": "The four-byte value 0x12345678 begins at 0x100 on x86. What byte is at 0x101?",
+      "options": [
+        "0x12",
+        "0x56",
+        "0x78"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Increasing addresses contain 78,56,34,12 in hexadecimal. The second byte, at 0x101, is 0x56."
+    },
+    {
+      "id": "p-pointer",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "foundations",
+      "title": "A pointer and its pointee",
+      "question": "p contains 0x100, and the long at 0x100 is 23. What does *p evaluate to?",
+      "options": [
+        "0x100",
+        "23",
+        "The size of p"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Dereferencing accesses the value at the address held in p. The address is 0x100; the value there is 23."
+    },
+    {
+      "id": "p-array-offset",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "foundations",
+      "title": "Index versus byte offset",
+      "question": "A long array starts at 0x1000. What is the address of a[3]?",
+      "options": [
+        "0x1003",
+        "0x1018",
+        "0x1010"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Index 3 means 3\u00d78=24 bytes from the base. Decimal 24 is 0x18, so the address is 0x1018."
+    },
+    {
+      "id": "p-or",
+      "type": "mcq",
+      "lesson": "07-bits",
+      "category": "foundations",
+      "title": "Setting an already-set bit",
+      "question": "What is 8 | 8?",
+      "options": [
+        "0",
+        "16",
+        "8"
+      ],
+      "correctAnswer": 2,
+      "explanation": "OR sets positions; it does not add their numeric weights twice. Bit 3 remains set and the result stays 8."
+    },
+    {
+      "id": "p-shr",
+      "type": "mcq",
+      "lesson": "08-shifts",
+      "category": "foundations",
+      "title": "Follow a logical shift",
+      "question": "As an eight-bit illustration, what is 10000000 shifted logically right by one?",
+      "options": [
+        "11000000",
+        "01000000",
+        "00000001"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Each bit moves one place toward the right. SHR fills the newly open high position with zero."
+    },
+    {
+      "id": "p-cmp",
+      "type": "mcq",
+      "lesson": "09-branches",
+      "category": "foundations",
+      "title": "Compare without overwriting",
+      "question": "RDI=6 and RSI=4. After cmpq %rsi,%rdi, which is true?",
+      "options": [
+        "RDI becomes 2",
+        "RDI and RSI are unchanged; flags describe 6\u22124",
+        "RSI becomes \u22122"
+      ],
+      "correctAnswer": 1,
+      "explanation": "CMP computes destination minus source only to set flags. It does not store the numeric difference."
+    },
+    {
+      "id": "p-branch",
+      "type": "code",
+      "lesson": "09-branches",
+      "category": "foundations",
+      "title": "Translate a zero test",
+      "cCode": "long nonzero(long x) { return x != 0; }",
+      "hint": "Default the result to false, and skip the true assignment when equal.",
+      "solutions": [
+        "movq $0,%rax\ncmpq $0,%rdi\nje done\nmovq $1,%rax\ndone: ret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: rdi=0",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 0
+          },
+          "expected": {
+            "registers": {
+              "rax": 0
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=5",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": 5
+          },
+          "expected": {
+            "registers": {
+              "rax": 1
+            },
+            "memory": {}
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: rdi=-2",
+          "memoryWidth": 8,
+          "memory": {},
+          "registers": {
+            "rdi": -2
+          },
+          "expected": {
+            "registers": {
+              "rax": 1
+            },
+            "memory": {}
+          },
+          "function": true
+        }
+      ],
+      "explanation": "JE uses the equality flag; negative values are nonzero too.",
+      "dataModel": "64-bit integer registers; AT&T source, destination"
+    },
+    {
+      "id": "p-stack-order",
+      "type": "mcq",
+      "lesson": "10-stack",
+      "category": "foundations",
+      "title": "Restore saved values",
+      "question": "You push RAX and then RCX to preserve them. Which restore order recovers both originals?",
+      "options": [
+        "popq %rax; popq %rcx",
+        "popq %rcx; popq %rax",
+        "Either order"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The most recently pushed value is on top, so restore RCX before RAX."
+    },
+    {
+      "id": "p-encoding-mode",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "foundations",
+      "title": "Distinguish register mode from memory mode",
+      "question": "Given that 48 89 c3 encodes movq %rax,%rbx and 48 89 03 encodes movq %rax,(%rbx), what changes?",
+      "options": [
+        "Only the numeric value being copied",
+        "Whether the destination is RBX itself or memory at RBX",
+        "The copy changes from 64 bits to 8 bits"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The destination mode changes. Both forms copy 64-bit data, but one writes a register and one writes an addressed memory location."
+    },
+    {
+      "id": "p-promotions",
+      "type": "mcq",
+      "lesson": "08-shifts",
+      "category": "foundations",
+      "title": "Read the C expression before narrowing",
+      "question": "In this model, unsigned char x=0x87 promotes to a 32-bit int. What is the value of x<<2 before storing it back into a byte?",
+      "options": [
+        "28",
+        "540",
+        "\u2212484"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The unsigned-char value 135 promotes to int, and 135\u00d74=540 fits in int. Assigning 540 to an unsigned char afterward would yield 28, but that is a separate narrowing step."
+    }
+  ]
+}

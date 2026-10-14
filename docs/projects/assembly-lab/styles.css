@@ -14,3 +14,41 @@
 #trace-step {width:100%;margin:14px 0}#trace-state {overflow:auto;max-height:480px;white-space:pre}
 #solution-explanation {line-height:1.7;max-width:90ch}#data-model {text-align:right;max-width:55%}
 @media(max-width:650px){.course{padding:16px}.course-heading label{width:100%}.course-heading select{width:100%}.actions{gap:12px}#data-model{font-size:.7rem}}
+
+/* One concept at a time, using the existing quiet purple practice style. */
+.chapter-goal{max-width:76ch;color:#545970;margin-bottom:22px}
+.concept-toolbar{padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.concept-toolbar label,.scope-label{display:flex;align-items:center;gap:12px;font-size:.85rem;color:var(--muted)}
+.concept-toolbar select{max-width:100%;width:520px}
+.concept-card{max-width:100%;padding-top:25px;outline:none}
+.concept-card h4{font-size:1.55rem;line-height:1.3;letter-spacing:-.02em;margin:6px 0 12px}
+.concept-card>p{max-width:78ch;line-height:1.8;font-size:1rem}
+.concept-card .concept-goal{font-size:1.08rem;font-weight:600;color:#443380;margin:0 0 14px}
+.concept-card .recap{padding:10px 14px;border-left:3px solid #b6a6ee;background:#f8f6ff;font-size:.86rem}
+.text-button{border:0;background:none;padding:2px 0;color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-align:left;font-weight:500}
+.lesson-diagram{margin:25px 0;padding:20px;background:#faf9fe;border:1px solid #e4dff3;border-radius:12px;max-width:640px}
+.lesson-diagram img{display:block;width:100%;max-width:480px;height:auto;margin:auto}
+.lesson-diagram figcaption{font-size:.87rem;line-height:1.7;color:#4c5069;margin-top:14px}
+.worked-example{margin:28px 0;padding:20px;background:#fafaff;border:1px solid var(--border);border-radius:12px}
+.concept-card h5{font-size:1.08rem;margin:0 0 12px;line-height:1.4}
+.worked-example h6{font-size:.84rem;margin:0 0 8px;color:#53566b}
+.worked-example .panel>pre{min-height:0}
+.worked-example .example-goal{max-width:78ch}
+.worked-example ol{padding-left:24px;max-width:85ch;line-height:1.8;margin:18px 0 0}
+.worked-example li{padding-left:5px;margin:7px 0}
+.teach-back{background:#f5f2ff;border:1px solid #d9cfef;border-radius:12px;padding:20px;max-width:90ch}
+.teach-back p{line-height:1.75;margin:8px 0}
+.teach-back details{margin:10px 0 0}.teach-back summary{font-size:.9rem}
+.step-practice{margin-top:26px}.practice-links{display:flex;gap:8px;flex-wrap:wrap}
+.practice-links button{text-align:left;font-size:.85rem;font-weight:500}
+.concept-actions{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:28px}
+.practice-context{font-size:.88rem;line-height:1.6;color:#565873;margin:0 0 14px}
+.scope-label select{max-width:220px}.summary button{margin:6px}
+@media(max-width:650px){
+ .concept-toolbar label{align-items:flex-start;flex-direction:column;gap:6px;width:100%}
+ .concept-toolbar select{width:100%}.concept-card h4{font-size:1.25rem}
+ .concept-card>p{font-size:.94rem}.lesson-diagram{padding:8px;margin:20px -6px}
+ .lesson-diagram figcaption{padding:0 6px}.worked-example,.teach-back{padding:14px}
+ .scope-label{margin-top:12px}.concept-actions button{font-size:.84rem}
+ .practice-links{display:grid;grid-template-columns:1fr}.practice-links button{width:100%}
+}

@@ -3,6 +3,7 @@
   "banks": [
     "translation.json",
     "concepts.json",
-    "lecture10.json"
+    "lecture10.json",
+    "foundations.json"
   ]
 }

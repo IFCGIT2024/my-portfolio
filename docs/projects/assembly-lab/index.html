@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Practice C to x86 assembly with browser-based execution checks, branching, loops, pointers, and concept questions.">
+  <meta name="description" content="Learn C to x86 assembly from first principles, one concept at a time, with diagrams, complete examples, explanations and executable practice.">
   <title>C → x86 Assembly Lab</title>
   <link rel="stylesheet" href="styles.css">
   <script defer src="engine.js"></script>
@@ -18,7 +18,7 @@
     <header class="hero">
       <div><p class="eyebrow">CSCI 2122 / GUIDED ASSEMBLY COURSE</p>
         <h1>C <span>→</span> x86 Assembly</h1>
-        <p>Translate the logic. Check the result. Understand the machine.</p>
+        <p>Start with one idea. See what changes. Build the whole program.</p>
       </div>
       <div class="architecture"><strong>x86-64 + 32-bit</strong><span>AT&amp;T syntax</span><span>Runs in your browser</span></div>
     </header>
@@ -27,27 +27,29 @@
     <div id="storage-status" class="notice" role="status" hidden></div>
     <div id="app" hidden>
       <section class="course" aria-label="Guided course">
-        <div class="course-heading"><div><p class="eyebrow">LEARN → TRANSLATE → EXPLAIN → TRACE</p><h2>Lecture 10 study path</h2></div>
-          <label>Lesson <select id="lesson-select"></select></label></div>
+        <div class="course-heading"><div><p class="eyebrow">LEARN → TRANSLATE → EXPLAIN → TRACE</p><h2>From first principles to complete programs</h2></div>
+          <label>Chapter <select id="lesson-select"></select></label></div>
         <p id="course-progress" class="small"></p>
         <div id="lesson-content"></div>
-        <div class="actions"><button id="lesson-prev">← Previous lesson</button><button id="lesson-next">Next lesson →</button></div>
+        <div class="actions"><button id="lesson-prev">← Previous chapter</button><button id="lesson-next">Next chapter →</button></div>
       </section>
+      <p id="practice-context" class="practice-context"></p>
       <div class="toolbar">
         <div class="modes" role="group" aria-label="Practice mode">
           <button id="code-mode" aria-pressed="true">Code translation <span id="code-total"></span></button>
           <button id="mcq-mode" aria-pressed="false">Concept questions <span id="mcq-total"></span></button>
         </div>
-        <label class="topic-label">Topic <select id="topic"><option value="all">All topics</option></select></label>
+        <label class="scope-label">Practice <select id="practice-scope"><option value="step">This concept</option><option value="chapter">Whole chapter review</option></select></label>
+        <label id="topic-label" class="topic-label">Topic <select id="topic"><option value="all">All topics</option></select></label>
       </div>
       <div class="progress-row"><p id="progress-text"></p><p id="stats"></p></div>
       <progress id="progress" max="1" value="0" aria-label="Questions solved independently"></progress>
-      <main id="exercise">
+      <main id="exercise" tabindex="-1">
         <div class="question-heading"><div><p id="question-meta" class="eyebrow"></p><h2 id="question-title"></h2></div>
           <label class="jump-label">Jump to <select id="question-select"></select></label>
         </div>
         <div id="code-exercise">
-          <div class="contract"><strong>Your task</strong><p>Translate the C using the stated input locations and data widths. Read the supplied inputs; do not hard-code example answers. Meet the required outputs and preserve other input memory. Function exercises must return correctly; all exercises must balance the stack.</p>
+          <div class="contract"><strong>Your task</strong><p>Translate the C using the stated input locations and data widths. Read the supplied inputs; do not hard-code example answers. Meet the required outputs and preserve other input memory. Each question states whether you are writing a short snippet or a complete function.</p>
             <p id="output-contract"></p></div>
           <div class="code-panels">
             <section class="panel"><div class="panel-heading"><h3>C operations</h3><span id="data-model">Use the question’s stated data model</span></div>
@@ -75,7 +77,7 @@
           <pre id="trace-state" tabindex="0"></pre>
         </section>
       </main>
-      <section id="summary" class="summary" hidden><p class="eyebrow">PRACTICE CHECKPOINT</p><h2>End of this set</h2><p id="summary-text"></p><p>Skipped questions and viewed solutions remain available to practice.</p><button id="return-to-questions" class="primary">Return to questions</button></section>
+      <section id="summary" class="summary" hidden><p class="eyebrow">PRACTICE CHECKPOINT</p><h2>End of this set</h2><p id="summary-text"></p><p>Skipped questions and viewed solutions remain available to practice.</p><button id="return-to-questions" class="primary">Return to questions</button><button id="continue-concept" hidden>Next concept →</button></section>
       <section class="reference">
         <details><summary>Syntax reference &amp; what the checker supports</summary>
           <div class="reference-grid"><div><h3>Operands</h3><p><code>$5</code> immediate · <code>%eax</code> register · <code>A</code> named memory</p><p><code>(%edx)</code> indirect · <code>-4(%ebp)</code> displacement · <code>8(%edx,%ecx,4)</code> base + index × scale + displacement</p><p>Registers: RAX, RBX, RCX, RDX, RSI, RDI, RBP, RSP and R8–R15, with 32-, 16- and 8-bit aliases (for example EAX/AX/AL, R8D/R8W/R8B). Use lowercase or uppercase with a <code>%</code> prefix.</p></div>
@@ -87,7 +89,7 @@
           <p><a href="data/example.json" download>Download a working question template</a> · <a href="https://github.com/IFCGIT2024/my-portfolio/blob/main/docs/projects/assembly-lab/README.md" target="_blank" rel="noopener noreferrer">Read the authoring guide ↗</a></p>
           <label class="import-label">Try a JSON bank on this device <input id="import-bank" type="file" accept="application/json,.json"></label><p class="small">Imported questions are kept for this session only. Publishing them for everyone requires adding the JSON file to the repository.</p><p id="import-status" role="status"></p>
         </details>
-        <details><summary>Progress &amp; study notes</summary><p><a href="https://github.com/IFCGIT2024/my-portfolio/blob/main/docs/projects/assembly-lab/LECTURE_REVIEW.md">Read the 36-slide coverage and educational review ↗</a></p><p>Drafts, attempts, and solved question IDs are saved in this browser when storage is available. Repeating a solved question cannot inflate the total. Viewed solutions and explained MCQs count as reviewed; only answers passed before a solution was revealed count as solved independently.</p><p>The original CSCI 1120 refresher remains available under “Original practice”. The guided CSCI 2122 path covers Lecture 10 (36 slides), with expanded bit operations and stack/call mechanics. It is an integer assembly study course, not coverage of the entire 2122 exam syllabus.</p><p>The slides contain two jump-description typos: <code>jne</code> branches when ZF is 0, and <code>jge</code> means signed greater than or equal. The checker follows the documented x86 semantics.</p><p>Lecture 10 corrections are explained in the lessons: slide 20’s load mapping, slide 33’s mismatched arithmetic, and slide 35’s mixed-width address. The simulator uses exact 64-bit integers but bounded memory, a 4096-byte stack, and symbolic code locations. No native code is executed.</p><p>References: <a href="https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html">Intel instruction manuals</a> · <a href="https://sourceware.org/binutils/docs/as/i386_002dVariations.html">GNU AT&amp;T syntax</a> · <a href="https://gitlab.com/x86-psABIs/x86-64-ABI">System V AMD64 ABI</a></p><button id="reset" class="danger">Reset this lab's progress</button></details>
+        <details><summary>Progress &amp; study notes</summary><p>This course is self-contained. Start with values and bits, then follow one small concept at a time. Each concept includes a complete example, an explanation to compare with your own, focused practice and relevant earlier review. No external slides are needed.</p><p>Marked read is a reading bookmark, not a mastery score. Questions passed before revealing a solution count as solved independently. Drafts and progress stay in this browser; nothing is uploaded or synchronized. Use “Whole chapter review” or “All practice” to revisit the larger bank.</p><p>The original 32-bit refresher remains available separately. The guided path uses Linux x86-64 LP64. The interpreter provides exact-width integer operations, bounded memory and a simulated stack; it does not execute native code. This course covers the supplied assembly topics and extensions, not the entire CSCI 2122 syllabus.</p><p><a href="https://github.com/IFCGIT2024/my-portfolio/blob/main/docs/projects/assembly-lab/COURSE_DESIGN.md">Read the course design and coverage notes ↗</a></p><p>References: <a href="https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html">Intel instruction manuals</a> · <a href="https://sourceware.org/binutils/docs/as/i386_002dVariations.html">GNU AT&amp;T syntax</a> · <a href="https://gitlab.com/x86-psABIs/x86-64-ABI">System V AMD64 ABI</a></p><button id="reset" class="danger">Reset this lab's progress</button></details>
       </section>
     </div>
     <footer><span>Assembly Lab · CSCI 2122 + 1120 foundations</span><span>Practice stays on your device.</span></footer>

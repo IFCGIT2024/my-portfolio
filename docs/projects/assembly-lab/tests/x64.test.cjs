@@ -5,10 +5,10 @@ const bank=require('../data/lecture10.json');
 const run=(code,fixture={},options={})=>E.execute(code,{memory:{},...fixture},options);
 const rax=(code,fixture)=>run(code,fixture).registers.get('rax');
 test('all 122 Lecture 10 questions and their reference solutions validate',()=>{E.validateBank(bank);assert.equal(bank.questions.length,122);});
-test('all lessons have introductions, examples, explanations and valid question mappings',()=>{
- const lessons=require('../data/lessons.json').lessons;assert.equal(lessons.length,12);
- for(const l of lessons){assert.ok(l.paragraphs.length>=4);assert.ok(l.exampleAssembly&&l.walkthrough&&l.pitfall);assert.ok(bank.questions.some(q=>q.lesson===l.id));}
- for(const q of bank.questions){assert.ok(lessons.some(l=>l.id===q.lesson));assert.ok(q.explanation);}
+test('all course questions have explanations and map into the learning path',()=>{
+ const lessons=require('../data/lessons.json').lessons;assert.equal(lessons.length,14);
+ const mapped=new Set(lessons.flatMap(l=>l.steps.flatMap(s=>[...s.practice,...s.review])));
+ for(const q of bank.questions){assert.ok(mapped.has(q.id),q.id);assert.ok(q.explanation);}
 });
 test('64-bit arithmetic is exact above Number safe range and wraps at 64 bits',()=>{
  assert.equal(rax('movq $9007199254740993,%rax\naddq $2,%rax'),9007199254740995n);

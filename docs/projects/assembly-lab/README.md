@@ -1,6 +1,6 @@
 # C → x86 Assembly Lab — CSCI 2122
 
-A static, browser-only integer assembly course and practice lab. **12 guided lessons, 81 code exercises, and 111 concept questions**: the original 36 translations / 34 concepts are preserved; Lecture 10 adds 45 code exercises / 77 concepts. Each lesson has an introduction, a worked example and pitfalls; its concepts have explained practice questions. The new reference translations have **152 independent expected-output cases**; the original bank retains 102.
+A static, browser-only integer assembly course and practice lab. **14 chapters, 75 small concepts, 35 diagrams and 51 executable worked examples** build from state and C assignment to complete translations. The guided path contains 148 questions; the preserved original bank adds 70, for **218 questions: 88 code exercises and 130 concepts**. Reference translations have **273 expected-output cases**: 171 guided-course cases and 102 original cases.
 
 Live URL: https://ifcgit2024.github.io/my-portfolio/docs/projects/assembly-lab/index.html
 
@@ -8,30 +8,26 @@ No backend or build step. The site remains at its existing path and does not cha
 
 ## Study workflow
 
-Choose a lesson, read its introduction, open the worked C → assembly example, then practice **both** Code translation and Concept questions. Lesson navigation follows prerequisites. Choose **Original practice** to use the preserved refresher, or **All practice** for the combined banks. The first lesson is conceptual and automatically selects that mode.
+Start with the first concept. Read its explanation and worked example, predict what changes, explain the idea in your own words, then use the focused practice and earlier review buttons. One concept is visible at a time. **Mark read and continue** records reading only; it does not solve any question. **Whole chapter** enables a broader review. **Original practice** preserves the 32-bit refresher, and **All practice** exposes the combined banks. Each concept automatically opens its first appropriate question mode.
+
+The [course design and educational review](COURSE_DESIGN.md) explains the progression, evidence of understanding and next improvements. Learners do not need the source lecture or external notes to follow the lessons.
 
 Code answers are executed against multiple supplied states, not compared to solution strings. Show hint, show solution and step through **Trace my code** when needed. The trace includes registers (decimal and hexadecimal), flags, question memory and eight-byte stack slots **before** each instruction. The first 200 pre-instruction states are retained, including steps captured before a runtime error. The final state is available separately through **Show final state**. Full registers and the initialized aliases used by the program appear with their actual widths. Check answer grades all cases; tracing one case does not mark an exercise solved.
 
-Drafts, attempts, solved/reviewed status and the selected lesson persist in browser localStorage under `mizel:assembly-lab:progress:v1`. Stable question IDs and content fingerprints preserve the original bank's progress. Modified questions invalidate only their own old results. Revealing a solution before passing marks that question reviewed, not independently solved. Nothing is synchronized or uploaded.
+Drafts, attempts, solved/reviewed status and the selected chapter/concept persist in browser localStorage under `mizel:assembly-lab:progress:v1`. Course schema version 2 adds concept and reading progress while retaining the existing storage key. Valid old answers and drafts are preserved; learners upgrading from the previous course start at the new foundation path. Stable question IDs and content fingerprints preserve unchanged questions' progress. Modified questions invalidate only their own old results. Revealing a solution before passing marks that question reviewed, not independently solved. Nothing is synchronized or uploaded.
 
 ## Lecture coverage
 
 The [page-by-page review](LECTURE_REVIEW.md) maps all 36 lecture pages to practice, records answer verification and prioritizes short-term educational improvements.
 
-| Lesson | Content | Lecture pages |
-| --- | --- | --- |
-| 1 | ISA, microarchitecture, state, types, C/assembly/object code, encoding and disassembly | 1–8, 11–17 |
-| 2 | AT&T operands, b/w/l/q, registers and overlapping aliases | 9–10, 13, 18–20 |
-| 3 | Pointers, loads, stores, swap and aliasing | 20–28 |
-| 4 | Displacement, base/index/scale, arrays, endian layout | 21, 29–30, 34–35 |
-| 5 | LEA versus MOV, address-of, scaled arithmetic | 31–32, 36 |
-| 6 | Arithmetic, subtraction, multiplication, audit of mismatched example | 12, 31, 33 |
-| 7 | AND/OR/XOR/NOT, masks, TEST, bitwise versus logical C | 12 + requested extension |
-| 8 | SHL/SAL/SHR/SAR, CL, signedness and count rules | 31, 33 + extension |
-| 9 | Flags, signed/unsigned conditions, array loops | 6, 12 + control-flow bridge |
-| 10 | PUSH/POP, automatic stack setup, frames, LEAVE | 15 + stack mechanics |
-| 11 | CALL/RET, System V ABI, saved registers, full sumstore | 15–16, 22–28 + ABI detail |
-| 12 | Integrated array, mask, runtime-bit and call/store exercises | Whole lecture |
+| Chapters | Learning path |
+| --- | --- |
+| 1–3 | State, C assignment, bits/bytes, binary/hex, signedness, registers, MOV, widths and arithmetic |
+| 4–5 | Functions, arguments/results, RET, memory, pointers, loads/stores and swap |
+| 6–7 | Arrays, full address forms, width versus scale and LEA versus MOV |
+| 8–9 | Bit masks, logical versus bitwise operations, shifts, C promotions, runtime counts and fields |
+| 10–12 | Flags, branches, loops, PUSH/POP, frames, CALL, ABI rules and complete call/store functions |
+| 13–14 | Encoding, disassembly, architecture, syntax/build pipeline and integrated explanations/translations |
 
 The image-only pages were inspected, including the register diagrams, instruction encoding, slide 15's `sumstore`, and slide 35's array example. This is coverage of the supplied integer-assembly lecture plus the requested extensions, **not a claim to cover the entire CSCI 2122 exam syllabus**.
 
@@ -66,8 +62,11 @@ Passing tests is evidence for the listed inputs, not a proof for all C inputs. C
 - `app.js`, `index.html`, `styles.css`: accessible interface and browser persistence.
 - `data/manifest.json`: bank list.
 - `data/translation.json`, `data/concepts.json`: preserved original questions, with reviewed concept wording.
-- `data/lecture10.json`: new exercises and answer explanations.
-- `data/lessons.json`: ordered introductions, worked examples, walkthroughs, pitfalls and expandable supporting sections.
+- `data/lecture10.json`: the reviewed core exercises and answer explanations.
+- `data/foundations.json`: 26 first-principles practice questions.
+- `data/lessons.json`: schema-version-2 chapters with ordered concepts, prerequisites, explanations, worked examples, teach-back prompts, focused practice and review IDs.
+- `data/diagrams.json`, `diagrams/*.svg`: figure metadata and 35 local accessible diagrams.
+- `COURSE_DESIGN.md`, `LECTURE_REVIEW.md`: author guidance, coverage mapping and review evidence.
 - `data/example.json`: simple legacy-compatible import template.
 
 Each bank uses `schemaVersion: 1`, a `questions` array, unique lowercase slug IDs, `type`, `category` and `title`. Code questions need `cCode`, `hint`, `solutions`, and `cases`; new ones add `lesson`, `explanation`, `dataModel` and optional `requirements` (normalized opcode names). MCQs need `question`, `options`, a zero-based `correctAnswer`, and `explanation`.
@@ -86,7 +85,7 @@ A 64-bit function fixture looks like:
 }
 ```
 
-Additional fields: `entry` selects a label; `memoryWidths` overrides widths by memory key; `preserveRegisters` adds preservation checks; `abi` enables call checks for snippets. Default cell width is 4. Null means allocated but uninitialized. Arrays use keys such as `a`, `a+8`, `a+16`. `checkStack:false` is an explicit advanced-fixture opt-out, not used by this course. Import validates reference solutions before admitting a bank and remains session-only.
+Additional fields: `entry` selects a label; `memoryWidths` overrides widths by memory key; `preserveRegisters` adds preservation checks; `abi` enables call checks for snippets. Default cell width is 4. Null means allocated but uninitialized. Arrays use keys such as `a`, `a+8`, `a+16`. `checkStack:false` is used only by the isolated PUSH worked example to observe an unfinished push. All graded exercises still require a balanced stack. Import validates reference solutions before admitting a bank and remains session-only.
 
 ## Validation and local preview
 
@@ -100,7 +99,9 @@ python3 -m http.server 8000
 
 Open `http://localhost:8000/docs/projects/assembly-lab/index.html`. Browsers block JSON fetches from `file://`.
 
-The Node suite covers original and new banks plus exact 64-bit arithmetic, aliases, overlapping widths, negative LEA, shifts/flags, stack boundaries, PUSH/POP special cases, nested calls, RET/LEAVE, ABI rules, invalid forms and grading. The independent native suite compiles and executes all **152 new reference cases** using GCC on Linux x86-64 and verifies expected register values, changed outputs and preserved input memory. The separate native-semantics suite compares shift results, defined flags and sign-extended immediate masks directly with hardware, including zero-count register writes. The C-reference suite separately compiles the displayed C functions with undefined-behavior checking and checks 137 fixtures across 40 functions. Machine-only snippets remain covered by the assembly suite. All native suites run only repository-owned programs in a temporary directory, never user code. GCC is a development-only verification dependency; the published site needs only a modern browser with BigInt.
+The Node suite additionally checks prerequisite order, instruction introduction, self-contained wording, local diagrams and all 51 executable worked examples. It covers original and new banks plus exact 64-bit arithmetic, aliases, overlapping widths, negative LEA, shifts/flags, stack boundaries, PUSH/POP special cases, nested calls, RET/LEAVE, ABI rules, invalid forms and grading. The independent native suite compiles and executes all **171 guided-course reference cases** using GCC on Linux x86-64 and verifies expected register values, changed outputs and preserved input memory. The separate native-semantics suite compares shift results, defined flags and sign-extended immediate masks directly with hardware, including zero-count register writes. The C-reference suite separately compiles the displayed C functions with undefined-behavior checking and checks 143 fixtures across 42 functions and the separate integer-promotion worked example. Machine-only snippets remain covered by the assembly suite. All native suites run only repository-owned programs in a temporary directory, never user code. GCC is a development-only verification dependency; the published site needs only a modern browser with BigInt.
+
+The optional DOM integration suite requires a development installation of `jsdom` and runs with `node docs/projects/assembly-lab/tests/ui-review.cjs`. If the dependency is installed elsewhere, set `ASSEMBLY_LAB_JSDOM` to its module path. It checks the full course flow, all 218 answer handlers and progress migration without starting a browser. It does not verify rendered layout. No runtime dependency was added to the site.
 
 ## Primary references
 

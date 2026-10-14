@@ -1,0 +1,177 @@
+{
+  "state": {
+    "src": "diagrams/state.svg",
+    "alt": "Replacing x with 9 changes x from 4 to 9. The separate value y remains 7.",
+    "caption": "Replacing x with 9 changes x from 4 to 9. The separate value y remains 7."
+  },
+  "widths": {
+    "src": "diagrams/widths.svg",
+    "alt": "One byte contains eight bits. The instruction suffix selects 1, 2, 4 or 8 data bytes.",
+    "caption": "One byte contains eight bits. The instruction suffix selects 1, 2, 4 or 8 data bytes."
+  },
+  "binary": {
+    "src": "diagrams/binary.svg",
+    "alt": "The low four positions have weights 8, 4, 2 and 1. Pattern 1010 selects 8 and 2, giving 10.",
+    "caption": "The low four positions have weights 8, 4, 2 and 1. Pattern 1010 selects 8 and 2, giving 10."
+  },
+  "hex": {
+    "src": "diagrams/hex.svg",
+    "alt": "The hexadecimal byte A6 is binary 10100110. Each hex digit represents four bits.",
+    "caption": "The hexadecimal byte A6 is binary 10100110. Each hex digit represents four bits."
+  },
+  "signed": {
+    "src": "diagrams/signed.svg",
+    "alt": "Eight one bits can mean unsigned 255 or signed negative 1. The signed reading is 255 minus 256.",
+    "caption": "Eight one bits can mean unsigned 255 or signed negative 1. The signed reading is 255 minus 256."
+  },
+  "registers": {
+    "src": "diagrams/registers.svg",
+    "alt": "RDI and RSI are named storage locations holding 6 and 4. RAX is chosen for the result in this example.",
+    "caption": "RDI and RSI are named storage locations holding 6 and 4. RAX is chosen for the result in this example."
+  },
+  "mov": {
+    "src": "diagrams/mov.svg",
+    "alt": "For movq %rdi,%rax with RDI equal to 23, RAX receives 23 and RDI remains 23.",
+    "caption": "For movq %rdi,%rax with RDI equal to 23, RAX receives 23 and RDI remains 23."
+  },
+  "aliases": {
+    "src": "diagrams/aliases.svg",
+    "alt": "RAX, EAX, AX and AL name overlapping parts of one register. Writing EAX clears the upper half; writing AX or AL preserves the other bits.",
+    "caption": "RAX, EAX, AX and AL name overlapping parts of one register. Writing EAX clears the upper half; writing AX or AL preserves the other bits."
+  },
+  "arguments": {
+    "src": "diagrams/arguments.svg",
+    "alt": "The first six integer or pointer arguments use RDI, RSI, RDX, RCX, R8 and R9. A long or pointer result uses RAX.",
+    "caption": "The first six integer or pointer arguments use RDI, RSI, RDX, RCX, R8 and R9. A long or pointer result uses RAX."
+  },
+  "memory": {
+    "src": "diagrams/memory.svg",
+    "alt": "An eight-byte object beginning at 0x100 occupies 0x100 through 0x107. Address 0x108 begins the following space.",
+    "caption": "An eight-byte object beginning at 0x100 occupies 0x100 through 0x107. Address 0x108 begins the following space."
+  },
+  "endian": {
+    "src": "diagrams/endian.svg",
+    "alt": "The four-byte value 0x12345678 is stored as bytes 78, 56, 34 and 12 at increasing addresses. All byte values shown are hexadecimal.",
+    "caption": "The four-byte value 0x12345678 is stored as bytes 78, 56, 34 and 12 at increasing addresses. All byte values shown are hexadecimal."
+  },
+  "pointer": {
+    "src": "diagrams/pointer.svg",
+    "alt": "The pointer p in RDI holds 0x100. Following that address reaches a long whose value is 23. The address and its contents are different values.",
+    "caption": "The pointer p in RDI holds 0x100. Following that address reaches a long whose value is 23. The address and its contents are different values."
+  },
+  "load-store": {
+    "src": "diagrams/load-store.svg",
+    "alt": "movq (%rdi),%rax loads memory into RAX. movq %rax,(%rdi) stores RAX into memory. RDI remains the address in either case.",
+    "caption": "movq (%rdi),%rax loads memory into RAX. movq %rax,(%rdi) stores RAX into memory. RDI remains the address in either case."
+  },
+  "swap": {
+    "src": "diagrams/swap.svg",
+    "alt": "Initially X is 123 and Y is 456. After both loads, RAX preserves 123. After the first store both cells hold 456; the second store writes the saved 123 to Y. The pointer addresses never change.",
+    "caption": "Initially X is 123 and Y is 456. After both loads, RAX preserves 123. After the first store both cells hold 456; the second store writes the saved 123 to Y. The pointer addresses never change."
+  },
+  "array": {
+    "src": "diagrams/array.svg",
+    "alt": "For an eight-byte long array at 0x1000, element indices 0, 1 and 2 have addresses 0x1000, 0x1008 and 0x1010. Their values are 4, negative 7 and 39.",
+    "caption": "For an eight-byte long array at 0x1000, element indices 0, 1 and 2 have addresses 0x1000, 0x1008 and 0x1010. Their values are 4, negative 7 and 39."
+  },
+  "address": {
+    "src": "diagrams/address.svg",
+    "alt": "For 8(%rdi,%rsi,8), with RDI=0x1000 and RSI=1, add displacement 8, base 0x1000 and index times scale 1\u00d78 to obtain 0x1010.",
+    "caption": "For 8(%rdi,%rsi,8), with RDI=0x1000 and RSI=1, add displacement 8, base 0x1000 and index times scale 1\u00d78 to obtain 0x1010."
+  },
+  "lea-mov": {
+    "src": "diagrams/lea-mov.svg",
+    "alt": "With RDX=0x100 and RCX=4, the effective address is 0x110. LEA returns that address. MOV reads memory there and obtains 8.",
+    "caption": "With RDX=0x100 and RCX=4, the effective address is 0x110. LEA returns that address. MOV reads memory there and obtains 8."
+  },
+  "mask": {
+    "src": "diagrams/mask.svg",
+    "alt": "The byte 10101100 AND 00001111 becomes 00001100, or decimal 12. Mask ones preserve input positions; mask zeros clear them.",
+    "caption": "The byte 10101100 AND 00001111 becomes 00001100, or decimal 12. Mask ones preserve input positions; mask zeros clear them."
+  },
+  "shifts": {
+    "src": "diagrams/shifts.svg",
+    "alt": "In an eight-bit illustration, input 10000000 becomes 01000000 with SHR and 11000000 with SAR. SHR fills with zero; SAR repeats the old sign bit.",
+    "caption": "In an eight-bit illustration, input 10000000 becomes 01000000 with SHR and 11000000 with SAR. SHR fills with zero; SAR repeats the old sign bit."
+  },
+  "field": {
+    "src": "diagrams/field.svg",
+    "alt": "For x=0xabcd, shifting right by eight gives 0xab. AND with 0x0f keeps its low four bits, producing 0x0b or 11.",
+    "caption": "For x=0xabcd, shifting right by eight gives 0xab. AND with 0x0f keeps its low four bits, producing 0x0b or 11."
+  },
+  "branch": {
+    "src": "diagrams/branch.svg",
+    "alt": "After comparing x with zero, ZF=1 means equal and JE takes the jump. ZF=0 means not equal and execution continues with the next instruction.",
+    "caption": "After comparing x with zero, ZF=1 means equal and JE takes the jump. ZF=0 means not equal and execution continues with the next instruction."
+  },
+  "loop": {
+    "src": "diagrams/loop.svg",
+    "alt": "A while loop tests first. If false, it exits without running the body. If true, it executes the body, updates its state, and returns to the test.",
+    "caption": "A while loop tests first. If false, it exits without running the body. If true, it executes the body, updates its state, and returns to the test."
+  },
+  "push": {
+    "src": "diagrams/push.svg",
+    "alt": "Starting with RSP=0x8000, pushq of value 7 subtracts eight and writes 7 at 0x7ff8. A matching pop reads 7 and restores RSP to 0x8000.",
+    "caption": "Starting with RSP=0x8000, pushq of value 7 subtracts eight and writes 7 at 0x7ff8. A matching pop reads 7 and restores RSP to 0x8000."
+  },
+  "stack-order": {
+    "src": "diagrams/stack-order.svg",
+    "alt": "Push x=3 at 0x7ff8, then y=7 at 0x7ff0. RSP now points to y. The next pop retrieves 7, followed by 3.",
+    "caption": "Push x=3 at 0x7ff8, then y=7 at 0x7ff0. RSP now points to y. The next pop retrieves 7, followed by 3."
+  },
+  "frame": {
+    "src": "diagrams/frame.svg",
+    "alt": "After saving RBP and establishing the frame base, saved RBP is at offset 0 and the caller continuation is at offset +8. The local long is at offset \u22128. RSP points below the reserved local area.",
+    "caption": "After saving RBP and establishing the frame base, saved RBP is at offset 0 and the caller continuation is at offset +8. The local long is at offset \u22128. RSP points below the reserved local area."
+  },
+  "call": {
+    "src": "diagrams/call.svg",
+    "alt": "A nested call puts the helper\u2019s continuation at the current stack top. Saved data and the outer continuation occupy distinct slots. Returning from the helper removes only its own continuation.",
+    "caption": "A nested call puts the helper\u2019s continuation at the current stack top. Saved data and the outer continuation occupy distinct slots. Returning from the helper removes only its own continuation."
+  },
+  "encoding": {
+    "src": "diagrams/encoding.svg",
+    "alt": "The encoding 48 89 d8 represents movq %rbx,%rax. Its three bytes select 64-bit width, the MOV operation and register operands.",
+    "caption": "The encoding 48 89 d8 represents movq %rbx,%rax. Its three bytes select 64-bit width, the MOV operation and register operands."
+  },
+  "modrm": {
+    "src": "diagrams/modrm.svg",
+    "alt": "For opcode 89 with prefix 48, d8 splits into 11, 011 and 000. These select register mode, source RBX and destination RAX.",
+    "caption": "For opcode 89 with prefix 48, d8 splits into 11, 011 and 000. These select register mode, source RBX and destination RAX."
+  },
+  "pipeline": {
+    "src": "diagrams/pipeline.svg",
+    "alt": "The compiler and assembler produce object files. The linker connects object files and resolves references, producing an executable whose functions must obey the same calling convention.",
+    "caption": "The compiler and assembler produce object files. The linker connects object files and resolves references, producing an executable whose functions must obey the same calling convention."
+  },
+  "byte-groups": {
+    "src": "diagrams/byte-groups.svg",
+    "alt": "Storage width counts bits. One byte contains 8 bits, four bytes contain 32 bits, and eight bytes contain 64 bits.",
+    "caption": "Storage width counts bits. One byte contains 8 bits, four bytes contain 32 bits, and eight bytes contain 64 bits."
+  },
+  "immediate": {
+    "src": "diagrams/immediate.svg",
+    "alt": "The instruction movq $7,%rax copies the immediate constant 7 into the 64-bit register RAX. The dollar sign marks the constant; the percent sign marks the register.",
+    "caption": "The instruction movq $7,%rax copies the immediate constant 7 into the 64-bit register RAX. The dollar sign marks the constant; the percent sign marks the register."
+  },
+  "left-shift": {
+    "src": "diagrams/left-shift.svg",
+    "alt": "With input 3, shifting left by two places gives 12. These are the low eight bits; the upper bits of the 64-bit example are all zero.",
+    "caption": "With input 3, shifting left by two places gives 12. These are the low eight bits; the upper bits of the 64-bit example are all zero."
+  },
+  "logical-shift": {
+    "src": "diagrams/logical-shift.svg",
+    "alt": "As an eight-bit illustration, the pattern 10000000 shifted logically right by one becomes 01000000. The new high bit is zero.",
+    "caption": "As an eight-bit illustration, the pattern 10000000 shifted logically right by one becomes 01000000. The new high bit is zero."
+  },
+  "push-only": {
+    "src": "diagrams/push-only.svg",
+    "alt": "Starting with RSP=0x8000, pushq of value 7 subtracts eight from RSP and writes 7 at the new top, 0x7ff8.",
+    "caption": "Starting with RSP=0x8000, pushq of value 7 subtracts eight from RSP and writes 7 at the new top, 0x7ff8."
+  },
+  "load-only": {
+    "src": "diagrams/load-only.svg",
+    "alt": "With RDI containing 0x100 and a long value 23 at that address, movq (%rdi),%rax reads the memory value into RAX. RDI remains 0x100.",
+    "caption": "With RDI containing 0x100 and a long value 23 at that address, movq (%rdi),%rax reads the memory value into RAX. RDI remains 0x100."
+  }
+}

@@ -66,8 +66,8 @@
       "type": "mcq",
       "lesson": "01-machine",
       "category": "01-machine",
-      "title": "Decode the lecture\u2019s store",
-      "question": "The bytes 48 89 03 encode movq %rax,(%rbx). What is 0x40059e in the slide?",
+      "title": "Instruction address or data address?",
+      "question": "A disassembly shows 0x40059e: 48 89 03 for movq %rax,(%rbx). What does 0x40059e identify?",
       "options": [
         "The value being stored from RAX",
         "The destination data address in RBX",
@@ -157,7 +157,7 @@
       "lesson": "01-machine",
       "category": "01-machine",
       "title": "Count register storage without aliases",
-      "question": "How many bytes are in the lecture\u2019s 16 general-purpose 64-bit registers, excluding RIP, flags and vector registers?",
+      "question": "How many bytes are in 16 general-purpose 64-bit registers, excluding RIP, flags and vector registers?",
       "options": [
         "64 bytes",
         "128 bytes",
@@ -179,7 +179,7 @@
         "XMM1 and YMM1"
       ],
       "correctAnswer": 2,
-      "explanation": "XMM/YMM names identify vector register views used by SIMD and some floating-point operations; they are not general-purpose integer-register aliases. The lecture introduces these families without teaching their instruction set."
+      "explanation": "XMM/YMM names identify vector register views used by SIMD and some floating-point operations. They are not aliases of a general-purpose integer register. The integer interpreter does not execute these instruction families."
     },
     {
       "id": "l10-aggregate",
@@ -187,7 +187,7 @@
       "lesson": "01-machine",
       "category": "01-machine",
       "title": "How an array exists at machine level",
-      "question": "How does an ordinary int array appear to the integer instructions in this lecture?",
+      "question": "How does an ordinary int array appear to the integer instructions used here?",
       "options": [
         "As consecutive bytes accessed using a base address, element size and index",
         "As a special array register containing all elements",
@@ -217,7 +217,7 @@
       "lesson": "01-machine",
       "category": "01-machine",
       "title": "Read the three encoding bytes",
-      "question": "For the lecture\u2019s 48 89 d8 encoding, which describes the three bytes?",
+      "question": "For the 48 89 d8 encoding of movq %rbx,%rax, which describes the three bytes?",
       "options": [
         "48 data bytes, followed by the source and destination values",
         "A memory address, followed by a C variable name",
@@ -1531,7 +1531,7 @@
       "type": "mcq",
       "lesson": "04-addresses",
       "category": "04-addresses",
-      "title": "Correct slide 35\u2019s register sizes",
+      "title": "Match address-register sizes",
       "question": "Which is a valid 64-bit address for a four-byte array element?",
       "options": [
         "20(%rbp,%rax,4)",
@@ -1546,7 +1546,7 @@
       "type": "mcq",
       "lesson": "04-addresses",
       "category": "04-addresses",
-      "title": "Solve all four lecture address forms",
+      "title": "Solve four address forms",
       "question": "RDX=0xf000, RCX=0x100. In order, evaluate 8(%rdx); (%rdx,%rcx); (%rdx,%rcx,4); 0x80(,%rdx,2).",
       "options": [
         "0xf008; 0xf100; 0xf400; 0x1e080",
@@ -1576,7 +1576,7 @@
       "type": "mcq",
       "lesson": "04-addresses",
       "category": "04-addresses",
-      "title": "Correct the lecture\u2019s local-array store",
+      "title": "Store into a local int array",
       "question": "int data[] begins at RBP+20, k is in RAX, and the int value is in EDX. Which implements data[k]=value?",
       "options": [
         "movq %rdx,20(%rbp,%rax,8)",
@@ -1895,7 +1895,7 @@
       "type": "mcq",
       "lesson": "05-lea",
       "category": "05-lea",
-      "title": "Lecture self-check",
+      "title": "Choose a legal expression for nine times x",
       "question": "Which computes RAX=9*RDI without a memory read?",
       "options": [
         "leaq (,%rdi,9),%rax",
@@ -2086,7 +2086,7 @@
       "type": "code",
       "lesson": "06-arithmetic",
       "category": "06-arithmetic",
-      "title": "Correct translation of slide 33\u2019s C",
+      "title": "Translate a product with a factor of 5*y",
       "cCode": "long arith(long x,long y,long z) {\n  return (x+y+z)*(5*y);\n}",
       "hint": "Compute 5*y, not 2*x+4.",
       "solutions": [
@@ -2145,7 +2145,7 @@
           "function": true
         }
       ],
-      "explanation": "RAX accumulates x+y+z. RCX gets y+4*y. Multiply those two values. The unused t3 and t4 in the slide C have no effect on the result.",
+      "explanation": "RAX accumulates x+y+z. RCX gets y+4*y, which is 5*y. Multiply those values and return the result. For x=1,y=2,z=3, the result is 60.",
       "requirements": [],
       "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
     },
@@ -2154,7 +2154,7 @@
       "type": "code",
       "lesson": "06-arithmetic",
       "category": "06-arithmetic",
-      "title": "Translate what the slide assembly actually does",
+      "title": "Translate a product with a factor of 2*x+4",
       "cCode": "long actual(long x,long y,long z) {\n  return (x+y+z)*(2*x+4);\n}",
       "hint": "Trace data dependencies rather than variable names in the C column.",
       "solutions": [
@@ -2213,7 +2213,7 @@
           "function": true
         }
       ],
-      "explanation": "leaq 4(%rdi,%rdi),%rcx computes 4+x+x. The original 48*y calculation is dead: removing it does not change the returned value.",
+      "explanation": "leaq 4(%rdi,%rdi),%rcx computes 4+x+x. Multiply that factor by x+y+z. For x=1,y=2,z=3, the result is 36, which distinguishes this expression from multiplying by 5*y.",
       "requirements": [],
       "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
     },
@@ -2252,15 +2252,15 @@
       "type": "mcq",
       "lesson": "06-arithmetic",
       "category": "06-arithmetic",
-      "title": "Spot the slide mismatch",
-      "question": "Which expression does slide 33\u2019s final imul use as its second factor?",
+      "title": "Find the live multiplication factor",
+      "question": "Inputs are x in RDI, y in RSI and z in RDX. Execute:\nleaq (%rdi,%rsi),%rax\naddq %rdx,%rax\nleaq (%rsi,%rsi,2),%rdx\nsalq $4,%rdx\nleaq 4(%rdi,%rdi),%rcx\nimulq %rcx,%rax\nWhich expression supplies the second factor in the final IMUL?",
       "options": [
         "2*x+4",
         "5*y",
         "48*y"
       ],
       "correctAnswer": 0,
-      "explanation": "The live RCX value comes from leaq 4(%rdi,%rdi). RDX\u2019s 48*y value is not used by that imul."
+      "explanation": "The final IMUL reads RCX, whose latest definition is 4+RDI+RDI=2*x+4. The computed RDX=48*y is never used by that multiply. Follow the live operand rather than a nearby unused calculation."
     },
     {
       "id": "l10-extract",
@@ -4062,7 +4062,7 @@
       "type": "code",
       "lesson": "11-calls",
       "category": "11-calls",
-      "title": "Complete slide 15: sumstore",
+      "title": "Call a helper and store its sum",
       "cCode": "long plus(long x,long y) { return x+y; }\nvoid sumstore(long x,long y,long *dest) { *dest=plus(x,y); }\n// Entry: sumstore. Include plus and let it clobber RDX with 123.\n// Preserve the incoming RBX.",
       "hint": "Save RBX, put dest there, call, store through RBX, restore RBX.",
       "solutions": [

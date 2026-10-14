@@ -6,7 +6,7 @@ import json, re, subprocess, tempfile, platform
 from pathlib import Path
 if platform.machine() not in ('x86_64','AMD64'): raise SystemExit('Requires x86-64 host')
 base=Path(__file__).resolve().parents[1]
-bank=json.loads((base/'data/lecture10.json').read_text())
+bank={'questions':sum([json.loads((base/'data'/name).read_text())['questions'] for name in ['lecture10.json','foundations.json']],[])}
 def num(v):return int(str(v),0) if str(v).lstrip('-').startswith(('0x','0b')) else int(v)
 def split(k):
  m=re.fullmatch(r'([A-Za-z_.$][\w.$]*)(?:([+-])((?:0x[\da-fA-F]+|\d+)))?',k)

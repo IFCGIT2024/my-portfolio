@@ -1,4 +1,4 @@
-"""Compile the displayed Lecture 10 C functions and independently check their fixtures.
+"""Compile the displayed guided-course C functions and check their fixtures.
 
 Trusted repository-owned C only, never imported banks or student submissions.
 Machine-state snippets (aliases, push/pop and the global copy) are checked by
@@ -16,7 +16,8 @@ from pathlib import Path
 if platform.machine() not in ('x86_64', 'AMD64') or C.sizeof(C.c_long) != 8:
     raise SystemExit('Requires x86-64 LP64 host')
 base = Path(__file__).resolve().parents[1]
-bank = json.loads((base / 'data/lecture10.json').read_text())['questions']
+bank = sum([json.loads((base / 'data' / name).read_text())['questions']
+            for name in ['lecture10.json', 'foundations.json']], [])
 signature = re.compile(r'\b((?:unsigned\s+)?(?:long|int|void)\s*\*?)\s*(\w+)\s*\(([^()]*)\)\s*\{')
 register_args = ['rdi', 'rsi', 'rdx', 'rcx', 'r8', 'r9']
 
@@ -53,6 +54,12 @@ for index, question in enumerate(bank):
     args = [] if definition[3].strip() == 'void' else definition[3].split(',')
     programs.append((question, names[entry], ctype(definition[1]), [ctype(arg) for arg in args]))
 
+course = json.loads((base / 'data/lessons.json').read_text())
+promotion = next(step for lesson in course['lessons'] for step in lesson['steps']
+                 if step['id'] == 'c-promotions')
+source.append('int course_promotion_result(int which) {\n' +
+              promotion['worked']['goal'] + '\nreturn which ? narrow : wide;\n}')
+
 count = 0
 with tempfile.TemporaryDirectory(prefix='assembly-c-reference-') as temporary:
     folder = Path(temporary)
@@ -61,6 +68,11 @@ with tempfile.TemporaryDirectory(prefix='assembly-c-reference-') as temporary:
                     '-fno-sanitize-recover=all', '-o', str(folder / 'answers.so'),
                     str(folder / 'answers.c')], check=True)
     library = C.CDLL(str(folder / 'answers.so'))
+    promotion_result = library.course_promotion_result
+    promotion_result.argtypes = [C.c_int]
+    promotion_result.restype = C.c_int
+    assert promotion_result(0) == 540
+    assert promotion_result(1) == 28
     for question, name, return_type, argument_types in programs:
         function = getattr(library, name)
         function.restype = return_type
@@ -118,3 +130,4 @@ with tempfile.TemporaryDirectory(prefix='assembly-c-reference-') as temporary:
                     assert observed == number(expected) % (1 << (8 * width)), (question['id'], key, observed, expected)
             count += 1
 print(f'Compiled C fixtures passed: {count} across {len(programs)} functions')
+print('C integer-promotion example passed: wide = 540, narrow = 28')

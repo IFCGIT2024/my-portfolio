@@ -3,23 +3,8 @@ const assert=require('node:assert/strict');
 const E=require('../engine.js');
 const lessons=require('../data/lessons.json').lessons;
 const bank=require('../data/lecture10.json').questions;
-const fixtures={
- '01-machine':{function:true,registers:{rdi:6,rsi:4},expected:{registers:{rax:10}}},
- '02-widths':{expected:{registers:{rax:5}}},
- '03-pointers':{function:true,registers:{rdi:4096,rsi:-17},symbols:{X:4096},memory:{X:99},expected:{memory:{X:-17}}},
- '04-addresses':{function:true,registers:{rdi:4096,rsi:2},symbols:{a:4096},memory:{a:1,'a+8':2,'a+16':3,'a+24':-11},expected:{registers:{rax:-11}}},
- '05-lea':{function:true,registers:{rdi:4096,rsi:3},expected:{registers:{rax:4120}}},
- '06-arithmetic':{function:true,registers:{rdi:4,rsi:9},expected:{registers:{rax:-5}}},
- '07-bits':{function:true,registers:{rdi:10},expected:{registers:{rax:11}}},
- '08-shifts':{function:true,registers:{rdi:'0x8000000000000000'},expected:{registers:{rax:'0x4000000000000000'}}},
- '09-branches':{function:true,registers:{rdi:-3,rsi:2},expected:{registers:{rax:2}}},
- '10-stack':{registers:{rdi:42},expected:{registers:{rdi:42,rsp:32768}}},
- '11-calls':{function:true,entry:'sumstore',registers:{rdi:6,rsi:4,rdx:4096},symbols:{dest:4096},memory:{dest:null},expected:{memory:{dest:10}}},
- '12-integration':{function:true,registers:{rdi:'0xabcd'},expected:{registers:{rax:188}}}
-};
-for(const lesson of lessons) test(`${lesson.id}: displayed worked example matches its walkthrough`,()=>{
- const fixture={name:lesson.id,memoryWidth:8,memory:{},...fixtures[lesson.id]};
- const result=E.check({cases:[fixture]},lesson.exampleAssembly);
+for(const lesson of lessons) for(const step of lesson.steps) if(step.worked.assembly) test(`${step.id}: worked example matches its stated result`,()=>{
+ const result=E.check({cases:[step.worked.fixture]},step.worked.assembly);
  assert.equal(result.ok,true,JSON.stringify(result));
 });
 test('lecture swap prediction answers match the actual intermediate states',()=>{

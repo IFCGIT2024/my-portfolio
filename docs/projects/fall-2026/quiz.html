@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Fall 2026 Practice Test</title>
-  <link rel="stylesheet" href="style.css?v=2115-450-1">
+  <link rel="stylesheet" href="style.css?v=2122-concepts-1">
 </head>
 <body>
   <nav class="topbar">
@@ -14,10 +14,10 @@
   <main class="quiz-shell">
     <nav id="course-quizzes" class="quiz-links hidden" aria-label="CSCI 2122 quizzes">
       <a class="secondary-button" data-quiz="general" href="quiz.html?course=2122">General practice</a>
-      <a class="secondary-button" data-quiz="a1" href="quiz.html?course=2122&amp;quiz=a1">A1 — Spellbee</a>
+      <a class="secondary-button" data-quiz="a1" href="quiz.html?course=2122&amp;quiz=a1">A1 — C foundations</a>
     </nav>
     <details id="quiz-context" class="quiz-context hidden">
-      <summary>A1 background and assumptions</summary>
+      <summary>Practice notes and assumptions</summary>
       <div id="context-content"></div>
     </details>
     <section id="loading" class="panel status-panel">Loading question bank…</section>
@@ -44,6 +44,13 @@
         <label>
           Questions
           <select id="question-count"></select>
+        </label>
+        <label id="practice-order-setting" class="hidden">
+          Question order
+          <select id="practice-order">
+            <option value="study">Build up in topic order</option>
+            <option value="random">Random review</option>
+          </select>
         </label>
         <label class="check-setting">
           <input id="shuffle-options" type="checkbox" checked>
@@ -88,6 +95,6 @@
       <a class="secondary-button" href="index.html">Return to the hub</a>
     </section>
   </main>
-  <script src="quiz.js?v=2115-450-2"></script>
+  <script src="quiz.js?v=2122-concepts-1"></script>
 </body>
 </html>

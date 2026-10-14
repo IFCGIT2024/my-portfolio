@@ -1,1092 +1,2493 @@
 {
-  "code": "CSCI 2122 · A1",
-  "title": "A1 — Spellbee Practice",
-  "description": "Practice the C concepts behind the Spellbee word-mask problem, from letter sets to pointers, strings, and composition counting.",
+  "code": "CSCI 2122 · A1 concepts",
+  "title": "C Foundations — Bits to Programs",
+  "description": "Build from individual C operations to short, complete problems. Practice syntax, predict output, choose expressions, and diagnose common mistakes. Start in topic order or switch to random review.",
   "context": [
-    "Assume C17, ASCII character encoding, 8-bit bytes, and a 32-bit int. Input words contain uppercase A–Z. Input conversions succeed and buffers are large enough unless a question asks about failures or overflow.",
-    "letterMask starts with int mask = 0 and sets bit word[i] - 'A' for each letter using mask | (1 << bit). Bits 0–25 represent A–Z. countBits counts the set bits by repeatedly adding (mask & 1) and shifting a non-negative mask right by one.",
-    "The examples use MAX_WORDS = 20000 and MAX_LEN = 30, with char words[MAX_WORDS][MAX_LEN] and an int masks[] array. Each stored word has at most 29 letters plus its null terminator.",
-    "A candidate (called a “panagram” in the supplied bank) has exactly seven distinct letters. Its composition count X includes every dictionary entry whose letters are a subset of those seven, including the candidate itself. Repeated letters are allowed."
+    "No assignment source code is needed. The 16 numbered topics progress from values and bit operators through functions, pointers, strings, input, and combined problems. Choose one topic for a focused 10-question session.",
+    "Use C17, ASCII character encoding, 8-bit bytes, 32-bit int and unsigned int, and INT_MAX = 2147483647 unless a question explicitly asks what ISO C guarantees without those assumptions. Bits are numbered from 0 at the least-significant (rightmost) bit.",
+    "Each code block is independent. Standard headers for the functions shown are included. Statement-only blocks run inside int main(void); blocks with main are complete programs apart from those headers. Input and allocation succeed unless a question gives a failure scenario.",
+    "All integer values in the answer choices are decimal unless they contain a hexadecimal prefix, are formatted by %X/%x, or the question says otherwise. Exactly one answer is correct. Ignore trailing spaces in output choices."
   ],
   "questions": [
     {
-      "id": 9,
-      "question": "In spellbee's letterMask, how is a word represented internally?",
+      "id": "C001",
+      "section": "01 · Values, types, and bit positions",
+      "question": "Bit positions start at 0 on the right. What is the value of a mask with only bit 5 set?",
       "options": [
-        "As an array of 26 booleans",
-        "As an int whose lowest 26 bits record whether each letter is present",
-        "As a linked list of chars",
-        "As a hash table of letter counts"
+        "32",
+        "16",
+        "64",
+        "5"
       ],
-      "correct": 1,
-      "section": "Bitmasks and Letter Sets",
-      "explanation": "Bits 0..25 map to A..Z; a bit is 1 when that letter appears at least once. This 'letter set' idea is the heart of the whole assignment."
+      "correct": 0,
+      "explanation": "Bit k has weight 2 raised to k. Bit 5 contributes 2^5 = 32; its index is not its numeric value."
     },
     {
-      "id": 10,
-      "question": "Which bit position represents the letter 'C' in the mask?",
+      "id": "C002",
+      "section": "01 · Values, types, and bit positions",
+      "question": "Which bit positions are set in the binary value 00101010?",
       "options": [
-        "bit 0",
-        "bit 2",
-        "bit 3",
-        "bit 67"
-      ],
-      "correct": 1,
-      "section": "Bitmasks and Letter Sets",
-      "explanation": "'C' - 'A' = 2, so letter C uses bit index 2 (value 4)."
-    },
-    {
-      "id": 11,
-      "question": "What integer value does letterMask(\"CAB\") return?",
-      "options": [
-        "3",
-        "7",
-        "6",
-        "111"
-      ],
-      "correct": 1,
-      "section": "Bitmasks and Letter Sets",
-      "explanation": "A,B,C set bits 0,1,2 => 1 + 2 + 4 = 7."
-    },
-    {
-      "id": 12,
-      "question": "Why does letterMask use OR (mask | (1<<bit)) instead of addition to set a bit?",
-      "options": [
-        "Addition is slower on integers",
-        "OR-ing an already-set bit leaves it set, so repeated letters cannot corrupt the mask",
-        "Addition does not work on ints",
-        "OR clears the bit"
-      ],
-      "correct": 1,
-      "section": "Bitmasks and Letter Sets",
-      "explanation": "Setting an already-set bit with | is idempotent. Addition would carry into neighbouring bits for duplicate letters and give a wrong set."
-    },
-    {
-      "id": 13,
-      "question": "What does letterMask(\"BANANA\") return?",
-      "options": [
-        "6 (one per letter typed)",
-        "3",
-        "8195",
-        "0"
+        "1, 3, 6",
+        "0, 2, 4",
+        "1, 3, 5",
+        "2, 4, 6"
       ],
       "correct": 2,
-      "section": "Bitmasks and Letter Sets",
-      "explanation": "Distinct letters A,B,N set bits 0,1,13 => 1 + 2 + 8192 = 8195. Duplicate A's and N's just re-set the same bits."
+      "explanation": "Reading from the right starting at 0 gives weights 2, 8, and 32. Their sum is 42."
     },
     {
-      "id": 14,
-      "question": "The mask produced by letterMask encodes which property of a word?",
+      "id": "C003",
+      "section": "01 · Values, types, and bit positions",
+      "question": "What is the decimal value of 0x2D?",
       "options": [
-        "Its length",
-        "The SET of distinct letters it contains",
-        "Its number of vowels",
-        "Its alphabetical rank"
+        "52",
+        "29",
+        "45",
+        "42"
+      ],
+      "correct": 2,
+      "explanation": "Hexadecimal D means 13. Thus 0x2D = 2 × 16 + 13 = 45."
+    },
+    {
+      "id": "C004",
+      "section": "01 · Values, types, and bit positions",
+      "question": "What is the value of the C integer constant 010?",
+      "options": [
+        "16",
+        "10",
+        "8",
+        "2"
+      ],
+      "correct": 2,
+      "explanation": "A leading 0 makes this an octal constant: 1 × 8 + 0 = 8. Decimal ten is written 10."
+    },
+    {
+      "id": "C005",
+      "section": "01 · Values, types, and bit positions",
+      "question": "What type does the integer constant 1u have?",
+      "options": [
+        "int",
+        "unsigned char",
+        "long int",
+        "unsigned int"
+      ],
+      "correct": 3,
+      "explanation": "The u suffix requests an unsigned type. Since 1 fits in unsigned int, that is the type of 1u."
+    },
+    {
+      "id": "C006",
+      "section": "01 · Values, types, and bit positions",
+      "question": "In C, what is the type of the ordinary character constant 'A'?",
+      "options": [
+        "char",
+        "char *",
+        "int",
+        "char[2]"
+      ],
+      "correct": 2,
+      "explanation": "An ordinary character constant such as 'A' has type int in C. The string literal \"A\" instead has array type char[2]."
+    },
+    {
+      "id": "C007",
+      "section": "01 · Values, types, and bit positions",
+      "question": "A mask must store 12 independent yes/no flags. How many distinct flag combinations can it represent?",
+      "options": [
+        "12",
+        "24",
+        "4095",
+        "4096"
+      ],
+      "correct": 3,
+      "explanation": "Each of 12 bits has two choices, so there are 2^12 = 4096 combinations, including the all-zero mask."
+    },
+    {
+      "id": "C008",
+      "section": "01 · Values, types, and bit positions",
+      "question": "For a 32-bit unsigned int, which is the highest valid bit index?",
+      "options": [
+        "30",
+        "31",
+        "32",
+        "33"
       ],
       "correct": 1,
-      "section": "Bitmasks and Letter Sets",
-      "explanation": "Two words with the same distinct letters (in any order, any counts) produce the same mask."
+      "explanation": "The 32 bit positions are numbered 0 through 31. A count of 32 is not a valid shift count for this type."
     },
     {
-      "id": 15,
-      "question": "Which standard header declares scanf and printf?",
+      "id": "C009",
+      "section": "01 · Values, types, and bit positions",
+      "question": "What does sizeof(char) equal in ISO C?",
       "options": [
-        "stdlib.h",
-        "stdio.h",
-        "string.h",
-        "math.h"
+        "8 C bytes",
+        "sizeof(int)",
+        "It depends on the pointer size",
+        "1 C byte"
       ],
-      "correct": 1,
-      "section": "Files and Headers",
-      "explanation": "Standard input/output functions such as scanf and printf are declared in <stdio.h>."
+      "correct": 3,
+      "explanation": "sizeof measures C bytes, and sizeof(char) is always 1. CHAR_BIT gives the number of bits in a C byte; this bank assumes 8."
     },
     {
-      "id": 16,
-      "question": "Which token is the bitwise OR operator in C?",
+      "id": "C010",
+      "section": "01 · Values, types, and bit positions",
+      "question": "Which statement is guaranteed by ISO C17 without assuming a particular machine?",
       "options": [
-        "||",
-        "|",
+        "int always occupies exactly 4 bytes",
+        "char is always a signed type",
+        "A pointer always has the same size as int",
+        "int can represent at least -32767 through 32767"
+      ],
+      "correct": 3,
+      "explanation": "The standard gives a minimum int range, not an exact size. Plain char signedness and pointer sizes depend on the implementation."
+    },
+    {
+      "id": "C011",
+      "section": "02 · Bitwise and logical operators",
+      "question": "Which operator combines integer operands using bitwise OR?",
+      "options": [
         "&",
+        "^",
+        "|",
+        "||"
+      ],
+      "correct": 2,
+      "explanation": "A single | performs OR at every bit position. || combines truth values, ^ is XOR, and & is bitwise AND."
+    },
+    {
+      "id": "C012",
+      "section": "02 · Bitwise and logical operators",
+      "question": "Which operator keeps a bit set only when it is set in both integer operands?",
+      "options": [
+        "&",
+        "&&",
+        "|",
         "^"
       ],
-      "correct": 1,
-      "section": "Bitwise Operators",
-      "explanation": "A single | is bitwise OR (per-bit); || is logical OR (whole-value, short-circuiting)."
+      "correct": 0,
+      "explanation": "Bitwise AND, &, intersects the set bits. Logical AND, &&, instead returns a single int truth value, 0 or 1."
     },
     {
-      "id": 17,
-      "question": "Which token is the bitwise AND operator in C?",
+      "id": "C013",
+      "section": "02 · Bitwise and logical operators",
+      "question": "Which operator sets a result bit exactly when the two input bits differ?",
       "options": [
-        "&&",
-        "&",
+        "~",
+        "^",
         "|",
-        "%"
+        "&"
       ],
       "correct": 1,
-      "section": "Bitwise Operators",
-      "explanation": "A single & is bitwise AND; && is logical AND."
+      "explanation": "XOR, ^, maps different bits to 1 and equal bits to 0. OR also keeps positions where both bits are 1."
     },
     {
-      "id": 18,
-      "question": "What does the expression (mask & 1) evaluate to?",
+      "id": "C014",
+      "section": "02 · Bitwise and logical operators",
+      "question": "What does this print?",
       "options": [
-        "The whole mask",
-        "1 if the lowest (least-significant) bit is set, otherwise 0",
-        "The number of set bits",
-        "mask divided by 2"
+        "0 1",
+        "8 8",
+        "1 1",
+        "8 1"
+      ],
+      "correct": 3,
+      "explanation": "12 is 1100 and 10 is 1010, so their bitwise AND is 1000 = 8. Both values are nonzero, so logical AND is 1.",
+      "code": "printf(\"%u %d\", 12u & 10u, 12u && 10u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C015",
+      "section": "02 · Bitwise and logical operators",
+      "question": "What does this print?",
+      "options": [
+        "6 6",
+        "6 1",
+        "1 1",
+        "0 1"
       ],
       "correct": 1,
-      "section": "Bitwise Operators",
-      "explanation": "AND-ing with 1 masks off every bit except bit 0, isolating the lowest bit."
+      "explanation": "2 | 4 combines 0010 and 0100 into 0110 = 6. Logical OR returns 1 when either operand is nonzero.",
+      "code": "printf(\"%u %d\", 2u | 4u, 2u || 4u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 19,
-      "question": "In countBits, count = count + (mask & 1) adds what on each iteration?",
+      "id": "C016",
+      "section": "02 · Bitwise and logical operators",
+      "question": "What does this print?",
       "options": [
-        "Always 1",
-        "The value of the current lowest bit (0 or 1)",
-        "The whole mask",
-        "The current bit index"
-      ],
-      "correct": 1,
-      "section": "Bitwise Operators",
-      "explanation": "It accumulates the lowest bit, then the loop shifts mask right so the next bit becomes the lowest."
-    },
-    {
-      "id": 20,
-      "question": "What is the key difference between & and && in C?",
-      "options": [
-        "There is none",
-        "& operates bit-by-bit on all bits; && is a logical test that yields 0/1 and short-circuits",
-        "&& is the bitwise one",
-        "& only works on booleans"
-      ],
-      "correct": 1,
-      "section": "Bitwise Operators",
-      "explanation": "Mixing them up is a classic bug: a & b and a && b can give very different results."
-    },
-    {
-      "id": 21,
-      "question": "The expression (masks[j] & masks[i]) computes which letter set?",
-      "options": [
-        "Letters in either word (union)",
-        "Letters common to BOTH words (intersection)",
-        "The longer word's letters",
-        "An empty set always"
-      ],
-      "correct": 1,
-      "section": "Bitwise Operators",
-      "explanation": "Bitwise AND keeps only bits set in both operands, i.e. the shared letters. This is the basis of the subset test."
-    },
-    {
-      "id": 22,
-      "question": "What does the bitwise OR of two letter masks give?",
-      "options": [
-        "Their intersection",
-        "Their union (letters appearing in either word)",
-        "Their difference",
-        "Zero"
-      ],
-      "correct": 1,
-      "section": "Bitwise Operators",
-      "explanation": "OR sets a bit if it is on in either operand, giving the union of the two letter sets."
-    },
-    {
-      "id": 23,
-      "question": "With a 32-bit int and 0 <= bit <= 25, what does (1 << bit) compute?",
-      "options": [
-        "1 multiplied by bit",
-        "An integer with only bit number 'bit' set to 1 (i.e. 2^bit)",
-        "bit divided by 1",
-        "1 raised to the power bit"
-      ],
-      "correct": 1,
-      "section": "Bit Shifting",
-      "explanation": "Left-shifting the single 1-bit by 'bit' positions produces a one-hot value of 2^bit, used to target one letter."
-    },
-    {
-      "id": 24,
-      "question": "(1 << 3) equals which value?",
-      "options": [
-        "3",
+        "2",
         "6",
+        "8",
+        "14"
+      ],
+      "correct": 1,
+      "explanation": "1100 XOR 1010 is 0110 = 6. The shared bit 3 is cleared, while bits 1 and 2 differ.",
+      "code": "printf(\"%u\", 12u ^ 10u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C017",
+      "section": "02 · Bitwise and logical operators",
+      "question": "What does this print?",
+      "options": [
+        "0 1 0",
+        "1 1 1",
+        "6 1 0",
+        "0 1 1"
+      ],
+      "correct": 3,
+      "explanation": "Logical ! maps a nonzero value to 0 and zero to 1. Applying it twice normalizes any nonzero value to 1.",
+      "code": "printf(\"%d %d %d\", !6u, !0u, !!6u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C018",
+      "section": "02 · Bitwise and logical operators",
+      "question": "Assume unsigned int is exactly 32 bits. What does this print?",
+      "options": [
+        "0000000A 0",
+        "FFFFFFFA 1",
+        "00000000 0",
+        "FFFFFFFA 0"
+      ],
+      "correct": 3,
+      "explanation": "~ flips all 32 bits of 5u, giving 0xFFFFFFFA. ! treats 5u as true and returns 0.",
+      "code": "printf(\"%08X %d\", ~5u, !5u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C019",
+      "section": "02 · Bitwise and logical operators",
+      "question": "What does this print?",
+      "options": [
+        "1 1",
+        "0 1",
+        "1 0",
+        "0 0"
+      ],
+      "correct": 3,
+      "explanation": "&& evaluates its right operand only when its left operand is nonzero. Here ++calls is skipped.",
+      "code": "int calls = 0;\nint result = 0 && ++calls;\nprintf(\"%d %d\", result, calls);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C020",
+      "section": "02 · Bitwise and logical operators",
+      "question": "p is either NULL or points to a valid int. Which expression safely tests whether that int is nonzero?",
+      "options": [
+        "p == NULL && *p != 0",
+        "*p != 0 && p != NULL",
+        "p != NULL && *p != 0",
+        "p != NULL & *p != 0"
+      ],
+      "correct": 2,
+      "explanation": "&& first tests p and skips the dereference when p is NULL. Bitwise & does not short-circuit; checking *p first is too late. Assume a non-NULL p points to a valid int."
+    },
+    {
+      "id": "C021",
+      "section": "03 · Shifts and unsigned boundaries",
+      "question": "What does this print?",
+      "options": [
+        "6",
+        "3",
         "8",
         "16"
       ],
       "correct": 2,
-      "section": "Bit Shifting",
-      "explanation": "Shifting 1 left by 3 gives binary 1000 = 8 = 2^3."
+      "explanation": "Shifting 1u left by 3 places moves its single set bit to position 3, whose weight is 8.",
+      "code": "printf(\"%u\", 1u << 3);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 25,
-      "question": "For a non-negative mask in countBits, what does mask = mask >> 1 do?",
+      "id": "C022",
+      "section": "03 · Shifts and unsigned boundaries",
+      "question": "What does this print?",
       "options": [
-        "Multiplies mask by 2",
-        "Drops the lowest bit and shifts every other bit one place right",
-        "Clears the whole mask",
-        "Negates mask"
-      ],
-      "correct": 1,
-      "section": "Bit Shifting",
-      "explanation": "Right shift by 1 discards bit 0 and moves bit n to position n-1, letting the loop inspect each bit in turn."
-    },
-    {
-      "id": 26,
-      "question": "For a non-negative int mask, why does while (mask != 0) terminate when every iteration executes mask = mask >> 1?",
-      "options": [
-        "Because count eventually reaches 7",
-        "Each right shift halves the non-negative value, discarding any remainder, until it reaches 0",
-        "Because mask is const",
-        "It is not guaranteed"
-      ],
-      "correct": 1,
-      "section": "Bit Shifting",
-      "explanation": "For non-negative values, right shift by one is integer division by two. A 26-bit non-negative mask reaches zero in at most 26 iterations. Do not assume this for negative signed values."
-    },
-    {
-      "id": 27,
-      "question": "For a NON-NEGATIVE int, mask >> 1 is equivalent to which arithmetic operation?",
-      "options": [
-        "mask * 2",
-        "mask / 2 using integer (truncating) division",
-        "mask % 2",
-        "-mask"
-      ],
-      "correct": 1,
-      "section": "Bit Shifting",
-      "explanation": "Right shift by 1 halves a non-negative integer, discarding any remainder."
-    },
-    {
-      "id": 28,
-      "question": "In C17, right-shifting a NEGATIVE signed int by one bit is:",
-      "options": [
-        "Always zero-filled",
-        "Implementation-defined (commonly arithmetic / sign-extending)",
-        "A compile error",
-        "Guaranteed to wrap to 0"
-      ],
-      "correct": 1,
-      "section": "Bit Shifting",
-      "explanation": "C17 makes this result implementation-defined; many implementations preserve the sign. The letter masks here are non-negative because only bits 0 through 25 are used in a 32-bit int."
-    },
-    {
-      "id": 29,
-      "question": "On the assumed 32-bit-int system, why does setting bit 25 for 'Z' fit safely in int?",
-      "options": [
-        "int is always 8 bits",
-        "2^25 is representable as a positive 32-bit int, and 25 is less than the type width",
-        "Because OR is used",
-        "It does not fit and overflows"
-      ],
-      "correct": 1,
-      "section": "Bit Shifting",
-      "explanation": "C does not guarantee a 32-bit int. On a 16-bit-int system, 1 << 25 has undefined behavior because the shift count is at least the width of the promoted left operand. The quiz explicitly assumes 32-bit int."
-    },
-    {
-      "id": 30,
-      "question": "Why are the parentheses in count = count + (mask & 1) actually required, not just stylistic?",
-      "options": [
-        "They are purely cosmetic",
-        "Because + has HIGHER precedence than &, so count + mask & 1 would wrongly parse as (count + mask) & 1",
-        "Because & cannot compile without them",
-        "Because mask is unsigned"
-      ],
-      "correct": 1,
-      "section": "Operator Precedence",
-      "explanation": "Addition binds tighter than bitwise AND. Without parentheses, the expression groups as (count + mask) & 1, which can produce a different result. Precedence specifies grouping; it does not generally specify operand evaluation order."
-    },
-    {
-      "id": 31,
-      "question": "Why are the parentheses in (masks[j] & masks[i]) == masks[j] required?",
-      "options": [
-        "No reason",
-        "Because == has HIGHER precedence than &, so without them it parses as masks[j] & (masks[i] == masks[j])",
-        "Because & cannot appear next to ==",
-        "To force unsigned math"
-      ],
-      "correct": 1,
-      "section": "Operator Precedence",
-      "explanation": "Equality binds tighter than bitwise AND. Parentheses group the expression as (masks[j] & masks[i]) == masks[j], so the intersection is the left operand of the comparison."
-    },
-    {
-      "id": 32,
-      "question": "In masks[i] & (1 << b), what is the precedence relationship between << and &?",
-      "options": [
-        "<< is higher than &, so even without the parentheses the shift happens before the AND",
-        "& is higher than <<",
-        "They have equal precedence",
-        "It is undefined behaviour"
+        "12",
+        "6",
+        "16",
+        "8"
       ],
       "correct": 0,
-      "section": "Operator Precedence",
-      "explanation": "Shift operators bind tighter than bitwise AND, so the grouping would be the same here; the parentheses are kept for clarity/safety."
+      "explanation": "3u is binary 11. Shifting left by two gives 1100 = 12; it moves both set bits.",
+      "code": "printf(\"%u\", 3u << 2);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 33,
-      "question": "Which of these binds TIGHTEST (highest precedence) in C?",
+      "id": "C023",
+      "section": "03 · Shifts and unsigned boundaries",
+      "question": "What does this print?",
       "options": [
-        "Bitwise & | ^",
-        "Equality == !=",
-        "Array subscript [] and function-call ()",
-        "Assignment ="
+        "1",
+        "7",
+        "6",
+        "26"
       ],
       "correct": 2,
-      "section": "Operator Precedence",
-      "explanation": "Postfix [] and () are among the highest-precedence operators; assignment is near the lowest."
+      "explanation": "Unsigned right shift by 1 divides by 2, discarding the remainder: 13 / 2 = 6.",
+      "code": "printf(\"%u\", 13u >> 1);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 34,
-      "question": "What is the loop condition in letterMask's for (int i = 0; word[i] != '\\0'; i++)?",
+      "id": "C024",
+      "section": "03 · Shifts and unsigned boundaries",
+      "question": "What does this print?",
       "options": [
-        "i < length",
-        "word[i] != '\\0' -- stop when the string's nul terminator is reached",
-        "i != 26",
-        "mask != 0"
+        "18",
+        "9",
+        "1",
+        "0"
       ],
       "correct": 1,
-      "section": "Loops and Iteration",
-      "explanation": "Walking until the '\\0' is the standard way to traverse a C string of unknown length."
+      "explanation": "A shift count of zero leaves the value unchanged. The count tells how many positions to move.",
+      "code": "printf(\"%u\", 9u << 0);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 35,
-      "question": "The counter i is declared inside the for statement: for (int i = 0; ...). What is its scope?",
+      "id": "C025",
+      "section": "03 · Shifts and unsigned boundaries",
+      "question": "Assume unsigned int is exactly 32 bits. What does this print?",
       "options": [
-        "The whole program",
-        "The whole function",
-        "Only that for loop",
-        "Global scope"
+        "0000001F",
+        "00000000",
+        "40000000",
+        "80000000"
+      ],
+      "correct": 3,
+      "explanation": "1u << 31 sets the highest bit of a 32-bit unsigned int. Its hexadecimal value is 80000000.",
+      "code": "printf(\"%08X\", 1u << 31);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C026",
+      "section": "03 · Shifts and unsigned boundaries",
+      "question": "In C17 with 32-bit unsigned int, how is 1u << 32 classified?",
+      "options": [
+        "Implementation-defined result",
+        "Defined result of 1",
+        "Undefined behavior",
+        "Defined result of 0"
       ],
       "correct": 2,
-      "section": "Loops and Iteration",
-      "explanation": "Since C99 a variable declared in the for-init clause is visible only within that loop."
+      "explanation": "A shift count must be nonnegative and less than the width of the promoted left operand. Unsigned arithmetic does not make an over-width shift valid."
     },
     {
-      "id": 36,
-      "question": "Which loop construct is used in while (mask != 0) { count += mask & 1; mask >>= 1; }?",
+      "id": "C027",
+      "section": "03 · Shifts and unsigned boundaries",
+      "question": "In C17, how is 8u >> -1 classified?",
       "options": [
-        "for",
-        "while",
-        "do-while",
-        "recursion"
+        "Defined result of 16",
+        "Implementation-defined result",
+        "Undefined behavior",
+        "Defined result of 4"
+      ],
+      "correct": 2,
+      "explanation": "A negative shift count is undefined behavior. It does not request a shift in the opposite direction."
+    },
+    {
+      "id": "C028",
+      "section": "03 · Shifts and unsigned boundaries",
+      "question": "Assume 32-bit int with INT_MAX = 2147483647. How is 1 << 31 classified in C17?",
+      "options": [
+        "Implementation-defined result",
+        "Defined result of INT_MIN",
+        "Undefined behavior",
+        "Defined result of 0"
+      ],
+      "correct": 2,
+      "explanation": "The left operand 1 has signed int type. Its mathematical shifted value is not representable as int. Using 1u changes this to a defined unsigned shift."
+    },
+    {
+      "id": "C029",
+      "section": "03 · Shifts and unsigned boundaries",
+      "question": "In C17, how is the result of -8 >> 1 specified?",
+      "options": [
+        "Undefined for every implementation",
+        "Always 4",
+        "Implementation-defined",
+        "Always -4"
+      ],
+      "correct": 2,
+      "explanation": "Right-shifting a negative signed integer has an implementation-defined result in C17. Common arithmetic shifts give -4, but portable C17 code cannot require that result."
+    },
+    {
+      "id": "C030",
+      "section": "03 · Shifts and unsigned boundaries",
+      "question": "Assume 32-bit unsigned int. What does this print?",
+      "options": [
+        "00000000",
+        "00000003",
+        "00000002",
+        "80000002"
+      ],
+      "correct": 2,
+      "explanation": "Unsigned left shift reduces the result modulo 2^32. The old highest bit is discarded and bit 0 moves to bit 1.",
+      "code": "unsigned int x = 0x80000001u;\nprintf(\"%08X\", x << 1);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C031",
+      "section": "04 · Reading bits and fields",
+      "question": "x is unsigned int and 0 <= k < 32. Which expression extracts bit k as exactly 0 or 1?",
+      "options": [
+        "(x >> k) & 1u",
+        "x & (1u << k)",
+        "x | (1u << k)",
+        "x >> k"
+      ],
+      "correct": 0,
+      "explanation": "Shift the target bit to position 0, then mask away every other bit. x & (1u << k) instead returns either 0 or the weight 2^k.",
+      "optionFeedback": {
+        "A": "Shift the target bit to position 0, then mask away every other bit. x & (1u << k) instead returns either 0 or the weight 2^k.",
+        "B": "This isolates the target bit at its original position. If k is 3 and that bit is set, the result is 8, not 1.",
+        "C": "OR forces the bit on; it does not read whether the bit was originally set.",
+        "D": "Higher bits remain above the extracted bit. For x = 24 and k = 3, this gives 3 rather than 1."
+      }
+    },
+    {
+      "id": "C032",
+      "section": "04 · Reading bits and fields",
+      "question": "What does this print?",
+      "options": [
+        "1",
+        "13",
+        "0",
+        "8"
+      ],
+      "correct": 3,
+      "explanation": "13 is binary 1101. The mask 8u keeps bit 3, whose numeric contribution is 8; the result is not normalized to 1.",
+      "code": "printf(\"%u\", 13u & 8u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C033",
+      "section": "04 · Reading bits and fields",
+      "question": "What does this print?",
+      "options": [
+        "6",
+        "0",
+        "1",
+        "2"
       ],
       "correct": 1,
-      "section": "Loops and Iteration",
-      "explanation": "It uses while (mask != 0) because the number of iterations depends on where the highest set bit is."
+      "explanation": "13 is 1101, so bit 1 is zero. After shifting once, 6u & 1u is zero.",
+      "code": "printf(\"%u\", (13u >> 1) & 1u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 37,
-      "question": "How many times does the letter-printing loop for (int b = 0; b < 26; b++) iterate for one panagram?",
+      "id": "C034",
+      "section": "04 · Reading bits and fields",
+      "question": "Which expression is true exactly when bit 4 of unsigned x is set?",
+      "options": [
+        "(x & (1u << 4)) == 1u",
+        "(x | (1u << 4)) != 0u",
+        "(x >> 4) == 1u",
+        "(x & (1u << 4)) != 0u"
+      ],
+      "correct": 3,
+      "explanation": "Masking bit 4 yields either 0 or 16. Compare against zero; comparing to 1 fails, and higher bits can make x >> 4 greater than 1.",
+      "optionFeedback": {
+        "A": "The masked value is either 0 or 16. It can never equal 1.",
+        "B": "OR sets bit 4, so this condition is true even when the original bit was zero.",
+        "C": "This rejects values with bit 4 and higher bits set. For example, x = 48 has bit 4 set but shifts to 3.",
+        "D": "Masking bit 4 yields either 0 or 16. Compare against zero; comparing to 1 fails, and higher bits can make x >> 4 greater than 1."
+      }
+    },
+    {
+      "id": "C035",
+      "section": "04 · Reading bits and fields",
+      "question": "Which expression returns only the lowest four bits of unsigned x?",
+      "options": [
+        "x & 0xFu",
+        "x >> 4",
+        "x | 0xFu",
+        "x & 4u"
+      ],
+      "correct": 0,
+      "explanation": "0xF has four low set bits. AND keeps just those positions; 4u would keep only bit 2."
+    },
+    {
+      "id": "C036",
+      "section": "04 · Reading bits and fields",
+      "question": "What does this print?",
+      "options": [
+        "6",
+        "4",
+        "8",
+        "54"
+      ],
+      "correct": 0,
+      "explanation": "0xD8 is binary 11011000. Shifting right by 2 gives 54; keeping its lowest three bits gives 110 in binary, or 6.",
+      "code": "printf(\"%u\", (0xD8u >> 2) & 7u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C037",
+      "section": "04 · Reading bits and fields",
+      "question": "Which expression extracts bits 7 through 4 of unsigned x and moves them into positions 3 through 0?",
+      "options": [
+        "(x >> 4) & 0xFu",
+        "(x >> 4) & 0xF0u",
+        "(x & 0xFu) >> 4",
+        "x & 0xF0u"
+      ],
+      "correct": 0,
+      "explanation": "Right shift by 4 aligns the field with bit 0. AND with 0xF keeps exactly four bits. Merely masking 0xF0 leaves the field in its original positions."
+    },
+    {
+      "id": "C038",
+      "section": "04 · Reading bits and fields",
+      "question": "What does this print?",
+      "options": [
+        "1",
+        "0",
+        "10",
+        "2"
+      ],
+      "correct": 0,
+      "explanation": "10u is 1010. Bit 3 is set, so shifting it down and masking gives 1 even though the original bit weight is 8.",
+      "code": "unsigned int x = 10u;\nprintf(\"%u\", (x >> 3) & 1u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C039",
+      "section": "04 · Reading bits and fields",
+      "question": "Which condition is true exactly when at least one of the bits selected by mask is set in flags?",
+      "options": [
+        "flags == mask",
+        "(flags & mask) != 0u",
+        "(flags | mask) == mask",
+        "(flags & mask) == mask"
+      ],
+      "correct": 1,
+      "explanation": "A nonzero intersection means any selected bit is present. Equality to mask instead requires every selected bit.",
+      "optionFeedback": {
+        "A": "Equality is stronger than overlap. Distinct masks can still share bits.",
+        "B": "A nonzero intersection means any selected bit is present. Equality to mask instead requires every selected bit.",
+        "C": "This checks whether flags is a subset of mask; it even accepts flags = 0 with no overlap.",
+        "D": "This checks all selected bits. flags = 2 and mask = 6 share a bit, but this condition is false."
+      }
+    },
+    {
+      "id": "C040",
+      "section": "04 · Reading bits and fields",
+      "question": "Which condition is true exactly when all bits selected by mask are set in flags?",
+      "options": [
+        "(flags & mask) == mask",
+        "(flags & mask) != 0u",
+        "(flags ^ mask) != 0u",
+        "(flags | mask) == mask"
+      ],
+      "correct": 0,
+      "explanation": "AND retains the selected bits that flags contains. Equality to the entire mask means none is missing. For mask = 0, the condition is true because no bits are required.",
+      "optionFeedback": {
+        "A": "AND retains the selected bits that flags contains. Equality to the entire mask means none is missing. For mask = 0, the condition is true because no bits are required.",
+        "B": "A nonzero intersection only proves that at least one selected bit is present.",
+        "C": "Nonzero XOR means the masks differ. It does not prove that required bits are present.",
+        "D": "This reverses containment: it checks that flags has no bits outside mask."
+      }
+    },
+    {
+      "id": "C041",
+      "section": "05 · Setting, clearing, and toggling",
+      "question": "x is unsigned and k is a valid bit index. Which statement sets bit k to 1 while preserving all other bits?",
+      "options": [
+        "x &= 1u << k;",
+        "x += 1u << k;",
+        "x |= 1u << k;",
+        "x ^= 1u << k;"
+      ],
+      "correct": 2,
+      "explanation": "OR forces a selected bit to 1 and leaves other positions unchanged, even if the bit was already set. XOR toggles, AND removes other bits, and addition may carry.",
+      "optionFeedback": {
+        "A": "AND keeps only bit k and discards other bits; it cannot turn a zero bit into one.",
+        "B": "Addition can carry when the bit is already set. For x = 2 and k = 1, the result is 4 rather than 2.",
+        "C": "OR forces a selected bit to 1 and leaves other positions unchanged, even if the bit was already set. XOR toggles, AND removes other bits, and addition may carry.",
+        "D": "XOR toggles the bit. If it was already set, this clears it."
+      }
+    },
+    {
+      "id": "C042",
+      "section": "05 · Setting, clearing, and toggling",
+      "question": "For unsigned x and 0 <= k < 32, which statement clears bit k while preserving all other bits?",
+      "options": [
+        "x ^= 1u << k;",
+        "x |= ~(1u << k);",
+        "x &= ~(1u << k);",
+        "x &= 1u << k;"
+      ],
+      "correct": 2,
+      "explanation": "The complemented one-bit mask has 0 at k and 1 everywhere else. AND clears only the target bit.",
+      "optionFeedback": {
+        "A": "XOR turns an already-clear target bit on, so it does not always clear it.",
+        "B": "This forces every other bit on and leaves the target bit unchanged.",
+        "C": "The complemented one-bit mask has 0 at k and 1 everywhere else. AND clears only the target bit.",
+        "D": "This preserves only the target bit and clears every other bit."
+      }
+    },
+    {
+      "id": "C043",
+      "section": "05 · Setting, clearing, and toggling",
+      "question": "For unsigned x and 0 <= k < 32, which statement toggles bit k while preserving all other bits?",
+      "options": [
+        "x ^= 1u << k;",
+        "x |= 1u << k;",
+        "x >>= k;",
+        "x &= ~(1u << k);"
+      ],
+      "correct": 0,
+      "explanation": "XOR with 1 flips a bit; XOR with 0 preserves it. This changes 0 to 1 and 1 to 0 at the target position.",
+      "optionFeedback": {
+        "A": "XOR with 1 flips a bit; XOR with 0 preserves it. This changes 0 to 1 and 1 to 0 at the target position.",
+        "B": "OR always sets the bit; it does not clear a bit that was already one.",
+        "C": "This moves every bit to a different position, rather than flipping only the target.",
+        "D": "This always clears the bit; it does not set a bit that was zero."
+      }
+    },
+    {
+      "id": "C044",
+      "section": "05 · Setting, clearing, and toggling",
+      "question": "What does this print?",
+      "options": [
+        "8",
+        "10",
+        "12",
+        "2"
+      ],
+      "correct": 1,
+      "explanation": "10 is binary 1010, with bit 1 already set. OR with 2u leaves it unchanged.",
+      "code": "unsigned int x = 10u;\nx |= 1u << 1;\nprintf(\"%u\", x);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C045",
+      "section": "05 · Setting, clearing, and toggling",
+      "question": "What does this print?",
+      "options": [
+        "8",
+        "12",
+        "10",
+        "2"
+      ],
+      "correct": 1,
+      "explanation": "Adding 2 to 10 yields 12: binary 1010 + 0010 = 1100. The carry clears bit 1 and sets bit 2, so addition is not a general set-bit operation.",
+      "code": "unsigned int x = 10u;\nx += 1u << 1;\nprintf(\"%u\", x);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C046",
+      "section": "05 · Setting, clearing, and toggling",
+      "question": "What does this print?",
+      "options": [
+        "3",
+        "11",
+        "4",
+        "15"
+      ],
+      "correct": 1,
+      "explanation": "15 is binary 1111. Clearing bit 2 removes its weight of 4, leaving 1011 = 11.",
+      "code": "unsigned int x = 15u;\nx &= ~(1u << 2);\nprintf(\"%u\", x);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C047",
+      "section": "05 · Setting, clearing, and toggling",
+      "question": "What does this print?",
+      "options": [
+        "6",
+        "4",
+        "2",
+        "0"
+      ],
+      "correct": 1,
+      "explanation": "The first XOR sets bit 1, changing 4 to 6. The second XOR clears it again, restoring 4.",
+      "code": "unsigned int x = 4u;\nx ^= 2u;\nx ^= 2u;\nprintf(\"%u\", x);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C048",
+      "section": "05 · Setting, clearing, and toggling",
+      "question": "Which statement sets both bits 1 and 4 of unsigned flags while preserving all other bits?",
+      "options": [
+        "flags |= (1u << 1) | (1u << 4);",
+        "flags &= (1u << 1) | (1u << 4);",
+        "flags |= (1u << 1) & (1u << 4);",
+        "flags ^= (1u << 1) | (1u << 4);"
+      ],
+      "correct": 0,
+      "explanation": "OR combines the two single-bit masks and then sets both target bits. Their AND is zero because the two masks have no set bit in common."
+    },
+    {
+      "id": "C049",
+      "section": "05 · Setting, clearing, and toggling",
+      "question": "x and mask are unsigned. Which statement clears every bit selected by mask?",
+      "options": [
+        "x &= ~mask;",
+        "x |= ~mask;",
+        "x ^= mask;",
+        "x &= mask;"
+      ],
+      "correct": 0,
+      "explanation": "Complementing mask makes selected positions 0. AND then clears those positions while retaining all unselected positions."
+    },
+    {
+      "id": "C050",
+      "section": "05 · Setting, clearing, and toggling",
+      "question": "What does this print?",
       "options": [
         "7",
-        "25",
-        "26",
-        "It varies with the word"
+        "1",
+        "4",
+        "5"
+      ],
+      "correct": 3,
+      "explanation": "The expression x | 2u computes 7 but does not store it. A plain expression statement can discard its value; x |= 2u would update x.",
+      "code": "unsigned int x = 5u;\nx | 2u;\nprintf(\"%u\", x);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C051",
+      "section": "06 · Masks as sets",
+      "question": "Each bit represents membership of one numbered item. Which expression represents the union of sets a and b?",
+      "options": [
+        "a & b",
+        "a | b",
+        "a ^ b",
+        "a & ~b"
+      ],
+      "correct": 1,
+      "explanation": "Union includes an item present in either set, including items present in both. That is the per-bit rule for OR."
+    },
+    {
+      "id": "C052",
+      "section": "06 · Masks as sets",
+      "question": "Which expression represents the intersection of sets encoded by unsigned masks a and b?",
+      "options": [
+        "a & ~b",
+        "a | b",
+        "a ^ b",
+        "a & b"
+      ],
+      "correct": 3,
+      "explanation": "Intersection keeps only items belonging to both sets. AND is 1 only where both input bits are 1."
+    },
+    {
+      "id": "C053",
+      "section": "06 · Masks as sets",
+      "question": "Which expression represents items in a but not in b?",
+      "options": [
+        "a ^ b",
+        "~a & b",
+        "a | ~b",
+        "a & ~b"
+      ],
+      "correct": 3,
+      "explanation": "a requires membership in the first set; ~b excludes membership in the second. XOR would also include items found only in b."
+    },
+    {
+      "id": "C054",
+      "section": "06 · Masks as sets",
+      "question": "Which expression represents items in exactly one of the two sets?",
+      "options": [
+        "a & ~b",
+        "a ^ b",
+        "a & b",
+        "a | b"
+      ],
+      "correct": 1,
+      "explanation": "XOR keeps positions where the bits differ. This is the symmetric difference: items exclusive to either set."
+    },
+    {
+      "id": "C055",
+      "section": "06 · Masks as sets",
+      "question": "Which condition is true exactly when needed is a subset of available?",
+      "options": [
+        "(needed & available) == available",
+        "(needed & available) != 0u",
+        "(needed & available) == needed",
+        "(needed | available) == needed"
       ],
       "correct": 2,
-      "section": "Loops and Iteration",
-      "explanation": "It always scans all 26 letter positions A..Z and prints only the ones whose bit is set."
+      "explanation": "Every bit of needed must survive intersection with available. Comparing the intersection with available reverses the containment test.",
+      "optionFeedback": {
+        "A": "This asks whether available is a subset of needed, reversing the requested relationship.",
+        "B": "Some overlap does not prove that every needed bit is available.",
+        "C": "Every bit of needed must survive intersection with available. Comparing the intersection with available reverses the containment test.",
+        "D": "This also tests the reverse containment: it requires available to have no bits outside needed."
+      }
     },
     {
-      "id": 38,
-      "question": "For n stored words, each word with seven distinct letters triggers a scan over all n words. What is the worst-case time complexity, treating word length and mask width as bounded?",
+      "id": "C056",
+      "section": "06 · Masks as sets",
+      "question": "What does this print?",
       "options": [
-        "O(1)",
-        "O(n)",
-        "O(n^2): each panagram re-scans all n words",
-        "O(log n)"
+        "1 1",
+        "1 0",
+        "0 1",
+        "0 0"
+      ],
+      "correct": 1,
+      "explanation": "5 is 0101 and 13 is 1101. Both bits of 5 are in 13, but bit 3 of 13 is missing from 5.",
+      "code": "unsigned int a = 5u, b = 13u;\nprintf(\"%d %d\", (a & b) == a, (a & b) == b);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C057",
+      "section": "06 · Masks as sets",
+      "question": "What does this print?",
+      "options": [
+        "1 1",
+        "0 1",
+        "1 0",
+        "0 0"
       ],
       "correct": 2,
-      "section": "Nested Loops and Selection",
-      "explanation": "With up to n panagrams each scanning all n masks, Problem 3's work is quadratic in the dictionary size."
+      "explanation": "The empty mask requires no bits, so it is a subset of every mask. Its intersection is still zero, so it does not overlap any mask.",
+      "code": "unsigned int needed = 0u, available = 6u;\nprintf(\"%d %d\", (needed & available) == needed, (needed & available) != 0u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 39,
-      "question": "What role does if (countBits(masks[i]) == 7) play?",
+      "id": "C058",
+      "section": "06 · Masks as sets",
+      "question": "A presence mask starts at 0. For item IDs 2, 2, and 5, the code applies mask |= 1u << id. What is the final mask?",
       "options": [
-        "It is a loop",
-        "It is a filter/selection that keeps only panagrams (exactly 7 distinct letters)",
-        "It declares a function",
-        "It casts a type"
-      ],
-      "correct": 1,
-      "section": "Nested Loops and Selection",
-      "explanation": "Only words passing this exact-equality test produce output."
-    },
-    {
-      "id": 40,
-      "question": "Why does scanning b from 0 to 25 print the 7 letters already in alphabetical order?",
-      "options": [
-        "printf sorts them",
-        "Because bit 0 = A, bit 1 = B, ... so ascending bit index is ascending alphabet",
-        "Because of the OR operator",
-        "It does not; order is random"
-      ],
-      "correct": 1,
-      "section": "Nested Loops and Selection",
-      "explanation": "The mask stores letters by alphabetical bit position, so a low-to-high scan emits them sorted for free -- no sorting code needed."
-    },
-    {
-      "id": 41,
-      "question": "In the declaration int letterMask(const char *word), what does the leading int specify?",
-      "options": [
-        "A parameter",
-        "The function's RETURN type",
-        "The function name",
-        "A local variable"
-      ],
-      "correct": 1,
-      "section": "Functions and Declarations",
-      "explanation": "A C function declaration reads: return-type name(parameters)."
-    },
-    {
-      "id": 42,
-      "question": "In int letterMask(const char *word), what is 'word'?",
-      "options": [
-        "The return type",
-        "A parameter: a pointer to const char",
-        "A global array",
-        "A macro"
-      ],
-      "correct": 1,
-      "section": "Functions and Declarations",
-      "explanation": "word is the single formal parameter, typed as const char *."
-    },
-    {
-      "id": 43,
-      "question": "What restriction does const impose in the parameter const char *word?",
-      "options": [
-        "The pointer variable itself can never change",
-        "The characters cannot be modified through word; the pointer variable itself can change",
-        "The string is exactly 7 letters",
-        "The string lives in ROM"
-      ],
-      "correct": 1,
-      "section": "Functions and Declarations",
-      "explanation": "const applies to the pointed-to char, not the pointer. Another writable alias can still modify an originally non-const object. This parameter alone does not promise that the function can never change the object by any other route."
-    },
-    {
-      "id": 44,
-      "question": "countBits is declared int countBits(int mask). Inside it, mask = mask >> 1 reassigns the parameter. Does that change the caller's variable?",
-      "options": [
-        "Yes, it edits the caller's mask",
-        "No -- mask is a local copy passed by value, so the caller is unaffected",
-        "Only if it is global",
-        "It causes a compile error"
-      ],
-      "correct": 1,
-      "section": "Functions and Declarations",
-      "explanation": "C passes scalars by value, so countBits mutates its own copy while the caller's masks[i] stays intact."
-    },
-    {
-      "id": 45,
-      "question": "If main calls two helper functions, why can defining those helpers above main avoid the need for separate prototypes?",
-      "options": [
-        "It does not",
-        "A function must be declared (by definition or prototype) before it is called, so defining them first lets main call them",
-        "main must run first regardless",
-        "Functions must be alphabetical"
-      ],
-      "correct": 1,
-      "section": "Functions and Declarations",
-      "explanation": "Without an earlier definition or prototype, the compiler would not know the function's signature at the call site."
-    },
-    {
-      "id": 46,
-      "question": "The function names letterMask and countBits follow which naming convention?",
-      "options": [
-        "ALL_CAPS",
-        "camelCase",
-        "names with spaces",
-        "digits only"
-      ],
-      "correct": 1,
-      "section": "Functions and Declarations",
-      "explanation": "camelCase starts with a lowercase word and capitalizes later words, as in letterMask and countBits."
-    },
-    {
-      "id": 47,
-      "question": "In scanf(\"%d\", &total), why is &total passed rather than total?",
-      "options": [
-        "To print total",
-        "scanf must receive the ADDRESS so it can store the parsed integer into total",
-        "& multiplies total",
-        "total is an array"
-      ],
-      "correct": 1,
-      "section": "Pass by Value vs Address",
-      "explanation": "The %d conversion requires an int pointer so scanf can write into total. Passing the int value total instead is an argument-type mismatch and causes undefined behavior; it is not just an ineffective copy."
-    },
-    {
-      "id": 48,
-      "question": "In scanf(\"%s\", words[i]), why is there NO & before words[i]?",
-      "options": [
-        "It is a bug",
-        "words[i] is an array that already decays to a pointer (an address), so & is unnecessary",
-        "%s ignores its argument",
-        "scanf adds the & itself"
-      ],
-      "correct": 1,
-      "section": "Pass by Value vs Address",
-      "explanation": "An array name used as a value decays to the address of its first element, so words[i] is already the needed pointer."
-    },
-    {
-      "id": 49,
-      "question": "When letterMask(words[i]) is called, what is actually passed to the function?",
-      "options": [
-        "A deep copy of all MAX_LEN chars",
-        "A copy of the POINTER to the first char (the row decays to char*)",
-        "The integer mask",
-        "Nothing"
-      ],
-      "correct": 1,
-      "section": "Pass by Value vs Address",
-      "explanation": "Arrays are never deep-copied as arguments in C; the function receives a pointer to the original storage."
-    },
-    {
-      "id": 50,
-      "question": "What is C's fundamental argument-passing model?",
-      "options": [
-        "Always pass by reference",
-        "Always pass by VALUE (pointers are used to emulate pass-by-reference)",
-        "Pass by name",
-        "Copy-on-write"
-      ],
-      "correct": 1,
-      "section": "Pass by Value vs Address",
-      "explanation": "Everything is copied into parameters; to let a callee modify a caller's object you pass that object's address."
-    },
-    {
-      "id": 51,
-      "question": "Because &total is given to scanf, scanf is able to:",
-      "options": [
-        "Only read total",
-        "Modify total in the caller (store the input count into it)",
-        "Delete total",
-        "Do nothing with total"
-      ],
-      "correct": 1,
-      "section": "Pass by Value vs Address",
-      "explanation": "Holding the address, scanf can write the parsed value straight into the caller's variable."
-    },
-    {
-      "id": 52,
-      "question": "As function parameters, char *word and char word[] are:",
-      "options": [
-        "Completely different types",
-        "Effectively equivalent -- an array parameter is adjusted to a pointer",
-        "Both illegal",
-        "Only usable for 7-letter strings"
-      ],
-      "correct": 1,
-      "section": "Pointers",
-      "explanation": "In a parameter list, char word[] is just another spelling of char *word."
-    },
-    {
-      "id": 53,
-      "question": "For a char *word, the expression word[i] is exactly equivalent to:",
-      "options": [
-        "*(word + i)",
-        "word + i",
-        "&word[i]",
-        "*word * i"
+        "36",
+        "3",
+        "7",
+        "40"
       ],
       "correct": 0,
-      "section": "Pointers",
-      "explanation": "Subscripting is pointer arithmetic plus a dereference: word[i] == *(word + i)."
+      "explanation": "Bit 2 contributes 4 and bit 5 contributes 32. Repeating item 2 does not add another 4: OR records presence, not frequency."
     },
     {
-      "id": 54,
-      "question": "What is char words[MAX_WORDS][MAX_LEN]?",
+      "id": "C059",
+      "section": "06 · Masks as sets",
+      "question": "Which information can be recovered from a presence mask alone?",
       "options": [
-        "A 1-D array of ints",
-        "A 2-D char array: MAX_WORDS rows of MAX_LEN chars, each fitting a string of at most MAX_LEN - 1 letters",
-        "A struct",
-        "A pointer-to-pointer"
-      ],
-      "correct": 1,
-      "section": "Arrays and Strings",
-      "explanation": "Each row is a fixed-size character buffer. A valid C string needs a terminating '\u0000', so a 30-char row can store at most 29 letters plus that terminator."
-    },
-    {
-      "id": 55,
-      "question": "Why is MAX_LEN defined as 30 when a word has at most 29 letters?",
-      "options": [
-        "Arbitrary rounding",
-        "To leave room for the terminating '\\0' alongside 29 letters",
-        "For speed",
-        "To match MAX_WORDS"
-      ],
-      "correct": 1,
-      "section": "Arrays and Strings",
-      "explanation": "A C string needs one extra byte for its nul terminator, so capacity must exceed the longest word by at least 1."
-    },
-    {
-      "id": 56,
-      "question": "After a successful scanf(\"%s\", words[i]) with enough buffer space, the stored word is terminated by:",
-      "options": [
-        "A newline",
-        "A space",
-        "The nul character '\\0'",
-        "A period"
+        "The total number of input occurrences",
+        "The order in which IDs occurred",
+        "Which distinct item IDs occurred",
+        "How often each item ID occurred"
       ],
       "correct": 2,
-      "section": "Arrays and Strings",
-      "explanation": "scanf(\"%s\") appends '\\0' after the token so it is a valid C string."
+      "explanation": "Each bit stores one yes/no fact. Duplicate occurrences and original ordering are lost, so different input sequences may produce the same mask."
     },
     {
-      "id": 57,
-      "question": "After skipping leading whitespace, what normally ends the token read by scanf(\"%s\", ...)?",
+      "id": "C060",
+      "section": "06 · Masks as sets",
+      "question": "In a four-item universe using bits 0 through 3, which expression gives the complement of set a within that universe?",
       "options": [
-        "Only at end of file",
-        "The next whitespace character, or end-of-file",
-        "After exactly 7 characters",
-        "At the first comma"
+        "~a",
+        "a & 0xFu",
+        "(~a) & 0xFu",
+        "a | 0xFu"
       ],
-      "correct": 1,
-      "section": "Arrays and Strings",
-      "explanation": "%s skips leading whitespace and reads non-whitespace characters until whitespace or end-of-file (or an input error). A successful conversion appends '\u0000'. A field width can also limit the number of characters read."
+      "correct": 2,
+      "explanation": "~a flips every bit of the integer. AND with 0xF removes positions outside the four-item universe."
     },
     {
-      "id": 58,
-      "question": "Given char words[MAX_WORDS][MAX_LEN], what is the type of words[i] before array-to-pointer conversion?",
+      "id": "C061",
+      "section": "07 · Precedence and expression grouping",
+      "question": "How does C group x & 4u == 0u?",
       "options": [
-        "char",
-        "An array of MAX_LEN chars, which usually converts to a pointer to its first char",
-        "int",
-        "char**"
+        "x & (4u == 0u)",
+        "x & (4u = 0u)",
+        "(x & 4u) == 0u",
+        "(x & 4u) = 0u"
       ],
-      "correct": 1,
-      "section": "Arrays and Strings",
-      "explanation": "The row has array type char[MAX_LEN]. Passing it as a function argument normally converts it to char*. sizeof words[i] and &words[i] are examples where that conversion does not occur."
+      "correct": 0,
+      "explanation": "Equality has higher precedence than bitwise AND. To test the masked result, write (x & 4u) == 0u explicitly."
     },
     {
-      "id": 59,
-      "question": "If total is an int and scanf(\"%d\", &total) succeeds, what does it read?",
+      "id": "C062",
+      "section": "07 · Precedence and expression grouping",
+      "question": "What does this print?",
       "options": [
-        "A string",
-        "An integer, stored into total",
-        "A single char",
-        "A float"
+        "1 0",
+        "1 1",
+        "0 0",
+        "0 1"
       ],
-      "correct": 1,
-      "section": "Input and Output",
-      "explanation": "%d parses a decimal integer; &total gives scanf somewhere to put it."
+      "correct": 3,
+      "explanation": "The first expression is 2u & (4u == 0u), so it is zero. The second compares (2u & 4u), which is zero, with zero and yields 1.",
+      "code": "unsigned int x = 2u;\nprintf(\"%u %d\", x & 4u == 0u, (x & 4u) == 0u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 60,
-      "question": "A program reads total, then runs for (int i = 0; i < total; i++) to read one word each time. What does the first input number represent?",
+      "id": "C063",
+      "section": "07 · Precedence and expression grouping",
+      "question": "How does C group count + x & 1u?",
       "options": [
-        "A panagram",
-        "The count W of words that follow",
-        "The final answer",
-        "Nothing used"
+        "(count + x) & 1u",
+        "count + (x && 1u)",
+        "count + (x & 1u)",
+        "(count + x) && 1u"
       ],
-      "correct": 1,
-      "section": "Input and Output",
-      "explanation": "total is read first, then the loop reads exactly that many words."
+      "correct": 0,
+      "explanation": "Addition binds more tightly than bitwise AND. Parentheses are needed when the intended increment is only x’s low bit."
     },
     {
-      "id": 61,
-      "question": "In printf(\" %c\", 'A' + b), the %c prints:",
+      "id": "C064",
+      "section": "07 · Precedence and expression grouping",
+      "question": "What does this print?",
       "options": [
-        "An integer",
-        "The character whose code is 'A' + b",
-        "A string",
-        "A float"
+        "1 3",
+        "3 3",
+        "3 1",
+        "1 1"
       ],
-      "correct": 1,
-      "section": "Input and Output",
-      "explanation": "'A' + b is an int character code; %c tells printf to emit it as a single character."
+      "correct": 0,
+      "explanation": "3u + 2u is 5, whose low bit is 1. In the second expression, 2u & 1u is zero, so adding it leaves 3.",
+      "code": "printf(\"%u %u\", 3u + 2u & 1u, 3u + (2u & 1u));",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 62,
-      "question": "printf(\"%s :\", words[i]) uses %s to print:",
-      "options": [
-        "One char",
-        "The nul-terminated string starting at words[i]",
-        "The address of words[i]",
-        "An int"
-      ],
-      "correct": 1,
-      "section": "Input and Output",
-      "explanation": "%s walks from the given pointer printing chars until it hits '\\0'."
-    },
-    {
-      "id": 63,
-      "question": "In printf(\" ; %d\\n\", composable), what does the \\n do?",
-      "options": [
-        "Prints the two characters backslash and n",
-        "Emits a newline, ending the current output line",
-        "Inserts a tab",
-        "Nothing"
-      ],
-      "correct": 1,
-      "section": "Input and Output",
-      "explanation": "\\n is the newline escape; each panagram's result ends with it so outputs are one per line."
-    },
-    {
-      "id": 64,
-      "question": "The output code prints the word P using \"%s :\", each of seven sorted letters using \" %c\", then the count X using \" ; %d\\n\". What is the line format?",
-      "options": [
-        "P ; C1..C7",
-        "P : C1 C2 C3 C4 C5 C6 C7 ; X",
-        "Just P",
-        "X only"
-      ],
-      "correct": 1,
-      "section": "Input and Output",
-      "explanation": "The panagram, a colon, the 7 sorted letters, a semicolon, then the composable-word count X."
-    },
-    {
-      "id": 65,
-      "question": "In the declaration int mask = 0; inside letterMask, what is the type of mask?",
-      "options": [
-        "char",
-        "int",
-        "float",
-        "double"
-      ],
-      "correct": 1,
-      "section": "Data Types",
-      "explanation": "The declaration explicitly uses int. Under this quiz's 32-bit-int assumption, bits 0 through 25 fit without setting the sign bit."
-    },
-    {
-      "id": 66,
-      "question": "On a typical system with 32-bit int, how many bits are available in mask?",
+      "id": "C065",
+      "section": "07 · Precedence and expression grouping",
+      "question": "What does this print?",
       "options": [
         "8",
         "16",
-        "32",
-        "64"
+        "9",
+        "12"
+      ],
+      "correct": 1,
+      "explanation": "Addition binds more tightly than shifting, so this is 1u << (3 + 1), which is 16.",
+      "code": "printf(\"%u\", 1u << 3 + 1);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C066",
+      "section": "07 · Precedence and expression grouping",
+      "question": "How does C group x & 1u << k?",
+      "options": [
+        "x & (1u << k)",
+        "x & (1u >> k)",
+        "(x & 1u) << k",
+        "(x << k) & 1u"
+      ],
+      "correct": 0,
+      "explanation": "Shifts bind more tightly than bitwise AND. Parentheses around the shift are optional here but make the intended mask clear."
+    },
+    {
+      "id": "C067",
+      "section": "07 · Precedence and expression grouping",
+      "question": "What does this print?",
+      "options": [
+        "2",
+        "1",
+        "0",
+        "3"
+      ],
+      "correct": 0,
+      "explanation": "Bitwise AND binds more tightly than bitwise OR. Compute 1u & 0u = 0 first, then 2u | 0u = 2.",
+      "code": "printf(\"%u\", 2u | 1u & 0u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C068",
+      "section": "07 · Precedence and expression grouping",
+      "question": "What does this print?",
+      "options": [
+        "0",
+        "3",
+        "2",
+        "1"
+      ],
+      "correct": 3,
+      "explanation": "Logical AND binds more tightly than logical OR: 1 || (0 && 0) is true.",
+      "code": "printf(\"%d\", 1 || 0 && 0);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C069",
+      "section": "07 · Precedence and expression grouping",
+      "question": "What does this print?",
+      "options": [
+        "2",
+        "3",
+        "0",
+        "1"
+      ],
+      "correct": 1,
+      "explanation": "A compound assignment has the entire expression x & 1u as its right side. Parentheses are not needed here: 3u & 1u contributes 1.",
+      "code": "unsigned int count = 2u, x = 3u;\ncount += x & 1u;\nprintf(\"%u\", count);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C070",
+      "section": "07 · Precedence and expression grouping",
+      "question": "What do parentheses in f() + (g() * h()) guarantee in C17?",
+      "options": [
+        "f() is called before both other functions",
+        "g() is called before h()",
+        "h() is called before f()",
+        "The product is an operand of the addition"
+      ],
+      "correct": 3,
+      "explanation": "Parentheses control grouping. They do not impose an evaluation order among these function calls; do not confuse precedence with sequencing."
+    },
+    {
+      "id": "C071",
+      "section": "08 · Loops, counting, and traversal",
+      "question": "What does this print?",
+      "options": [
+        "0",
+        "5",
+        "3",
+        "4"
+      ],
+      "correct": 3,
+      "explanation": "The loop body runs for i = 0, 1, 2, and 3. It stops when i becomes 4.",
+      "code": "int count = 0;\nfor (int i = 0; i < 4; ++i) {\n    ++count;\n}\nprintf(\"%d\", count);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C072",
+      "section": "08 · Loops, counting, and traversal",
+      "question": "What does this print?",
+      "options": [
+        "1",
+        "5",
+        "0",
+        "4"
       ],
       "correct": 2,
-      "section": "Data Types",
-      "explanation": "The assumed int occupies 32 bits. A typical signed 32-bit int uses one bit for its sign; the 26 letter positions fit within its positive value range."
+      "explanation": "while tests its condition before entering the body. Since x starts at zero, the body never executes.",
+      "code": "unsigned int x = 0u;\nint count = 0;\nwhile (x != 0u) {\n    ++count;\n    x >>= 1;\n}\nprintf(\"%d\", count);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 67,
-      "question": "On an ASCII system, what are the type and value of the ordinary C character constant 'A'?",
+      "id": "C073",
+      "section": "08 · Loops, counting, and traversal",
+      "question": "What does this print?",
       "options": [
-        "A one-character string",
-        "An int with value 65",
-        "A float",
-        "A pointer"
+        "2",
+        "4",
+        "3",
+        "13"
       ],
-      "correct": 1,
-      "section": "Data Types",
-      "explanation": "The ordinary character constant 'A' has type int in C, and its ASCII value is 65. This differs from the string literal \"A\", which is an array containing 'A' and a null terminator."
+      "correct": 2,
+      "explanation": "The inspected low bits are 1, 0, 1, and 1 as x takes values 13, 6, 3, and 1. Their sum is 3 set bits.",
+      "code": "unsigned int x = 13u, count = 0u;\nwhile (x != 0u) {\n    count += x & 1u;\n    x >>= 1;\n}\nprintf(\"%u\", count);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 68,
-      "question": "With ASCII uppercase input, why does word[i] - 'A' yield an index from 0 to 25?",
+      "id": "C074",
+      "section": "08 · Loops, counting, and traversal",
+      "question": "What does this print?",
       "options": [
-        "Letters are stored randomly",
-        "Because uppercase A..Z have consecutive ASCII codes, subtracting 'A' maps A->0 ... Z->25",
-        "Because 'A' equals 0",
-        "Because of the OR operator"
+        "1",
+        "8",
+        "3",
+        "4"
       ],
-      "correct": 1,
-      "section": "Char Arithmetic and ASCII",
-      "explanation": "ASCII places uppercase A through Z in consecutive positions. C itself does not require alphabetic character codes to be consecutive, so this mapping assumes ASCII."
+      "correct": 3,
+      "explanation": "The successive values entering the loop are 8, 4, 2, and 1. Shifting one place per iteration counts positions through the highest set bit, not only set bits.",
+      "code": "unsigned int x = 8u, steps = 0u;\nwhile (x != 0u) {\n    ++steps;\n    x >>= 1;\n}\nprintf(\"%u\", steps);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 69,
-      "question": "With ASCII encoding, if word[i] is 'D', what is word[i] - 'A'?",
+      "id": "C075",
+      "section": "08 · Loops, counting, and traversal",
+      "question": "What does this print?",
       "options": [
         "3",
+        "13",
         "4",
+        "1"
+      ],
+      "correct": 0,
+      "explanation": "Each x &= x - 1u removes one lowest set bit. The values go 13 → 12 → 8 → 0, so there are three iterations.",
+      "code": "unsigned int x = 13u, count = 0u;\nwhile (x != 0u) {\n    x &= x - 1u;\n    ++count;\n}\nprintf(\"%u\", count);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C076",
+      "section": "08 · Loops, counting, and traversal",
+      "question": "For nonzero unsigned x, which update removes exactly the lowest set bit?",
+      "options": [
+        "x ^= x - 1u;",
+        "x &= x + 1u;",
+        "x &= x - 1u;",
+        "x >>= 1;"
+      ],
+      "correct": 2,
+      "explanation": "Subtracting 1 changes the lowest set bit to 0 and its trailing zeros to 1. AND with the original retains higher bits and removes that one set bit."
+    },
+    {
+      "id": "C077",
+      "section": "08 · Loops, counting, and traversal",
+      "question": "What does this print?",
+      "options": [
+        "1 3 4 ",
+        "0 1 2 3 ",
+        "3 2 0 ",
+        "0 2 3 "
+      ],
+      "correct": 3,
+      "explanation": "13 has bits 0, 2, and 3 set. The loop visits bit positions in increasing order and prints only those that are present. The space after each number is part of the format.",
+      "code": "unsigned int mask = 13u;\nfor (int k = 0; k < 4; ++k) {\n    if ((mask & (1u << k)) != 0u) {\n        printf(\"%d \", k);\n    }\n}",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C078",
+      "section": "08 · Loops, counting, and traversal",
+      "question": "What does this print?",
+      "options": [
+        "0",
+        "3",
+        "5",
+        "2"
+      ],
+      "correct": 3,
+      "explanation": "continue skips the increment for odd i. Only i = 2 and i = 4 reach ++count.",
+      "code": "int count = 0;\nfor (int i = 1; i <= 5; ++i) {\n    if (i % 2 != 0) continue;\n    ++count;\n}\nprintf(\"%d\", count);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C079",
+      "section": "08 · Loops, counting, and traversal",
+      "question": "How many times does the innermost statement execute?",
+      "options": [
+        "5",
+        "9",
+        "3",
+        "6"
+      ],
+      "correct": 3,
+      "explanation": "The inner loop runs 0 times for i = 0, then 1, 2, and 3 times. The total is 0 + 1 + 2 + 3 = 6.",
+      "code": "for (int i = 0; i < 4; ++i) {\n    for (int j = 0; j < i; ++j) {\n        /* one operation */\n    }\n}"
+    },
+    {
+      "id": "C080",
+      "section": "08 · Loops, counting, and traversal",
+      "question": "Both loops below run n times. For positive n, what is the tight asymptotic running-time bound?",
+      "options": [
+        "Θ(n)",
+        "Θ(1)",
+        "Θ(log n)",
+        "Θ(n²)"
+      ],
+      "correct": 3,
+      "explanation": "There are n outer iterations and n inner iterations for each, giving n × n constant-time operations.",
+      "code": "for (int i = 0; i < n; ++i) {\n    for (int j = 0; j < n; ++j) {\n        /* constant-time operation */\n    }\n}"
+    },
+    {
+      "id": "C081",
+      "section": "09 · Functions and argument passing",
+      "question": "In unsigned int extract(unsigned int x, int k); what does the first unsigned int specify?",
+      "options": [
+        "The number of returned bits",
+        "The type of both parameters",
+        "The type of the function address",
+        "The return type"
+      ],
+      "correct": 3,
+      "explanation": "A function declaration starts with its return type, then its name and parameter list. The parameter types are written separately."
+    },
+    {
+      "id": "C082",
+      "section": "09 · Functions and argument passing",
+      "question": "Which prototype declares a function named read_bit that takes an unsigned int and an int, then returns int?",
+      "options": [
+        "void read_bit(unsigned int x, int k);",
+        "int read_bit(unsigned int x, int k);",
+        "int read_bit(unsigned int *x, int *k);",
+        "unsigned int read_bit(int x, int k);"
+      ],
+      "correct": 1,
+      "explanation": "The leading int is the return type; unsigned int x and int k are the two value parameters. Pointer parameters would require different arguments."
+    },
+    {
+      "id": "C083",
+      "section": "09 · Functions and argument passing",
+      "question": "What does this complete program print?",
+      "options": [
+        "0",
+        "9",
+        "18",
+        "1"
+      ],
+      "correct": 1,
+      "explanation": "The parameter x receives a copy of value. Assigning zero to that local parameter does not modify value in main.",
+      "code": "void reset(int x) {\n    x = 0;\n}\nint main(void) {\n    int value = 9;\n    reset(value);\n    printf(\"%d\", value);\n    return 0;\n}",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C084",
+      "section": "09 · Functions and argument passing",
+      "question": "What does this complete program print?",
+      "options": [
+        "4 4",
+        "4 9",
+        "9 4",
+        "9 9"
+      ],
+      "correct": 1,
+      "explanation": "half changes its local copy and returns 4. That return value initializes result; the original value stays 9.",
+      "code": "unsigned int half(unsigned int x) {\n    x >>= 1;\n    return x;\n}\nint main(void) {\n    unsigned int value = 9u;\n    unsigned int result = half(value);\n    printf(\"%u %u\", result, value);\n    return 0;\n}",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C085",
+      "section": "09 · Functions and argument passing",
+      "question": "A function is declared void clear(int *p); and int x = 7; exists in the caller. Which call passes the address of x?",
+      "options": [
+        "clear(*x);",
+        "clear(&x);",
+        "clear(sizeof x);",
+        "clear(x);"
+      ],
+      "correct": 1,
+      "explanation": "&x has type int * and points to x. x alone is an int value; *x is invalid because x is not a pointer."
+    },
+    {
+      "id": "C086",
+      "section": "09 · Functions and argument passing",
+      "question": "What does this complete program print?",
+      "options": [
+        "8",
+        "9",
+        "0",
+        "1"
+      ],
+      "correct": 2,
+      "explanation": "p receives a copy of the address of value. Writing through *p changes the actual int at that address.",
+      "code": "void reset(int *p) {\n    *p = 0;\n}\nint main(void) {\n    int value = 9;\n    reset(&value);\n    printf(\"%d\", value);\n    return 0;\n}",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C087",
+      "section": "09 · Functions and argument passing",
+      "question": "Given void inspect(const char *s); and char text[] = \"DOG\";, what argument value is supplied by inspect(text)?",
+      "options": [
+        "The number of characters in text",
+        "A pointer to the first character of text",
+        "The value of text[0] as an int",
+        "A copy of every character in text"
+      ],
+      "correct": 1,
+      "explanation": "In this call, the array expression converts to a pointer to its first element. That pointer value is copied into the parameter; the entire array is not copied."
+    },
+    {
+      "id": "C088",
+      "section": "09 · Functions and argument passing",
+      "question": "What does a prototype int ready(void); specify in C17?",
+      "options": [
+        "ready takes no arguments and returns nothing",
+        "ready takes one void pointer and returns int",
+        "ready takes any arguments and returns int",
+        "ready takes no arguments and returns int"
+      ],
+      "correct": 3,
+      "explanation": "(void) specifies an empty parameter list. In C17 a declaration using empty parentheses, ready(), does not provide the same parameter-type information."
+    },
+    {
+      "id": "C089",
+      "section": "09 · Functions and argument passing",
+      "question": "A helper function is defined after main in a C17 file. What should appear before main calls it?",
+      "options": [
+        "A macro containing the return value",
+        "A compatible function declaration",
+        "A second function body",
+        "A local variable with the same name"
+      ],
+      "correct": 1,
+      "explanation": "A prototype declares the helper’s parameter and return types before its use. Its definition can then appear later in the file."
+    },
+    {
+      "id": "C090",
+      "section": "09 · Functions and argument passing",
+      "question": "What does this complete program print?",
+      "options": [
+        "1 3",
+        "5 3",
+        "3 5",
+        "3 3"
+      ],
+      "correct": 2,
+      "explanation": "The first call changes a copy of x from 1 to 3. The second changes a copy of that result from 3 to 5. Neither call modifies its caller’s argument.",
+      "code": "int add_two(int value) {\n    return value + 2;\n}\nint main(void) {\n    int x = 1;\n    int y = add_two(x);\n    int z = add_two(y);\n    printf(\"%d %d\", y, z);\n    return 0;\n}",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C091",
+      "section": "10 · Pointers, addresses, and const",
+      "question": "Given int x = 7; int *p = &x;, which expression reads the int stored at the address in p?",
+      "options": [
+        "*p",
+        "p",
+        "sizeof p",
+        "&p"
+      ],
+      "correct": 0,
+      "explanation": "* dereferences p to access x. p is the address value, while &p is the address of the pointer variable itself."
+    },
+    {
+      "id": "C092",
+      "section": "10 · Pointers, addresses, and const",
+      "question": "Given int x = 7; int *p = &x;, what is the type of &p?",
+      "options": [
+        "const int *",
+        "int",
+        "int *",
+        "int **"
+      ],
+      "correct": 3,
+      "explanation": "p is an int pointer, so taking its address produces a pointer to an int pointer: int **."
+    },
+    {
+      "id": "C093",
+      "section": "10 · Pointers, addresses, and const",
+      "question": "Which pair of expressions has the same value when i is a valid index into the array pointed to by p?",
+      "options": [
+        "p[i] and p + i",
+        "p[i] and &p[i]",
+        "p[i] and *p + i",
+        "p[i] and *(p + i)"
+      ],
+      "correct": 3,
+      "explanation": "Array subscripting is defined using pointer arithmetic and dereferencing. *p + i adds to the first element’s value instead."
+    },
+    {
+      "id": "C094",
+      "section": "10 · Pointers, addresses, and const",
+      "question": "What does this print?",
+      "options": [
+        "20",
+        "10",
+        "40",
+        "30"
+      ],
+      "correct": 0,
+      "explanation": "p + 1 advances by one int element, not one byte. Dereferencing it accesses a[1], which is 20.",
+      "code": "int a[] = {10, 20, 30};\nint *p = a;\nprintf(\"%d\", *(p + 1));",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C095",
+      "section": "10 · Pointers, addresses, and const",
+      "question": "Given char text[] = \"CAT\"; const char *p = text;, which statement is permitted?",
+      "options": [
+        "p++;",
+        "*p = 'B';",
+        "p[1] = 'B';",
+        "++*p;"
+      ],
+      "correct": 0,
+      "explanation": "const char * prevents modifying a character through p. The pointer variable itself is still assignable, so p++ can move it to the next character."
+    },
+    {
+      "id": "C096",
+      "section": "10 · Pointers, addresses, and const",
+      "question": "Given char text[] = \"CAT\"; char * const p = text;, which statement is permitted?",
+      "options": [
+        "p = NULL;",
+        "*p = 'B';",
+        "p = text + 1;",
+        "p++;"
+      ],
+      "correct": 1,
+      "explanation": "Here const applies to the pointer, so p cannot be reassigned. The characters remain writable through p."
+    },
+    {
+      "id": "C097",
+      "section": "10 · Pointers, addresses, and const",
+      "question": "What does this print?",
+      "options": [
+        "CAT",
+        "C",
+        "B",
+        "BAT"
+      ],
+      "correct": 3,
+      "explanation": "p is a read-only access path to the array, not a promise that the underlying array can never change. text[0] legally changes the non-const array.",
+      "code": "char text[] = \"CAT\";\nconst char *p = text;\ntext[0] = 'B';\nprintf(\"%s\", p);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C098",
+      "section": "10 · Pointers, addresses, and const",
+      "question": "What does this complete program print?",
+      "options": [
+        "The code must fail to compile",
+        "1",
+        "9",
+        "0"
+      ],
+      "correct": 2,
+      "explanation": "p is a local pointer parameter. Reassigning it changes only that copy; *p = 0 would instead modify the caller’s int.",
+      "code": "void redirect(int *p) {\n    p = NULL;\n}\nint main(void) {\n    int x = 9;\n    redirect(&x);\n    printf(\"%d\", x);\n    return 0;\n}",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C099",
+      "section": "10 · Pointers, addresses, and const",
+      "question": "Given int a[4];, which statement about the pointer a + 4 is correct?",
+      "options": [
+        "It points to the last element and may be dereferenced",
+        "It may be formed but not dereferenced",
+        "It is required to be a null pointer",
+        "Forming it already has undefined behavior"
+      ],
+      "correct": 1,
+      "explanation": "C permits a pointer one past the final array element for arithmetic and comparisons within that array. There is no element at that position to access."
+    },
+    {
+      "id": "C100",
+      "section": "10 · Pointers, addresses, and const",
+      "question": "What does this print?",
+      "options": [
+        "5 9",
+        "5 5",
+        "7 7",
+        "7 9"
+      ],
+      "correct": 3,
+      "explanation": "q receives a copy of the address originally in p, so q still points to x after p is redirected to y. *q = 7 changes x.",
+      "code": "int x = 5, y = 9;\nint *p = &x;\nint *q = p;\np = &y;\n*q = 7;\nprintf(\"%d %d\", x, *p);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C101",
+      "section": "11 · Arrays, rows, and bounds",
+      "question": "For int a[6];, which range contains exactly its valid element indices?",
+      "options": [
+        "1 through 6",
+        "1 through 5",
+        "0 through 5",
+        "0 through 6"
+      ],
+      "correct": 2,
+      "explanation": "An array of six elements starts at index 0 and ends at index 5. Index 6 is one past the final element."
+    },
+    {
+      "id": "C102",
+      "section": "11 · Arrays, rows, and bounds",
+      "question": "Given an actual array int values[6]; in the current scope, which expression computes its element count?",
+      "options": [
+        "sizeof values / sizeof values[0]",
+        "sizeof values",
+        "sizeof values[0] / sizeof values",
+        "sizeof &values / sizeof values[0]"
+      ],
+      "correct": 0,
+      "explanation": "Divide the total array size in bytes by one element’s size. This does not work after an array has become a pointer parameter."
+    },
+    {
+      "id": "C103",
+      "section": "11 · Arrays, rows, and bounds",
+      "question": "Assume sizeof(int) is 4. What does this print?",
+      "options": [
+        "8",
+        "4",
+        "6",
+        "24"
+      ],
+      "correct": 3,
+      "explanation": "values contains six int elements, each taking four bytes, so sizeof values is 24. sizeof suppresses array-to-pointer conversion here.",
+      "code": "int values[6];\nprintf(\"%zu\", sizeof values);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C104",
+      "section": "11 · Arrays, rows, and bounds",
+      "question": "In void process(int a[6]), what parameter type does C use after adjusting the declaration?",
+      "options": [
+        "int *",
+        "int **",
+        "int (*)[6]",
+        "int[6]"
+      ],
+      "correct": 0,
+      "explanation": "An array parameter is adjusted to a pointer to its element type. The spelling [6] does not make the function receive a copied six-element array."
+    },
+    {
+      "id": "C105",
+      "section": "11 · Arrays, rows, and bounds",
+      "question": "Assume int is 4 bytes and int * is 8 bytes. Inside void f(int a[6]), what does sizeof a measure?",
+      "options": [
+        "6 bytes for the element count",
+        "8 bytes for a pointer",
+        "4 bytes for one int",
+        "24 bytes for six ints"
+      ],
+      "correct": 1,
+      "explanation": "a is a pointer parameter inside f, so sizeof a is the size of int *. The original array length must be supplied or known separately."
+    },
+    {
+      "id": "C106",
+      "section": "11 · Arrays, rows, and bounds",
+      "question": "Given char rows[3][8];, what is sizeof rows?",
+      "options": [
+        "3",
+        "24",
+        "8",
+        "11"
+      ],
+      "correct": 1,
+      "explanation": "There are three rows, each containing eight chars. Each char is one C byte, so the total size is 3 × 8 = 24 bytes."
+    },
+    {
+      "id": "C107",
+      "section": "11 · Arrays, rows, and bounds",
+      "question": "Given char rows[3][8];, what is the type of rows[1] before array-to-pointer conversion?",
+      "options": [
+        "char[8]",
+        "char",
+        "char *",
+        "char **"
+      ],
+      "correct": 0,
+      "explanation": "Selecting one row yields an array of eight chars. In many expressions it then converts to char *, but the row itself has array type."
+    },
+    {
+      "id": "C108",
+      "section": "11 · Arrays, rows, and bounds",
+      "question": "Given char rows[3][8];, what is the type of &rows[1]?",
+      "options": [
+        "char **",
+        "char *",
+        "char[8]",
+        "char (*)[8]"
+      ],
+      "correct": 3,
+      "explanation": "Taking the row’s address produces a pointer to an array of eight chars. It does not produce a pointer to a char pointer."
+    },
+    {
+      "id": "C109",
+      "section": "11 · Arrays, rows, and bounds",
+      "question": "What does this print?",
+      "options": [
+        "7 8",
+        "7 0",
+        "0 8",
+        "0 0"
+      ],
+      "correct": 3,
+      "explanation": "A partial initializer initializes the remaining array elements to zero. Here only a[0] and a[1] are explicitly supplied.",
+      "code": "int a[4] = {7, 8};\nprintf(\"%d %d\", a[2], a[3]);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C110",
+      "section": "11 · Arrays, rows, and bounds",
+      "question": "What does this complete program print?",
+      "options": [
+        "The code must fail to compile",
+        "2",
+        "8",
+        "4"
+      ],
+      "correct": 2,
+      "explanation": "The parameter points to the caller’s array storage. Writing a[1] therefore updates data[1]; no full array copy is made.",
+      "code": "void change(int a[]) {\n    a[1] = 8;\n}\nint main(void) {\n    int data[3] = {1, 2, 3};\n    change(data);\n    printf(\"%d\", data[1]);\n    return 0;\n}",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C111",
+      "section": "12 · Strings and character arithmetic",
+      "question": "How many char elements are needed to store \"HELLO\" as a null-terminated C string?",
+      "options": [
+        "6",
+        "4",
+        "5",
+        "7"
+      ],
+      "correct": 0,
+      "explanation": "The five visible characters need five elements, plus one for the terminating null character, '\\0'."
+    },
+    {
+      "id": "C112",
+      "section": "12 · Strings and character arithmetic",
+      "question": "What does this print?",
+      "options": [
+        "3 3",
+        "4 3",
+        "3 4",
+        "4 4"
+      ],
+      "correct": 1,
+      "explanation": "The array holds C, A, T, and the null terminator, so sizeof is 4. strlen counts characters before the terminator, so it returns 3.",
+      "code": "char s[] = \"CAT\";\nprintf(\"%zu %zu\", sizeof s, strlen(s));",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C113",
+      "section": "12 · Strings and character arithmetic",
+      "question": "What does this print?",
+      "options": [
+        "5 5",
+        "1 5",
+        "4 5",
+        "1 1"
+      ],
+      "correct": 1,
+      "explanation": "strlen stops at the first null character after A. The initializer still contains A, the explicit null, B, C, and the implicit final null: five elements.",
+      "code": "char s[] = \"A\\0BC\";\nprintf(\"%zu %zu\", strlen(s), sizeof s);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C114",
+      "section": "12 · Strings and character arithmetic",
+      "question": "Which declaration creates a null-terminated string containing exactly CAT?",
+      "options": [
+        "char s[] = {'C', 'A', 'T', '0'};",
+        "char s[3] = \"CAT\";",
+        "char s[] = {'C', 'A', 'T', '\\0'};",
+        "char s[] = {'C', 'A', 'T'};"
+      ],
+      "correct": 2,
+      "explanation": "The first initializer includes a null character. In C, char s[3] = \"CAT\" is allowed but lacks room for the terminator; the digit '0' is not a null character."
+    },
+    {
+      "id": "C115",
+      "section": "12 · Strings and character arithmetic",
+      "question": "What does this print?",
+      "options": [
+        "CAT",
+        "The code has undefined behavior",
+        "BAT",
+        "B"
+      ],
+      "correct": 2,
+      "explanation": "s is a writable array initialized by copying a string literal. Replacing its first character changes the stored string.",
+      "code": "char s[] = \"CAT\";\ns[0] = 'B';\nprintf(\"%s\", s);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C116",
+      "section": "12 · Strings and character arithmetic",
+      "question": "In C17, what happens if code executes p[0] = 'B' after char *p = \"CAT\";?",
+      "options": [
+        "The pointer changes to a different string",
+        "The literal becomes BAT portably",
+        "Undefined behavior",
+        "A new writable copy is created"
+      ],
+      "correct": 2,
+      "explanation": "p points to a string literal. Attempting to modify a literal has undefined behavior, even though the declaration can use char * in C."
+    },
+    {
+      "id": "C117",
+      "section": "12 · Strings and character arithmetic",
+      "question": "On an ASCII system, what does this print?",
+      "options": [
+        "4",
+        "3",
+        "65",
+        "68"
+      ],
+      "correct": 1,
+      "explanation": "ASCII gives 'D' the value 68 and 'A' the value 65. Subtracting produces the zero-based offset 3.",
+      "code": "printf(\"%d\", 'D' - 'A');",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C118",
+      "section": "12 · Strings and character arithmetic",
+      "question": "On an ASCII system, what does this print?",
+      "options": [
+        "3",
         "68",
-        "the char 'D'"
+        "D",
+        "C"
+      ],
+      "correct": 2,
+      "explanation": "Adding 3 to 'A' gives the code for 'D'. %c prints the character represented by that code.",
+      "code": "printf(\"%c\", 'A' + 3);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C119",
+      "section": "12 · Strings and character arithmetic",
+      "question": "On an ASCII system, c has type char. Which condition validates c before using c - 'A' as an index from 0 through 25?",
+      "options": [
+        "c > 'A' && c < 'Z'",
+        "c >= 'A' || c <= 'Z'",
+        "c >= 0 && c < 26",
+        "c >= 'A' && c <= 'Z'"
+      ],
+      "correct": 3,
+      "explanation": "Both inclusive bounds must hold. OR accepts values outside the range, while strict comparisons would exclude A and Z."
+    },
+    {
+      "id": "C120",
+      "section": "12 · Strings and character arithmetic",
+      "question": "What does this print?",
+      "options": [
+        "0 1",
+        "1 0",
+        "0 0",
+        "1 1"
+      ],
+      "correct": 1,
+      "explanation": "strcmp compares string contents, and equal strings give zero. a == b instead compares addresses; these are two distinct live arrays.",
+      "code": "char a[] = \"DOG\";\nchar b[] = \"DOG\";\nprintf(\"%d %d\", strcmp(a, b) == 0, a == b);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C121",
+      "section": "13 · Reading and validating input",
+      "question": "Given int value;, which call correctly reads a decimal int into value?",
+      "options": [
+        "scanf(\"%d\", &value);",
+        "scanf(\"%d\", value);",
+        "scanf(\"%f\", &value);",
+        "scanf(\"%u\", &value);"
       ],
       "correct": 0,
-      "section": "Char Arithmetic and ASCII",
-      "explanation": "'D' is 68 and 'A' is 65, so the difference is 3 -- the bit index for D."
+      "explanation": "%d requires a pointer to int so that scanf can store the result. Passing an int value or using a conversion requiring a different pointer type is invalid."
     },
     {
-      "id": 70,
-      "question": "With ASCII encoding, which character has the code 'A' + 2?",
+      "id": "C122",
+      "section": "13 · Reading and validating input",
+      "question": "For char name[8];, which call reads a whitespace-delimited string with the largest safe field width for this buffer?",
       "options": [
-        "'C'",
-        "the digit '2'",
-        "the string \"A2\"",
-        "nothing valid"
+        "scanf(\"%7s\", &name);",
+        "scanf(\"%s\", name);",
+        "scanf(\"%7s\", name);",
+        "scanf(\"%8s\", name);"
+      ],
+      "correct": 2,
+      "explanation": "%s needs a char pointer and room for a terminator. A width of 7 allows seven characters plus '\\0'. &name has pointer-to-array type, not char *.",
+      "optionFeedback": {
+        "A": "&name has type pointer to array of eight chars. The conversion expects char *, obtained here by passing name.",
+        "B": "An unbounded %s conversion can overflow the destination if the input token is too long.",
+        "C": "%s needs a char pointer and room for a terminator. A width of 7 allows seven characters plus '\\0'. &name has pointer-to-array type, not char *.",
+        "D": "Eight input characters plus the terminator require nine bytes, but name has only eight."
+      }
+    },
+    {
+      "id": "C123",
+      "section": "13 · Reading and validating input",
+      "question": "What is the required destination argument type for scanf(\"%s\", ...)?",
+      "options": [
+        "int *",
+        "char **",
+        "char *",
+        "const char *"
+      ],
+      "correct": 2,
+      "explanation": "%s writes characters into a writable char buffer. The destination is a char pointer, not a pointer to a pointer or a read-only access path."
+    },
+    {
+      "id": "C124",
+      "section": "13 · Reading and validating input",
+      "question": "What does scanf return when it successfully assigns both conversions in scanf(\"%d %d\", &a, &b)?",
+      "options": [
+        "The sum a + b",
+        "0",
+        "1",
+        "2"
+      ],
+      "correct": 3,
+      "explanation": "scanf returns the number of input items successfully assigned. It does not return the numeric input itself or the number of bytes read."
+    },
+    {
+      "id": "C125",
+      "section": "13 · Reading and validating input",
+      "question": "Input begins with x. What does this print?",
+      "options": [
+        "1 7",
+        "1 0",
+        "0 7",
+        "0 0"
+      ],
+      "correct": 2,
+      "explanation": "The first character cannot start a decimal integer, so scanf reports a matching failure with zero assignments. The initialized value remains 7.",
+      "code": "int n = 7;\nint result = scanf(\"%d\", &n);\nprintf(\"%d %d\", result, n);",
+      "verification": {
+        "kind": "output",
+        "stdin": "x"
+      }
+    },
+    {
+      "id": "C126",
+      "section": "13 · Reading and validating input",
+      "question": "If end-of-file occurs before the first conversion in scanf(\"%d\", &n), what return value indicates it?",
+      "options": [
+        "0",
+        "EOF",
+        "1",
+        "n"
+      ],
+      "correct": 1,
+      "explanation": "scanf returns EOF for input failure before any conversion is completed. A matching failure, such as a nonnumeric character for %d, normally returns 0. Do not assume the numeric value of EOF."
+    },
+    {
+      "id": "C127",
+      "section": "13 · Reading and validating input",
+      "question": "The input is 12 x. What does this print?",
+      "options": [
+        "0 7 8",
+        "2 12 0",
+        "1 12 8",
+        "1 12 0"
+      ],
+      "correct": 2,
+      "explanation": "The first integer is assigned as 12. The second conversion fails on x, so b stays 8 and the return value is one successful assignment.",
+      "code": "int a = 7, b = 8;\nint result = scanf(\"%d %d\", &a, &b);\nprintf(\"%d %d %d\", result, a, b);",
+      "verification": {
+        "kind": "output",
+        "stdin": "12 x"
+      }
+    },
+    {
+      "id": "C128",
+      "section": "13 · Reading and validating input",
+      "question": "The input is ABCDE followed by end-of-file. What does this print?",
+      "options": [
+        "ABC D",
+        "ABCDE D",
+        "AB C",
+        "ABC E"
       ],
       "correct": 0,
-      "section": "Char Arithmetic and ASCII",
-      "explanation": "'A' is 65, plus 2 is 67, which is 'C'. The print loop uses exactly this to turn a bit index back into a letter."
+      "explanation": "%3s stores ABC plus a null terminator. The remaining D and E are still unread, so the following %c reads D.",
+      "code": "char s[4], c;\nscanf(\"%3s\", s);\nscanf(\"%c\", &c);\nprintf(\"%s %c\", s, c);",
+      "verification": {
+        "kind": "output",
+        "stdin": "ABCDE"
+      }
     },
     {
-      "id": 71,
-      "question": "With ASCII encoding, what input restriction keeps word[i] - 'A' within 0..25?",
+      "id": "C129",
+      "section": "13 · Reading and validating input",
+      "question": "Which format skips leading whitespace before reading one character into char c?",
       "options": [
-        "Input can be any characters",
-        "Input letters are UPPERCASE A..Z",
-        "Input is lowercase",
-        "Input is digits"
+        "scanf(\"%1s\", &c);",
+        "scanf(\" %c\", &c);",
+        "scanf(\"%c \", &c);",
+        "scanf(\"%c\", &c);"
       ],
       "correct": 1,
-      "section": "Char Arithmetic and ASCII",
-      "explanation": "Uppercase A through Z give indices 0 through 25. Other characters can produce invalid indices; shifting by a negative count or by a count at least the int width is undefined behavior. Input should be validated when this restriction is not guaranteed."
+      "explanation": "Whitespace before %c in the format consumes leading input whitespace. %c alone does not skip it; trailing format whitespace acts after the character. %1s also writes a terminator and needs two chars of storage."
     },
     {
-      "id": 72,
-      "question": "What does #define MAX_WORDS 20000 create?",
+      "id": "C130",
+      "section": "13 · Reading and validating input",
+      "question": "int a[8]; and int n; are declared. Which check is sufficient before a loop reads n values into a[0] through a[n-1]?",
       "options": [
-        "A runtime variable",
-        "A preprocessor macro that is textually substituted before compilation",
-        "A function",
-        "A pointer"
+        "scanf(\"%d\", &n) != EOF && n <= 8",
+        "scanf(\"%d\", &n) == 1 && n >= 0",
+        "scanf(\"%d\", &n) == 1 && n <= 8",
+        "scanf(\"%d\", &n) == 1 && n >= 0 && n <= 8"
       ],
-      "correct": 1,
-      "section": "Preprocessor and Constants",
-      "explanation": "In ordinary preprocessing-token use, MAX_WORDS expands to 20000. The macro is not a runtime variable, and its name is not replaced inside string literals."
+      "correct": 3,
+      "explanation": "Require one successful assignment and both bounds. n = 8 is valid because the loop’s final index is 7. The bounds test rejects negative counts and oversized counts. Assume a successful numeric conversion is representable as int."
     },
     {
-      "id": 73,
-      "question": "What is a benefit of #define MAX_LEN 30 over writing 30 everywhere?",
+      "id": "C131",
+      "section": "14 · Output, headers, and macros",
+      "question": "Which conversion prints an unsigned int as unsigned decimal?",
       "options": [
-        "It runs slower",
-        "A single edit point and a self-documenting name make the code clearer and safer to change",
-        "It forces heap use",
-        "scanf requires it"
+        "%u",
+        "%x",
+        "%c",
+        "%d"
       ],
-      "correct": 1,
-      "section": "Preprocessor and Constants",
-      "explanation": "Named constants reduce magic numbers and keep related sizes consistent."
+      "correct": 0,
+      "explanation": "%u prints unsigned decimal. %x prints hexadecimal, %d expects int, and %c prints a character."
     },
     {
-      "id": 74,
-      "question": "Macros such as MAX_WORDS are expanded by which part of the toolchain?",
+      "id": "C132",
+      "section": "14 · Output, headers, and macros",
+      "question": "What does this print?",
       "options": [
-        "The linker",
-        "The preprocessor, before the compiler proper",
-        "The CPU at runtime",
-        "The operating system"
+        "65 65",
+        "A A",
+        "A 65",
+        "65 A"
       ],
-      "correct": 1,
-      "section": "Preprocessor and Constants",
-      "explanation": "Preprocessing (includes, defines, conditionals) happens first, producing a translation unit for the compiler."
+      "correct": 2,
+      "explanation": "On ASCII systems, 'A' has value 65. %c prints its character, while %d prints its integer value.",
+      "code": "printf(\"%c %d\", 'A', 'A');",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 75,
-      "question": "When is (masks[j] & masks[i]) == masks[j] true?",
+      "id": "C133",
+      "section": "14 · Output, headers, and macros",
+      "question": "What does this print?",
       "options": [
-        "When word j shares exactly one letter with panagram i",
-        "When EVERY letter of word j is also in panagram i (j's letters are a subset of i's)",
-        "When word j equals panagram i",
-        "When word j is longer than i"
+        "2A",
+        "052",
+        "42",
+        "2a"
       ],
-      "correct": 1,
-      "section": "Subset and Composition Logic",
-      "explanation": "AND keeps only j's bits that are also in i; if that still equals j's full mask, none of j's bits were lost, so all of j's letters are inside i."
+      "correct": 0,
+      "explanation": "%X formats an unsigned int in hexadecimal using uppercase letters. Decimal 42 is hexadecimal 2A.",
+      "code": "printf(\"%X\", 42u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 76,
-      "question": "Testing (masks[j] & masks[i]) == masks[j] lets the composition-count loop count words that:",
+      "id": "C134",
+      "section": "14 · Output, headers, and macros",
+      "question": "Which format correctly prints a value returned by sizeof as an unsigned decimal number?",
       "options": [
-        "Have exactly 7 distinct letters",
-        "Can be spelled using ONLY the panagram's letters (a subset is allowed)",
-        "Are themselves panagrams",
-        "Are longer than 7 letters"
+        "%zu",
+        "%d",
+        "%s",
+        "%u"
       ],
-      "correct": 1,
-      "section": "Subset and Composition Logic",
-      "explanation": "This test accepts any word whose distinct letters are a subset of the candidate's letters. Repeated letters are allowed. This quiz's rule imposes no additional mandatory-letter condition."
+      "correct": 0,
+      "explanation": "sizeof produces size_t, whose matching printf conversion is %zu. size_t is not guaranteed to be unsigned int."
     },
     {
-      "id": 77,
-      "question": "Under the subset-only composition rule, does a dictionary word need all seven of a candidate's letters to be counted?",
+      "id": "C135",
+      "section": "14 · Output, headers, and macros",
+      "question": "What does this print?",
       "options": [
-        "Yes, all 7 are required",
-        "No -- any subset of the 7 letters qualifies",
-        "Only if it has exactly 7 distinct letters",
-        "It can never be counted"
+        "D:3",
+        "DOG:3",
+        "DOG:4",
+        "DOG:2"
       ],
       "correct": 1,
-      "section": "Subset and Composition Logic",
-      "explanation": "A 5-distinct-letter word whose letters all lie within the panagram still counts toward X."
+      "explanation": "%s prints characters through the first null terminator, excluding it. strlen reports the three visible characters.",
+      "code": "char s[] = \"DOG\";\nprintf(\"%s:%zu\", s, strlen(s));",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 78,
-      "question": "If the composition loop checks every dictionary entry, including the candidate itself, is that candidate counted in its own total?",
+      "id": "C136",
+      "section": "14 · Output, headers, and macros",
+      "question": "What does this print?",
       "options": [
-        "No",
-        "Yes -- its mask is a subset of itself, so (m & m) == m holds",
-        "Only sometimes",
-        "Only when it has no repeated letters"
+        "50%%",
+        "50",
+        "%50",
+        "50%"
       ],
-      "correct": 1,
-      "section": "Subset and Composition Logic",
-      "explanation": "Every mask is a subset of itself, so a panagram always contributes at least 1 to its own X."
+      "correct": 3,
+      "explanation": "Within a printf format, %% prints one literal percent sign. It does not consume another argument.",
+      "code": "printf(\"%d%%\", 50);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 79,
-      "question": "In this study bank, what does the filter countBits(mask) == 7 require of a 'panagram'?",
+      "id": "C137",
+      "section": "14 · Output, headers, and macros",
+      "question": "Which header declares printf and scanf?",
       "options": [
-        "A word of at least 7 letters",
-        "A word with EXACTLY 7 distinct letters -- no more, no fewer",
-        "A word of exactly 7 characters",
-        "A word made only of vowels"
+        "<stdlib.h>",
+        "<string.h>",
+        "<stdio.h>",
+        "<ctype.h>"
       ],
-      "correct": 1,
-      "section": "Filtering and Counting",
-      "explanation": "The exact-equality check countBits(mask) == 7 encodes 'exactly seven distinct letters'."
+      "correct": 2,
+      "explanation": "<stdio.h> declares standard input/output functions. <stdlib.h> covers allocation and utilities; <string.h> covers string and memory functions; <ctype.h> covers character classification."
     },
     {
-      "id": 80,
-      "question": "Why is PERFORMANCE (9 distinct letters) rejected as a panagram?",
+      "id": "C138",
+      "section": "14 · Output, headers, and macros",
+      "question": "Which header declares strlen and strcmp?",
       "options": [
-        "It is too short",
-        "countBits returns 9, and 9 != 7 fails the filter",
-        "It has no vowels",
-        "Because of the OR operator"
+        "<string.h>",
+        "<stdio.h>",
+        "<stddef.h>",
+        "<stdlib.h>"
       ],
-      "correct": 1,
-      "section": "Filtering and Counting",
-      "explanation": "More than 7 distinct letters fails the exact == 7 test, just as fewer than 7 would."
+      "correct": 0,
+      "explanation": "<string.h> supplies string function declarations, including strlen and strcmp. Their declarations should be visible before calls."
     },
     {
-      "id": 81,
-      "question": "If a loop visits words[i] with i increasing from 0 to total - 1 and immediately prints each qualifying word, in what order are the results printed?",
+      "id": "C139",
+      "section": "14 · Output, headers, and macros",
+      "question": "What does this print?",
       "options": [
-        "Alphabetical order",
-        "The order they appear in the input list",
-        "Reverse input order",
-        "Random order"
+        "12",
+        "16",
+        "10",
+        "8"
       ],
-      "correct": 1,
-      "section": "Filtering and Counting",
-      "explanation": "The main loop walks words by increasing index, so output follows input order."
+      "correct": 0,
+      "explanation": "The macro expands to 4 + 4 without implicit parentheses. The resulting expression is 2 * 4 + 4, which is 12. Parenthesizing the replacement list would instead give 16.",
+      "code": "#define WIDTH 4 + 4\nprintf(\"%d\", 2 * WIDTH);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 82,
-      "question": "To count all dictionary entries composable from a candidate's letters using the subset test, which entries must be considered?",
+      "id": "C140",
+      "section": "14 · Output, headers, and macros",
+      "question": "Which definition makes 2 * WIDTH evaluate to 14 while keeping WIDTH as an expression for 3 plus 4?",
       "options": [
-        "Only the other panagrams",
-        "ALL words in the dictionary",
-        "Only words appearing after the panagram",
-        "Only the first 7 words"
+        "#define WIDTH 3 + 4",
+        "#define WIDTH (3 + 4)",
+        "#define WIDTH 3 + 4;",
+        "#define WIDTH \"3 + 4\""
       ],
       "correct": 1,
-      "section": "Filtering and Counting",
-      "explanation": "Every stored word is tested for the subset property, which is why the words are kept in memory."
+      "explanation": "Parenthesizing the replacement expression makes expansion give 2 * (3 + 4). Macro expansion substitutes tokens; it does not automatically group expressions."
     },
     {
-      "id": 83,
-      "question": "Inside main, char words[20000][30] is declared without static. What storage does it have?",
+      "id": "C141",
+      "section": "15 · Storage, allocation, and lifetime",
+      "question": "Inside a function, char buffer[32]; is declared without static. What storage duration does buffer have?",
       "options": [
-        "On the heap via malloc",
-        "600,000 bytes of automatic storage, typically placed on the stack",
-        "In CPU registers",
-        "In static ROM"
+        "Allocated",
+        "Automatic",
+        "Thread",
+        "Static"
       ],
       "correct": 1,
-      "section": "Memory and C Quirks",
-      "explanation": "The array contains 20000 × 30 = 600,000 C bytes. A block-scope declaration without static has automatic storage duration. Implementations commonly use a stack, but the C standard does not require one; stack limits can matter in practice."
+      "explanation": "A block-scope array without static has automatic storage duration. A stack is a common implementation, but the C language does not require that physical arrangement."
     },
     {
-      "id": 84,
-      "question": "A program stores words and masks in local arrays with fixed capacities supplied by #define constants. How does it avoid malloc/free for that storage?",
+      "id": "C142",
+      "section": "15 · Storage, allocation, and lifetime",
+      "question": "Assume sizeof(int) is 4 and sizeof(int *) is 8. Given int *p;, which call requests exactly enough bytes for 12 ints?",
       "options": [
-        "It uses a global linked list",
-        "It pre-sizes fixed arrays using the #define bounds and stores everything there",
-        "It uses recursion",
-        "It never stores the words"
+        "p = malloc(12 * sizeof p);",
+        "p = malloc(12);",
+        "p = malloc(12 * sizeof *p);",
+        "p = malloc(sizeof p);"
       ],
-      "correct": 1,
-      "section": "Memory and C Quirks",
-      "explanation": "Fixed-capacity arrays sidestep dynamic allocation entirely, trading some memory for simplicity."
+      "correct": 2,
+      "explanation": "sizeof *p is the size of one int. sizeof p instead measures the pointer object. Allocation sizes are in bytes, and the result must be checked before use."
     },
     {
-      "id": 85,
-      "question": "On a system that provides strdup, what does a successful call do?",
+      "id": "C143",
+      "section": "15 · Storage, allocation, and lifetime",
+      "question": "What must be checked before writing to memory returned by malloc?",
       "options": [
-        "Frees memory",
-        "Allocates new memory and copies a string into it, returning a pointer the caller must later free",
-        "Compares two strings",
-        "Prints a string"
+        "Whether the returned pointer is NULL",
+        "Whether the first allocated int is zero",
+        "Whether the pointer equals the byte count",
+        "Whether sizeof the pointer equals the request"
       ],
-      "correct": 1,
-      "section": "Memory and C Quirks",
-      "explanation": "strdup allocates space for a copy including the null terminator. Check for NULL on allocation failure and free a successful result after use. strdup is provided by POSIX but is not part of the ISO C17 library."
+      "correct": 0,
+      "explanation": "malloc reports allocation failure by returning NULL. Its allocated bytes are initially indeterminate, so reading a first element is not a valid failure test."
     },
     {
-      "id": 86,
-      "question": "If you DID use malloc/strdup to store the words, when should the memory be freed?",
+      "id": "C144",
+      "section": "15 · Storage, allocation, and lifetime",
+      "question": "Which statement about successful malloc and calloc calls is correct?",
       "options": [
-        "Never",
-        "Once you are finished using the stored words, before the program exits, to avoid leaks",
-        "Immediately after malloc",
-        "Inside the loop while still using it"
+        "Neither ever initializes the allocated bytes",
+        "calloc zeroes the allocated bytes; malloc does not",
+        "malloc zeroes the allocated bytes; calloc does not",
+        "Both initialize every allocated byte to zero"
       ],
       "correct": 1,
-      "section": "Memory and C Quirks",
-      "explanation": "Free after last use and before exit. Freeing too early invalidates the data; never freeing leaks it."
+      "explanation": "calloc initializes all allocated bits to zero. malloc leaves the contents indeterminate. All-zero bits are not a universal promise of every possible C type’s semantic zero, such as a null pointer representation."
     },
     {
-      "id": 87,
-      "question": "main is declared int and ends with return 0;. What does returning 0 signify?",
+      "id": "C145",
+      "section": "15 · Storage, allocation, and lifetime",
+      "question": "Assume allocation succeeds. What does this print?",
       "options": [
-        "An error occurred",
-        "Successful termination, communicated to the host environment",
-        "The computed answer",
-        "The number of panagrams"
+        "The value is indeterminate",
+        "3",
+        "1",
+        "0"
       ],
-      "correct": 1,
-      "section": "Memory and C Quirks",
-      "explanation": "Returning 0 from the initial call to main indicates successful termination. EXIT_SUCCESS also indicates success, and EXIT_FAILURE indicates failure; the meaning of other exit values depends on the implementation."
+      "correct": 3,
+      "explanation": "calloc initializes the storage to all-bits-zero. For int, that represents the value 0.",
+      "code": "int *p = calloc(3, sizeof *p);\nif (p == NULL) return 1;\nprintf(\"%d\", p[1]);\nfree(p);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     },
     {
-      "id": 88,
-      "question": "For a nonzero unsigned mask, which operation clears its lowest set bit, allowing a population-count loop to run once per set bit?",
+      "id": "C146",
+      "section": "15 · Storage, allocation, and lifetime",
+      "question": "Which expression gives the required allocation size for an independent copy of a valid string s, including its terminator?",
       "options": [
-        "mask = mask + 1 each step",
-        "mask &= (mask - 1), which clears the lowest set bit so the loop runs once per set bit",
-        "mask = mask * 2",
-        "mask = -mask"
+        "strlen(s)",
+        "sizeof *s",
+        "strlen(s) + 1",
+        "sizeof s"
       ],
-      "correct": 1,
-      "section": "Memory and C Quirks",
-      "explanation": "mask &= (mask - 1) clears the lowest set bit. In a while (mask != 0) loop, each iteration removes one set bit. This can reduce iterations for sparse masks; it does not guarantee faster execution on every machine."
+      "correct": 2,
+      "explanation": "strlen counts characters before the first null. Add one byte for that null terminator. sizeof a pointer does not measure the pointed-to string."
     },
     {
-      "id": 89,
-      "question": "If scanf's return value is ignored, what should a more robust program do?",
+      "id": "C147",
+      "section": "15 · Storage, allocation, and lifetime",
+      "question": "p is the unchanged pointer returned by a successful malloc call, and buffer is a local array. Which call releases that block correctly?",
       "options": [
-        "Always ignore it",
-        "Check it to detect malformed input or end-of-file",
-        "Print it to the user",
-        "Pass it to free()"
+        "free(p + 1);",
+        "free(p);",
+        "free(buffer);",
+        "free(&p);"
       ],
       "correct": 1,
-      "section": "Memory and C Quirks",
-      "explanation": "scanf returns the number of input items assigned, or EOF if an input failure occurs before the first conversion. For these calls, require a return value of 1 before using the input. Also validate the word count and word lengths."
+      "explanation": "free requires NULL or a live allocation pointer returned by an allocation function. The pointer’s address, an interior pointer, and an automatic array are not valid allocation pointers."
     },
     {
-      "id": 90,
-      "question": "With char words[20000][30], what risk exists if scanf(\"%s\", words[i]) receives a token longer than 29 letters?",
+      "id": "C148",
+      "section": "15 · Storage, allocation, and lifetime",
+      "question": "After free(p), another pointer q still holds the former address of the same allocation. What happens if code dereferences q?",
       "options": [
-        "None; it is always safe",
-        "scanf(\"%s\") has no width limit, so it could overflow words[i] -- a buffer overflow",
-        "It truncates automatically and safely",
-        "It is a compile error"
+        "It allocates the block again",
+        "It reads a guaranteed saved copy",
+        "It reads a guaranteed zero value",
+        "Undefined behavior"
       ],
-      "correct": 1,
-      "section": "Memory and C Quirks",
-      "explanation": "The unbounded %s conversion can write beyond the 30-byte row, including its null terminator. %29s bounds this write, but an overlong token leaves characters unread; robust input handling should also detect and reject such input."
+      "correct": 3,
+      "explanation": "Freeing ends the allocation’s lifetime. Every alias to that storage loses its valid target; keeping another pointer does not preserve the allocation."
     },
     {
-      "id": 91,
-      "question": "The study bank uses 'panagram' for a word with seven distinct letters. Which usual term describes text containing every letter of a specified alphabet?",
+      "id": "C149",
+      "section": "15 · Storage, allocation, and lifetime",
+      "question": "Why is returning local from this function unsafe for the caller to dereference?",
       "options": [
-        "A palindrome (same forwards and backwards)",
-        "A pangram",
-        "An anagram (letter rearrangement)",
-        "A homonym"
+        "The returned pointer always becomes NULL",
+        "Arrays can never have their addresses taken",
+        "The array lifetime ends when the function returns",
+        "Returning a pointer copies only the first character"
+      ],
+      "correct": 2,
+      "explanation": "local has automatic storage duration. Returning its address does not extend the lifetime of its elements; use caller-provided storage or an allocation with a suitable lifetime.",
+      "code": "char *make_text(void) {\n    char local[] = \"OK\";\n    return local;\n}"
+    },
+    {
+      "id": "C150",
+      "section": "15 · Storage, allocation, and lifetime",
+      "question": "In a hosted C program, what does return 0; from the initial call to main indicate?",
+      "options": [
+        "Successful termination",
+        "All allocated memory was explicitly freed",
+        "No functions were called",
+        "One byte was printed"
+      ],
+      "correct": 0,
+      "explanation": "Returning zero from main communicates successful termination to the host. It is an exit status, not proof of particular output or cleanup operations."
+    },
+    {
+      "id": "C151",
+      "section": "16 · Combined problems and edge cases",
+      "question": "Flags use bit 0 for read, bit 1 for write, and bit 2 for execute. Which expression grants read and execute while removing write, preserving all other flags?",
+      "options": [
+        "(flags & 5u) | 2u",
+        "flags ^ 7u",
+        "flags | 7u",
+        "(flags | 5u) & ~2u"
+      ],
+      "correct": 3,
+      "explanation": "5u selects bits 0 and 2; OR sets both. AND with ~2u then clears only bit 1. XOR would toggle existing permissions, not enforce the requested state."
+    },
+    {
+      "id": "C152",
+      "section": "16 · Combined problems and edge cases",
+      "question": "x and value are unsigned. value is between 0 and 7. Which expression replaces bits 4 through 2 of x with value, preserving every other bit?",
+      "options": [
+        "(x & ~(7u << 2)) | (value << 2)",
+        "(x & (7u << 2)) | (value << 2)",
+        "x | (value << 2)",
+        "(x & ~(7u << 2)) | value"
+      ],
+      "correct": 0,
+      "explanation": "First clear all three destination bits with the complemented field mask, then shift value into the empty field and OR it in. OR alone cannot remove old 1 bits.",
+      "optionFeedback": {
+        "A": "First clear all three destination bits with the complemented field mask, then shift value into the empty field and OR it in. OR alone cannot remove old 1 bits.",
+        "B": "This keeps the old field and clears everything outside it, reversing which positions must be preserved.",
+        "C": "OR cannot remove old 1 bits in the destination field when the new value has zeros there.",
+        "D": "The old field is cleared, but value is written to bits 2 through 0 without the required shift."
+      }
+    },
+    {
+      "id": "C153",
+      "section": "16 · Combined problems and edge cases",
+      "question": "Which expression is true exactly when unsigned x contains exactly one set bit?",
+      "options": [
+        "x != 0u && (x & (x - 1u)) == 0u",
+        "(x & (x - 1u)) == 0u",
+        "x != 0u && (x & 1u) != 0u",
+        "x != 0u && (x & (x + 1u)) == 0u"
+      ],
+      "correct": 0,
+      "explanation": "Clearing the lowest set bit leaves zero only for a one-bit value or the original zero. The x != 0u guard excludes zero; testing oddness alone admits many multi-bit values.",
+      "optionFeedback": {
+        "A": "Clearing the lowest set bit leaves zero only for a one-bit value or the original zero. The x != 0u guard excludes zero; testing oddness alone admits many multi-bit values.",
+        "B": "This is also true for x = 0, which contains no set bits.",
+        "C": "This tests oddness. Values such as 3 have their low bit set but contain more than one set bit.",
+        "D": "This accepts values like 3 and 7 whose low bits are all ones, rather than exactly one set bit."
+      }
+    },
+    {
+      "id": "C154",
+      "section": "16 · Combined problems and edge cases",
+      "question": "What does this print?",
+      "options": [
+        "10 0",
+        "12 1",
+        "10 1",
+        "8 0"
+      ],
+      "correct": 0,
+      "explanation": "Start with 0101. Setting bit 3 gives 1101; clearing bit 0 gives 1100; toggling bits 1 and 2 using 0110 gives 1010 = 10. Its bit 2 is zero.",
+      "code": "unsigned int flags = 5u;\nflags |= 8u;\nflags &= ~1u;\nflags ^= 6u;\nprintf(\"%u %u\", flags, (flags >> 2) & 1u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C155",
+      "section": "16 · Combined problems and edge cases",
+      "question": "For 32-bit unsigned masks, which identity is true for every a and b?",
+      "options": [
+        "~(a | b) == (a & b)",
+        "~(a | b) == (~a & ~b)",
+        "~(a | b) == (~a | ~b)",
+        "~(a | b) == (a ^ b)"
       ],
       "correct": 1,
-      "section": "Memory and C Quirks",
-      "explanation": "The usual term is pangram. This study bank retains 'panagram' from the supplied questions for the seven-distinct-letter candidates; it does not mean a palindrome or an anagram."
+      "explanation": "De Morgan’s law applies bit by bit: the complement of OR is the AND of the complements. A result bit is 1 only when both original bits were 0."
+    },
+    {
+      "id": "C156",
+      "section": "16 · Combined problems and edge cases",
+      "question": "What does this print?",
+      "options": [
+        "4",
+        "2",
+        "1",
+        "3"
+      ],
+      "correct": 3,
+      "explanation": "Required bits 0 and 2 form mask 5. Values 5, 7, and 13 contain both bits; 4 does not. Counting an exact match alone would miss the extra-bit cases.",
+      "code": "unsigned int values[] = {4u, 5u, 7u, 13u};\nint count = 0;\nfor (int i = 0; i < 4; ++i) {\n    if ((values[i] & 5u) == 5u) ++count;\n}\nprintf(\"%d\", count);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C157",
+      "section": "16 · Combined problems and edge cases",
+      "question": "What does this print?",
+      "options": [
+        "6",
+        "4",
+        "8",
+        "3"
+      ],
+      "correct": 0,
+      "explanation": "The IDs are 2, 1, and 2. Setting bit 2 twice does not increase its contribution. Bits 1 and 2 are set, giving 2 + 4 = 6.",
+      "code": "unsigned int ids[] = {2u, 1u, 2u};\nunsigned int mask = 0u;\nfor (int i = 0; i < 3; ++i) {\n    mask |= 1u << ids[i];\n}\nprintf(\"%u\", mask);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
+    },
+    {
+      "id": "C158",
+      "section": "16 · Combined problems and edge cases",
+      "question": "Which statement about the displayed code is correct?",
+      "options": [
+        "Convert the shift count to unsigned char first",
+        "Shift in int, then convert to unsigned char",
+        "Shift in unsigned char, then keep that type",
+        "Convert x to unsigned int before the shift"
+      ],
+      "correct": 1,
+      "explanation": "With 32-bit int, every unsigned char value fits in int, so x is promoted before shifting. The result 540 is then converted to unsigned char, producing 28 on this 8-bit-byte system.",
+      "code": "unsigned char x = 0x87;\nunsigned char y = x << 2;"
+    },
+    {
+      "id": "C159",
+      "section": "16 · Combined problems and edge cases",
+      "question": "Which guard makes 1u << k a valid shift for every signed int k on a 32-bit-unsigned-int system?",
+      "options": [
+        "k >= 0 && k < 32",
+        "k >= 1 && k <= 32",
+        "k < 32",
+        "k >= 0 && k <= 32"
+      ],
+      "correct": 0,
+      "explanation": "Both bounds are needed: the valid counts are 0 through 31. Zero is valid, negative counts are not, and 32 equals the operand width and is invalid."
+    },
+    {
+      "id": "C160",
+      "section": "16 · Combined problems and edge cases",
+      "question": "Assume 32-bit unsigned int. What does this print?",
+      "options": [
+        "1",
+        "0",
+        "4294967295",
+        "2147483648"
+      ],
+      "correct": 1,
+      "explanation": "Unsigned addition wraps modulo 2^32: 0xFFFFFFFFu is the largest value, and adding 1u gives zero. This rule does not apply to overflowing signed int addition.",
+      "code": "unsigned int x = 0xFFFFFFFFu;\nprintf(\"%u\", x + 1u);",
+      "verification": {
+        "kind": "output",
+        "stdin": ""
+      }
     }
   ]
 }

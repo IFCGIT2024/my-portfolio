@@ -148,7 +148,7 @@
     const { code, title, description, questions } = state.bank;
     $("shuffle-options").checked = course !== "2115";
     $("quiz-context").querySelector("summary").textContent = isA1
-      ? "A1 background and assumptions"
+      ? "C practice notes and assumptions"
       : course === "2115" ? "Module 1 source scope" : "Practice notes";
     document.title = `${code} Practice Test`;
     $("nav-course").textContent = code;
@@ -157,6 +157,7 @@
     $("course-description").textContent = `${description} ${questions.length} questions available.`;
     $("course-quizzes").classList.toggle("hidden", course !== "2122");
     $("2115-presets").classList.toggle("hidden", course !== "2115");
+    $("practice-order-setting").classList.toggle("hidden", !isA1);
     document.querySelectorAll("#course-quizzes a").forEach((link) => {
       const active = link.dataset.quiz === (isA1 ? "a1" : "general");
       if (active) link.setAttribute("aria-current", "page");
@@ -189,7 +190,7 @@
 
   function updateCountOptions() {
     const available = eligibleQuestions().length;
-    const sizes = course === "2115" ? [5, 10, 15, 25, 50, 100, available] : [5, 10, 15, available];
+    const sizes = course === "2115" || isA1 ? [5, 10, 15, 25, 50, 100, available] : [5, 10, 15, available];
     const choices = [...new Set(sizes.filter((n) => n > 0 && n <= available))].sort((a, b) => a - b);
     $("question-count").innerHTML = choices.map((n) => `<option value="${n}">${n === available ? `All ${n}` : n}</option>`).join("");
     if (choices.length) $("question-count").value = String(choices[Math.min(1, choices.length - 1)]);
@@ -204,7 +205,8 @@
       return;
     }
     const count = Math.min(Number($("question-count").value), pool.length);
-    state.questions = shuffle(pool).slice(0, count);
+    const orderedStudy = isA1 && $("practice-order").value === "study";
+    state.questions = (orderedStudy ? pool : shuffle(pool)).slice(0, count);
     state.index = 0;
     state.score = 0;
     state.stats = {};
@@ -231,13 +233,14 @@
     let options = question.options.map((text, originalIndex) => ({ text, originalIndex }));
     if (shouldShuffle) options = shuffle(options);
 
-    $("progress-text").textContent = `Question ${state.index + 1} of ${state.questions.length}${course === "2115" ? ` · ${question.id}` : ""}`;
+    $("progress-text").textContent = `Question ${state.index + 1} of ${state.questions.length}${course === "2115" || isA1 ? ` · ${question.id}` : ""}`;
     $("topic-text").textContent = question.section;
     $("progress-fill").style.width = `${((state.index + 1) / state.questions.length) * 100}%`;
     $("question-text").textContent = question.question;
     const support = $("question-support");
-    support.innerHTML = question.table ? renderStudyTable(question.table) : "";
-    support.classList.toggle("hidden", !question.table);
+    support.innerHTML = (question.code ? `<pre class="question-code" aria-label="C code"><code>${escapeHtml(question.code)}</code></pre>` : "")
+      + (question.table ? renderStudyTable(question.table) : "");
+    support.classList.toggle("hidden", !question.table && !question.code);
     $("feedback").className = "feedback hidden";
     $("feedback").textContent = "";
     $("next-button").classList.add("hidden");

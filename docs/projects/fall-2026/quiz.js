@@ -114,9 +114,21 @@
     renderQuestion();
   }
 
+  function getCorrectIndices(question) {
+    return Array.isArray(question.correct) ? question.correct : [question.correct];
+  }
+
+  function sameAnswerSet(selected, correct) {
+    if (selected.length !== correct.length) return false;
+    const selectedSet = new Set(selected);
+    return correct.every((index) => selectedSet.has(index));
+  }
+
   function renderQuestion() {
     const question = state.questions[state.index];
     const shouldShuffle = $("shuffle-options").checked;
+    const correctIndices = getCorrectIndices(question);
+    const isMulti = correctIndices.length > 1;
     let options = question.options.map((text, originalIndex) => ({ text, originalIndex }));
     if (shouldShuffle) options = shuffle(options);
 
@@ -135,14 +147,48 @@
       button.type = "button";
       button.dataset.originalIndex = option.originalIndex;
       button.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + displayIndex)}</span>${escapeHtml(option.text)}`;
-      button.addEventListener("click", () => answerQuestion(button, question));
+
+      if (isMulti) {
+        button.setAttribute("aria-pressed", "false");
+        button.addEventListener("click", () => {
+          const selected = button.classList.toggle("selected");
+          button.setAttribute("aria-pressed", selected ? "true" : "false");
+        });
+      } else {
+        button.addEventListener("click", () => submitAnswer(question, [option.originalIndex]));
+      }
+
       $("answer-options").appendChild(button);
     });
+
+    if (isMulti) {
+      const checkButton = document.createElement("button");
+      checkButton.className = "primary-button multi-check-button";
+      checkButton.type = "button";
+      checkButton.textContent = "Check selected answers";
+      checkButton.addEventListener("click", () => {
+        const selected = [...document.querySelectorAll(".answer-button.selected")]
+          .map((button) => Number(button.dataset.originalIndex));
+
+        if (selected.length === 0) {
+          const feedback = $("feedback");
+          feedback.className = "feedback wrong";
+          feedback.textContent = "Select at least one answer before checking.";
+          return;
+        }
+
+        submitAnswer(question, selected);
+      });
+      $("answer-options").appendChild(checkButton);
+    }
   }
 
-  function answerQuestion(selectedButton, question) {
-    const selected = Number(selectedButton.dataset.originalIndex);
-    const isCorrect = selected === question.correct;
+  function submitAnswer(question, selectedIndices) {
+    const correctIndices = getCorrectIndices(question);
+    const isCorrect = sameAnswerSet(selectedIndices, correctIndices);
+    const selectedSet = new Set(selectedIndices);
+    const correctSet = new Set(correctIndices);
+
     state.stats[question.section].total += 1;
     if (isCorrect) {
       state.score += 1;
@@ -150,10 +196,17 @@
     }
 
     document.querySelectorAll(".answer-button").forEach((button) => {
+      const originalIndex = Number(button.dataset.originalIndex);
       button.disabled = true;
-      if (Number(button.dataset.originalIndex) === question.correct) button.classList.add("correct");
+      button.classList.remove("selected");
+      button.setAttribute("aria-pressed", "false");
+
+      if (correctSet.has(originalIndex)) button.classList.add("correct");
+      else if (selectedSet.has(originalIndex)) button.classList.add("wrong");
     });
-    if (!isCorrect) selectedButton.classList.add("wrong");
+
+    const checkButton = document.querySelector(".multi-check-button");
+    if (checkButton) checkButton.disabled = true;
 
     const feedback = $("feedback");
     feedback.className = `feedback ${isCorrect ? "correct" : "wrong"}`;

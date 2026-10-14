@@ -1,0 +1,2179 @@
+{
+  "questions": [
+    {
+      "id": "T23-06",
+      "topic": "T23",
+      "title": "Token and token stream",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Rules are keyword if and ID=[a-z]+. Longest match is used, with keyword priority on equal lengths. How is if tokenized?",
+      "options": [
+        {
+          "value": "A",
+          "label": "KW_IF"
+        },
+        {
+          "value": "B",
+          "label": "A lexical error due to ambiguity"
+        },
+        {
+          "value": "C",
+          "label": "Two ID tokens"
+        },
+        {
+          "value": "D",
+          "label": "ID(if) necessarily"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Both rules match length two; the explicitly stated priority selects the keyword.",
+      "sources": "S08 pp. 4-7, 13, 15"
+    },
+    {
+      "id": "T23-07",
+      "topic": "T23",
+      "title": "Token and token stream",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "With ID=[a-z]+, INT=[0-9]+, PLUS='+', and skipped spaces, what is the token sequence for x+12?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ID(x), PLUS, INT(12)"
+        },
+        {
+          "value": "B",
+          "label": "ID(x+12)"
+        },
+        {
+          "value": "C",
+          "label": "ID(x), INT(12)"
+        },
+        {
+          "value": "D",
+          "label": "ID(x), PLUS, INT(1), INT(2)"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The plus is its own token, and maximal munch groups both digits into one integer lexeme.",
+      "sources": "S08 pp. 4-7, 13, 15"
+    },
+    {
+      "id": "T23-08",
+      "topic": "T23",
+      "title": "Token and token stream",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which fact distinguishes lexeme from token type?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A lexeme is always an integer value."
+        },
+        {
+          "value": "B",
+          "label": "x and count can share type ID while having different lexemes."
+        },
+        {
+          "value": "C",
+          "label": "Each token type has exactly one spelling."
+        },
+        {
+          "value": "D",
+          "label": "Token types must preserve every source-space character."
+        }
+      ],
+      "answer": "B",
+      "explanation": "A category can have many spellings. Lexemes are concrete source substrings, while types identify categories.",
+      "sources": "S08 pp. 4-7, 13, 15"
+    },
+    {
+      "id": "T23-09",
+      "topic": "T23",
+      "title": "Token and token stream",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "With INT=[0-9]+ and value conversion to decimal, what may the token for 007 contain?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Three separate tokens under maximal munch"
+        },
+        {
+          "value": "B",
+          "label": "Type ID because of the leading zeros"
+        },
+        {
+          "value": "C",
+          "label": "Value 007 as a different mathematical integer from 7"
+        },
+        {
+          "value": "D",
+          "label": "Type INT and value 7, optionally retaining lexeme \"007\""
+        }
+      ],
+      "answer": "D",
+      "explanation": "The lexical rule accepts the digit run. A semantic value and original spelling may both be stored, and their representations need not match.",
+      "sources": "S08 pp. 4-7, 13, 15"
+    },
+    {
+      "id": "T23-10",
+      "topic": "T23",
+      "title": "Token and token stream",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Why should ordinary repeated token rules avoid matching ε?",
+      "options": [
+        {
+          "value": "A",
+          "label": "They can emit tokens without advancing the input, causing an infinite loop."
+        },
+        {
+          "value": "B",
+          "label": "A DFA can never accept ε."
+        },
+        {
+          "value": "C",
+          "label": "ε cannot be described by a regex."
+        },
+        {
+          "value": "D",
+          "label": "Every ε match must be a syntax error."
+        }
+      ],
+      "answer": "A",
+      "explanation": "A zero-length token needs special handling. Otherwise a scanner can repeatedly succeed at the same input position.",
+      "sources": "S08 pp. 4-7, 13, 15"
+    },
+    {
+      "id": "T24-01",
+      "topic": "T24",
+      "title": "Switch-based, table-based and generated scanners",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "In a nested-switch scanner, what do the outer and inner switches typically inspect?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Token count, then file size"
+        },
+        {
+          "value": "B",
+          "label": "Final state only, then ε"
+        },
+        {
+          "value": "C",
+          "label": "Current state, then input character or character class"
+        },
+        {
+          "value": "D",
+          "label": "Parser rule, then machine instruction"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The two switches implement the two arguments of δ: state and symbol.",
+      "sources": "S08 pp. 8-15"
+    },
+    {
+      "id": "T24-02",
+      "topic": "T24",
+      "title": "Switch-based, table-based and generated scanners",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "In a table-driven scanner, what does T[s][index(c)] store?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The final token stream"
+        },
+        {
+          "value": "B",
+          "label": "The next state from state s on character c"
+        },
+        {
+          "value": "C",
+          "label": "The original source file"
+        },
+        {
+          "value": "D",
+          "label": "The number of tokens seen"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Rows select current states and columns select symbols or equivalent character classes.",
+      "sources": "S08 pp. 8-15"
+    },
+    {
+      "id": "T24-03",
+      "topic": "T24",
+      "title": "Switch-based, table-based and generated scanners",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "For n states and m individually indexed input symbols, what is the transition table size?",
+      "options": [
+        {
+          "value": "A",
+          "label": "n+m entries"
+        },
+        {
+          "value": "B",
+          "label": "n×m entries"
+        },
+        {
+          "value": "C",
+          "label": "m×m entries"
+        },
+        {
+          "value": "D",
+          "label": "2^n entries always"
+        }
+      ],
+      "answer": "B",
+      "explanation": "One cell is needed per state-symbol pair. Additional token-type metadata may be stored separately.",
+      "sources": "S08 pp. 8-15"
+    },
+    {
+      "id": "T24-04",
+      "topic": "T24",
+      "title": "Switch-based, table-based and generated scanners",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "What does 'ad hoc' mean in the implementation choices shown?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Guaranteed incorrect"
+        },
+        {
+          "value": "B",
+          "label": "Handwritten for the task"
+        },
+        {
+          "value": "C",
+          "label": "Necessarily nondeterministic"
+        },
+        {
+          "value": "D",
+          "label": "Automatically generated"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Both switch-based and table-based scanners can be handwritten. The label concerns how the implementation is produced.",
+      "sources": "S08 pp. 8-15"
+    },
+    {
+      "id": "T24-05",
+      "topic": "T24",
+      "title": "Switch-based, table-based and generated scanners",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "What does a scanner generator consume in the lecture's model?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A token stream only"
+        },
+        {
+          "value": "B",
+          "label": "Token regular expressions and associated actions"
+        },
+        {
+          "value": "C",
+          "label": "A machine-code executable only"
+        },
+        {
+          "value": "D",
+          "label": "An already parsed syntax tree"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The generator creates recognition code and invokes specified actions when token patterns match.",
+      "sources": "S08 pp. 8-15"
+    },
+    {
+      "id": "T24-06",
+      "topic": "T24",
+      "title": "Switch-based, table-based and generated scanners",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Why might a large DFA favor a table-driven implementation?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Tables make nonregular languages regular."
+        },
+        {
+          "value": "B",
+          "label": "Tables eliminate all memory use."
+        },
+        {
+          "value": "C",
+          "label": "Tables require no handling of invalid input."
+        },
+        {
+          "value": "D",
+          "label": "Its transitions can be stored and generated systematically."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Table-driven code separates transition data from control flow. It still needs memory, indexing and error handling.",
+      "sources": "S08 pp. 8-15"
+    },
+    {
+      "id": "T24-07",
+      "topic": "T24",
+      "title": "Switch-based, table-based and generated scanners",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Suppose reading '+' ends an identifier x but '+' starts the next token. What must scanning do?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Append '+' to the identifier regardless of its rule."
+        },
+        {
+          "value": "B",
+          "label": "Restart from the beginning of the file."
+        },
+        {
+          "value": "C",
+          "label": "Discard '+' as part of x."
+        },
+        {
+          "value": "D",
+          "label": "Preserve or push back '+' for the next token."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Lookahead that is not part of the current lexeme must remain available to the next scan.",
+      "sources": "S08 pp. 8-15"
+    },
+    {
+      "id": "T24-08",
+      "topic": "T24",
+      "title": "Switch-based, table-based and generated scanners",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If a tentative longer token fails after the scanner has passed an accepting state, where should maximal munch end?",
+      "options": [
+        {
+          "value": "A",
+          "label": "At the first accepting position always."
+        },
+        {
+          "value": "B",
+          "label": "At the furthest examined position regardless of validity."
+        },
+        {
+          "value": "C",
+          "label": "At the last accepting position, restoring later characters."
+        },
+        {
+          "value": "D",
+          "label": "At the start of the file."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The longest valid prefix may be shorter than the longest path explored. Remember the last accepting state and input position.",
+      "sources": "S08 pp. 8-15"
+    },
+    {
+      "id": "T24-09",
+      "topic": "T24",
+      "title": "Switch-based, table-based and generated scanners",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "What must happen at end of file if a valid token is pending?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Discard it because no delimiter followed."
+        },
+        {
+          "value": "B",
+          "label": "Add an imaginary delimiter to its lexeme."
+        },
+        {
+          "value": "C",
+          "label": "Emit the token before reporting end of input."
+        },
+        {
+          "value": "D",
+          "label": "Always report a lexical error."
+        }
+      ],
+      "answer": "C",
+      "explanation": "EOF can terminate a token. A scanner that only emits on delimiters will lose the final token.",
+      "sources": "S08 pp. 8-15"
+    },
+    {
+      "id": "T24-10",
+      "topic": "T24",
+      "title": "Switch-based, table-based and generated scanners",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Can an ordinary DFA minimization merge accepting scanner states for ID and INT solely because both accept?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if the scanner is generated, then always yes."
+        },
+        {
+          "value": "B",
+          "label": "Yes; token values do not matter to a parser."
+        },
+        {
+          "value": "C",
+          "label": "No; distinct observable token outputs must be preserved."
+        },
+        {
+          "value": "D",
+          "label": "Yes; every final state is equivalent."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Recognition-only equivalence preserves a Boolean answer. Scanner minimization must also preserve token types/actions and applicable priorities, so initial classes must respect outputs.",
+      "sources": "S08 pp. 8-15"
+    },
+    {
+      "id": "T25-01",
+      "topic": "T25",
+      "title": "The equivalence theorem",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which four statements are equivalent?",
+      "options": [
+        {
+          "value": "A",
+          "label": "L is nonregular; L has an NFA; L has a parser; L has a scanner."
+        },
+        {
+          "value": "B",
+          "label": "L has a regex; L has exactly one DFA; L has exactly one NFA; L is finite."
+        },
+        {
+          "value": "C",
+          "label": "L is regular; some RE describes L; some NFA recognizes L; some DFA recognizes L."
+        },
+        {
+          "value": "D",
+          "label": "L is finite; every NFA recognizes L; every DFA recognizes L; L={ε}."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The theorem is about existence of equivalent descriptions for the same language, not finiteness or uniqueness.",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7"
+    },
+    {
+      "id": "T25-02",
+      "topic": "T25",
+      "title": "The equivalence theorem",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What does equivalence between an RE and a DFA mean?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Their diagrams look identical."
+        },
+        {
+          "value": "B",
+          "label": "They run equally fast in every implementation."
+        },
+        {
+          "value": "C",
+          "label": "They specify or accept exactly the same words."
+        },
+        {
+          "value": "D",
+          "label": "They have the same number of symbols and states."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Language equality is the invariant across representations. Structure and resource costs can differ.",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7"
+    },
+    {
+      "id": "T25-03",
+      "topic": "T25",
+      "title": "The equivalence theorem",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Why does every DFA have an equivalent NFA immediately?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Treat each DFA destination as a singleton successor set and use no ε moves."
+        },
+        {
+          "value": "B",
+          "label": "Replace every transition by ∅."
+        },
+        {
+          "value": "C",
+          "label": "Make all states final."
+        },
+        {
+          "value": "D",
+          "label": "Add an ε edge between every pair of states."
+        }
+      ],
+      "answer": "A",
+      "explanation": "A DFA already satisfies the more permissive NFA model once its deterministic transitions are written as singleton sets.",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7"
+    },
+    {
+      "id": "T25-04",
+      "topic": "T25",
+      "title": "The equivalence theorem",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which pipeline is the standard construction taught for compiling token patterns?",
+      "options": [
+        {
+          "value": "A",
+          "label": "RE → NFA → DFA → minimized DFA"
+        },
+        {
+          "value": "B",
+          "label": "RE → pumping lemma → accepting state"
+        },
+        {
+          "value": "C",
+          "label": "Token stream → alphabet → ε"
+        },
+        {
+          "value": "D",
+          "label": "DFA → nonregular language → parser"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Recursive NFA construction handles regex operations, subset construction removes nondeterminism, and minimization merges equivalent states.",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7"
+    },
+    {
+      "id": "T25-05",
+      "topic": "T25",
+      "title": "The equivalence theorem",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which construction converts an NFA to a DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "State elimination into regex labels"
+        },
+        {
+          "value": "B",
+          "label": "Pumping lemma"
+        },
+        {
+          "value": "C",
+          "label": "Merely flip final states"
+        },
+        {
+          "value": "D",
+          "label": "Subset construction"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Subset construction stores sets of NFA states as DFA states. State elimination is the route from an automaton to an RE.",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7"
+    },
+    {
+      "id": "T25-06",
+      "topic": "T25",
+      "title": "The equivalence theorem",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which construction converts an NFA to an RE?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Treat it as a GNFA and eliminate states while preserving path languages."
+        },
+        {
+          "value": "B",
+          "label": "Keep only one accepting path."
+        },
+        {
+          "value": "C",
+          "label": "Treat every state name as a literal input word."
+        },
+        {
+          "value": "D",
+          "label": "List only words of length at most |Q|."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Generalized edges summarize all possible paths through removed states. A finite sample or single path misses other accepted words.",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7"
+    },
+    {
+      "id": "T25-07",
+      "topic": "T25",
+      "title": "The equivalence theorem",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Does the theorem mean every language has a regular expression?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes; every language has finite words."
+        },
+        {
+          "value": "B",
+          "label": "No; only regular languages do in this formal sense."
+        },
+        {
+          "value": "C",
+          "label": "Yes; every language has an alphabet."
+        },
+        {
+          "value": "D",
+          "label": "Only if the language is infinite, then yes."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Nonregular languages such as {0^n1^n:n≥0} have no formal regular expression or finite-automaton recognizer.",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7"
+    },
+    {
+      "id": "T25-08",
+      "topic": "T25",
+      "title": "The equivalence theorem",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Why is there no one-to-one correspondence between individual regexes and languages?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a, a|a and εa all describe {a}."
+        },
+        {
+          "value": "B",
+          "label": "NFAs have no transition function."
+        },
+        {
+          "value": "C",
+          "label": "Every regex denotes an empty set."
+        },
+        {
+          "value": "D",
+          "label": "A language must have infinitely many symbols."
+        }
+      ],
+      "answer": "A",
+      "explanation": "The recursive definitions correspond in their constructors, but several syntactic descriptions can denote the same set.",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7"
+    },
+    {
+      "id": "T25-09",
+      "topic": "T25",
+      "title": "The equivalence theorem",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Can minimizing an equivalent DFA change whether ε is accepted?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes; ε is ignored by equivalence."
+        },
+        {
+          "value": "B",
+          "label": "No; minimization preserves the language including ε."
+        },
+        {
+          "value": "C",
+          "label": "Only when the NFA had ε transitions."
+        },
+        {
+          "value": "D",
+          "label": "Yes; only nonempty words matter."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Empty-word membership is part of language equality. The class containing the start state must have the correct accepting status.",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7"
+    },
+    {
+      "id": "T25-10",
+      "topic": "T25",
+      "title": "The equivalence theorem",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "What does exponential DFA blow-up say about expressive power?",
+      "options": [
+        {
+          "value": "A",
+          "label": "NFAs recognize nonregular languages."
+        },
+        {
+          "value": "B",
+          "label": "Every NFA necessarily produces all 2^|Q| subsets."
+        },
+        {
+          "value": "C",
+          "label": "Nothing stronger for NFAs; it concerns description size, not which languages exist."
+        },
+        {
+          "value": "D",
+          "label": "DFAs cannot simulate every NFA."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Equivalent DFAs always exist, but some languages have much more compact NFAs. Worst-case growth is an upper bound and can be necessary, not universal.",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7"
+    },
+    {
+      "id": "T26-01",
+      "topic": "T26",
+      "title": "Generalized NFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "How do GNFA edge labels differ from ordinary NFA labels?",
+      "options": [
+        {
+          "value": "A",
+          "label": "They are limited to ε."
+        },
+        {
+          "value": "B",
+          "label": "They may only be final-state names."
+        },
+        {
+          "value": "C",
+          "label": "They must be entire input files."
+        },
+        {
+          "value": "D",
+          "label": "They may be arbitrary regular expressions."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Ordinary NFA labels are one symbol or ε; GNFA labels can summarize multi-symbol path languages.",
+      "sources": "S09 pp. 9-14; S01 Q8"
+    },
+    {
+      "id": "T26-02",
+      "topic": "T26",
+      "title": "Generalized NFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What does a GNFA edge labeled ab* consume?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Any number of ab blocks"
+        },
+        {
+          "value": "B",
+          "label": "One a followed by zero or more b symbols"
+        },
+        {
+          "value": "C",
+          "label": "Exactly one symbol, always"
+        },
+        {
+          "value": "D",
+          "label": "No input"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The label is interpreted as a regex. For instance a, ab and abb can traverse the edge.",
+      "sources": "S09 pp. 9-14; S01 Q8"
+    },
+    {
+      "id": "T26-03",
+      "topic": "T26",
+      "title": "Generalized NFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What regex represents no edge between two GNFA states?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a*"
+        },
+        {
+          "value": "B",
+          "label": "Σ*"
+        },
+        {
+          "value": "C",
+          "label": "ε"
+        },
+        {
+          "value": "D",
+          "label": "∅"
+        }
+      ],
+      "answer": "D",
+      "explanation": "No edge means there is no consumable word connecting that ordered pair. ε would add an empty-word path.",
+      "sources": "S09 pp. 9-14; S01 Q8"
+    },
+    {
+      "id": "T26-04",
+      "topic": "T26",
+      "title": "Generalized NFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Parallel edges labeled R and S can be replaced with which label?",
+      "options": [
+        {
+          "value": "A",
+          "label": "RS"
+        },
+        {
+          "value": "B",
+          "label": "R∩S necessarily"
+        },
+        {
+          "value": "C",
+          "label": "R*S*"
+        },
+        {
+          "value": "D",
+          "label": "R|S"
+        }
+      ],
+      "answer": "D",
+      "explanation": "A path can take either edge. Concatenation would require traversing both sequentially, which is a different structure.",
+      "sources": "S09 pp. 9-14; S01 Q8"
+    },
+    {
+      "id": "T26-05",
+      "topic": "T26",
+      "title": "Generalized NFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Why add a new sole final state with ε edges from old final states?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It makes all states accepting."
+        },
+        {
+          "value": "B",
+          "label": "It forces every word to contain ε as a symbol."
+        },
+        {
+          "value": "C",
+          "label": "It preserves every accepting path while giving a single elimination endpoint."
+        },
+        {
+          "value": "D",
+          "label": "It removes all loops."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Existing accepted words can finish by one ε move. Old accepting states cease to be accepting in the normalized machine.",
+      "sources": "S09 pp. 9-14; S01 Q8"
+    },
+    {
+      "id": "T26-06",
+      "topic": "T26",
+      "title": "Generalized NFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Why add a fresh start with an ε edge to the old start in strict GNFA normalization?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It forces the old start to be rejecting on every suffix."
+        },
+        {
+          "value": "B",
+          "label": "It halves the state count."
+        },
+        {
+          "value": "C",
+          "label": "It consumes a mandatory input symbol."
+        },
+        {
+          "value": "D",
+          "label": "It creates a start with no incoming edges without changing the language."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The fresh start provides a clean endpoint for elimination. The old start remains as an ordinary state and can be eliminated.",
+      "sources": "S09 pp. 9-14; S01 Q8"
+    },
+    {
+      "id": "T26-07",
+      "topic": "T26",
+      "title": "Generalized NFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If the old start is also final, how does normalization preserve ε?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It must add a literal symbol ε to Σ."
+        },
+        {
+          "value": "B",
+          "label": "It must delete ε from the language."
+        },
+        {
+          "value": "C",
+          "label": "It cannot normalize such an automaton."
+        },
+        {
+          "value": "D",
+          "label": "The new start reaches the old start and then the new final by ε moves."
+        }
+      ],
+      "answer": "D",
+      "explanation": "The empty run through the original automaton becomes an ε-only path between the new endpoints.",
+      "sources": "S09 pp. 9-14; S01 Q8"
+    },
+    {
+      "id": "T26-08",
+      "topic": "T26",
+      "title": "Generalized NFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Does an edge labeled ∅* permit a traversal?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes; it consumes every word."
+        },
+        {
+          "value": "B",
+          "label": "Yes; it permits consuming ε."
+        },
+        {
+          "value": "C",
+          "label": "Yes; it consumes the printed symbol ∅."
+        },
+        {
+          "value": "D",
+          "label": "No; any label containing ∅ blocks all paths."
+        }
+      ],
+      "answer": "B",
+      "explanation": "∅* denotes {ε}. Distinguish the empty language label ∅ from its star.",
+      "sources": "S09 pp. 9-14; S01 Q8"
+    },
+    {
+      "id": "T26-09",
+      "topic": "T26",
+      "title": "Generalized NFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If a GNFA has only a start s and final f with label R from s to f and no other nonempty-language edges, what is its language?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Σ*"
+        },
+        {
+          "value": "B",
+          "label": "{ε} always"
+        },
+        {
+          "value": "C",
+          "label": "L(R)"
+        },
+        {
+          "value": "D",
+          "label": "L(R*) always"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The only accepting traversal uses the s-to-f edge once, consuming a word described by R.",
+      "sources": "S09 pp. 9-14; S01 Q8"
+    },
+    {
+      "id": "T26-10",
+      "topic": "T26",
+      "title": "Generalized NFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "The lecture also allows a final two-state GNFA with loops and a return edge. Can its s-to-f label alone always be the answer?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No; such a GNFA cannot have a regex."
+        },
+        {
+          "value": "B",
+          "label": "Yes; final states stop all input consumption."
+        },
+        {
+          "value": "C",
+          "label": "No; the remaining loops and return cycles must also be included."
+        },
+        {
+          "value": "D",
+          "label": "Yes; all loops can be deleted."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Strict fresh-endpoint normalization avoids these remaining edges. Otherwise use a two-state formula accounting for every possible cycle.",
+      "sources": "S09 pp. 9-14; S01 Q8"
+    },
+    {
+      "id": "T27-01",
+      "topic": "T27",
+      "title": "Collapsing a GNFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which formula eliminates q between remaining states i and j?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R_iq R_qq R_qj"
+        },
+        {
+          "value": "B",
+          "label": "R_ij | R_qj(R_qq)*R_iq"
+        },
+        {
+          "value": "C",
+          "label": "R_ij | R_iq(R_qq)*R_qj"
+        },
+        {
+          "value": "D",
+          "label": "R_ij R_iq R_qj"
+        }
+      ],
+      "answer": "C",
+      "explanation": "A path either avoids q using the old edge or enters q, loops zero or more times, and exits. Input order must be preserved.",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8"
+    },
+    {
+      "id": "T27-02",
+      "topic": "T27",
+      "title": "Collapsing a GNFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Edges i→q:a, q→q:b, q→j:c, i→j:d are present. What replaces i→j after deleting q?",
+      "options": [
+        {
+          "value": "A",
+          "label": "dab*c"
+        },
+        {
+          "value": "B",
+          "label": "d|abc"
+        },
+        {
+          "value": "C",
+          "label": "a(b|c)*d"
+        },
+        {
+          "value": "D",
+          "label": "d|ab*c"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The old direct path d remains, and paths through q consume a, any number of b symbols, then c.",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8"
+    },
+    {
+      "id": "T27-03",
+      "topic": "T27",
+      "title": "Collapsing a GNFA",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "If q has no self-loop, what does its loop factor become?",
+      "options": [
+        {
+          "value": "A",
+          "label": "One required input symbol"
+        },
+        {
+          "value": "B",
+          "label": "Σ*"
+        },
+        {
+          "value": "C",
+          "label": "∅*=ε"
+        },
+        {
+          "value": "D",
+          "label": "∅"
+        }
+      ],
+      "answer": "C",
+      "explanation": "No self-loop still permits zero repetitions, so paths through q remain possible. Replacing the loop factor by ∅ would incorrectly erase them.",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8"
+    },
+    {
+      "id": "T27-04",
+      "topic": "T27",
+      "title": "Collapsing a GNFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If i→q has label ∅, what new contribution comes from paths through q?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ε"
+        },
+        {
+          "value": "B",
+          "label": "(R_qq)*"
+        },
+        {
+          "value": "C",
+          "label": "∅"
+        },
+        {
+          "value": "D",
+          "label": "R_qj"
+        }
+      ],
+      "answer": "C",
+      "explanation": "It is impossible to enter q from i, so the concatenated contribution is empty. The old i-to-j edge is still retained.",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8"
+    },
+    {
+      "id": "T27-05",
+      "topic": "T27",
+      "title": "Collapsing a GNFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Why must elimination consider i=j?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A state cannot have a self-loop in a GNFA."
+        },
+        {
+          "value": "B",
+          "label": "Paths through q may create or enlarge a self-loop on i."
+        },
+        {
+          "value": "C",
+          "label": "It changes the alphabet automatically."
+        },
+        {
+          "value": "D",
+          "label": "i=j forces the whole language to be empty."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Eliminating an intermediate state can expose a cycle returning to the same remaining state. Ignoring it loses repeatable paths.",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8"
+    },
+    {
+      "id": "T27-06",
+      "topic": "T27",
+      "title": "Collapsing a GNFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Edges i→q:ε, q→q:a, q→j:b|ε, i→j:∅. What is the new label?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a|b"
+        },
+        {
+          "value": "B",
+          "label": "a*(b|ε)"
+        },
+        {
+          "value": "C",
+          "label": "a*b"
+        },
+        {
+          "value": "D",
+          "label": "(ab)*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Simplify ∅|εa*(b|ε) to a*(b|ε). The exit can consume b or nothing, and the loop can be traversed zero times.",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8"
+    },
+    {
+      "id": "T27-07",
+      "topic": "T27",
+      "title": "Collapsing a GNFA",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If two correct elimination orders produce different-looking regexes, what must hold?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Their languages are equal."
+        },
+        {
+          "value": "B",
+          "label": "Their operators occur in the same order."
+        },
+        {
+          "value": "C",
+          "label": "Their printed lengths are equal."
+        },
+        {
+          "value": "D",
+          "label": "One of them must be wrong."
+        }
+      ],
+      "answer": "A",
+      "explanation": "The preserved object is the accepted set of words, not expression syntax or size.",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8"
+    },
+    {
+      "id": "T27-08",
+      "topic": "T27",
+      "title": "Collapsing a GNFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "In a two-state GNFA, s has loop A, s→f label B, f→s label C, and f has loop D. What is a correct full regex?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A|B|C|D"
+        },
+        {
+          "value": "B",
+          "label": "A*B(CA*B|D)*"
+        },
+        {
+          "value": "C",
+          "label": "A*B"
+        },
+        {
+          "value": "D",
+          "label": "(ABCD)*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "First reach f via A*B. At f, repeat either a local D loop or an excursion C back to s followed by A*B. s and f are distinct and only f is final.",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8"
+    },
+    {
+      "id": "T27-09",
+      "topic": "T27",
+      "title": "Collapsing a GNFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "With s-loop 0, s→f label 1, f→s label 0 and f-loop 1, what does the formula yield?",
+      "options": [
+        {
+          "value": "A",
+          "label": "(01)*"
+        },
+        {
+          "value": "B",
+          "label": "0*1"
+        },
+        {
+          "value": "C",
+          "label": "0*|1*"
+        },
+        {
+          "value": "D",
+          "label": "0*1(00*1|1)*"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Substitute A=0,B=1,C=0,D=1. Returns from f can be followed by arbitrary extra zeros at s before returning on 1.",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8"
+    },
+    {
+      "id": "T27-10",
+      "topic": "T27",
+      "title": "Collapsing a GNFA",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "What is a sound way to disprove equivalence of two candidate regexes?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Give one word matched by exactly one expression."
+        },
+        {
+          "value": "B",
+          "label": "Show their printed lengths differ."
+        },
+        {
+          "value": "C",
+          "label": "Show both match ten selected words."
+        },
+        {
+          "value": "D",
+          "label": "Show one has more parentheses."
+        }
+      ],
+      "answer": "A",
+      "explanation": "A single membership disagreement disproves set equality. Matching finite samples does not prove equality for all words.",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8"
+    },
+    {
+      "id": "T28-01",
+      "topic": "T28",
+      "title": "Subset construction",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What does one subset-construction DFA state represent?",
+      "options": [
+        {
+          "value": "A",
+          "label": "One regular-expression operator"
+        },
+        {
+          "value": "B",
+          "label": "One input symbol"
+        },
+        {
+          "value": "C",
+          "label": "One accepting path only"
+        },
+        {
+          "value": "D",
+          "label": "All NFA states possible after one input prefix"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Nondeterministic alternatives become a single set-valued summary handled deterministically.",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)"
+    },
+    {
+      "id": "T28-02",
+      "topic": "T28",
+      "title": "Subset construction",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is the DFA start state for an ε-NFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{q0} with ε moves ignored"
+        },
+        {
+          "value": "B",
+          "label": "∅ always"
+        },
+        {
+          "value": "C",
+          "label": "F"
+        },
+        {
+          "value": "D",
+          "label": "E({q0})"
+        }
+      ],
+      "answer": "D",
+      "explanation": "ε transitions may be taken before any input symbol, so the initial possible-state set must include the full closure.",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)"
+    },
+    {
+      "id": "T28-03",
+      "topic": "T28",
+      "title": "Subset construction",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "When is a subset S final?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only when q0∈S"
+        },
+        {
+          "value": "B",
+          "label": "When S=F"
+        },
+        {
+          "value": "C",
+          "label": "When S∩F≠∅"
+        },
+        {
+          "value": "D",
+          "label": "When every member of S is final"
+        }
+      ],
+      "answer": "C",
+      "explanation": "One original accepting state supplies an accepting NFA path after the prefix.",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)"
+    },
+    {
+      "id": "T28-04",
+      "topic": "T28",
+      "title": "Subset construction",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "An NFA has n states. What is the general upper bound on subset DFA states?",
+      "options": [
+        {
+          "value": "A",
+          "label": "n^2"
+        },
+        {
+          "value": "B",
+          "label": "n! always"
+        },
+        {
+          "value": "C",
+          "label": "n"
+        },
+        {
+          "value": "D",
+          "label": "2^n"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Each DFA state is a subset of the n original states. Only reachable subsets need be retained, so the actual number can be much smaller.",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)"
+    },
+    {
+      "id": "T28-05",
+      "topic": "T28",
+      "title": "Subset construction",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Suppose s --ε→ p, p --a→ q, q --ε→ f; f is final and all other transitions are absent. What is the first DFA transition on a?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{s,p} --a→ {q,f}"
+        },
+        {
+          "value": "B",
+          "label": "{s,p} --a→ {s,p,q,f}"
+        },
+        {
+          "value": "C",
+          "label": "{s,p} --a→ {q}"
+        },
+        {
+          "value": "D",
+          "label": "{s} --a→ {p}"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The start closure is {s,p}. Taking a reaches q, then closure adds f; previous states are not retained unless reached again.",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)"
+    },
+    {
+      "id": "T28-06",
+      "topic": "T28",
+      "title": "Subset construction",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "An NFA has only s --ε→ p, p --a→ q, q --ε→ f; f is final. From active set {q,f}, what happens on the next a?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It moves to ∅."
+        },
+        {
+          "value": "B",
+          "label": "It automatically accepts another token."
+        },
+        {
+          "value": "C",
+          "label": "It remains {q,f}."
+        },
+        {
+          "value": "D",
+          "label": "It returns to {s,p}."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Neither q nor f has an a transition. Subset construction recognizes one whole word and does not restart a scanner automatically.",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)"
+    },
+    {
+      "id": "T28-07",
+      "topic": "T28",
+      "title": "Subset construction",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "When should the empty subset be included in the constructed DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Never; a DFA cannot have a state represented by ∅."
+        },
+        {
+          "value": "B",
+          "label": "When it is reachable, or when explicitly completing a transition to it."
+        },
+        {
+          "value": "C",
+          "label": "Always as an accepting state."
+        },
+        {
+          "value": "D",
+          "label": "Only if the NFA start is final."
+        }
+      ],
+      "answer": "B",
+      "explanation": "The empty subset is a valid state label meaning no live NFA paths. It loops to itself on every symbol and is nonfinal.",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)"
+    },
+    {
+      "id": "T28-08",
+      "topic": "T28",
+      "title": "Subset construction",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "NFA: s loops on 0 and 1 and s --1→ f, with only f final and no other edges. How many reachable subset states occur?",
+      "options": [
+        {
+          "value": "A",
+          "label": "4"
+        },
+        {
+          "value": "B",
+          "label": "1"
+        },
+        {
+          "value": "C",
+          "label": "2"
+        },
+        {
+          "value": "D",
+          "label": "3"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The reachable sets are {s} and {s,f}. s is always present because of its loops, so ∅ and {f} alone are unreachable.",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)"
+    },
+    {
+      "id": "T28-09",
+      "topic": "T28",
+      "title": "Subset construction",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Does subset construction guarantee a minimal DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only when every subset is reachable, then always yes."
+        },
+        {
+          "value": "B",
+          "label": "No; different reachable subsets may be equivalent."
+        },
+        {
+          "value": "C",
+          "label": "Only when ε transitions occur, then always yes."
+        },
+        {
+          "value": "D",
+          "label": "Yes; subsets are automatically equivalence classes."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Subset construction removes nondeterminism. Minimization is a separate operation comparing future acceptance behavior.",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)"
+    },
+    {
+      "id": "T28-10",
+      "topic": "T28",
+      "title": "Subset construction",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "When does the iterative reachable-subset procedure stop?",
+      "options": [
+        {
+          "value": "A",
+          "label": "When every discovered subset has processed transitions on every symbol and no new subset appears."
+        },
+        {
+          "value": "B",
+          "label": "When the first accepting subset appears."
+        },
+        {
+          "value": "C",
+          "label": "After exactly n iterations."
+        },
+        {
+          "value": "D",
+          "label": "When the empty subset first appears."
+        }
+      ],
+      "answer": "A",
+      "explanation": "All reachable transitions must be explored. Discovering acceptance or a dead subset does not finish the other branches of the worklist.",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)"
+    },
+    {
+      "id": "T29-01",
+      "topic": "T29",
+      "title": "Equivalence classes",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "When are two DFA states equivalent?",
+      "options": [
+        {
+          "value": "A",
+          "label": "They agree on acceptance for every possible continuation."
+        },
+        {
+          "value": "B",
+          "label": "They have the same incoming edge count."
+        },
+        {
+          "value": "C",
+          "label": "They have the same printed name length."
+        },
+        {
+          "value": "D",
+          "label": "They are both currently accepting."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Equivalence is a universal condition on future suffixes. Current final status is necessary but not sufficient.",
+      "sources": "S02 pp. 10-15; S01 Q9(b)"
+    },
+    {
+      "id": "T29-02",
+      "topic": "T29",
+      "title": "Equivalence classes",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is a distinguishing string for states p and q?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Any word containing two different symbols"
+        },
+        {
+          "value": "B",
+          "label": "A word reaching both from the start"
+        },
+        {
+          "value": "C",
+          "label": "A string longer than |Q| necessarily"
+        },
+        {
+          "value": "D",
+          "label": "A suffix accepted from exactly one of them"
+        }
+      ],
+      "answer": "D",
+      "explanation": "The same suffix must produce different acceptance outcomes when started in the two states.",
+      "sources": "S02 pp. 10-15; S01 Q9(b)"
+    },
+    {
+      "id": "T29-03",
+      "topic": "T29",
+      "title": "Equivalence classes",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which string distinguishes any accepting state from any nonaccepting state?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ε"
+        },
+        {
+          "value": "B",
+          "label": "Only a word of length two"
+        },
+        {
+          "value": "C",
+          "label": "No string can distinguish them"
+        },
+        {
+          "value": "D",
+          "label": "Every symbol"
+        }
+      ],
+      "answer": "A",
+      "explanation": "With no input, each state retains its own final status, which already differs.",
+      "sources": "S02 pp. 10-15; S01 Q9(b)"
+    },
+    {
+      "id": "T29-04",
+      "topic": "T29",
+      "title": "Equivalence classes",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If p and q are both final, must they be equivalent?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No; a later suffix may distinguish them."
+        },
+        {
+          "value": "B",
+          "label": "Only if p is the start, then yes."
+        },
+        {
+          "value": "C",
+          "label": "Yes; all final states must merge."
+        },
+        {
+          "value": "D",
+          "label": "Only if the alphabet is binary, then yes."
+        }
+      ],
+      "answer": "A",
+      "explanation": "They agree on ε but may disagree after one or more symbols.",
+      "sources": "S02 pp. 10-15; S01 Q9(b)"
+    },
+    {
+      "id": "T29-05",
+      "topic": "T29",
+      "title": "Equivalence classes",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If p and q transition on a into states already known to be distinguishable, what follows?",
+      "options": [
+        {
+          "value": "A",
+          "label": "p and q are distinguishable."
+        },
+        {
+          "value": "B",
+          "label": "p and q are equivalent."
+        },
+        {
+          "value": "C",
+          "label": "a must be removed from the alphabet."
+        },
+        {
+          "value": "D",
+          "label": "Their a destinations must be merged."
+        }
+      ],
+      "answer": "A",
+      "explanation": "If suffix w distinguishes the destinations, aw distinguishes p and q.",
+      "sources": "S02 pp. 10-15; S01 Q9(b)"
+    },
+    {
+      "id": "T29-06",
+      "topic": "T29",
+      "title": "Equivalence classes",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Does having identical destination names on every symbol and equal final status suffice for equivalence?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only for start states"
+        },
+        {
+          "value": "B",
+          "label": "Only if both states are sinks"
+        },
+        {
+          "value": "C",
+          "label": "No; incoming edges must also match."
+        },
+        {
+          "value": "D",
+          "label": "Yes"
+        }
+      ],
+      "answer": "D",
+      "explanation": "After one symbol both runs are in the same state; ε is handled by equal final status. Incoming edges are irrelevant to continuation behavior.",
+      "sources": "S02 pp. 10-15; S01 Q9(b)"
+    },
+    {
+      "id": "T29-07",
+      "topic": "T29",
+      "title": "Equivalence classes",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Can equivalent states have different immediate destination names?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes, if corresponding destinations are themselves equivalent."
+        },
+        {
+          "value": "B",
+          "label": "Only if the states are unreachable."
+        },
+        {
+          "value": "C",
+          "label": "Only if every destination is final."
+        },
+        {
+          "value": "D",
+          "label": "No; names must match exactly."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Equivalence concerns destination behavior, not literal names. Partition refinement compares destination classes.",
+      "sources": "S02 pp. 10-15; S01 Q9(b)"
+    },
+    {
+      "id": "T29-08",
+      "topic": "T29",
+      "title": "Equivalence classes",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If p∼q and q∼r, what follows?",
+      "options": [
+        {
+          "value": "A",
+          "label": "p and r must be distinct final states"
+        },
+        {
+          "value": "B",
+          "label": "Nothing; equivalence is not transitive"
+        },
+        {
+          "value": "C",
+          "label": "p and r must have no transitions"
+        },
+        {
+          "value": "D",
+          "label": "p∼r"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Agreement on acceptance for every suffix is transitive, as well as reflexive and symmetric.",
+      "sources": "S02 pp. 10-15; S01 Q9(b)"
+    },
+    {
+      "id": "T29-09",
+      "topic": "T29",
+      "title": "Equivalence classes",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Two nonfinal states cannot reach any final state. Are they equivalent?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if their outgoing edges are identical."
+        },
+        {
+          "value": "B",
+          "label": "Only if both are unreachable from q0."
+        },
+        {
+          "value": "C",
+          "label": "No; nonfinal states never merge."
+        },
+        {
+          "value": "D",
+          "label": "Yes; every suffix is rejected from both."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Their right languages are both empty. Different rejecting internal structures can collapse into one dead class.",
+      "sources": "S02 pp. 10-15; S01 Q9(b)"
+    },
+    {
+      "id": "T29-10",
+      "topic": "T29",
+      "title": "Equivalence classes",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which observation is insufficient to prove equivalence?",
+      "options": [
+        {
+          "value": "A",
+          "label": "They have equal final status and identical transitions to the same states."
+        },
+        {
+          "value": "B",
+          "label": "A stable accepting-status-respecting partition puts them in one block."
+        },
+        {
+          "value": "C",
+          "label": "Both states reject every tested suffix of length at most two."
+        },
+        {
+          "value": "D",
+          "label": "Their right languages are equal."
+        }
+      ],
+      "answer": "C",
+      "explanation": "A distinguishing suffix may be longer than the limited test set. The other conditions supply general arguments, not just bounded examples.",
+      "sources": "S02 pp. 10-15; S01 Q9(b)"
+    },
+    {
+      "id": "T30-01",
+      "topic": "T30",
+      "title": "DFA minimization",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is the standard initial partition for recognition-only DFA minimization?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{q0} and Q\\{q0}"
+        },
+        {
+          "value": "B",
+          "label": "One block for each transition"
+        },
+        {
+          "value": "C",
+          "label": "One block for each input symbol"
+        },
+        {
+          "value": "D",
+          "label": "F and Q\\F, omitting empty blocks"
+        }
+      ],
+      "answer": "D",
+      "explanation": "ε immediately separates final from nonfinal states. Start status is not the acceptance distinction used for initial refinement.",
+      "sources": "S02 pp. 7-18; S01 Q9(b)"
+    },
+    {
+      "id": "T30-02",
+      "topic": "T30",
+      "title": "DFA minimization",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What should be removed before computing the minimal reachable DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "All self-loops"
+        },
+        {
+          "value": "B",
+          "label": "Unreachable states"
+        },
+        {
+          "value": "C",
+          "label": "Every sink state"
+        },
+        {
+          "value": "D",
+          "label": "All final states"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Unreachable states cannot affect any input run. Reachable sinks or loops may be essential.",
+      "sources": "S02 pp. 7-18; S01 Q9(b)"
+    },
+    {
+      "id": "T30-03",
+      "topic": "T30",
+      "title": "DFA minimization",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What triggers splitting a current block?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Two of its states have transitions on one symbol into different current blocks."
+        },
+        {
+          "value": "B",
+          "label": "Two states have different incoming edge counts."
+        },
+        {
+          "value": "C",
+          "label": "Two states have different names."
+        },
+        {
+          "value": "D",
+          "label": "The block contains the start state."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Distinct destination behavior can distinguish the source states. State names and how a state was reached do not define equivalence.",
+      "sources": "S02 pp. 7-18; S01 Q9(b)"
+    },
+    {
+      "id": "T30-04",
+      "topic": "T30",
+      "title": "DFA minimization",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "With blocks N={p,q} and F={r}, p --a→ p and q --a→ r, what must happen?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Keep p and q together because both are nonfinal."
+        },
+        {
+          "value": "B",
+          "label": "Split p and q."
+        },
+        {
+          "value": "C",
+          "label": "Delete a."
+        },
+        {
+          "value": "D",
+          "label": "Merge all three states."
+        }
+      ],
+      "answer": "B",
+      "explanation": "After suffix a, p stays nonfinal while q reaches a final state. That one-symbol witness distinguishes them.",
+      "sources": "S02 pp. 7-18; S01 Q9(b)"
+    },
+    {
+      "id": "T30-05",
+      "topic": "T30",
+      "title": "DFA minimization",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If a refinement round makes no splits, what follows?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The language is finite."
+        },
+        {
+          "value": "B",
+          "label": "The original DFA had the smallest number of named states."
+        },
+        {
+          "value": "C",
+          "label": "The partition is stable under all symbols if every block and symbol was checked."
+        },
+        {
+          "value": "D",
+          "label": "Every state is accepting."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Stability means no further distinguishing behavior remains within the blocks. The original may have redundant states that are now merged.",
+      "sources": "S02 pp. 7-18; S01 Q9(b)"
+    },
+    {
+      "id": "T30-06",
+      "topic": "T30",
+      "title": "DFA minimization",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Where is the start state in the quotient DFA?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A new rejecting sink"
+        },
+        {
+          "value": "B",
+          "label": "The class containing the original q0"
+        },
+        {
+          "value": "C",
+          "label": "Every accepting class"
+        },
+        {
+          "value": "D",
+          "label": "The largest class"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Each original run is mapped to classes; its initial state must map to the class containing q0.",
+      "sources": "S02 pp. 7-18; S01 Q9(b)"
+    },
+    {
+      "id": "T30-07",
+      "topic": "T30",
+      "title": "DFA minimization",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "How are quotient transitions defined?",
+      "options": [
+        {
+          "value": "A",
+          "label": "[q] --a→ [δ(q,a)]"
+        },
+        {
+          "value": "B",
+          "label": "[q] --a→ q0 always"
+        },
+        {
+          "value": "C",
+          "label": "Use incoming edges instead of outgoing edges"
+        },
+        {
+          "value": "D",
+          "label": "Pick any class regardless of q"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Stability ensures all representatives of [q] have a-successors in the same class, so the transition is well-defined.",
+      "sources": "S02 pp. 7-18; S01 Q9(b)"
+    },
+    {
+      "id": "T30-08",
+      "topic": "T30",
+      "title": "DFA minimization",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "What is the minimal complete DFA for ∅ over a nonempty alphabet?",
+      "options": [
+        {
+          "value": "A",
+          "label": "One nonfinal state looping on every symbol"
+        },
+        {
+          "value": "B",
+          "label": "Two states, one final and one nonfinal"
+        },
+        {
+          "value": "C",
+          "label": "Zero states"
+        },
+        {
+          "value": "D",
+          "label": "One final state with no edges"
+        }
+      ],
+      "answer": "A",
+      "explanation": "A DFA must have a start state. A single rejecting sink recognizes ∅ and is minimal.",
+      "sources": "S02 pp. 7-18; S01 Q9(b)"
+    },
+    {
+      "id": "T30-09",
+      "topic": "T30",
+      "title": "DFA minimization",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Does minimization always strictly reduce the number of states?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Yes; at least one state must disappear."
+        },
+        {
+          "value": "B",
+          "label": "Yes; the result always has two states."
+        },
+        {
+          "value": "C",
+          "label": "Only for infinite languages, then always yes."
+        },
+        {
+          "value": "D",
+          "label": "No; an already minimal reachable DFA stays the same size."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Minimization finds the smallest equivalent state count; it need not be smaller than the input count.",
+      "sources": "S02 pp. 7-18; S01 Q9(b)"
+    },
+    {
+      "id": "T30-10",
+      "topic": "T30",
+      "title": "DFA minimization",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "What is meant by uniqueness of the minimal complete DFA for a fixed language and alphabet?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A unique drawing layout"
+        },
+        {
+          "value": "B",
+          "label": "A unique set of state names"
+        },
+        {
+          "value": "C",
+          "label": "A unique order of partition-refinement steps"
+        },
+        {
+          "value": "D",
+          "label": "Unique up to consistent state renaming"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Isomorphic minimal reachable complete DFAs have the same structure and behavior after renaming. Drawings and execution of the algorithm may differ.",
+      "sources": "S02 pp. 7-18; S01 Q9(b)"
+    }
+  ]
+}

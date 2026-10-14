@@ -1,0 +1,2179 @@
+{
+  "questions": [
+    {
+      "id": "T01-01",
+      "topic": "T01",
+      "title": "Regular expressions",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which object is a regular expression rather than a language or a machine?",
+      "options": [
+        {
+          "value": "A",
+          "label": "The set of all words ending in ab"
+        },
+        {
+          "value": "B",
+          "label": "A five-tuple (Σ,Q,δ,q0,F)"
+        },
+        {
+          "value": "C",
+          "label": "{ab, aab, bab, ...}"
+        },
+        {
+          "value": "D",
+          "label": "(a|b)*ab"
+        }
+      ],
+      "answer": "D",
+      "explanation": "An expression is syntax that describes a set. The set is its language; the five-tuple specifies an automaton.",
+      "sources": "S06 pp. 4-11, 18"
+    },
+    {
+      "id": "T01-02",
+      "topic": "T01",
+      "title": "Regular expressions",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Over {a,b,c}, what language does a|bc describe?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{a,bc}"
+        },
+        {
+          "value": "B",
+          "label": "{ac,bc}"
+        },
+        {
+          "value": "C",
+          "label": "{ab,ac}"
+        },
+        {
+          "value": "D",
+          "label": "{a,b,c}"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Concatenation binds before alternation: the choices are a and the two-symbol word bc. Parentheses would be needed for (a|b)c.",
+      "sources": "S06 pp. 4-11, 18"
+    },
+    {
+      "id": "T01-03",
+      "topic": "T01",
+      "title": "Regular expressions",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which word matches a(b|c)d?",
+      "options": [
+        {
+          "value": "A",
+          "label": "abcd"
+        },
+        {
+          "value": "B",
+          "label": "ad"
+        },
+        {
+          "value": "C",
+          "label": "acd"
+        },
+        {
+          "value": "D",
+          "label": "bcd"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Choose c from the alternation, then concatenate a, c, d. The choice contributes exactly one of b or c.",
+      "sources": "S06 pp. 4-11, 18"
+    },
+    {
+      "id": "T01-04",
+      "topic": "T01",
+      "title": "Regular expressions",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which expression describes exactly {ε,a}?",
+      "options": [
+        {
+          "value": "A",
+          "label": "∅|a"
+        },
+        {
+          "value": "B",
+          "label": "a*"
+        },
+        {
+          "value": "C",
+          "label": "ε|a"
+        },
+        {
+          "value": "D",
+          "label": "εa"
+        }
+      ],
+      "answer": "C",
+      "explanation": "a* also contains aa; ∅|a and εa both describe only {a}. Alternation with ε explicitly adds the empty word.",
+      "sources": "S06 pp. 4-11, 18"
+    },
+    {
+      "id": "T01-05",
+      "topic": "T01",
+      "title": "Regular expressions",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which expression describes binary words containing 01 somewhere?",
+      "options": [
+        {
+          "value": "A",
+          "label": "01(0|1)*"
+        },
+        {
+          "value": "B",
+          "label": "(0|1)*01"
+        },
+        {
+          "value": "C",
+          "label": "(0|1)*01(0|1)*"
+        },
+        {
+          "value": "D",
+          "label": "(01)*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Arbitrary binary prefixes and suffixes surround 01. The other expressions impose a prefix, a suffix, or repetitions of the entire block.",
+      "sources": "S06 pp. 4-11, 18"
+    },
+    {
+      "id": "T01-06",
+      "topic": "T01",
+      "title": "Regular expressions",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which word matches ab* but does not match (ab)*?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ab"
+        },
+        {
+          "value": "B",
+          "label": "abb"
+        },
+        {
+          "value": "C",
+          "label": "ε"
+        },
+        {
+          "value": "D",
+          "label": "abab"
+        }
+      ],
+      "answer": "B",
+      "explanation": "ab* contains one a followed by any number of b symbols, so abb belongs. (ab)* repeats the whole block; ab belongs to both, abab only to the latter, and ε only to the latter.",
+      "sources": "S06 pp. 4-11, 18"
+    },
+    {
+      "id": "T01-07",
+      "topic": "T01",
+      "title": "Regular expressions",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which pair describes the same language?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a|a and a"
+        },
+        {
+          "value": "B",
+          "label": "ab and ba"
+        },
+        {
+          "value": "C",
+          "label": "a* and aa*"
+        },
+        {
+          "value": "D",
+          "label": "a|b and ab"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Repeated alternatives do not duplicate words in a set. a* includes ε whereas aa* does not; the other pairs differ in order or length.",
+      "sources": "S06 pp. 4-11, 18"
+    },
+    {
+      "id": "T01-08",
+      "topic": "T01",
+      "title": "Regular expressions",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which expression denotes no words at all?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a∅b"
+        },
+        {
+          "value": "B",
+          "label": "∅*"
+        },
+        {
+          "value": "C",
+          "label": "aεb"
+        },
+        {
+          "value": "D",
+          "label": "ε"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Concatenating with the empty language gives the empty language. aεb denotes ab; ∅* and ε each denote {ε}.",
+      "sources": "S06 pp. 4-11, 18"
+    },
+    {
+      "id": "T01-09",
+      "topic": "T01",
+      "title": "Regular expressions",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which statement follows from a regex specification of an identifier?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A parser is unnecessary for an entire programming language."
+        },
+        {
+          "value": "B",
+          "label": "The identifier's variable type is determined by the regex."
+        },
+        {
+          "value": "C",
+          "label": "A scanner can use it to recognize identifier lexemes."
+        },
+        {
+          "value": "D",
+          "label": "Every sequence of valid tokens is a valid program."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Regexes can specify lexical patterns. Grammar, type checks, and program meaning require additional processing.",
+      "sources": "S06 pp. 4-11, 18"
+    },
+    {
+      "id": "T01-10",
+      "topic": "T01",
+      "title": "Regular expressions",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Consider formal regexes without star, built from finitely many symbols, ε, ∅, union and concatenation. Which is guaranteed?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Their languages contain exactly one word."
+        },
+        {
+          "value": "B",
+          "label": "Their languages contain ε."
+        },
+        {
+          "value": "C",
+          "label": "Their languages are finite."
+        },
+        {
+          "value": "D",
+          "label": "Their languages are empty."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Finite unions and concatenations of finite languages stay finite. This does not imply that any expression containing star has an infinite language: ε* is a counterexample.",
+      "sources": "S06 pp. 4-11, 18"
+    },
+    {
+      "id": "T02-01",
+      "topic": "T02",
+      "title": "Concatenation",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "If x=01 and y=10, what is xy?",
+      "options": [
+        {
+          "value": "A",
+          "label": "0110"
+        },
+        {
+          "value": "B",
+          "label": "1001"
+        },
+        {
+          "value": "C",
+          "label": "{01,10}"
+        },
+        {
+          "value": "D",
+          "label": "010"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Concatenate the two sequences without deleting or reordering symbols. A set containing x and y is not their concatenation.",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2"
+    },
+    {
+      "id": "T02-02",
+      "topic": "T02",
+      "title": "Concatenation",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Let R={a,b} and S={0,1}. What is RS?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{a0,a1,b0,b1}"
+        },
+        {
+          "value": "B",
+          "label": "{a,b,0,1}"
+        },
+        {
+          "value": "C",
+          "label": "{0a,1a,0b,1b}"
+        },
+        {
+          "value": "D",
+          "label": "{a0,b1}"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Every left word combines with every right word, giving all four pairs in that order.",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2"
+    },
+    {
+      "id": "T02-03",
+      "topic": "T02",
+      "title": "Concatenation",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "For any language L, what is L{ε}?",
+      "options": [
+        {
+          "value": "A",
+          "label": "L∪{ε}"
+        },
+        {
+          "value": "B",
+          "label": "∅"
+        },
+        {
+          "value": "C",
+          "label": "{ε}"
+        },
+        {
+          "value": "D",
+          "label": "L"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Appending the empty word changes no word. It does not add ε unless ε already belongs to L.",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2"
+    },
+    {
+      "id": "T02-04",
+      "topic": "T02",
+      "title": "Concatenation",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For any language L, what is L∅?",
+      "options": [
+        {
+          "value": "A",
+          "label": "L"
+        },
+        {
+          "value": "B",
+          "label": "{ε}"
+        },
+        {
+          "value": "C",
+          "label": "∅"
+        },
+        {
+          "value": "D",
+          "label": "L*"
+        }
+      ],
+      "answer": "C",
+      "explanation": "There is no right-hand word available, so no concatenation can be formed. This differs from concatenation with {ε}.",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2"
+    },
+    {
+      "id": "T02-05",
+      "topic": "T02",
+      "title": "Concatenation",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which identity holds for all languages R,S,T?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R(S∪T)=RS∩RT"
+        },
+        {
+          "value": "B",
+          "label": "RS=SR"
+        },
+        {
+          "value": "C",
+          "label": "R∅=R"
+        },
+        {
+          "value": "D",
+          "label": "(RS)T=R(ST)"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Concatenation is associative and distributes over union, not intersection in this form. Order generally matters.",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2"
+    },
+    {
+      "id": "T02-06",
+      "topic": "T02",
+      "title": "Concatenation",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let R={ε,a}, S={ε,a}. How many distinct words are in RS?",
+      "options": [
+        {
+          "value": "A",
+          "label": "4"
+        },
+        {
+          "value": "B",
+          "label": "3"
+        },
+        {
+          "value": "C",
+          "label": "2"
+        },
+        {
+          "value": "D",
+          "label": "5"
+        }
+      ],
+      "answer": "B",
+      "explanation": "RS={ε,a,aa}. Two different pairs produce a, so multiplying cardinalities can overcount distinct concatenated words.",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2"
+    },
+    {
+      "id": "T02-07",
+      "topic": "T02",
+      "title": "Concatenation",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For which condition is ε in RS?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R and S share any word."
+        },
+        {
+          "value": "B",
+          "label": "R and S are both nonempty."
+        },
+        {
+          "value": "C",
+          "label": "ε is in both R and S."
+        },
+        {
+          "value": "D",
+          "label": "ε is in at least one of R and S."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Word lengths add. To obtain length zero, both component words must have length zero.",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2"
+    },
+    {
+      "id": "T02-08",
+      "topic": "T02",
+      "title": "Concatenation",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which word proves ab* is not the same as a*b?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ab"
+        },
+        {
+          "value": "B",
+          "label": "ba"
+        },
+        {
+          "value": "C",
+          "label": "abbabb"
+        },
+        {
+          "value": "D",
+          "label": "a"
+        }
+      ],
+      "answer": "D",
+      "explanation": "a is in ab* by taking zero b symbols, but is not in a*b, which requires a final b. The other listed words do not distinguish the pair.",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2"
+    },
+    {
+      "id": "T02-09",
+      "topic": "T02",
+      "title": "Concatenation",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If RS=∅, what must hold?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R and S are disjoint."
+        },
+        {
+          "value": "B",
+          "label": "At least one of R or S is empty."
+        },
+        {
+          "value": "C",
+          "label": "Both R and S are empty."
+        },
+        {
+          "value": "D",
+          "label": "R={ε}."
+        }
+      ],
+      "answer": "B",
+      "explanation": "If both sets had a word, concatenating those words would produce an element of RS. Disjointness is irrelevant.",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2"
+    },
+    {
+      "id": "T02-10",
+      "topic": "T02",
+      "title": "Concatenation",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Let R={ε,a} and S={b}. Which equality is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "RS={ε,a,b}"
+        },
+        {
+          "value": "B",
+          "label": "RS={b,ab}"
+        },
+        {
+          "value": "C",
+          "label": "RS={ba,b}"
+        },
+        {
+          "value": "D",
+          "label": "RS={a,b}"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Choose ε or a from R, then append b. The two products are εb=b and ab.",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2"
+    },
+    {
+      "id": "T03-01",
+      "topic": "T03",
+      "title": "Alternation",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What does R|S mean for the described languages?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Set difference"
+        },
+        {
+          "value": "B",
+          "label": "Concatenation"
+        },
+        {
+          "value": "C",
+          "label": "Intersection"
+        },
+        {
+          "value": "D",
+          "label": "Union"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Alternation admits a word if either branch admits it. It does not require both branches or concatenate their words.",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12"
+    },
+    {
+      "id": "T03-02",
+      "topic": "T03",
+      "title": "Alternation",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What does 10|01 match?",
+      "options": [
+        {
+          "value": "A",
+          "label": "All length-two binary words"
+        },
+        {
+          "value": "B",
+          "label": "Exactly 10 and 01"
+        },
+        {
+          "value": "C",
+          "label": "Exactly 1001"
+        },
+        {
+          "value": "D",
+          "label": "All words containing 10 or 01"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The two alternatives are whole words of length two. No surrounding star allows extra input.",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12"
+    },
+    {
+      "id": "T03-03",
+      "topic": "T03",
+      "title": "Alternation",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "If a word satisfies both branches of R|S, what happens?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It is rejected."
+        },
+        {
+          "value": "B",
+          "label": "It appears twice as distinct set elements."
+        },
+        {
+          "value": "C",
+          "label": "It belongs to the language once."
+        },
+        {
+          "value": "D",
+          "label": "It must choose neither branch."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Union is inclusive and languages are sets; multiple descriptions of a word do not create duplicate elements.",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12"
+    },
+    {
+      "id": "T03-04",
+      "topic": "T03",
+      "title": "Alternation",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which expression equals (a|b)c?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a|bc"
+        },
+        {
+          "value": "B",
+          "label": "abc"
+        },
+        {
+          "value": "C",
+          "label": "ac|bc"
+        },
+        {
+          "value": "D",
+          "label": "a|b|c"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Concatenation distributes across alternation. Each alternative must receive the trailing c.",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12"
+    },
+    {
+      "id": "T03-05",
+      "topic": "T03",
+      "title": "Alternation",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which equality holds for every language R?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R∪{ε}=R"
+        },
+        {
+          "value": "B",
+          "label": "R∪∅=R"
+        },
+        {
+          "value": "C",
+          "label": "R∪∅=∅"
+        },
+        {
+          "value": "D",
+          "label": "R∪R=R*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The empty language contributes no words. Adding {ε} may add a new word, and duplicate union is R rather than R*.",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12"
+    },
+    {
+      "id": "T03-06",
+      "topic": "T03",
+      "title": "Alternation",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For R={a,ab} and S={ab,b}, how many words are in R∪S?",
+      "options": [
+        {
+          "value": "A",
+          "label": "1"
+        },
+        {
+          "value": "B",
+          "label": "3"
+        },
+        {
+          "value": "C",
+          "label": "4"
+        },
+        {
+          "value": "D",
+          "label": "2"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The union is {a,ab,b}; the shared word ab is counted once.",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12"
+    },
+    {
+      "id": "T03-07",
+      "topic": "T03",
+      "title": "Alternation",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Over binary words, L means 'odd number of 0s OR even number of 1s'. Does 011 belong?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No; both conditions hold."
+        },
+        {
+          "value": "B",
+          "label": "No; neither condition holds."
+        },
+        {
+          "value": "C",
+          "label": "Yes; only the first condition holds."
+        },
+        {
+          "value": "D",
+          "label": "Yes; both conditions hold."
+        }
+      ],
+      "answer": "D",
+      "explanation": "011 has one 0 and two 1s. Inclusive OR accepts when both conditions hold as well as when exactly one holds.",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12"
+    },
+    {
+      "id": "T03-08",
+      "topic": "T03",
+      "title": "Alternation",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If R∪S is regular, what can be concluded about R and S individually?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Both must be regular."
+        },
+        {
+          "value": "B",
+          "label": "Both must be nonregular."
+        },
+        {
+          "value": "C",
+          "label": "Exactly one must be regular."
+        },
+        {
+          "value": "D",
+          "label": "Neither is guaranteed regular."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Let R be nonregular and S its complement: the union is Σ*, which is regular. Conversely, regular components can also have a regular union.",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12"
+    },
+    {
+      "id": "T03-09",
+      "topic": "T03",
+      "title": "Alternation",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which word distinguishes a*|b* from (a|b)*?",
+      "options": [
+        {
+          "value": "A",
+          "label": "aaa"
+        },
+        {
+          "value": "B",
+          "label": "ab"
+        },
+        {
+          "value": "C",
+          "label": "ε"
+        },
+        {
+          "value": "D",
+          "label": "bbb"
+        }
+      ],
+      "answer": "B",
+      "explanation": "(a|b)* allows mixing letters in one word. a*|b* allows only all-a or all-b words, including ε.",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12"
+    },
+    {
+      "id": "T03-10",
+      "topic": "T03",
+      "title": "Alternation",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If ε is not in R but is in S, is ε in R∪S?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if R is empty."
+        },
+        {
+          "value": "B",
+          "label": "Yes, because membership in one branch is enough."
+        },
+        {
+          "value": "C",
+          "label": "No, because both branches must contain it."
+        },
+        {
+          "value": "D",
+          "label": "Only if S={ε}."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Union needs one membership witness. The size of S and whether R is empty do not change this.",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12"
+    },
+    {
+      "id": "T04-01",
+      "topic": "T04",
+      "title": "Repetition and Kleene star",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which word belongs to R* for every language R?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ε"
+        },
+        {
+          "value": "B",
+          "label": "a"
+        },
+        {
+          "value": "C",
+          "label": "Every one-symbol word"
+        },
+        {
+          "value": "D",
+          "label": "aa"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Zero repetitions are always allowed, even if R is empty.",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)"
+    },
+    {
+      "id": "T04-02",
+      "topic": "T04",
+      "title": "Repetition and Kleene star",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is ∅*?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Σ*"
+        },
+        {
+          "value": "B",
+          "label": "∅"
+        },
+        {
+          "value": "C",
+          "label": "{∅}"
+        },
+        {
+          "value": "D",
+          "label": "{ε}"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Zero factors produce ε, and positive numbers of factors are impossible because ∅ has no words. ∅ is a set, not an input word.",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)"
+    },
+    {
+      "id": "T04-03",
+      "topic": "T04",
+      "title": "Repetition and Kleene star",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is {ε}*?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{ε,εε} with two different words"
+        },
+        {
+          "value": "B",
+          "label": "∅"
+        },
+        {
+          "value": "C",
+          "label": "Every finite word"
+        },
+        {
+          "value": "D",
+          "label": "{ε}"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Concatenating any number of empty words still yields the same empty word.",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)"
+    },
+    {
+      "id": "T04-04",
+      "topic": "T04",
+      "title": "Repetition and Kleene star",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which word belongs to (ab|ba)*?",
+      "options": [
+        {
+          "value": "A",
+          "label": "bb"
+        },
+        {
+          "value": "B",
+          "label": "abba"
+        },
+        {
+          "value": "C",
+          "label": "aab"
+        },
+        {
+          "value": "D",
+          "label": "aba"
+        }
+      ],
+      "answer": "B",
+      "explanation": "abba splits as ab followed by ba. Every permitted block has length two and is ab or ba.",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)"
+    },
+    {
+      "id": "T04-05",
+      "topic": "T04",
+      "title": "Repetition and Kleene star",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which description is exact for (aa)*?",
+      "options": [
+        {
+          "value": "A",
+          "label": "All even-length words over {a}, including ε"
+        },
+        {
+          "value": "B",
+          "label": "Only aa"
+        },
+        {
+          "value": "C",
+          "label": "All nonempty even-length words over {a}"
+        },
+        {
+          "value": "D",
+          "label": "All words over {a}"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Every repetition contributes two a symbols; zero repetitions contribute length zero.",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)"
+    },
+    {
+      "id": "T04-06",
+      "topic": "T04",
+      "title": "Repetition and Kleene star",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For L=(110*)*, which statement is true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every maximal run of 1s has even length."
+        },
+        {
+          "value": "B",
+          "label": "Every word has even total length."
+        },
+        {
+          "value": "C",
+          "label": "No word contains 111 as a substring."
+        },
+        {
+          "value": "D",
+          "label": "Every nonempty word contains a 0."
+        }
+      ],
+      "answer": "A",
+      "explanation": "Each block contributes 11 and any number of 0s. Adjacent blocks may merge runs of 1s, preserving even run length. 110 has odd length; 1111 contains 111; 11 needs no 0.",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)"
+    },
+    {
+      "id": "T04-07",
+      "topic": "T04",
+      "title": "Repetition and Kleene star",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which pair is equivalent?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a* and aa*"
+        },
+        {
+          "value": "B",
+          "label": "(a*)* and a*"
+        },
+        {
+          "value": "C",
+          "label": "(ab)* and a*b*"
+        },
+        {
+          "value": "D",
+          "label": "(a|b)* and a*|b*"
+        }
+      ],
+      "answer": "B",
+      "explanation": "A sequence of sequences of a symbols is still any finite sequence of a symbols. The other pairs differ on mixed, repeated, or empty words.",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)"
+    },
+    {
+      "id": "T04-08",
+      "topic": "T04",
+      "title": "Repetition and Kleene star",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "When is L* finite?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Exactly when L is finite."
+        },
+        {
+          "value": "B",
+          "label": "Never."
+        },
+        {
+          "value": "C",
+          "label": "Exactly when L is a subset of {ε}."
+        },
+        {
+          "value": "D",
+          "label": "Exactly when L is empty."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Any nonempty-length word w in L gives distinct w^k of unbounded length. If L contains only ε, or is empty, L*={ε}.",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)"
+    },
+    {
+      "id": "T04-09",
+      "topic": "T04",
+      "title": "Repetition and Kleene star",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Let P={a^p : p is prime}. What is P*?",
+      "options": [
+        {
+          "value": "A",
+          "label": "a*"
+        },
+        {
+          "value": "B",
+          "label": "P"
+        },
+        {
+          "value": "C",
+          "label": "{ε}∪{a^n : n≥2}"
+        },
+        {
+          "value": "D",
+          "label": "{a^(2k) : k≥0}"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Lengths 2 and 3 are prime. Every even n≥2 uses 2s; every odd n≥3 uses one 3 and 2s. Length 1 is impossible, and ε uses zero blocks.",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)"
+    },
+    {
+      "id": "T04-10",
+      "topic": "T04",
+      "title": "Repetition and Kleene star",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which expression describes one or more repetitions of R?",
+      "options": [
+        {
+          "value": "A",
+          "label": "R*"
+        },
+        {
+          "value": "B",
+          "label": "ε|R"
+        },
+        {
+          "value": "C",
+          "label": "RR*"
+        },
+        {
+          "value": "D",
+          "label": "R∅"
+        }
+      ],
+      "answer": "C",
+      "explanation": "RR* requires at least one factor from R. If ε belongs to L(R), one or more factors may still yield the empty word; 'one factor' need not mean 'one symbol'.",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)"
+    },
+    {
+      "id": "T05-01",
+      "topic": "T05",
+      "title": "Language",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which statement defines a language over Σ?",
+      "options": [
+        {
+          "value": "A",
+          "label": "A subset of Σ*"
+        },
+        {
+          "value": "B",
+          "label": "A single symbol of Σ"
+        },
+        {
+          "value": "C",
+          "label": "A transition in a DFA"
+        },
+        {
+          "value": "D",
+          "label": "An infinite word"
+        }
+      ],
+      "answer": "A",
+      "explanation": "A language is a set of finite words whose symbols come from Σ. It need not include every possible word.",
+      "sources": "S06 pp. 12-17; S07 p. 3"
+    },
+    {
+      "id": "T05-02",
+      "topic": "T05",
+      "title": "Language",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "How many words are in {ε}?",
+      "options": [
+        {
+          "value": "A",
+          "label": "2"
+        },
+        {
+          "value": "B",
+          "label": "0"
+        },
+        {
+          "value": "C",
+          "label": "1"
+        },
+        {
+          "value": "D",
+          "label": "Infinitely many"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The set has one element, the empty word. Its word has length zero, but its cardinality is one.",
+      "sources": "S06 pp. 12-17; S07 p. 3"
+    },
+    {
+      "id": "T05-03",
+      "topic": "T05",
+      "title": "Language",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "How many words are in ∅?",
+      "options": [
+        {
+          "value": "A",
+          "label": "0"
+        },
+        {
+          "value": "B",
+          "label": "1"
+        },
+        {
+          "value": "C",
+          "label": "Infinitely many"
+        },
+        {
+          "value": "D",
+          "label": "|Σ|"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The empty language has no elements, including no empty word.",
+      "sources": "S06 pp. 12-17; S07 p. 3"
+    },
+    {
+      "id": "T05-04",
+      "topic": "T05",
+      "title": "Language",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let L={0,01}. Which statement is correctly typed and true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{01}∈L"
+        },
+        {
+          "value": "B",
+          "label": "01⊆L"
+        },
+        {
+          "value": "C",
+          "label": "L∈01"
+        },
+        {
+          "value": "D",
+          "label": "01∈L"
+        }
+      ],
+      "answer": "D",
+      "explanation": "01 is a word and is an element of L. The singleton language {01} is a subset of L, not one of its word elements.",
+      "sources": "S06 pp. 12-17; S07 p. 3"
+    },
+    {
+      "id": "T05-05",
+      "topic": "T05",
+      "title": "Language",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Can an infinite language contain only finite words?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No; some word must be infinite."
+        },
+        {
+          "value": "B",
+          "label": "Yes; {a^n:n≥0} is an example."
+        },
+        {
+          "value": "C",
+          "label": "Only if its alphabet is infinite."
+        },
+        {
+          "value": "D",
+          "label": "Only if it is nonregular."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Infinite describes the number of words, not the length of an individual word. a* has infinitely many finite words over one symbol and is regular.",
+      "sources": "S06 pp. 12-17; S07 p. 3"
+    },
+    {
+      "id": "T05-06",
+      "topic": "T05",
+      "title": "Language",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For a finite nonempty alphabet, which statement is true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "There is a longest word in Σ*."
+        },
+        {
+          "value": "B",
+          "label": "There are finitely many words of any fixed length."
+        },
+        {
+          "value": "C",
+          "label": "Every language over it is finite."
+        },
+        {
+          "value": "D",
+          "label": "Every infinite language is nonregular."
+        }
+      ],
+      "answer": "B",
+      "explanation": "At length n there are |Σ|^n words. Allowing all finite lengths gives unbounded word length and infinitely many words.",
+      "sources": "S06 pp. 12-17; S07 p. 3"
+    },
+    {
+      "id": "T05-07",
+      "topic": "T05",
+      "title": "Language",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Let Σ={0,1} and L={0,1}. What is Σ*\\L?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only words of length at least two"
+        },
+        {
+          "value": "B",
+          "label": "Only ε"
+        },
+        {
+          "value": "C",
+          "label": "All binary words except the two one-symbol words"
+        },
+        {
+          "value": "D",
+          "label": "All binary words except ε"
+        }
+      ],
+      "answer": "C",
+      "explanation": "The complement includes ε and all words of length at least two, while excluding exactly 0 and 1.",
+      "sources": "S06 pp. 12-17; S07 p. 3"
+    },
+    {
+      "id": "T05-08",
+      "topic": "T05",
+      "title": "Language",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If L={ab,ab,ε}, how many distinct words does L contain?",
+      "options": [
+        {
+          "value": "A",
+          "label": "0"
+        },
+        {
+          "value": "B",
+          "label": "3"
+        },
+        {
+          "value": "C",
+          "label": "2"
+        },
+        {
+          "value": "D",
+          "label": "4"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Sets ignore duplicates. The two distinct elements are ab and ε.",
+      "sources": "S06 pp. 12-17; S07 p. 3"
+    },
+    {
+      "id": "T05-09",
+      "topic": "T05",
+      "title": "Language",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Over a finite alphabet, every infinite language has which property?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It contains ε."
+        },
+        {
+          "value": "B",
+          "label": "Its word lengths are unbounded."
+        },
+        {
+          "value": "C",
+          "label": "It contains every word length."
+        },
+        {
+          "value": "D",
+          "label": "It is regular."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Bounded lengths permit only finitely many words. Infinite languages may omit many lengths, omit ε, and be regular or nonregular.",
+      "sources": "S06 pp. 12-17; S07 p. 3"
+    },
+    {
+      "id": "T05-10",
+      "topic": "T05",
+      "title": "Language",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which statement separates a language from a regular expression?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every regex describes exactly one word."
+        },
+        {
+          "value": "B",
+          "label": "Every language has a regular expression."
+        },
+        {
+          "value": "C",
+          "label": "Every language is itself a regex string."
+        },
+        {
+          "value": "D",
+          "label": "Different expressions can describe the same set of words."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Languages are semantic sets; regexes are descriptions of regular languages. For instance, a|a and a describe the same singleton set.",
+      "sources": "S06 pp. 12-17; S07 p. 3"
+    },
+    {
+      "id": "T06-01",
+      "topic": "T06",
+      "title": "Alphabet",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "If Σ={a,b}, which is an alphabet symbol?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ab"
+        },
+        {
+          "value": "B",
+          "label": "ε"
+        },
+        {
+          "value": "C",
+          "label": "a"
+        },
+        {
+          "value": "D",
+          "label": "{a}"
+        }
+      ],
+      "answer": "C",
+      "explanation": "a is an atomic symbol in Σ; ab is a two-symbol word, ε is the empty word, and {a} is a set.",
+      "sources": "S06 pp. 6, 10, 13-14"
+    },
+    {
+      "id": "T06-02",
+      "topic": "T06",
+      "title": "Alphabet",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "For Σ={0,1}, what is Σ^0?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{0,1}"
+        },
+        {
+          "value": "B",
+          "label": "∅"
+        },
+        {
+          "value": "C",
+          "label": "{0}"
+        },
+        {
+          "value": "D",
+          "label": "{ε}"
+        }
+      ],
+      "answer": "D",
+      "explanation": "There is exactly one sequence of zero symbols: ε. The numeral 0 is a one-symbol word, not the empty word.",
+      "sources": "S06 pp. 6, 10, 13-14"
+    },
+    {
+      "id": "T06-03",
+      "topic": "T06",
+      "title": "Alphabet",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "For Σ={x,y}, what is Σ^2?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{xx,xy,yx,yy}"
+        },
+        {
+          "value": "B",
+          "label": "{x,y}"
+        },
+        {
+          "value": "C",
+          "label": "{xx,yy}"
+        },
+        {
+          "value": "D",
+          "label": "{ε,x,y}"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Choose either symbol independently at each of two positions; order matters.",
+      "sources": "S06 pp. 6, 10, 13-14"
+    },
+    {
+      "id": "T06-04",
+      "topic": "T06",
+      "title": "Alphabet",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If |Σ|=3, how many words have length four?",
+      "options": [
+        {
+          "value": "A",
+          "label": "64"
+        },
+        {
+          "value": "B",
+          "label": "12"
+        },
+        {
+          "value": "C",
+          "label": "81"
+        },
+        {
+          "value": "D",
+          "label": "24"
+        }
+      ],
+      "answer": "C",
+      "explanation": "Each position has three choices, giving 3^4=81. Multiplying length by alphabet size counts the wrong object.",
+      "sources": "S06 pp. 6, 10, 13-14"
+    },
+    {
+      "id": "T06-05",
+      "topic": "T06",
+      "title": "Alphabet",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Is ε in Σ* for Σ={a}?",
+      "options": [
+        {
+          "value": "A",
+          "label": "No, because ε is not an alphabet symbol."
+        },
+        {
+          "value": "B",
+          "label": "Yes, because length zero is allowed."
+        },
+        {
+          "value": "C",
+          "label": "Only if ε is added to Σ."
+        },
+        {
+          "value": "D",
+          "label": "Only if a is removed from Σ."
+        }
+      ],
+      "answer": "B",
+      "explanation": "Σ* contains sequences of every finite length, including zero. ε need not be a symbol to be a word.",
+      "sources": "S06 pp. 6, 10, 13-14"
+    },
+    {
+      "id": "T06-06",
+      "topic": "T06",
+      "title": "Alphabet",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "For Σ={0,1}, which word is outside Σ*?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ε"
+        },
+        {
+          "value": "B",
+          "label": "102"
+        },
+        {
+          "value": "C",
+          "label": "111"
+        },
+        {
+          "value": "D",
+          "label": "001"
+        }
+      ],
+      "answer": "B",
+      "explanation": "102 uses 2, which is not in the alphabet. Repetition of allowed symbols and the empty word are permitted.",
+      "sources": "S06 pp. 6, 10, 13-14"
+    },
+    {
+      "id": "T06-07",
+      "topic": "T06",
+      "title": "Alphabet",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "With token kinds treated as atomic symbols, Σ={ID,NUM,PLUS}. What is the length of the sequence ID NUM PLUS?",
+      "options": [
+        {
+          "value": "A",
+          "label": "0"
+        },
+        {
+          "value": "B",
+          "label": "9"
+        },
+        {
+          "value": "C",
+          "label": "1"
+        },
+        {
+          "value": "D",
+          "label": "3"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Length counts the declared atomic symbols, not the printed letters in their names.",
+      "sources": "S06 pp. 6, 10, 13-14"
+    },
+    {
+      "id": "T06-08",
+      "topic": "T06",
+      "title": "Alphabet",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "If Σ={a} and Γ={a,b}, which relation is true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Σ*=Γ*."
+        },
+        {
+          "value": "B",
+          "label": "Σ* and Γ* are disjoint."
+        },
+        {
+          "value": "C",
+          "label": "Σ* is a proper subset of Γ*."
+        },
+        {
+          "value": "D",
+          "label": "Γ* is a proper subset of Σ*."
+        }
+      ],
+      "answer": "C",
+      "explanation": "Every a-word is a Γ-word, but b is a Γ-word that is not a Σ-word. Both sets contain ε.",
+      "sources": "S06 pp. 6, 10, 13-14"
+    },
+    {
+      "id": "T06-09",
+      "topic": "T06",
+      "title": "Alphabet",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "What does Σ^3 mean?",
+      "options": [
+        {
+          "value": "A",
+          "label": "All words of length at most three"
+        },
+        {
+          "value": "B",
+          "label": "Three copies of Σ as one alphabet symbol"
+        },
+        {
+          "value": "C",
+          "label": "All words with three distinct symbols"
+        },
+        {
+          "value": "D",
+          "label": "All words of exactly three symbols"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Positions may repeat a symbol. The exponent here specifies exact length, not an upper bound or a distinctness condition.",
+      "sources": "S06 pp. 6, 10, 13-14"
+    },
+    {
+      "id": "T06-10",
+      "topic": "T06",
+      "title": "Alphabet",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "For Σ={a,b}, how many words have length at most two?",
+      "options": [
+        {
+          "value": "A",
+          "label": "8"
+        },
+        {
+          "value": "B",
+          "label": "4"
+        },
+        {
+          "value": "C",
+          "label": "6"
+        },
+        {
+          "value": "D",
+          "label": "7"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Count length zero, one and two: 1+2+4=7. Omitting ε gives the tempting wrong answer 6.",
+      "sources": "S06 pp. 6, 10, 13-14"
+    },
+    {
+      "id": "T07-01",
+      "topic": "T07",
+      "title": "String or word",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "What is |ε|?",
+      "options": [
+        {
+          "value": "A",
+          "label": "1"
+        },
+        {
+          "value": "B",
+          "label": "0"
+        },
+        {
+          "value": "C",
+          "label": "Undefined"
+        },
+        {
+          "value": "D",
+          "label": "Infinity"
+        }
+      ],
+      "answer": "B",
+      "explanation": "The empty word has zero symbols; it is still a word.",
+      "sources": "S06 pp. 11, 13; S01 Q1"
+    },
+    {
+      "id": "T07-02",
+      "topic": "T07",
+      "title": "String or word",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "For w=00101, what is |w|0?",
+      "options": [
+        {
+          "value": "A",
+          "label": "5"
+        },
+        {
+          "value": "B",
+          "label": "1"
+        },
+        {
+          "value": "C",
+          "label": "2"
+        },
+        {
+          "value": "D",
+          "label": "3"
+        }
+      ],
+      "answer": "D",
+      "explanation": "There are three zero positions. The two ones contribute to total length but not to |w|0.",
+      "sources": "S06 pp. 11, 13; S01 Q1"
+    },
+    {
+      "id": "T07-03",
+      "topic": "T07",
+      "title": "String or word",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "For w=ab, what is w^3?",
+      "options": [
+        {
+          "value": "A",
+          "label": "ababab"
+        },
+        {
+          "value": "B",
+          "label": "aba"
+        },
+        {
+          "value": "C",
+          "label": "ab3"
+        },
+        {
+          "value": "D",
+          "label": "aaabbb"
+        }
+      ],
+      "answer": "A",
+      "explanation": "Exponentiation of a word means concatenating three copies of the whole word.",
+      "sources": "S06 pp. 11, 13; S01 Q1"
+    },
+    {
+      "id": "T07-04",
+      "topic": "T07",
+      "title": "String or word",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which statement about w=010 is true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It ends with 01."
+        },
+        {
+          "value": "B",
+          "label": "It has three 0s."
+        },
+        {
+          "value": "C",
+          "label": "It begins and ends with 0."
+        },
+        {
+          "value": "D",
+          "label": "It contains two consecutive 0s."
+        }
+      ],
+      "answer": "C",
+      "explanation": "The two zeros are separated. Prefix, suffix, count and adjacency are different properties.",
+      "sources": "S06 pp. 11, 13; S01 Q1"
+    },
+    {
+      "id": "T07-05",
+      "topic": "T07",
+      "title": "String or word",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Under the usual nonempty-word interpretation, does the word 1 begin and end with the same symbol?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only if the alphabet is unary."
+        },
+        {
+          "value": "B",
+          "label": "No; two positions are required."
+        },
+        {
+          "value": "C",
+          "label": "Yes; its first and last position are the same position."
+        },
+        {
+          "value": "D",
+          "label": "Only if ε also belongs to the language."
+        }
+      ],
+      "answer": "C",
+      "explanation": "A one-symbol word has both a first and a last symbol. A length-at-least-two restriction must be stated separately.",
+      "sources": "S06 pp. 11, 13; S01 Q1"
+    },
+    {
+      "id": "T07-06",
+      "topic": "T07",
+      "title": "String or word",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which statement about 1111 is true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It does not contain 111."
+        },
+        {
+          "value": "B",
+          "label": "It has a maximal run of exactly three 1s."
+        },
+        {
+          "value": "C",
+          "label": "It contains 111 but has no maximal run of exactly three 1s."
+        },
+        {
+          "value": "D",
+          "label": "It contains exactly three 1s in total."
+        }
+      ],
+      "answer": "C",
+      "explanation": "There are length-three substrings at positions 1-3 and 2-4, but the whole maximal run has length four.",
+      "sources": "S06 pp. 11, 13; S01 Q1"
+    },
+    {
+      "id": "T07-07",
+      "topic": "T07",
+      "title": "String or word",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "If |x|=2 and |y|=5, what is |xy|?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It depends on shared symbols."
+        },
+        {
+          "value": "B",
+          "label": "10"
+        },
+        {
+          "value": "C",
+          "label": "3"
+        },
+        {
+          "value": "D",
+          "label": "7"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Concatenation keeps all positions, so lengths add. Matching symbols at a boundary are not merged.",
+      "sources": "S06 pp. 11, 13; S01 Q1"
+    },
+    {
+      "id": "T07-08",
+      "topic": "T07",
+      "title": "String or word",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "What is the reverse of 00101?",
+      "options": [
+        {
+          "value": "A",
+          "label": "00101"
+        },
+        {
+          "value": "B",
+          "label": "10100"
+        },
+        {
+          "value": "C",
+          "label": "01010"
+        },
+        {
+          "value": "D",
+          "label": "11010"
+        }
+      ],
+      "answer": "B",
+      "explanation": "Reversal changes position order; it does not complement the bits.",
+      "sources": "S06 pp. 11, 13; S01 Q1"
+    },
+    {
+      "id": "T07-09",
+      "topic": "T07",
+      "title": "String or word",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Which description of ε is correct?",
+      "options": [
+        {
+          "value": "A",
+          "label": "It can only be concatenated with itself."
+        },
+        {
+          "value": "B",
+          "label": "It is a prefix and a suffix of every word."
+        },
+        {
+          "value": "C",
+          "label": "It is the same object as ∅."
+        },
+        {
+          "value": "D",
+          "label": "It is a one-symbol substring of every word."
+        }
+      ],
+      "answer": "B",
+      "explanation": "For every word w, εw=w=wε. It has no symbol and is distinct from the empty set.",
+      "sources": "S06 pp. 11, 13; S01 Q1"
+    },
+    {
+      "id": "T07-10",
+      "topic": "T07",
+      "title": "String or word",
+      "part": "Core",
+      "difficulty": "Edge case",
+      "question": "Over {0,1}, compare 'length is even' and 'number of 1s is even'. Which is true?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Even length implies an even number of 1s."
+        },
+        {
+          "value": "B",
+          "label": "An even number of 1s implies even length."
+        },
+        {
+          "value": "C",
+          "label": "Neither property implies the other."
+        },
+        {
+          "value": "D",
+          "label": "The two properties are equivalent."
+        }
+      ],
+      "answer": "C",
+      "explanation": "01 has even length but one 1; 0 has odd length but zero 1s. Zero is even.",
+      "sources": "S06 pp. 11, 13; S01 Q1"
+    },
+    {
+      "id": "T08-01",
+      "topic": "T08",
+      "title": "Regular language",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which is a base case in the recursive definition of regular languages?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Every language with equal numbers of two symbols"
+        },
+        {
+          "value": "B",
+          "label": "Every infinite language"
+        },
+        {
+          "value": "C",
+          "label": "Every subset of Σ*"
+        },
+        {
+          "value": "D",
+          "label": "{ε}"
+        }
+      ],
+      "answer": "D",
+      "explanation": "{ε}, ∅, and {a} for a∈Σ are the base cases. Arbitrary subsets need not be regular.",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7"
+    },
+    {
+      "id": "T08-02",
+      "topic": "T08",
+      "title": "Regular language",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Is every finite language regular?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Only over a unary alphabet."
+        },
+        {
+          "value": "B",
+          "label": "No; only singleton languages are regular."
+        },
+        {
+          "value": "C",
+          "label": "No; ε makes a finite language nonregular."
+        },
+        {
+          "value": "D",
+          "label": "Yes; use a finite union of expressions for its words."
+        }
+      ],
+      "answer": "D",
+      "explanation": "Each finite word is a finite concatenation of symbols. Finite union handles all words, with ∅ for the empty language.",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7"
+    },
+    {
+      "id": "T08-03",
+      "topic": "T08",
+      "title": "Regular language",
+      "part": "Core",
+      "difficulty": "Foundation",
+      "question": "Which language is infinite and regular?",
+      "options": [
+        {
+          "value": "A",
+          "label": "{a^n:n≥0}"
+        },
+        {
+          "value": "B",
+          "label": "{a^p:p prime}"
+        },
+        {
+          "value": "C",
+          "label": "{0^n1^n:n≥0}"
+        },
+        {
+          "value": "D",
+          "label": "{a^i b^j:i<j}"
+        }
+      ],
+      "answer": "A",
+      "explanation": "The first is described by a*. The other three are nonregular examples established in this module.",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7"
+    },
+    {
+      "id": "T08-04",
+      "topic": "T08",
+      "title": "Regular language",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which operation is part of the recursive construction of regular languages?",
+      "options": [
+        {
+          "value": "A",
+          "label": "Unbounded equality of symbol counts"
+        },
+        {
+          "value": "B",
+          "label": "Arbitrary infinite union"
+        },
+        {
+          "value": "C",
+          "label": "Arbitrary subset selection"
+        },
+        {
+          "value": "D",
+          "label": "Kleene star"
+        }
+      ],
+      "answer": "D",
+      "explanation": "Star is a defining regular operation. Finite union is allowed; arbitrary infinite union need not preserve regularity.",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7"
+    },
+    {
+      "id": "T08-05",
+      "topic": "T08",
+      "title": "Regular language",
+      "part": "Core",
+      "difficulty": "Application",
+      "question": "Which statement follows if a DFA recognizes L?",
+      "options": [
+        {
+          "value": "A",
+          "label": "L is regular."
+        },
+        {
+          "value": "B",
+          "label": "L contains ε."
+        },
+        {
+          "value": "C",
+          "label": "L is finite."
+        },
+        {
+          "value": "D",
+          "label": "L has a unique regular expression."
+        }
+      ],
+      "answer": "A",
+      "explanation": "DFA-recognizable languages are regular. DFAs can recognize infinite languages and can reject ε; descriptions need not be unique.",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7"
+    }
+  ]
+}

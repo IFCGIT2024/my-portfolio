@@ -1,6 +1,6 @@
 # C → x86 Assembly Lab — CSCI 2122
 
-A static, browser-only integer assembly course and practice lab. **12 guided lessons, 80 C-to-assembly exercises, and 92 concept questions**: the original 36 translations / 34 concepts are preserved; Lecture 10 adds 44 translations / 58 concepts. Every new concept has an introduction, a worked example, pitfalls and explained practice. The new reference translations have **149 independent expected-output cases**; the original bank retains 102.
+A static, browser-only integer assembly course and practice lab. **12 guided lessons, 81 code exercises, and 111 concept questions**: the original 36 translations / 34 concepts are preserved; Lecture 10 adds 45 code exercises / 77 concepts. Each lesson has an introduction, a worked example and pitfalls; its concepts have explained practice questions. The new reference translations have **152 independent expected-output cases**; the original bank retains 102.
 
 Live URL: https://ifcgit2024.github.io/my-portfolio/docs/projects/assembly-lab/index.html
 
@@ -15,6 +15,8 @@ Code answers are executed against multiple supplied states, not compared to solu
 Drafts, attempts, solved/reviewed status and the selected lesson persist in browser localStorage under `mizel:assembly-lab:progress:v1`. Stable question IDs and content fingerprints preserve the original bank's progress. Modified questions invalidate only their own old results. Revealing a solution before passing marks that question reviewed, not independently solved. Nothing is synchronized or uploaded.
 
 ## Lecture coverage
+
+The [page-by-page review](LECTURE_REVIEW.md) maps all 36 lecture pages to practice, records answer verification and prioritizes short-term educational improvements.
 
 | Lesson | Content | Lecture pages |
 | --- | --- | --- |
@@ -43,7 +45,7 @@ The image-only pages were inspected, including the register diagrams, instructio
 
 ## Simulator contract
 
-The data model is Linux x86-64 **LP64**: `long` and pointers are eight bytes; `int` is four. Legacy exercises default to four-byte memory cells. Arithmetic uses BigInt internally, so 64-bit values above JavaScript Number's safe range remain exact. In JSON, write large integers as strings.
+The data model is Linux x86-64 **LP64**: `long` and pointers are eight bytes; `int` is four. Legacy exercises use a separate 32-bit teaching model with four-byte integers and pointer slots. They default to four-byte memory cells. Arithmetic uses BigInt internally, so 64-bit values above JavaScript Number's safe range remain exact. In JSON, write large integers as strings.
 
 - Supports all 16 general-purpose register families and their 32/16/8-bit aliases, including AH/BH/CH/DH where no REX encoding is required. A 32-bit register write clears its upper half; narrower writes preserve other bits. Uninitialized bits cannot be read.
 - Data operations: MOV, LEA, ADD, SUB, two/three-operand IMUL, CMP, TEST, AND, OR, XOR, NEG, INC, DEC, NOT, NOP, SHL/SAL, SHR, SAR.
@@ -63,9 +65,9 @@ Passing tests is evidence for the listed inputs, not a proof for all C inputs. C
 - `engine.js`: parser, execution, grading and bank validation.
 - `app.js`, `index.html`, `styles.css`: accessible interface and browser persistence.
 - `data/manifest.json`: bank list.
-- `data/translation.json`, `data/concepts.json`: original unchanged questions.
+- `data/translation.json`, `data/concepts.json`: preserved original questions, with reviewed concept wording.
 - `data/lecture10.json`: new exercises and answer explanations.
-- `data/lessons.json`: ordered introductions, worked examples, walkthroughs and pitfalls.
+- `data/lessons.json`: ordered introductions, worked examples, walkthroughs, pitfalls and expandable supporting sections.
 - `data/example.json`: simple legacy-compatible import template.
 
 Each bank uses `schemaVersion: 1`, a `questions` array, unique lowercase slug IDs, `type`, `category` and `title`. Code questions need `cCode`, `hint`, `solutions`, and `cases`; new ones add `lesson`, `explanation`, `dataModel` and optional `requirements` (normalized opcode names). MCQs need `question`, `options`, a zero-based `correctAnswer`, and `explanation`.
@@ -91,13 +93,14 @@ Additional fields: `entry` selects a label; `memoryWidths` overrides widths by m
 ```sh
 node --test docs/projects/assembly-lab/tests/*.test.cjs
 python3 docs/projects/assembly-lab/tests/native-reference.py
+python3 docs/projects/assembly-lab/tests/c-reference.py
 python3 docs/projects/assembly-lab/tests/native-semantics.py
 python3 -m http.server 8000
 ```
 
 Open `http://localhost:8000/docs/projects/assembly-lab/index.html`. Browsers block JSON fetches from `file://`.
 
-The Node suite covers original and new banks plus exact 64-bit arithmetic, aliases, overlapping widths, negative LEA, shifts/flags, stack boundaries, PUSH/POP special cases, nested calls, RET/LEAVE, ABI rules, invalid forms and grading. The independent native suite compiles and executes all **149 new reference cases** using GCC on Linux x86-64 and verifies expected register values, changed outputs and preserved input memory. The separate native-semantics suite compares shift results, defined flags and sign-extended immediate masks directly with hardware, including zero-count register writes. Both suites run only repository-owned programs in a temporary directory, never user code. GCC is a development-only verification dependency; the published site needs only a modern browser with BigInt.
+The Node suite covers original and new banks plus exact 64-bit arithmetic, aliases, overlapping widths, negative LEA, shifts/flags, stack boundaries, PUSH/POP special cases, nested calls, RET/LEAVE, ABI rules, invalid forms and grading. The independent native suite compiles and executes all **152 new reference cases** using GCC on Linux x86-64 and verifies expected register values, changed outputs and preserved input memory. The separate native-semantics suite compares shift results, defined flags and sign-extended immediate masks directly with hardware, including zero-count register writes. The C-reference suite separately compiles the displayed C functions with undefined-behavior checking and checks 137 fixtures across 40 functions. Machine-only snippets remain covered by the assembly suite. All native suites run only repository-owned programs in a temporary directory, never user code. GCC is a development-only verification dependency; the published site needs only a modern browser with BigInt.
 
 ## Primary references
 

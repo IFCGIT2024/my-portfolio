@@ -132,7 +132,7 @@
         "Jump if Safe"
       ],
       "correctAnswer": 1,
-      "explanation": "js = Jump if Sign flag set (result is negative)",
+      "explanation": "JS branches when SF=1, the sign bit of the last flag-setting result. That bit alone is not a reliable signed less-than comparison when subtraction overflows; JL uses SF and OF together.",
       "type": "mcq",
       "title": "Concept 09"
     },
@@ -169,7 +169,7 @@
     {
       "id": "mcq-12",
       "category": "registers",
-      "question": "What does %ebp typically point to?",
+      "question": "In a conventional 32-bit stack frame, what does %ebp typically point to?",
       "options": [
         "Heap memory",
         "Stack base/frame pointer",
@@ -177,7 +177,7 @@
         "Data segment"
       ],
       "correctAnswer": 1,
-      "explanation": "%ebp is the base pointer, used to access stack variables",
+      "explanation": "EBP conventionally holds a stable frame base in 32-bit examples. The corresponding 64-bit register is RBP. Compilers can omit a frame pointer; it is a convention, not a mandatory use of this register.",
       "type": "mcq",
       "title": "Concept 12"
     },
@@ -381,13 +381,13 @@
       "category": "syntax",
       "question": "What does the 'l' suffix in 'movl' indicate?",
       "options": [
-        "Long (32-bit)",
+        "Long word (32-bit)",
         "Loop",
         "Load",
         "Label"
       ],
       "correctAnswer": 0,
-      "explanation": "l = long (32-bit). Other suffixes: b=byte, w=word, q=quad",
+      "explanation": "The assembler l suffix selects a 32-bit long word. It does not mean the C type long, which is 64-bit under the LP64 model used by the guided lessons.",
       "type": "mcq",
       "title": "Concept 26"
     },
@@ -464,7 +464,7 @@
         "Both move 64 bits"
       ],
       "correctAnswer": 1,
-      "explanation": "Operand size changes the operation. This practice interpreter supports only 32-bit instructions."
+      "explanation": "Operand size changes the operation. This simulator supports 8-, 16-, 32- and 64-bit forms: b/w/l/q. A movl register write also clears the upper 32 bits of its 64-bit parent; a movb write preserves the other bits."
     },
     {
       "id": "mcq-32",

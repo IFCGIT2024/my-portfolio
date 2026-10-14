@@ -20,7 +20,32 @@
       "exampleC": "long sum(long x, long y) { return x + y; }",
       "exampleAssembly": "movq %rdi, %rax\naddq %rsi, %rax\nret",
       "walkthrough": "With x=6 in RDI and y=4 in RSI, mov copies 6 to RAX. add changes RAX to 10 and sets flags. ret resumes the caller, which reads the result from RAX.",
-      "pitfall": "Register names describe storage, not permanently assigned C variables. RAX is commonly a return register, but can also hold temporary data."
+      "pitfall": "Register names describe storage, not permanently assigned C variables. RAX is commonly a return register, but can also hold temporary data.",
+      "sections": [
+        {
+          "title": "Why read assembly, and how does it connect to C?",
+          "paragraphs": [
+            "Assembly helps explain optimized code when C statements have been combined, moved or removed. It is useful for debugging, understanding performance, controlling hardware and examining an executable when its C source is unavailable. Reading instructions can also help analyze and correct security defects; writing everything by hand is not automatically faster.",
+            "A separately assembled function can be linked with C object files. Its name, argument locations, return value and preserved registers must follow the agreed calling convention. Inline assembly instead embeds an assembly fragment in C using compiler-specific syntax and constraints that describe inputs, outputs and clobbered state. These are two different integration methods; this lab practices their machine-level concepts, not a compiler inline-assembly interface."
+          ]
+        },
+        {
+          "title": "Registers, memory and instruction families",
+          "paragraphs": [
+            "General-purpose registers are a small, fixed set of named CPU storage locations. Memory is addressed by byte addresses and provides much more space. The 16 ordinary 64-bit general-purpose registers hold 16 \u00d7 8 = 128 bytes in total; aliases such as EAX do not add storage. RIP, flags and floating-point/vector registers are not included in that count. The lecture\u2019s speed and memory-capacity numbers are illustrative, not universal latency or capacity guarantees.",
+            "The integer instruction forms studied here move and operate on 1, 2, 4 or 8 bytes. Floating-point and SIMD use other instruction/register families, including XMM/YMM vector registers; the 80-bit extended floating-point format belongs to the x87 family. Recognize these categories, but do not try floating-point instructions in this integer simulator. Arrays and structs are byte layouts interpreted by the program, not special aggregate registers.",
+            "Classify an instruction by its main job: arithmetic/logic computes a result (add, sub, shifts and bit masks); data transfer copies values (mov); control flow selects where execution continues (jumps, call, ret). Some instructions also affect flags or the stack, so these teaching categories are not exclusive hardware compartments."
+          ]
+        },
+        {
+          "title": "Read the encoding diagram and debugger output",
+          "paragraphs": [
+            "In the lecture\u2019s 48 89 d8 example, 48 is a REX prefix selecting a 64-bit operand for this form, 89 is the MOV opcode, and d8 is the ModR/M operand byte. Split d8 into binary fields 11 | 011 | 000: 11 selects register-to-register form, 011 selects RBX as the source, and 000 selects RAX as the destination for opcode 89. The instruction is movq %rbx,%rax. This field direction is specific to the opcode; do not assume every x86 opcode assigns the fields the same way.",
+            "Changing that final byte to c3 (11 | 000 | 011) produces movq %rax,%rbx. Changing it to 03 (00 | 000 | 011) selects the memory destination (%rbx), giving movq %rax,(%rbx). These instructions are three code bytes long while moving eight data bytes. Other x86 forms may include further prefixes, displacement or immediate bytes; this is an introduction, not a complete encoder.",
+            "objdump -d sum disassembles the executable named sum. In GDB, disassemble sum disassembles the function named sum. The command x/14xb sum examines 14 units, in hexadecimal (x), with byte size (b), starting at sum. It does not request 14 instructions. The command uses a forward slash. Disassembly can reveal instructions and control flow, but generally cannot recover original variable names and source text exactly."
+          ]
+        }
+      ]
     },
     {
       "id": "02-widths",
@@ -37,10 +62,19 @@
         "RAX, EAX, AX and AL overlap: they name the full 64 bits, low 32, low 16 and low 8 bits. AH names bits 8\u201315. Writing EAX clears RAX\u2019s upper 32 bits. Writing AX or AL preserves the other bits. All 16 register families are available; R8 has R8D, R8W and R8B aliases.",
         "A mov copies; it does not erase its source and it does not set arithmetic flags. Both operand sizes must match. For memory-to-memory copies, use a temporary register. The checker rejects mismatched widths and uninitialized reads; a narrow write alone does not initialize the untouched bits."
       ],
-      "exampleC": "unsigned long x = 0xffffffffffffffffUL;\n// Replace the low 32 bits with 5.",
+      "exampleC": "// Start with all 64 bits of RAX set.\n// Write 5 to EAX; determine the entire resulting RAX.",
       "exampleAssembly": "movq $-1, %rax\nmovl $5, %eax",
       "walkthrough": "After the first instruction RAX contains 64 one bits. The second writes EAX and zeroes the upper half, so the whole RAX becomes 5.",
-      "pitfall": "movl $-1,%eax makes RAX = 0x00000000ffffffff, not a 64-bit -1. Use movq for a 64-bit negative constant."
+      "pitfall": "movl $-1,%eax makes RAX = 0x00000000ffffffff, not a 64-bit -1. Use movq for a 64-bit negative constant.",
+      "sections": [
+        {
+          "title": "Recognize Intel syntax without reversing the assignment",
+          "paragraphs": [
+            "For the ordinary MOV form, AT&T uses source,destination with % on registers and $ on constants; Intel uses destination,source without those prefixes. Thus AT&T movq %rbx,%rax and Intel mov rax,rbx both copy RBX into RAX. AT&T movq $7,%rax corresponds to Intel mov rax,7.",
+            "AT&T movq (%rdi),%rax corresponds to Intel mov rax,QWORD PTR [rdi]: both read eight bytes at the address in RDI. Intel memory sizes can be stated with BYTE/WORD/DWORD/QWORD PTR when needed. This lab accepts AT&T input; use the comparison to read either dialect, not to mix them in one answer."
+          ]
+        }
+      ]
     },
     {
       "id": "03-pointers",
@@ -53,14 +87,25 @@
       ],
       "paragraphs": [
         "A pointer is an address value. If RDI contains xp, (%rdi) means memory at that address: *xp. movq %rdi,%rax copies the pointer; movq (%rdi),%rax copies the long it points to. Parentheses cause a memory access for mov.",
-        "For *p = value, first obtain the value in a register, then store that register to (%p-register). For value = *p, load from the parenthesized register. The address register remains unchanged unless you explicitly modify it.",
+        "For *p = value, store a value to (%p-register). The value can come from a register or, when encodable, an immediate: movq $-128,(%rdi) writes the constant directly. For value = *p, load from the parenthesized register. The address register remains unchanged unless you explicitly modify it.",
         "Swap requires remembering a value before overwriting it. Read both pointees into temporaries, then store each into the opposite location. Two pointers may alias the same location: swapping a value with itself must leave it unchanged.",
         "Slide 20\u2019s memory-to-register C-equivalent is reversed: with varA in RAX and ptrD in RDX, movq (%rax),%rdx does not mean varA = *ptrD. Translate the assembly literally: RDX receives memory at the address in RAX."
       ],
       "exampleC": "void store(long *p, long x) { *p = x; }",
       "exampleAssembly": "movq %rsi, (%rdi)\nret",
       "walkthrough": "The calling convention places p in RDI and x in RSI. The store writes x\u2019s eight bytes at p. It changes memory, not RDI. ret returns; a void function has no required RAX result.",
-      "pitfall": "Do not confuse movq %rsi,%rdi with a store: that overwrites the pointer register."
+      "pitfall": "Do not confuse movq %rsi,%rdi with a store: that overwrites the pointer register.",
+      "sections": [
+        {
+          "title": "Predict every stage of the lecture\u2019s swap",
+          "paragraphs": [
+            "Start with RDI=0x120, RSI=0x100, an eight-byte value 123 at 0x120, and 456 at 0x100. Treat the address values (0x120, 0x100) separately from the data (123, 456).",
+            "After movq (%rdi),%rax, RAX=123 and memory is unchanged. After movq (%rsi),%rdx, RDX=456 and memory is still unchanged. These two loads preserve both original values before either store.",
+            "After movq %rdx,(%rdi), both memory locations temporarily hold 456, but RAX still holds the original 123. After movq %rax,(%rsi), memory at 0x120 holds 456 and memory at 0x100 holds 123. RDI and RSI still contain the original addresses.",
+            "Practice predicting the next state before opening the trace. A final correct swap is only part of the explanation: identify which temporary preserves a value at the moment its original memory cell is overwritten."
+          ]
+        }
+      ]
     },
     {
       "id": "04-addresses",
@@ -80,7 +125,17 @@
       "exampleC": "long get_next(long *a, long i) { return a[i+1]; }",
       "exampleAssembly": "movq 8(%rdi,%rsi,8), %rax\nret",
       "walkthrough": "For a=0x1000 and i=2, compute 8 + 0x1000 + 2\u00d78 = 0x1018. movq reads eight bytes there. The +1 element becomes an eight-byte displacement.",
-      "pitfall": "Scale follows element size, not the size of the index register. Long arrays use 8 even when i is small."
+      "pitfall": "Scale follows element size, not the size of the index register. Long arrays use 8 even when i is small.",
+      "sections": [
+        {
+          "title": "Work the lecture\u2019s address calculations",
+          "paragraphs": [
+            "For RDX=0xf000 and RCX=0x100, the four slide-30 addresses are: 8(%rdx) = 0xf008; (%rdx,%rcx) = 0xf100; (%rdx,%rcx,4) = 0xf400; 0x80(,%rdx,2) = 0x1e080. An omitted scale is 1; an omitted base contributes zero. These are addresses, not the stored values.",
+            "A displacement need not be a multiple of the operand width. For RSI=0x1000 and RAX=3, 42(%rsi,%rax,2) uses 0x1000 + 42 + 6 = 0x1030; the written 42 is decimal. The instruction\u2019s data width is specified separately.",
+            "In slide 35, suppose int data[] begins at RBP+20, k is in RAX and the assigned int is in EDX. data[k] = value becomes movl %edx,20(%rbp,%rax,4): four-byte store, four-byte element stride, matching 64-bit address registers. The given positive frame offset is an exercise layout, not a rule for where all local arrays must be placed."
+          ]
+        }
+      ]
     },
     {
       "id": "05-lea",
@@ -201,7 +256,7 @@
       "exampleC": "// Save x while computing a temporary value, then recover x.",
       "exampleAssembly": "pushq %rdi\nmovq $99,%rdi\npopq %rdi",
       "walkthrough": "Starting at 0x8000, push stores x at 0x7ff8. RDI is overwritten temporarily. pop reloads x and restores RSP to 0x8000. The old stack bytes remain but are no longer live.",
-      "pitfall": "Do not use pushl/pop l to mean a 32-bit value on this 64-bit stack. This lab supports pushq/popq; their register operands must be 64-bit."
+      "pitfall": "Do not use pushl/popl to mean a 32-bit value on this 64-bit stack. This lab supports pushq/popq; their register operands must be 64-bit."
     },
     {
       "id": "11-calls",
@@ -236,7 +291,7 @@
       "paragraphs": [
         "Use the same translation checklist every time: identify the C types and widths; map inputs and outputs; distinguish values from addresses; choose instructions; plan control flow; preserve live values across calls; balance the stack; and test boundary cases.",
         "For each program, predict registers and memory before checking. Use the trace on a failing case to find the first step where your prediction differs. A passing result only covers the listed test cases; it is not a proof of general correctness.",
-        "This course covers the lecture\u2019s integer machine model, syntax, register widths, encodings/disassembly concepts, data movement, pointers/swap, addressing, LEA and arithmetic, with expanded bit and stack/call practice. Floating-point/SIMD, real instruction encoding, system calls, arbitrary C compilation and the rest of CSCI 2122 remain outside this lab.",
+        "This course covers the lecture\u2019s integer machine model, syntax, register widths, encodings/disassembly concepts, data movement, pointers/swap, addressing, LEA and arithmetic, with expanded bit and stack/call practice. Executing floating-point/SIMD, generating real machine code, system calls, arbitrary C compilation and the rest of CSCI 2122 remain outside this lab.",
         "Corrections to remember: x86\u2019s instruction-length limit is 15 bytes, slide 20\u2019s load mapping is reversed, slide 33\u2019s C/assembly results differ, and slide 35 mixes address-register widths. Course answers follow actual instruction semantics."
       ],
       "exampleC": "unsigned long normalize(unsigned long x) { return (x >> 4) & 0xffUL; }",

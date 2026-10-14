@@ -137,7 +137,7 @@
     $('previous').disabled=list[0].id===q.id;
     $('next').textContent=list.at(-1).id===q.id?'View summary →':'Next →';
     if(mode==='code') {
-      $('data-model').textContent=q.dataModel||'signed 32-bit integers';
+      $('data-model').textContent=q.dataModel||'Legacy 32-bit model: signed integers and pointer slots are 4 bytes';
       $('solution-explanation').textContent=q.explanation||'Follow each instruction from the supplied inputs to the required outputs. Temporary registers can differ from this example.';
       $('c-code').textContent=q.cCode; $('assembly-input').value=r.draft;
       $('hint').textContent=q.hint; $('solution-code').textContent=q.solutions[0];
@@ -239,6 +239,11 @@
     const goals=node('ul');for(const goal of l.goals)goals.append(node('li',goal));area.append(goals);
     const intro=node('details');intro.open=true;intro.append(node('summary','Introduction — read this first'));
     for(const paragraph of l.paragraphs)intro.append(node('p',paragraph));area.append(intro);
+    for(const section of l.sections||[]) {
+      const detail=node('details');detail.append(node('summary',section.title));
+      for(const paragraph of section.paragraphs) detail.append(node('p',paragraph));
+      area.append(detail);
+    }
     const example=node('details');example.append(node('summary','Worked C → assembly example'));
     const columns=node('div',undefined,'code-panels');
     for(const [heading,text] of [['C / goal',l.exampleC],['Assembly',l.exampleAssembly]]) {const panel=node('div',undefined,'panel');panel.append(node('h4',heading));const pre=node('pre');pre.append(node('code',text));panel.append(pre);columns.append(panel);}

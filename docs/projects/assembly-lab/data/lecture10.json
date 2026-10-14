@@ -107,6 +107,156 @@
       "explanation": "Implementation, workload and encoding details matter. x86 permits instructions up to 15 bytes; some RISC ISAs offer compressed encodings."
     },
     {
+      "id": "l10-whyassembly",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Why inspect optimized assembly?",
+      "question": "A debugger seems to step through optimized C in an unexpected order. Why inspect the assembly?",
+      "options": [
+        "Each C statement must always become exactly one instruction",
+        "It shows the instructions and control flow actually produced by the compiler",
+        "It guarantees that hand-written code will be faster"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Optimization can combine, reorder or eliminate operations while preserving required behavior. Disassembly helps relate the executable\u2019s actual steps to the C algorithm; it does not guarantee a speedup from hand coding."
+    },
+    {
+      "id": "l10-cbridge",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Connect C and assembly",
+      "question": "Which correctly distinguishes a separately assembled function from inline assembly?",
+      "options": [
+        "Inline assembly is C source recovered by a disassembler",
+        "A separate function needs no calling convention",
+        "A separate function is assembled and linked with C; inline assembly is a compiler-supported fragment inside C"
+      ],
+      "correctAnswer": 2,
+      "explanation": "A separately assembled function obeys the linking and ABI contract. Inline assembly also needs compiler-specific operands and clobber information. Both require you to describe how data enters, leaves and survives the code."
+    },
+    {
+      "id": "l10-regmemory",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Named storage versus addresses",
+      "question": "Which statement correctly compares general-purpose registers with memory?",
+      "options": [
+        "Registers have names and a small fixed architectural count; memory is selected by byte addresses",
+        "RAX is a memory address that can be dereferenced to find the register",
+        "A program allocates a new architectural register for every C variable"
+      ],
+      "correctAnswer": 0,
+      "explanation": "A register can contain an address, but the register itself is named storage. Programs can obtain more memory within system limits; they do not create extra architectural general-purpose registers. C variables may share registers or be stored in memory."
+    },
+    {
+      "id": "l10-regcapacity",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Count register storage without aliases",
+      "question": "How many bytes are in the lecture\u2019s 16 general-purpose 64-bit registers, excluding RIP, flags and vector registers?",
+      "options": [
+        "64 bytes",
+        "128 bytes",
+        "256 bytes because the 32-bit aliases add storage"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Each register holds 64/8=8 bytes. 16\u00d78=128 bytes. EAX, AX and AL are overlapping views of RAX, so counting them separately would double-count storage."
+    },
+    {
+      "id": "l10-floatregs",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Recognize another register family",
+      "question": "Which pair belongs to vector register families outside this integer simulator?",
+      "options": [
+        "RAX and EAX",
+        "RDI and RSI",
+        "XMM1 and YMM1"
+      ],
+      "correctAnswer": 2,
+      "explanation": "XMM/YMM names identify vector register views used by SIMD and some floating-point operations; they are not general-purpose integer-register aliases. The lecture introduces these families without teaching their instruction set."
+    },
+    {
+      "id": "l10-aggregate",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "How an array exists at machine level",
+      "question": "How does an ordinary int array appear to the integer instructions in this lecture?",
+      "options": [
+        "As consecutive bytes accessed using a base address, element size and index",
+        "As a special array register containing all elements",
+        "As an instruction that remembers the C array length"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The compiler and program use the type to choose layout, scale and access width. A MOV instruction reads or writes bytes at a computed address; it does not know the C array\u2019s bounds."
+    },
+    {
+      "id": "l10-opfamilies",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Classify instruction roles",
+      "question": "Match addq, movq and call to their primary roles, in that order.",
+      "options": [
+        "Control flow; arithmetic; data transfer",
+        "Arithmetic/logic; data transfer; control flow",
+        "Data transfer; control flow; arithmetic"
+      ],
+      "correctAnswer": 1,
+      "explanation": "ADD computes a sum; MOV copies data; CALL redirects execution and saves a return address. CALL also writes the stack, but its main role here is procedure control flow."
+    },
+    {
+      "id": "l10-encodingfields",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Read the three encoding bytes",
+      "question": "For the lecture\u2019s 48 89 d8 encoding, which describes the three bytes?",
+      "options": [
+        "48 data bytes, followed by the source and destination values",
+        "A memory address, followed by a C variable name",
+        "REX prefix selecting 64-bit width, MOV opcode, ModR/M operand fields"
+      ],
+      "correctAnswer": 2,
+      "explanation": "48 is the REX prefix with W set for this form; 89 is the MOV opcode; d8 encodes register mode and the register choices. These three code bytes describe an eight-byte data operation; they do not contain RBX\u2019s runtime value."
+    },
+    {
+      "id": "l10-encodingdirection",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Decode source and destination",
+      "question": "For opcode 89 with prefix 48, d8 splits as 11 | 011 | 000. Here 11 means register mode, 011 selects source RBX and 000 selects destination RAX. Which instruction is encoded?",
+      "options": [
+        "movq %rbx,%rax",
+        "movq %rax,%rbx",
+        "movq %rbx,(%rax)"
+      ],
+      "correctAnswer": 0,
+      "explanation": "For this opcode, the reg field is the source and the r/m field is the destination. AT&T writes source first, so it is movq %rbx,%rax. Register mode means no memory dereference. Replacing d8 with c3 reverses the register choices."
+    },
+    {
+      "id": "l10-gdbbytes",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "01-machine",
+      "title": "Interpret the debugger\u2019s byte command",
+      "question": "What does x/14xb sum request in GDB?",
+      "options": [
+        "Disassemble exactly 14 instructions",
+        "Examine 14 bytes at sum, displaying each in hexadecimal",
+        "Execute sum 14 times"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The x command examines memory; 14 is the unit count, x selects hexadecimal display and b selects byte-sized units. Instruction lengths vary, so 14 bytes need not represent 14 instructions. Use disassemble sum for instructions."
+    },
+    {
       "id": "l10-copy64",
       "type": "code",
       "lesson": "02-widths",
@@ -405,6 +555,21 @@
       ],
       "correctAnswer": 2,
       "explanation": "The ordinary mov form cannot copy directly between two memory operands. Load A into a register, then store to B."
+    },
+    {
+      "id": "l10-intelsyntax",
+      "type": "mcq",
+      "lesson": "02-widths",
+      "category": "02-widths",
+      "title": "Translate the syntax, keep the meaning",
+      "question": "Which Intel-syntax instruction has the same effect as AT&T movq %rbx,%rax?",
+      "options": [
+        "mov rbx,rax",
+        "mov rax,[rbx]",
+        "mov rax,rbx"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Intel MOV puts the destination first. Both forms copy the value in RBX into RAX without accessing memory or changing RBX. Brackets would instead dereference an address. Enter AT&T syntax in this lab."
     },
     {
       "id": "l10-loadptr",
@@ -818,6 +983,149 @@
       ],
       "correctAnswer": 0,
       "explanation": "The second load sees the already-overwritten value. Preserve the original before the store."
+    },
+    {
+      "id": "l10-swapload1",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Swap: predict the first load",
+      "question": "RDI=0x120, RSI=0x100, M8[0x120]=123 and M8[0x100]=456. After movq (%rdi),%rax, what changes?",
+      "options": [
+        "RAX becomes 123; both memory cells and both pointers are unchanged",
+        "RAX becomes 0x120 and memory[0x120] becomes 0",
+        "RDI becomes 123"
+      ],
+      "correctAnswer": 0,
+      "explanation": "MOV reads the eight-byte pointee at RDI. RAX receives the data, not the pointer. A load neither erases memory nor changes the address register."
+    },
+    {
+      "id": "l10-swapload2",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Swap: preserve both originals",
+      "question": "RDI=0x120, RSI=0x100, M8[0x120]=123 and M8[0x100]=456. After movq (%rdi),%rax; movq (%rsi),%rdx, which state is correct?",
+      "options": [
+        "RAX=456, RDX=123; memory has already swapped",
+        "RAX=123, RDX=456; memory is unchanged",
+        "RAX=0x120, RDX=0x100; both memory cells are zero"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The two loads capture the original data in independent temporary registers. No store has run yet, so the memory values remain 123 and 456."
+    },
+    {
+      "id": "l10-swapstore1",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Swap: the temporary prevents data loss",
+      "question": "RDI=0x120, RSI=0x100, M8[0x120]=123 and M8[0x100]=456. After both loads and movq %rdx,(%rdi), what are M8[0x120], M8[0x100] and RAX?",
+      "options": [
+        "123, 456, 0x120",
+        "456, 123, 456",
+        "456, 456, 123"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The first store overwrites the original 123 in memory with 456. RAX still preserves 123 for the second store. Both memory cells temporarily containing 456 is expected at this intermediate step."
+    },
+    {
+      "id": "l10-swapfinal",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Swap: distinguish changed data from pointers",
+      "question": "RDI=0x120, RSI=0x100, M8[0x120]=123 and M8[0x100]=456. After movq (%rdi),%rax; movq (%rsi),%rdx; movq %rdx,(%rdi); movq %rax,(%rsi), which state is correct?",
+      "options": [
+        "M8[0x120]=456, M8[0x100]=123; RDI=0x120 and RSI=0x100",
+        "M8[0x120]=456, M8[0x100]=123; RDI=0x100 and RSI=0x120",
+        "Both memory cells contain 456"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The code exchanges the pointed-to values. It does not exchange the pointers: neither RDI nor RSI is an instruction destination. RAX=123 and RDX=456 still hold the original values."
+    },
+    {
+      "id": "l10-storeimmediate",
+      "type": "code",
+      "lesson": "03-pointers",
+      "category": "03-pointers",
+      "title": "Store a constant directly through a pointer",
+      "cCode": "void initialize(long *p) { *p = -128; }\n// Practice the immediate-to-memory form: use movq $-128,(%rdi).",
+      "hint": "An encodable immediate can be the source of a memory store. Keep the pointer in RDI.",
+      "solutions": [
+        "movq $-128,(%rdi)\nret"
+      ],
+      "cases": [
+        {
+          "name": "Destination at 0x1000",
+          "function": true,
+          "memoryWidth": 8,
+          "memory": {
+            "cell": 0,
+            "guard": "0x1122334455667788"
+          },
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "cell": 4096,
+            "guard": 4104
+          },
+          "expected": {
+            "memory": {
+              "cell": -128
+            }
+          }
+        },
+        {
+          "name": "Destination at 0x1200",
+          "function": true,
+          "memoryWidth": 8,
+          "memory": {
+            "cell": "9007199254740993",
+            "guard": "0x1122334455667788"
+          },
+          "registers": {
+            "rdi": 4608
+          },
+          "symbols": {
+            "cell": 4608,
+            "guard": 4616
+          },
+          "expected": {
+            "memory": {
+              "cell": -128
+            }
+          }
+        },
+        {
+          "name": "Destination at 0x1800",
+          "function": true,
+          "memoryWidth": 8,
+          "memory": {
+            "cell": -1,
+            "guard": "0x1122334455667788"
+          },
+          "registers": {
+            "rdi": 6144
+          },
+          "symbols": {
+            "cell": 6144,
+            "guard": 6152
+          },
+          "expected": {
+            "memory": {
+              "cell": -128
+            }
+          }
+        }
+      ],
+      "explanation": "The q suffix writes all eight bytes. -128 fits the sign-extended immediate encoding used by a q memory store. The cases vary the pointer and include a neighboring guard cell to detect an incorrect address or extra write.",
+      "requirements": [
+        "mov",
+        "ret"
+      ],
+      "dataModel": "x86-64 / LP64: long and pointers 8 bytes; int 4 bytes"
     },
     {
       "id": "l10-arraylong",
@@ -1234,6 +1542,51 @@
       "explanation": "Use matching address-register widths. The scale remains 4 for int, regardless of the 64-bit registers."
     },
     {
+      "id": "l10-addressforms",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Solve all four lecture address forms",
+      "question": "RDX=0xf000, RCX=0x100. In order, evaluate 8(%rdx); (%rdx,%rcx); (%rdx,%rcx,4); 0x80(,%rdx,2).",
+      "options": [
+        "0xf008; 0xf100; 0xf400; 0x1e080",
+        "0xf008; 0xf100; 0x3c100; 0xf082",
+        "0xf008; 0xf400; 0xf400; 0x1e000"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Use displacement + base + index\u00d7scale. The second form has implicit scale 1; the third scales RCX, not RDX; the fourth has no base. Hexadecimal 0x80 adds 128 bytes."
+    },
+    {
+      "id": "l10-displacement42",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Keep byte offsets and scales separate",
+      "question": "RSI=0x1000 and RAX=3. Which address does 42(%rsi,%rax,2) use? The displacement 42 is decimal.",
+      "options": [
+        "0x1048",
+        "0x1030",
+        "0x102a"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Compute 4096 + 42 + 3\u00d72 = 4144 = 0x1030. The displacement is added once; scale multiplies only the index. Do not treat the decimal text 42 as hexadecimal 0x42."
+    },
+    {
+      "id": "l10-localintstore",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "04-addresses",
+      "title": "Correct the lecture\u2019s local-array store",
+      "question": "int data[] begins at RBP+20, k is in RAX, and the int value is in EDX. Which implements data[k]=value?",
+      "options": [
+        "movq %rdx,20(%rbp,%rax,8)",
+        "movl %edx,20(%rbp,%eax,4)",
+        "movl %edx,20(%rbp,%rax,4)"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The element and store are four bytes, so choose scale 4 and movl. RBP/RAX match as 64-bit address registers; mixing RBP with EAX is invalid. A q store would overwrite eight bytes, potentially damaging a neighboring int."
+    },
+    {
       "id": "l10-elementptr",
       "type": "code",
       "lesson": "05-lea",
@@ -1566,6 +1919,21 @@
       ],
       "correctAnswer": 1,
       "explanation": "lea and mov preserve flags; add and sub update them."
+    },
+    {
+      "id": "l10-leafour",
+      "type": "mcq",
+      "lesson": "05-lea",
+      "category": "05-lea",
+      "title": "Predict all four LEA/MOV results",
+      "question": "RDX=0x100, RCX=4, M8[0x100]=1, M8[0x110]=8. Execute leaq (%rdx,%rcx,4),%rax; movq (%rdx,%rcx,4),%rbx; leaq (%rdx),%rdi; movq (%rdx),%rsi. What are RAX,RBX,RDI,RSI?",
+      "options": [
+        "0x110, 8, 0x100, 1",
+        "8, 0x110, 1, 0x100",
+        "0x110, 0x110, 0x100, 0x100"
+      ],
+      "correctAnswer": 0,
+      "explanation": "LEA returns the calculated number; MOV loads the eight-byte value stored there. The indexed address is 0x100+4\u00d74=0x110. Neither RDX nor RCX changes. Track each destination separately."
     },
     {
       "id": "l10-subtract",
@@ -3826,7 +4194,8 @@
           "memoryWidth": 8,
           "expected": {
             "registers": {
-              "rax": "21"
+              "rax": "21",
+              "rdi": "0"
             },
             "memory": {}
           },
@@ -3847,7 +4216,8 @@
           "memoryWidth": 8,
           "expected": {
             "registers": {
-              "rax": "-9"
+              "rax": "-9",
+              "rdi": "0"
             },
             "memory": {}
           },
@@ -3868,7 +4238,8 @@
           "memoryWidth": 8,
           "expected": {
             "registers": {
-              "rax": "0"
+              "rax": "0",
+              "rdi": "0"
             },
             "memory": {}
           },

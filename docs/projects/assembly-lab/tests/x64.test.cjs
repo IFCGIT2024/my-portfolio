@@ -4,7 +4,7 @@ const E=require('../engine.js');
 const bank=require('../data/lecture10.json');
 const run=(code,fixture={},options={})=>E.execute(code,{memory:{},...fixture},options);
 const rax=(code,fixture)=>run(code,fixture).registers.get('rax');
-test('all 102 new questions and their reference solutions validate',()=>{E.validateBank(bank);assert.equal(bank.questions.length,102);});
+test('all 122 Lecture 10 questions and their reference solutions validate',()=>{E.validateBank(bank);assert.equal(bank.questions.length,122);});
 test('all lessons have introductions, examples, explanations and valid question mappings',()=>{
  const lessons=require('../data/lessons.json').lessons;assert.equal(lessons.length,12);
  for(const l of lessons){assert.ok(l.paragraphs.length>=4);assert.ok(l.exampleAssembly&&l.walkthrough&&l.pitfall);assert.ok(bank.questions.some(q=>q.lesson===l.id));}

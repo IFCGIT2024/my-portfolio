@@ -227,7 +227,7 @@
   function renderCourseProgress() {
     if(!lessons.length) return;
     const list=bank.filter(q=>q.lesson), count=counters(list);
-    $('course-progress').textContent=`12 lessons · ${list.length} new exercises · ${count.solved} solved independently · ${count.reviewed} reviewed. Start with the introduction, try the worked example, then practice both modes.`;
+    $('course-progress').textContent=`${lessons.length} lessons · ${list.length} new exercises · ${count.solved} solved independently · ${count.reviewed} reviewed. Start with the introduction, try the worked example, then practice both modes.`;
   }
   function renderLesson() {
     $('lesson-select').replaceChildren(...[...lessons.map((l,i)=>({id:l.id,title:`${i+1}. ${l.title}`})),{id:'original',title:'Original practice — all preserved exercises'},{id:'all',title:'All practice — course and original'}].map(l=>{const o=node('option',l.title);o.value=l.id;o.selected=l.id===lessonId;return o;}));
@@ -252,20 +252,22 @@
   function showTraceStep() {
     const t=trace[Number($('trace-step').value)];
     if(!t){$('trace-state').textContent='No trace available.';return;}
-    const registers=Object.entries(t.registers).map(([k,v])=>{const n=BigInt(v);return `%${k.padEnd(3)}  ${v}   (0x${BigInt.asUintN(64,n).toString(16).padStart(16,'0')})`;});
-    $('trace-state').textContent=`Step ${t.step} · line ${t.line} · ${t.instruction}\n\nRegisters before instruction\n${registers.join('\n')}\n\nFlags: ${Object.entries(t.flags).map(([k,v])=>k+'='+v).join(' · ')||'undefined'}\n\nStack from RSP\n${t.stack.join('\n')||'(empty)'}\n\nQuestion memory\n${Object.entries(t.memory||{}).map(([k,v])=>k+' = '+v).join('\n')||'(none)'}`;
+    const registers=Object.entries(t.registers).map(([k,v])=>{const n=BigInt(v),bits=t.registerWidths?.[k]||64;return `%${k.padEnd(4)} ${v}   (0x${BigInt.asUintN(bits,n).toString(16).padStart(bits/4,'0')}; ${bits} bits)`;});
+    const heading=t.phase==='after'?`Final state after ${t.step} instructions`:`Before step ${t.step} · line ${t.line} · ${t.instruction}`;
+    $('trace-state').textContent=`${heading}\n\nRegisters (signed decimal and hexadecimal)\n${registers.join('\n')}\n\nFlags: ${Object.entries(t.flags).map(([k,v])=>k+'='+v).join(' · ')||'undefined'}\n\nStack from RSP\n${t.stack.join('\n')||'(empty)'}\n\nQuestion memory\n${Object.entries(t.memory||{}).map(([k,v])=>k+' = '+v).join('\n')||'(none)'}`;
   }
   function runTrace() {
     const q=current();if(!q||q.type!=='code')return;
     const fixture=q.cases[Number($('trace-case').value)||0];
-    try {const state=engine.execute($('assembly-input').value,fixture,{trace:true});trace=state.trace;$('trace-status').textContent=`Executed ${state.steps} instructions. Showing ${trace.length} pre-instruction states. Use Check answer to grade all cases.`;}
+    try {const state=engine.execute($('assembly-input').value,fixture,{trace:true});trace=[...state.trace,state.finalTrace];$('trace-status').textContent=`Executed ${state.steps} instructions. Showing ${state.trace.length} pre-instruction states${state.steps>state.trace.length?' (first 200 only)':''} plus the final state. Use Check answer to grade all cases.`;}
     catch(e){trace=e.trace||[];$('trace-status').textContent=e.message+' Fix the error and rerun; any captured steps are shown below.';}
-    $('trace-step').max=Math.max(0,trace.length-1);$('trace-step').value=0;showTraceStep();
+    $('trace-step').max=Math.max(0,trace.length-1);$('trace-step').value=0;$('trace-final').disabled=trace.at(-1)?.phase!=='after';showTraceStep();
   }
   $('lesson-select').addEventListener('change',()=>chooseLesson($('lesson-select').value));
   for(const [id,delta] of [['lesson-prev',-1],['lesson-next',1]]) $(id).addEventListener('click',()=>{const index=lessons.findIndex(l=>l.id===lessonId);if(lessons[index+delta])chooseLesson(lessons[index+delta].id);});
   $('trace-button').addEventListener('click',()=>{const q=current();if(!q||q.type!=='code')return;$('trace-panel').hidden=false;$('trace-case').replaceChildren(...q.cases.map((c,i)=>{const o=node('option',c.name);o.value=i;return o;}));runTrace();});
   $('trace-run').addEventListener('click',runTrace);$('trace-step').addEventListener('input',showTraceStep);
+  $('trace-final').addEventListener('click',()=>{$('trace-step').value=trace.length-1;showTraceStep();});
   $('code-mode').addEventListener('click',()=>changeMode('code'));
   $('mcq-mode').addEventListener('click',()=>changeMode('mcq'));
   $('topic').addEventListener('change',()=>{topic=$('topic').value;currentId=null;render();});
@@ -285,8 +287,9 @@
       const incoming=engine.validateBank(JSON.parse(await file.text()));
       const combined=engine.validateBank({schemaVersion:1,questions:[...bank,...incoming.questions]});
       bank=combined.questions;for(const q of incoming.questions)fingerprints.set(q.id,fingerprint(q));
-      $('import-status').textContent=`Added ${incoming.questions.length} questions for this session. Choose their topic or use Jump to.`;
-      updateFilters();render();
+      lessonId='all';topic='all';mode=incoming.questions[0].type;currentId=incoming.questions[0].id;
+      $('import-status').textContent=`Added ${incoming.questions.length} questions for this session. The first imported question is open under All practice.`;
+      renderLesson();updateFilters();render();
     } catch(e){$('import-status').textContent='Bank not added: '+e.message;}
     event.target.value='';
   });

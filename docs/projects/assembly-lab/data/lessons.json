@@ -135,7 +135,8 @@
         "Bitwise operators act on corresponding bits: AND keeps a bit only if both inputs have 1; OR sets it if either has 1; XOR sets it if the inputs differ; NOT flips every bit. Number bits from zero at the least significant end.",
         "A mask selects positions. x & 0xff extracts the low byte. x | (1UL<<k) sets bit k; x & ~(1UL<<k) clears it; x ^ (1UL<<k) toggles it. For a 64-bit C mask use 1UL in this LP64 model, and ensure k is in 0..63.",
         "C & and | are bitwise; && and || test truth and short-circuit. For example 2 & 4 is zero while 2 && 4 is one. A bit-mask test often becomes testq $mask,%reg followed by a conditional branch.",
-        "test performs an AND only for flags and leaves both operands unchanged. AND/OR/XOR set ZF and SF and clear CF/OF. NOT preserves flags. XORing a register with itself produces zero without needing its old value."
+        "test performs an AND only for flags and leaves both operands unchanged. AND/OR/XOR set ZF and SF and clear CF/OF. NOT preserves flags. XORing a register with itself produces zero without needing its old value.",
+        "Most q-form arithmetic and bitwise immediate operands use a sign-extended 32-bit encoding. For example, -9 and 0xfffffffffffffff7 describe the same encodable 64-bit mask for clearing bit 3. The positive mask 0x00000000ffffffff does not fit that encoding: load it into a register with movq first, then AND the registers. The written bit pattern matters, not just its number of hexadecimal digits."
       ],
       "exampleC": "unsigned long set_low_bit(unsigned long x) { return x | 1UL; }",
       "exampleAssembly": "movq %rdi,%rax\norq $1,%rax\nret",
@@ -154,8 +155,8 @@
       "paragraphs": [
         "SHL and SAL are names for the same left shift. Zeros enter at the low end and high bits fall off. For unsigned values it corresponds to multiplication by a power of two modulo the width. SHR shifts right and inserts zeros; SAR shifts right and replicates the sign bit.",
         "For 64-bit x86 shifts, the hardware uses the low six bits of the count; for 8-, 16- and 32-bit shifts it uses five. A variable count must be in CL. In C, a shift count must be nonnegative and less than the promoted left operand\u2019s width; x86 count masking does not legalize an out-of-range C shift.",
-        "SAR of a negative integer rounds toward negative infinity. C signed division rounds toward zero, so -7 >> 1 under arithmetic-shift behavior yields -4 while -7/2 is -3. Do not replace arbitrary signed division with SAR without a correction. In pre-C23 C, right-shifting a negative signed value is implementation-defined; these lessons explicitly use the x86 arithmetic behavior.",
-        "A zero effective count leaves data and flags unchanged. For nonzero counts, shifts update ZF/SF; OF is defined only for a count of one. This lab refuses branches that depend on undefined flags."
+        "SAR of a negative integer rounds toward negative infinity. C signed division rounds toward zero, so -7 >> 1 under arithmetic-shift behavior yields -4 while -7/2 is -3. Do not replace arbitrary signed division with SAR without a correction. In C (including C23), right-shifting a negative signed value is implementation-defined; these lessons explicitly use the x86 arithmetic behavior.",
+        "A zero effective count preserves the operand-width value and flags. However, a 32-bit register destination still clears its upper 32 bits: shll $0,%eax leaves EAX unchanged but zeroes the high half of RAX. A q-form zero-count shift leaves the full 64-bit register unchanged. For nonzero counts, shifts update ZF/SF; OF is defined only for a count of one. This lab refuses branches that depend on undefined flags."
       ],
       "exampleC": "unsigned long half(unsigned long x) { return x >> 1; }",
       "exampleAssembly": "movq %rdi,%rax\nshrq $1,%rax\nret",

@@ -2507,6 +2507,21 @@
       "explanation": "It computes an AND for flags but discards the numeric result."
     },
     {
+      "id": "l10-mask-immediate",
+      "type": "mcq",
+      "lesson": "07-bits",
+      "category": "07-bits",
+      "title": "Encoding an inverted mask",
+      "question": "Which immediate is equivalent to $-9 in andq $-9,%rax?",
+      "options": [
+        "$0x00000000fffffff7",
+        "$0xfffffffffffffff7",
+        "$9"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A q-form AND immediate is sign-extended from 32 bits. The 64-bit pattern 0xfffffffffffffff7 is -9 and clears bit 3. The positive value 0x00000000fffffff7 is a different 64-bit mask; load it into a register first if that is the value you want."
+    },
+    {
       "id": "l10-left",
       "type": "code",
       "lesson": "08-shifts",
@@ -2939,6 +2954,21 @@
       ],
       "correctAnswer": 0,
       "explanation": "Only count one defines OF for these shifts. The checker refuses to guess it."
+    },
+    {
+      "id": "l10-zero-shift-alias",
+      "type": "mcq",
+      "lesson": "08-shifts",
+      "category": "08-shifts",
+      "title": "Zero count, 32-bit destination",
+      "question": "After movq $-1,%rax; shll $0,%eax, what is RAX?",
+      "options": [
+        "0xffffffffffffffff",
+        "0x00000000ffffffff",
+        "0"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The effective count is zero, so the low 32-bit value and flags stay unchanged. But the 32-bit register result clears RAX bits 32\u201363. By contrast, shlq $0,%rax leaves all 64 bits unchanged."
     },
     {
       "id": "l10-signedmax",

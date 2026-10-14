@@ -135,7 +135,7 @@
             const v=arg.expr.value;
             const width=shift?8:bits;
             if(v< -(1n<<BigInt(width-1)) || v>mask(width)) fail(`Immediate does not fit ${width} bits.`);
-            if(bits===64 && !(op==='mov' && args.at(-1).kind==='reg') && !shift && (v< -2147483648n || v>2147483647n)) fail('This 64-bit form encodes a sign-extended 32-bit immediate. Load a large constant into a register first.');
+            if(bits===64 && !(op==='mov' && args.at(-1).kind==='reg') && !shift && U(v)!==U(S(v,32))) fail('This 64-bit form encodes a sign-extended 32-bit immediate. Load a large constant into a register first.');
           }
           // AH/BH/CH/DH cannot coexist with a REX encoding.
           const allRegs=args.flatMap(a=>a.kind==='reg'?[a.name]:[a.base,a.index].filter(Boolean));
@@ -160,7 +160,7 @@
     return n;
   }
   function makeState(fixture={}) {
-    const state={symbols:new Map(),registers:new Map(),regValues:new Map(),regKnown:new Map(),bytes:new Map(),flags:{},writes:new Set(),steps:0,trace:[],function:fixture.function===true,returned:false};
+    const state={symbols:new Map(),registers:new Map(),regValues:new Map(),regKnown:new Map(),bytes:new Map(),flags:{},writes:new Set(),executedOps:new Set(),steps:0,trace:[],function:fixture.function===true,returned:false};
     const {symbols,bytes}=state, occupied=new Set();
     for(const [name,value] of Object.entries(fixture.symbols||{})) {
       if(!SYMBOL.test(name)) fail(`Invalid fixture symbol ${name}.`);
@@ -270,6 +270,27 @@
   function execute(program,fixture={},options={}) {
     if(typeof program==='string') program=parse(program);
     const state=makeState(fixture), maxSteps=Math.min(options.maxSteps||10000,20000);
+    // Show full registers plus the aliases actually used in the program. In
+    // particular, AL remains visible when the rest of RAX is uninitialized.
+    const traceRegisters=new Set(program.instructions.flatMap(ins=>ins.args.flatMap(arg=>arg.kind==='reg'?[arg.name]:[arg.base,arg.index].filter(Boolean))));
+    const snapshot=details=>{
+      const registers=[...state.registers].filter(([name])=>REGS.get(name).bits===64||traceRegisters.has(name));
+      const sp=safeAddress(readRegister('rsp',state));
+      return {...details,
+        registers:Object.fromEntries(registers.map(([name,value])=>[name,value.toString()])),
+        registerWidths:Object.fromEntries(registers.map(([name])=>[name,REGS.get(name).bits])),
+        flags:{...state.flags},
+        memory:Object.fromEntries(Object.keys(fixture.memory||{}).map(key=>{
+          const bits=cellSize(fixture,key)*8;
+          try {const value=readMemory(safeAddress(resolve(expression(key),state)),state,bits);return [key,`${S(value,bits)} (0x${value.toString(16)})`];}
+          catch {return [key,'uninitialized'];}
+        })),
+        stack:Array.from({length:Math.min(8,Math.max(0,Math.ceil((STACK_TOP-sp)/8)))},(_,i)=>{
+          const at=sp+i*8;
+          try {return `0x${at.toString(16)}: 0x${readMemory(at,state,64).toString(16)}`;}
+          catch {return `0x${at.toString(16)}: uninitialized`;}
+        })};
+    };
     const push=value=>{const sp=safeAddress(readRegister('rsp',state)-8n);if(sp<STACK_LOW||sp>STACK_TOP-8) fail('Stack overflow or invalid stack pointer.');writeMemory(sp,value,state,64);writeRegister('rsp',BigInt(sp),state);};
     const pop=()=>{const sp=safeAddress(readRegister('rsp',state));if(sp<STACK_LOW||sp>STACK_TOP-8) fail('Stack underflow or invalid stack pointer.');const v=readMemory(sp,state,64);writeRegister('rsp',BigInt(sp+8),state);return v;};
     const calls=[];
@@ -279,7 +300,8 @@
       const ins=program.instructions[pc],{op,args,bits}=ins;
       try {
         if(++state.steps>maxSteps) fail(`Stopped after ${maxSteps} instructions. Check the loop condition and update.`);
-        if(options.trace && state.trace.length<200) state.trace.push({step:state.steps,line:ins.line,instruction:ins.source,registers:Object.fromEntries([...state.registers].filter(([k])=>REGS.get(k).bits===64).map(([k,v])=>[k,v.toString()])),flags:{...state.flags},memory:Object.fromEntries(Object.keys(fixture.memory||{}).map(k=>{const bits=cellSize(fixture,k)*8;try{const v=readMemory(safeAddress(resolve(expression(k),state)),state,bits);return [k,`${S(v,bits)} (0x${v.toString(16)})`];}catch{return [k,'uninitialized'];}})),stack:Array.from({length:Math.min(8,Math.max(0,(STACK_TOP-safeAddress(readRegister('rsp',state)))/8))},(_,i)=>{const at=safeAddress(readRegister('rsp',state))+i*8;try{return `0x${at.toString(16)}: 0x${readMemory(at,state,64).toString(16)}`;}catch{return `0x${at.toString(16)}: uninitialized`;}})});
+        if(options.trace && state.trace.length<200) state.trace.push(snapshot({step:state.steps,line:ins.line,instruction:ins.source,phase:'before'}));
+        state.executedOps.add(op==='sal'?'shl':op);
         if(op.startsWith('j')) {pc=(op==='jmp'||condition(op,state.flags))?program.labels.get(args[0]):pc+1;continue;}
         if(op==='call') {if((fixture.abi||fixture.function) && readRegister('rsp',state)%16n!==0n) fail('System V call requires RSP aligned to 16 bytes.');calls.push({target:BigInt(pc+1),saved:CALLEE_SAVED.filter(n=>state.regKnown.has(n)).map(n=>[n,readRegister(n,state)])});push(BigInt(pc+1));pc=program.labels.get(args[0]);continue;}
         if(op==='ret') {const target=pop();
@@ -308,7 +330,10 @@
           }
           case 'shl':case 'sal':case 'shr':case 'sar': {
             const count=Number(read(args[0],state,args[0].kind==='reg'?8:bits)&BigInt(bits===64?63:31));
-            const a=r(dest);if(!count) break;
+            const a=r(dest);
+            // Even an effective count of zero writes a 32-bit register result,
+            // clearing its upper 32 bits. Flags and memory remain unchanged.
+            if(!count) {if(bits===32 && dest.kind==='reg') w(a);break;}
             const n=BigInt(count),left=op==='shl'||op==='sal';
             result=U(left?a<<n:op==='shr'?a>>n:S(a,bits)>>n,bits);
             const cf=count<bits?Boolean(left?(a>>BigInt(bits-count))&1n:(a>>BigInt(count-1))&1n):op==='sar'?S(a,bits)<0n:undefined;
@@ -319,8 +344,10 @@
         pc++;
       } catch(e) {const error=new AssemblyError(e.message,ins.line);error.trace=state.trace;throw error;}
     }
-    if(calls.length) fail('Program ended inside a called function without ret.');
-    if(state.function&&!state.returned) fail('Function must return with ret; falling off the end is not a return.');
+    const endError=message=>{const error=new AssemblyError(message);error.trace=state.trace;throw error;};
+    if(calls.length) endError('Program ended inside a called function without ret.');
+    if(state.function&&!state.returned) endError('Function must return with ret; falling off the end is not a return.');
+    if(options.trace) state.finalTrace=snapshot({step:state.steps,instruction:'Program finished',phase:'after'});
     return state;
   }
   function inspect(state,expected,fixture) {
@@ -341,11 +368,12 @@
     let program;
     try { program=parse(code); } catch(e) { return {ok:false,message:e.message}; }
     const required=question.requirements||[];
-    for(const op of required) if(!program.instructions.some(i=>i.op===op || (op==='sal'&&i.op==='shl'))) return {ok:false,message:`This exercise asks you to practice ${op}; include that instruction.`};
-    const results=[];
+    for(const op of required) if(!program.instructions.some(i=>(i.op==='sal'?'shl':i.op)===(op==='sal'?'shl':op))) return {ok:false,message:`This exercise asks you to practice ${op}; include that instruction.`};
+    const results=[], executedOps=new Set();
     for (const fixture of question.cases) {
       try {
         const state=execute(program,fixture);
+        for(const op of state.executedOps) executedOps.add(op);
         const differences=inspect(state,fixture.expected,fixture);
         // Memory that is not an output must be preserved. Temporary registers are free.
         const initial=makeState(fixture), allowed=new Set();
@@ -361,6 +389,8 @@
         results.push({name:fixture.name,ok:!differences.length,differences,steps:state.steps});
       } catch(e) { results.push({name:fixture.name,ok:false,error:e.message}); }
     }
+    const missing=required.filter(op=>!executedOps.has(op==='sal'?'shl':op));
+    if(results.every(r=>r.ok) && missing.length) return {ok:false,results,message:`The outputs match, but ${missing.join(', ')} never executed in any test case. This exercise requires practicing those instructions; unreachable code does not count.`};
     const ok=results.every(r=>r.ok);
     return {ok,results,message:ok?`Passed all ${results.length} test cases. Required outputs and preserved memory match.`:`Passed ${results.filter(r=>r.ok).length} of ${results.length} test cases. Review the first failing case below.`};
   }

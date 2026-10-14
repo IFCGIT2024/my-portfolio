@@ -4,7 +4,7 @@ const E=require('../engine.js');
 const bank=require('../data/lecture10.json');
 const run=(code,fixture={},options={})=>E.execute(code,{memory:{},...fixture},options);
 const rax=(code,fixture)=>run(code,fixture).registers.get('rax');
-test('all 100 new questions and their reference solutions validate',()=>{E.validateBank(bank);assert.equal(bank.questions.length,100);});
+test('all 102 new questions and their reference solutions validate',()=>{E.validateBank(bank);assert.equal(bank.questions.length,102);});
 test('all lessons have introductions, examples, explanations and valid question mappings',()=>{
  const lessons=require('../data/lessons.json').lessons;assert.equal(lessons.length,12);
  for(const l of lessons){assert.ok(l.paragraphs.length>=4);assert.ok(l.exampleAssembly&&l.walkthrough&&l.pitfall);assert.ok(bank.questions.some(q=>q.lesson===l.id));}
@@ -84,4 +84,49 @@ test('function contracts reject unpreserved callee-saved registers and helpers',
 });
 test('runtime errors retain a useful partial trace',()=>{
  try {run('movq $1,%rax\nmovq 0x9000,%rax',{}, {trace:true});assert.fail('Should reject missing memory');}catch(e){assert.equal(e.trace.length,2);assert.equal(e.trace[1].registers.rax,'1');}
+});
+test('zero-count 32-bit shifts zero-extend their register but preserve flags',()=>{
+ for(const op of ['shl','sal','shr','sar']) for(const count of ['$0','$32','%cl']) {
+  const s=run(`movq $-1,%rax\nmovl $32,%ecx\ncmpq $-1,%rax\n${op}l ${count},%eax`);
+  assert.equal(s.registers.get('rax'),0xffffffffn,`${op} ${count}`);
+  assert.deepEqual(s.flags,{ZF:true,SF:false,CF:false,OF:false});
+ }
+ assert.equal(rax('movq $-1,%rax\nshlq $0,%rax'),-1n);
+ assert.equal(rax('movq $-1,%rax\nshlw $0,%ax'),-1n);
+ assert.equal(rax('movq $-1,%rax\nshlb $0,%al'),-1n);
+ const s=run('shll $32,A',{memoryWidth:8,memory:{A:'0x1122334455667788'}});
+ assert.equal(s.writes.size,0,'A zero-count memory shift does not write any bytes');
+});
+test('sign-extended q immediates accept equivalent negative and full-width hex spellings',()=>{
+ for(const op of ['and','or','xor','add','sub','cmp','test','imul']) {
+  const a=run(`movq $123,%rax\n${op}q $-9,%rax`);
+  const b=run(`movq $123,%rax\n${op}q $0xfffffffffffffff7,%rax`);
+  assert.equal(a.registers.get('rax'),b.registers.get('rax'),op);assert.deepEqual(a.flags,b.flags,op);
+ }
+ assert.equal(rax('pushq $0xffffffffffffffff\npopq %rax'),-1n);
+ for(const v of ['0x80000000','0xffffffff','0xffffffff7fffffff']) assert.throws(()=>E.parse(`andq $${v},%rax`),/sign-extended/);
+ assert.equal(rax('movq $7,%rax\nsubq $0xffffffff80000000,%rax'),2147483655n);
+});
+test('unreachable required instructions do not satisfy a stack exercise',()=>{
+ const q=bank.questions.find(q=>q.id==='l10-pushpop');
+ const result=E.check(q,'movq %rdi,%rax\nmovq $99,%rdi\njmp done\npushq %rdi\npopq %rax\ndone:');
+ assert.equal(result.ok,false);assert.match(result.message,/never executed/);
+});
+test('required shifts accept SAL and SHL as synonyms in either direction',()=>{
+ const q={requirements:['shl'],cases:[{name:'x',memory:{},registers:{rax:1},expected:{registers:{rax:2}}}]};
+ assert.equal(E.check(q,'salq $1,%rax').ok,true);
+ assert.equal(E.check({...q,requirements:['sal']},'shlq $1,%rax').ok,true);
+});
+test('trace includes partial-register aliases and a separate completed final state',()=>{
+ const s=run('movb $0xff,%al\nmovb %al,%dl',{}, {trace:true});
+ assert.equal(s.trace[1].registers.al,'-1');assert.equal(s.trace[1].registerWidths.al,8);
+ assert.equal(s.trace[1].registers.rax,undefined);
+ assert.equal(s.finalTrace.phase,'after');assert.equal(s.finalTrace.registers.dl,'-1');
+ const t=run('pushq $7\npopq %rax',{}, {trace:true});
+ assert.equal(t.finalTrace.registers.rax,'7');assert.equal(t.finalTrace.registers.rsp,'32768');
+ const long=run('movl $205,%ecx\nagain: decl %ecx\njne again',{}, {trace:true});
+ assert.equal(long.trace.length,200);assert.equal(long.finalTrace.registers.ecx,'0');
+});
+test('a function falling off the end retains its trace for diagnosis',()=>{
+ assert.throws(()=>run('movq $7,%rax',{function:true},{trace:true}),e=>e.trace.length===1&&/must return/.test(e.message));
 });

@@ -67,10 +67,11 @@
         <div class="actions"><div class="action-group"><button id="check" class="primary">Check answer</button><button id="hint-button">Show hint</button><button id="solution-button">Show solution</button><button id="trace-button">Trace my code</button></div>
           <div class="action-group"><button id="previous">← Previous</button><button id="next">Next →</button></div></div>
         <section id="trace-panel" class="panel" hidden aria-label="Execution trace">
-          <h3>Trace your program</h3><p class="small">State immediately before the selected instruction. The trace keeps the first 200 steps. Stack entries are 8-byte hexadecimal values; return addresses are simulated instruction indexes.</p>
+          <h3>Trace your program</h3><p class="small">Inspect the state before each instruction and the final result. The trace keeps the first 200 steps plus the final state. Register aliases used by your code appear with their widths. Stack entries are 8-byte hexadecimal values; return addresses are simulated instruction indexes.</p>
           <label>Test case <select id="trace-case"></select></label>
           <button id="trace-run">Run selected case</button><p id="trace-status" role="status"></p>
           <label>Step <input id="trace-step" type="range" min="0" max="0" value="0"></label>
+          <button id="trace-final" disabled>Show final state</button>
           <pre id="trace-state" tabindex="0"></pre>
         </section>
       </main>

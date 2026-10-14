@@ -1,6 +1,6 @@
 # C → x86 Assembly Lab — CSCI 2122
 
-A static, browser-only integer assembly course and practice lab. **12 guided lessons, 80 C-to-assembly exercises, and 90 concept questions**: the original 36 translations / 34 concepts are preserved; Lecture 10 adds 44 translations / 56 concepts. Every new concept has an introduction, a worked example, pitfalls and explained practice. The new reference translations have **149 independent expected-output cases**; the original bank retains 102.
+A static, browser-only integer assembly course and practice lab. **12 guided lessons, 80 C-to-assembly exercises, and 92 concept questions**: the original 36 translations / 34 concepts are preserved; Lecture 10 adds 44 translations / 58 concepts. Every new concept has an introduction, a worked example, pitfalls and explained practice. The new reference translations have **149 independent expected-output cases**; the original bank retains 102.
 
 Live URL: https://ifcgit2024.github.io/my-portfolio/docs/projects/assembly-lab/index.html
 
@@ -10,7 +10,7 @@ No backend or build step. The site remains at its existing path and does not cha
 
 Choose a lesson, read its introduction, open the worked C → assembly example, then practice **both** Code translation and Concept questions. Lesson navigation follows prerequisites. Choose **Original practice** to use the preserved refresher, or **All practice** for the combined banks. The first lesson is conceptual and automatically selects that mode.
 
-Code answers are executed against multiple supplied states, not compared to solution strings. Show hint, show solution and step through **Trace my code** when needed. The trace includes registers (decimal and hexadecimal), flags, question memory and eight-byte stack slots **before** each instruction. The first 200 steps are retained, including steps captured before a runtime error. Check answer grades all cases; tracing one case does not mark an exercise solved.
+Code answers are executed against multiple supplied states, not compared to solution strings. Show hint, show solution and step through **Trace my code** when needed. The trace includes registers (decimal and hexadecimal), flags, question memory and eight-byte stack slots **before** each instruction. The first 200 pre-instruction states are retained, including steps captured before a runtime error. The final state is available separately through **Show final state**. Full registers and the initialized aliases used by the program appear with their actual widths. Check answer grades all cases; tracing one case does not mark an exercise solved.
 
 Drafts, attempts, solved/reviewed status and the selected lesson persist in browser localStorage under `mizel:assembly-lab:progress:v1`. Stable question IDs and content fingerprints preserve the original bank's progress. Modified questions invalidate only their own old results. Revealing a solution before passing marks that question reviewed, not independently solved. Nothing is synchronized or uploaded.
 
@@ -49,11 +49,11 @@ The data model is Linux x86-64 **LP64**: `long` and pointers are eight bytes; `i
 - Data operations: MOV, LEA, ADD, SUB, two/three-operand IMUL, CMP, TEST, AND, OR, XOR, NEG, INC, DEC, NOT, NOP, SHL/SAL, SHR, SAR.
 - Control: named-label JMP and signed/unsigned/equality/overflow/sign conditional branches and aliases; local direct CALL, RET, 64-bit PUSH/POP and LEAVE. No suffix infers a register width; ambiguous memory-only instructions default to 32 bits for legacy compatibility. Prefer explicit sizes.
 - Little-endian byte memory supports overlapping accesses, aliases, symbols, immediates, register indirect, displacement and base/index/scale. Index scale is 1/2/4/8; ESP/RSP cannot index. Memory addresses are restricted to nonnegative safe JavaScript integer addresses. LEA arithmetic itself remains fully 64-bit, including negative results.
-- Most q-form arithmetic and memory-immediate operations encode sign-extended 32-bit immediates. A register-destination MOV can load a full-width immediate. Shift counts must be an immediate byte or CL, and are hardware-masked to five or six bits.
+- Most q-form arithmetic and memory-immediate operations encode sign-extended 32-bit immediates. A register-destination MOV can load a full-width immediate. Signed constants and equivalent 64-bit hexadecimal patterns are both accepted (for example, `-9` and `0xfffffffffffffff7`). Shift counts must be an immediate byte or CL, and are hardware-masked to five or six bits. A zero effective count preserves flags and the operand-width value; a 32-bit register destination still clears the upper half of its 64-bit parent.
 - Relevant ZF/SF/CF/OF flags are tracked. IMUL leaves ZF/SF undefined; shift OF is undefined for nonzero counts other than one. NOT/MOV/LEA and stack/control instructions preserve flags. A branch on an undefined flag fails clearly.
 - A 4096-byte stack is preallocated at `[0x7000,0x8000)`. Snippets start with RSP=0x8000; functions start at 0x7ff8 with a simulated return sentinel. Function fixtures seed RBX/RBP/R12–R15 with visible sentinel values unless explicitly overridden, and check their preservation. Function calls check ordinary 16-byte pre-call alignment and helper preservation.
 - `call` pushes a simulated instruction index, **not a native byte address**. `ret` pops it. Helpers must be included in the submitted code. Function exercises must execute RET; falling off the end is an error. Snippets may end normally. Stack balance is checked. No external/native functions run in the browser.
-- Output memory and registers must match; other supplied memory must remain unchanged. Stack scratch bytes may change. Some exercises explicitly require instructions such as PUSH/POP/CALL to practice that concept; this is stated in the task. Otherwise equivalent implementations are accepted.
+- Output memory and registers must match; other supplied memory must remain unchanged. Stack scratch bytes may change. Some exercises explicitly require instructions such as PUSH/POP/CALL to practice that concept; this is stated in the task. Required operations must execute in at least one test case; unreachable instructions do not satisfy that requirement. Otherwise equivalent implementations are accepted.
 - Limits: 50,000 characters, 1,000 lines/instructions, 10,000 executed instructions per case. The interpreter is a bounded teaching subset, not a complete assembler/emulator. No directives, indirect calls, division, extension moves, floating-point/SIMD, operating-system calls, arbitrary C parser, or machine-code generation. The displayed C is a specification, never evaluated.
 
 Passing tests is evidence for the listed inputs, not a proof for all C inputs. C signed overflow is undefined; signed examples avoid it. Unsigned examples can deliberately wrap. Negative signed right-shift questions explicitly specify x86 arithmetic behavior; C shift-count restrictions differ from hardware count masking.
@@ -91,12 +91,13 @@ Additional fields: `entry` selects a label; `memoryWidths` overrides widths by m
 ```sh
 node --test docs/projects/assembly-lab/tests/*.test.cjs
 python3 docs/projects/assembly-lab/tests/native-reference.py
+python3 docs/projects/assembly-lab/tests/native-semantics.py
 python3 -m http.server 8000
 ```
 
 Open `http://localhost:8000/docs/projects/assembly-lab/index.html`. Browsers block JSON fetches from `file://`.
 
-The Node suite covers original and new banks plus exact 64-bit arithmetic, aliases, overlapping widths, negative LEA, shifts/flags, stack boundaries, PUSH/POP special cases, nested calls, RET/LEAVE, ABI rules, invalid forms and grading. The independent native suite compiles and executes all **149 new reference cases** using GCC on Linux x86-64 and verifies expected register values, changed outputs and preserved input memory. It runs only repository-owned reference solutions in a temporary directory, never user code. GCC is a development-only verification dependency; the published site needs only a modern browser with BigInt.
+The Node suite covers original and new banks plus exact 64-bit arithmetic, aliases, overlapping widths, negative LEA, shifts/flags, stack boundaries, PUSH/POP special cases, nested calls, RET/LEAVE, ABI rules, invalid forms and grading. The independent native suite compiles and executes all **149 new reference cases** using GCC on Linux x86-64 and verifies expected register values, changed outputs and preserved input memory. The separate native-semantics suite compares shift results, defined flags and sign-extended immediate masks directly with hardware, including zero-count register writes. Both suites run only repository-owned programs in a temporary directory, never user code. GCC is a development-only verification dependency; the published site needs only a modern browser with BigInt.
 
 ## Primary references
 
@@ -104,6 +105,7 @@ The Node suite covers original and new banks plus exact 64-bit arithmetic, alias
 - [Intel architecture manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
 - [GNU assembler AT&T syntax](https://sourceware.org/binutils/docs/as/i386_002dVariations.html)
 - [GNU operand sizes](https://sourceware.org/binutils/docs/as/i386_002dMnemonics.html)
+- [C23 committee draft, §6.5.7 (shift rules)](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3096.pdf)
 - [System V AMD64 ABI source](https://gitlab.com/x86-psABIs/x86-64-ABI)
 
 No analytics, external fonts or third-party runtime scripts. Static assets and banks are the only app network requests.

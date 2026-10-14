@@ -29,6 +29,82 @@
     show("error");
   };
 
+  function normalize2115Question(q, topicMap) {
+    if (!q || typeof q !== "object" || !Array.isArray(q.options) || q.options.length !== 4) {
+      throw new Error("Invalid CSCI 2115 question record.");
+    }
+    const letters = q.options.map((option) => option.value);
+    if (letters.join("") !== "ABCD") {
+      throw new Error(`${q.id}: expected original A–D answer choices.`);
+    }
+    const correct = q.options.findIndex((option) => option.value === q.answer);
+    if (correct < 0) throw new Error(`${q.id}: correct answer is absent from the choices.`);
+    const meta = topicMap.get(q.topic);
+    if (q.part === "Core" && !meta) throw new Error(`${q.id}: missing core topic.`);
+    const section = q.part === "Core"
+      ? `Core — ${meta.section}`
+      : `Assignment — ${q.topic}: ${q.title}`;
+    return {
+      id: q.id,
+      section,
+      question: q.question,
+      options: q.options.map((option) => option.label),
+      correct,
+      explanation: q.explanation,
+      sources: q.sources,
+      table: q.table || null,
+      workedSolution: q.worked_solution || null,
+      optionFeedback: q.option_feedback || null,
+      difficulty: q.difficulty
+    };
+  }
+
+  async function load2115Questions(bank) {
+    if (!Array.isArray(bank.questionFiles) || bank.questionFiles.length === 0) {
+      throw new Error("Missing CSCI 2115 question files.");
+    }
+    const sets = await Promise.all(bank.questionFiles.map(async (filename) => {
+      if (!/^2115-module1-part-\d{2}\.json$/.test(filename)) {
+        throw new Error(`Unexpected 2115 file: ${filename}`);
+      }
+      const response = await fetch(`data/${filename}`, { cache: "no-store" });
+      if (!response.ok) throw new Error(`${filename}: HTTP ${response.status}`);
+      const payload = await response.json();
+      if (!Array.isArray(payload.questions)) throw new Error(`${filename}: invalid question list.`);
+      return payload.questions;
+    }));
+    const rawQuestions = sets.flat();
+    if (rawQuestions.length !== bank.expectedCount) {
+      throw new Error(`Expected ${bank.expectedCount} questions, received ${rawQuestions.length}.`);
+    }
+    const topicMap = new Map((bank.topics || []).map((topic) => [topic.code, topic]));
+    const ids = new Set();
+    for (const q of rawQuestions) {
+      if (!q.id || ids.has(q.id)) throw new Error(`Missing or repeated question ID: ${q.id}`);
+      ids.add(q.id);
+    }
+    return rawQuestions.map((q) => normalize2115Question(q, topicMap));
+  }
+
+  function renderStudyTable(table) {
+    if (!table || !Array.isArray(table.headers) || !Array.isArray(table.rows)) return "";
+    const head = table.headers.map((cell) => `<th scope="col">${escapeHtml(cell)}</th>`).join("");
+    const body = table.rows.map((row) => {
+      const cells = table.headers.map((_, index) => `<td>${escapeHtml(Array.isArray(row) ? (row[index] ?? "") : "")}</td>`).join("");
+      return `<tr>${cells}</tr>`;
+    }).join("");
+    return `<div class="study-table-wrap"><table class="study-table"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+  }
+
+  function renderWorkedSolution(steps) {
+    if (!Array.isArray(steps) || steps.length === 0) return "";
+    const content = steps.map((step) => {
+      if (typeof step === "string") return `<p>${escapeHtml(step)}</p>`;
+      return renderStudyTable(step);
+    }).join("");
+    return `<details class="worked-solution"><summary>Show the full worked solution</summary><div>${content}</div></details>`;
+  }
+
   async function loadBank() {
     if (!allowedCourses.has(course)) {
       fail("Choose one of the four courses from the Fall 2026 hub.");
@@ -42,6 +118,9 @@
       const response = await fetch(`data/${course}${isA1 ? "-a1" : ""}.json`, { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       state.bank = await response.json();
+      if (course === "2115" && Array.isArray(state.bank.questionFiles)) {
+        state.bank.questions = await load2115Questions(state.bank);
+      }
       if (!Array.isArray(state.bank.questions) || state.bank.questions.length === 0) {
         throw new Error("The question list is empty.");
       }
@@ -53,6 +132,10 @@
 
   function renderSetup() {
     const { code, title, description, questions } = state.bank;
+    $("shuffle-options").checked = course !== "2115";
+    $("quiz-context").querySelector("summary").textContent = isA1
+      ? "A1 background and assumptions"
+      : course === "2115" ? "Module 1 source scope" : "Practice notes";
     document.title = `${code} Practice Test`;
     $("nav-course").textContent = code;
     $("course-code").textContent = code;
@@ -91,7 +174,8 @@
 
   function updateCountOptions() {
     const available = eligibleQuestions().length;
-    const choices = [...new Set([5, 10, 15, available].filter((n) => n > 0 && n <= available))].sort((a, b) => a - b);
+    const sizes = course === "2115" ? [5, 10, 15, 25, 50, 100, available] : [5, 10, 15, available];
+    const choices = [...new Set(sizes.filter((n) => n > 0 && n <= available))].sort((a, b) => a - b);
     $("question-count").innerHTML = choices.map((n) => `<option value="${n}">${n === available ? `All ${n}` : n}</option>`).join("");
     if (choices.length) $("question-count").value = String(choices[Math.min(1, choices.length - 1)]);
     $("setup-message").textContent = "";
@@ -132,10 +216,13 @@
     let options = question.options.map((text, originalIndex) => ({ text, originalIndex }));
     if (shouldShuffle) options = shuffle(options);
 
-    $("progress-text").textContent = `Question ${state.index + 1} of ${state.questions.length}`;
+    $("progress-text").textContent = `Question ${state.index + 1} of ${state.questions.length}${course === "2115" ? ` · ${question.id}` : ""}`;
     $("topic-text").textContent = question.section;
     $("progress-fill").style.width = `${((state.index + 1) / state.questions.length) * 100}%`;
     $("question-text").textContent = question.question;
+    const support = $("question-support");
+    support.innerHTML = question.table ? renderStudyTable(question.table) : "";
+    support.classList.toggle("hidden", !question.table);
     $("feedback").className = "feedback hidden";
     $("feedback").textContent = "";
     $("next-button").classList.add("hidden");
@@ -210,7 +297,15 @@
 
     const feedback = $("feedback");
     feedback.className = `feedback ${isCorrect ? "correct" : "wrong"}`;
-    feedback.innerHTML = `<strong>${isCorrect ? "Correct." : "Not quite."}</strong> ${escapeHtml(question.explanation || "Review this topic and try it again.")}`;
+    let extra = "";
+    if (!isCorrect && question.optionFeedback && selectedIndices.length === 1) {
+      const originalLetter = String.fromCharCode(65 + selectedIndices[0]);
+      const detail = question.optionFeedback[originalLetter];
+      if (detail) extra += `<p class="option-detail">${escapeHtml(detail)}</p>`;
+    }
+    if (question.workedSolution) extra += renderWorkedSolution(question.workedSolution);
+    if (question.sources) extra += `<p class="source-note">Source: ${escapeHtml(question.sources)}</p>`;
+    feedback.innerHTML = `<strong>${isCorrect ? "Correct." : "Not quite."}</strong> ${escapeHtml(question.explanation || "Review this topic and try it again.")}${extra}`;
     $("next-button").textContent = state.index === state.questions.length - 1 ? "See results" : "Next question";
     $("next-button").classList.remove("hidden");
   }

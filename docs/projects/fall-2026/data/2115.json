@@ -1,15 +1,244 @@
 {
   "code": "CSCI 2115",
-  "title": "Theory of Computer Science",
-  "description": "Starter practice for regular languages and finite automata.",
-  "questions": [
-    {"id": 1, "question": "Which operation is part of the inductive definition of regular languages?", "options": ["Differentiation", "Concatenation", "Matrix inversion", "Prime factorization"], "correct": 1, "section": "Regular Languages", "explanation": "Regular languages are closed under operations including union, concatenation, and Kleene star."},
-    {"id": 2, "question": "Why is the language described by [A-Z][0-9][A-Z][0-9][A-Z][0-9] finite?", "options": ["It contains no digits", "Every word has a fixed length and every position has finitely many choices", "All regular expressions describe finite languages", "It contains only one word"], "correct": 1, "section": "Regular Languages", "explanation": "There are six fixed positions and each position draws from a finite set."},
-    {"id": 3, "question": "What does the Kleene star L* include for every language L?", "options": ["Only nonempty strings", "The empty string", "Only strings of length one", "Every possible alphabet"], "correct": 1, "section": "Regular Expressions", "explanation": "Zero repetitions are allowed, so epsilon is always in L*."},
-    {"id": 4, "question": "What information must a DFA use to decide its next state?", "options": ["Its current state and current input symbol", "The entire future input", "A random choice", "Only the length of the input"], "correct": 0, "section": "Finite Automata", "explanation": "A DFA transition is determined by exactly one current state and one input symbol."},
-    {"id": 5, "question": "A DFA recognizing binary strings whose number of 1s is a multiple of three naturally tracks what?", "options": ["The exact input string", "The count of 0s", "The count of 1s modulo three", "Whether the first symbol is 1"], "correct": 2, "section": "Finite Automata", "explanation": "Three states can represent remainders 0, 1, and 2 modulo three."},
-    {"id": 6, "question": "What is the core idea of subset construction?", "options": ["Turn each DFA state into a symbol", "Represent a DFA state as a set of possible NFA states", "Remove every accepting state", "Replace transitions with regular expressions only"], "correct": 1, "section": "NFA to DFA", "explanation": "Each constructed DFA state records all NFA states reachable after reading the same input."},
-    {"id": 7, "question": "To disprove a universal claim, what is normally sufficient?", "options": ["One valid counterexample", "One supporting example", "A larger alphabet", "A diagram without labels"], "correct": 0, "section": "Proof Strategy", "explanation": "A single case satisfying the premise but violating the conclusion refutes a universal statement."},
-    {"id": 8, "question": "Which models recognize exactly the regular languages?", "options": ["DFAs only", "Regular expressions only", "DFAs, NFAs, and regular expressions", "Pushdown automata only"], "correct": 2, "section": "Equivalence", "explanation": "DFAs, NFAs, and regular expressions have equivalent expressive power."}
+  "title": "Theory of Computer Science — Module 1",
+  "description": "450 MCQs: 310 core questions and 140 worked assignment-style problems from the Module 1 lecture decks and formative assignment solutions.",
+  "context": [
+    "Scope: eight Module 1 lecture decks and the supplied formative assignment solutions. These are study questions based on the source materials, not a prediction of the actual midterm.",
+    "The original A–D choice order is displayed by default to match the question and answer PDFs. You can enable choice shuffling. Questions with state tables or scanner rules display those tables before the answers; worked solutions are available after answering.",
+    "For worked problems, derive the proof, construction, trace, or calculation before choosing an answer. Regular-expression matches mean whole words unless substring search is explicitly stated; ε is the empty word and ∅ is the empty language."
+  ],
+  "sourceBankVersion": "1.0",
+  "sourceBankTitle": "CSCI 2115 - Module 1 Midterm Question Bank",
+  "sourceScope": "Eight lecture decks and the supplied formative assignment solutions; not a prediction of the actual midterm.",
+  "sourceFileSHA256": "0acf5a888fa98c73789b06fbf4f9c38ce86ac488fa6f228d3f8cd5ac0dc94bc7",
+  "expectedCount": 450,
+  "expectedCoreCount": 310,
+  "expectedAssignmentCount": 140,
+  "topics": [
+    {
+      "code": "T01",
+      "section": "Regular expressions and languages",
+      "title": "Regular expressions",
+      "sources": "S06 pp. 4-11, 18",
+      "review": "A formal regular expression is a finite description of a language. Its building blocks are ∅, ε, and alphabet symbols; its operations are union, concatenation, and star. In this bank matching means the whole word, unless substring search is explicitly stated. Star binds most tightly, then concatenation, then |."
+    },
+    {
+      "code": "T02",
+      "section": "Regular expressions and languages",
+      "title": "Concatenation",
+      "sources": "S06 pp. 7, 16, 18; S01 Q2",
+      "review": "Concatenation puts one complete word after another. For languages, RS contains every xy with x in R and y in S. It preserves order, is associative, and need not be commutative. {ε} is an identity; ∅ is an annihilator."
+    },
+    {
+      "code": "T03",
+      "section": "Regular expressions and languages",
+      "title": "Alternation",
+      "sources": "S06 pp. 8, 16, 18; S07 pp. 11-12",
+      "review": "Alternation R|S describes union: a word may belong to either language or both. Union is inclusive, commutative and idempotent. It neither concatenates words nor requires both conditions."
+    },
+    {
+      "code": "T04",
+      "section": "Regular expressions and languages",
+      "title": "Repetition and Kleene star",
+      "sources": "S06 pp. 9-11, 16; S07 pp. 7-10; S01 Q1(b), Q4(a)",
+      "review": "L* consists of zero or more concatenated words from L, and zero repetitions always produce ε. Each repetition may select a different word from L. A maximal run is a block that cannot be extended with the same symbol on either side."
+    },
+    {
+      "code": "T05",
+      "section": "Regular expressions and languages",
+      "title": "Language",
+      "sources": "S06 pp. 12-17; S07 p. 3",
+      "review": "A language is a set of finite words over an alphabet. It can be empty, finite, or infinite. The language containing one empty word is different from the language containing no words. Membership concerns a word; inclusion compares languages."
+    },
+    {
+      "code": "T06",
+      "section": "Regular expressions and languages",
+      "title": "Alphabet",
+      "sources": "S06 pp. 6, 10, 13-14",
+      "review": "An alphabet Σ is the finite set of allowed atomic symbols. Σ^n contains words of length n, and Σ* contains words of all finite lengths. ε represents zero symbols and is not an ordinary member of the input alphabet."
+    },
+    {
+      "code": "T07",
+      "section": "Regular expressions and languages",
+      "title": "String or word",
+      "sources": "S06 pp. 11, 13; S01 Q1",
+      "review": "A word is a finite sequence. Its length counts positions; |w|a counts occurrences of a. A substring occupies consecutive positions. A maximal run cannot be extended by the same symbol. Word powers repeat a whole word."
+    },
+    {
+      "code": "T08",
+      "section": "Regular expressions and languages",
+      "title": "Regular language",
+      "sources": "S06 pp. 15-18; S09 pp. 4-7",
+      "review": "The regular languages are exactly those built from ∅, {ε}, and one-symbol languages by finitely many unions, concatenations and stars. Equivalently, they have a formal regex or a finite automaton. Finite languages are regular; infinite languages may or may not be."
+    },
+    {
+      "code": "T09",
+      "section": "Regular and nonregular languages",
+      "title": "Regular-language proofs",
+      "sources": "S07 pp. 4-10; S01 Q1-Q3, Q7",
+      "review": "A regularity proof must describe exactly the target language and justify the construction. For an expression, prove both inclusions. For a machine, explain what each state records and why final states match the requirement. Testing examples supplies evidence, not a proof for all words."
+    },
+    {
+      "code": "T10",
+      "section": "Regular and nonregular languages",
+      "title": "Closure properties",
+      "sources": "S07 pp. 11-12; S01 Q3-Q4",
+      "review": "Regular languages are closed under finite union, concatenation, star, complement relative to a fixed alphabet, intersection, difference and reversal. Closure works forward from regular inputs. It does not usually work backward from a regular result to its ingredients."
+    },
+    {
+      "code": "T11",
+      "section": "Regular and nonregular languages",
+      "title": "Nonregular languages",
+      "sources": "S06 p. 17; S07 pp. 13-16; S01 Q3",
+      "review": "To use closure for nonregularity, assume the target is regular and combine it with known regular languages to obtain a known nonregular language. An infinite language is not automatically nonregular. A DFA can count modulo a fixed number; it cannot store arbitrary exact counts for later comparison."
+    },
+    {
+      "code": "T12",
+      "section": "Deterministic finite automata",
+      "title": "DFA",
+      "sources": "S03 pp. 3-12, 15",
+      "review": "A DFA has a finite nonempty state set, one start state, a set of accepting states, an alphabet and a total transition function. It has exactly one next state for each state-symbol pair. Its current state records only the information about the prefix needed for future decisions."
+    },
+    {
+      "code": "T13",
+      "section": "Deterministic finite automata",
+      "title": "Accepts, rejects and recognizes",
+      "sources": "S03 pp. 5-11, 14; S04 pp. 7-10",
+      "review": "Acceptance is a decision about one complete word. Recognition is the statement that the set of all accepted words is exactly a particular language. Reaching a final state midway does not settle acceptance if unread input remains."
+    },
+    {
+      "code": "T14",
+      "section": "Deterministic finite automata",
+      "title": "State, start state and final state",
+      "sources": "S03 pp. 5-12; S02 pp. 10-13",
+      "review": "A state records a finite summary of the prefix. The start state describes the empty prefix. A final state means the prefix read so far would be accepted if input ended now. A dead state has no accepting continuation; a sink loops on every symbol and may be final or nonfinal."
+    },
+    {
+      "code": "T15",
+      "section": "Deterministic finite automata",
+      "title": "Symbols and input consumption",
+      "sources": "S03 pp. 6, 10-12; S04 pp. 7-10; S09 p. 9",
+      "review": "A DFA transition consumes one alphabet symbol. A label such as 0,1 is shorthand for two separate symbol transitions with the same endpoints. ε consumes none. A multi-symbol edge is not a standard DFA edge unless the printed label names a single declared atomic symbol."
+    },
+    {
+      "code": "T16",
+      "section": "Deterministic finite automata",
+      "title": "Alphabet in a DFA",
+      "sources": "S03 pp. 10-12; S08 p. 12",
+      "review": "A DFA transition table has one destination for each state and each input symbol. Changing the alphabet changes the universe of words and the required transition entries. Complementation must use a specified common alphabet."
+    },
+    {
+      "code": "T17",
+      "section": "Deterministic finite automata",
+      "title": "Transition function",
+      "sources": "S03 pp. 10-12, 15; S02 p. 11",
+      "review": "The DFA function δ:Q×Σ→Q handles one symbol. Its extension δ* handles words: δ*(q,ε)=q and δ*(q,wa)=δ(δ*(q,w),a). Tables, diagrams and switch statements can implement the same function."
+    },
+    {
+      "code": "T18",
+      "section": "Nondeterministic finite automata",
+      "title": "NFA",
+      "sources": "S04 pp. 4-13, 16-19; S09 pp. 6-8",
+      "review": "An NFA keeps a set of possible current states. This course permits ε transitions. A word is accepted if at least one path consumes the entire word and finishes in a final state, with ε moves allowed before, between and after symbols. Every DFA is a special case of an NFA."
+    },
+    {
+      "code": "T19",
+      "section": "Nondeterministic finite automata",
+      "title": "Nondeterminism",
+      "sources": "S04 pp. 7-16",
+      "review": "Nondeterminism is a mathematical possibility relation, not random choice or a probability of success. To simulate it faithfully, track all possible states or systematically explore alternatives. A greedy choice of one branch need not preserve the language."
+    },
+    {
+      "code": "T20",
+      "section": "Nondeterministic finite automata",
+      "title": "Multiple successor states",
+      "sources": "S04 pp. 7-12; S09 pp. 16-21",
+      "review": "For an NFA, δ(q,a) is a set, not a list of alternative input symbols. From a current set S, first take the union of all a-successors, then take ε-closure. Duplicate destinations appear only once."
+    },
+    {
+      "code": "T21",
+      "section": "Nondeterministic finite automata",
+      "title": "Epsilon transitions",
+      "sources": "S04 pp. 7-10, 17-19; S09 pp. 16-18",
+      "review": "An ε transition changes state without consuming an input symbol. ε-closure includes zero or more ε moves, so it always includes its starting states. Follow chains and cycles to a fixed point; do not follow labeled symbol edges during closure."
+    },
+    {
+      "code": "T22",
+      "section": "Scanners and lexers",
+      "title": "Scanner or lexer",
+      "sources": "S08 pp. 3-7, 15",
+      "review": "A scanner converts characters into tokens, skips material designated insignificant by its rules, and reports lexical errors. A parser uses the token stream to analyze grammatical structure. Token patterns and token-selection policies must be stated; whitespace is not universally insignificant."
+    },
+    {
+      "code": "T23",
+      "section": "Scanners and lexers",
+      "title": "Token and token stream",
+      "sources": "S08 pp. 4-7, 13, 15",
+      "review": "A lexeme is the actual input spelling. A token commonly pairs a token type with a value or spelling. Maximal munch chooses the longest valid prefix at the current position. If equal-length matches remain, a separate priority policy resolves the tie."
+    },
+    {
+      "code": "T24",
+      "section": "Scanners and lexers",
+      "title": "Switch-based, table-based and generated scanners",
+      "sources": "S08 pp. 8-15",
+      "review": "Switch statements and transition tables are alternative implementations of the same transition function. Either may be handwritten; a generator derives code from token regexes and actions. Robust longest-match scanning remembers the last accepting position and preserves unread lookahead."
+    },
+    {
+      "code": "T25",
+      "section": "The equivalence theorem",
+      "title": "The equivalence theorem",
+      "sources": "S09 pp. 3-8, 15-23; S01 Q7",
+      "review": "A language is regular exactly when a formal regex describes it, an NFA recognizes it, or a DFA recognizes it. Equivalence concerns accepted words, not identical structure, speed, state count, or a one-to-one correspondence between descriptions."
+    },
+    {
+      "code": "T26",
+      "section": "The equivalence theorem",
+      "title": "Generalized NFA",
+      "sources": "S09 pp. 9-14; S01 Q8",
+      "review": "A GNFA permits whole regular expressions on edges. Traversing an edge consumes a word from that edge language. Parallel alternatives are combined with |, a missing edge denotes ∅, and an ε edge consumes the empty word. Fresh start/final states simplify elimination."
+    },
+    {
+      "code": "T27",
+      "section": "The equivalence theorem",
+      "title": "Collapsing a GNFA",
+      "sources": "S09 pp. 10-14; S02 p. 3; S01 Q8",
+      "review": "When removing q, replace every remaining i-to-j label by R_ij | R_iq(R_qq)*R_qj, using the labels before that elimination step. The direct alternative, zero loop traversals, and updates with i=j all matter. Different elimination orders may give different equivalent expressions."
+    },
+    {
+      "code": "T28",
+      "section": "The equivalence theorem",
+      "title": "Subset construction",
+      "sources": "S09 pp. 16-21; S02 pp. 4-5, 18; S01 Q9(a)",
+      "review": "A DFA state represents one ε-closed subset of NFA states. Start from E({q0}), repeatedly compute E(union of symbol successors), and retain every reachable subset. A subset is final when it contains at least one original final state. The empty subset, if reached, is a rejecting sink."
+    },
+    {
+      "code": "T29",
+      "section": "DFA minimization",
+      "title": "Equivalence classes",
+      "sources": "S02 pp. 10-15; S01 Q9(b)",
+      "review": "States p and q are equivalent when every suffix w leads from p to a final state exactly when it does from q. One distinguishing suffix disproves equivalence. ε already distinguishes a final state from a nonfinal state. Temporary partition blocks are candidates, not necessarily final equivalence classes."
+    },
+    {
+      "code": "T30",
+      "section": "DFA minimization",
+      "title": "DFA minimization",
+      "sources": "S02 pp. 7-18; S01 Q9(b)",
+      "review": "Remove unreachable states, partition into nonempty final and nonfinal blocks, and repeatedly split a block when its states transition into different current blocks on some symbol. Stop at a stable partition. Each block becomes one state; the start block contains q0."
+    },
+    {
+      "code": "T31",
+      "section": "The pumping lemma",
+      "title": "Pumping lemma",
+      "sources": "S05 pp. 3-13; S01 Q10",
+      "review": "If L is regular, there exists p≥1 such that every w∈L with |w|≥p has some split w=xyz with |xy|≤p, |y|>0, and xy^kz∈L for every k≥0. To refute regularity, choose w after p is given, handle every legal split, and choose a failing k. The lemma is necessary, not sufficient, for regularity."
+    }
+  ],
+  "questionFiles": [
+    "2115-module1-part-01.json",
+    "2115-module1-part-02.json",
+    "2115-module1-part-03.json",
+    "2115-module1-part-04.json",
+    "2115-module1-part-05.json",
+    "2115-module1-part-06.json"
   ]
 }

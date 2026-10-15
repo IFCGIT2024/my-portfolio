@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CSCI 2122 midterm practice: 21 sample-test question types, 210 new variants, memory traces, C implementations, and a personalized review guide.">
+  <title>CSCI 2122 · Midterm Review</title>
+  <link rel="stylesheet" href="style.css?v=2122-midterm-1">
+  <link rel="stylesheet" href="midterm.css?v=1">
+</head>
+<body>
+  <nav class="topbar"><a href="index.html">← Fall 2026 Hub</a><span>CSCI 2122</span></nav>
+  <main class="midterm-shell">
+    <nav class="quiz-links" aria-label="CSCI 2122 quizzes">
+      <a class="secondary-button" href="quiz.html?course=2122">General practice</a>
+      <a class="secondary-button" href="quiz.html?course=2122&amp;quiz=a1">A1 — C foundations</a>
+      <a class="secondary-button" href="midterm.html" aria-current="page">Midterm review</a>
+    </nav>
+    <p id="load-status" class="panel" role="status">Loading the midterm bank…</p>
+    <section id="setup" class="panel hidden" aria-labelledby="setup-title">
+      <p class="eyebrow">Systems programming · Midterm review</p>
+      <h1 id="setup-title">Same skills.<br>A fresh test.</h1>
+      <p class="muted">Practice the question types in your sample paper, with new values, code, and boundary cases. Each full test draws one question from each of its 21 groups.</p>
+      <div class="midterm-metrics" aria-label="Question bank size"><div><strong>231</strong><span>questions in the bank</span></div><div><strong>21</strong><span>originals preserved</span></div><div><strong>10</strong><span>new variants per original</span></div></div>
+      <div class="paper-format"><strong>The paper format</strong><p>18 multiple-choice questions · 1 two-part memory trace · 2 C implementations</p><p>Answers appear after submission. Written responses use model solutions and self-assessment. For exam conditions, follow the PDF’s “no calculators, no notes” instruction.</p></div>
+      <div id="resume-area" class="resume-area hidden"><p id="resume-copy"></p><button class="secondary-button" id="resume" type="button">Resume saved test</button></div>
+      <div class="settings-row">
+        <label for="source">Question source<select id="source"><option value="variants">New variants only</option><option value="mixed">Originals + new variants</option><option value="originals">Original sample paper</option></select></label>
+        <label for="scope">Practice scope<select id="scope"><option value="full">Full test · 21 questions</option><option value="focus">One question type</option></select></label>
+      </div>
+      <label id="focus-setting" class="field-label hidden" for="focus-group">Question type<select id="focus-group"></select></label>
+      <label class="check-setting"><input id="shuffle" type="checkbox" checked> Shuffle new questions’ answer choices</label>
+      <p class="small muted">Original questions always keep their PDF answer order. A new test replaces the saved attempt on this browser.</p>
+      <button id="start" type="button" class="primary-button">Build my test →</button>
+      <details class="midterm-details"><summary>What each question type tests</summary><div id="blueprint"></div></details>
+      <details class="midterm-details"><summary>Source, assumptions, and original-question clarifications</summary><div id="source-notes"></div><p><a href="data/2122-midterm.json" download="2122-midterm.json">Download the complete question bank (JSON)</a></p></details>
+    </section>
+    <section id="paper" class="hidden" aria-label="Practice test">
+      <div class="paper-heading"><div><p class="eyebrow" id="paper-label">Practice test</p><p id="paper-progress" aria-live="polite"></p></div><button id="save-exit" class="secondary-button" type="button">Save &amp; exit</button></div>
+      <div class="paper-layout"><aside class="paper-nav panel"><h2>Questions</h2><nav id="question-nav" aria-label="Jump to question"></nav><p class="small muted">A filled circle means answered. You can change answers before submission.</p><p id="save-status" class="small" role="status"></p></aside>
+        <article class="panel question-panel"><p id="question-meta" class="eyebrow"></p><h1 id="question-title" class="question-text" tabindex="-1"></h1><div id="question-material"></div><div id="response"></div><div class="question-controls"><button id="previous" class="secondary-button" type="button">← Previous</button><button id="next" class="secondary-button" type="button">Next →</button></div><div class="submit-row"><p id="submit-note" class="small muted"></p><button id="submit" class="primary-button" type="button">Submit test</button></div></article>
+      </div>
+      <details class="midterm-details"><summary>Test-wide assumptions</summary><div id="paper-assumptions"></div></details>
+    </section>
+    <section id="results" class="panel hidden" aria-labelledby="results-title">
+      <p class="eyebrow">Your review</p><h1 id="results-title" tabindex="-1">Check your reasoning.</h1>
+      <div id="score-summary" aria-live="polite"></div>
+      <p class="muted">Multiple-choice answers are checked automatically; blank answers count as incorrect. Compare written responses with the model and criteria, then record your self-assessment. These are practice results, not official exam marks.</p>
+      <div class="result-actions"><button id="new-test" class="primary-button" type="button">Build another test</button><button id="review-weak" class="secondary-button" type="button">Practice topics to review</button></div>
+      <h2 class="section-heading">Answers and worked reasoning</h2><p class="muted">Open any question to compare your answer. Other correct C implementations are possible.</p><div id="answer-review"></div>
+      <h2 class="section-heading">What to review next</h2><p class="muted">Start with missed or incomplete topics. A correct answer is one piece of evidence; use another variant to check understanding.</p><div id="review-guide"></div>
+    </section>
+    <noscript><p class="panel">Enable JavaScript to generate a test, or <a href="data/2122-midterm.json">read the question bank</a>.</p></noscript>
+  </main>
+  <script src="midterm-core.js?v=1"></script><script src="midterm.js?v=1"></script>
+</body>
+</html>

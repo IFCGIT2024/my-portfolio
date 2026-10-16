@@ -6,7 +6,7 @@ import json, re, subprocess, tempfile, platform
 from pathlib import Path
 if platform.machine() not in ('x86_64','AMD64'): raise SystemExit('Requires x86-64 host')
 base=Path(__file__).resolve().parents[1]
-bank={'questions':sum([json.loads((base/'data'/name).read_text())['questions'] for name in ['lecture10.json','foundations.json']],[])}
+bank={'questions':sum([json.loads((base/'data'/name).read_text())['questions'] for name in ['lecture10.json','foundations.json','control-inline.json']],[])}
 def num(v):return int(str(v),0) if str(v).lstrip('-').startswith(('0x','0b')) else int(v)
 def split(k):
  m=re.fullmatch(r'([A-Za-z_.$][\w.$]*)(?:([+-])((?:0x[\da-fA-F]+|\d+)))?',k)
@@ -27,7 +27,9 @@ for q in bank['questions']:
   renames={k:prefix+k for k in set(labels)|roots}
   for old,new in sorted(renames.items(),key=lambda x:-len(x[0])):
    solution=re.sub(r'(?<![\w.$%])'+re.escape(old)+r'(?![\w.$])',new,solution)
-  entry=prefix+fixture['entry'] if fixture.get('entry') else prefix+'body'
+  entry=prefix+fixture['entry'] if fixture.get('entry') else prefix+'fixture_start'
+  if not fixture.get('entry'):
+   while entry in renames.values():entry+='_'  # Keep wrapper entry distinct from learner labels.
   outregs=dict(fixture['expected'].get('registers',{}))
   for reg in fixture.get('preserveRegisters',[]):outregs[reg]=fixture['registers'][reg]
   asm+=['.text',f'.globl run_{n}',f'run_{n}:','pushq %rbx','pushq %rbp','pushq %r12','pushq %r13','pushq %r14','pushq %r15','subq $8,%rsp']
@@ -37,7 +39,7 @@ for q in bank['questions']:
   asm.append(f'call {entry}')
   for j,reg in enumerate(outregs):asm.append(f'mov{ {8:"q",4:"l",2:"w",1:"b"}[width(reg)]} %{reg},observed_{n}+{j*8}(%rip)')
   asm+=['addq $8,%rsp','popq %r15','popq %r14','popq %r13','popq %r12','popq %rbp','popq %rbx','ret']
-  if not fixture.get('entry'):asm.append(prefix+'body:')
+  if not fixture.get('entry'):asm.append(entry+':')
   asm.append(solution)
   if not fixture.get('function'):asm.append('ret')
   asm+=['.data',f'.globl observed_{n}',f'observed_{n}: .zero {max(8,len(outregs)*8)}']

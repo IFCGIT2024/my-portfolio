@@ -290,6 +290,7 @@
       img.src=d.src;img.alt=d.alt;img.decoding='async';figure.append(img,node('figcaption',d.caption));card.append(figure);
     }
     const worked=node('section',undefined,'worked-example');worked.append(node('h5','See one complete example'));
+    if(step.worked.nativeC) worked.append(node('p','Native C example: compile with GCC. The practice below checks your understanding of the interface; this browser does not compile inline assembly.','small'));
     const columns=node('div',undefined,step.worked.assembly?'code-panels':'example-goal');
     const goal=node('div',undefined,'panel');goal.append(node('h6','Goal / starting information'));const pre=node('pre');pre.append(node('code',step.worked.goal));goal.append(pre);columns.append(goal);
     if(step.worked.assembly){const asm=node('div',undefined,'panel');asm.append(node('h6','Assembly'));const code=node('pre');code.append(node('code',step.worked.assembly));asm.append(code);columns.append(asm);}

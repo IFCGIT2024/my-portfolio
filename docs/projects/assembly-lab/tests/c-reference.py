@@ -17,8 +17,8 @@ if platform.machine() not in ('x86_64', 'AMD64') or C.sizeof(C.c_long) != 8:
     raise SystemExit('Requires x86-64 LP64 host')
 base = Path(__file__).resolve().parents[1]
 bank = sum([json.loads((base / 'data' / name).read_text())['questions']
-            for name in ['lecture10.json', 'foundations.json']], [])
-signature = re.compile(r'\b((?:unsigned\s+)?(?:long|int|void)\s*\*?)\s*(\w+)\s*\(([^()]*)\)\s*\{')
+            for name in ['lecture10.json', 'foundations.json', 'control-inline.json']], [])
+signature = re.compile(r'\b((?:(?:unsigned|signed)\s+)?(?:long|int|short|char|void)\s*\*?)\s*(\w+)\s*\(([^()]*)\)\s*\{')
 register_args = ['rdi', 'rsi', 'rdx', 'rcx', 'r8', 'r9']
 
 def number(value):
@@ -29,7 +29,14 @@ def ctype(text):
         return C.c_void_p
     if text.strip() == 'void':
         return None
-    return C.c_ulong if 'unsigned' in text else C.c_int if 'int' in text else C.c_long
+    unsigned = 'unsigned' in text
+    if 'char' in text:
+        return C.c_ubyte if unsigned else C.c_byte
+    if 'short' in text:
+        return C.c_ushort if unsigned else C.c_short
+    if 'int' in text:
+        return C.c_uint if unsigned else C.c_int
+    return C.c_ulong if unsigned else C.c_long
 
 def split(key):
     match = re.fullmatch(r'([A-Za-z_]\w*)(?:\+(\d+))?', key)
@@ -114,7 +121,7 @@ with tempfile.TemporaryDirectory(prefix='assembly-c-reference-') as temporary:
             result = function(*arguments)
             expected_registers = fixture['expected'].get('registers', {})
             if return_type is not None:
-                register = 'eax' if return_type is C.c_int else 'rax'
+                register = 'eax' if return_type in (C.c_int, C.c_uint) else 'rax'
                 expected = number(expected_registers[register])
                 if return_type is C.c_void_p:
                     result = next(fake + result - real for fake, real, size in mappings

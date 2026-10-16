@@ -25,7 +25,7 @@ async function open(saved){
  const dom=await open(),w=dom.window,$=id=>w.document.getElementById(id);
  const change=(id,value)=>{$(id).value=value;$(id).dispatchEvent(new w.Event('change'));};
  const input=code=>{$('assembly-input').value=code;$('assembly-input').dispatchEvent(new w.Event('input'));};
- assert.equal($('lesson-select').options.length,16);
+ assert.equal($('lesson-select').options.length,19);
  assert.equal($('lesson-select').value,'00-foundations');
  assert.equal($('concept-select').value,'state');
  assert.equal($('question-select').value,'p-state');
@@ -76,7 +76,7 @@ async function open(saved){
  assert.equal(rd.getElementById('assembly-input').value,'movq (%rdi),%rax\nret');restored.window.close();
  // Original bank remains available and all answers still pass through real UI handlers.
  change('lesson-select','all');
- assert.equal($('code-total').textContent,'88');assert.equal($('mcq-total').textContent,'130');
+ assert.equal($('code-total').textContent,'103');assert.equal($('mcq-total').textContent,'188');
  $('code-mode').click();
  for(const q of bank.filter(q=>q.type==='code')){
   change('question-select',q.id);input(q.solutions[0]);$('check').click();
@@ -113,5 +113,5 @@ async function open(saved){
  const reset=JSON.parse(w.localStorage.getItem(key));assert.ok(Object.values(reset.records).every(r=>r.attempts===0&&!r.passed&&!r.draft));
  assert.deepEqual(reset.readSteps,{});assert.equal(w.localStorage.getItem('unrelated-tool'),'keep');
  w.close();
- console.log('DOM workflow passed: 14 chapters, 75 concepts, 218 answers, focused/chapter practice, direct task buttons, progress migration, restoration, traces, retry, imports and reset.');
+ console.log('DOM workflow passed: 17 chapters, 108 concepts, 291 answers, focused/chapter practice, direct task buttons, progress migration, restoration, traces, retry, imports and reset.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

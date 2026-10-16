@@ -10,12 +10,12 @@ const steps=course.lessons.flatMap(l=>l.steps);
 
 test('all banks validate together, including the new first-principles exercises',()=>{
  E.validateBank({schemaVersion:1,questions:bank});
- assert.equal(bank.length,218);
- assert.equal(bank.filter(q=>q.type==='code').length,88);
- assert.equal(bank.reduce((n,q)=>n+(q.cases?.length||0),0),273);
+ assert.equal(bank.length,291);
+ assert.equal(bank.filter(q=>q.type==='code').length,103);
+ assert.equal(bank.reduce((n,q)=>n+(q.cases?.length||0),0),355);
 });
 test('every concept has a complete learning cycle and only earlier prerequisites',()=>{
- assert.equal(steps.length,75);const seen=new Set();
+ assert.equal(steps.length,108);const seen=new Set();
  for(const step of steps){
   assert.ok(!seen.has(step.id));
   for(const prior of step.requires)assert.ok(seen.has(prior),`${step.id} requires future ${prior}`);
@@ -52,7 +52,7 @@ test('student-facing explanations and questions require no slides or external PD
  assert.match(audit.question,/leaq 4\(%rdi,%rdi\),%rcx/,'Audit supplies the actual code being interpreted');
 });
 test('every diagram is local, accessible, and has a full text explanation',()=>{
- assert.equal(Object.keys(figures).length,35);
+ assert.equal(Object.keys(figures).length,49);
  for(const step of steps)if(step.diagram)assert.ok(figures[step.diagram],step.id);
  for(const f of Object.values(figures)){
   assert.ok(f.alt.length>40&&f.caption.length>40);

@@ -139,7 +139,7 @@
             "One hexadecimal digit represents four bits, so a byte fits into two hex digits. Addresses are often written in hex because the digits line up neatly with groups of bits. A number written in hex is not automatically an address; its role depends on the operation."
           ],
           "worked": {
-            "goal": "0x2A = 2\u00d716 + 10 = 42\n0xA6 = 1010 0110 in binary\n0x100 + 8 = 0x108",
+            "goal": "0x2A = 2×16 + 10 = 42\n0xA6 = 1010 0110 in binary\n0x100 + 8 = 0x108",
             "assembly": "",
             "reasoning": [
               "A contributes decimal 10 in the first calculation.",
@@ -163,16 +163,16 @@
         {
           "id": "signed",
           "title": "The same bits can have different meanings",
-          "goal": "Distinguish unsigned values from signed two\u2019s-complement values.",
+          "goal": "Distinguish unsigned values from signed two’s-complement values.",
           "requires": [
             "hex"
           ],
           "paragraphs": [
-            "Unsigned means every bit contributes a nonnegative place value. Eight bits can represent 0 through 255. In signed two\u2019s-complement interpretation, the top bit has negative weight. Eight signed bits represent \u2212128 through 127.",
-            "For an N-bit pattern with its top bit set, subtract 2^N from its unsigned value to read it as signed. Thus the byte 0xff is unsigned 255 or signed \u22121, since 255\u2212256=\u22121. The bits did not change; the interpretation did. On x86-64, 64 one bits similarly represent unsigned 2^64\u22121 or signed \u22121."
+            "Unsigned means every bit contributes a nonnegative place value. Eight bits can represent 0 through 255. In signed two’s-complement interpretation, the top bit has negative weight. Eight signed bits represent −128 through 127.",
+            "For an N-bit pattern with its top bit set, subtract 2^N from its unsigned value to read it as signed. Thus the byte 0xff is unsigned 255 or signed −1, since 255−256=−1. The bits did not change; the interpretation did. On x86-64, 64 one bits similarly represent unsigned 2^64−1 or signed −1."
           ],
           "worked": {
-            "goal": "8-bit pattern: 11111111 = 0xff\nUnsigned: 255\nSigned: 255 \u2212 256 = \u22121",
+            "goal": "8-bit pattern: 11111111 = 0xff\nUnsigned: 255\nSigned: 255 − 256 = −1",
             "assembly": "",
             "reasoning": [
               "First identify the width: this example has eight bits.",
@@ -185,7 +185,7 @@
           ],
           "review": [],
           "teachBack": {
-            "prompt": "Explain why a register\u2019s top bit alone does not tell you the C type.",
+            "prompt": "Explain why a register’s top bit alone does not tell you the C type.",
             "answer": "A register holds a pattern. The C type and chosen instructions determine whether the program interprets that pattern as signed or unsigned."
           },
           "introducesInstructions": [],
@@ -206,7 +206,7 @@
             "signed"
           ],
           "paragraphs": [
-            "A register is a small storage location in the CPU. The general-purpose registers used here have names such as RAX, RBX, RDI and RSI. Each full register holds 64 bits. There are 16 ordinary general-purpose register families in this course\u2019s x86-64 model.",
+            "A register is a small storage location in the CPU. The general-purpose registers used here have names such as RAX, RBX, RDI and RSI. Each full register holds 64 bits. There are 16 ordinary general-purpose register families in this course’s x86-64 model.",
             "Names identify registers; byte addresses identify memory locations, which we will introduce later. A register can hold an ordinary integer or an address. Its name does not permanently bind it to a C variable. The compiler chooses where each live value belongs."
           ],
           "worked": {
@@ -230,11 +230,44 @@
           "diagram": "registers"
         },
         {
+          "id": "register-names",
+          "title": "Read register names without inventing a role",
+          "goal": "Separate register family, width and historical name.",
+          "requires": [
+            "registers"
+          ],
+          "paragraphs": [
+            "AX/BX/CX/DX have historical accumulator/base/count/data names; SI and DI mean source and destination index. These names help recognize families, but do not specify the current C type or every use. RDI can contain an integer or an address. The instruction determines how it is used.",
+            "P means pointer in SP (stack pointer) and BP (base pointer). BX and BP are different registers, not two sizes of one register. E marks a 32-bit extended name; RAX, RBX and the other full R-prefixed names select 64-bit views. We will give SP and BP concrete stack roles later."
+          ],
+          "worked": {
+            "goal": "BX → EBX → RBX: one family\nBP → EBP → RBP: another family\nSI → ESI → RSI: another family",
+            "assembly": "",
+            "reasoning": [
+              "Changing the width name stays within a family.",
+              "Changing BX to BP selects different storage."
+            ]
+          },
+          "practice": [
+            "x-register-names",
+            "x-historical-role"
+          ],
+          "review": [
+            "p-state"
+          ],
+          "teachBack": {
+            "prompt": "Why does RBX’s historical base name not make it the stack-frame pointer?",
+            "answer": "RBX and RBP are distinct register families. The usual frame-pointer role belongs to RBP by convention, not to any name containing B."
+          },
+          "introducesInstructions": [],
+          "diagram": "register-families"
+        },
+        {
           "id": "immediate",
           "title": "Write a constant with MOV",
           "goal": "Read a complete AT&T instruction one part at a time.",
           "requires": [
-            "registers"
+            "register-names"
           ],
           "paragraphs": [
             "The AT&T spelling movq $7,%rax means copy the constant 7 into RAX. mov is the operation, q selects 64-bit data, $ marks an immediate constant written in the instruction, and % marks a register name. The source comes first and the destination comes last.",
@@ -327,8 +360,8 @@
             "register-copy"
           ],
           "paragraphs": [
-            "An operation\u2019s width determines how many bits it reads and writes. The suffixes are b=8 bits, w=16, l=32 and q=64. A word in x86 terminology is two bytes; a quadword is eight. These names describe data width, not the number of bytes in the encoded instruction.",
-            "This guided course uses Linux x86-64\u2019s LP64 data model: int is four bytes, while long and pointers are eight. Therefore a C long usually needs a q operation; the l suffix does not mean the C type long. Always read the stated type and data model before choosing a suffix."
+            "An operation’s width determines how many bits it reads and writes. The suffixes are b=8 bits, w=16, l=32 and q=64. A word in x86 terminology is two bytes; a quadword is eight. These names describe data width, not the number of bytes in the encoded instruction.",
+            "This guided course uses Linux x86-64’s LP64 data model: int is four bytes, while long and pointers are eight. Therefore a C long usually needs a q operation; the l suffix does not mean the C type long. Always read the stated type and data model before choosing a suffix."
           ],
           "worked": {
             "goal": "C type       Data bytes      MOV suffix\nint          4               l\nlong         8               q\npointer      8               q",
@@ -361,7 +394,7 @@
           ],
           "paragraphs": [
             "RAX, EAX, AX and AL refer to overlapping parts of one register: all 64 bits, the low 32, low 16 and low 8 respectively. AH refers to bits 8 through 15. EAX is not extra storage beside RAX.",
-            "Other families follow similar patterns. RBX has EBX/BX/BL; R8 has R8D/R8W/R8B. Use a register name that matches the instruction\u2019s data width. For example, movw uses AX rather than RAX as a 16-bit destination."
+            "Other families follow similar patterns. RBX has EBX/BX/BL; R8 has R8D/R8W/R8B. Use a register name that matches the instruction’s data width. For example, movw uses AX rather than RAX as a 16-bit destination."
           ],
           "worked": {
             "goal": "// RAX starts at 0x1122334455667788. Replace its low byte.",
@@ -405,8 +438,8 @@
             "register-aliases"
           ],
           "paragraphs": [
-            "x86-64 gives 32-bit register writes a special rule: writing EAX also sets RAX\u2019s upper 32 bits to zero. Writing AX or AL instead preserves the bits outside that smaller destination. This difference matters when a 64-bit value must survive.",
-            "For example, writing \u22121 to EAX puts 32 one bits in the low half and zeros in the high half. The full RAX is then 0x00000000ffffffff, a positive 64-bit number. To write 64 one bits, use movq $-1,%rax."
+            "x86-64 gives 32-bit register writes a special rule: writing EAX also sets RAX’s upper 32 bits to zero. Writing AX or AL instead preserves the bits outside that smaller destination. This difference matters when a 64-bit value must survive.",
+            "For example, writing −1 to EAX puts 32 one bits in the low half and zeros in the high half. The full RAX is then 0x00000000ffffffff, a positive 64-bit number. To write 64 one bits, use movq $-1,%rax."
           ],
           "worked": {
             "goal": "// Start with all 64 bits set, then write EAX.",
@@ -457,14 +490,14 @@
           ],
           "paragraphs": [
             "addq source,destination reads both operands and replaces the destination with their sum. The source remains unchanged when it is a different register. Unlike MOV, ADD needs an initialized destination because its old value is one of the inputs.",
-            "To compute a result from x while preserving x, first copy x into a result register. Then update that copy. This pattern\u2014choose a result location, initialize it, update it\u2014will recur in larger translations."
+            "To compute a result from x while preserving x, first copy x into a result register. Then update that copy. This pattern—choose a result location, initialize it, update it—will recur in larger translations."
           ],
           "worked": {
             "goal": "// RDI=x. Compute x+3 in RAX.",
             "assembly": "movq %rdi,%rax\naddq $3,%rax",
             "reasoning": [
               "Copy x=6 to RAX.",
-              "Add 3 to RAX\u2019s old 6: the result is 9. RDI still holds 6."
+              "Add 3 to RAX’s old 6: the result is 9. RDI still holds 6."
             ],
             "fixture": {
               "name": "Worked example",
@@ -501,15 +534,15 @@
             "addition"
           ],
           "paragraphs": [
-            "subq source,destination computes old destination minus source. Reversing the operands usually changes the answer. To form x\u2212y in RAX, copy x there and subtract y; do not copy y and then subtract x.",
-            "This is a useful discipline for every two-operand instruction: rewrite its meaning as an assignment before running it. subq %rsi,%rax becomes RAX = old RAX \u2212 RSI."
+            "subq source,destination computes old destination minus source. Reversing the operands usually changes the answer. To form x−y in RAX, copy x there and subtract y; do not copy y and then subtract x.",
+            "This is a useful discipline for every two-operand instruction: rewrite its meaning as an assignment before running it. subq %rsi,%rax becomes RAX = old RAX − RSI."
           ],
           "worked": {
             "goal": "// RDI=x=9; RSI=y=4. Compute x-y.",
             "assembly": "movq %rdi,%rax\nsubq %rsi,%rax",
             "reasoning": [
               "Initialize the destination with the minuend, x.",
-              "Subtract y from it: 9\u22124=5."
+              "Subtract y from it: 9−4=5."
             ],
             "fixture": {
               "name": "Worked example",
@@ -535,7 +568,7 @@
           ],
           "teachBack": {
             "prompt": "How would copying y first change the calculation?",
-            "answer": "Subtracting x from that copy would compute y\u2212x, which is the negative of x\u2212y for representable signed results."
+            "answer": "Subtracting x from that copy would compute y−x, which is the negative of x−y for representable signed results."
           },
           "introducesInstructions": [
             "sub"
@@ -550,7 +583,7 @@
           ],
           "paragraphs": [
             "Two-operand imulq source,destination multiplies the old destination by the source and keeps the low 64 result bits. Initialize the destination with one factor first. With representable signed values, these bits are the ordinary signed product.",
-            "A three-operand form separates the input from the output: imulq $5,%rdi,%rax computes 5\u00d7RDI in RAX. The immediate constant is first, then the input, then the destination. It preserves RDI. No memory access is involved."
+            "A three-operand form separates the input from the output: imulq $5,%rdi,%rax computes 5×RDI in RAX. The immediate constant is first, then the input, then the destination. It preserves RDI. No memory access is involved."
           ],
           "worked": {
             "goal": "// RDI=x=7. Compute 5*x in RAX.",
@@ -625,7 +658,7 @@
           ],
           "teachBack": {
             "prompt": "Can you infer that overflowing signed C is safe because the corresponding assembly wraps?",
-            "answer": "No. C\u2019s language rules and the instruction\u2019s fixed-width behavior are different contracts."
+            "answer": "No. C’s language rules and the instruction’s fixed-width behavior are different contracts."
           },
           "introducesInstructions": []
         }
@@ -644,7 +677,7 @@
             "wrapping"
           ],
           "paragraphs": [
-            "A function names a reusable computation. In long plus(long x, long y) { return x+y; }, the first long says the result type, plus is the name, and x and y are parameters\u2014the names for input values inside the function. Braces enclose its body.",
+            "A function names a reusable computation. In long plus(long x, long y) { return x+y; }, the first long says the result type, plus is the name, and x and y are parameters—the names for input values inside the function. Braces enclose its body.",
             "return sends a result back to the caller, the code that requested the computation. With plus(6,4), x receives 6 and y receives 4, and the caller gets 10. A void result means there is no result value; such a function can still perform useful work by writing memory."
           ],
           "worked": {
@@ -675,10 +708,11 @@
           ],
           "paragraphs": [
             "Separately written functions need an agreement about input and result locations. That agreement is part of a calling convention. In the Linux x86-64 System V convention used here, the first integer or pointer arguments arrive in RDI, RSI, RDX, RCX, R8 and R9, in that order.",
-            "A long or pointer result goes in RAX. An int result is read from EAX. Start with RAX and the input registers as your working registers. Some other registers must be restored if changed; we will learn that preservation contract before using them for saved values across calls."
+            "A long or pointer result goes in RAX. An int result is read from EAX. Start with RAX and the input registers as your working registers. Some other registers must be restored if changed; we will learn that preservation contract before using them for saved values across calls.",
+            "A mnemonic for these six input locations is “Dogs Steal Donuts; Cats Ate Nine”: D,S,D,C,8,9. The two D entries are RDI first and RDX third. This is the Linux System V convention; Windows x64 instead begins RCX,RDX,R8,R9. Register names do not impose a universal argument order."
           ],
           "worked": {
-            "goal": "long difference(long x,long y)\nx \u2192 RDI\ny \u2192 RSI\nlong result \u2192 RAX",
+            "goal": "long difference(long x,long y)\nx → RDI\ny → RSI\nlong result → RAX",
             "assembly": "",
             "reasoning": [
               "This mapping is a convention, not a property of the variable names x and y.",
@@ -687,7 +721,8 @@
           },
           "practice": [
             "l10-args",
-            "p-return-register"
+            "p-return-register",
+            "x-argument-mnemonic"
           ],
           "review": [
             "l10-long"
@@ -708,7 +743,7 @@
           ],
           "paragraphs": [
             "A function has two separate obligations: place its result where agreed, and resume the caller. ret performs the second job. The environment has supplied a return address saying where to continue; ret uses it. We will trace its storage on the stack later.",
-            "To return the number 7, put 7 in RAX and then execute ret. ret does not calculate or copy the numeric result. Function exercises must execute ret; small snippet exercises instead finish at the end. The task\u2019s starting state tells you which form is expected."
+            "To return the number 7, put 7 in RAX and then execute ret. ret does not calculate or copy the numeric result. Function exercises must execute ret; small snippet exercises instead finish at the end. The task’s starting state tells you which form is expected."
           ],
           "worked": {
             "goal": "long seven(void) { return 7; }\n// void in the parameter list means no parameters.",
@@ -863,7 +898,7 @@
             "goal": "long x = 23;\nlong *p = &x;\n// Suppose &x is 0x100.\n// p is 0x100; *p is 23.",
             "assembly": "",
             "reasoning": [
-              "& asks for a location\u2019s address.",
+              "& asks for a location’s address.",
               "A pointer holds that address.",
               "* follows the address to the value stored at the location."
             ]
@@ -891,7 +926,8 @@
           ],
           "paragraphs": [
             "In an AT&T memory operand, (%rdi) means memory at the address in RDI. The parentheses do not perform ordinary arithmetic grouping. For MOV, they select a memory access. movq %rdi,%rax copies the address; movq (%rdi),%rax loads the eight-byte pointee.",
-            "Neither form changes RDI. Decide whether the C expression wants the pointer itself or the object it points to, then choose whether the MOV operand needs parentheses. A load requires valid initialized memory at the selected address."
+            "Neither form changes RDI. Decide whether the C expression wants the pointer itself or the object it points to, then choose whether the MOV operand needs parentheses. A load requires valid initialized memory at the selected address.",
+            "For MOV, (%rdi) acts like dereferencing the pointer held in RDI: *p in C. RDI itself is still just a stored address. A register copy such as movq %rdi,%rax copies that address; movq (%rdi),%rax reads the value at it. Parentheses describe an address expression; LEA will use that expression without reading the memory."
           ],
           "worked": {
             "goal": "long read_value(long *p) { return *p; }",
@@ -923,7 +959,8 @@
           },
           "practice": [
             "l10-deref",
-            "l10-loadptr"
+            "l10-loadptr",
+            "x-dereference"
           ],
           "review": [
             "p-return-register"
@@ -944,7 +981,7 @@
           ],
           "paragraphs": [
             "A store writes memory. With p in RDI and x in RSI, movq %rsi,(%rdi) implements *p=x. The register value is the source; the addressed memory is the destination. Writing movq %rsi,%rdi would replace the pointer instead.",
-            "A constant can also be a store source when it fits the instruction\u2019s immediate encoding. movq $-128,(%rdi) writes an eight-byte \u2212128. The q width specifies the amount written; it does not depend on how small the number appears. Neighboring objects must be preserved."
+            "A constant can also be a store source when it fits the instruction’s immediate encoding. movq $-128,(%rdi) writes an eight-byte −128. The q width specifies the amount written; it does not depend on how small the number appears. Neighboring objects must be preserved."
           ],
           "worked": {
             "goal": "void store(long *p,long x) { *p=x; }",
@@ -1170,16 +1207,16 @@
         {
           "id": "array-layout",
           "title": "An array is a sequence of equal-sized elements",
-          "goal": "Compute an element\u2019s byte offset from its index.",
+          "goal": "Compute an element’s byte offset from its index.",
           "requires": [
             "swap-complete"
           ],
           "paragraphs": [
-            "An array stores elements next to each other. C counts indices from zero: a[0] is the first element, a[1] the second. The base address points to the first byte of a[0]. An element\u2019s offset is its index multiplied by the element size.",
+            "An array stores elements next to each other. C counts indices from zero: a[0] is the first element, a[1] the second. The base address points to the first byte of a[0]. An element’s offset is its index multiplied by the element size.",
             "For long a[] with base 0x1000, each element occupies eight bytes. The addresses are 0x1000, 0x1008, 0x1010 and so on. The values stored there can be unrelated numbers. Arrays and structs are layouts of bytes; an integer MOV instruction does not know their C bounds or element names."
           ],
           "worked": {
-            "goal": "long a[3] = {4, -7, 39};\n// Base = 0x1000\n// a[2] lives at 0x1000 + 2\u00d78 = 0x1010.",
+            "goal": "long a[3] = {4, -7, 39};\n// Base = 0x1000\n// a[2] lives at 0x1000 + 2×8 = 0x1010.",
             "assembly": "",
             "reasoning": [
               "The index 2 selects the third element.",
@@ -1196,7 +1233,7 @@
           ],
           "teachBack": {
             "prompt": "Why is adding 3 bytes not enough to reach a[3] in a long array?",
-            "answer": "The index counts elements. Each element occupies eight bytes, so the byte offset is 3\u00d78."
+            "answer": "The index counts elements. Each element occupies eight bytes, so the byte offset is 3×8."
           },
           "introducesInstructions": [],
           "diagram": "array"
@@ -1209,7 +1246,7 @@
             "array-layout"
           ],
           "paragraphs": [
-            "The operand (%rdi,%rsi,8) computes RDI + RSI\u00d78. Here RDI is the base address, RSI holds the element index, and 8 is the scale. In a MOV source operand, the resulting address is then dereferenced.",
+            "The operand (%rdi,%rsi,8) computes RDI + RSI×8. Here RDI is the base address, RSI holds the element index, and 8 is the scale. In a MOV source operand, the resulting address is then dereferenced.",
             "For an int array, each element has four bytes: use scale 4 and movl into EAX. The address can still use 64-bit registers RDI and RSI. Data width and address-register width are different choices."
           ],
           "worked": {
@@ -1264,14 +1301,14 @@
             "scaled-index"
           ],
           "paragraphs": [
-            "A displacement is a fixed byte offset written before the parentheses. The full form D(base,index,scale) computes D + base + index\u00d7scale. The displacement is added once; it is not multiplied by the scale.",
+            "A displacement is a fixed byte offset written before the parentheses. The full form D(base,index,scale) computes D + base + index×scale. The displacement is added once; it is not multiplied by the scale.",
             "For a long array, a[i+1] is eight bytes after a[i], so 8(%rdi,%rsi,8) selects it. A displacement need not equal an element size: 42(%rsi,%rax,2) uses the decimal byte offset 42. Numeric prefixes matter: decimal 42 differs from hexadecimal 0x42."
           ],
           "worked": {
             "goal": "long next(long *a,long i) { return a[i+1]; }",
             "assembly": "movq 8(%rdi,%rsi,8),%rax\nret",
             "reasoning": [
-              "For base 0x1000 and i=1, compute 8+0x1000+1\u00d78=0x1010.",
+              "For base 0x1000 and i=1, compute 8+0x1000+1×8=0x1010.",
               "Load the third element, 39. The index register remains 1."
             ],
             "fixture": {
@@ -1324,11 +1361,11 @@
             "The legal hardware scales for these forms are 1, 2, 4 and 8. A missing component contributes zero, except that an omitted scale for a present index defaults to 1. RSP cannot be an index in these encodings; it can serve as a base."
           ],
           "worked": {
-            "goal": "Given RDX=0xf000 and RCX=0x100:\n8(%rdx) \u2192 0xf008\n(%rdx,%rcx) \u2192 0xf100\n(%rdx,%rcx,4) \u2192 0xf400\n0x80(,%rdx,2) \u2192 0x1e080",
+            "goal": "Given RDX=0xf000 and RCX=0x100:\n8(%rdx) → 0xf008\n(%rdx,%rcx) → 0xf100\n(%rdx,%rcx,4) → 0xf400\n0x80(,%rdx,2) → 0x1e080",
             "assembly": "",
             "reasoning": [
               "Read each position before doing arithmetic.",
-              "In the last form, compute 128+0xf000\u00d72; there is no additional base."
+              "In the last form, compute 128+0xf000×2; there is no additional base."
             ]
           },
           "practice": [
@@ -1341,7 +1378,7 @@
           ],
           "teachBack": {
             "prompt": "Why is (,%rdx,2) different from (%rdx,%rdx,2)?",
-            "answer": "The first has no base and computes 2\u00d7RDX. The second adds an extra RDX base, giving 3\u00d7RDX."
+            "answer": "The first has no base and computes 2×RDX. The second adds an extra RDX base, giving 3×RDX."
           },
           "introducesInstructions": [],
           "diagram": "address"
@@ -1402,6 +1439,40 @@
             "answer": "Use the int data width of four bytes, an element scale of four, and matching address-register widths. The address width itself need not be four bytes."
           },
           "introducesInstructions": []
+        },
+        {
+          "id": "address-data-width",
+          "title": "Choose address width separately from data width",
+          "goal": "Read a four-byte object through a full-width pointer.",
+          "requires": [
+            "array-store"
+          ],
+          "paragraphs": [
+            "An address locates the first byte; the instruction’s data width determines how many bytes are read or written there. movl (%rdi),%eax reads four bytes using the address in RDI. movq (%rdi),%rax reads eight. The pointer register’s width does not choose the object’s width.",
+            "Ordinary Linux x86-64 C pointers use 64-bit register values. The ISA also permits 32-bit effective-address forms such as (%ebx), using an address-size override and zero-extending the calculated address into the low 4 GiB. Such a load still requires valid mapped memory; it is not automatically an assembler error. Sixteen-bit address forms, including (%ax), are not available in 64-bit mode."
+          ],
+          "worked": {
+            "goal": "RDI = address 0x100\nFour bytes at 0x100: 78 56 34 12\nmovl (%rdi),%eax → EAX=0x12345678",
+            "assembly": "",
+            "reasoning": [
+              "RDI chooses the first byte.",
+              "The l suffix chooses four data bytes.",
+              "The bytes are interpreted in little-endian order."
+            ]
+          },
+          "practice": [
+            "x-address-width",
+            "x-address32"
+          ],
+          "review": [
+            "l10-arrayint"
+          ],
+          "teachBack": {
+            "prompt": "Why can an eight-byte pointer point to a one-byte char?",
+            "answer": "The pointer represents an address. The char occupies one byte at that address; a byte load selects that size."
+          },
+          "introducesInstructions": [],
+          "diagram": "address-data-width"
         }
       ]
     },
@@ -1415,11 +1486,11 @@
           "title": "LEA computes; MOV dereferences",
           "goal": "Translate &a[i] rather than a[i].",
           "requires": [
-            "array-store"
+            "address-data-width"
           ],
           "paragraphs": [
             "LEA means load effective address. It evaluates an address expression and places the resulting number in a register. It does not read memory. The parentheses describe a calculation for LEA; in MOV they request a memory access.",
-            "This is exactly the difference between &a[i], the address of an element, and a[i], the element\u2019s value. LEA\u2019s destination must be a register. No initialized bytes are needed at the computed address merely to calculate that address."
+            "This is exactly the difference between &a[i], the address of an element, and a[i], the element’s value. LEA’s destination must be a register. No initialized bytes are needed at the computed address merely to calculate that address."
           ],
           "worked": {
             "goal": "long *element(long *a,long i) { return &a[i]; }",
@@ -1467,13 +1538,14 @@
           ],
           "paragraphs": [
             "Always perform address arithmetic first. After computing the number, ask whether the instruction stops there (LEA) or uses it to access memory (MOV). This two-stage reading method avoids confusing a correct address with a correct loaded result.",
-            "Suppose RDX=0x100 and RCX=4, with the long 1 at 0x100 and the long 8 at 0x110. The expression (%rdx,%rcx,4) computes 0x110. LEA gets 0x110; MOV gets 8. With (%rdx), the corresponding results are 0x100 and 1."
+            "Suppose RDX=0x100 and RCX=4, with the long 1 at 0x100 and the long 8 at 0x110. The expression (%rdx,%rcx,4) computes 0x110. LEA gets 0x110; MOV gets 8. With (%rdx), the corresponding results are 0x100 and 1.",
+            "With RBX=4096 and the eight-byte value at 4096 equal to 23, movq %rbx,%rax gives 4096; movq (%rbx),%rax gives 23; leaq (%rbx),%rax gives 4096. LEA becomes useful with a larger expression: leaq 8(%rbx),%rax computes 4104 without loading anything there."
           ],
           "worked": {
             "goal": "// Compare a computed address with the value stored there.",
             "assembly": "leaq (%rdx,%rcx,4),%rax\nmovq (%rdx,%rcx,4),%rbx",
             "reasoning": [
-              "Both instructions calculate 0x100+4\u00d74=0x110.",
+              "Both instructions calculate 0x100+4×4=0x110.",
               "RAX receives the address 0x110. RBX receives the stored value 8."
             ],
             "fixture": {
@@ -1500,7 +1572,8 @@
           },
           "practice": [
             "l10-leamov",
-            "l10-leafour"
+            "l10-leafour",
+            "x-lea-three"
           ],
           "review": [
             "l10-addressvalue"
@@ -1520,7 +1593,7 @@
             "lea-compare"
           ],
           "paragraphs": [
-            "An address calculation is arithmetic even when the number is not used as a pointer. If RDI holds x, leaq (%rdi,%rdi,8),%rax computes x+8\u00d7x=9\u00d7x. There is no memory access, so x can be an ordinary integer.",
+            "An address calculation is arithmetic even when the number is not used as a pointer. If RDI holds x, leaq (%rdi,%rdi,8),%rax computes x+8×x=9×x. There is no memory access, so x can be an ordinary integer.",
             "The same rule handles x+4y+12 with leaq 12(%rdi,%rsi,4),%rax. The scale still must be 1,2,4 or 8. To multiply by 9, add the base to eight times the index; writing a scale of 9 is invalid. Signed C tests here stay within the representable range."
           ],
           "worked": {
@@ -1528,7 +1601,7 @@
             "assembly": "leaq (%rdi,%rdi,8),%rax\nret",
             "reasoning": [
               "RDI=3 is both the base and index value.",
-              "Compute 3+8\u00d73=27; return 27."
+              "Compute 3+8×3=27; return 27."
             ],
             "fixture": {
               "name": "Worked example",
@@ -1727,7 +1800,7 @@
             "assembly": "movq %rdi,%rax\nnotq %rax\nret",
             "reasoning": [
               "With x=0, all 64 zero bits become ones.",
-              "As unsigned, the result is 18446744073709551615. A signed display may show the same pattern as \u22121."
+              "As unsigned, the result is 18446744073709551615. A signed display may show the same pattern as −1."
             ],
             "fixture": {
               "name": "Worked example",
@@ -1751,8 +1824,8 @@
             "p-signed"
           ],
           "teachBack": {
-            "prompt": "Why can the lab display \u22121 for an unsigned all-one result without changing the result bits?",
-            "answer": "The display is interpreting the same 64-bit pattern as signed. Its unsigned interpretation is 2^64\u22121."
+            "prompt": "Why can the lab display −1 for an unsigned all-one result without changing the result bits?",
+            "answer": "The display is interpreting the same 64-bit pattern as signed. Its unsigned interpretation is 2^64−1."
           },
           "introducesInstructions": [
             "not"
@@ -1798,14 +1871,14 @@
           ],
           "paragraphs": [
             "To clear bit 3, start with its one-bit mask 8, then complement that mask. The result has a zero only at bit 3 and ones everywhere else. ANDing x with that inverted mask clears the chosen bit and preserves all other positions.",
-            "In 64-bit two\u2019s complement, ~8UL has the same pattern as signed \u22129: 0xfffffffffffffff7. andq $-9,%rax is therefore a compact way to clear bit 3. Do not use XOR to clear a bit: XOR would turn a currently zero bit on."
+            "In 64-bit two’s complement, ~8UL has the same pattern as signed −9: 0xfffffffffffffff7. andq $-9,%rax is therefore a compact way to clear bit 3. Do not use XOR to clear a bit: XOR would turn a currently zero bit on."
           ],
           "worked": {
             "goal": "unsigned long clear(unsigned long x) { return x & ~8UL; }",
             "assembly": "movq %rdi,%rax\nandq $-9,%rax\nret",
             "reasoning": [
               "For x=15, the low four bits are 1111.",
-              "The mask\u2019s low bits are 0111, so the result is 0111=7.",
+              "The mask’s low bits are 0111, so the result is 0111=7.",
               "The mask has ones in all higher positions, preserving them."
             ],
             "fixture": {
@@ -1951,16 +2024,16 @@
             "logical-right"
           ],
           "paragraphs": [
-            "SAR shifts right while copying the old top bit into the newly opened high positions. A negative two\u2019s-complement value therefore remains negative. Under this arithmetic-shift behavior, \u22127 shifted right once becomes \u22124.",
-            "SAR rounds the division-like result toward negative infinity. Signed C division rounds toward zero, so \u22127/2 is \u22123 instead. Also, right-shifting a negative signed C value is implementation-defined; these exercises explicitly assume x86 arithmetic-shift behavior. Do not silently replace arbitrary signed division with SAR."
+            "SAR shifts right while copying the old top bit into the newly opened high positions. A negative two’s-complement value therefore remains negative. Under this arithmetic-shift behavior, −7 shifted right once becomes −4.",
+            "SAR rounds the division-like result toward negative infinity. Signed C division rounds toward zero, so −7/2 is −3 instead. Also, right-shifting a negative signed C value is implementation-defined; these exercises explicitly assume x86 arithmetic-shift behavior. Do not silently replace arbitrary signed division with SAR."
           ],
           "worked": {
             "goal": "// Assume arithmetic right-shift behavior.\nlong shifted(long x) { return x >> 1; }",
             "assembly": "movq %rdi,%rax\nsarq $1,%rax\nret",
             "reasoning": [
-              "Start with signed x=\u22127.",
-              "Repeat the sign bit while shifting, giving \u22124.",
-              "This differs from the C division expression \u22127/2."
+              "Start with signed x=−7.",
+              "Repeat the sign bit while shifting, giving −4.",
+              "This differs from the C division expression −7/2."
             ],
             "fixture": {
               "name": "Worked example",
@@ -2003,14 +2076,14 @@
           "paragraphs": [
             "C often promotes char and short operands to int before arithmetic or shifts. In this model, every unsigned-char value fits in a 32-bit int, so an unsigned char containing 0x87 becomes the positive int 135 before it is shifted.",
             "Thus x<<2 computes the int value 540. Storing that result in an unsigned char then reduces it modulo 256, leaving 28, or 0x1c. An eight-bit machine shift gives that final narrow pattern directly, but it does not show the wider C intermediate. Always state whether a question asks for a C expression or a fixed-width machine result.",
-            "A signed char with pattern 0x87 instead represents \u2212121 here. Promoting it preserves that negative value, and left-shifting a negative signed C value is undefined. This is why the declared type matters even before you select an instruction."
+            "A signed char with pattern 0x87 instead represents −121 here. Promoting it preserves that negative value, and left-shifting a negative signed C value is undefined. This is why the declared type matters even before you select an instruction."
           ],
           "worked": {
             "goal": "unsigned char x = 0x87;  // 135\nint wide = x << 2;        // 540\nunsigned char narrow = wide; // 28, or 0x1c",
             "assembly": "",
             "reasoning": [
               "The small unsigned value first becomes a positive int.",
-              "The int shift computes 135\u00d74=540.",
+              "The int shift computes 135×4=540.",
               "Only the later assignment to an eight-bit unsigned destination reduces the result modulo 256."
             ]
           },
@@ -2036,7 +2109,7 @@
           ],
           "paragraphs": [
             "A constant shift count is written as an immediate, such as $3. For the variable-count forms used here, x86 reads the count from CL, the low byte of RCX. If the C count arrives in RSI, copy it to RCX before naming %cl in the shift.",
-            "C requires a nonnegative count smaller than the promoted left operand\u2019s width. These 64-bit exercises require k<64. Hardware masks q counts to six low bits, so a count of 64 acts as zero; that hardware fact does not make the C expression x<<64 valid. For smaller x86 shift widths, the hardware count mask uses five bits."
+            "C requires a nonnegative count smaller than the promoted left operand’s width. These 64-bit exercises require k<64. Hardware masks q counts to six low bits, so a count of 64 acts as zero; that hardware fact does not make the C expression x<<64 valid. For smaller x86 shift widths, the hardware count mask uses five bits."
           ],
           "worked": {
             "goal": "// Precondition: k is in 0..63.\nunsigned long shift(unsigned long x,unsigned long k) { return x<<k; }",
@@ -2140,14 +2213,14 @@
             "bit-field"
           ],
           "paragraphs": [
-            "Flags record facts about a result. ZF says the result was zero; SF copies its top bit; CF reports unsigned carry or borrow; OF reports signed overflow. They are distinct facts, not interchangeable notions of \u201cnegative\u201d.",
-            "cmpq source,destination sets flags as if subtracting source from destination, but leaves both operands unchanged. After cmpq %rsi,%rdi, the comparison is RDI\u2212RSI. MOV and LEA do not overwrite these flags; arithmetic instructions generally do. A branch uses the relevant most recently established flags."
+            "Flags record facts about a result. ZF says the result was zero; SF copies its top bit; CF reports unsigned carry or borrow; OF reports signed overflow. They are distinct facts, not interchangeable notions of “negative”.",
+            "cmpq source,destination sets flags as if subtracting source from destination, but leaves both operands unchanged. After cmpq %rsi,%rdi, the comparison is RDI−RSI. MOV and LEA do not overwrite these flags; arithmetic instructions generally do. A branch uses the relevant most recently established flags."
           ],
           "worked": {
             "goal": "// Compare x=6 in RDI with y=4 in RSI.",
             "assembly": "cmpq %rsi,%rdi",
             "reasoning": [
-              "The temporary mathematical difference is 6\u22124=2.",
+              "The temporary mathematical difference is 6−4=2.",
               "ZF=0, SF=0, CF=0 and OF=0 for this comparison.",
               "RDI and RSI are unchanged; the difference is not stored."
             ],
@@ -2174,18 +2247,62 @@
           "review": [],
           "teachBack": {
             "prompt": "Why can you place MOV between CMP and a conditional jump, but not freely place ADD there?",
-            "answer": "MOV preserves the comparison\u2019s flags. ADD can replace them with flags from its own result."
+            "answer": "MOV preserves the comparison’s flags. ADD can replace them with flags from its own result."
           },
           "introducesInstructions": [
             "cmp"
           ]
         },
         {
+          "id": "flag-details",
+          "title": "Compute carry, overflow, sign and zero separately",
+          "goal": "Interpret a fixed-width arithmetic result before choosing a branch.",
+          "requires": [
+            "flags"
+          ],
+          "paragraphs": [
+            "ZF is one when the stored result is zero; SF copies the stored result’s top bit. For ADD, CF reports an unsigned carry beyond the width. For SUB/CMP, CF reports an unsigned borrow: destination is below source. OF separately reports that the signed mathematical result did not fit.",
+            "With eight-bit 127+1, the stored byte is 0x80: SF=1, OF=1, CF=0, ZF=0. With 255+1, the stored byte is zero: ZF=1, CF=1, SF=0, OF=0. The same addition mechanism has distinct signed and unsigned interpretations; C signed overflow is not defined wrapping arithmetic."
+          ],
+          "worked": {
+            "goal": "Eight-bit machine calculation: 127 + 1\nStored result: 0x80\nZF=0, SF=1, CF=0, OF=1",
+            "assembly": "movq $127,%rax\naddb $1,%al",
+            "reasoning": [
+              "127+1 fits unsigned eight bits but not signed eight bits.",
+              "SF describes the stored top bit, not the original comparison."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {},
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 128
+                }
+              }
+            }
+          },
+          "practice": [
+            "x-carry-overflow",
+            "x-borrow"
+          ],
+          "review": [
+            "p-wrap"
+          ],
+          "teachBack": {
+            "prompt": "Why does a negative stored result not by itself prove that an original signed comparison was less-than?",
+            "answer": "The subtraction may overflow. Signed ordering combines SF with OF; the stored sign bit alone loses that information."
+          },
+          "introducesInstructions": [],
+          "diagram": "four-flags"
+        },
+        {
           "id": "equality-branch",
           "title": "A branch chooses the next instruction",
           "goal": "Use a label and a zero comparison to express a decision.",
           "requires": [
-            "flags"
+            "flag-details"
           ],
           "paragraphs": [
             "A label marks a position in code, written as a name followed by a colon. je label jumps there if ZF=1; jne label jumps if ZF=0. Otherwise execution continues with the following instruction. jmp label always jumps.",
@@ -2240,15 +2357,15 @@
           ],
           "paragraphs": [
             "After CMP, signed ordering uses JL/JLE/JG/JGE for less, less-or-equal, greater and greater-or-equal. These combine SF and OF correctly even when the subtraction would overflow. SF alone is not a reliable signed ordering test.",
-            "Unsigned ordering uses JB/JBE/JA/JAE for below, below-or-equal, above and above-or-equal; these use CF and ZF. Equality uses JE/JNE regardless of signedness. An all-one 64-bit value is signed \u22121 but unsigned 2^64\u22121, so it compares differently with 1."
+            "Unsigned ordering uses JB/JBE/JA/JAE for below, below-or-equal, above and above-or-equal; these use CF and ZF. Equality uses JE/JNE regardless of signedness. An all-one 64-bit value is signed −1 but unsigned 2^64−1, so it compares differently with 1."
           ],
           "worked": {
             "goal": "long max(long x,long y) { return x>y ? x:y; }\n// condition ? value_if_true : value_if_false",
             "assembly": "movq %rsi,%rax\ncmpq %rsi,%rdi\njle done\nmovq %rdi,%rax\ndone: ret",
             "reasoning": [
               "Default the result to y.",
-              "Compare x\u2212y using signed ordering.",
-              "For x=\u22123 and y=2, JLE keeps the default 2."
+              "Compare x−y using signed ordering.",
+              "For x=−3 and y=2, JLE keeps the default 2."
             ],
             "fixture": {
               "name": "Worked example",
@@ -2292,11 +2409,105 @@
           "diagram": "branch"
         },
         {
+          "id": "threshold-if",
+          "title": "Turn a condition into two complete paths",
+          "goal": "Make both sides return the intended value.",
+          "requires": [
+            "ordered-branches"
+          ],
+          "paragraphs": [
+            "For if(x<3), choose a signed comparison and include the equality boundary. CMP $3,x describes x−3; JL selects x<3. If the jump is not taken, execution falls through to the other path.",
+            "Every path must prepare the agreed result and return, or converge at a shared return. A jump destination is a code label, not the numeric value returned. At x=3 the strict comparison is false, so this function returns 2."
+          ],
+          "worked": {
+            "goal": "long choose(long x) { if(x<3) return 1; return 2; }",
+            "assembly": "cmpq $3,%rdi\njl small\nmovq $2,%rax\nret\nsmall:\nmovq $1,%rax\nret",
+            "reasoning": [
+              "For x=2, take small and return 1.",
+              "For x=3, fall through and return 2."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 3
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 2
+                }
+              },
+              "function": true
+            }
+          },
+          "practice": [
+            "x-threshold-branch",
+            "x-threshold"
+          ],
+          "review": [
+            "l10-signedmax"
+          ],
+          "teachBack": {
+            "prompt": "Why does changing JL to JLE change the boundary case?",
+            "answer": "JLE includes equality, so x=3 would incorrectly enter the return-1 path."
+          },
+          "introducesInstructions": [],
+          "diagram": "if-paths"
+        },
+        {
+          "id": "absolute-difference",
+          "title": "Choose subtraction order with a comparison",
+          "goal": "Keep the comparison separate from each path’s calculation.",
+          "requires": [
+            "threshold-if"
+          ],
+          "paragraphs": [
+            "To compute a nonnegative difference, first determine which input is larger. CMP preserves both inputs. After cmpq %rsi,%rdi, JLE selects x<=y, where y−x is the desired expression; otherwise use x−y.",
+            "The function assumes the difference fits in signed long. An extreme pair such as LONG_MIN and LONG_MAX violates that assumption; a signed long cannot represent their absolute difference. A working branch structure does not remove the C type’s range limit."
+          ],
+          "worked": {
+            "goal": "long absdiff(long x,long y) {\n  if(x>y) return x-y;\n  return y-x;\n} // Difference must fit in long.",
+            "assembly": "cmpq %rsi,%rdi\njle other\nmovq %rdi,%rax\nsubq %rsi,%rax\nret\nother:\nmovq %rsi,%rax\nsubq %rdi,%rax\nret",
+            "reasoning": [
+              "For x=2,y=7, jump to other and compute 7−2.",
+              "For x=y, the result is zero."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 2,
+                "rsi": 7
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 5
+                }
+              },
+              "function": true
+            }
+          },
+          "practice": [
+            "x-absdiff-direction",
+            "x-absdiff"
+          ],
+          "review": [
+            "x-threshold"
+          ],
+          "teachBack": {
+            "prompt": "Why is TEST not a substitute for comparing x and y here?",
+            "answer": "TEST computes bitwise AND for flags. It does not establish the signed ordering of the two values."
+          },
+          "introducesInstructions": []
+        },
+        {
           "id": "test-bits",
           "title": "TEST asks whether selected bits are zero",
           "goal": "Branch on a mask without modifying the input.",
           "requires": [
-            "ordered-branches"
+            "absolute-difference"
           ],
           "paragraphs": [
             "testq source,destination performs an AND for the purpose of setting flags, but discards the numeric result. The operands stay unchanged. In testq $8,%rdi, ZF is 1 if bit 3 is clear and 0 if bit 3 is set.",
@@ -2342,22 +2553,70 @@
           ]
         },
         {
-          "id": "while-loop",
-          "title": "Check before repeating",
-          "goal": "Preserve the possibility of zero iterations.",
+          "id": "arithmetic-tests",
+          "title": "Use flags from the operation you actually executed",
+          "goal": "Reuse valid flags and refresh them when asking a different question.",
           "requires": [
             "test-bits"
           ],
           "paragraphs": [
+            "ADD and SUB set flags as a side effect, so JE/JNE can inspect whether their stored result is zero. JS/JNS inspect its top bit. JO/JNO inspect signed overflow. MOV, LEA and NOT preserve existing arithmetic flags; INC/DEC preserve CF; IMUL leaves ZF/SF undefined. “Every arithmetic instruction sets every flag” is too broad.",
+            "A signed ordering branch combines flags appropriate to a comparison, not just the result’s sign. After byte-sized 127+1, SF=1 and OF=1, so JG would be true even though the stored result is signed negative. To ask whether a stored result is positive, first TEST it against itself, which clears OF and CF and sets ZF/SF. Unsigned JB after ADD tests carry, not whether the result is below unsigned zero."
+          ],
+          "worked": {
+            "goal": "movq $127,%rax\naddb $1,%al\n// SF=1, OF=1: JS and JG both true\ntestb %al,%al\n// SF=1, OF=0: JS true; JG false",
+            "assembly": "movq $127,%rax\naddb $1,%al\ntestb %al,%al",
+            "reasoning": [
+              "The arithmetic flags describe the ADD event.",
+              "TEST establishes a fresh result-versus-zero condition without modifying the byte."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {},
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 128
+                }
+              }
+            }
+          },
+          "practice": [
+            "x-arithmetic-zero",
+            "x-overflow-sign"
+          ],
+          "review": [
+            "l10-test"
+          ],
+          "teachBack": {
+            "prompt": "Why does LEA followed by JE not test the LEA result for zero?",
+            "answer": "LEA preserves earlier flags. JE would read the earlier ZF unless a flag-setting instruction establishes the desired condition."
+          },
+          "introducesInstructions": [
+            "js",
+            "jns",
+            "jo",
+            "jno"
+          ]
+        },
+        {
+          "id": "while-loop",
+          "title": "Check before repeating",
+          "goal": "Preserve the possibility of zero iterations.",
+          "requires": [
+            "arithmetic-tests"
+          ],
+          "paragraphs": [
             "A while loop tests its condition before each body execution. If the condition is false initially, the body must not run at all. Implement this with a label at the test, a conditional jump to the exit, the body, and an unconditional jump back.",
-            "Each body execution must make progress toward finishing for the chosen inputs. In an array loop, check the index against the count before reading an element. Otherwise an empty array case can incorrectly read memory. INC adds one and DEC subtracts one; their carry-flag behavior is discussed next. The C body i++ increments i by one; this body does not use the expression\u2019s old-value result."
+            "Each body execution must make progress toward finishing for the chosen inputs. In an array loop, check the index against the count before reading an element. Otherwise an empty array case can incorrectly read memory. INC adds one and DEC subtracts one; their carry-flag behavior is discussed next. The C body i++ increments i by one; this body does not use the expression’s old-value result."
           ],
           "worked": {
             "goal": "long count(long n) {\n  long i=0; while(i<n) i++; return i;\n}",
             "assembly": "movq $0,%rax\nloop: cmpq %rdi,%rax\njge done\nincq %rax\njmp loop\ndone: ret",
             "reasoning": [
               "RAX starts as i=0.",
-              "Compare i\u2212n before each increment.",
+              "Compare i−n before each increment.",
               "For n=3, increment three times, then exit with i=3. For n=0, exit immediately."
             ],
             "fixture": {
@@ -2402,7 +2661,7 @@
           "paragraphs": [
             "Instructions define and preserve different parts of the flags state. INC/DEC preserve CF while updating several other flags. MOV, LEA and NOT preserve arithmetic flags. A later branch must match the flags that are actually available.",
             "For shifts, a zero effective count preserves flags. For nonzero counts, ZF/SF describe the result; OF is defined only for a count of one. IMUL defines CF/OF but leaves ZF/SF undefined. This lab rejects a branch that depends on an undefined flag rather than guessing. JO tests OF; it is not reliable after a shift by two.",
-            "A zero-count 32-bit register shift has a further alias rule: shll $0,%eax keeps EAX\u2019s value and the flags, but still clears the high half of RAX. A q-form zero-count shift leaves the full register unchanged."
+            "A zero-count 32-bit register shift has a further alias rule: shll $0,%eax keeps EAX’s value and the flags, but still clears the high half of RAX. A q-form zero-count shift leaves the full register unchanged."
           ],
           "worked": {
             "goal": "// Preserve flags but observe the 32-bit destination rule.",
@@ -2440,6 +2699,588 @@
       ]
     },
     {
+      "id": "09-booleans",
+      "title": "Widen values and produce Boolean results",
+      "goal": "Make widths and condition results explicit, one mechanism at a time.",
+      "steps": [
+        {
+          "id": "zero-extension",
+          "title": "Make a small unsigned value wider",
+          "goal": "Fill new upper bits with zeros.",
+          "requires": [
+            "flag-lifetime"
+          ],
+          "paragraphs": [
+            "When a value moves into a wider register, the new upper positions need a defined meaning. Zero extension fills them with zeros, preserving an unsigned value. The AT&T name movzbl means MOV, zero-extend, byte source, long-word destination: 8 bits become 32.",
+            "Examples include movzbw, movzbl, movzbq, movzwl and movzwq. The source is a register or memory; the destination must be a wider register. movzbl %al,%eax also clears the upper half of RAX because it writes EAX. A plain movb only writes one byte and does not perform this widening."
+          ],
+          "worked": {
+            "goal": "AL=0x80\nmovzbl %al,%eax\nEAX=0x00000080; RAX=128",
+            "assembly": "movzbl %al,%eax",
+            "reasoning": [
+              "Read the source as eight bits.",
+              "Fill the destination’s new positions with zero."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rax": "0xffffffffffff0080"
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 128
+                }
+              }
+            }
+          },
+          "practice": [
+            "x-zero-extend",
+            "x-load-ubyte",
+            "x-load-unsigned-memory"
+          ],
+          "review": [
+            "p-signed"
+          ],
+          "teachBack": {
+            "prompt": "Why can a plain byte MOV not guarantee a clean int result?",
+            "answer": "It changes only the byte destination. Zero extension defines the rest of the wider result."
+          },
+          "introducesInstructions": [
+            "movzx"
+          ],
+          "diagram": "extension-zero"
+        },
+        {
+          "id": "sign-extension",
+          "title": "Keep the signed meaning while widening",
+          "goal": "Repeat the source sign bit in added positions.",
+          "requires": [
+            "zero-extension"
+          ],
+          "paragraphs": [
+            "Sign extension preserves a two’s-complement signed value when increasing its width. A byte 0x80 represents −128. movsbq copies that byte and fills the new upper 56 bits with ones, giving the 64-bit representation of −128. A source with sign bit zero gets zeros above it.",
+            "movsbl sign-extends a byte to 32 bits; movswq sign-extends a word to 64. The two suffix letters name source and destination widths. With movsbl %al,%eax and AL=0x80, EAX is signed −128, but RAX is the positive pattern 0x00000000ffffff80 because the EAX write clears its upper half. To obtain a signed 64-bit −128 directly, use movsbq."
+          ],
+          "worked": {
+            "goal": "AL=0x80\nmovsbq %al,%rax → −128\nmovzbq %al,%rax → 128",
+            "assembly": "movsbq %al,%rax",
+            "reasoning": [
+              "The byte pattern alone does not state signedness.",
+              "Choose the extension matching the C type."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rax": 128
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": -128
+                }
+              }
+            }
+          },
+          "practice": [
+            "x-sign-extend",
+            "x-load-sbyte",
+            "x-load-signed-memory",
+            "x-load-word-memory"
+          ],
+          "review": [
+            "x-zero-extend"
+          ],
+          "teachBack": {
+            "prompt": "Why can two widening instructions produce different results from the same source bits?",
+            "answer": "Zero extension preserves the unsigned magnitude; sign extension preserves the signed two’s-complement interpretation."
+          },
+          "introducesInstructions": [
+            "movsx"
+          ],
+          "diagram": "extension-sign"
+        },
+        {
+          "id": "extension32",
+          "title": "Widen a 32-bit value according to its type",
+          "goal": "Distinguish signed extension from the EAX zeroing rule.",
+          "requires": [
+            "sign-extension"
+          ],
+          "paragraphs": [
+            "A signed int converted to long needs its sign extended from 32 to 64 bits. movslq %edi,%rax performs that conversion. For EDI=0xffffffff, signed int −1 becomes 64-bit long −1, with all 64 bits set.",
+            "An unsigned int converted to unsigned long needs zeros above bit 31. A normal movl %edi,%eax already does that because every 32-bit register write clears the upper half. There is no separate movzlq encoding to request. The C type determines which of these operations preserves the value."
+          ],
+          "worked": {
+            "goal": "int x = -1;\nlong y = x; // requires sign extension\nunsigned int u = 0xffffffffU;\nunsigned long v = u; // 4294967295",
+            "assembly": "movslq %edi,%rax",
+            "reasoning": [
+              "The two 32-bit source patterns can be identical.",
+              "Their declared types require different 64-bit interpretations."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 4294967295
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": -1
+                }
+              }
+            }
+          },
+          "practice": [
+            "x-extend32",
+            "x-int-long"
+          ],
+          "review": [
+            "x-load-sbyte"
+          ],
+          "teachBack": {
+            "prompt": "Why does movl %edi,%eax not correctly return every signed int as a long?",
+            "answer": "A negative int needs ones above its sign bit. MOVL clears those bits and would produce a large positive long."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "set-byte",
+          "title": "Write a condition as zero or one",
+          "goal": "Turn an existing condition into a byte value.",
+          "requires": [
+            "extension32"
+          ],
+          "paragraphs": [
+            "A conditional jump chooses a code path. SETcc instead writes one byte: 1 when the condition is true, 0 when false, then continues to the next instruction. SETE uses ZF just like JE; SETNE uses its opposite. These instructions read flags without changing them.",
+            "The destination must be a byte register or one byte in memory. sete %al changes AL only, leaving RAX’s seven other bytes alone. It does not establish a complete int or long result by itself. SETE %eax is not a valid wider form."
+          ],
+          "worked": {
+            "goal": "// RDI=5, RSI=5; RAX has unrelated upper bits.\ncmpq %rsi,%rdi\nsete %al",
+            "assembly": "cmpq %rsi,%rdi\nsete %al",
+            "reasoning": [
+              "CMP establishes equality.",
+              "SETE writes one to AL, preserving the other bytes."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 5,
+                "rsi": 5,
+                "rax": "0x1122334455667788"
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": "0x1122334455667701"
+                }
+              }
+            }
+          },
+          "practice": [
+            "x-set-byte",
+            "x-set-vs-jump"
+          ],
+          "review": [
+            "x-zero-extend"
+          ],
+          "teachBack": {
+            "prompt": "Why might reading the whole RAX after SETE show a number much larger than one?",
+            "answer": "SETE defines only AL. The remaining bytes can retain old data."
+          },
+          "introducesInstructions": [
+            "sete",
+            "setne"
+          ],
+          "diagram": "set-byte"
+        },
+        {
+          "id": "set-result",
+          "title": "Return a complete Boolean value",
+          "goal": "Join comparison, byte result and widening into one function.",
+          "requires": [
+            "set-byte"
+          ],
+          "paragraphs": [
+            "C comparison expressions produce int zero or one. A direct translation is CMP, then the matching SETcc into AL, then movzbl %al,%eax. The final widening makes the complete int result defined, and its EAX write clears the upper half of RAX.",
+            "For signed x>y, use SETG, not SETA. CMP computes x−y only for flags; it does not store a subtraction result. The caller reads EAX for int, even though a register table may loosely label the family RAX. A 32-bit instruction operates on four bytes, not “32 bytes.”"
+          ],
+          "worked": {
+            "goal": "int greater(long x,long y) { return x>y; }",
+            "assembly": "cmpq %rsi,%rdi\nsetg %al\nmovzbl %al,%eax\nret",
+            "reasoning": [
+              "With x=9,y=4, SETG writes 1 to AL.",
+              "MOVZBL makes EAX=1 and RAX=1."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 9,
+                "rsi": 4,
+                "rax": -1
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 1,
+                  "eax": 1
+                }
+              },
+              "function": true
+            }
+          },
+          "practice": [
+            "x-boolean-clean",
+            "x-greater-int"
+          ],
+          "review": [
+            "l10-cmp"
+          ],
+          "teachBack": {
+            "prompt": "Why must XOR EAX,EAX occur before CMP if used instead of the final MOVZBL?",
+            "answer": "XOR changes flags. Placing it after CMP would destroy the comparison before SETcc reads it."
+          },
+          "introducesInstructions": [
+            "setg"
+          ]
+        },
+        {
+          "id": "set-conditions",
+          "title": "Choose the condition that matches the question",
+          "goal": "Use the same flag logic for SETcc and Jcc.",
+          "requires": [
+            "set-result"
+          ],
+          "paragraphs": [
+            "The suffix selects the predicate. E/NE use ZF and !ZF; S/NS use SF and !SF; O/NO use OF and !OF. Signed L/GE use SF!=OF and SF==OF; G uses !ZF and SF==OF; LE uses ZF or SF!=OF.",
+            "Unsigned B/AE use CF and !CF; A uses !CF and !ZF; BE uses CF or ZF. Add SET to the suffix to write a byte, or J to branch. Equality does not depend on signedness. For example, all-one bits compared with one is signed less-than but unsigned above."
+          ],
+          "worked": {
+            "goal": "CMP destination minus source:\nE: ZF     NE: !ZF\nL: SF!=OF   GE: SF==OF\nG: !ZF && SF==OF   LE: ZF || SF!=OF\nB: CF     AE: !CF\nA: !CF && !ZF   BE: CF || ZF",
+            "assembly": "",
+            "reasoning": [
+              "The predicate reads only the flags it needs.",
+              "Pick signedness before choosing an ordering suffix."
+            ]
+          },
+          "practice": [
+            "x-condition-table",
+            "x-setne-spelling"
+          ],
+          "review": [
+            "l10-unsigned"
+          ],
+          "teachBack": {
+            "prompt": "Why do SETL and SETB disagree for the all-one pattern compared with one?",
+            "answer": "The same bits represent signed −1 or a very large unsigned value. The two instructions implement those different orderings."
+          },
+          "introducesInstructions": [
+            "setl",
+            "setle",
+            "setge",
+            "seta",
+            "setae",
+            "setb",
+            "setbe",
+            "sets",
+            "setns",
+            "seto",
+            "setno"
+          ],
+          "diagram": "condition-table"
+        },
+        {
+          "id": "set-memory",
+          "title": "Store a Boolean byte without touching its neighbors",
+          "goal": "Use a memory destination with its exact one-byte width.",
+          "requires": [
+            "set-conditions"
+          ],
+          "paragraphs": [
+            "SETcc accepts a memory destination as well as a byte register. After CMP, sete (%rdx) stores one or zero at the address held in RDX. No MOVZBL is needed when the required output is one unsigned char in memory.",
+            "The memory address and object width are still separate. RDX is a full pointer; SETE writes one byte. The pointer itself stays unchanged, and neighboring bytes must be preserved. A later wider load would also read those neighbors, so do not assume a one-byte store zeroed an entire int."
+          ],
+          "worked": {
+            "goal": "void store_equal(long x,long y,unsigned char *out) { *out=(x==y); }",
+            "assembly": "cmpq %rsi,%rdi\nsete (%rdx)\nret",
+            "reasoning": [
+              "RDI and RSI contain the compared values.",
+              "RDX contains the output address.",
+              "Only the byte at that address is written."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 5,
+                "rsi": 5,
+                "rdx": 4096
+              },
+              "memory": {
+                "out": 170,
+                "out+1": 187
+              },
+              "memoryWidth": 1,
+              "expected": {
+                "memory": {
+                  "out": 1
+                }
+              },
+              "symbols": {
+                "out": 4096
+              },
+              "function": true
+            }
+          },
+          "practice": [
+            "x-set-memory",
+            "x-store-bool"
+          ],
+          "review": [
+            "x-address-width"
+          ],
+          "teachBack": {
+            "prompt": "Why does a one-byte Boolean output not need a one-byte address register?",
+            "answer": "The destination’s data size is one byte; its location is still represented by a full pointer."
+          },
+          "introducesInstructions": []
+        }
+      ]
+    },
+    {
+      "id": "09-loops",
+      "title": "Translate every loop form and count set bits",
+      "goal": "Explain when the condition is evaluated and preserve the initial-case behavior.",
+      "steps": [
+        {
+          "id": "goto-paths",
+          "title": "Make a C control path explicit with goto",
+          "goal": "Relate C labels and jumps to assembly labels and branches.",
+          "requires": [
+            "set-memory"
+          ],
+          "paragraphs": [
+            "A C label names a statement position. goto other transfers execution there. A conditional goto first tests a condition; if false, execution falls through. This expresses the same control structure that assembly labels and conditional jumps make explicit.",
+            "An if/else can branch to its else label, perform the then calculation on fall-through, then jump over else to done. The final unconditional jump prevents executing both branches. Use this as a translation tool; structured C is normally clearer for ordinary source."
+          ],
+          "worked": {
+            "goal": "if(x<=y) goto other;\nresult=x-y;\ngoto done;\nother: result=y-x;\ndone: return result;",
+            "assembly": "",
+            "reasoning": [
+              "The two calculations are mutually exclusive.",
+              "Both paths meet at done."
+            ]
+          },
+          "practice": [
+            "x-goto"
+          ],
+          "review": [
+            "x-absdiff"
+          ],
+          "teachBack": {
+            "prompt": "What goes wrong if the then path falls directly into the else calculation?",
+            "answer": "It can overwrite the intended result by executing the other branch too."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "do-while",
+          "title": "Place the condition after the first body execution",
+          "goal": "Preserve the at-least-once behavior.",
+          "requires": [
+            "goto-paths"
+          ],
+          "paragraphs": [
+            "A do-while reaches the body before testing. Write its body label first, then the body update, then a conditional jump back when the continuation condition is true. This differs from while, which may execute zero times.",
+            "If the update itself establishes the right flags, it can feed the jump directly. SHR sets ZF from its shifted result; JNE immediately afterward repeats while that result is nonzero. Do not place an unrelated flag-changing instruction between the update and the branch."
+          ],
+          "worked": {
+            "goal": "long bit_visits(unsigned long x) {\n  long n=0;\n  do { n++; x>>=1; } while(x);\n  return n;\n}",
+            "assembly": "movl $0,%eax\nbody:\nincq %rax\nshrq $1,%rdi\njne body\nret",
+            "reasoning": [
+              "For x=0, the body still increments n to 1.",
+              "For x=8, updates leave 4,2,1,0: four visits."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 0
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 1
+                }
+              },
+              "function": true
+            }
+          },
+          "practice": [
+            "x-do-first",
+            "x-do-width"
+          ],
+          "review": [
+            "l10-loopzero"
+          ],
+          "teachBack": {
+            "prompt": "Why does moving the condition to the top change x=0?",
+            "answer": "A top test would skip the body, changing the required do-while result."
+          },
+          "introducesInstructions": [],
+          "diagram": "loop-timing"
+        },
+        {
+          "id": "guarded-while",
+          "title": "Use a bottom test without changing while semantics",
+          "goal": "Add an entry guard before a shared loop body.",
+          "requires": [
+            "do-while"
+          ],
+          "paragraphs": [
+            "A while can use a top test on every iteration, or an initial guard followed by a bottom-tested body. Both must skip the body when the initial condition is false. This is a control-flow transformation, not permission to change the loop’s behavior.",
+            "For an unsigned shifting loop, TEST x,x followed by JE done supplies the initial guard. The body shifts x; JNE body uses the resulting ZF for the next iteration. An unconditional jump back to a top test is another valid translation, with a different arrangement of jumps."
+          ],
+          "worked": {
+            "goal": "while(x) { n++; x>>=1; }\n// x=0 → zero visits\n// x=8 → four visits",
+            "assembly": "movl $0,%eax\ntestq %rdi,%rdi\nje done\nbody:\nincq %rax\nshrq $1,%rdi\njne body\ndone:\nret",
+            "reasoning": [
+              "The entry test protects the zero case.",
+              "A bottom test handles later iterations."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 0
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 0
+                }
+              },
+              "function": true
+            }
+          },
+          "practice": [
+            "x-guarded-while",
+            "x-guarded-visits"
+          ],
+          "review": [
+            "x-do-width"
+          ],
+          "teachBack": {
+            "prompt": "How would you distinguish a correct guarded while from an unguarded do-while?",
+            "answer": "Test an input whose condition is false initially and whose body would visibly change state."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "for-loop",
+          "title": "Separate initialize, test, body and update",
+          "goal": "Translate every phase of a for loop.",
+          "requires": [
+            "guarded-while"
+          ],
+          "paragraphs": [
+            "A for loop performs its initialization once, tests before each iteration, executes the body when true, and then performs the update. It can be rewritten as initialization followed by a while with the update at the end of the body.",
+            "Keep the count and accumulated value in distinct registers. If n=0, the first test exits. If n=1, only i=0 is included. Tracking those two cases catches initialization, boundary and update placement errors before longer examples."
+          ],
+          "worked": {
+            "goal": "for(long i=0;i<n;i++) s+=i;\n// n=5 adds 0+1+2+3+4 = 10",
+            "assembly": "movl $0,%eax\nmovl $0,%ecx\ncheck:\ncmpq %rdi,%rcx\njge done\naddq %rcx,%rax\nincq %rcx\njmp check\ndone:\nret",
+            "reasoning": [
+              "Initialize RCX=0 and RAX=0.",
+              "Compare i with n before adding.",
+              "Increment i after each addition."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 5
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 10
+                }
+              },
+              "function": true
+            }
+          },
+          "practice": [
+            "x-for-order",
+            "x-for-sum"
+          ],
+          "review": [
+            "l10-sumloop"
+          ],
+          "teachBack": {
+            "prompt": "Why would adding i before the first test be wrong for n=0?",
+            "answer": "It executes a body that the C loop must skip; with memory access it could also read an absent element."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "population-count",
+          "title": "Count every set bit in an unsigned long",
+          "goal": "Explain the complete mask, accumulate, shift and repeat algorithm.",
+          "requires": [
+            "for-loop"
+          ],
+          "paragraphs": [
+            "Population count is the number of one bits. At each iteration, x&1 selects the current low bit, contributing zero or one. Then a logical right shift moves the next bit into that position. Continue until the shifted x is zero.",
+            "Use a temporary so masking does not destroy x before the shift. movq %rdi,%rdx followed by andl $1,%edx leaves RDX exactly zero or one: the 32-bit AND clears RDX’s upper half. ADD updates the count; SHR then establishes the flags JNE needs. For x=0, the do-while still runs once, adds zero, and returns zero. For 64 one bits it returns 64.",
+            "Some native disassemblies print the return as rep ret. That prefix is not what repeats this algorithm: the loop is controlled by JNE after SHR. Use plain RET in the lab; the repetition is explicit in the branch back to body."
+          ],
+          "worked": {
+            "goal": "long count_ones(unsigned long x) {\n  long result=0;\n  do { result+=x&1UL; x>>=1; } while(x);\n  return result;\n}",
+            "assembly": "movl $0,%eax\nbody:\nmovq %rdi,%rdx\nandl $1,%edx\naddq %rdx,%rax\nshrq $1,%rdi\njne body\nret",
+            "reasoning": [
+              "For x=22, successive bits are 0,1,1,0,1.",
+              "The accumulator becomes 3.",
+              "The unsigned shift eventually reaches zero."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 22
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 3
+                }
+              },
+              "function": true
+            }
+          },
+          "practice": [
+            "x-popcount-trace",
+            "x-popcount",
+            "x-popcount-return"
+          ],
+          "review": [
+            "x-guarded-visits",
+            "l10-field"
+          ],
+          "teachBack": {
+            "prompt": "Why is the branch immediately after SHR instead of immediately after ADD?",
+            "answer": "The continuation condition is the updated x, not whether the accumulated count is zero."
+          },
+          "introducesInstructions": [],
+          "diagram": "popcount"
+        }
+      ]
+    },
+    {
       "id": "10-stack",
       "title": "A stack is memory with a moving top",
       "goal": "Trace one push, one pop, and then a small local frame.",
@@ -2449,7 +3290,7 @@
           "title": "PUSH reserves space before writing",
           "goal": "Follow RSP and the stored value separately.",
           "requires": [
-            "flag-lifetime"
+            "population-count"
           ],
           "paragraphs": [
             "The stack is a region of memory used to keep temporary values and support function calls. RSP holds its current top address. The runtime and caller supply an existing stack; ordinary functions do not start by inventing one.",
@@ -2594,15 +3435,47 @@
           "diagram": "stack-order"
         },
         {
-          "id": "local-frame",
-          "title": "Reserve a local value at a stable offset",
-          "goal": "Understand a complete small stack frame.",
+          "id": "frame-register-names",
+          "title": "Distinguish stack top from frame reference",
+          "goal": "Assign RSP, RBP and RBX different roles.",
           "requires": [
             "stack-order"
           ],
           "paragraphs": [
-            "A frame is one function\u2019s arrangement of saved values and local storage. A conventional setup saves RBP, copies RSP into RBP, then subtracts space from RSP. RBP is a stable base even while RSP changes, so a local can be addressed as -8(%rbp). RBP\u2019s incoming value must be restored.",
-            "To finish, movq %rbp,%rsp releases the local area and popq %rbp restores the old frame base. leave combines those two operations in this 64-bit setting. Then RET can use the caller\u2019s return address. Frames are a convention; a function with no locals may not need one.",
+            "RSP is the stack pointer: PUSH, POP, CALL and RET use it to locate the current stack top. RBP is the base/frame pointer when a function chooses a frame-pointer layout. A saved copy of a stable stack position makes local offsets easier to follow.",
+            "RBX is a separate general-purpose register. Its historical base name does not make it the base of a function. In the convention here, both RBX and RBP are callee-saved if changed. A compiler can omit a frame pointer and use RBP for another purpose while still preserving its incoming value."
+          ],
+          "worked": {
+            "goal": "RSP: current stack top\nRBP: optional stable frame reference\nRBX: separate general-purpose register",
+            "assembly": "",
+            "reasoning": [
+              "P means pointer in SP and BP.",
+              "X belongs to the historical BX name, not to a stack role."
+            ]
+          },
+          "practice": [
+            "x-frame-name"
+          ],
+          "review": [
+            "p-stack-order"
+          ],
+          "teachBack": {
+            "prompt": "Can a function have a stack frame without using RBP as a frame pointer?",
+            "answer": "Yes. A frame is the function’s stack arrangement. It can address that arrangement using RSP or other agreed offsets without dedicating RBP."
+          },
+          "introducesInstructions": [],
+          "diagram": "frame-names"
+        },
+        {
+          "id": "local-frame",
+          "title": "Reserve a local value at a stable offset",
+          "goal": "Understand a complete small stack frame.",
+          "requires": [
+            "frame-register-names"
+          ],
+          "paragraphs": [
+            "A frame is one function’s arrangement of saved values and local storage. A conventional setup saves RBP, copies RSP into RBP, then subtracts space from RSP. RBP is a stable base even while RSP changes, so a local can be addressed as -8(%rbp). RBP’s incoming value must be restored.",
+            "To finish, movq %rbp,%rsp releases the local area and popq %rbp restores the old frame base. leave combines those two operations in this 64-bit setting. Then RET can use the caller’s return address. Frames are a convention; a function with no locals may not need one.",
             "The C keyword volatile in the example requires the local accesses to occur. It prevents explaining this task solely as a register calculation of x+1. The exercise specifically asks you to practice a local memory slot."
           ],
           "worked": {
@@ -2660,7 +3533,7 @@
           ],
           "paragraphs": [
             "CALL saves the address of the next instruction on the stack, then transfers execution to its target. RET pops that saved continuation address and resumes there. The numeric function result still travels separately through RAX.",
-            "A function entered from a caller already has an outer return address on its stack. A nested call adds another. The helper\u2019s RET uses the inner address; the outer function\u2019s RET later uses the original one. The browser lab represents these addresses by instruction positions; real code uses byte addresses."
+            "A function entered from a caller already has an outer return address on its stack. A nested call adds another. The helper’s RET uses the inner address; the outer function’s RET later uses the original one. The browser lab represents these addresses by instruction positions; real code uses byte addresses."
           ],
           "worked": {
             "goal": "long plus(long x,long y) { return x+y; }",
@@ -2706,17 +3579,17 @@
         },
         {
           "id": "saved-registers",
-          "title": "Respect the caller\u2019s saved values",
+          "title": "Respect the caller’s saved values",
           "goal": "Separate caller-saved from callee-saved registers.",
           "requires": [
             "call-continuation"
           ],
           "paragraphs": [
-            "The callee is the function being called. If it changes a callee-saved register, it must restore the incoming value before returning. For this convention, RBX, RBP and R12\u2013R15 are callee-saved. RSP must also be restored to the correct stack position.",
-            "RAX, RCX, RDX, RSI, RDI and R8\u2013R11 may be clobbered by a call. \u201cCaller-saved\u201d means the caller is responsible for protecting any values it still needs in them. A simple helper might happen to preserve one, but the interface does not promise that behavior."
+            "The callee is the function being called. If it changes a callee-saved register, it must restore the incoming value before returning. For this convention, RBX, RBP and R12–R15 are callee-saved. RSP must also be restored to the correct stack position.",
+            "RAX, RCX, RDX, RSI, RDI and R8–R11 may be clobbered by a call. “Caller-saved” means the caller is responsible for protecting any values it still needs in them. A simple helper might happen to preserve one, but the interface does not promise that behavior."
           ],
           "worked": {
-            "goal": "// Use RBX as a temporary while preserving the caller\u2019s RBX.",
+            "goal": "// Use RBX as a temporary while preserving the caller’s RBX.",
             "assembly": "pushq %rbx\nmovq %rdi,%rbx\nmovq %rbx,%rax\npopq %rbx\nret",
             "reasoning": [
               "Save incoming RBX before using it.",
@@ -2749,7 +3622,7 @@
           ],
           "teachBack": {
             "prompt": "Why is saving your current x in RBX only half the job?",
-            "answer": "You must also preserve the caller\u2019s original RBX value, usually by saving it before repurposing RBX and restoring it before return."
+            "answer": "You must also preserve the caller’s original RBX value, usually by saving it before repurposing RBX and restoring it before return."
           },
           "introducesInstructions": [],
           "diagram": "arguments"
@@ -2814,7 +3687,7 @@
           ],
           "paragraphs": [
             "Suppose outer(x) needs both twice(x) and the original x. The helper may overwrite RDI, so leaving x only in its incoming argument register is unsafe. Save x in a protected place before the call.",
-            "RBX is useful because a conforming helper preserves it. Save the caller\u2019s original RBX, put x there, call the helper, then combine the result in RAX with the saved x. Restore RBX before returning. The practice helper deliberately sets RDI to zero so relying on it fails visibly."
+            "RBX is useful because a conforming helper preserves it. Save the caller’s original RBX, put x there, call the helper, then combine the result in RAX with the saved x. Restore RBX before returning. The practice helper deliberately sets RDI to zero so relying on it fails visibly."
           ],
           "worked": {
             "goal": "long twice(long x) { return 2*x; }\nlong outer(long x) { return twice(x)+x; }",
@@ -2852,7 +3725,7 @@
           ],
           "teachBack": {
             "prompt": "Which two distinct values must this code preserve, and for whom?",
-            "answer": "It preserves x for outer\u2019s own later calculation and the incoming RBX value for outer\u2019s caller."
+            "answer": "It preserves x for outer’s own later calculation and the incoming RBX value for outer’s caller."
           },
           "introducesInstructions": [],
           "diagram": "call"
@@ -2865,8 +3738,8 @@
             "live-across-call"
           ],
           "paragraphs": [
-            "sumstore(x,y,dest) must call plus(x,y) and write its result through dest. The destination arrives in RDX, a register the helper may clobber. Move that address to a callee-saved register after preserving the register\u2019s original value.",
-            "The sequence now has a reason at every line: PUSH protects the caller\u2019s RBX and aligns the stack; MOV keeps dest safe; CALL obtains the sum; the memory-destination MOV stores it; POP restores RBX; RET resumes the caller. A void function still needs this correct control return."
+            "sumstore(x,y,dest) must call plus(x,y) and write its result through dest. The destination arrives in RDX, a register the helper may clobber. Move that address to a callee-saved register after preserving the register’s original value.",
+            "The sequence now has a reason at every line: PUSH protects the caller’s RBX and aligns the stack; MOV keeps dest safe; CALL obtains the sum; the memory-destination MOV stores it; POP restores RBX; RET resumes the caller. A void function still needs this correct control return."
           ],
           "worked": {
             "goal": "long plus(long x,long y) { return x+y; }\nvoid sumstore(long x,long y,long *dest) { *dest=plus(x,y); }",
@@ -2874,7 +3747,7 @@
             "reasoning": [
               "Save dest=0x100 in RBX before plus overwrites RDX.",
               "plus returns 10 in RAX.",
-              "Store 10 through the saved pointer, then restore the caller\u2019s state."
+              "Store 10 through the saved pointer, then restore the caller’s state."
             ],
             "fixture": {
               "name": "Worked example",
@@ -2922,7 +3795,7 @@
     {
       "id": "01-machine",
       "title": "Read machine code and explain the architecture",
-      "goal": "Connect the instructions you can now trace to bytes, tools and the processor\u2019s contract.",
+      "goal": "Connect the instructions you can now trace to bytes, tools and the processor’s contract.",
       "steps": [
         {
           "id": "instruction-position",
@@ -2932,14 +3805,14 @@
             "sumstore"
           ],
           "paragraphs": [
-            "A program\u2019s state includes its position in the instruction sequence. On x86-64, RIP is the instruction pointer. Ordinary execution proceeds to the next instruction; a taken branch, CALL or RET changes where execution continues.",
-            "Code is stored as bytes in memory, just as data is stored as bytes. An instruction\u2019s address identifies where its encoding is found, not where it will read or write data. RSP separately identifies the top of the stack. Keeping these roles distinct makes debugger output readable."
+            "A program’s state includes its position in the instruction sequence. On x86-64, RIP is the instruction pointer. Ordinary execution proceeds to the next instruction; a taken branch, CALL or RET changes where execution continues.",
+            "Code is stored as bytes in memory, just as data is stored as bytes. An instruction’s address identifies where its encoding is found, not where it will read or write data. RSP separately identifies the top of the stack. Keeping these roles distinct makes debugger output readable."
           ],
           "worked": {
             "goal": "Instruction begins at code address 0x40059e:\nmovq %rax,(%rbx)\nRAX holds the data; RBX holds the destination address.",
             "assembly": "",
             "reasoning": [
-              "0x40059e identifies the instruction\u2019s location.",
+              "0x40059e identifies the instruction’s location.",
               "The store destination is whatever address is currently in RBX.",
               "The numeric value written comes from RAX."
             ]
@@ -2973,7 +3846,7 @@
             "goal": "Assembly: movq %rbx,%rax\nEncoding: 48 89 d8\nCode length: 3 bytes\nData copied: 8 bytes",
             "assembly": "",
             "reasoning": [
-              "The encoding describes an operation; it does not contain RBX\u2019s current runtime value.",
+              "The encoding describes an operation; it does not contain RBX’s current runtime value.",
               "Different register choices can change the operand byte while keeping the operation the same."
             ]
           },
@@ -2986,7 +3859,7 @@
           ],
           "teachBack": {
             "prompt": "What does the q suffix tell you, and what does it not tell you?",
-            "answer": "It selects 64-bit data for this operation. It does not state the length of the instruction\u2019s machine-code encoding."
+            "answer": "It selects 64-bit data for this operation. It does not state the length of the instruction’s machine-code encoding."
           },
           "introducesInstructions": [],
           "diagram": "encoding"
@@ -3003,7 +3876,7 @@
             "Because this is AT&T order, the resulting text is movq %rbx,%rax. Changing the byte to c3 gives 11 | 000 | 011 and reverses the register choices. Changing it to 03 gives 00 | 000 | 011 and uses memory at RBX as the destination: movq %rax,(%rbx). These field roles are specific to the opcode; other encodings can assign roles differently."
           ],
           "worked": {
-            "goal": "48 89 d8 \u2192 movq %rbx,%rax\n48 89 c3 \u2192 movq %rax,%rbx\n48 89 03 \u2192 movq %rax,(%rbx)",
+            "goal": "48 89 d8 → movq %rbx,%rax\n48 89 c3 → movq %rax,%rbx\n48 89 03 → movq %rax,(%rbx)",
             "assembly": "",
             "reasoning": [
               "Read the selected mode before interpreting the destination field.",
@@ -3034,7 +3907,7 @@
           ],
           "paragraphs": [
             "A register-destination MOV can load a full 64-bit immediate. Most q-form arithmetic and bitwise immediates instead encode 32 bits and sign-extend them to 64. Sign-extension copies the original sign bit into the added upper positions.",
-            "The constant \u22129 has the 64-bit pattern 0xfffffffffffffff7, so either spelling can describe the same immediate for andq. Positive 0x00000000ffffffff is a different value: sign-extending the 32-bit pattern ffffffff would produce 64 one bits instead. To use that positive 64-bit mask, first load it into a register with MOV, then AND the registers."
+            "The constant −9 has the 64-bit pattern 0xfffffffffffffff7, so either spelling can describe the same immediate for andq. Positive 0x00000000ffffffff is a different value: sign-extending the 32-bit pattern ffffffff would produce 64 one bits instead. To use that positive 64-bit mask, first load it into a register with MOV, then AND the registers."
           ],
           "worked": {
             "goal": "// Keep only the low 32 bits of an unsigned long x.",
@@ -3066,7 +3939,7 @@
             "l10-clearbit"
           ],
           "teachBack": {
-            "prompt": "Why are \u22129 and 0xfffffffffffffff7 equivalent here, while 0x00000000fffffff7 is different?",
+            "prompt": "Why are −9 and 0xfffffffffffffff7 equivalent here, while 0x00000000fffffff7 is different?",
             "answer": "The first two are the same 64-bit pattern. The third has zeros, not ones, in the upper 32 positions and is a positive 64-bit mask."
           },
           "introducesInstructions": []
@@ -3080,7 +3953,7 @@
           ],
           "paragraphs": [
             "A disassembler reads encoded bytes and renders instructions. objdump -d sum disassembles executable sections of a file named sum. In GDB, disassemble sum displays the function named sum. These views help explain optimized code whose instruction order differs from the original C.",
-            "GDB\u2019s x/14xb sum instead examines 14 bytes beginning at sum, displaying each in hexadecimal: 14 is the count, x the display format, b the unit size. It does not ask for 14 instructions. The command uses a forward slash. Disassembly does not generally recover the original variable names, formatting or exact C source."
+            "GDB’s x/14xb sum instead examines 14 bytes beginning at sum, displaying each in hexadecimal: 14 is the count, x the display format, b the unit size. It does not ask for 14 instructions. The command uses a forward slash. Disassembly does not generally recover the original variable names, formatting or exact C source."
           ],
           "worked": {
             "goal": "Decoded instruction view:\n  movq %rax,(%rbx)\nRaw byte view for that instruction:\n  48 89 03",
@@ -3101,7 +3974,7 @@
           ],
           "teachBack": {
             "prompt": "Why might disassembly help when a debugger seems to skip or reorder C statements?",
-            "answer": "Optimization can combine, remove or rearrange operations while preserving required behavior. Disassembly shows the executable\u2019s actual instructions."
+            "answer": "Optimization can combine, remove or rearrange operations while preserving required behavior. Disassembly shows the executable’s actual instructions."
           },
           "introducesInstructions": []
         },
@@ -3114,7 +3987,7 @@
           ],
           "paragraphs": [
             "The instruction set architecture, or ISA, defines the software-visible machine: registers, instruction meanings, addressing rules and effects on state. You have been using that contract whenever you predict what MOV, ADD or CALL does.",
-            "Microarchitecture is how a processor implements the contract, including execution hardware and caches. Two processors can run the same ISA while having different cache sizes, clock frequencies and performance. A register\u2019s defined behavior belongs to the contract; the circuit choices used to achieve it belong to the implementation."
+            "Microarchitecture is how a processor implements the contract, including execution hardware and caches. Two processors can run the same ISA while having different cache sizes, clock frequencies and performance. A register’s defined behavior belongs to the contract; the circuit choices used to achieve it belong to the implementation."
           ],
           "worked": {
             "goal": "Software-visible question: what does addq do to RAX?\nImplementation question: how quickly can this processor execute it?",
@@ -3133,7 +4006,39 @@
           ],
           "teachBack": {
             "prompt": "Can two CPUs share an ISA but have different performance?",
-            "answer": "Yes. They implement the same software contract using different internal designs. A program\u2019s behavior can agree while its timing differs."
+            "answer": "Yes. They implement the same software contract using different internal designs. A program’s behavior can agree while its timing differs."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "performance-meaning",
+          "title": "Separate an operation’s meaning from its speed",
+          "goal": "Avoid replacing architecture rules with performance slogans.",
+          "requires": [
+            "isa"
+          ],
+          "paragraphs": [
+            "A register copy reads register state. A load reads memory at a calculated address; those bytes may come from a CPU cache rather than the RAM chips. An ordinary process uses virtual addresses, which the memory system maps to physical storage. Register names also describe software-visible state rather than a promise about one particular physical circuit.",
+            "Choose width to implement the required C type and operation. EAX writes conveniently clear upper bits and often allow shorter encodings, but 8/16-bit operations are not universally slower and MOV does not universally take one cycle. Partial-register dependencies and instruction-decoding costs vary with the CPU and code. Partial-register merging and length-changing-prefix stalls are different mechanisms."
+          ],
+          "worked": {
+            "goal": "Meaning: does MOV read a register or an addressed memory object?\nTiming: which cache supplies a load, and what dependencies exist?",
+            "assembly": "",
+            "reasoning": [
+              "The first question is defined by the instruction.",
+              "The second needs implementation and runtime context."
+            ]
+          },
+          "practice": [
+            "x-memory-cache",
+            "x-width-speed"
+          ],
+          "review": [
+            "l10-isa"
+          ],
+          "teachBack": {
+            "prompt": "Why should a tiny current value not automatically make a 32-bit operation valid for a long?",
+            "answer": "The operation must preserve the type’s full-width behavior for all allowed inputs; a smaller operation can change overflow, sign and high bits."
           },
           "introducesInstructions": []
         },
@@ -3142,7 +4047,7 @@
           "title": "Read CISC and RISC as design traditions",
           "goal": "Avoid inferring performance from a label alone.",
           "requires": [
-            "isa"
+            "performance-meaning"
           ],
           "paragraphs": [
             "CISC and RISC describe traditions in instruction-set design. x86-64 is commonly classified as CISC, with many instruction forms and variable-length encodings. RISC designs often favor more regular instruction forms; complex work can be built from simpler operations.",
@@ -3163,7 +4068,7 @@
             "l10-isa"
           ],
           "teachBack": {
-            "prompt": "Why is \u201cRISC is always faster\u201d not a sufficient technical explanation?",
+            "prompt": "Why is “RISC is always faster” not a sufficient technical explanation?",
             "answer": "It ignores implementation, workload and the specific operations being compared. The label alone does not determine performance."
           },
           "introducesInstructions": []
@@ -3177,7 +4082,7 @@
           ],
           "paragraphs": [
             "AT&T MOV writes source,destination and marks registers with % and constants with $. Intel MOV writes destination,source and omits those prefixes. Thus movq %rbx,%rax and Intel mov rax,rbx copy the same register value.",
-            "Memory notation also differs: AT&T (%rdi) corresponds to Intel [rdi]. Intel can state a memory width with BYTE/WORD/DWORD/QWORD PTR. mov rax,QWORD PTR [rdi] loads the same eight bytes as AT&T movq (%rdi),%rax. The lab\u2019s editor accepts AT&T, so do not mix dialects in a submission."
+            "Memory notation also differs: AT&T (%rdi) corresponds to Intel [rdi]. Intel can state a memory width with BYTE/WORD/DWORD/QWORD PTR. mov rax,QWORD PTR [rdi] loads the same eight bytes as AT&T movq (%rdi),%rax. The lab’s editor accepts AT&T, so do not mix dialects in a submission."
           ],
           "worked": {
             "goal": "AT&T:  movq $7,%rax\nIntel: mov rax,7\n\nAT&T:  movq (%rdi),%rax\nIntel: mov rax,QWORD PTR [rdi]",
@@ -3211,7 +4116,7 @@
             "A separately assembled function can be linked with compiled C when names and the calling convention agree. Inline assembly is a different arrangement: a compiler-supported fragment inside C must declare its inputs, outputs and clobbered state. Knowing the instructions alone does not supply that compiler interface. The browser lab executes its own teaching model rather than compiling a native executable."
           ],
           "worked": {
-            "goal": "C function \u2192 compiler\nAssembly function \u2192 assembler\nObject files \u2192 linker \u2192 executable",
+            "goal": "C function → compiler\nAssembly function → assembler\nObject files → linker → executable",
             "assembly": "",
             "reasoning": [
               "Object files can contain references to functions in other object files.",
@@ -3267,6 +4172,467 @@
       ]
     },
     {
+      "id": "13-inline",
+      "title": "Connect assembly to C with a correct compiler contract",
+      "goal": "Read, repair and explain native inline assembly, then combine and compare counter readings.",
+      "steps": [
+        {
+          "id": "inline-basic",
+          "title": "Put an assembler template inside a C function",
+          "goal": "Distinguish the C wrapper from the instruction text.",
+          "requires": [
+            "other-data"
+          ],
+          "paragraphs": [
+            "GCC inline assembly is a compiler extension that embeds assembler text inside C. __asm__(\"nop\"); is a small basic-asm example. Double quotes create a C string; the compiler includes its text in generated assembly. This is native-toolchain code, not a string executed by the browser lab.",
+            "Adjacent C string literals concatenate. A template can separate instructions using semicolons or escaped newline/tab characters, written \\n\\t in the C source. Basic asm has no C operand lists. Keep register-changing code in extended asm with an explicit contract rather than assuming GCC can discover every side effect."
+          ],
+          "worked": {
+            "goal": "void basic_nop(void) { __asm__(\"nop\"); }",
+            "assembly": "",
+            "reasoning": [
+              "The C compiler sees a GNU asm statement.",
+              "The assembler sees the NOP instruction."
+            ],
+            "nativeC": true
+          },
+          "practice": [
+            "x-inline-basic",
+            "x-inline-string",
+            "x-inline-syntax"
+          ],
+          "review": [
+            "l10-cbridge"
+          ],
+          "teachBack": {
+            "prompt": "Why does putting assembly in quotes not make it ordinary C code?",
+            "answer": "The quotes provide text for the assembler template. Its instructions follow assembler syntax and require a compiler interface."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "inline-contract",
+          "title": "Declare what the compiler must know",
+          "goal": "Read outputs, inputs and clobbers as an interface.",
+          "requires": [
+            "inline-basic"
+          ],
+          "paragraphs": [
+            "Extended asm has the shape __asm__(template : outputs : inputs : clobbers). Outputs bind changed values to C variables; inputs supply C expressions; clobbers list additional changed registers or state. The declaration must describe what actually happens, not merely the desired final arithmetic result.",
+            "GCC can choose operand locations, arrange input values, and use the output afterward. It treats clobbered state as unavailable for unrelated values across the asm. It does not parse every instruction to infer all these effects. Omitted lists can be empty, but preserve the colon positions for lists you do supply."
+          ],
+          "worked": {
+            "goal": "__asm__(\"instruction template\"\n        : /* output operands */\n        : /* input operands */\n        : /* extra changed state */);",
+            "assembly": "",
+            "reasoning": [
+              "Read the C interface separately from the template.",
+              "The compiler and assembler need different information."
+            ]
+          },
+          "practice": [
+            "x-inline-sections",
+            "x-inline-register-allocation"
+          ],
+          "review": [
+            "x-historical-role"
+          ],
+          "teachBack": {
+            "prompt": "Why can correct instruction text still produce a wrong optimized C program?",
+            "answer": "An inaccurate operand or clobber contract can let GCC allocate, reuse or move values in ways the assembly did not account for."
+          },
+          "introducesInstructions": [],
+          "diagram": "inline-contract"
+        },
+        {
+          "id": "inline-placeholders",
+          "title": "Substitute operands without guessing register names",
+          "goal": "Read numbered, named and literal-register references.",
+          "requires": [
+            "inline-contract"
+          ],
+          "paragraphs": [
+            "In an extended template, %0 selects operand zero. Outputs are numbered before explicit inputs. With one output and two inputs, %0 is the output and %1/%2 are the two inputs. Named operands such as [out] and %[out] make larger templates easier to read.",
+            "A literal hardware register needs a doubled percent in an extended template: %%rax becomes %rax in assembler text. Basic asm has no such operand-substitution layer and uses ordinary percent spelling. The result of substitution is still AT&T source,destination notation."
+          ],
+          "worked": {
+            "goal": "long inline_copy(long x) {\n  long out;\n  __asm__(\"movq %1,%0\" : \"=r\"(out) : \"r\"(x));\n  return out;\n}",
+            "assembly": "",
+            "reasoning": [
+              "%1 becomes the chosen input register.",
+              "%0 becomes the chosen output register.",
+              "The template copies the input to the output."
+            ],
+            "nativeC": true
+          },
+          "practice": [
+            "x-inline-percent",
+            "x-inline-numbering"
+          ],
+          "review": [
+            "x-inline-sections"
+          ],
+          "teachBack": {
+            "prompt": "Why does %1 not necessarily refer to RSI?",
+            "answer": "It refers to the second listed operand, whose actual register is selected by GCC."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "inline-writeonly",
+          "title": "Describe a newly produced value with =",
+          "goal": "Avoid inventing an input dependency on an uninitialized result.",
+          "requires": [
+            "inline-placeholders"
+          ],
+          "paragraphs": [
+            "The = modifier declares a write-only output. With \"=r\"(out), GCC supplies a register location for the value the template will create; no old out value needs to be loaded. An output C expression must be a writable location.",
+            "The + modifier instead promises that the asm reads the initial operand and writes it back. Using +r on an uninitialized result is a faulty contract even if the instruction text happens not to use the old bits. Choose the constraint from the actual data flow."
+          ],
+          "worked": {
+            "goal": "long inline_constant(void) {\n  long out;\n  __asm__(\"movq $42,%0\" : \"=r\"(out));\n  return out;\n}",
+            "assembly": "",
+            "reasoning": [
+              "The template writes 42 to the chosen output register.",
+              "There is no input section because no C input is needed."
+            ],
+            "nativeC": true
+          },
+          "practice": [
+            "x-write-only",
+            "x-bad-readwrite"
+          ],
+          "review": [
+            "x-inline-numbering"
+          ],
+          "teachBack": {
+            "prompt": "Why is an uninitialized variable acceptable as an =r output here?",
+            "answer": "Its previous value is never an input. The template supplies its first meaningful value."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "inline-readwrite",
+          "title": "Update an initialized value with +",
+          "goal": "Express an accumulator that is both read and written.",
+          "requires": [
+            "inline-writeonly"
+          ],
+          "paragraphs": [
+            "If a template updates an existing value, initialize it and use +r. For multiplication, long result=x; provides the starting value, and imulq reads result and y before replacing result with their product.",
+            "The r part permits a register location; + defines the data flow. IMUL also changes condition codes, so declare \"cc\". These examples use signed long inputs whose mathematical product fits in long. Inline assembly does not make overflowing signed C arithmetic a portable operation."
+          ],
+          "worked": {
+            "goal": "long inline_product(long x,long y) {\n  long result=x;\n  __asm__(\"imulq %1,%0\" : \"+r\"(result) : \"r\"(y) : \"cc\");\n  return result;\n}",
+            "assembly": "",
+            "reasoning": [
+              "The output operand starts with x.",
+              "%1 supplies y and %0 is the read/write result.",
+              "For x=13,y=7, the result is 91."
+            ],
+            "nativeC": true
+          },
+          "practice": [
+            "x-read-write",
+            "x-multiply-cc"
+          ],
+          "review": [
+            "p-multiply"
+          ],
+          "teachBack": {
+            "prompt": "How does +r communicate more than r alone?",
+            "answer": "It binds the same operand as an input and output; input-only r would incorrectly claim the value remains unchanged."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "inline-locations",
+          "title": "Describe registers and addressed objects precisely",
+          "goal": "Use r for a register and m for a memory operand.",
+          "requires": [
+            "inline-readwrite"
+          ],
+          "paragraphs": [
+            "A constraint’s location letter is separate from its read/write modifier. r permits a register; m requires a memory operand. Thus =r is a write-only register output, +r a read/write register operand, and +m a read/write memory object.",
+            "With +m(*p), GCC knows which C object is accessed, and the template receives an assembler memory operand for it. Merely supplying r(p) makes the pointer value available; it does not declare every possible access through that pointer. Input-only operands must not be silently changed."
+          ],
+          "worked": {
+            "goal": "void inline_increment(long *p) {\n  __asm__(\"addq $1,%0\" : \"+m\"(*p) : : \"cc\");\n}",
+            "assembly": "",
+            "reasoning": [
+              "The operand names the pointed-to long object.",
+              "ADD reads and writes that object.",
+              "The compiler also learns that flags change."
+            ],
+            "nativeC": true
+          },
+          "practice": [
+            "x-constraint-location",
+            "x-pointer-input-not-memory"
+          ],
+          "review": [
+            "x-dereference"
+          ],
+          "teachBack": {
+            "prompt": "Why is r(p) different from m(*p)?",
+            "answer": "The first supplies an address value in a register. The second describes an access to the object at that address."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "inline-clobbers",
+          "title": "Declare fixed scratch registers without losing C values",
+          "goal": "Separate output operands from additional overwritten state.",
+          "requires": [
+            "inline-locations"
+          ],
+          "paragraphs": [
+            "A template may name RAX/RDX literally as temporary storage. List them in the clobber section, without percent prefixes, so GCC can avoid allocating operands there and protect unrelated live values. Add cc when instructions change flags.",
+            "This does not mean every clobbered register must be reloaded afterward. GCC chooses how to keep needed C values valid. Do not also list an output operand’s register as a clobber. The following complete multiplication uses a fresh =r result and declares both scratch families plus flags."
+          ],
+          "worked": {
+            "goal": "long inline_scratch(long x,long y) {\n  long result;\n  __asm__(\"movq %1,%%rax; movq %2,%%rdx;\"\n          \"imulq %%rax,%%rdx; movq %%rdx,%0\"\n          : \"=r\"(result) : \"r\"(x), \"r\"(y)\n          : \"rax\", \"rdx\", \"cc\");\n  return result;\n}",
+            "assembly": "",
+            "reasoning": [
+              "Both inputs are read into declared scratch registers.",
+              "The product is copied into the output after those reads.",
+              "GCC can keep other needed values away from the scratch registers."
+            ],
+            "nativeC": true
+          },
+          "practice": [
+            "x-scratch-clobber",
+            "x-reload-myth"
+          ],
+          "review": [
+            "x-read-write"
+          ],
+          "teachBack": {
+            "prompt": "Why is =r enough for this output, without an early-clobber modifier?",
+            "answer": "The output is written only after all input operands have been consumed. Fixed scratch registers are separately excluded by the clobbers."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "inline-earlyclobber",
+          "title": "Protect a later input from an early output write",
+          "goal": "Make multi-instruction operand lifetimes explicit.",
+          "requires": [
+            "inline-clobbers"
+          ],
+          "paragraphs": [
+            "GCC normally assumes an asm consumes its inputs before producing outputs. A multi-instruction template can write an output while another input is still needed. Without extra information, the allocator may overlap them and the early write can destroy the later input.",
+            "The & modifier marks an early-clobber output. In movq %1,%0; addq %2,%0, the first instruction writes out before y is read, so use =&r(out). This protects the input without forcing a particular hardware register."
+          ],
+          "worked": {
+            "goal": "long inline_sum(long x,long y) {\n  long out;\n  __asm__(\"movq %1,%0; addq %2,%0\"\n          : \"=&r\"(out) : \"r\"(x), \"r\"(y) : \"cc\");\n  return out;\n}",
+            "assembly": "",
+            "reasoning": [
+              "MOV prepares out from x.",
+              "The early-clobber keeps y separate until ADD reads it."
+            ],
+            "nativeC": true
+          },
+          "practice": [
+            "x-early-clobber",
+            "x-early-repair"
+          ],
+          "review": [
+            "x-scratch-clobber"
+          ],
+          "teachBack": {
+            "prompt": "Why does a template’s number of instructions matter to the operand contract?",
+            "answer": "An output might be written before the last input is read. The interface must describe that lifetime overlap."
+          },
+          "introducesInstructions": [],
+          "diagram": "early-clobber"
+        },
+        {
+          "id": "inline-volatile-memory",
+          "title": "Describe side effects and compiler ordering separately",
+          "goal": "Use volatile and memory clobbers for their specific jobs.",
+          "requires": [
+            "inline-earlyclobber"
+          ],
+          "paragraphs": [
+            "Use asm volatile when execution has observable effects not fully represented by an ordinary output dependency, such as reading a changing hardware counter. It prevents treating that asm as an ordinary redundant computation, but does not fix missing operand declarations or guarantee arbitrary ordering with every nearby operation.",
+            "When a template accesses memory not described by its operands, a memory clobber informs GCC that memory assumptions must be refreshed as needed. It is a compiler barrier, not a cache flush or CPU fence. An exact m output is often more precise when the accessed object is known. The example below writes through a register-supplied pointer, so the otherwise-hidden write is declared with memory."
+          ],
+          "worked": {
+            "goal": "void inline_store(long *p,long x) {\n  __asm__ volatile(\"movq %1,(%0)\"\n                   : : \"r\"(p), \"r\"(x) : \"memory\");\n}",
+            "assembly": "",
+            "reasoning": [
+              "The inputs supply p and x.",
+              "The template writes the pointed-to memory.",
+              "The clobber declares that memory effect to the compiler."
+            ],
+            "nativeC": true
+          },
+          "practice": [
+            "x-volatile",
+            "x-memory-clobber"
+          ],
+          "review": [
+            "x-pointer-input-not-memory"
+          ],
+          "teachBack": {
+            "prompt": "Why does volatile alone not tell GCC that *p changed?",
+            "answer": "Volatile concerns the asm statement’s execution. The accessed memory must still be described by operands or clobbers."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "inline-disassembly",
+          "title": "Inspect the compiled template in context",
+          "goal": "Distinguish template work from compiler-generated setup.",
+          "requires": [
+            "inline-volatile-memory"
+          ],
+          "paragraphs": [
+            "Build a real object with gcc -std=c11 -O2 -Wall -Wextra -c sample.c -o sample.o, then use objdump -d sample.o. GCC may move C inputs into selected registers and use or return the output after the template. The emitted register choices can differ between builds.",
+            "Trace the actual data flow: locate input preparation, the template’s multiply or other operation, and the output’s later use. A single successful run or one disassembly is not proof that constraints are correct. Validate several inputs and optimized builds; review the contract for allowed register overlap."
+          ],
+          "worked": {
+            "goal": "gcc -std=c11 -O2 -Wall -Wextra -c sample.c -o sample.o\nobjdump -d sample.o\n// inline_product(13,7) must return 91.",
+            "assembly": "",
+            "reasoning": [
+              "The object contains encoded instructions.",
+              "The displayed registers are one allocator choice, not permanent C-variable locations."
+            ]
+          },
+          "practice": [
+            "x-inline-objdump",
+            "x-inline-result"
+          ],
+          "review": [
+            "l10-disassembly"
+          ],
+          "teachBack": {
+            "prompt": "Why can surrounding MOV instructions appear even when they are not in the template?",
+            "answer": "The compiler may need to arrange constrained input/output locations and preserve other live values."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "inline-counter-read",
+          "title": "Read a changing hardware counter through explicit outputs",
+          "goal": "Separate the counter value from an elapsed interval.",
+          "requires": [
+            "inline-disassembly"
+          ],
+          "paragraphs": [
+            "RDTSC reads the time-stamp counter into EDX:EAX: EDX receives the high 32 bits and EAX the low 32 bits. In GNU x86 constraints, =a binds an output to the accumulator family and =d to the data-register family. With unsigned int outputs, these select EAX and EDX.",
+            "Use volatile for the counter read so repeated requests are not treated as the same ordinary calculation. RDTSC does not itself serialize surrounding execution. Its counter ticks are not generally a count of instructions or current-frequency core cycles. Rigorous benchmarking requires additional ordering and platform considerations; this example teaches the data interface, not a complete timing framework."
+          ],
+          "worked": {
+            "goal": "unsigned long read_tsc(void) {\n  unsigned int low,high;\n  __asm__ volatile(\"rdtsc\" : \"=a\"(low), \"=d\"(high));\n  return ((unsigned long)high<<32) | low;\n}",
+            "assembly": "",
+            "reasoning": [
+              "The two outputs capture both halves with write-only constraints.",
+              "The cast makes high 64-bit before the shift.",
+              "Combining the halves produces one counter reading."
+            ],
+            "nativeC": true
+          },
+          "practice": [
+            "x-rdtsc-halves",
+            "x-rdtsc-meaning"
+          ],
+          "review": [
+            "x-write-only"
+          ],
+          "teachBack": {
+            "prompt": "Why is declaring only an EAX output incomplete?",
+            "answer": "RDTSC also writes EDX. Both changed register families must be represented in the contract."
+          },
+          "introducesInstructions": [],
+          "diagram": "counter-halves"
+        },
+        {
+          "id": "counter-combine",
+          "title": "Combine two halves into one unsigned value",
+          "goal": "Put the high half in bits 63..32 and the low half in bits 31..0.",
+          "requires": [
+            "inline-counter-read"
+          ],
+          "paragraphs": [
+            "If high=2 and low=7, the complete value is 2×2^32+7, or 8589934599. Shift a widened high half left by 32, then OR in the low half. Their positions do not overlap.",
+            "The C cast must happen before the shift. For a 32-bit unsigned int high, high<<32 has an invalid count; casting that already-computed result afterward cannot repair it. The browser exercise supplies deterministic halves and practices recombination; it does not execute RDTSC or measure your machine."
+          ],
+          "worked": {
+            "goal": "unsigned long join_counter(unsigned int low,unsigned int high) {\n  return ((unsigned long)high<<32) | low;\n}",
+            "assembly": "movl %esi,%eax\nshlq $32,%rax\nmovl %edi,%edx\norq %rdx,%rax\nret",
+            "reasoning": [
+              "Zero-extend high into RAX before shifting.",
+              "Zero-extend low into RDX.",
+              "OR combines the disjoint halves."
+            ],
+            "fixture": {
+              "name": "Worked state",
+              "registers": {
+                "rdi": 7,
+                "rsi": 2
+              },
+              "memory": {},
+              "memoryWidth": 8,
+              "expected": {
+                "registers": {
+                  "rax": 8589934599
+                }
+              },
+              "function": true
+            }
+          },
+          "practice": [
+            "x-counter-cast",
+            "x-join-counter"
+          ],
+          "review": [
+            "l10-count"
+          ],
+          "teachBack": {
+            "prompt": "Why is bitwise OR suitable here without losing either half?",
+            "answer": "The shifted high half and the zero-extended low half occupy disjoint positions."
+          },
+          "introducesInstructions": []
+        },
+        {
+          "id": "counter-delta",
+          "title": "Turn readings into a documented interval",
+          "goal": "Initialize persistent state and define the first-call result.",
+          "requires": [
+            "counter-combine"
+          ],
+          "paragraphs": [
+            "A static local object retains its value across function calls. Store the previous counter reading there. After the first established reading, calculate now−last, save now, and return the difference. If last merely starts at zero, the first result is an absolute reading from zero, not an interval since a previous call.",
+            "The complete example uses a ready flag and returns zero on the first call. It uses unsigned 64-bit arithmetic for counter differences, including modulo wraparound. The simple static state is for a single caller/thread; concurrent calls would require a different synchronization design. Bare RDTSC is not serialized, so this remains an illustrative interval function rather than a rigorous benchmark."
+          ],
+          "worked": {
+            "goal": "unsigned long ticks_since(void) {\n  static unsigned long last;\n  static int ready;\n  unsigned int low,high;\n  __asm__ volatile(\"rdtsc\" : \"=a\"(low), \"=d\"(high));\n  unsigned long now=((unsigned long)high<<32) | low;\n  unsigned long delta=ready ? now-last : 0;\n  last=now;\n  ready=1;\n  return delta;\n}",
+            "assembly": "",
+            "reasoning": [
+              "The first call records a baseline and returns zero.",
+              "Later calls subtract the saved baseline.",
+              "Updating last makes the next interval relative to this invocation."
+            ],
+            "nativeC": true
+          },
+          "practice": [
+            "x-ticks-first",
+            "x-ticks-delta",
+            "x-ticks-wrap"
+          ],
+          "review": [
+            "x-counter-cast"
+          ],
+          "teachBack": {
+            "prompt": "Why does static unsigned long last alone not specify a sensible first-call interval?",
+            "answer": "It begins at zero but no actual previous reading exists. Define and implement a first-call policy explicitly."
+          },
+          "introducesInstructions": []
+        }
+      ]
+    },
+    {
       "id": "12-integration",
       "title": "Explain and build a complete translation",
       "goal": "Combine earlier ideas, diagnose a mismatch, then teach the reasoning in your own words.",
@@ -3276,7 +4642,7 @@
           "title": "Start from the contract, then decompose the work",
           "goal": "Make a plan that explains every instruction choice.",
           "requires": [
-            "other-data"
+            "counter-delta"
           ],
           "paragraphs": [
             "Before writing instructions, state the C types, input locations and required output. Identify which expressions are values, which are addresses, and which require memory access. Break the result into small operations whose meanings you can already explain.",
@@ -3389,14 +4755,14 @@
           ],
           "paragraphs": [
             "Try a complete task without opening a solution. Predict a typical case and a boundary case, write the translation, then trace it. When a check fails, locate the first state that differs from your prediction rather than changing instructions at random.",
-            "To judge understanding, explain each width, operand order, address calculation, branch and saved value to another person. \u201cIt passed\u201d is not the explanation. Passing the listed cases is evidence for those inputs, not a proof for every possible input.",
+            "To judge understanding, explain each width, operand order, address calculation, branch and saved value to another person. “It passed” is not the explanation. Passing the listed cases is evidence for those inputs, not a proof for every possible input.",
             "For a final rehearsal, explain how a function can receive an array pointer, select an element, extract bits, call a helper, preserve a destination pointer and store the result. All needed concepts and complete examples are now available in this course. Revisit any concept you cannot explain before trying a fresh variation."
           ],
           "worked": {
             "goal": "unsigned long extract(unsigned long x) { return (x>>4)&255UL; }\nvoid write_field(unsigned long x,unsigned long *out) { *out=extract(x); }",
             "assembly": "write_field:\npushq %rbx\nmovq %rsi,%rbx\ncall extract\nmovq %rax,(%rbx)\npopq %rbx\nret\nextract:\nmovq %rdi,%rax\nshrq $4,%rax\nandq $255,%rax\nret",
             "reasoning": [
-              "Preserve the caller\u2019s RBX and put out\u2019s address there.",
+              "Preserve the caller’s RBX and put out’s address there.",
               "Call the helper with aligned RSP; it returns the extracted value.",
               "Store through the preserved address, restore RBX and return.",
               "For x=0xabcd, the stored field is 0xbc=188."

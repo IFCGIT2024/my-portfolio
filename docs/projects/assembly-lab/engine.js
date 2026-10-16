@@ -19,6 +19,10 @@
   const NUMBER = /^[+-]?(?:0x[\da-f]+|0b[01]+|\d+)$/i;
   const ALIASES = {jz:'je', jnz:'jne', jnle:'jg', jnl:'jge', jnge:'jl', jng:'jle', jc:'jb', jnae:'jb', jnc:'jae', jnb:'jae', jna:'jbe', jnbe:'ja'};
   const ARITY = {mov:[2], lea:[2], add:[2], sub:[2], imul:[2,3], cmp:[2], test:[2], and:[2], or:[2], xor:[2], neg:[1], inc:[1], dec:[1], not:[1], shl:[1,2], sal:[1,2], shr:[1,2], sar:[1,2], push:[1], pop:[1], call:[1], ret:[0], leave:[0], nop:[0], jmp:[1], je:[1], jne:[1], jg:[1], jge:[1], jl:[1], jle:[1], js:[1], jns:[1], jo:[1], jno:[1], ja:[1], jae:[1], jb:[1], jbe:[1]};
+  const SET_CONDITIONS=['e','ne','g','ge','l','le','s','ns','o','no','a','ae','b','be'];
+  for(const cc of SET_CONDITIONS) ARITY['set'+cc]=[1];
+  for(const [alias,canonical] of Object.entries(ALIASES)) ALIASES['set'+alias.slice(1)]='set'+canonical.slice(1);
+  ARITY.movzx=[2];ARITY.movsx=[2];
   class AssemblyError extends Error {
     constructor(message, line) { super(line ? `Line ${line}: ${message}` : message); this.name = 'AssemblyError'; this.line = line; }
   }
@@ -84,6 +88,7 @@
     if(op==='push') return;
     const dest = args[args.length-1];
     if (dest.kind === 'imm') fail('An immediate value cannot be a destination.');
+    if (['movzx','movsx'].includes(op) && (args[0].kind==='imm'||dest.kind!=='reg')) fail('Extension moves require a register or memory source and a wider register destination.');
     if (args.filter(a => a.kind === 'mem').length > 1) fail('Memory-to-memory instructions are not supported by these x86 forms. Use a register between memory locations.');
     if (op === 'lea' && (args[0].kind !== 'mem' || dest.kind !== 'reg')) fail('lea requires an address and a register destination.');
     if (op === 'imul' && (dest.kind !== 'reg' || (args.length === 3 && (args[0].kind !== 'imm' || args[1].kind === 'imm')))) fail('Use imul source, register or imul $constant, source, register.');
@@ -109,12 +114,20 @@
           }
           if (!part) continue;
           const m = part.match(/^(\S+)(?:\s+(.*))?$/);
-          let op = m[1].toLowerCase(), bits=null;
+          let op = m[1].toLowerCase(), bits=null, sourceBits=null;
+          const extension=op.match(/^mov([zs])(b[wlq]|w[lq]|lq)$/);
+          if(extension) {
+            if(extension[1]==='z'&&extension[2]==='lq') fail('There is no movzlq encoding. A 32-bit MOV already zeroes the upper half of its destination.');
+            sourceBits={b:8,w:16,l:32}[extension[2][0]];
+            bits={w:16,l:32,q:64}[extension[2][1]];
+            op=extension[1]==='z'?'movzx':'movsx';
+          }
           const sized=op.match(/^(mov|lea|add|sub|imul|cmp|test|and|or|xor|neg|inc|dec|not|shl|sal|shr|sar|push|pop)([lbwq])$/);
           if(sized) {op=sized[1];bits={b:8,w:16,l:32,q:64}[sized[2]];}
           if(op==='callq') op='call'; if(op==='retq') op='ret'; if(op==='leaveq') op='leave';
           op = ALIASES[op] || op;
           if (!Object.hasOwn(ARITY, op)) fail(`Unsupported instruction "${m[1]}". See the syntax reference.`);
+          if(['movzx','movsx'].includes(op)&&!sourceBits) fail('Use an explicit AT&T extension form, such as movzbl, movsbq or movslq.');
           const raw = splitOperands(m[2] || '');
           const control=op.startsWith('j')||op==='call';
           let args = control ? raw.map(label => { if (!SYMBOL.test(label)) fail('Jumps/calls require a named label.'); return label; }) : raw.map(operand);
@@ -122,8 +135,11 @@
           const shift=['shl','sal','shr','sar'].includes(op);
           if(shift && args.length===1) args=[operand('$1'),...args];
           const sizedArgs=shift?args.slice(1):args;
-          bits=bits || (['push','pop'].includes(op)?64:REGS.get(sizedArgs.findLast(a=>a.kind==='reg')?.name)?.bits || 32);
-          if(!control) for(const arg of sizedArgs) if(arg.kind==='reg' && REGS.get(arg.name).bits!==bits) fail(`Operand size mismatch: %${arg.name} is ${REGS.get(arg.name).bits}-bit, instruction is ${bits}-bit.`);
+          bits=bits || (op.startsWith('set')?8:['push','pop'].includes(op)?64:REGS.get(sizedArgs.findLast(a=>a.kind==='reg')?.name)?.bits || 32);
+          if(!control) for(const [index,arg] of sizedArgs.entries()) {
+            const width=sourceBits&&index===0?sourceBits:bits;
+            if(arg.kind==='reg' && REGS.get(arg.name).bits!==width) fail(`Operand size mismatch: %${arg.name} is ${REGS.get(arg.name).bits}-bit, instruction needs ${width} bits here.`);
+          }
           if(['push','pop'].includes(op) && bits!==64) fail('This lab supports pushq/popq (64-bit stack) only.');
           if(op==='lea' && bits===8 || op==='imul' && bits===8) fail(`${op} has no byte-sized form.`);
           if(op==='imul' && args.length===2 && args[0].kind==='imm') {
@@ -140,7 +156,7 @@
           // AH/BH/CH/DH cannot coexist with a REX encoding.
           const allRegs=args.flatMap(a=>a.kind==='reg'?[a.name]:[a.base,a.index].filter(Boolean));
           if(allRegs.some(r=>REGS.get(r).shift===8) && (bits===64 || allRegs.some(r=>/^r(?:[89]|1[0-5])/.test(r)||['sil','dil','bpl','spl'].includes(r)))) fail('High-byte registers cannot be used with a REX encoding.');
-          instructions.push({op, args, bits, line, source:part});
+          instructions.push({op, args, bits, ...(sourceBits?{sourceBits}:{}), line, source:part});
           if (instructions.length > 1000) fail('Programs are limited to 1,000 instructions.');
         } catch (e) { throw new AssemblyError(e.message, line); }
       }
@@ -303,6 +319,7 @@
         if(options.trace && state.trace.length<200) state.trace.push(snapshot({step:state.steps,line:ins.line,instruction:ins.source,phase:'before'}));
         state.executedOps.add(op==='sal'?'shl':op);
         if(op.startsWith('j')) {pc=(op==='jmp'||condition(op,state.flags))?program.labels.get(args[0]):pc+1;continue;}
+        if(op.startsWith('set')) {write(args[0],condition('j'+op.slice(3),state.flags)?1n:0n,state,8);pc++;continue;}
         if(op==='call') {if((fixture.abi||fixture.function) && readRegister('rsp',state)%16n!==0n) fail('System V call requires RSP aligned to 16 bytes.');calls.push({target:BigInt(pc+1),saved:CALLEE_SAVED.filter(n=>state.regKnown.has(n)).map(n=>[n,readRegister(n,state)])});push(BigInt(pc+1));pc=program.labels.get(args[0]);continue;}
         if(op==='ret') {const target=pop();
           if(calls.length) {const frame=calls.pop();if(target!==frame.target) fail('Return address does not match the active call. Check the stack.');if(fixture.function||fixture.abi) for(const [name,value] of frame.saved) if(readRegister(name,state)!==value) fail(`Helper must preserve %${name} across its call.`);}
@@ -315,6 +332,8 @@
           case 'pop': {const value=pop();w(value);break;}
           case 'leave':writeRegister('rsp',readRegister('rbp',state),state);writeRegister('rbp',pop(),state);break;
           case 'mov':w(r(args[0]));break;
+          case 'movzx':w(read(args[0],state,ins.sourceBits));break;
+          case 'movsx':w(S(read(args[0],state,ins.sourceBits),ins.sourceBits));break;
           case 'lea':w(address(args[0],state,true));break;
           case 'add':case 'sub':case 'cmp':result=arithmetic(r(dest),r(args[0]),op!=='add',state,bits);if(op!=='cmp') w(result);break;
           case 'inc':case 'dec': {const cf=state.flags.CF;result=arithmetic(r(dest),1n,op==='dec',state,bits);state.flags.CF=cf;w(result);break;}

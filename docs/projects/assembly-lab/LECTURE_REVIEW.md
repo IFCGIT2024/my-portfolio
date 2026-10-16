@@ -6,7 +6,7 @@ Reviewed 14 October 2026 against the supplied 36-page **Assembly 1 / Lecture 10*
 
 The lab now provides an explanation and a relevant practice task for every substantive topic presented in the supplied lecture. Core integer operations are practiced by executing translations; introductory topics such as ISA distinctions, floating-point register families, compiler integration and debugger commands are practiced conceptually. This distinction matters: answering a debugger question is not experience operating GDB.
 
-The redesigned course contains **14 chapters, 75 small concepts and 218 questions: 88 code exercises and 130 concepts**. Of these, 70 are the preserved original bank and 148 form the guided course. There are 35 diagrams and 51 executable worked examples. See [Course design](COURSE_DESIGN.md) for the beginner-to-independent progression. PUSH/POP/CALL, 64-bit widths and bit operations have both explanations and executable practice.
+The current course contains **17 chapters, 108 small concepts and 291 questions: 103 code exercises and 188 concepts**. Of these, 70 are the preserved original bank and 221 form the guided course. There are 49 diagrams, 66 executable assembly worked examples and 10 native inline-C examples. This page maps the original 36 pages; [the newer review](CONTROL_INLINE_REVIEW.md) maps Assembly II, inline assembly and the conversation additions. See [Course design](COURSE_DESIGN.md) for the beginner-to-independent progression. PUSH/POP/CALL, 64-bit widths and bit operations have both explanations and executable practice.
 
 This is a strong focused resource for the supplied material. It is not a complete CSCI 2122 syllabus or a substitute for compiling and debugging native programs. The external textbook exercise “problem 3.1, page 182” mentioned on the final slide was not supplied and is **not verified or reproduced**.
 
@@ -53,7 +53,7 @@ Question and concept IDs below are stable author identifiers in the JSON data. L
 | 35 | Match an int store’s width and scale while correcting mixed address widths | `array-store`, `local-frame` | `l10-localintstore`, `l10-mixedaddr`, `l10-arrayint`, `l10-arraystore` |
 | 36 | Select and write the LEA expression for 9× | `lea-arithmetic` | `l10-nine`, `l10-times9`; external textbook problem unavailable |
 
-The requested extensions go further than the lecture: chapter 8 practices setting, clearing, toggling, complementing and testing bits; chapter 9 practices logical/arithmetic shifts and runtime counts; chapters 11–12 practice stack frames, nested calls, alignment and register preservation. Chapter 14 combines arrays, masks and calls.
+The requested extensions go further than the lecture: chapter 8 practices setting, clearing, toggling, complementing and testing bits; chapter 9 practices logical/arithmetic shifts and runtime counts; chapters 13–14 practice stack frames, nested calls, alignment and register preservation. Chapter 17 combines arrays, masks and calls.
 
 ## Corrections and gaps addressed
 
@@ -69,16 +69,16 @@ The course already corrects the lecture’s x86 instruction-length generalizatio
 
 ## Answer verification and its limits
 
-All 130 multiple-choice answer keys and explanations were reviewed against the stated data model, instruction semantics and supplied material. Numerical state-prediction questions were also checked by execution. All 88 code reference answers pass **273 total fixtures**: 102 original and 171 guided-course cases.
+All 188 multiple-choice answer keys and explanations were reviewed against the stated data model, instruction semantics and supplied material. Numerical state-prediction questions were also checked by execution. All 103 code reference answers pass **355 total fixtures**: 102 original and 253 guided-course cases.
 
 Independent checks avoid relying solely on the simulator:
 
-- The automated Node suite executes all 51 displayed assembly worked examples and checks prerequisite order, prior instruction introduction, cumulative review, local diagrams and question validation.
-- **171 guided-course reference fixtures pass as native x86-64 assembly**, including output values and preservation of supplied memory.
-- **143 fixtures across 42 displayed C functions pass when compiled separately with GCC and undefined-behavior checking.** Machine-state snippets remain covered by the native assembly checks. The integer-promotion worked example is also compiled independently and checked before and after narrowing.
-- **1,209 native instruction/flag comparisons** cover shifts, aliases and sign-extended immediate cases.
+- The automated Node suite executes all 66 displayed assembly worked examples and checks prerequisite order, prior instruction introduction, cumulative review, local diagrams and question validation.
+- **253 guided-course reference fixtures pass as native x86-64 assembly**, including output values and preservation of supplied memory.
+- **225 fixtures across 57 displayed C functions pass when compiled separately with GCC and undefined-behavior checking.** Machine-state snippets remain covered by the native assembly checks. The integer-promotion worked example is also compiled independently and checked before and after narrowing.
+- **1,527 native instruction/flag comparisons** cover shifts, aliases and sign-extended immediate cases.
 - GNU assembler/objdump confirmed `48 89 d8`, `48 89 c3` and `48 89 03` against the encoding explanations in the preceding coverage review; those explanations remain unchanged.
-- DOM workflow checks cover all 75 concepts and all 218 answer handlers, focused/chapter practice, navigation, progress restoration and migration, traces, concept feedback and imports. All 35 SVGs were rendered and inspected separately. Full browser layout and mobile-device review was unavailable in this environment.
+- DOM workflow checks cover all 108 concepts and all 291 answer handlers, focused/chapter practice, navigation, progress restoration and migration, traces, concept feedback and imports. All 49 SVGs were rendered and inspected separately. Full browser layout and mobile-device review was unavailable in this environment.
 
 Tests establish correctness for the supplied cases, not every possible input. The browser uses a bounded teaching interpreter, not a full assembler. Conceptual coverage of encoding, GDB, floating-point/vector families and C/assembly integration does not mean those systems execute inside the lab. ABI-only exercise constraints are checked separately from compiled C, because C source does not specify their register clobbers.
 

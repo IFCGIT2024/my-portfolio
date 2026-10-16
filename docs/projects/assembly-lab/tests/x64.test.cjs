@@ -6,7 +6,7 @@ const run=(code,fixture={},options={})=>E.execute(code,{memory:{},...fixture},op
 const rax=(code,fixture)=>run(code,fixture).registers.get('rax');
 test('all 122 Lecture 10 questions and their reference solutions validate',()=>{E.validateBank(bank);assert.equal(bank.questions.length,122);});
 test('all course questions have explanations and map into the learning path',()=>{
- const lessons=require('../data/lessons.json').lessons;assert.equal(lessons.length,14);
+ const lessons=require('../data/lessons.json').lessons;assert.equal(lessons.length,17);
  const mapped=new Set(lessons.flatMap(l=>l.steps.flatMap(s=>[...s.practice,...s.review])));
  for(const q of bank.questions){assert.ok(mapped.has(q.id),q.id);assert.ok(q.explanation);}
 });

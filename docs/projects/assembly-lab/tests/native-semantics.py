@@ -28,6 +28,23 @@ for op in ['and', 'or', 'xor', 'add', 'sub', 'cmp', 'test', 'imul']:
         programs.append(f'movq $0x8000000012345678,%rax\n{op}q ${immediate},%rax')
 programs.append('pushq $0xfffffffffffffff7\npopq %rax\ncmpq $-9,%rax')
 
+# Every supported extension form, including destination partial-write effects.
+for op in ['movzbw','movzbl','movzbq','movzwl','movzwq',
+           'movsbw','movsbl','movsbq','movswl','movswq','movslq']:
+    src = {'b':'dl','w':'dx','l':'edx'}[op[-2]]
+    dst = {'w':'ax','l':'eax','q':'rax'}[op[-1]]
+    for value in [0,1,127,128,255,32767,32768,65535,2147483648,4294967295]:
+        programs.append(f'movq $-1,%rax\nmovq ${value},%rdx\ncmpq $3,%rdx\n{op} %{src},%{dst}')
+
+# Condition bytes retain unrelated upper bytes and preserve the source flags.
+conditions=['e','ne','g','ge','l','le','s','ns','o','no','a','ae','b','be',
+            'z','nz','nle','nl','nge','ng','c','nae','nc','nb','na','nbe']
+for cc in conditions:
+    for x,y in [(0,0),(1,2),(2,1),(-1,1),(9223372036854775807,-1),(-9223372036854775808,1)]:
+        programs.append(f'movq $0x1122334455667788,%rax\nmovq ${x},%rdi\nmovq ${y},%rsi\ncmpq %rsi,%rdi\nset{cc} %al')
+    for start in [127,255]:
+        programs.append(f'movl ${start},%eax\naddb $1,%al\nset{cc} %dl\nmovzbq %dl,%rax')
+
 # The native functions return RAX and save RFLAGS before any later instructions
 # can overwrite flags. RDX/RCX are caller-saved; no callee-saved state is changed.
 asm = ['.text']

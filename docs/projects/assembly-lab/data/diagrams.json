@@ -76,8 +76,8 @@
   },
   "address": {
     "src": "diagrams/address.svg",
-    "alt": "For 8(%rdi,%rsi,8), with RDI=0x1000 and RSI=1, add displacement 8, base 0x1000 and index times scale 1\u00d78 to obtain 0x1010.",
-    "caption": "For 8(%rdi,%rsi,8), with RDI=0x1000 and RSI=1, add displacement 8, base 0x1000 and index times scale 1\u00d78 to obtain 0x1010."
+    "alt": "For 8(%rdi,%rsi,8), with RDI=0x1000 and RSI=1, add displacement 8, base 0x1000 and index times scale 1×8 to obtain 0x1010.",
+    "caption": "For 8(%rdi,%rsi,8), with RDI=0x1000 and RSI=1, add displacement 8, base 0x1000 and index times scale 1×8 to obtain 0x1010."
   },
   "lea-mov": {
     "src": "diagrams/lea-mov.svg",
@@ -121,13 +121,13 @@
   },
   "frame": {
     "src": "diagrams/frame.svg",
-    "alt": "After saving RBP and establishing the frame base, saved RBP is at offset 0 and the caller continuation is at offset +8. The local long is at offset \u22128. RSP points below the reserved local area.",
-    "caption": "After saving RBP and establishing the frame base, saved RBP is at offset 0 and the caller continuation is at offset +8. The local long is at offset \u22128. RSP points below the reserved local area."
+    "alt": "After saving RBP and establishing the frame base, saved RBP is at offset 0 and the caller continuation is at offset +8. The local long is at offset −8. RSP points below the reserved local area.",
+    "caption": "After saving RBP and establishing the frame base, saved RBP is at offset 0 and the caller continuation is at offset +8. The local long is at offset −8. RSP points below the reserved local area."
   },
   "call": {
     "src": "diagrams/call.svg",
-    "alt": "A nested call puts the helper\u2019s continuation at the current stack top. Saved data and the outer continuation occupy distinct slots. Returning from the helper removes only its own continuation.",
-    "caption": "A nested call puts the helper\u2019s continuation at the current stack top. Saved data and the outer continuation occupy distinct slots. Returning from the helper removes only its own continuation."
+    "alt": "A nested call puts the helper’s continuation at the current stack top. Saved data and the outer continuation occupy distinct slots. Returning from the helper removes only its own continuation.",
+    "caption": "A nested call puts the helper’s continuation at the current stack top. Saved data and the outer continuation occupy distinct slots. Returning from the helper removes only its own continuation."
   },
   "encoding": {
     "src": "diagrams/encoding.svg",
@@ -173,5 +173,75 @@
     "src": "diagrams/load-only.svg",
     "alt": "With RDI containing 0x100 and a long value 23 at that address, movq (%rdi),%rax reads the memory value into RAX. RDI remains 0x100.",
     "caption": "With RDI containing 0x100 and a long value 23 at that address, movq (%rdi),%rax reads the memory value into RAX. RDI remains 0x100."
+  },
+  "register-families": {
+    "src": "diagrams/register-families.svg",
+    "alt": "BX, EBX and RBX name one family at 16, 32 and 64 bits. BP, EBP and RBP name a different family. Changing X to P changes the register, not the width.",
+    "caption": "BX, EBX and RBX name one family at 16, 32 and 64 bits. BP, EBP and RBP name a different family. Changing X to P changes the register, not the width."
+  },
+  "address-data-width": {
+    "src": "diagrams/address-data-width.svg",
+    "alt": "In movl (%rdi),%eax, RDI supplies a 64-bit address while the instruction loads four data bytes into EAX. The pointer size does not dictate the object size.",
+    "caption": "In movl (%rdi),%eax, RDI supplies a 64-bit address while the instruction loads four data bytes into EAX. The pointer size does not dictate the object size."
+  },
+  "frame-names": {
+    "src": "diagrams/frame-names.svg",
+    "alt": "RSP tracks the stack top. RBP can provide a stable reference for a function frame. RBX is a separate general-purpose register, not the frame pointer.",
+    "caption": "RSP tracks the stack top. RBP can provide a stable reference for a function frame. RBX is a separate general-purpose register, not the frame pointer."
+  },
+  "four-flags": {
+    "src": "diagrams/four-flags.svg",
+    "alt": "Eight-bit 127 plus 1 stores 0x80. The result is nonzero with its top bit set; there is signed overflow but no unsigned carry.",
+    "caption": "Eight-bit 127 plus 1 stores 0x80. The result is nonzero with its top bit set; there is signed overflow but no unsigned carry."
+  },
+  "if-paths": {
+    "src": "diagrams/if-paths.svg",
+    "alt": "Comparing signed x with 3 selects return 1 for x less than 3, including 2; equality and larger values select return 2. Every selected path returns.",
+    "caption": "Comparing signed x with 3 selects return 1 for x less than 3, including 2; equality and larger values select return 2. Every selected path returns."
+  },
+  "extension-zero": {
+    "src": "diagrams/extension-zero.svg",
+    "alt": "Zero extension turns byte 0x80 into 32-bit 0x00000080, still unsigned 128. Writing EAX also clears the high half of RAX.",
+    "caption": "Zero extension turns byte 0x80 into 32-bit 0x00000080, still unsigned 128. Writing EAX also clears the high half of RAX."
+  },
+  "extension-sign": {
+    "src": "diagrams/extension-sign.svg",
+    "alt": "The byte 0x80 is signed negative 128. Sign extension to 64 bits gives 0xffffffffffffff80, preserving negative 128. Zero extension instead gives positive 128.",
+    "caption": "The byte 0x80 is signed negative 128. Sign extension to 64 bits gives 0xffffffffffffff80, preserving negative 128. Zero extension instead gives positive 128."
+  },
+  "set-byte": {
+    "src": "diagrams/set-byte.svg",
+    "alt": "With RAX initially 0x1122334455667788, a true SETE into AL leaves RAX at 0x1122334455667701. MOVZBL from AL to EAX then produces a complete clean result of 1.",
+    "caption": "With RAX initially 0x1122334455667788, a true SETE into AL leaves RAX at 0x1122334455667701. MOVZBL from AL to EAX then produces a complete clean result of 1."
+  },
+  "condition-table": {
+    "src": "diagrams/condition-table.svg",
+    "alt": "Equality uses ZF; signed less-than compares SF with OF; signed greater also excludes equality; unsigned comparisons use CF and ZF. Jcc and SETcc use matching predicates.",
+    "caption": "Equality uses ZF; signed less-than compares SF with OF; signed greater also excludes equality; unsigned comparisons use CF and ZF. Jcc and SETcc use matching predicates."
+  },
+  "loop-timing": {
+    "src": "diagrams/loop-timing.svg",
+    "alt": "A while loop tests before its first body and can run zero times. A do-while runs its body first and can only test afterward. A guarded bottom-test loop preserves while behavior.",
+    "caption": "A while loop tests before its first body and can run zero times. A do-while runs its body first and can only test afterward. A guarded bottom-test loop preserves while behavior."
+  },
+  "popcount": {
+    "src": "diagrams/popcount.svg",
+    "alt": "For unsigned x equal to 22, the low bits encountered are 0, 1, 1, 0 and 1. Adding those bits produces population count 3.",
+    "caption": "For unsigned x equal to 22, the low bits encountered are 0, 1, 1, 0 and 1. Adding those bits produces population count 3."
+  },
+  "inline-contract": {
+    "src": "diagrams/inline-contract.svg",
+    "alt": "The template contains assembler instructions. Outputs, inputs and clobbers describe its interface to GCC; clobbers are declarations of additional changed state, not automatic restore instructions.",
+    "caption": "The template contains assembler instructions. Outputs, inputs and clobbers describe its interface to GCC; clobbers are declarations of additional changed state, not automatic restore instructions."
+  },
+  "early-clobber": {
+    "src": "diagrams/early-clobber.svg",
+    "alt": "For movq input1,out followed by addq input2,out, the first write must not overwrite input2. The early-clobber output constraint prevents sharing that register.",
+    "caption": "For movq input1,out followed by addq input2,out, the first write must not overwrite input2. The early-clobber output constraint prevents sharing that register."
+  },
+  "counter-halves": {
+    "src": "diagrams/counter-halves.svg",
+    "alt": "RDTSC returns the high 32 bits in EDX and low 32 bits in EAX. With high equal to 2 and low equal to 7, shifting the widened high half left 32 and ORing the low half yields 8589934599.",
+    "caption": "RDTSC returns the high 32 bits in EDX and low 32 bits in EAX. With high equal to 2 and low equal to 7, shifting the widened high half left 32 and ORing the low half yields 8589934599."
   }
 }

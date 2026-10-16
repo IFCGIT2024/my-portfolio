@@ -1,6 +1,6 @@
 # C → x86 Assembly Lab — CSCI 2122
 
-A static, browser-only integer assembly course and practice lab. **14 chapters, 75 small concepts, 35 diagrams and 51 executable worked examples** build from state and C assignment to complete translations. The guided path contains 148 questions; the preserved original bank adds 70, for **218 questions: 88 code exercises and 130 concepts**. Reference translations have **273 expected-output cases**: 171 guided-course cases and 102 original cases.
+A static, browser-only integer assembly course and practice lab. **17 chapters, 108 small concepts and 49 diagrams** build from values and C assignment to complete translations and native inline-C interfaces. There are **66 executable assembly worked examples and 10 separately compiled inline-C examples**. The guided path contains 221 questions; the preserved original bank adds 70, for **291 questions: 103 code exercises and 188 concepts**. Reference translations have **355 expected-output cases**: 253 guided-course cases and 102 original cases.
 
 Live URL: https://ifcgit2024.github.io/my-portfolio/docs/projects/assembly-lab/index.html
 
@@ -18,18 +18,18 @@ Drafts, attempts, solved/reviewed status and the selected chapter/concept persis
 
 ## Lecture coverage
 
-The [page-by-page review](LECTURE_REVIEW.md) maps all 36 lecture pages to practice, records answer verification and prioritizes short-term educational improvements.
+The [original page-by-page review](LECTURE_REVIEW.md) maps the first 36-page assembly source. The [control-flow and inline review](CONTROL_INLINE_REVIEW.md) maps all 21 Assembly II pages, all 8 inline-assembly pages, and the register/pointer/LEA discussion to specific lessons and practice. Both record corrections and verification limits.
 
 | Chapters | Learning path |
 | --- | --- |
-| 1–3 | State, C assignment, bits/bytes, binary/hex, signedness, registers, MOV, widths and arithmetic |
-| 4–5 | Functions, arguments/results, RET, memory, pointers, loads/stores and swap |
-| 6–7 | Arrays, full address forms, width versus scale and LEA versus MOV |
-| 8–9 | Bit masks, logical versus bitwise operations, shifts, C promotions, runtime counts and fields |
-| 10–12 | Flags, branches, loops, PUSH/POP, frames, CALL, ABI rules and complete call/store functions |
-| 13–14 | Encoding, disassembly, architecture, syntax/build pipeline and integrated explanations/translations |
+| 1–3 | State, C assignment, bits/bytes, names, registers, MOV, widths and arithmetic |
+| 4–7 | Functions, pointers, loads/stores, swap, arrays, independent address/data widths and LEA |
+| 8–10 | Masks, shifts, C promotions, flags, comparisons, if/else and careful flag reuse |
+| 11–12 | Zero/sign extension, SETcc, complete Booleans, goto, while/do-while/for and population count |
+| 13–15 | Stack versus frame pointers, frames, calls, ABI, encoding, architecture and the build pipeline |
+| 16–17 | GCC inline contracts, constraints, clobbers, counter readings/deltas and integrated translations |
 
-The image-only pages were inspected, including the register diagrams, instruction encoding, slide 15's `sumstore`, and slide 35's array example. This is coverage of the supplied integer-assembly lecture plus the requested extensions, **not a claim to cover the entire CSCI 2122 exam syllabus**.
+All source pages were visually inspected, including image-only flags tables, extension examples, loop translations, inline disassembly and counter code. This is coverage of the supplied assembly material plus the requested extensions, **not a claim to cover the entire CSCI 2122 exam syllabus**.
 
 ### Corrections explicitly taught
 
@@ -45,14 +45,15 @@ The data model is Linux x86-64 **LP64**: `long` and pointers are eight bytes; `i
 
 - Supports all 16 general-purpose register families and their 32/16/8-bit aliases, including AH/BH/CH/DH where no REX encoding is required. A 32-bit register write clears its upper half; narrower writes preserve other bits. Uninitialized bits cannot be read.
 - Data operations: MOV, LEA, ADD, SUB, two/three-operand IMUL, CMP, TEST, AND, OR, XOR, NEG, INC, DEC, NOT, NOP, SHL/SAL, SHR, SAR.
-- Control: named-label JMP and signed/unsigned/equality/overflow/sign conditional branches and aliases; local direct CALL, RET, 64-bit PUSH/POP and LEAVE. No suffix infers a register width; ambiguous memory-only instructions default to 32 bits for legacy compatibility. Prefer explicit sizes.
+- Condition results: SETE/SETNE/SETG/SETGE/SETL/SETLE/SETS/SETNS/SETO/SETNO/SETA/SETAE/SETB/SETBE and their supported aliases write one byte and preserve flags. Zero extension supports MOVZBW/MOVZBL/MOVZBQ/MOVZWL/MOVZWQ; sign extension supports MOVSBW/MOVSBL/MOVSBQ/MOVSWL/MOVSWQ/MOVSLQ. Extension sources are register or memory; destinations must be wider registers. There is no MOVZLQ form: a 32-bit MOV already clears the high half.
+- Control: named-label JMP and signed/unsigned/equality/overflow/sign conditional branches and aliases; local direct CALL, RET, 64-bit PUSH/POP and LEAVE. When a normal instruction omits its suffix, the lab infers width from a register; ambiguous memory-only instructions default to 32 bits for legacy compatibility. Prefer explicit sizes.
 - Little-endian byte memory supports overlapping accesses, aliases, symbols, immediates, register indirect, displacement and base/index/scale. Index scale is 1/2/4/8; ESP/RSP cannot index. Memory addresses are restricted to nonnegative safe JavaScript integer addresses. LEA arithmetic itself remains fully 64-bit, including negative results.
 - Most q-form arithmetic and memory-immediate operations encode sign-extended 32-bit immediates. A register-destination MOV can load a full-width immediate. Signed constants and equivalent 64-bit hexadecimal patterns are both accepted (for example, `-9` and `0xfffffffffffffff7`). Shift counts must be an immediate byte or CL, and are hardware-masked to five or six bits. A zero effective count preserves flags and the operand-width value; a 32-bit register destination still clears the upper half of its 64-bit parent.
 - Relevant ZF/SF/CF/OF flags are tracked. IMUL leaves ZF/SF undefined; shift OF is undefined for nonzero counts other than one. NOT/MOV/LEA and stack/control instructions preserve flags. A branch on an undefined flag fails clearly.
 - A 4096-byte stack is preallocated at `[0x7000,0x8000)`. Snippets start with RSP=0x8000; functions start at 0x7ff8 with a simulated return sentinel. Function fixtures seed RBX/RBP/R12–R15 with visible sentinel values unless explicitly overridden, and check their preservation. Function calls check ordinary 16-byte pre-call alignment and helper preservation.
 - `call` pushes a simulated instruction index, **not a native byte address**. `ret` pops it. Helpers must be included in the submitted code. Function exercises must execute RET; falling off the end is an error. Snippets may end normally. Stack balance is checked. No external/native functions run in the browser.
 - Output memory and registers must match; other supplied memory must remain unchanged. Stack scratch bytes may change. Some exercises explicitly require instructions such as PUSH/POP/CALL to practice that concept; this is stated in the task. Required operations must execute in at least one test case; unreachable instructions do not satisfy that requirement. Otherwise equivalent implementations are accepted.
-- Limits: 50,000 characters, 1,000 lines/instructions, 10,000 executed instructions per case. The interpreter is a bounded teaching subset, not a complete assembler/emulator. No directives, indirect calls, division, extension moves, floating-point/SIMD, operating-system calls, arbitrary C parser, or machine-code generation. The displayed C is a specification, never evaluated.
+- Limits: 50,000 characters, 1,000 lines/instructions, 10,000 executed instructions per case. The interpreter is a bounded teaching subset, not a complete assembler/emulator. No directives, indirect calls, division, floating-point/SIMD, RDTSC, operating-system calls, arbitrary C parser, or machine-code generation. Native inline-C examples are explicitly marked for external GCC compilation; their browser questions check the contract and deterministic calculations rather than measuring hardware. The displayed C is a specification, never evaluated.
 
 Passing tests is evidence for the listed inputs, not a proof for all C inputs. C signed overflow is undefined; signed examples avoid it. Unsigned examples can deliberately wrap. Negative signed right-shift questions explicitly specify x86 arithmetic behavior; C shift-count restrictions differ from hardware count masking.
 
@@ -64,9 +65,10 @@ Passing tests is evidence for the listed inputs, not a proof for all C inputs. C
 - `data/translation.json`, `data/concepts.json`: preserved original questions, with reviewed concept wording.
 - `data/lecture10.json`: the reviewed core exercises and answer explanations.
 - `data/foundations.json`: 26 first-principles practice questions.
-- `data/lessons.json`: schema-version-2 chapters with ordered concepts, prerequisites, explanations, worked examples, teach-back prompts, focused practice and review IDs.
-- `data/diagrams.json`, `diagrams/*.svg`: figure metadata and 35 local accessible diagrams.
-- `COURSE_DESIGN.md`, `LECTURE_REVIEW.md`: author guidance, coverage mapping and review evidence.
+- `data/control-inline.json`: 73 questions extending control flow, widening, native inline interfaces and the conversation topics.
+- `data/lessons.json`: schema-version-2 chapters with ordered concepts, prerequisites, explanations, worked examples, teach-back prompts, focused practice and review IDs. Executable assembly examples include fixtures; `worked.nativeC: true` identifies native C shown for separate GCC compilation.
+- `data/diagrams.json`, `diagrams/*.svg`: figure metadata and 49 local accessible diagrams.
+- `COURSE_DESIGN.md`, `LECTURE_REVIEW.md`, `CONTROL_INLINE_REVIEW.md`: author guidance, coverage mapping and review evidence.
 - `data/example.json`: simple legacy-compatible import template.
 
 Each bank uses `schemaVersion: 1`, a `questions` array, unique lowercase slug IDs, `type`, `category` and `title`. Code questions need `cCode`, `hint`, `solutions`, and `cases`; new ones add `lesson`, `explanation`, `dataModel` and optional `requirements` (normalized opcode names). MCQs need `question`, `options`, a zero-based `correctAnswer`, and `explanation`.
@@ -94,18 +96,20 @@ node --test docs/projects/assembly-lab/tests/*.test.cjs
 python3 docs/projects/assembly-lab/tests/native-reference.py
 python3 docs/projects/assembly-lab/tests/c-reference.py
 python3 docs/projects/assembly-lab/tests/native-semantics.py
+python3 docs/projects/assembly-lab/tests/inline-reference.py
 python3 -m http.server 8000
 ```
 
 Open `http://localhost:8000/docs/projects/assembly-lab/index.html`. Browsers block JSON fetches from `file://`.
 
-The Node suite additionally checks prerequisite order, instruction introduction, self-contained wording, local diagrams and all 51 executable worked examples. It covers original and new banks plus exact 64-bit arithmetic, aliases, overlapping widths, negative LEA, shifts/flags, stack boundaries, PUSH/POP special cases, nested calls, RET/LEAVE, ABI rules, invalid forms and grading. The independent native suite compiles and executes all **171 guided-course reference cases** using GCC on Linux x86-64 and verifies expected register values, changed outputs and preserved input memory. The separate native-semantics suite compares shift results, defined flags and sign-extended immediate masks directly with hardware, including zero-count register writes. The C-reference suite separately compiles the displayed C functions with undefined-behavior checking and checks 143 fixtures across 42 functions and the separate integer-promotion worked example. Machine-only snippets remain covered by the assembly suite. All native suites run only repository-owned programs in a temporary directory, never user code. GCC is a development-only verification dependency; the published site needs only a modern browser with BigInt.
+The Node suite additionally checks prerequisite order, instruction introduction, self-contained wording, local diagrams and all 66 executable assembly worked examples. It covers original and new banks plus exact 64-bit arithmetic, aliases, overlapping widths, negative LEA, shifts/flags, stack boundaries, PUSH/POP special cases, nested calls, RET/LEAVE, ABI rules, invalid forms and grading. The independent native suite compiles and executes all **253 guided-course reference cases** using GCC on Linux x86-64 and verifies expected register values, changed outputs and preserved input memory. The separate native-semantics suite compares shift results, defined flags and sign-extended immediate masks directly with hardware, including zero-count register writes. The C-reference suite separately compiles the displayed C functions with undefined-behavior checking and checks 225 fixtures across 57 functions and the separate integer-promotion worked example. Machine-only snippets remain covered by the assembly suite. The inline-reference suite compiles the exact 10 displayed native-C examples at four GCC optimization settings, including LTO, and runs 136 checks. All native suites run only repository-owned programs in a temporary directory, never user code. GCC is a development-only verification dependency; the published site needs only a modern browser with BigInt.
 
-The optional DOM integration suite requires a development installation of `jsdom` and runs with `node docs/projects/assembly-lab/tests/ui-review.cjs`. If the dependency is installed elsewhere, set `ASSEMBLY_LAB_JSDOM` to its module path. It checks the full course flow, all 218 answer handlers and progress migration without starting a browser. It does not verify rendered layout. No runtime dependency was added to the site.
+The optional DOM integration suite requires a development installation of `jsdom` and runs with `node docs/projects/assembly-lab/tests/ui-review.cjs`. If the dependency is installed elsewhere, set `ASSEMBLY_LAB_JSDOM` to its module path. It checks the full course flow, all 291 answer handlers and progress migration without starting a browser. It does not verify rendered layout. No runtime dependency was added to the site.
 
 ## Primary references
 
-- Supplied Lecture 10, “Assembly 1” (36 slides), used as the course-content map; source PDF is not redistributed.
+- Supplied Assembly 1 (36 pages), Assembly II (21 pages) and Inline Assembly (8 pages), used as coverage benchmarks; source PDFs are not redistributed.
+- [GNU extended asm](https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html), [basic asm](https://gcc.gnu.org/onlinedocs/gcc/Basic-Asm.html), and [constraints](https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html)
 - [Intel architecture manuals](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html)
 - [GNU assembler AT&T syntax](https://sourceware.org/binutils/docs/as/i386_002dVariations.html)
 - [GNU operand sizes](https://sourceware.org/binutils/docs/as/i386_002dMnemonics.html)

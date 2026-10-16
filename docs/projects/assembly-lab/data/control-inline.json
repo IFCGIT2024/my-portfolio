@@ -1,0 +1,2505 @@
+{
+  "schemaVersion": 1,
+  "questions": [
+    {
+      "id": "x-register-names",
+      "type": "mcq",
+      "lesson": "02-widths",
+      "category": "registers",
+      "title": "BX and BP are different registers",
+      "question": "Which pair names the same register family at different widths?",
+      "options": [
+        "EBP and RBP",
+        "EBX and EBP",
+        "RBX and RBP",
+        "RDI and RDX"
+      ],
+      "correctAnswer": 0,
+      "explanation": "EBP is the low 32-bit view of RBP. BX/EBX/RBX and BP/EBP/RBP are distinct families. P means pointer in BP/SP; X is part of the historical AX/BX/CX/DX names."
+    },
+    {
+      "id": "x-historical-role",
+      "type": "mcq",
+      "lesson": "02-widths",
+      "category": "registers",
+      "title": "Names do not force every use",
+      "question": "Must RDI always contain a destination pointer because DI historically means destination index?",
+      "options": [
+        "Yes. It cannot contain an integer.",
+        "Yes. RDI automatically dereferences its value.",
+        "No. RDI is another name for RDX.",
+        "No. Instructions and the calling convention determine its current role."
+      ],
+      "correctAnswer": 3,
+      "explanation": "A historical name does not attach a C type to the bits. Some instructions have fixed roles; ordinary MOV and arithmetic can use RDI as data."
+    },
+    {
+      "id": "x-dereference",
+      "type": "mcq",
+      "lesson": "03-pointers",
+      "category": "pointers",
+      "title": "An address differs from its contents",
+      "question": "RDI=4096 and the eight-byte value at address 4096 is 23. What does movq (%rdi),%rax produce?",
+      "options": [
+        "RAX=4096; RDI stays 4096",
+        "RAX=23; RDI becomes 4104",
+        "RAX=23; RDI stays 4096",
+        "RAX=4096; RDI becomes 23"
+      ],
+      "correctAnswer": 2,
+      "explanation": "MOV uses RDI to locate the source memory. It reads the value there without changing the pointer. In C this is like reading *p, rather than copying p."
+    },
+    {
+      "id": "x-lea-three",
+      "type": "mcq",
+      "lesson": "05-lea",
+      "category": "addressing",
+      "title": "Copy, dereference or calculate",
+      "question": "RBX=4096; the eight-byte value at 4096 is 23. Which sequence of RAX results matches movq %rbx,%rax; movq (%rbx),%rax; leaq (%rbx),%rax, considered separately?",
+      "options": [
+        "4096, 23, 23",
+        "4096, 23, 4096",
+        "23, 23, 4096",
+        "4096, 4096, 23"
+      ],
+      "correctAnswer": 1,
+      "explanation": "MOV with a register source copies the address value. MOV with a memory source loads its contents. LEA calculates the address expression and does not load memory."
+    },
+    {
+      "id": "x-address-width",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "addressing",
+      "title": "A wide pointer can load a small object",
+      "question": "In movl (%rdi),%eax, how many bytes of data are loaded, and what supplies the address?",
+      "options": [
+        "Four bytes; the 64-bit value in RDI supplies the address",
+        "Eight bytes because RDI is 64-bit",
+        "Four bytes from the address in EAX",
+        "Only one byte because parentheses select a byte"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The l suffix and EAX choose four-byte data. RDI supplies a separate 64-bit address. Address width does not dictate object width."
+    },
+    {
+      "id": "x-address32",
+      "type": "mcq",
+      "lesson": "04-addresses",
+      "category": "addressing",
+      "title": "A 32-bit address form can be valid",
+      "question": "In x86-64 mode, which statement about movl (%ebx),%eax is correct?",
+      "options": [
+        "It always fails to assemble in 64-bit mode",
+        "It reads eight bytes because addresses are 64-bit",
+        "It is equivalent to using the full RBX value for every possible RBX",
+        "It can encode a 32-bit address calculation, zero-extended into the low 4 GiB"
+      ],
+      "correctAnswer": 3,
+      "explanation": "The address-size override allows a 32-bit effective address. This does not make EBX an ordinary full-width C pointer. The address must still map accessible memory. AX is not a valid address base."
+    },
+    {
+      "id": "x-argument-mnemonic",
+      "type": "mcq",
+      "lesson": "03-functions",
+      "category": "functions",
+      "title": "Recall the argument order",
+      "question": "For the Linux x86-64 convention here, which order matches the first six integer or pointer arguments?",
+      "options": [
+        "RCX, RDX, R8, R9, RDI, RSI",
+        "RAX, RBX, RCX, RDX, RSI, RDI",
+        "RDI, RSI, RDX, RCX, R8, R9",
+        "RDI, RDX, RSI, RCX, R8, R9"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Dogs Steal Donuts; Cats Ate Nine recalls D,S,D,C,8,9. It is a mnemonic for this convention. Windows x64 instead starts RCX,RDX,R8,R9. The convention is separate from the historical register names."
+    },
+    {
+      "id": "x-frame-name",
+      "type": "mcq",
+      "lesson": "10-stack",
+      "category": "stack",
+      "title": "Separate RBX, RBP and RSP",
+      "question": "A function uses a conventional frame pointer. Which register normally provides that stable frame reference?",
+      "options": [
+        "RIP because it points at local variables",
+        "RBP",
+        "RBX because B means base",
+        "RSP because it never changes"
+      ],
+      "correctAnswer": 1,
+      "explanation": "RBP can remain stable while RSP changes. RSP tracks the stack top; RBX is a separate general-purpose, callee-saved register. A frame pointer is optional."
+    },
+    {
+      "id": "x-carry-overflow",
+      "type": "mcq",
+      "lesson": "09-branches",
+      "category": "control-flow",
+      "title": "Carry and signed overflow are different",
+      "question": "An eight-bit ADD computes 127+1, leaving 0x80. Which flags describe that result?",
+      "options": [
+        "SF=1, OF=1, CF=0, ZF=0",
+        "SF=1, OF=0, CF=1, ZF=0",
+        "SF=0, OF=1, CF=0, ZF=0",
+        "SF=1, OF=1, CF=1, ZF=1"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The stored pattern is signed -128, so SF=1. Positive signed inputs produced a negative result, so OF=1. Unsigned 128 fits in eight bits, so CF=0; the result is nonzero."
+    },
+    {
+      "id": "x-borrow",
+      "type": "mcq",
+      "lesson": "09-branches",
+      "category": "control-flow",
+      "title": "CMP uses subtraction borrow",
+      "question": "For eight-bit unsigned values, CMP computes 3−5 without storing it. What are CF and ZF?",
+      "options": [
+        "CF=0 and ZF=1",
+        "CF=0 and ZF=0",
+        "CF=1 and ZF=1",
+        "CF=1 and ZF=0"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Subtraction needs an unsigned borrow when destination < source, so CF=1. The operands differ, so ZF=0. Calling every CF event a carry out obscures subtraction."
+    },
+    {
+      "id": "x-threshold-branch",
+      "type": "mcq",
+      "lesson": "09-branches",
+      "category": "control-flow",
+      "title": "Compare with a constant",
+      "question": "After cmpq $3,%rdi, which jump selects the signed condition x<3?",
+      "options": [
+        "jb small for every signed x",
+        "js small for every signed x",
+        "jl small",
+        "jg small"
+      ],
+      "correctAnswer": 2,
+      "explanation": "CMP computes x−3. JL uses SF≠OF to implement signed less-than, including cases where that subtraction overflows."
+    },
+    {
+      "id": "x-threshold",
+      "type": "code",
+      "lesson": "09-branches",
+      "category": "control-flow",
+      "title": "Select one of two constants",
+      "cCode": "long choose(long x) { if(x<3) return 1; return 2; }",
+      "hint": "Compare x with 3; branch to the return-1 path only when the signed comparison is less.",
+      "solutions": [
+        "cmpq $3,%rdi\njl small\nmovq $2,%rax\nret\nsmall:\nmovq $1,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: -9223372036854775808",
+          "registers": {
+            "rdi": "-9223372036854775808"
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: -1",
+          "registers": {
+            "rdi": -1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 2",
+          "registers": {
+            "rdi": 2
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 3",
+          "registers": {
+            "rdi": 3
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "2"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 4",
+          "registers": {
+            "rdi": 4
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "2"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 9223372036854775807",
+          "registers": {
+            "rdi": "9223372036854775807"
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "2"
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Compare x with 3; branch to the return-1 path only when the signed comparison is less.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination"
+    },
+    {
+      "id": "x-absdiff-direction",
+      "type": "mcq",
+      "lesson": "09-branches",
+      "category": "control-flow",
+      "title": "Preserve subtraction order",
+      "question": "For signed x=2,y=7, an absolute-difference function takes the x<=y path. Which expression belongs there?",
+      "options": [
+        "y−x",
+        "x−y",
+        "x+y",
+        "x&y"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The smaller value must be subtracted from the larger. Equality produces zero on either subtraction path."
+    },
+    {
+      "id": "x-absdiff",
+      "type": "code",
+      "lesson": "09-branches",
+      "category": "control-flow",
+      "title": "Translate both subtraction paths",
+      "cCode": "// Precondition: the nonnegative difference fits in long.\nlong absdiff(long x,long y) { if(x>y) return x-y; return y-x; }",
+      "hint": "CMP sets the ordering without replacing x or y. JLE sends x<=y to y−x; otherwise compute x−y.",
+      "solutions": [
+        "cmpq %rsi,%rdi\njle other\nmovq %rdi,%rax\nsubq %rsi,%rax\nret\nother:\nmovq %rsi,%rax\nsubq %rdi,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: 9, 4",
+          "registers": {
+            "rdi": 9,
+            "rsi": 4
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "5"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 2, 7",
+          "registers": {
+            "rdi": 2,
+            "rsi": 7
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "5"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 5, 5",
+          "registers": {
+            "rdi": 5,
+            "rsi": 5
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: -9, -4",
+          "registers": {
+            "rdi": -9,
+            "rsi": -4
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "5"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: -2, 3",
+          "registers": {
+            "rdi": -2,
+            "rsi": 3
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "5"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 0, 0",
+          "registers": {
+            "rdi": 0,
+            "rsi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "CMP sets the ordering without replacing x or y. JLE sends x<=y to y−x; otherwise compute x−y.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination"
+    },
+    {
+      "id": "x-arithmetic-zero",
+      "type": "mcq",
+      "lesson": "09-branches",
+      "category": "control-flow",
+      "title": "Reuse a result’s zero flag",
+      "question": "After addq $5,%rax, which jump directly checks whether the stored result is zero?",
+      "options": [
+        "jb zero",
+        "jmp zero only when zero",
+        "je zero",
+        "jg zero"
+      ],
+      "correctAnswer": 2,
+      "explanation": "ADD sets ZF from its stored result, so JE can use that fact without another CMP. LEA would not set ZF."
+    },
+    {
+      "id": "x-overflow-sign",
+      "type": "mcq",
+      "lesson": "09-branches",
+      "category": "control-flow",
+      "title": "Do not reinterpret arbitrary flags as CMP result,0",
+      "question": "An eight-bit ADD has result 0x80, SF=1, OF=1, ZF=0. Which statements are true?",
+      "options": [
+        "Neither would be taken",
+        "JS and JG would both be taken with these flags",
+        "Only JS would be taken",
+        "Only JG would be taken"
+      ],
+      "correctAnswer": 1,
+      "explanation": "JS reads SF. JG reads !ZF and SF==OF, which are also true here. JG after an arbitrary overflowing ADD is not simply a sign test of the stored result. Use TEST result,result to establish result-versus-zero flags first."
+    },
+    {
+      "id": "x-zero-extend",
+      "type": "mcq",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Widen with zeros",
+      "question": "AL=0x80. What value does movzbl %al,%eax produce in RAX?",
+      "options": [
+        "128",
+        "−128",
+        "0xffffffffffffff80",
+        "It preserves all old upper bits"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The byte is zero-extended to EAX=0x00000080. Writing EAX also clears RAX’s upper 32 bits. Widening preserves unsigned byte magnitude."
+    },
+    {
+      "id": "x-load-ubyte",
+      "type": "code",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Load an unsigned byte as a long",
+      "cCode": "unsigned long widen_byte(unsigned char x) { return x; }",
+      "hint": "Read the byte input in DIL and fill the wider destination with zeros.",
+      "solutions": [
+        "movzbq %dil,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: 0",
+          "registers": {
+            "rdi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 1",
+          "registers": {
+            "rdi": 1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 127",
+          "registers": {
+            "rdi": 127
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "127"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 128",
+          "registers": {
+            "rdi": 128
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "128"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 255",
+          "registers": {
+            "rdi": 255
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "255"
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Read the byte input in DIL and fill the wider destination with zeros.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination",
+      "requirements": [
+        "movzx"
+      ]
+    },
+    {
+      "id": "x-sign-extend",
+      "type": "mcq",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Preserve a negative byte’s meaning",
+      "question": "AL=0x80. What does movsbq %al,%rax produce?",
+      "options": [
+        "0x000000000000ff80",
+        "0",
+        "−128",
+        "128"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The source sign bit is one, so all 56 added upper bits become one. The resulting 64-bit two’s-complement value is −128."
+    },
+    {
+      "id": "x-load-sbyte",
+      "type": "code",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Load a signed byte as a long",
+      "cCode": "long widen_signed(signed char x) { return x; }",
+      "hint": "Read the source at its declared byte width, then repeat its sign bit in the widened result.",
+      "solutions": [
+        "movsbq %dil,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: -128",
+          "registers": {
+            "rdi": -128
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-128"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: -1",
+          "registers": {
+            "rdi": -1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 0",
+          "registers": {
+            "rdi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 1",
+          "registers": {
+            "rdi": 1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 127",
+          "registers": {
+            "rdi": 127
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "127"
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Read the source at its declared byte width, then repeat its sign bit in the widened result.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination",
+      "requirements": [
+        "movsx"
+      ]
+    },
+    {
+      "id": "x-extend32",
+      "type": "mcq",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "An EAX write is not a signed long conversion",
+      "question": "EAX contains 0xffffffff, interpreted as signed int −1. Which instruction produces signed long −1 in RAX?",
+      "options": [
+        "movslq %eax,%rax",
+        "movl %eax,%eax",
+        "movzbl %al,%eax",
+        "movq $0,%rax"
+      ],
+      "correctAnswer": 0,
+      "explanation": "MOVSLQ sign-extends 32 bits to 64. A 32-bit MOV instead zeroes the upper half, giving positive 4294967295 in RAX."
+    },
+    {
+      "id": "x-int-long",
+      "type": "code",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Convert a signed int to long",
+      "cCode": "long widen_int(int x) { return x; }",
+      "hint": "MOVSLQ extends the sign of the 32-bit argument. MOVL alone is only appropriate for an unsigned widening.",
+      "solutions": [
+        "movslq %edi,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: -2147483648",
+          "registers": {
+            "rdi": -2147483648
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-2147483648"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: -1",
+          "registers": {
+            "rdi": -1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "-1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 0",
+          "registers": {
+            "rdi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 1",
+          "registers": {
+            "rdi": 1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 2147483647",
+          "registers": {
+            "rdi": 2147483647
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "2147483647"
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "MOVSLQ extends the sign of the 32-bit argument. MOVL alone is only appropriate for an unsigned widening.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination",
+      "requirements": [
+        "movsx"
+      ]
+    },
+    {
+      "id": "x-set-byte",
+      "type": "mcq",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "SETcc writes one byte",
+      "question": "RAX=0x1122334455667788. A true condition executes sete %al. What is RAX?",
+      "options": [
+        "0x1122334455667788",
+        "0x0000000055667701",
+        "0x1122334455667701",
+        "1"
+      ],
+      "correctAnswer": 2,
+      "explanation": "SETE writes 01 to AL. It preserves all seven other bytes, so the complete register is not automatically the integer 1."
+    },
+    {
+      "id": "x-set-vs-jump",
+      "type": "mcq",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Store a condition instead of jumping",
+      "question": "What is the difference between je label and sete %al?",
+      "options": [
+        "SETE changes ZF to match AL",
+        "JE may change the next instruction; SETE writes 0 or 1 and continues",
+        "SETE jumps to AL",
+        "JE writes the result into RAX"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Both inspect ZF. Neither clears flags. SETE stores a Boolean byte without branching."
+    },
+    {
+      "id": "x-boolean-clean",
+      "type": "mcq",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Finish a Boolean result",
+      "question": "After cmpq %rsi,%rdi; setg %al, what makes a complete 0-or-1 int in EAX without destroying that byte?",
+      "options": [
+        "movzbl %al,%eax",
+        "movl $0,%eax",
+        "movq %rax,%rax",
+        "movb %al,%al"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Zero-extension retains AL’s 0 or 1 and defines the rest of EAX. Clearing EAX afterward would erase the result. Clearing before CMP is another valid strategy."
+    },
+    {
+      "id": "x-greater-int",
+      "type": "code",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Return a clean comparison result",
+      "cCode": "// Also clear RAX above the int result.\nint greater(long x,long y) { return x>y; }",
+      "hint": "CMP handles signed ordering. SETG produces a byte; MOVZBL normalizes the full return register.",
+      "solutions": [
+        "cmpq %rsi,%rdi\nsetg %al\nmovzbl %al,%eax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: 1, 2",
+          "registers": {
+            "rdi": 1,
+            "rsi": 2
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": 0,
+              "rax": 0
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 2, 1",
+          "registers": {
+            "rdi": 2,
+            "rsi": 1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": 1,
+              "rax": 1
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 5, 5",
+          "registers": {
+            "rdi": 5,
+            "rsi": 5
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": 0,
+              "rax": 0
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: -1, 1",
+          "registers": {
+            "rdi": -1,
+            "rsi": 1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": 0,
+              "rax": 0
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 9223372036854775807, -9223372036854775808",
+          "registers": {
+            "rdi": "9223372036854775807",
+            "rsi": "-9223372036854775808"
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": 1,
+              "rax": 1
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: -9223372036854775808, 9223372036854775807",
+          "registers": {
+            "rdi": "-9223372036854775808",
+            "rsi": "9223372036854775807"
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "eax": 0,
+              "rax": 0
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "CMP handles signed ordering. SETG produces a byte; MOVZBL normalizes the full return register.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination",
+      "requirements": [
+        "setg",
+        "movzx"
+      ]
+    },
+    {
+      "id": "x-condition-table",
+      "type": "mcq",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Choose signed or unsigned SETcc",
+      "question": "After comparing x with y, which byte result implements unsigned x<y?",
+      "options": [
+        "sets %al",
+        "sete %al",
+        "setb %al",
+        "setl %al for every bit pattern"
+      ],
+      "correctAnswer": 2,
+      "explanation": "SETB reads CF (unsigned borrow). SETL instead reads SF≠OF for signed less-than."
+    },
+    {
+      "id": "x-setne-spelling",
+      "type": "mcq",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Non-equality has its own mnemonic",
+      "question": "Which instruction writes a byte equal to one when ZF=0?",
+      "options": [
+        "sets %al",
+        "setne %al",
+        "sete %al",
+        "setg %al for every flags state"
+      ],
+      "correctAnswer": 1,
+      "explanation": "SETNE is not-equal/nonzero; SETE tests ZF=1. The conditions correspond to JNE and JE respectively."
+    },
+    {
+      "id": "x-set-memory",
+      "type": "mcq",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "A Boolean can be stored directly",
+      "question": "RDX points to a four-byte object whose bytes are aa bb cc dd. A true condition executes sete (%rdx). What are its bytes afterward?",
+      "options": [
+        "01 bb cc dd",
+        "01 00 00 00",
+        "aa bb cc 01",
+        "The address in RDX becomes 1"
+      ],
+      "correctAnswer": 0,
+      "explanation": "SETcc stores exactly one byte. Other bytes and the address register stay unchanged."
+    },
+    {
+      "id": "x-store-bool",
+      "type": "code",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Store one Boolean byte",
+      "cCode": "void store_equal(long x,long y,unsigned char *out) { *out=(x==y); }",
+      "hint": "Compare x with y, then SETE into the byte at the pointer in RDX.",
+      "solutions": [
+        "cmpq %rsi,%rdi\nsete (%rdx)\nret"
+      ],
+      "explanation": "SETE writes a byte directly to memory. It does not overwrite adjacent bytes or the pointer.",
+      "requirements": [
+        "sete"
+      ],
+      "dataModel": "Linux x86-64 LP64; unsigned char is one byte",
+      "cases": [
+        {
+          "name": "x=5,y=5",
+          "registers": {
+            "rdi": 5,
+            "rsi": 5,
+            "rdx": 4096
+          },
+          "memory": {
+            "out": 170,
+            "out+1": 187
+          },
+          "memoryWidth": 1,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "out": 1
+            }
+          },
+          "symbols": {
+            "out": 4096
+          },
+          "function": true
+        },
+        {
+          "name": "x=4,y=9",
+          "registers": {
+            "rdi": 4,
+            "rsi": 9,
+            "rdx": 4096
+          },
+          "memory": {
+            "out": 170,
+            "out+1": 187
+          },
+          "memoryWidth": 1,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "out": 0
+            }
+          },
+          "symbols": {
+            "out": 4096
+          },
+          "function": true
+        },
+        {
+          "name": "x=-1,y=-1",
+          "registers": {
+            "rdi": -1,
+            "rsi": -1,
+            "rdx": 4096
+          },
+          "memory": {
+            "out": 170,
+            "out+1": 187
+          },
+          "memoryWidth": 1,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "out": 1
+            }
+          },
+          "symbols": {
+            "out": 4096
+          },
+          "function": true
+        },
+        {
+          "name": "x=0,y=1",
+          "registers": {
+            "rdi": 0,
+            "rsi": 1,
+            "rdx": 4096
+          },
+          "memory": {
+            "out": 170,
+            "out+1": 187
+          },
+          "memoryWidth": 1,
+          "expected": {
+            "registers": {},
+            "memory": {
+              "out": 0
+            }
+          },
+          "symbols": {
+            "out": 4096
+          },
+          "function": true
+        }
+      ]
+    },
+    {
+      "id": "x-goto",
+      "type": "mcq",
+      "lesson": "09-loops",
+      "category": "loops",
+      "title": "A label is a code destination",
+      "question": "In if(x<=y) goto other;, what happens when x>y?",
+      "options": [
+        "The function returns y",
+        "The label receives x",
+        "Execution falls through to the next statement",
+        "It jumps to other"
+      ],
+      "correctAnswer": 2,
+      "explanation": "A conditional transfer occurs only when the condition is true. Otherwise execution continues sequentially."
+    },
+    {
+      "id": "x-do-first",
+      "type": "mcq",
+      "lesson": "09-loops",
+      "category": "loops",
+      "title": "A do-while executes before testing",
+      "question": "A loop body increments visits. Initially x=0. A do { visits++; } while(x); body runs how many times?",
+      "options": [
+        "Forever",
+        "Once",
+        "Zero times",
+        "Exactly twice"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The initial condition is tested only after the first body execution. Since x remains zero, the loop then stops."
+    },
+    {
+      "id": "x-do-width",
+      "type": "code",
+      "lesson": "09-loops",
+      "category": "loops",
+      "title": "Count iterations of a do-while",
+      "cCode": "long bit_visits(unsigned long x) { long n=0; do { n++; x>>=1; } while(x); return n; }",
+      "hint": "The body runs once for x=0. SHR sets ZF from the updated x, so JNE repeats while it remains nonzero.",
+      "solutions": [
+        "movl $0,%eax\nbody:\nincq %rax\nshrq $1,%rdi\njne body\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: 0",
+          "registers": {
+            "rdi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 1",
+          "registers": {
+            "rdi": 1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 2",
+          "registers": {
+            "rdi": 2
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "2"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 8",
+          "registers": {
+            "rdi": 8
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 255",
+          "registers": {
+            "rdi": 255
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 0x8000000000000000",
+          "registers": {
+            "rdi": "0x8000000000000000"
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "64"
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "The body runs once for x=0. SHR sets ZF from the updated x, so JNE repeats while it remains nonzero.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination"
+    },
+    {
+      "id": "x-guarded-while",
+      "type": "mcq",
+      "lesson": "09-loops",
+      "category": "loops",
+      "title": "Keep the entry guard",
+      "question": "A bottom-tested loop body is used to implement while(x!=0). What preserves the initial-zero case?",
+      "options": [
+        "Removing the bottom test",
+        "Always running the body once",
+        "Changing every JNE to JMP",
+        "A test and exit jump before the first body execution"
+      ],
+      "correctAnswer": 3,
+      "explanation": "The entry guard skips the body when x starts zero. The bottom test controls subsequent repeats."
+    },
+    {
+      "id": "x-guarded-visits",
+      "type": "code",
+      "lesson": "09-loops",
+      "category": "loops",
+      "title": "Use a guarded bottom-test loop",
+      "cCode": "long while_visits(unsigned long x) { long n=0; while(x) { n++; x>>=1; } return n; }",
+      "hint": "Guard the first body execution with TEST/JE, then use SHR/JNE at the bottom.",
+      "solutions": [
+        "movl $0,%eax\ntestq %rdi,%rdi\nje done\nbody:\nincq %rax\nshrq $1,%rdi\njne body\ndone:\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: 0",
+          "registers": {
+            "rdi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 1",
+          "registers": {
+            "rdi": 1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 2",
+          "registers": {
+            "rdi": 2
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "2"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 8",
+          "registers": {
+            "rdi": 8
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 255",
+          "registers": {
+            "rdi": 255
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 0x8000000000000000",
+          "registers": {
+            "rdi": "0x8000000000000000"
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "64"
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Guard the first body execution with TEST/JE, then use SHR/JNE at the bottom.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination"
+    },
+    {
+      "id": "x-for-order",
+      "type": "mcq",
+      "lesson": "09-loops",
+      "category": "loops",
+      "title": "Account for all parts of for",
+      "question": "For for(i=0; i<n; i++), which order is correct?",
+      "options": [
+        "Test once; repeat the body forever",
+        "Initialize once; test; body; update; return to test",
+        "Initialize on every iteration; body; test",
+        "Body first; initialize; test; update"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A for loop has initialization, a condition before each body, and an update after each completed body. The update is not the first action."
+    },
+    {
+      "id": "x-for-sum",
+      "type": "code",
+      "lesson": "09-loops",
+      "category": "loops",
+      "title": "Translate a for loop completely",
+      "cCode": "// Precondition: 0<=n<=10000.\nlong triangular(long n) { long s=0; for(long i=0;i<n;i++) s+=i; return s; }",
+      "hint": "Initialize i and sum once; test i<n before the body; add i, then increment i before jumping back.",
+      "solutions": [
+        "movl $0,%eax\nmovl $0,%ecx\ncheck:\ncmpq %rdi,%rcx\njge done\naddq %rcx,%rax\nincq %rcx\njmp check\ndone:\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: 0",
+          "registers": {
+            "rdi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 1",
+          "registers": {
+            "rdi": 1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 2",
+          "registers": {
+            "rdi": 2
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 5",
+          "registers": {
+            "rdi": 5
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "10"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 10",
+          "registers": {
+            "rdi": 10
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "45"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 64",
+          "registers": {
+            "rdi": 64
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "2016"
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Initialize i and sum once; test i<n before the body; add i, then increment i before jumping back.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination"
+    },
+    {
+      "id": "x-popcount-trace",
+      "type": "mcq",
+      "lesson": "09-loops",
+      "category": "loops",
+      "title": "Count ones rather than positions",
+      "question": "For x=0b10110, successive low bits examined by x&1 before shifting are 0,1,1,0,1. What is the population count?",
+      "options": [
+        "5",
+        "2",
+        "22",
+        "3"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Each one contributes one to the accumulator. Zero bits and leading positions do not add to the count."
+    },
+    {
+      "id": "x-popcount",
+      "type": "code",
+      "lesson": "09-loops",
+      "category": "loops",
+      "title": "Combine a mask, shift and loop",
+      "cCode": "long count_ones(unsigned long x) { long result=0; do { result+=x&1UL; x>>=1; } while(x); return result; }",
+      "hint": "Save x’s low bit in RDX, add it to the result, then shift x. JNE must use SHR’s flags, not ADD’s.",
+      "solutions": [
+        "movl $0,%eax\nbody:\nmovq %rdi,%rdx\nandl $1,%edx\naddq %rdx,%rax\nshrq $1,%rdi\njne body\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: 0",
+          "registers": {
+            "rdi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 1",
+          "registers": {
+            "rdi": 1
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 22",
+          "registers": {
+            "rdi": 22
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "3"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 255",
+          "registers": {
+            "rdi": 255
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 0x8000000000000000",
+          "registers": {
+            "rdi": "0x8000000000000000"
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "1"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 0xffffffffffffffff",
+          "registers": {
+            "rdi": "0xffffffffffffffff"
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "64"
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Save x’s low bit in RDX, add it to the result, then shift x. JNE must use SHR’s flags, not ADD’s.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination",
+      "requirements": [
+        "and",
+        "shr"
+      ]
+    },
+    {
+      "id": "x-memory-cache",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "architecture",
+      "title": "A load need not visit RAM sticks",
+      "question": "Does movq (%rdi),%rax necessarily fetch data from the computer’s RAM chips on every execution?",
+      "options": [
+        "Yes. A cache cannot hold ordinary program data.",
+        "No. The memory load may be satisfied by a CPU cache.",
+        "Yes. Parentheses force a trip to RAM.",
+        "No. It is always a register-to-register copy."
+      ],
+      "correctAnswer": 1,
+      "explanation": "The instruction accesses program memory. How the processor supplies those bytes is an implementation detail; caches often satisfy the access."
+    },
+    {
+      "id": "x-width-speed",
+      "type": "mcq",
+      "lesson": "01-machine",
+      "category": "architecture",
+      "title": "Choose correct meaning before optimizing",
+      "question": "Which is the safest general statement about AX, EAX and RAX operations?",
+      "options": [
+        "Choose the required width; performance depends on the instruction, dependencies and CPU.",
+        "AX is always slower than RAX",
+        "Every MOV takes exactly one cycle",
+        "RAX is only needed for positive values above four billion"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Widths define behavior. Some 32-bit forms are shorter and avoid upper-bit dependencies; partial-register effects and instruction encoding costs depend on the specific case. Sixty-four-bit types require their full semantics even when the current value is small."
+    },
+    {
+      "id": "x-inline-basic",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Basic asm is a compiler extension",
+      "question": "What does __asm__(\"nop\"); inside a C function ask GCC to do?",
+      "options": [
+        "Execute a C string at runtime",
+        "Run a separate assembler process at every function call",
+        "Automatically discover all changed C variables",
+        "Insert the given assembler text into the generated program"
+      ],
+      "correctAnswer": 3,
+      "explanation": "GCC passes the template into its assembly output. It does not interpret the text as C or infer a complete input/output contract. __asm__ is accepted even in strict C modes as a GNU extension."
+    },
+    {
+      "id": "x-inline-string",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Separate C strings from instructions",
+      "question": "Inside a template, what does \"movq %1,%0;\" \"addq $1,%0\" mean at the C string level?",
+      "options": [
+        "A C addition of the strings",
+        "A guarantee that both instructions take one clock tick",
+        "Adjacent string literals concatenate; semicolons separate assembler instructions",
+        "Two different asm statements"
+      ],
+      "correctAnswer": 2,
+      "explanation": "C joins adjacent quoted strings. The assembler can separate instructions with semicolons; \n\t can instead format new instruction lines."
+    },
+    {
+      "id": "x-inline-sections",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Read the colon-separated contract",
+      "question": "What is the order in __asm__(template : ... : ... : ...)?",
+      "options": [
+        "Return type, parameters, local variables",
+        "Outputs, inputs, clobbers",
+        "Inputs, outputs, clobbers",
+        "Clobbers, inputs, outputs"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The first section describes written C operands; the second describes read C expressions; the third names additional changed state. Empty sections still need colons when a later section is present."
+    },
+    {
+      "id": "x-inline-register-allocation",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "GCC places the operands",
+      "question": "Who chooses the actual register for an operand constrained with \"r\"?",
+      "options": [
+        "GCC’s register allocator, subject to the declared constraints",
+        "The variable’s first letter",
+        "Always RAX",
+        "Always the first argument register"
+      ],
+      "correctAnswer": 0,
+      "explanation": "An r constraint permits a register; it does not name one. GCC emits needed input setup and makes the output available as the bound C variable."
+    },
+    {
+      "id": "x-inline-percent",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Placeholders differ from literal registers",
+      "question": "In extended asm, how do %0 and %%rax differ?",
+      "options": [
+        "Both always name RAX",
+        "%0 means register R0; %%rax means memory",
+        "%%rax is needed in every standalone .s file",
+        "%0 substitutes operand zero; %%rax emits the literal register name %rax"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Extended templates use percent substitutions. A doubled percent emits one literal percent. Basic asm has no operand substitution and uses ordinary register percent spelling."
+    },
+    {
+      "id": "x-inline-numbering",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Outputs come before inputs",
+      "question": "An asm has one output \"=r\"(out) and inputs \"r\"(x), \"r\"(y). What does %2 name?",
+      "options": [
+        "The operand bound to x",
+        "Always RDX",
+        "The operand bound to y",
+        "The output out"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Output zero is numbered first. The two explicit inputs are numbered one and two. These numbers are operand positions, not register numbers."
+    },
+    {
+      "id": "x-write-only",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "A fresh output does not need an old value",
+      "question": "The template overwrites result before reading it. Which output constraint is appropriate?",
+      "options": [
+        "\"cc\"(result)",
+        "\"=r\"(result)",
+        "\"+r\"(result) with an uninitialized result",
+        "\"r\"(result) in the input list only"
+      ],
+      "correctAnswer": 1,
+      "explanation": "= marks a write-only output. + declares that an initial value is read as well as written, which requires a meaningful initialized input."
+    },
+    {
+      "id": "x-bad-readwrite",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Repair an uninitialized read/write operand",
+      "question": "long result; followed by asm(... : \"+r\"(result) : ...), where the template only produces a new result, has which issue?",
+      "options": [
+        "It incorrectly declares an initial input value; use a write-only output.",
+        "It forces result to be returned through RDI",
+        "It makes result a pointer",
+        "It requires an extra pair of parentheses around result"
+      ],
+      "correctAnswer": 0,
+      "explanation": "A read/write constraint claims the old C value is supplied. Do not use it for an uninitialized variable that should only receive a new value."
+    },
+    {
+      "id": "x-read-write",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "A read/write value must start defined",
+      "question": "long result=x; is followed by a template multiplying result by y. Which constraint describes result?",
+      "options": [
+        "\"=r\"(result) with no tied input",
+        "\"r\"(result) as input only",
+        "\"m\" with no expression",
+        "\"+r\"(result)"
+      ],
+      "correctAnswer": 3,
+      "explanation": "The old result is an input and the new result is an output. + describes both uses."
+    },
+    {
+      "id": "x-multiply-cc",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Declare changed flags",
+      "question": "An inline template executes IMUL. Which extra state should its contract declare as changed?",
+      "options": [
+        "RSP must always be listed",
+        "No state, because C cannot name flags",
+        "\"cc\"",
+        "\"memory\" is always sufficient by itself"
+      ],
+      "correctAnswer": 2,
+      "explanation": "IMUL changes condition-code state. The cc clobber tells GCC not to carry assumptions about flags across the asm."
+    },
+    {
+      "id": "x-constraint-location",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Register and memory constraints name locations",
+      "question": "What does \"+m\"(*p) describe?",
+      "options": [
+        "All program memory must be overwritten",
+        "The pointed-to memory object is both read and written",
+        "The pointer register p is incremented",
+        "The result must go in RAX"
+      ],
+      "correctAnswer": 1,
+      "explanation": "m identifies a memory operand; + marks read/write data flow. *p describes the object, while p by itself is the address value."
+    },
+    {
+      "id": "x-pointer-input-not-memory",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "A pointer input is not a memory declaration",
+      "question": "Does \"r\"(p) alone tell GCC that the asm writes the object at p?",
+      "options": [
+        "No. Declare the memory output or an appropriate memory clobber.",
+        "Yes, because p is a pointer",
+        "Yes, r means RAM",
+        "No, pointers cannot be asm inputs"
+      ],
+      "correctAnswer": 0,
+      "explanation": "A register input supplies the pointer bits. It does not by itself declare a read or write through those bits."
+    },
+    {
+      "id": "x-scratch-clobber",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Declare fixed scratch registers",
+      "question": "A template uses literal RAX and RDX as temporary registers and IMUL changes flags. Which clobbers describe those changes?",
+      "options": [
+        "\"%rax\", \"%rdx\" only",
+        "\"memory\" only",
+        "No clobbers if the result is correct for 13 and 7",
+        "\"rax\", \"rdx\", \"cc\""
+      ],
+      "correctAnswer": 3,
+      "explanation": "Clobber names omit %. GCC avoids conflicts with those fixed scratch registers and accounts for their changed state. Outputs should be described as outputs, not duplicated as clobbers."
+    },
+    {
+      "id": "x-reload-myth",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "A clobber is information, not a forced reload",
+      "question": "What does listing \"rdx\" in the clobbers guarantee?",
+      "options": [
+        "The CPU automatically restores RDX",
+        "RDX becomes a C output variable",
+        "GCC accounts for RDX being changed when allocating and preserving live values",
+        "GCC always reloads the same RDX value after the asm"
+      ],
+      "correctAnswer": 2,
+      "explanation": "A clobber does not request a particular reload sequence. The compiler may save, move, recompute or avoid placing a live value there."
+    },
+    {
+      "id": "x-early-clobber",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Protect inputs that are read later",
+      "question": "A template first writes output %0, then later reads input %2. Why might \"=&r\" be needed for output %0?",
+      "options": [
+        "It preserves the CPU flags automatically",
+        "It prevents that early output write from sharing a register with an input still needed",
+        "It initializes the result to zero",
+        "It makes the output a memory address"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Without &, GCC normally assumes inputs are consumed before outputs are produced. A multi-instruction template can violate that assumption."
+    },
+    {
+      "id": "x-early-repair",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Find the register-overlap failure",
+      "question": "Template: movq %1,%0; addq %2,%0. What if GCC placed %0 and %2 in the same register?",
+      "options": [
+        "The MOV would overwrite the second input before ADD reads it",
+        "The addition would always still be x+y",
+        "Only the flags would change",
+        "The assembler would necessarily reject the program"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The first instruction replaces the output register. If input two shares it, its original value is lost. Early-clobber forbids that overlap."
+    },
+    {
+      "id": "x-volatile",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Volatile does not replace operands",
+      "question": "Does asm volatile automatically declare all modified registers and memory?",
+      "options": [
+        "Yes, it saves every register",
+        "Yes, all memory is automatically refreshed",
+        "Yes, it is a CPU serialization fence",
+        "No. Inputs, outputs and clobbers must still be accurate."
+      ],
+      "correctAnswer": 3,
+      "explanation": "Volatile restricts compiler removal and certain motion of the asm. It does not describe omitted data flow or automatically serialize the CPU."
+    },
+    {
+      "id": "x-memory-clobber",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Compiler barrier versus hardware fence",
+      "question": "What does the \"memory\" clobber do?",
+      "options": [
+        "Forces RDTSC to execute in order",
+        "Restores all callee-saved registers",
+        "Tells GCC about otherwise-unlisted memory effects and constrains compiler memory assumptions",
+        "Flushes every CPU cache"
+      ],
+      "correctAnswer": 2,
+      "explanation": "A memory clobber is a compiler-level memory barrier. It does not itself emit a processor fence or guarantee hardware instruction ordering."
+    },
+    {
+      "id": "x-inline-objdump",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Inspect native code around the template",
+      "question": "What does objdump -d sample.o show?",
+      "options": [
+        "Proof that all operand constraints are correct",
+        "Decoded machine instructions from the object’s executable sections",
+        "Only the original C text",
+        "The runtime values of every input"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Disassembly shows both template instructions and surrounding compiler-generated setup/use. One build’s register choices do not prove the constraints work under every optimization."
+    },
+    {
+      "id": "x-inline-result",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Follow inputs through a complete product",
+      "question": "For inline_product(13,7), with a correct initialized +r result and IMUL, what value should C receive?",
+      "options": [
+        "91",
+        "20",
+        "13",
+        "The address of result"
+      ],
+      "correctAnswer": 0,
+      "explanation": "GCC provides the input operands; IMUL computes 13×7; the output binding makes that value available to the C return."
+    },
+    {
+      "id": "x-rdtsc-halves",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Read the counter halves in the right order",
+      "question": "RDTSC writes the low 32 bits to which register, and the high 32 bits to which register?",
+      "options": [
+        "Low: EDX; high: EAX",
+        "Low: RDI; high: RSI",
+        "All 64 bits directly into RAX",
+        "Low: EAX; high: EDX"
+      ],
+      "correctAnswer": 3,
+      "explanation": "RDTSC returns the counter as EDX:EAX, with EDX the high half. It is the instruction name RDTSC, not RSTSC."
+    },
+    {
+      "id": "x-rdtsc-meaning",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "A counter read is not a duration",
+      "question": "What does a single RDTSC reading provide?",
+      "options": [
+        "The exact number of instructions executed",
+        "The current CPU frequency in hertz",
+        "A time-stamp counter value; an interval needs two readings",
+        "Seconds since the previous C function call"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The counter is not automatically relative to your previous invocation. On invariant-TSC systems its rate is not the current changing core clock frequency."
+    },
+    {
+      "id": "x-counter-cast",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Widen before shifting a 32-bit half",
+      "question": "Why is ((unsigned long)high<<32) used instead of high<<32 when high is a 32-bit unsigned int?",
+      "options": [
+        "It reverses the high and low halves",
+        "The cast makes the left operand 64-bit before the shift",
+        "The cast forces a memory access",
+        "A shift by 32 is always valid for 32-bit operands"
+      ],
+      "correctAnswer": 1,
+      "explanation": "C requires the shift count to be smaller than the promoted left operand’s width. Widen first so the count 32 is valid and the high half is retained."
+    },
+    {
+      "id": "x-join-counter",
+      "type": "code",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Combine supplied counter halves",
+      "cCode": "unsigned long join_counter(unsigned int low,unsigned int high) { return ((unsigned long)high<<32) | low; }",
+      "hint": "Zero-extend each 32-bit half. Shift the high half left 32 places, then OR in the low half. These are supplied values, not a live counter read.",
+      "solutions": [
+        "movl %esi,%eax\nshlq $32,%rax\nmovl %edi,%edx\norq %rdx,%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Inputs: 0, 0",
+          "registers": {
+            "rdi": 0,
+            "rsi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "0"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 7, 0",
+          "registers": {
+            "rdi": 7,
+            "rsi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "7"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 7, 2",
+          "registers": {
+            "rdi": 7,
+            "rsi": 2
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "8589934599"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 4294967295, 0",
+          "registers": {
+            "rdi": 4294967295,
+            "rsi": 0
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "4294967295"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 0, 2147483648",
+          "registers": {
+            "rdi": 0,
+            "rsi": 2147483648
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "9223372036854775808"
+            }
+          },
+          "function": true
+        },
+        {
+          "name": "Inputs: 4294967295, 4294967295",
+          "registers": {
+            "rdi": 4294967295,
+            "rsi": 4294967295
+          },
+          "memory": {},
+          "memoryWidth": 8,
+          "expected": {
+            "registers": {
+              "rax": "18446744073709551615"
+            }
+          },
+          "function": true
+        }
+      ],
+      "explanation": "Zero-extend each 32-bit half. Shift the high half left 32 places, then OR in the low half. These are supplied values, not a live counter read.",
+      "dataModel": "Linux x86-64 LP64; int 32 bits, long and pointers 64 bits; AT&T source, destination"
+    },
+    {
+      "id": "x-ticks-first",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Define what the first call means",
+      "question": "A ticks function starts last=0 and immediately returns current−last. What does its first result represent?",
+      "options": [
+        "Zero automatically",
+        "The number of instructions in main",
+        "Exactly one CPU cycle",
+        "The current counter value measured from zero, not an interval between two calls"
+      ],
+      "correctAnswer": 3,
+      "explanation": "No previous invocation reading has been recorded yet. A separate initialized flag can make the first-call policy explicitly return zero."
+    },
+    {
+      "id": "x-ticks-delta",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Keep state across invocations",
+      "question": "A saved previous counter is 900. The next reading is 950. What should the function return and save?",
+      "options": [
+        "Return 900 and save 950",
+        "Return 50 and keep 900",
+        "Return 50 and save 950",
+        "Return 950 and save 50"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Subtract the previous reading to get the interval, then update the saved reading for the next call. Static storage persists between calls."
+    },
+    {
+      "id": "x-ticks-wrap",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Use unsigned counter subtraction",
+      "question": "For 64-bit unsigned counters, previous=2^64−3 and current=2 after one wrap. What is current−previous modulo 2^64?",
+      "options": [
+        "2^64−5",
+        "5",
+        "−1",
+        "2"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The unsigned subtraction wraps modulo 2^64: three increments reach zero and two more reach two. This is meaningful only with the intended counter continuity and interval assumptions."
+    },
+    {
+      "id": "x-inline-syntax",
+      "type": "mcq",
+      "lesson": "13-inline",
+      "category": "inline-assembly",
+      "title": "Repair the assembler notation",
+      "question": "Which standalone AT&T instruction stores ECX to label + RDX + RBX*4?",
+      "options": [
+        "movl, %ecx,label(%rdx,%rbx,4)",
+        "movl %ecx,$label(%rdx,%rbx,4)",
+        "movl %ecx,label(%rdx,%rbx,4)",
+        "movl %ecx,label(%rdx,%rbx,$4)"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The opcode has no trailing comma. The memory displacement label is not an immediate, and the address scale is written as bare 4. These are assembler syntax rules; inline code still needs a correct compiler contract."
+    },
+    {
+      "id": "x-popcount-return",
+      "type": "mcq",
+      "lesson": "09-loops",
+      "category": "loops",
+      "title": "Identify what actually repeats the body",
+      "question": "A population-count sequence ends its body with shrq $1,%rdi; jne body, then reaches a return sometimes printed as rep ret. What controls repetition of the body?",
+      "options": [
+        "The REP prefix repeats the entire function",
+        "JNE tests the flags left by SHR",
+        "RET checks whether RDI is zero",
+        "RAX automatically jumps back whenever its value changes"
+      ],
+      "correctAnswer": 1,
+      "explanation": "JNE repeats while the updated x is nonzero. The prefix sometimes shown with RET is not the loop condition or a repetition of the whole function. The lab uses plain RET."
+    },
+    {
+      "id": "x-load-unsigned-memory",
+      "type": "code",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Widen a byte loaded through a pointer",
+      "cCode": "unsigned long load_byte(unsigned char *p) { return *p; }",
+      "hint": "Read only the declared source object width, then extend according to its signedness. The pointer and adjacent memory stay unchanged.",
+      "solutions": [
+        "movzbq (%rdi),%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Source value 0",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 1,
+          "memory": {
+            "B": 0,
+            "B+1": 77
+          },
+          "expected": {
+            "registers": {
+              "rax": 0
+            }
+          }
+        },
+        {
+          "name": "Source value 1",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 1,
+          "memory": {
+            "B": 1,
+            "B+1": 77
+          },
+          "expected": {
+            "registers": {
+              "rax": 1
+            }
+          }
+        },
+        {
+          "name": "Source value 127",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 1,
+          "memory": {
+            "B": 127,
+            "B+1": 77
+          },
+          "expected": {
+            "registers": {
+              "rax": 127
+            }
+          }
+        },
+        {
+          "name": "Source value 128",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 1,
+          "memory": {
+            "B": 128,
+            "B+1": 77
+          },
+          "expected": {
+            "registers": {
+              "rax": 128
+            }
+          }
+        },
+        {
+          "name": "Source value 255",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 1,
+          "memory": {
+            "B": 255,
+            "B+1": 77
+          },
+          "expected": {
+            "registers": {
+              "rax": 255
+            }
+          }
+        }
+      ],
+      "explanation": "Read only the declared source object width, then extend according to its signedness. The pointer and adjacent memory stay unchanged.",
+      "requirements": [
+        "movzx"
+      ],
+      "dataModel": "Linux x86-64 LP64; char 1 byte, short 2, int 4, long and pointers 8"
+    },
+    {
+      "id": "x-load-signed-memory",
+      "type": "code",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Load a signed byte as an int",
+      "cCode": "// Also clear RAX above the int result.\nint load_signed_byte(signed char *p) { return *p; }",
+      "hint": "Read only the declared source object width, then extend according to its signedness. The pointer and adjacent memory stay unchanged.",
+      "solutions": [
+        "movsbl (%rdi),%eax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Source value -128",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 1,
+          "memory": {
+            "B": -128,
+            "B+1": 77
+          },
+          "expected": {
+            "registers": {
+              "eax": -128,
+              "rax": 4294967168
+            }
+          }
+        },
+        {
+          "name": "Source value -1",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 1,
+          "memory": {
+            "B": -1,
+            "B+1": 77
+          },
+          "expected": {
+            "registers": {
+              "eax": -1,
+              "rax": 4294967295
+            }
+          }
+        },
+        {
+          "name": "Source value 0",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 1,
+          "memory": {
+            "B": 0,
+            "B+1": 77
+          },
+          "expected": {
+            "registers": {
+              "eax": 0,
+              "rax": 0
+            }
+          }
+        },
+        {
+          "name": "Source value 1",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 1,
+          "memory": {
+            "B": 1,
+            "B+1": 77
+          },
+          "expected": {
+            "registers": {
+              "eax": 1,
+              "rax": 1
+            }
+          }
+        },
+        {
+          "name": "Source value 127",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 1,
+          "memory": {
+            "B": 127,
+            "B+1": 77
+          },
+          "expected": {
+            "registers": {
+              "eax": 127,
+              "rax": 127
+            }
+          }
+        }
+      ],
+      "explanation": "Read only the declared source object width, then extend according to its signedness. The pointer and adjacent memory stay unchanged.",
+      "requirements": [
+        "movsx"
+      ],
+      "dataModel": "Linux x86-64 LP64; char 1 byte, short 2, int 4, long and pointers 8"
+    },
+    {
+      "id": "x-load-word-memory",
+      "type": "code",
+      "lesson": "09-booleans",
+      "category": "boolean-values",
+      "title": "Widen a signed short from memory",
+      "cCode": "long load_short(short *p) { return *p; }",
+      "hint": "Read only the declared source object width, then extend according to its signedness. The pointer and adjacent memory stay unchanged.",
+      "solutions": [
+        "movswq (%rdi),%rax\nret"
+      ],
+      "cases": [
+        {
+          "name": "Source value -32768",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 2,
+          "memory": {
+            "B": -32768,
+            "B+2": 77
+          },
+          "expected": {
+            "registers": {
+              "rax": -32768
+            }
+          }
+        },
+        {
+          "name": "Source value -1",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 2,
+          "memory": {
+            "B": -1,
+            "B+2": 77
+          },
+          "expected": {
+            "registers": {
+              "rax": -1
+            }
+          }
+        },
+        {
+          "name": "Source value 0",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 2,
+          "memory": {
+            "B": 0,
+            "B+2": 77
+          },
+          "expected": {
+            "registers": {
+              "rax": 0
+            }
+          }
+        },
+        {
+          "name": "Source value 1",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 2,
+          "memory": {
+            "B": 1,
+            "B+2": 77
+          },
+          "expected": {
+            "registers": {
+              "rax": 1
+            }
+          }
+        },
+        {
+          "name": "Source value 32767",
+          "function": true,
+          "registers": {
+            "rdi": 4096
+          },
+          "symbols": {
+            "B": 4096
+          },
+          "memoryWidth": 2,
+          "memory": {
+            "B": 32767,
+            "B+2": 77
+          },
+          "expected": {
+            "registers": {
+              "rax": 32767
+            }
+          }
+        }
+      ],
+      "explanation": "Read only the declared source object width, then extend according to its signedness. The pointer and adjacent memory stay unchanged.",
+      "requirements": [
+        "movsx"
+      ],
+      "dataModel": "Linux x86-64 LP64; char 1 byte, short 2, int 4, long and pointers 8"
+    }
+  ]
+}

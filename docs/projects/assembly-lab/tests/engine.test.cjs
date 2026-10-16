@@ -138,7 +138,7 @@ test('all asset and manifest paths resolve locally',()=>{
   const base=path.join(__dirname,'..'), html=fs.readFileSync(path.join(base,'index.html'),'utf8');
   for(const match of html.matchAll(/(?:src|href)="([^"#]+)"/g)) {
     if(/^https?:/.test(match[1])) continue;
-    assert.ok(fs.existsSync(path.resolve(base,match[1])),match[1]);
+    assert.ok(fs.existsSync(path.resolve(base,match[1].split(/[?#]/)[0])),match[1]);
   }
   for(const f of require('../data/manifest.json').banks)assert.ok(fs.existsSync(path.join(base,'data',f)));
 });

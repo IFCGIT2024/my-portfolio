@@ -230,7 +230,7 @@
     if(!bank.some(q=>inScope(q)&&q.type===mode)) mode=bank.find(inScope)?.type||'code';
     renderLesson();updateFilters();render(); }
   async function fetchJSON(url) {
-    const response=await fetch(url);
+    const response=await fetch(url,{cache:'no-cache'});
     if(!response.ok) throw Error(`Could not load ${url} (HTTP ${response.status}).`);
     return response.json();
   }

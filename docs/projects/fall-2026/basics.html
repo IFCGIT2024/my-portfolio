@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quick, generated CSCI 2122 drills: binary, hex, two’s complement, bits, type sizes, shifts, masks, and logical operators.">
+  <title>CSCI 2122 · Basics Drill</title>
+  <link rel="stylesheet" href="style.css?v=2122-basics-1">
+  <link rel="stylesheet" href="basics.css?v=1">
+  <script src="basics-core.js?v=1" defer></script>
+  <script src="basics.js?v=1" defer></script>
+</head>
+<body>
+  <nav class="topbar"><a href="index.html">← Fall 2026 Hub</a><span>CSCI 2122</span></nav>
+  <main class="basics-shell">
+    <nav class="quiz-links" aria-label="CSCI 2122 quizzes">
+      <a class="secondary-button" href="basics.html" aria-current="page">Basics drill</a>
+      <a class="secondary-button" href="quiz.html?course=2122">General practice</a>
+      <a class="secondary-button" href="quiz.html?course=2122&amp;quiz=a1">A1 — C foundations</a>
+      <a class="secondary-button" href="midterm.html">Midterm review</a>
+    </nav>
+    <header class="drill-heading">
+      <p class="eyebrow">Systems programming · Quick practice</p>
+      <h1>Make the basics automatic.</h1>
+      <p>One small question. Check it. Do another. Fresh numbers, as long as you want.</p>
+    </header>
+    <section class="drill-settings" aria-label="Choose your drill">
+      <label for="topic">Topic<select id="topic"></select></label>
+      <label for="skill">Focus<select id="skill"></select></label>
+      <label for="width">Bit width<select id="width"><option value="4">4 bits</option><option value="8" selected>8 bits</option><option value="16">16 bits</option></select></label>
+      <label for="length">Round<select id="length"><option value="0">Endless</option><option value="10">10 questions</option><option value="25">25 questions</option><option value="100">100 questions</option><option value="256">256 questions</option></select></label>
+    </section>
+    <p id="setting-note" class="setting-note">Changing a setting starts a fresh round; missed questions stay available.</p>
+    <details class="representation-settings"><summary>Choose the number bases for bit operations</summary>
+      <div class="drill-settings"><label for="input-base">Show operands in<select id="input-base"><option value="binary">Binary</option><option value="hex">Hex</option><option value="decimal">Decimal</option><option value="mixed">Mix bases</option></select></label>
+      <label for="output-base">Ask for the result in<select id="output-base"><option value="binary">Binary</option><option value="hex">Hex</option><option value="decimal">Unsigned decimal</option><option value="mixed">Mix bases</option></select></label></div>
+      <p>Applies to bitwise operations, pattern shifts, and masks. Conversions and C expressions use their own stated formats. Decimal pattern results are unsigned.</p>
+    </details>
+    <section class="drill-stats" aria-label="This round">
+      <div><strong id="score">0 / 0</strong><span>correct</span></div>
+      <div><strong id="accuracy">—</strong><span>accuracy</span></div>
+      <div><strong id="streak">0</strong><span>in a row</span></div>
+      <button id="review" class="secondary-button" type="button" disabled>Review missed (0)</button>
+    </section>
+    <section id="drill" class="panel drill-panel" aria-labelledby="prompt">
+      <div class="question-topline"><p id="question-count" class="eyebrow">Question 1</p><span id="topic-label" class="topic-pill"></span></div>
+      <p id="coverage" class="coverage" hidden></p>
+      <p id="assumption" class="assumption"></p>
+      <h2 id="prompt" tabindex="-1"></h2>
+      <pre id="value" class="drill-value"></pre>
+      <form id="answer-form" novalidate>
+        <label id="answer-label" for="answer">Your answer in decimal</label>
+        <div class="answer-row"><input id="answer" name="answer" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="format-help input-error"><button id="check" class="primary-button" type="submit">Check answer</button></div>
+        <p id="format-help" class="format-help"></p>
+      </form>
+      <div id="choices" class="drill-choices" hidden aria-label="Choose one answer"></div>
+      <p id="input-error" class="input-error" role="alert"></p>
+      <div id="support-actions" class="support-actions"><button id="hint-button" type="button" class="text-button">Small hint</button><button id="reveal" type="button" class="text-button">Show answer</button></div>
+      <p id="hint" class="hint" hidden></p>
+      <div id="feedback" class="drill-feedback" role="status" aria-live="polite" hidden></div>
+      <div class="next-row"><button id="next" class="primary-button" type="button" hidden>Next question →</button><span id="keyboard-note">Enter to check</span></div>
+    </section>
+    <section id="summary" class="panel round-summary" hidden aria-labelledby="summary-title">
+      <p class="eyebrow">Round complete</p><h2 id="summary-title"></h2><p id="summary-copy"></p>
+      <div class="summary-actions"><button id="again" class="primary-button" type="button">Another round →</button><button id="summary-review" class="secondary-button" type="button">Review missed</button></div>
+    </section>
+    <div class="below-drill"><button id="fresh" type="button" class="text-button">Start a fresh round</button><p id="storage-note" role="status"></p></div>
+    <details class="quick-reference">
+      <summary>Quick reference &amp; assumptions</summary>
+      <div class="reference-grid">
+        <div><h3>Work through every value</h3><p>Lock onto one conversion, signed representation, or char skill. Each 8-bit pass shows all 256 patterns once in scrambled order: unsigned 0…255 or signed −128…127. One-digit hex passes cover 0…F. Then another pass begins.</p><p>Pass progress counts questions shown; review missed questions to correct mistakes. Settings, pass positions, and missed questions are saved in this browser when storage is available. Round scores start fresh. Mixed modes rotate through skills.</p></div>
+        <div><h3>Pointer basics</h3><p>With <code>int x = 7; int *p = &amp;x;</code>, <code>p</code> holds the address of <code>x</code> and <code>*p</code> reads 7. Writing <code>*p = 9;</code> changes <code>x</code> to 9. Array indices start at 0.</p><p>The pointer drills use valid objects and one dereference at a time. The type-size drill assumes that object pointers occupy 8 bytes.</p></div>
+        <div><h3>Bit weights</h3><p>From left to right in 8 bits:</p><code class="reference-code">128 64 32 16 8 4 2 1</code><p>For two’s complement, the first weight becomes <strong>−128</strong>. A leading 1 means negative. For 8-bit values: unsigned 0…255; signed −128…127.</p><p>To negate a fixed-width pattern: invert every bit, then add 1. Keep only the chosen width.</p></div>
+        <div><h3>Hex ↔ four bits</h3><table><caption>Each hex digit represents four bits</caption><thead><tr><th>Hex</th><th>Binary</th><th>Hex</th><th>Binary</th></tr></thead><tbody>
+          <tr><td>0</td><td>0000</td><td>8</td><td>1000</td></tr><tr><td>1</td><td>0001</td><td>9</td><td>1001</td></tr>
+          <tr><td>2</td><td>0010</td><td>A</td><td>1010</td></tr><tr><td>3</td><td>0011</td><td>B</td><td>1011</td></tr>
+          <tr><td>4</td><td>0100</td><td>C</td><td>1100</td></tr><tr><td>5</td><td>0101</td><td>D</td><td>1101</td></tr>
+          <tr><td>6</td><td>0110</td><td>E</td><td>1110</td></tr><tr><td>7</td><td>0111</td><td>F</td><td>1111</td></tr>
+        </tbody></table></div>
+        <div><h3>Practice machine</h3><table><caption>Assumed sizes for type-size questions</caption><thead><tr><th>Type</th><th>Bytes</th><th>Bits</th></tr></thead><tbody>
+          <tr><td>char</td><td>1</td><td>8</td></tr><tr><td>short</td><td>2</td><td>16</td></tr><tr><td>int</td><td>4</td><td>32</td></tr><tr><td>long / long long</td><td>8</td><td>64</td></tr><tr><td>float</td><td>4</td><td>32</td></tr><tr><td>double</td><td>8</td><td>64</td></tr><tr><td>Object pointers</td><td>8</td><td>64</td></tr>
+        </tbody></table><p>Signed and unsigned versions have the same storage size. These are practice assumptions, not universal C sizes. Integer sizes match the Timberlea examples in Lecture 5. C fact questions explicitly ask about C itself.</p></div>
+        <div><h3>Keep the operations separate</h3><p><code>&amp; | ^ ~</code> act on bits. <code>&amp;&amp; || !</code> act on truth and return 0 or 1. Zero is false; any nonzero integer is true.</p><p>Bit-pattern questions use exactly the displayed width. A logical right shift fills with 0; an arithmetic right shift copies the sign bit.</p><p>C expressions use C17 and 32-bit <code>int</code>/<code>unsigned int</code>. C promotes small integer operands before shifting or complementing. Negative signed right shift is implementation-defined in C17; signed overflow is undefined. The fixed-width exercises specify their own bit operations.</p><p>Rule reference: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf">WG14 C draft</a>, §§6.3.1.1, 6.5.3.3–4 and 6.5.7–14; the relevant rules also apply in C17.</p></div>
+      </div>
+    </details>
+    <noscript><p class="panel">Enable JavaScript to generate and check practice questions.</p></noscript>
+  </main>
+</body>
+</html>

@@ -4,6 +4,63 @@ This directory is intentionally self-contained. `index.html` is the course hub a
 
 Each course owns one file in `data/`: `2115.json`, `2122.json`, `2134.json`, or `2141.json`.
 
+## CSCI 2122 rapid basics drill — 2026-10-19
+
+`basics.html` is linked from Systems Programming on the hub and from the general,
+A1, and midterm navigation. It opens immediately on 8-bit binary → decimal.
+`basics-core.js` generates and grades questions; `basics.js` controls the page.
+No build step, server, dependency installation, or fixed numeric question bank is needed.
+
+Ten topic groups cover conversions in six directions plus single hex digits,
+two’s-complement binary/hex reading and encoding, bits/bytes/weights, type sizes
+and limits, bitwise operations, logical operations, shifts, masks, signed/unsigned
+chars and extension/truncation, and one-step pointer reads/writes. The operator
+inference questions show two hex operands and a binary result; generated
+operands guarantee exactly one matching AND/OR/XOR answer. Optional input/output
+base selectors apply to pattern operations, so the same operation can be drilled
+with binary, hex, or unsigned-decimal values.
+
+Focus on one skill, mix a topic, or rotate through all topics. Rounds support 10,
+25, 100, 256, or endless questions. Binary, hex, and decimal answers are typed;
+definitions and operator inference use choices with 1–4 keyboard shortcuts.
+Enter checks a typed answer; the focused Next button continues after feedback.
+Hints, brief explanations, accuracy, streaks, and a repeat-until-correct missed
+review support repetition. Revealing an answer counts as a miss. Invalid input
+does not count as an attempt. Correct answers in either mode clear matching misses.
+
+For conversions, two’s complement, and char exercises, each focused value pass
+visits every pattern once before starting again. Eight-bit passes include all 256
+unsigned values and all signed values −128…127; single-hex-digit passes include
+all 16 digits. An odd-stride permutation modulo 2^n guarantees coverage with a
+small cursor rather than a stored bank. Pass progress counts questions **shown**,
+not mastered; missed review handles errors. Local storage saves settings, pass
+positions, and missed questions; round scores restart. Storage failure never
+blocks practice. Nothing is sent to a server. Mixed modes use shuffled bags of
+topics/skills/definitions so they rotate evenly.
+
+Pattern widths are 4/8/16 bits; byte/char exercises explicitly use 8 bits and
+extension asks for 16. Definitions distinguish the fixed-width bit model from C17
+integer promotions and implementation-defined negative signed right shift.
+The practice machine assumes 8-bit bytes; char/short/int/long sizes 1/2/4/8 bytes
+(matching Lecture 5’s Timberlea examples), long long 8, float 4, double 8, and
+object pointers 8. These are labelled assumptions, not universal C guarantees.
+Plain-char signedness is never silently assumed. Type facts and references are
+available in the expandable quick reference. No copyrighted lecture PDFs are
+published with this addition.
+
+Validation:
+
+```sh
+node --test docs/projects/fall-2026/tests/basics-core.test.cjs docs/projects/fall-2026/tests/basics-ui.test.cjs
+```
+
+Checks exhaust all byte conversions and signed interpretations, every byte pair
+for AND/OR/XOR against bit-by-bit truth tables, all byte masks and 1–3-place
+shifts, every value-pass generator across save/resume, unique operator inference,
+all representation pairs, pointer/char questions, parsing, scoring, missed review,
+round completion, keyboard selection, persistence, and storage failure. The UI
+suite runs the real controller in a DOM harness; it does not verify rendered layout.
+
 CSCI 2122 also has a separate A1 bank at `data/2122-a1.json`, opened with
 `quiz.html?course=2122&quiz=a1`. The hub and the 2122 quiz navigation link to it.
 The general 2122 bank remains separate. A1 contains 160 newly written questions

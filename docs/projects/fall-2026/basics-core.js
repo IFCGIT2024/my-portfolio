@@ -12,6 +12,10 @@
       ['bin-hex', 'Binary → hex'], ['hex-bin', 'Hex → binary'],
       ['hex-dec', 'Hex → decimal'], ['dec-hex', 'Decimal → hex'],
       ['hex-digit-dec', 'One hex digit → decimal'], ['dec-hex-digit', 'Decimal → one hex digit']] },
+    { id: 'upper', label: 'Upper four bits · 128 64 32 16', skills: [
+      ['bin-dec', 'Upper bits → decimal'], ['dec-bin', 'Decimal → upper bits'],
+      ['bin-hex', 'Upper bits → hex'], ['hex-bin', 'Hex → upper bits'],
+      ['hex-dec', 'Hex → decimal'], ['dec-hex', 'Decimal → hex']] },
     { id: 'twos', label: "Two’s complement", skills: [
       ['decode', 'Read signed bits'], ['encode', 'Write signed bits'],
       ['decode-hex', 'Read signed hex'], ['encode-hex', 'Signed decimal → hex'],
@@ -135,11 +139,12 @@
   function makeQuestion(settings = {}, rng = Math.random) {
     const topic = TOPICS.find(t => t.id === settings.topic) || pick(TOPICS, rng);
     const skill = topic.skills.some(([id]) => id === settings.skill) ? settings.skill : pick(topic.skills, rng)[0];
-    const width = skill.includes('hex-digit') ? 4 : topic.id === 'chars' ? (skill === 'extend' ? 16 : 8) : [4, 8, 16].includes(Number(settings.width)) ? Number(settings.width) : 8;
+    const width = topic.id === 'upper' ? 8 : skill.includes('hex-digit') ? 4 : topic.id === 'chars' ? (skill === 'extend' ? 16 : 8) : [4, 8, 16].includes(Number(settings.width)) ? Number(settings.width) : 8;
     const q = { topic: topic.id, topicLabel: topic.label, skill, width, format: 'decimal',
       prompt: '', display: '', context: '', answer: '', explanation: '', hint: '', meta: {} };
     const max = 2 ** width - 1;
-    const a = Number.isInteger(settings.value) && settings.value >= 0 && settings.value <= max ? settings.value : sample(width, rng);
+    const rawA = Number.isInteger(settings.value) && settings.value >= 0 && settings.value <= max ? settings.value : sample(width, rng);
+    const a = topic.id === 'upper' ? Math.floor(rawA / 16) * 16 : rawA;
     const b = sample(width, rng);
     const k = int(width, rng);
     const set = (prompt, display, answer, format, explanation, context, hint) => {
@@ -149,7 +154,7 @@
       const [prompt, answer, wrong, explanation] = Number.isInteger(settings.factIndex) ? FACTS[topic.id][settings.factIndex % FACTS[topic.id].length] : pick(FACTS[topic.id], rng);
       set(prompt, '', answer, 'choice', explanation, 'Quick definition', 'Choose the rule that applies.');
       q.choices = shuffle([answer, ...wrong], rng);
-    } else if (topic.id === 'conversions') {
+    } else if (topic.id === 'conversions' || topic.id === 'upper') {
       const [from, to] = skill === 'hex-digit-dec' ? ['hex', 'dec'] : skill === 'dec-hex-digit' ? ['dec', 'hex'] : skill.split('-');
       const repr = {bin: group(bits(a, width)), dec: String(a), hex: hex(a, width)};
       const names = {bin: 'binary', dec: 'decimal', hex: 'hexadecimal'};
@@ -162,6 +167,11 @@
           (from === 'hex' || to === 'hex' ? hexPairs + '.' : `${terms.length ? terms.join(' + ') : '0'} = ${a}.`),
         `${width}-bit unsigned value`, to === 'hex' || from === 'hex' ? 'One hex digit corresponds to four bits. Group from the right.' : 'From the right, bit weights are 1, 2, 4, 8, 16, 32, 64, 128…');
       q.meta = {a, from, to};
+      if (topic.id === 'upper') {
+        q.context = 'Unsigned 8-bit byte · upper four bits only · lower four bits fixed at 0000';
+        q.hint = 'The left four weights are 128, 64, 32, 16. Add the weights whose bits are 1.';
+        q.explanation = `${group(bits(a, 8))} = ${terms.length ? terms.join(' + ') : '0'} = ${a} decimal = ${hex(a, 8)}. The lower four bits contribute 0.`;
+      }
     } else if (topic.id === 'twos') {
       const value = signed(a, width);
       const base = 2 ** width;
@@ -387,8 +397,8 @@
       const skill = topic.skills.some(([id]) => id === settings.skill) ? settings.skill : bag(topic.id, topic.skills)[0];
       const opts = {...settings, topic: topic.id, skill};
       let coverage;
-      if (['conversions', 'twos', 'chars'].includes(topic.id) && skill !== 'definitions') {
-        const width = skill.includes('hex-digit') ? 4 : topic.id === 'chars' ? 8 : [4, 8, 16].includes(Number(settings.width)) ? Number(settings.width) : 8;
+      if (['conversions', 'upper', 'twos', 'chars'].includes(topic.id) && skill !== 'definitions') {
+        const width = topic.id === 'upper' || skill.includes('hex-digit') ? 4 : topic.id === 'chars' ? 8 : [4, 8, 16].includes(Number(settings.width)) ? Number(settings.width) : 8;
         const size = 2 ** width;
         const key = `${topic.id}:${skill}:${width}`;
         let d = decks[key];
@@ -396,6 +406,7 @@
           d = decks[key] = {size, cursor: 0, stride: 2 * int(size / 2, rng) + 1, offset: int(size, rng), pass: d ? d.pass + 1 : 1};
         }
         opts.value = (d.stride * d.cursor + d.offset) % size;
+        if (topic.id === 'upper') opts.value *= 16;
         d.cursor++;
         coverage = {shown: d.cursor, total: size, pass: d.pass};
       }

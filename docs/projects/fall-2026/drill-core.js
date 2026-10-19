@@ -12,7 +12,7 @@
   const shown = (n, base) => base === 'hex' ? '0x' + hex(n) : fmt(n, base);
   const baseName = { bin: 'binary', hex: 'hex', dec: 'decimal', text: 'answer' };
   const groups = [
-    { id: 'bits', name: 'Bits & hex digits', detail: 'Place values, single digits, four bits.' },
+    { id: 'bits', name: 'Bits & hex digits', detail: 'Place values, hex digits, upper four bits.' },
     { id: 'convert', name: 'Byte conversions', detail: 'Binary ↔ decimal ↔ hex. All 0–255.' },
     { id: 'signed', name: 'Two’s complement', detail: 'Every value −128–127, both directions.' },
     { id: 'bitwise', name: 'Bitwise & masks', detail: 'AND, OR, XOR, NOT, read/set/clear/toggle.' },
@@ -38,6 +38,14 @@
   add('read-bit', 'bits', 'Read one bit', 2048, i => { const n = i % 256, k = Math.floor(i / 256); return number(`In ${bin(n)}, what is bit ${k}?`, (n >> k) & 1, 'dec', `Count from bit 0 at the right. Bit ${k} is ${(n >> k) & 1}.`); });
   for (const [from, to] of [['hex', 'dec'], ['dec', 'hex'], ['hex', 'bin'], ['bin', 'hex'], ['bin', 'dec'], ['dec', 'bin']]) {
     add(`digit-${from}-${to}`, 'bits', `${baseName[from]} → ${baseName[to]} · 0–15`, 16, n => number(`${from === 'hex' ? 'Hex' : baseName[from]} ${from === 'bin' ? bin(n, 4) : from === 'hex' ? hex(n, 1) : n} → ${baseName[to]}?`, n, to, `${bin(n, 4)}₂ = ${n} decimal = ${hex(n, 1)} hex.`, { width: 4, answer: to === 'bin' ? bin(n, 4) : to === 'hex' ? hex(n, 1) : String(n) }));
+  }
+  for (const [from, to] of [['bin', 'dec'], ['dec', 'bin'], ['hex', 'dec'], ['dec', 'hex'], ['bin', 'hex'], ['hex', 'bin']]) {
+    add(`upper-${from}-${to}`, 'bits', `Upper four bits · ${baseName[from]} → ${baseName[to]}`, 16, i => {
+      const n = i * 16, grouped = `${bin(n).slice(0, 4)} 0000`;
+      return number(`${from === 'bin' ? grouped : shown(n, from)} → ${baseName[to]}?`, n, to,
+        `${grouped} = ${weights(n)} = ${n} decimal = 0x${hex(n)}.\nThe upper four weights are 128, 64, 32, 16. The lower four bits contribute 0.`,
+        { assumption: 'Unsigned 8-bit byte · upper four bits only · lower four bits fixed at 0000', upperFour: true, answer: to === 'bin' ? grouped : fmt(n, to) });
+    });
   }
   facts('bit-definitions', 'bits', 'Bit, byte, nibble definitions', [
     ['How many bits does one hex digit represent?', '4', ['2', '8', '16'], 'One hex digit selects one of 16 patterns; 2^4 = 16.'],
@@ -212,8 +220,9 @@
     if (q.options) return shuffle(q.options, random);
     if (q.format === 'char') return shuffle([q.answer, ...ascii.filter(c => c !== q.answer).slice(q.index % 30, q.index % 30 + 3)], random);
     const max = q.format === 'bin' || q.format === 'hex' ? 2 ** (q.width || 8) - 1 : Infinity;
-    const candidates = [q.value, q.value + 1, q.value - 1, q.value ^ 1, q.value ^ 128, 0, 1, 2, 3];
-    const values = [...new Set(candidates)].filter(n => Number.isInteger(n) && (q.format === 'dec' || (n >= 0 && n <= max))).slice(0, 4);
+    const step = q.upperFour ? 16 : 1;
+    const candidates = [q.value, q.value + step, q.value - step, q.value ^ step, q.value ^ 128, 0, step, 2 * step, 3 * step];
+    const values = [...new Set(candidates)].filter(n => Number.isInteger(n) && (q.upperFour ? n >= 0 && n <= 240 && n % 16 === 0 : q.format === 'dec' || (n >= 0 && n <= max))).slice(0, 4);
     return shuffle(values.map(n => q.format === 'bin' ? bin(n, q.width || 8) : q.format === 'hex' ? hex(n, q.width === 4 ? 1 : 2) : String(n)), random);
   }
   const gcd = (a, b) => b ? gcd(b, a % b) : a;

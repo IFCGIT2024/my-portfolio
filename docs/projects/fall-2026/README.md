@@ -7,11 +7,16 @@ Each course owns one file in `data/`: `2115.json`, `2122.json`, `2134.json`, or 
 ## CSCI 2122 full-pass trainer — 2026-10-19
 
 `drill.html` complements the quick `basics.html` drill within the same hub section.
-Its 73 focused types cover single-bit and single-digit foundations, all six byte
+Its 79 focused types cover single-bit and single-digit foundations, all six byte
 conversion directions, all signed byte values, signed/unsigned reinterpretation,
 two's-complement negation, bitwise truth tables and byte pairs, unique-operator
 inference, masks, logical and arithmetic shifts, C unsigned shifts, logical
 operators, type sizes, ranges, ASCII, unsigned-char conversions and pointers.
+
+Both trainers include an **Upper four bits** shortcut. These six conversion
+directions cover all 16 unsigned byte patterns with the low nibble fixed at zero:
+0, 16, 32, …, 240. Binary is grouped as `1010 0000`; feedback expands the high
+weights (128 + 32 = 160). Each direction completes all 16 patterns before repeating.
 
 Each type has a finite domain; an affine permutation visits every member exactly
 once per pass with constant-sized saved deck state. Ordered mode walks the domain
@@ -51,7 +56,7 @@ A1, and midterm navigation. It opens immediately on 8-bit binary → decimal.
 `basics-core.js` generates and grades questions; `basics.js` controls the page.
 No build step, server, dependency installation, or fixed numeric question bank is needed.
 
-Ten topic groups cover conversions in six directions plus single hex digits,
+Eleven topic groups cover conversions in six directions plus single hex digits,
 two’s-complement binary/hex reading and encoding, bits/bytes/weights, type sizes
 and limits, bitwise operations, logical operations, shifts, masks, signed/unsigned
 chars and extension/truncation, and one-step pointer reads/writes. The operator

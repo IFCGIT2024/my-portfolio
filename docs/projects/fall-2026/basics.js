@@ -30,7 +30,8 @@
     if (topic) $('skill').append(...topic.skills.map(([id, label]) => option(id, label)));
     $('skill').value = topic?.skills.some(([id]) => id === preferred) ? preferred : 'mixed';
     $('skill').disabled = !topic;
-    $('width').disabled = ['logical', 'chars', 'pointers'].includes($('topic').value);
+    $('width').disabled = ['upper', 'logical', 'chars', 'pointers'].includes($('topic').value);
+    if ($('topic').value === 'upper') $('width').value = '8';
   }
   skills(saved?.skill || 'bin-dec');
   function saveSettings() {
@@ -159,6 +160,7 @@
   $('summary-review').addEventListener('click', () => start(true));
   $('fresh').addEventListener('click', () => start());
   $('again').addEventListener('click', () => start());
+  $('upper-start').addEventListener('click', () => { $('topic').value = 'upper'; skills('bin-dec'); $('length').value = '0'; start(); });
   $('topic').addEventListener('change', () => { skills(); start(); });
   for (const id of ['skill', 'width', 'length', 'input-base', 'output-base']) $(id).addEventListener('change', () => start());
   document.addEventListener('keydown', event => {

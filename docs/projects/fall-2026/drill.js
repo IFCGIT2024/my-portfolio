@@ -183,6 +183,7 @@
   });
   $('auto-next').addEventListener('change', () => { db.auto = $('auto-next').checked; cancelTimer(); save(); });
   $('start-small').addEventListener('click', () => { selectGroup('bits', 'digit-hex-dec'); $('length').value = '0'; start(); });
+  $('start-upper').addEventListener('click', () => { selectGroup('bits', 'upper-bin-dec'); $('length').value = '0'; start(); });
   $('start-signed').addEventListener('click', () => { selectGroup('signed', 'signed-bin'); $('length').value = 'pass'; $('order').value = 'ordered'; start(); });
   $('start-mixed').addEventListener('click', () => { selectGroup('all'); $('length').value = '0'; start(); });
   document.addEventListener('keydown', e => {

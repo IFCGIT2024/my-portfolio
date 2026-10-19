@@ -22,6 +22,7 @@
       <header class="drill-intro"><p class="eyebrow">Rapid-fire basics · Full-pass trainer</p><h1 id="setup-title">Every value. Every direction.</h1><p>One operation at a time. Work through every byte value, keep your place, and build fluency one rep at a time.</p></header>
       <div class="quick-starts" aria-label="Quick starts">
         <button id="start-small" class="primary-button" type="button">Start with bits &amp; hex →</button>
+        <button id="start-upper" class="secondary-button" type="button">Upper four bits · 128 64 32 16</button>
         <button id="start-signed" class="secondary-button" type="button">All −128 to 127</button>
         <button id="start-mixed" class="secondary-button" type="button">Mix everything</button>
       </div>
@@ -68,7 +69,7 @@
     <details class="drill-details"><summary>Quick reference · open when you need a reminder</summary>
       <div class="reference-grid">
         <div><h2>Read the bits</h2><pre>bit:    7   6  5  4  3  2  1  0
-weight:128 64 32 16  8  4  2  1</pre><p>Add the weights of the 1 bits. In signed 8-bit two’s complement, replace the 128 weight with −128.</p><p>Binary → hex: split into groups of four bits from the right. Hex → binary: expand each digit into four bits.</p></div>
+weight:128 64 32 16  8  4  2  1</pre><p>Add the weights of the 1 bits. In signed 8-bit two’s complement, replace the 128 weight with −128.</p><p><strong>Upper four bits:</strong> <code>1010 0000</code> = 128 + 32 = 160. <code>1011 0000</code> = 128 + 32 + 16 = 176. These are unsigned readings.</p><p>Binary → hex: split into groups of four bits from the right. Hex → binary: expand each digit into four bits.</p></div>
         <div><h2>Hex digits</h2><div id="hex-table" class="hex-grid"></div></div>
         <div><h2>Two’s complement</h2><p>8-bit signed range: <strong>−128 to 127</strong>. Unsigned: <strong>0 to 255</strong>.</p><p>Decode a leading 1: unsigned value − 256. Encode a negative value: 256 + value. To negate the bit pattern: flip all eight bits and add 1, keeping eight bits.</p><p><code>11111111</code> = −1 signed or 255 unsigned. <code>01111111</code> = 127.</p></div>
         <div><h2>Operations</h2><p><code>&amp;</code> both bits 1 · <code>|</code> either bit 1 · <code>^</code> bits differ · <code>~</code> flips bits.</p><p><code>&amp;&amp;</code> both true · <code>||</code> either true · <code>!</code> reverses truth. Zero is false; every nonzero value is true. Results are 0 or 1.</p><p>Left shift by k: multiply by 2<sup>k</sup>. Unsigned right shift: divide by 2<sup>k</sup>, round down. Only discard at 8 bits when the question explicitly says so.</p></div>
@@ -84,6 +85,6 @@ weight:128 64 32 16  8  4  2  1</pre><p>Add the weights of the 1 bits. In signed
     <p id="save-status" class="small muted" role="status"></p>
     <noscript><p class="panel">Enable JavaScript to generate questions and check answers. The quick references above remain available.</p></noscript>
   </main>
-  <script src="drill-core.js?v=1"></script><script src="drill.js?v=1"></script>
+  <script src="drill-core.js?v=2"></script><script src="drill.js?v=2"></script>
 </body>
 </html>

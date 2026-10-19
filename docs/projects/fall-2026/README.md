@@ -4,6 +4,46 @@ This directory is intentionally self-contained. `index.html` is the course hub a
 
 Each course owns one file in `data/`: `2115.json`, `2122.json`, `2134.json`, or `2141.json`.
 
+## CSCI 2122 full-pass trainer — 2026-10-19
+
+`drill.html` complements the quick `basics.html` drill within the same hub section.
+Its 73 focused types cover single-bit and single-digit foundations, all six byte
+conversion directions, all signed byte values, signed/unsigned reinterpretation,
+two's-complement negation, bitwise truth tables and byte pairs, unique-operator
+inference, masks, logical and arithmetic shifts, C unsigned shifts, logical
+operators, type sizes, ranges, ASCII, unsigned-char conversions and pointers.
+
+Each type has a finite domain; an affine permutation visits every member exactly
+once per pass with constant-sized saved deck state. Ordered mode walks the domain
+in increasing index order (signed encoders start at −128). Mixed mode rotates
+evenly through selected types. Choose endless, 25, 100, 256, or a complete focused
+pass. Typed answers and multiple choice are available; definitions use choices.
+
+Sessions save the current question, input, grading state, choice order, deck
+positions and score in `csci2122-rapid-drill-v1`, separate from the quick drill.
+Misses and reveals enter an exact-question review queue. A correct answer clears
+that question; wrong review answers remain for another review round. Topic totals
+persist across sessions. Optional automatic advance is off by default and stops
+on a miss, pause, manual navigation, or hidden tab. Questions and input render as
+text, never HTML. No server or runtime dependency is needed.
+
+All byte arithmetic, character encoding and implementation-size assumptions are
+explicit. Type sizes use the documented practice model, not universal C sizes.
+The 8-bit shift model is separate from C's promoted 32-bit unsigned expressions.
+
+Validation:
+
+```sh
+node --test docs/projects/fall-2026/tests/drill-core.test.cjs docs/projects/fall-2026/tests/drill-ui.test.cjs
+```
+
+The core tests exhaust all byte conversions and signed values, all AND/OR/XOR
+byte pairs, all inverse-operation questions, all byte shifts and mask operations,
+and full domain coverage in both orders. The controller harness checks full
+256-question sessions, typed and choice answers, input rejection, review,
+pause/resume, persistence, timer cancellation and storage failure. The harness
+does not claim visual browser verification.
+
 ## CSCI 2122 rapid basics drill — 2026-10-19
 
 `basics.html` is linked from Systems Programming on the hub and from the general,

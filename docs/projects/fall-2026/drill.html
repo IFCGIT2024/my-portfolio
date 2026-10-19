@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Endless CSCI 2122 basics drills: binary, hex, two’s complement, shifts, logic, C types and pointers. Every byte value, every conversion direction.">
+  <title>CSCI 2122 · Full-pass basics trainer</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="drill.css?v=1">
+</head>
+<body>
+  <nav class="topbar"><a href="index.html">← Fall 2026 Hub</a><span>CSCI 2122</span></nav>
+  <main class="drill-shell">
+    <nav class="quiz-links" aria-label="CSCI 2122 practice">
+      <a class="secondary-button" href="basics.html">Basics drill</a>
+      <a class="secondary-button" href="drill.html" aria-current="page">Full-pass trainer</a>
+      <a class="secondary-button" href="quiz.html?course=2122&amp;quiz=a1">A1 foundations</a>
+      <a class="secondary-button" href="midterm.html">Midterm review</a>
+    </nav>
+
+    <section id="setup" aria-labelledby="setup-title">
+      <header class="drill-intro"><p class="eyebrow">Rapid-fire basics · Full-pass trainer</p><h1 id="setup-title">Every value. Every direction.</h1><p>One operation at a time. Work through every byte value, keep your place, and build fluency one rep at a time.</p></header>
+      <div class="quick-starts" aria-label="Quick starts">
+        <button id="start-small" class="primary-button" type="button">Start with bits &amp; hex →</button>
+        <button id="start-signed" class="secondary-button" type="button">All −128 to 127</button>
+        <button id="start-mixed" class="secondary-button" type="button">Mix everything</button>
+      </div>
+      <div id="resume-area" class="resume-area hidden"><p id="resume-copy"></p><button id="resume" class="secondary-button" type="button">Resume drill →</button></div>
+      <section class="panel setup-panel" aria-labelledby="focus-title">
+        <div class="row-between"><h2 id="focus-title">Choose your focus</h2><span class="muted small">Build up in this order, or jump in.</span></div>
+        <div id="group-list" class="group-grid" role="group" aria-label="Practice stages"></div>
+        <div class="drill-settings">
+          <label for="skill">Question type<select id="skill"></select></label>
+          <label for="length">Session length<select id="length"><option value="0">Endless</option><option value="25">25 questions</option><option value="100">100 questions</option><option value="256">256 questions</option><option value="pass">One complete pass</option></select></label>
+          <label for="order">Value order<select id="order"><option value="shuffled">Shuffled · no repeat until full pass</option><option value="ordered">In order · smallest first</option></select></label>
+          <label for="answer-mode">Answer style<select id="answer-mode"><option value="type">Type the answer</option><option value="choice">Multiple choice</option></select></label>
+        </div>
+        <p id="coverage-note" class="muted small"></p>
+        <p class="muted small">Definition questions always use choices. A complete pass is available when you choose one question type. Starting a new drill replaces the saved session; your topic totals and missed questions stay.</p>
+        <div class="result-actions"><button id="start" class="primary-button" type="button">Start drilling →</button><button id="review-missed" class="secondary-button" type="button">Review missed (0)</button></div>
+      </section>
+      <details class="drill-details"><summary>Your practice totals</summary><p class="muted small">Saved on this browser. Counts describe practice, not a guarantee of mastery.</p><div id="topic-stats"></div></details>
+    </section>
+
+    <section id="practice" class="hidden" aria-label="Rapid-fire drill">
+      <div class="session-top"><div><p id="session-label" class="eyebrow"></p><p id="session-progress" class="small"></p></div><button id="pause" class="secondary-button" type="button">Pause &amp; save</button></div>
+      <div class="session-stats" aria-label="Session statistics"><span><strong id="correct-count">0</strong> correct</span><span><strong id="accuracy">—</strong> accuracy</span><span><strong id="streak">0</strong> streak</span></div>
+      <article class="panel drill-card">
+        <div class="row-between"><span id="question-topic" class="eyebrow"></span><span id="question-number" class="small muted"></span></div>
+        <p id="assumption" class="assumption"></p>
+        <h1 id="prompt" tabindex="-1"></h1>
+        <form id="answer-form" autocomplete="off">
+          <div id="typed-answer"><label id="answer-label" for="answer">Your answer</label><input id="answer" type="text" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="input-help input-error"><p id="input-help" class="small muted"></p><p id="input-error" class="error" role="alert"></p></div>
+          <div id="choices" class="drill-choices hidden" role="group" aria-label="Answer choices"></div>
+          <div class="answer-actions"><button id="check" class="primary-button" type="submit">Check answer ↵</button><button id="reveal" class="text-button" type="button">Show answer</button></div>
+        </form>
+        <div id="feedback" class="feedback hidden" aria-live="polite" aria-atomic="true"><strong id="feedback-title"></strong><p id="answer-correct"></p><p id="explanation"></p></div>
+        <div class="next-row"><button id="next" class="primary-button hidden" type="button">Next question ↵</button><label class="small check-setting"><input id="auto-next" type="checkbox"> Auto-next after correct · 1 second</label></div>
+        <p class="keyboard-note small muted">Enter: check, then next. Choice questions: keys 1–4. Misses and revealed answers go into your review queue.</p>
+      </article>
+      <div class="session-bottom"><p id="deck-progress" class="small muted"></p><button id="finish" class="text-button" type="button">Finish session</button></div>
+    </section>
+
+    <section id="summary" class="panel hidden" aria-labelledby="summary-title">
+      <p class="eyebrow">Practice complete</p><h1 id="summary-title" tabindex="-1">Keep building fluency.</h1><p id="summary-copy"></p><div id="summary-stats"></div><div class="result-actions"><button id="again" class="primary-button" type="button">Drill again</button><button id="summary-review" class="secondary-button" type="button">Review missed</button><button id="back" class="secondary-button" type="button">Choose another focus</button></div>
+    </section>
+
+    <details class="drill-details"><summary>Quick reference · open when you need a reminder</summary>
+      <div class="reference-grid">
+        <div><h2>Read the bits</h2><pre>bit:    7   6  5  4  3  2  1  0
+weight:128 64 32 16  8  4  2  1</pre><p>Add the weights of the 1 bits. In signed 8-bit two’s complement, replace the 128 weight with −128.</p><p>Binary → hex: split into groups of four bits from the right. Hex → binary: expand each digit into four bits.</p></div>
+        <div><h2>Hex digits</h2><div id="hex-table" class="hex-grid"></div></div>
+        <div><h2>Two’s complement</h2><p>8-bit signed range: <strong>−128 to 127</strong>. Unsigned: <strong>0 to 255</strong>.</p><p>Decode a leading 1: unsigned value − 256. Encode a negative value: 256 + value. To negate the bit pattern: flip all eight bits and add 1, keeping eight bits.</p><p><code>11111111</code> = −1 signed or 255 unsigned. <code>01111111</code> = 127.</p></div>
+        <div><h2>Operations</h2><p><code>&amp;</code> both bits 1 · <code>|</code> either bit 1 · <code>^</code> bits differ · <code>~</code> flips bits.</p><p><code>&amp;&amp;</code> both true · <code>||</code> either true · <code>!</code> reverses truth. Zero is false; every nonzero value is true. Results are 0 or 1.</p><p>Left shift by k: multiply by 2<sup>k</sup>. Unsigned right shift: divide by 2<sup>k</sup>, round down. Only discard at 8 bits when the question explicitly says so.</p></div>
+      </div>
+    </details>
+    <details class="drill-details"><summary>C assumptions &amp; type-size reference</summary>
+      <p>Byte exercises use 8 bits; signed byte patterns use two’s complement. Type-size drills use the model below. These sizes are assumptions, not universal C guarantees.</p>
+      <div class="study-table-wrap"><table class="study-table"><thead><tr><th>Type</th><th>Bytes in this model</th><th>Bits</th></tr></thead><tbody><tr><td>char, signed char, unsigned char</td><td>1</td><td>8</td></tr><tr><td>short</td><td>2</td><td>16</td></tr><tr><td>int, float</td><td>4</td><td>32</td></tr><tr><td>long, long long, double, pointers</td><td>8</td><td>64</td></tr></tbody></table></div>
+      <p>C questions use C17 semantics and state any additional assumptions. Plain <code>char</code> signedness varies. Character-code questions explicitly assume ASCII. Small integer types can be promoted before arithmetic. In C, <code>~</code> and shifts do not automatically stop at eight bits.</p>
+      <p>Arithmetic right shifts are labelled as a sign-extending model; C17 leaves a negative signed right shift implementation-defined. A shift count at least as large as the promoted left operand’s width is undefined.</p>
+      <p class="small">Language reference: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf">WG14 C11 committee draft</a>, §§6.3.1.1, 6.5.3, 6.5.7 and 6.5.10–14 (the relevant rules also apply in C17).</p>
+    </details>
+    <p id="save-status" class="small muted" role="status"></p>
+    <noscript><p class="panel">Enable JavaScript to generate questions and check answers. The quick references above remain available.</p></noscript>
+  </main>
+  <script src="drill-core.js?v=1"></script><script src="drill.js?v=1"></script>
+</body>
+</html>

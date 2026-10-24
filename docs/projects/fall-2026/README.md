@@ -4,6 +4,47 @@ This directory is intentionally self-contained. `index.html` is the course hub a
 
 Each course owns one file in `data/`: `2115.json`, `2122.json`, `2134.json`, or `2141.json`.
 
+## CSCI 2122 C syntax repetition
+
+`syntax.html` adds a dedicated multiple-choice memorization drill, linked from the
+2122 hub, practice navigation, and the C recall round summary. It can be used
+independently of recall. The 294 original prompts in `data/2122-syntax.json` cover
+30 topics from the existing foundations, recall and midterm material. Questions
+are self-contained and require no assignment document.
+
+The focus is exact forms: declarations, literals, operators, control flow,
+function signatures, pointer layers and const, arrays, sizes, strings, printf and
+scanf conversions, input, allocation, memory and string calls, structs, typedef,
+linked nodes, masks, field expressions, casts, headers, storage and build commands.
+C17 and the required width assumptions are stated on the page. This is coverage
+of the current practice material, not a claim to cover every feature of C.
+
+Students can repeat one pattern, select a topic, or mix all topics. Rounds offer
+10, 25, 50, 100, the rest of the current pass, or endless repetition. Each pass
+visits each selected pattern before repeating; topic rotation balances mixed
+practice. Both question and choice orders are shuffled. Keys 1–4 choose an
+answer; Enter advances after feedback. Optional automatic advance runs only after
+an unassisted correct answer and stops when pausing or hiding the tab.
+
+Mistakes, revealed answers and correct answers reached with a topic reminder stay
+in missed review until answered correctly without help. The progress table
+separates unique patterns attempted from repeated correct choices. These are
+recognition practice counts, not a mastery estimate. C recall remains available
+for producing answers and functions from memory.
+
+`syntax-core.js` owns grading, coverage passes, records and backup validation;
+`syntax.js` renders the interface using text nodes. The local storage key is
+`csci2122-syntax-v1`; reset and import affect only this drill. An active question,
+its shuffled choices and recorded feedback survive reload. Export/import provides
+portable progress; changed question fingerprints invalidate only affected records.
+
+Validation from this directory:
+
+```sh
+node --test tests/syntax-core.test.cjs tests/syntax-ui.test.cjs
+python tests/syntax-verify.py
+```
+
 ## CSCI 2122 C recall (A2 section) — 2026-10-24
 
 `a2-recall.html` is a separate C quiz preparation section linked from the Systems

@@ -1,0 +1,4280 @@
+{
+  "schemaVersion": 1,
+  "title": "C Syntax Repetition",
+  "description": "Direct multiple-choice practice for C syntax and standard-library calling forms covered by the 2122 foundations, recall and midterm material.",
+  "assumptions": [
+    "C17. Any standard headers needed by a snippet are included unless the question asks for the header.",
+    "Local variables have automatic storage duration unless stated otherwise. Names refer to declared objects of the stated types. Pointers, array indices and arithmetic are valid for their described use unless a question explicitly tests an error.",
+    "Bit-mask questions use 8-bit bytes and 32-bit int/unsigned int when a width is needed. Other type sizes are not assumed."
+  ],
+  "topics": [
+    {
+      "id": "declarations",
+      "title": "01 · Declarations and initialization",
+      "reference": "C17 declarations: type, declarator, optional initializer, semicolon."
+    },
+    {
+      "id": "literals",
+      "title": "02 · Literals, escapes and comments",
+      "reference": "Distinguish integer, character and string literals; remember C escape sequences."
+    },
+    {
+      "id": "arithmetic",
+      "title": "03 · Assignment and arithmetic",
+      "reference": "= stores a value; arithmetic operators and compound assignments act on operands."
+    },
+    {
+      "id": "logic",
+      "title": "04 · Comparisons and logical operators",
+      "reference": "Comparisons produce int 0 or 1; && and || short-circuit."
+    },
+    {
+      "id": "grouping",
+      "title": "05 · Grouping and precedence",
+      "reference": "Parentheses specify grouping; postfix operations bind before unary dereference."
+    },
+    {
+      "id": "conditions",
+      "title": "06 · if, else and switch",
+      "reference": "Conditions use parentheses; braces group statements; case labels use constant expressions."
+    },
+    {
+      "id": "loops",
+      "title": "07 · for, while and do/while",
+      "reference": "Recall loop punctuation, initialization, conditions and updates."
+    },
+    {
+      "id": "functions",
+      "title": "08 · Functions, prototypes and calls",
+      "reference": "A prototype describes parameter and return types; a call supplies argument values."
+    },
+    {
+      "id": "addresses",
+      "title": "09 · Addresses and dereferencing",
+      "reference": "& obtains an address; * follows a pointer; pointer objects and pointed-to objects differ."
+    },
+    {
+      "id": "pointer-moves",
+      "title": "10 · Pointer movement and updates",
+      "reference": "Pointer arithmetic advances in elements; distinguish the pointer from its target."
+    },
+    {
+      "id": "double-pointers",
+      "title": "11 · Pointer layers and output arguments",
+      "reference": "Pass an object’s address when a function needs to modify that object, including a pointer object."
+    },
+    {
+      "id": "const",
+      "title": "12 · const and pointer declarations",
+      "reference": "Read const relative to the pointed-to type and the pointer declarator."
+    },
+    {
+      "id": "arrays",
+      "title": "13 · Arrays and indexing",
+      "reference": "Arrays contain contiguous elements. Their names usually convert to pointers in expressions."
+    },
+    {
+      "id": "sizeof",
+      "title": "14 · sizeof, counts and parameters",
+      "reference": "sizeof reports bytes as size_t; arrays and pointers have different size behavior."
+    },
+    {
+      "id": "strings",
+      "title": "15 · Characters and C strings",
+      "reference": "C strings end at the first null character. Capacity includes room for that terminator."
+    },
+    {
+      "id": "printf",
+      "title": "16 · printf conversions and arguments",
+      "reference": "Match the conversion to the argument after default promotions; printf receives values."
+    },
+    {
+      "id": "scanf",
+      "title": "17 · scanf conversions and destinations",
+      "reference": "scanf needs correctly typed destination pointers and a conversion-result check."
+    },
+    {
+      "id": "input",
+      "title": "18 · Input buffers, EOF and streams",
+      "reference": "Know the direct calling forms for bounded line input and standard streams."
+    },
+    {
+      "id": "allocation",
+      "title": "19 · malloc, calloc, realloc and free",
+      "reference": "Allocation arguments are byte counts or count × size; check success and manage ownership."
+    },
+    {
+      "id": "memory",
+      "title": "20 · Byte-memory library syntax",
+      "reference": "memset writes bytes; memcpy requires non-overlap; memmove supports overlap."
+    },
+    {
+      "id": "string-library",
+      "title": "21 · String-library calls",
+      "reference": "String calls use null-terminated character sequences; match their argument order and result contracts."
+    },
+    {
+      "id": "structs",
+      "title": "22 · Structures and member access",
+      "reference": "Use . for an object and -> for a pointer; a struct definition ends with a semicolon."
+    },
+    {
+      "id": "typedefs",
+      "title": "23 · typedef and enum",
+      "reference": "typedef creates an alias; enum defines named integer constants."
+    },
+    {
+      "id": "nodes",
+      "title": "24 · Linked-node syntax",
+      "reference": "Self-referential structs contain pointers to their own type, and traversal updates that pointer."
+    },
+    {
+      "id": "bitwise",
+      "title": "25 · Bitwise operators and shifts",
+      "reference": "Use integer bitwise operators, unsigned operands, and valid shift counts."
+    },
+    {
+      "id": "masks",
+      "title": "26 · Set, clear, toggle and test bits",
+      "reference": "Bit 0 is the least significant bit. Use unsigned int x and 0 <= k < 32."
+    },
+    {
+      "id": "fields",
+      "title": "27 · Fields and byte indexing",
+      "reference": "The question supplies bit order; choose the expression that performs the one requested step."
+    },
+    {
+      "id": "conversions",
+      "title": "28 · Casts and integer-type syntax",
+      "reference": "Cast before the operation when the operation’s type matters. Promotions happen before arithmetic."
+    },
+    {
+      "id": "headers",
+      "title": "29 · Headers, macros and guards",
+      "reference": "Preprocessing directives begin with #; header guards pair conditionals with an ending #endif."
+    },
+    {
+      "id": "storage-build",
+      "title": "30 · Storage, declarations and build commands",
+      "reference": "Distinguish declarations from definitions and compiling from linking. GCC commands here are shell commands."
+    }
+  ],
+  "questions": [
+    {
+      "id": "declarations-01",
+      "topic": "declarations",
+      "prompt": "Declare an int named count and initialize it to zero.",
+      "code": "",
+      "options": [
+        "int count = 0;",
+        "count int = 0;",
+        "int count == 0;",
+        "int count(0);"
+      ],
+      "correct": 0,
+      "explanation": "A declaration places the type before the name. = introduces its initializer."
+    },
+    {
+      "id": "declarations-02",
+      "topic": "declarations",
+      "prompt": "Declare an unsigned int named flags.",
+      "code": "",
+      "options": [
+        "unsigned int flags;",
+        "int flags unsigned;",
+        "unsigned flags int;",
+        "unsigned(int) flags;"
+      ],
+      "correct": 0,
+      "explanation": "unsigned modifies the integer type; it comes in the declaration specifiers."
+    },
+    {
+      "id": "declarations-03",
+      "topic": "declarations",
+      "prompt": "Declare two int variables, x and y, in one declaration.",
+      "code": "",
+      "options": [
+        "int x, y;",
+        "int x; y;",
+        "int x and y;",
+        "int (x, y);"
+      ],
+      "correct": 0,
+      "explanation": "A comma separates declarators sharing the int type."
+    },
+    {
+      "id": "declarations-04",
+      "topic": "declarations",
+      "prompt": "Initialize both int variables x and y to zero.",
+      "code": "",
+      "options": [
+        "int x = 0, y = 0;",
+        "int x, y = 0;",
+        "int x = y = 0; /* y not previously declared */",
+        "int x == 0, y == 0;"
+      ],
+      "correct": 0,
+      "explanation": "Each declarator needs its own initializer. int x, y = 0 initializes only y."
+    },
+    {
+      "id": "declarations-05",
+      "topic": "declarations",
+      "prompt": "Declare p as a pointer to int.",
+      "code": "",
+      "options": [
+        "int *p;",
+        "int &p;",
+        "pointer int p;",
+        "int p*;"
+      ],
+      "correct": 0,
+      "explanation": "The * belongs to the declarator and makes p a pointer."
+    },
+    {
+      "id": "declarations-06",
+      "topic": "declarations",
+      "prompt": "Declare both p and q as pointers to int.",
+      "code": "",
+      "options": [
+        "int *p, *q;",
+        "int *p, q;",
+        "int p, *q;",
+        "int **p, q;"
+      ],
+      "correct": 0,
+      "explanation": "Repeat * for each pointer declarator."
+    },
+    {
+      "id": "declarations-07",
+      "topic": "declarations",
+      "prompt": "Which declaration makes p a pointer to int and value an ordinary int?",
+      "code": "",
+      "options": [
+        "int *p, value;",
+        "int *p, *value;",
+        "int p, *value;",
+        "int **p, value;"
+      ],
+      "correct": 0,
+      "explanation": "In a comma-separated declaration, the star does not automatically apply to later names."
+    },
+    {
+      "id": "declarations-08",
+      "topic": "declarations",
+      "prompt": "Declare a double named average initialized to 0.0.",
+      "code": "",
+      "options": [
+        "double average = 0.0;",
+        "double = average 0.0;",
+        "average double = 0.0;",
+        "double average == 0.0;"
+      ],
+      "correct": 0,
+      "explanation": "A scalar initializer uses = after the declarator."
+    },
+    {
+      "id": "declarations-09",
+      "topic": "declarations",
+      "prompt": "Which spelling is a valid C identifier?",
+      "code": "",
+      "options": [
+        "item_count",
+        "2items",
+        "item-count",
+        "int"
+      ],
+      "correct": 0,
+      "explanation": "An identifier may contain underscores and digits but cannot begin with a digit or be a keyword."
+    },
+    {
+      "id": "declarations-10",
+      "topic": "declarations",
+      "prompt": "Which punctuation ends an ordinary variable declaration?",
+      "code": "",
+      "options": [
+        ";",
+        ",",
+        ":",
+        "."
+      ],
+      "correct": 0,
+      "explanation": "An ordinary declaration ends with a semicolon."
+    },
+    {
+      "id": "literals-01",
+      "topic": "literals",
+      "prompt": "Which is a hexadecimal integer literal?",
+      "code": "",
+      "options": [
+        "0x2A",
+        "2Ah",
+        "hex(2A)",
+        "x2A"
+      ],
+      "correct": 0,
+      "explanation": "A hexadecimal integer literal begins with 0x or 0X."
+    },
+    {
+      "id": "literals-02",
+      "topic": "literals",
+      "prompt": "Which literal uses an unsigned integer suffix?",
+      "code": "",
+      "options": [
+        "12u",
+        "u12",
+        "12unsigned",
+        "unsigned(12)"
+      ],
+      "correct": 0,
+      "explanation": "u or U is an unsigned suffix; its exact resulting type also depends on the value and other suffixes."
+    },
+    {
+      "id": "literals-03",
+      "topic": "literals",
+      "prompt": "Which suffix explicitly requests long long for the integer literal 1?",
+      "code": "",
+      "options": [
+        "1LL",
+        "LL1",
+        "1longlong",
+        "1L_L"
+      ],
+      "correct": 0,
+      "explanation": "LL or ll requests long long; 1LL is representable in that type."
+    },
+    {
+      "id": "literals-04",
+      "topic": "literals",
+      "prompt": "Which is a character constant for the letter A?",
+      "code": "",
+      "options": [
+        "'A'",
+        "\"A\"",
+        "A",
+        "'A'[]"
+      ],
+      "correct": 0,
+      "explanation": "Single quotes form a character constant; double quotes form a string literal."
+    },
+    {
+      "id": "literals-05",
+      "topic": "literals",
+      "prompt": "Which is a string literal containing one visible letter?",
+      "code": "",
+      "options": [
+        "\"A\"",
+        "'A'",
+        "A",
+        "{'A'}"
+      ],
+      "correct": 0,
+      "explanation": "A string literal uses double quotes and includes a terminating null character."
+    },
+    {
+      "id": "literals-06",
+      "topic": "literals",
+      "prompt": "Which character constant denotes the null character?",
+      "code": "",
+      "options": [
+        "'\\0'",
+        "'0'",
+        "\"0\"",
+        "'null'"
+      ],
+      "correct": 0,
+      "explanation": "Backslash-zero denotes character value zero. The digit character is different."
+    },
+    {
+      "id": "literals-07",
+      "topic": "literals",
+      "prompt": "Which escape represents a newline inside a string?",
+      "code": "",
+      "options": [
+        "\\n",
+        "/n",
+        "\\N",
+        "\\newline"
+      ],
+      "correct": 0,
+      "explanation": "The newline escape is backslash followed by lowercase n."
+    },
+    {
+      "id": "literals-08",
+      "topic": "literals",
+      "prompt": "Which string literal contains a single backslash?",
+      "code": "",
+      "options": [
+        "\"\\\\\"",
+        "\"/\"",
+        "\"\\n\"",
+        "\"\\\\\\\\\""
+      ],
+      "correct": 0,
+      "explanation": "A backslash in a string is escaped by another backslash."
+    },
+    {
+      "id": "literals-09",
+      "topic": "literals",
+      "prompt": "Which starts a comment that lasts to the end of the source line?",
+      "code": "",
+      "options": [
+        "// comment",
+        "# comment",
+        "-- comment",
+        "<!-- comment -->"
+      ],
+      "correct": 0,
+      "explanation": "C17 supports // line comments."
+    },
+    {
+      "id": "literals-10",
+      "topic": "literals",
+      "prompt": "Which writes a C block comment?",
+      "code": "",
+      "options": [
+        "/* comment */",
+        "<!-- comment -->",
+        "(* comment *)",
+        "/# comment #/"
+      ],
+      "correct": 0,
+      "explanation": "A block comment starts with /* and ends with */; block comments do not nest."
+    },
+    {
+      "id": "arithmetic-01",
+      "topic": "arithmetic",
+      "prompt": "Assign 7 to an already declared int x.",
+      "code": "",
+      "options": [
+        "x = 7;",
+        "x == 7;",
+        "x := 7;",
+        "7 = x;"
+      ],
+      "correct": 0,
+      "explanation": "= is assignment. == compares values."
+    },
+    {
+      "id": "arithmetic-02",
+      "topic": "arithmetic",
+      "prompt": "Increase int x by 3 using a compound assignment.",
+      "code": "",
+      "options": [
+        "x += 3;",
+        "x =+ 3;",
+        "x ++ 3;",
+        "x = 3;"
+      ],
+      "correct": 0,
+      "explanation": "x += 3 adds three to the old value. x =+ 3 assigns positive three."
+    },
+    {
+      "id": "arithmetic-03",
+      "topic": "arithmetic",
+      "prompt": "Decrease int x by 2 using a compound assignment.",
+      "code": "",
+      "options": [
+        "x -= 2;",
+        "x =- 2;",
+        "x -- 2;",
+        "x - 2;"
+      ],
+      "correct": 0,
+      "explanation": "-= subtracts and stores; =- assigns a negative value."
+    },
+    {
+      "id": "arithmetic-04",
+      "topic": "arithmetic",
+      "prompt": "Multiply int x by 4 and store the result in x.",
+      "code": "",
+      "options": [
+        "x *= 4;",
+        "x =* 4;",
+        "x ** 4;",
+        "x * 4;"
+      ],
+      "correct": 0,
+      "explanation": "*= multiplies and assigns. C has no ** exponentiation operator."
+    },
+    {
+      "id": "arithmetic-05",
+      "topic": "arithmetic",
+      "prompt": "Divide int x by 2 and store the quotient.",
+      "code": "",
+      "options": [
+        "x /= 2;",
+        "x =/ 2;",
+        "x //= 2;",
+        "x / 2;"
+      ],
+      "correct": 0,
+      "explanation": "/= performs division and assignment. The operands here use integer division."
+    },
+    {
+      "id": "arithmetic-06",
+      "topic": "arithmetic",
+      "prompt": "Select the operator that gives an integer remainder.",
+      "code": "",
+      "options": [
+        "%",
+        "/",
+        "//",
+        "**"
+      ],
+      "correct": 0,
+      "explanation": "% is remainder for integer operands; the divisor must be nonzero."
+    },
+    {
+      "id": "arithmetic-07",
+      "topic": "arithmetic",
+      "prompt": "Increment int count by one as a complete statement.",
+      "code": "",
+      "options": [
+        "++count;",
+        "count + 1;",
+        "count =+ 1;",
+        "+count;"
+      ],
+      "correct": 0,
+      "explanation": "++count changes count. count + 1 only computes an expression value."
+    },
+    {
+      "id": "arithmetic-08",
+      "topic": "arithmetic",
+      "prompt": "Which expression uses the old value of i, then increments i?",
+      "code": "",
+      "options": [
+        "i++",
+        "++i",
+        "i + 1",
+        "+i"
+      ],
+      "correct": 0,
+      "explanation": "Postfix ++ yields the old value; prefix ++ yields the incremented value."
+    },
+    {
+      "id": "arithmetic-09",
+      "topic": "arithmetic",
+      "prompt": "Which expression increments i and yields the new value?",
+      "code": "",
+      "options": [
+        "++i",
+        "i++",
+        "i + 1",
+        "i += 0"
+      ],
+      "correct": 0,
+      "explanation": "Prefix ++ changes the object and yields its new value."
+    },
+    {
+      "id": "arithmetic-10",
+      "topic": "arithmetic",
+      "prompt": "Which expression computes the negative of x without assigning to x?",
+      "code": "",
+      "options": [
+        "-x",
+        "--x",
+        "x--",
+        "x = -x"
+      ],
+      "correct": 0,
+      "explanation": "Unary minus computes negation. -- changes its operand."
+    },
+    {
+      "id": "logic-01",
+      "topic": "logic",
+      "prompt": "Test whether int x equals int y.",
+      "code": "",
+      "options": [
+        "x == y",
+        "x = y",
+        "x === y",
+        "x := y"
+      ],
+      "correct": 0,
+      "explanation": "== compares equality; = is assignment."
+    },
+    {
+      "id": "logic-02",
+      "topic": "logic",
+      "prompt": "Test whether int x differs from int y.",
+      "code": "",
+      "options": [
+        "x != y",
+        "x <> y",
+        "x =! y",
+        "x !== y"
+      ],
+      "correct": 0,
+      "explanation": "!= is the C inequality operator."
+    },
+    {
+      "id": "logic-03",
+      "topic": "logic",
+      "prompt": "Test whether x is at least limit.",
+      "code": "",
+      "options": [
+        "x >= limit",
+        "x => limit",
+        "x > limit",
+        "x = limit"
+      ],
+      "correct": 0,
+      "explanation": ">= includes equality."
+    },
+    {
+      "id": "logic-04",
+      "topic": "logic",
+      "prompt": "Require both conditions ready and valid to hold, using a short-circuit logical operator.",
+      "code": "",
+      "options": [
+        "ready && valid",
+        "ready & valid",
+        "ready || valid",
+        "ready + valid"
+      ],
+      "correct": 0,
+      "explanation": "&& treats operands as truth values and skips its right operand when the left is false."
+    },
+    {
+      "id": "logic-05",
+      "topic": "logic",
+      "prompt": "Require at least one of conditions ready and valid to hold, using a short-circuit logical operator.",
+      "code": "",
+      "options": [
+        "ready || valid",
+        "ready | valid",
+        "ready && valid",
+        "ready ^ valid"
+      ],
+      "correct": 0,
+      "explanation": "|| is logical OR and short-circuits when the left operand is true."
+    },
+    {
+      "id": "logic-06",
+      "topic": "logic",
+      "prompt": "Negate the truth value of ready.",
+      "code": "",
+      "options": [
+        "!ready",
+        "~ready",
+        "-ready",
+        "ready!"
+      ],
+      "correct": 0,
+      "explanation": "! is logical NOT. ~ complements individual integer bits."
+    },
+    {
+      "id": "logic-07",
+      "topic": "logic",
+      "prompt": "Which condition correctly tests that int x is strictly between 0 and 10?",
+      "code": "",
+      "options": [
+        "0 < x && x < 10",
+        "0 < x < 10",
+        "x > 0 || x < 10",
+        "0 <= x && x <= 10"
+      ],
+      "correct": 0,
+      "explanation": "C does not use mathematical chained comparisons; write the two comparisons with &&."
+    },
+    {
+      "id": "logic-08",
+      "topic": "logic",
+      "prompt": "Which safely tests *p == 7 when p may be NULL or point to a valid int?",
+      "code": "",
+      "options": [
+        "p != NULL && *p == 7",
+        "*p == 7 && p != NULL",
+        "p != NULL & *p == 7",
+        "p == NULL && *p == 7"
+      ],
+      "correct": 0,
+      "explanation": "&& skips dereferencing p when p is NULL."
+    },
+    {
+      "id": "logic-09",
+      "topic": "logic",
+      "prompt": "Which safely tests whether int a is divisible by int b, where a >= 0 and b >= 0?",
+      "code": "",
+      "options": [
+        "b != 0 && a % b == 0",
+        "a % b == 0 && b != 0",
+        "b != 0 & a % b == 0",
+        "b == 0 && a % b == 0"
+      ],
+      "correct": 0,
+      "explanation": "The nonzero-divisor check must occur before the remainder operation."
+    },
+    {
+      "id": "logic-10",
+      "topic": "logic",
+      "prompt": "Select the conditional expression that chooses x when flag is true, otherwise y.",
+      "code": "",
+      "options": [
+        "flag ? x : y",
+        "flag : x ? y",
+        "if (flag) x else y",
+        "flag ? x, y"
+      ],
+      "correct": 0,
+      "explanation": "The conditional operator is condition ? true_expression : false_expression."
+    },
+    {
+      "id": "grouping-01",
+      "topic": "grouping",
+      "prompt": "Group addition before multiplication.",
+      "code": "",
+      "options": [
+        "(a + b) * c",
+        "a + b * c",
+        "a + (b * c)",
+        "a + b + c"
+      ],
+      "correct": 0,
+      "explanation": "Parentheses force a + b to be evaluated as the operand of *."
+    },
+    {
+      "id": "grouping-02",
+      "topic": "grouping",
+      "prompt": "Test whether any bit in unsigned mask m is set in unsigned x.",
+      "code": "",
+      "options": [
+        "(x & m) != 0u",
+        "x & m != 0u",
+        "x && m != 0u",
+        "x | m != 0u"
+      ],
+      "correct": 0,
+      "explanation": "Equality operators bind more tightly than bitwise AND; parentheses make the mask test explicit."
+    },
+    {
+      "id": "grouping-03",
+      "topic": "grouping",
+      "prompt": "Which expression means dereference p, then increment that int object?",
+      "code": "",
+      "options": [
+        "(*p)++",
+        "*p++",
+        "*(p++)",
+        "*++p"
+      ],
+      "correct": 0,
+      "explanation": "Parentheses make the dereferenced object the operand of postfix ++."
+    },
+    {
+      "id": "grouping-04",
+      "topic": "grouping",
+      "prompt": "Which grouping describes *p++?",
+      "code": "",
+      "options": [
+        "*(p++)",
+        "(*p)++",
+        "*(++p)",
+        "++(*p)"
+      ],
+      "correct": 0,
+      "explanation": "Postfix ++ binds more tightly than unary *."
+    },
+    {
+      "id": "grouping-05",
+      "topic": "grouping",
+      "prompt": "Which expression means increment pointer p first, then dereference it?",
+      "code": "",
+      "options": [
+        "*++p",
+        "(*p)++",
+        "*p++",
+        "++*p"
+      ],
+      "correct": 0,
+      "explanation": "Prefix ++ applies to p before its result is dereferenced. The advanced pointer must be dereferenceable."
+    },
+    {
+      "id": "grouping-06",
+      "topic": "grouping",
+      "prompt": "Group a bitwise OR result before applying bitwise AND.",
+      "code": "",
+      "options": [
+        "(a | b) & c",
+        "a | b & c",
+        "a | (b & c)",
+        "a || b & c"
+      ],
+      "correct": 0,
+      "explanation": "Bitwise & binds more tightly than | unless parentheses override that grouping."
+    },
+    {
+      "id": "grouping-07",
+      "topic": "grouping",
+      "prompt": "Choose the safe grouping for a function-like macro that adds one to its argument.",
+      "code": "",
+      "options": [
+        "#define INC(x) ((x) + 1)",
+        "#define INC(x) x + 1",
+        "#define INC(x) (x + 1);",
+        "#define INC(x) {(x) + 1}"
+      ],
+      "correct": 0,
+      "explanation": "Parenthesize the argument and entire replacement expression; do not append a statement semicolon."
+    },
+    {
+      "id": "grouping-08",
+      "topic": "grouping",
+      "prompt": "Which expression takes the size of the pointed-to type rather than the pointer object?",
+      "code": "",
+      "options": [
+        "sizeof *p",
+        "sizeof p",
+        "sizeof &p",
+        "sizeof (p + 1)"
+      ],
+      "correct": 0,
+      "explanation": "Dereference binds within sizeof here. For an ordinary non-VLA pointed-to type, no runtime dereference occurs."
+    },
+    {
+      "id": "conditions-01",
+      "topic": "conditions",
+      "prompt": "Execute work() only when ready is true.",
+      "code": "",
+      "options": [
+        "if (ready) { work(); }",
+        "if ready { work(); }",
+        "if (ready); { work(); }",
+        "if {ready} work();"
+      ],
+      "correct": 0,
+      "explanation": "The condition goes in parentheses. A semicolon immediately after if creates an empty controlled statement."
+    },
+    {
+      "id": "conditions-02",
+      "topic": "conditions",
+      "prompt": "Choose the complete if/else syntax.",
+      "code": "",
+      "options": [
+        "if (ok) { yes(); } else { no(); }",
+        "if (ok) { yes(); } else: { no(); }",
+        "if (ok) then yes(); else no();",
+        "if (ok) { yes(); }; else { no(); }"
+      ],
+      "correct": 0,
+      "explanation": "else follows the controlled statement without a stray separating semicolon."
+    },
+    {
+      "id": "conditions-03",
+      "topic": "conditions",
+      "prompt": "Add a second condition only when the first one failed.",
+      "code": "",
+      "options": [
+        "else if (other) { work(); }",
+        "elseif (other) { work(); }",
+        "elif (other) { work(); }",
+        "else (other) { work(); }"
+      ],
+      "correct": 0,
+      "explanation": "C spells the chain as else followed by another if statement."
+    },
+    {
+      "id": "conditions-04",
+      "topic": "conditions",
+      "prompt": "Which symbols group several statements into one block?",
+      "code": "",
+      "options": [
+        "{ }",
+        "( )",
+        "[ ]",
+        "< >"
+      ],
+      "correct": 0,
+      "explanation": "Braces form a compound statement."
+    },
+    {
+      "id": "conditions-05",
+      "topic": "conditions",
+      "prompt": "Select the switch statement header for int choice.",
+      "code": "",
+      "options": [
+        "switch (choice)",
+        "switch choice",
+        "switch [choice]",
+        "switch {choice}"
+      ],
+      "correct": 0,
+      "explanation": "switch takes an integer controlling expression in parentheses."
+    },
+    {
+      "id": "conditions-06",
+      "topic": "conditions",
+      "prompt": "Write a case label for the constant 2.",
+      "code": "",
+      "options": [
+        "case 2:",
+        "case 2;",
+        "case (2) =>",
+        "case = 2:"
+      ],
+      "correct": 0,
+      "explanation": "A case label ends with a colon."
+    },
+    {
+      "id": "conditions-07",
+      "topic": "conditions",
+      "prompt": "Write the label for switch cases that did not match.",
+      "code": "",
+      "options": [
+        "default:",
+        "else:",
+        "otherwise:",
+        "default;"
+      ],
+      "correct": 0,
+      "explanation": "default is the optional fallback label within switch."
+    },
+    {
+      "id": "conditions-08",
+      "topic": "conditions",
+      "prompt": "Leave the nearest enclosing switch after a case has run.",
+      "code": "",
+      "options": [
+        "break;",
+        "continue;",
+        "exit;",
+        "next;"
+      ],
+      "correct": 0,
+      "explanation": "break leaves the nearest switch or loop."
+    },
+    {
+      "id": "conditions-09",
+      "topic": "conditions",
+      "prompt": "Inside a function returning int, leave the whole function with result 0.",
+      "code": "",
+      "options": [
+        "return 0;",
+        "break 0;",
+        "exit 0;",
+        "continue 0;"
+      ],
+      "correct": 0,
+      "explanation": "return exits the current function and supplies its result."
+    },
+    {
+      "id": "conditions-10",
+      "topic": "conditions",
+      "prompt": "Which condition checks whether pointer p is null?",
+      "code": "",
+      "options": [
+        "p == NULL",
+        "*p == NULL",
+        "p = NULL",
+        "&p == NULL"
+      ],
+      "correct": 0,
+      "explanation": "Compare the pointer value itself with NULL; assignment changes it."
+    },
+    {
+      "id": "loops-01",
+      "topic": "loops",
+      "prompt": "Visit array indices 0 through n-1 using size_t i.",
+      "code": "",
+      "options": [
+        "for (size_t i = 0; i < n; ++i)",
+        "for (size_t i = 0, i < n, ++i)",
+        "for (size_t i = 0; i <= n; ++i)",
+        "for (size_t i = 1; i < n; ++i)"
+      ],
+      "correct": 0,
+      "explanation": "The for header has three clauses separated by semicolons; i < n excludes index n."
+    },
+    {
+      "id": "loops-02",
+      "topic": "loops",
+      "prompt": "Repeat work() while ready is true, checking before each iteration.",
+      "code": "",
+      "options": [
+        "while (ready) { work(); }",
+        "while ready { work(); }",
+        "while (ready); { work(); }",
+        "do (ready) { work(); }"
+      ],
+      "correct": 0,
+      "explanation": "while tests before entering its body, including before the first iteration."
+    },
+    {
+      "id": "loops-03",
+      "topic": "loops",
+      "prompt": "Run work() at least once, then repeat while ready is true.",
+      "code": "",
+      "options": [
+        "do { work(); } while (ready);",
+        "do { work(); } while (ready)",
+        "while (ready) do { work(); }",
+        "do (ready) { work(); };"
+      ],
+      "correct": 0,
+      "explanation": "The do/while form tests after the body and needs its final semicolon."
+    },
+    {
+      "id": "loops-04",
+      "topic": "loops",
+      "prompt": "Skip the rest of the current loop iteration.",
+      "code": "",
+      "options": [
+        "continue;",
+        "break;",
+        "return;",
+        "skip;"
+      ],
+      "correct": 0,
+      "explanation": "continue moves to the next iteration step; in for it evaluates the update clause next."
+    },
+    {
+      "id": "loops-05",
+      "topic": "loops",
+      "prompt": "Leave the nearest loop immediately.",
+      "code": "",
+      "options": [
+        "break;",
+        "continue;",
+        "next;",
+        "stop;"
+      ],
+      "correct": 0,
+      "explanation": "break exits the nearest enclosing loop or switch."
+    },
+    {
+      "id": "loops-06",
+      "topic": "loops",
+      "prompt": "Write a for loop with no initialization, condition or update clauses.",
+      "code": "",
+      "options": [
+        "for (;;)",
+        "for ()",
+        "for (;;;)",
+        "for (true)"
+      ],
+      "correct": 0,
+      "explanation": "All three clauses may be empty; their two separating semicolons remain."
+    },
+    {
+      "id": "loops-07",
+      "topic": "loops",
+      "prompt": "Traverse a valid string s from index 0, stopping at its first null character.",
+      "code": "",
+      "options": [
+        "for (size_t i = 0; s[i] != '\\0'; ++i)",
+        "for (size_t i = 0; s[i] == '\\0'; ++i)",
+        "for (size_t i = 0; s[i] != '0'; ++i)",
+        "for (size_t i = 0; s != NULL; ++i)"
+      ],
+      "correct": 0,
+      "explanation": "Test the current character against the null character, then advance the index."
+    },
+    {
+      "id": "loops-08",
+      "topic": "loops",
+      "prompt": "Which loop visits an int array backward without unsigned underflow in its condition?",
+      "code": "",
+      "options": [
+        "for (size_t i = n; i > 0; --i) { use(a[i - 1]); }",
+        "for (size_t i = n - 1; i >= 0; --i) { use(a[i]); }",
+        "for (size_t i = n; i >= 0; --i) { use(a[i]); }",
+        "for (size_t i = 0; i < n; --i) { use(a[i]); }"
+      ],
+      "correct": 0,
+      "explanation": "Begin one past the last index and use i - 1 only while i is positive; this also handles n == 0."
+    },
+    {
+      "id": "loops-09",
+      "topic": "loops",
+      "prompt": "Where does the update expression ++i belong in a for header?",
+      "code": "",
+      "options": [
+        "After the second semicolon",
+        "Before the first semicolon",
+        "Between the two semicolons",
+        "After the closing parenthesis"
+      ],
+      "correct": 0,
+      "explanation": "The clauses are initialization; condition; update."
+    },
+    {
+      "id": "loops-10",
+      "topic": "loops",
+      "prompt": "Which condition keeps reading until getchar reports EOF?",
+      "code": "",
+      "options": [
+        "(ch = getchar()) != EOF",
+        "ch = getchar() != EOF",
+        "getchar(ch) != EOF",
+        "(ch == getchar()) != EOF"
+      ],
+      "correct": 0,
+      "explanation": "Parenthesize the assignment so ch receives the character or EOF, then compare. Declare ch as int."
+    },
+    {
+      "id": "functions-01",
+      "topic": "functions",
+      "prompt": "Declare a function add taking two int parameters and returning int.",
+      "code": "",
+      "options": [
+        "int add(int a, int b);",
+        "int add(a, b);",
+        "add(int a, int b) int;",
+        "int add(int a; int b);"
+      ],
+      "correct": 0,
+      "explanation": "The prototype contains a return type, name, parenthesized parameter list, and semicolon."
+    },
+    {
+      "id": "functions-02",
+      "topic": "functions",
+      "prompt": "Define an int function twice that returns two times its int argument.",
+      "code": "",
+      "options": [
+        "int twice(int x) { return 2 * x; }",
+        "int twice(int x); { return 2 * x; }",
+        "twice(int x) { return 2 * x; }",
+        "int twice(int x) { 2 * x; }"
+      ],
+      "correct": 0,
+      "explanation": "A definition supplies a body directly after the declarator and returns the result."
+    },
+    {
+      "id": "functions-03",
+      "topic": "functions",
+      "prompt": "Explicitly declare that reset takes no parameters and returns no value in C17.",
+      "code": "",
+      "options": [
+        "void reset(void);",
+        "void reset();",
+        "int reset(void);",
+        "void reset(NULL);"
+      ],
+      "correct": 0,
+      "explanation": "In C17, (void) specifies no parameters; empty () in a declaration leaves parameter information unspecified."
+    },
+    {
+      "id": "functions-04",
+      "topic": "functions",
+      "prompt": "Call reset, which takes no arguments.",
+      "code": "",
+      "options": [
+        "reset();",
+        "reset;",
+        "call reset();",
+        "void reset();"
+      ],
+      "correct": 0,
+      "explanation": "Parentheses perform the call. void reset(); is a declaration rather than a call."
+    },
+    {
+      "id": "functions-05",
+      "topic": "functions",
+      "prompt": "Store the return value of add(x, y) in an already declared int result.",
+      "code": "",
+      "options": [
+        "result = add(x, y);",
+        "result = add(int x, int y);",
+        "result == add(x, y);",
+        "add(x, y) = result;"
+      ],
+      "correct": 0,
+      "explanation": "A call supplies expressions, not parameter declarations."
+    },
+    {
+      "id": "functions-06",
+      "topic": "functions",
+      "prompt": "Return immediately from a function whose return type is void.",
+      "code": "",
+      "options": [
+        "return;",
+        "return void;",
+        "return NULL;",
+        "break;"
+      ],
+      "correct": 0,
+      "explanation": "A void-returning function may use return without an expression."
+    },
+    {
+      "id": "functions-07",
+      "topic": "functions",
+      "prompt": "Declare a function that takes a pointer to int and returns int.",
+      "code": "",
+      "options": [
+        "int inspect(int *p);",
+        "int *inspect(int p);",
+        "int inspect(*int p);",
+        "inspect(int *p) int;"
+      ],
+      "correct": 0,
+      "explanation": "A star in the parameter declarator describes the parameter, not the return type."
+    },
+    {
+      "id": "functions-08",
+      "topic": "functions",
+      "prompt": "Declare a function that returns a pointer to int and takes no parameters.",
+      "code": "",
+      "options": [
+        "int *find(void);",
+        "int find(int *);",
+        "int (*find)(void);",
+        "int find(void *);"
+      ],
+      "correct": 0,
+      "explanation": "The star before the function name makes its result a pointer. (*find) would declare a function pointer object."
+    },
+    {
+      "id": "functions-09",
+      "topic": "functions",
+      "prompt": "Define the hosted-program main form with no parameters.",
+      "code": "",
+      "options": [
+        "int main(void) { return 0; }",
+        "void main(void) { return; }",
+        "main(void) { return 0; }",
+        "int main(void); { return 0; }"
+      ],
+      "correct": 0,
+      "explanation": "The standard hosted form returns int; reaching its final brace also returns zero."
+    },
+    {
+      "id": "functions-10",
+      "topic": "functions",
+      "prompt": "Which parameter declaration lets a function modify a caller’s int using *out?",
+      "code": "",
+      "options": [
+        "int *out",
+        "int out",
+        "int &out",
+        "const int *out"
+      ],
+      "correct": 0,
+      "explanation": "C passes the address value as an int pointer, through which the function can change the caller’s object."
+    },
+    {
+      "id": "addresses-01",
+      "topic": "addresses",
+      "prompt": "Initialize int pointer p with the address of existing int x.",
+      "code": "",
+      "options": [
+        "int *p = &x;",
+        "int *p = x;",
+        "int p = &x;",
+        "int *p = *x;"
+      ],
+      "correct": 0,
+      "explanation": "&x produces the address of x with type int *."
+    },
+    {
+      "id": "addresses-02",
+      "topic": "addresses",
+      "prompt": "Read the int pointed to by valid int *p.",
+      "code": "",
+      "options": [
+        "*p",
+        "&p",
+        "p",
+        "**p"
+      ],
+      "correct": 0,
+      "explanation": "Unary * dereferences one pointer level."
+    },
+    {
+      "id": "addresses-03",
+      "topic": "addresses",
+      "prompt": "Store 7 in the int pointed to by valid int *p.",
+      "code": "",
+      "options": [
+        "*p = 7;",
+        "p = 7;",
+        "&p = 7;",
+        "p == 7;"
+      ],
+      "correct": 0,
+      "explanation": "Assign through *p to modify the pointed-to int."
+    },
+    {
+      "id": "addresses-04",
+      "topic": "addresses",
+      "prompt": "Redirect int *p to the address of another int y.",
+      "code": "",
+      "options": [
+        "p = &y;",
+        "*p = y;",
+        "*p = &y;",
+        "&p = y;"
+      ],
+      "correct": 0,
+      "explanation": "Assign an address to p itself to change where it points."
+    },
+    {
+      "id": "addresses-05",
+      "topic": "addresses",
+      "prompt": "Copy the pointer value in int *q into int *p.",
+      "code": "",
+      "options": [
+        "p = q;",
+        "*p = *q;",
+        "p = &q;",
+        "*p = q;"
+      ],
+      "correct": 0,
+      "explanation": "p = q copies an address. *p = *q copies an int between pointed-to objects."
+    },
+    {
+      "id": "addresses-06",
+      "topic": "addresses",
+      "prompt": "Copy the int at *q into the int at *p, leaving both pointers unchanged.",
+      "code": "",
+      "options": [
+        "*p = *q;",
+        "p = q;",
+        "p = &q;",
+        "*p = q;"
+      ],
+      "correct": 0,
+      "explanation": "Dereference on both sides copies the pointed-to value."
+    },
+    {
+      "id": "addresses-07",
+      "topic": "addresses",
+      "prompt": "Given int *p, what is the type of &p?",
+      "code": "",
+      "options": [
+        "int **",
+        "int *",
+        "int",
+        "void"
+      ],
+      "correct": 0,
+      "explanation": "Taking the address of a pointer adds a pointer layer."
+    },
+    {
+      "id": "addresses-08",
+      "topic": "addresses",
+      "prompt": "Given int *p, what is the type of *p?",
+      "code": "",
+      "options": [
+        "int",
+        "int *",
+        "int **",
+        "void *"
+      ],
+      "correct": 0,
+      "explanation": "Dereferencing removes one pointer layer from the expression’s type."
+    },
+    {
+      "id": "addresses-09",
+      "topic": "addresses",
+      "prompt": "Which tests whether p and q point to the same address?",
+      "code": "",
+      "options": [
+        "p == q",
+        "*p == *q",
+        "&p == &q",
+        "p = q"
+      ],
+      "correct": 0,
+      "explanation": "Compare pointer values for address equality; dereferenced equality compares stored values."
+    },
+    {
+      "id": "addresses-10",
+      "topic": "addresses",
+      "prompt": "Given a null int pointer, which operation obtains that pointer object’s own address?",
+      "code": "",
+      "options": [
+        "&p",
+        "*p",
+        "p[0]",
+        "**p"
+      ],
+      "correct": 0,
+      "explanation": "The pointer object exists even when its stored value is null; taking &p does not dereference it."
+    },
+    {
+      "id": "pointer-moves-01",
+      "topic": "pointer-moves",
+      "prompt": "Advance int *p to the next array element.",
+      "code": "",
+      "options": [
+        "++p;",
+        "++*p;",
+        "p += sizeof(int);",
+        "*p += 1;"
+      ],
+      "correct": 0,
+      "explanation": "Incrementing a pointer moves one element, automatically accounting for the pointed-to type size."
+    },
+    {
+      "id": "pointer-moves-02",
+      "topic": "pointer-moves",
+      "prompt": "Increase the pointed-to int by one without moving p.",
+      "code": "",
+      "options": [
+        "++*p;",
+        "++p;",
+        "*++p;",
+        "p++;"
+      ],
+      "correct": 0,
+      "explanation": "++*p groups as ++(*p), modifying the int."
+    },
+    {
+      "id": "pointer-moves-03",
+      "topic": "pointer-moves",
+      "prompt": "Read the current pointed-to value, then advance p by one element.",
+      "code": "",
+      "options": [
+        "*p++",
+        "*++p",
+        "++*p",
+        "(*p)++"
+      ],
+      "correct": 0,
+      "explanation": "Postfix ++ operates on p; dereferencing its old value reads the current element."
+    },
+    {
+      "id": "pointer-moves-04",
+      "topic": "pointer-moves",
+      "prompt": "Access the third int after the one p points to, within a valid array.",
+      "code": "",
+      "options": [
+        "p[3]",
+        "p + 3",
+        "&p[3]",
+        "p[3 * sizeof(int)]"
+      ],
+      "correct": 0,
+      "explanation": "p[3] is *(p + 3); indexing counts elements."
+    },
+    {
+      "id": "pointer-moves-05",
+      "topic": "pointer-moves",
+      "prompt": "Get the address of the third int after *p.",
+      "code": "",
+      "options": [
+        "p + 3",
+        "*p + 3",
+        "*(p + 3)",
+        "p[3]"
+      ],
+      "correct": 0,
+      "explanation": "Pointer addition yields an address. Dereference would yield an int object."
+    },
+    {
+      "id": "pointer-moves-06",
+      "topic": "pointer-moves",
+      "prompt": "For pointers p and q into the same int array, which expression counts the element displacement from p to q?",
+      "code": "",
+      "options": [
+        "q - p",
+        "(q - p) / sizeof(int)",
+        "q + p",
+        "*q - *p"
+      ],
+      "correct": 0,
+      "explanation": "Subtracting same-array pointers already counts elements; the result type is ptrdiff_t."
+    },
+    {
+      "id": "pointer-moves-07",
+      "topic": "pointer-moves",
+      "prompt": "If a has n elements, which expression forms its one-past pointer?",
+      "code": "",
+      "options": [
+        "a + n",
+        "a + n - 1",
+        "a + n * sizeof a[0]",
+        "*a + n"
+      ],
+      "correct": 0,
+      "explanation": "One-past pointers may be formed and compared appropriately, but must not be dereferenced."
+    },
+    {
+      "id": "pointer-moves-08",
+      "topic": "pointer-moves",
+      "prompt": "Which expression dereferences the previous element, assuming it exists?",
+      "code": "",
+      "options": [
+        "*(p - 1)",
+        "*p - 1",
+        "&p - 1",
+        "p - 1"
+      ],
+      "correct": 0,
+      "explanation": "Subtract from the pointer before dereferencing it."
+    },
+    {
+      "id": "double-pointers-01",
+      "topic": "double-pointers",
+      "prompt": "Declare pp as a pointer to a pointer to int.",
+      "code": "",
+      "options": [
+        "int **pp;",
+        "int *pp*;",
+        "int &&pp;",
+        "int *&pp;"
+      ],
+      "correct": 0,
+      "explanation": "Two stars describe two pointer layers."
+    },
+    {
+      "id": "double-pointers-02",
+      "topic": "double-pointers",
+      "prompt": "Initialize int **pp to point to existing int *p.",
+      "code": "",
+      "options": [
+        "int **pp = &p;",
+        "int **pp = p;",
+        "int **pp = *p;",
+        "int **pp = &*p;"
+      ],
+      "correct": 0,
+      "explanation": "&p is the address of the pointer object and has type int **."
+    },
+    {
+      "id": "double-pointers-03",
+      "topic": "double-pointers",
+      "prompt": "Given valid int **pp, access the final int object.",
+      "code": "",
+      "options": [
+        "**pp",
+        "*pp",
+        "pp",
+        "&pp"
+      ],
+      "correct": 0,
+      "explanation": "Dereference once to reach the int pointer, then again to reach the int."
+    },
+    {
+      "id": "double-pointers-04",
+      "topic": "double-pointers",
+      "prompt": "Change the caller’s int pointer through valid int **pp so it points to int x.",
+      "code": "",
+      "options": [
+        "*pp = &x;",
+        "**pp = x;",
+        "pp = &x;",
+        "**pp = &x;"
+      ],
+      "correct": 0,
+      "explanation": "*pp names the caller’s pointer object; assign the address there."
+    },
+    {
+      "id": "double-pointers-05",
+      "topic": "double-pointers",
+      "prompt": "Store 9 in the final int object reached through valid int **pp.",
+      "code": "",
+      "options": [
+        "**pp = 9;",
+        "*pp = 9;",
+        "pp = 9;",
+        "&pp = 9;"
+      ],
+      "correct": 0,
+      "explanation": "Two dereferences reach the int to be changed."
+    },
+    {
+      "id": "double-pointers-06",
+      "topic": "double-pointers",
+      "prompt": "Call advance so it may update caller variable p.",
+      "code": "void advance(int **pp);\nint *p = data; /* data is a valid int array */",
+      "options": [
+        "advance(&p);",
+        "advance(p);",
+        "advance(*p);",
+        "advance(**p);"
+      ],
+      "correct": 0,
+      "explanation": "The function needs the address of p, not p’s stored target address."
+    },
+    {
+      "id": "double-pointers-07",
+      "topic": "double-pointers",
+      "prompt": "Advance the caller’s pointer by one element through int **pp.",
+      "code": "",
+      "options": [
+        "++(*pp);",
+        "++pp;",
+        "++(**pp);",
+        "*++pp;"
+      ],
+      "correct": 0,
+      "explanation": "*pp is the caller’s pointer. Increment that object, with a valid next array position."
+    },
+    {
+      "id": "double-pointers-08",
+      "topic": "double-pointers",
+      "prompt": "Which signature accepts an output parameter for a size_t count?",
+      "code": "",
+      "options": [
+        "void measure(size_t *out);",
+        "void measure(size_t out);",
+        "void measure(size_t **out);",
+        "size_t *measure(void);"
+      ],
+      "correct": 0,
+      "explanation": "One pointer layer suffices to write a size_t result through *out."
+    },
+    {
+      "id": "const-01",
+      "topic": "const",
+      "prompt": "Declare p as a pointer through which int values cannot be modified.",
+      "code": "",
+      "options": [
+        "const int *p;",
+        "int *const p = &x;",
+        "int const p;",
+        "const *int p;"
+      ],
+      "correct": 0,
+      "explanation": "const int * qualifies the pointed-to int. The pointer may still be reassigned."
+    },
+    {
+      "id": "const-02",
+      "topic": "const",
+      "prompt": "Declare a pointer p that must keep pointing to existing int x.",
+      "code": "",
+      "options": [
+        "int *const p = &x;",
+        "const int *p = &x;",
+        "int const *p = &x;",
+        "const int p = x;"
+      ],
+      "correct": 0,
+      "explanation": "const after * qualifies the pointer object itself."
+    },
+    {
+      "id": "const-03",
+      "topic": "const",
+      "prompt": "Make both p and the int accessed through p read-only via this declaration.",
+      "code": "",
+      "options": [
+        "const int *const p = &x;",
+        "const int *p = &x;",
+        "int *const p = &x;",
+        "int **const p = &x;"
+      ],
+      "correct": 0,
+      "explanation": "There is a const qualifier for the pointed-to int and another for the pointer."
+    },
+    {
+      "id": "const-04",
+      "topic": "const",
+      "prompt": "Which statement is allowed through const int *p when y is a valid int?",
+      "code": "",
+      "options": [
+        "p = &y;",
+        "*p = 5;",
+        "++*p;",
+        "p[0] = 5;"
+      ],
+      "correct": 0,
+      "explanation": "A pointer to const can be redirected; it cannot be used to write its target."
+    },
+    {
+      "id": "const-05",
+      "topic": "const",
+      "prompt": "Which statement is allowed with int *const p = &x?",
+      "code": "",
+      "options": [
+        "*p = 5;",
+        "p = &y;",
+        "++p;",
+        "p = NULL;"
+      ],
+      "correct": 0,
+      "explanation": "The pointer is fixed but its non-const target can be modified."
+    },
+    {
+      "id": "const-06",
+      "topic": "const",
+      "prompt": "Use a string literal through a pointer that prevents writes through that pointer.",
+      "code": "",
+      "options": [
+        "const char *s = \"hello\";",
+        "char *const s = \"hello\";",
+        "const char s = \"hello\";",
+        "char s = \"hello\";"
+      ],
+      "correct": 0,
+      "explanation": "const char * communicates read-only character access; modifying a string literal is undefined regardless of pointer type."
+    },
+    {
+      "id": "const-07",
+      "topic": "const",
+      "prompt": "Declare a function parameter for reading a byte buffer without modifying its bytes through that parameter.",
+      "code": "",
+      "options": [
+        "const unsigned char *data",
+        "unsigned char *const data",
+        "const unsigned char data",
+        "unsigned char **data"
+      ],
+      "correct": 0,
+      "explanation": "Const belongs on the byte type to prevent writes through the parameter."
+    },
+    {
+      "id": "const-08",
+      "topic": "const",
+      "prompt": "Which pointer parameter still lets a function modify the caller’s int, while preventing reassignment of its local parameter?",
+      "code": "",
+      "options": [
+        "int *const p",
+        "const int *p",
+        "const int *const p",
+        "const int p"
+      ],
+      "correct": 0,
+      "explanation": "int *const fixes the local pointer parameter but leaves its target writable."
+    },
+    {
+      "id": "arrays-01",
+      "topic": "arrays",
+      "prompt": "Declare an array of five int elements.",
+      "code": "",
+      "options": [
+        "int values[5];",
+        "int[5] values;",
+        "int values(5);",
+        "int *values[5];"
+      ],
+      "correct": 0,
+      "explanation": "Brackets following the name give the array length."
+    },
+    {
+      "id": "arrays-02",
+      "topic": "arrays",
+      "prompt": "Declare an int array initialized with 2, 4 and 6, letting C infer its length.",
+      "code": "",
+      "options": [
+        "int a[] = {2, 4, 6};",
+        "int a = {2, 4, 6};",
+        "int a[] = (2, 4, 6);",
+        "int[] a = {2, 4, 6};"
+      ],
+      "correct": 0,
+      "explanation": "Braced elements initialize the array; omitted length is inferred here."
+    },
+    {
+      "id": "arrays-03",
+      "topic": "arrays",
+      "prompt": "Initialize all five int elements to zero.",
+      "code": "",
+      "options": [
+        "int a[5] = {0};",
+        "int a[5] = 0;",
+        "int a[5];",
+        "int a[5] = {5};"
+      ],
+      "correct": 0,
+      "explanation": "The first element gets zero explicitly; remaining elements are zero-initialized."
+    },
+    {
+      "id": "arrays-04",
+      "topic": "arrays",
+      "prompt": "Read the first element of array a.",
+      "code": "",
+      "options": [
+        "a[0]",
+        "a[1]",
+        "a[-1]",
+        "a()"
+      ],
+      "correct": 0,
+      "explanation": "Array indexing starts at zero."
+    },
+    {
+      "id": "arrays-05",
+      "topic": "arrays",
+      "prompt": "Assign 7 to the third element of int array a.",
+      "code": "",
+      "options": [
+        "a[2] = 7;",
+        "a[3] = 7;",
+        "a = 7;",
+        "a[2] == 7;"
+      ],
+      "correct": 0,
+      "explanation": "The third element has index 2, and = stores a value."
+    },
+    {
+      "id": "arrays-06",
+      "topic": "arrays",
+      "prompt": "Initialize int *p to the first element of existing int array a.",
+      "code": "",
+      "options": [
+        "int *p = a;",
+        "int *p = &a;",
+        "int *p = *a;",
+        "int p = a;"
+      ],
+      "correct": 0,
+      "explanation": "In this initializer, a converts to a pointer to its first element; &a points to the whole array."
+    },
+    {
+      "id": "arrays-07",
+      "topic": "arrays",
+      "prompt": "Which assigns a pointer to b without trying to assign an entire array?",
+      "code": "int a[3], b[3];\nint *p = a;",
+      "options": [
+        "p = b;",
+        "a = b;",
+        "a = p;",
+        "a = &b[0];"
+      ],
+      "correct": 0,
+      "explanation": "Array objects are not assignable; pointer objects are."
+    },
+    {
+      "id": "arrays-08",
+      "topic": "arrays",
+      "prompt": "Declare a two-row, three-column int array.",
+      "code": "",
+      "options": [
+        "int grid[2][3];",
+        "int grid[2, 3];",
+        "int grid(2)(3);",
+        "int **grid[2][3];"
+      ],
+      "correct": 0,
+      "explanation": "Each bracket pair supplies one array dimension."
+    },
+    {
+      "id": "arrays-09",
+      "topic": "arrays",
+      "prompt": "Access row 1, column 2 of int grid[2][3].",
+      "code": "",
+      "options": [
+        "grid[1][2]",
+        "grid[1, 2]",
+        "grid(1, 2)",
+        "grid[2][1]"
+      ],
+      "correct": 0,
+      "explanation": "Use a separate subscript for each dimension, counting each from zero."
+    },
+    {
+      "id": "arrays-10",
+      "topic": "arrays",
+      "prompt": "Declare p as a pointer to an entire array of three ints.",
+      "code": "",
+      "options": [
+        "int (*p)[3];",
+        "int *p[3];",
+        "int **p[3];",
+        "int p(*)[3];"
+      ],
+      "correct": 0,
+      "explanation": "Parentheses group *p so p is a pointer to an array."
+    },
+    {
+      "id": "arrays-11",
+      "topic": "arrays",
+      "prompt": "Declare a as an array of three pointers to int.",
+      "code": "",
+      "options": [
+        "int *a[3];",
+        "int (*a)[3];",
+        "int a*[3];",
+        "int **a;"
+      ],
+      "correct": 0,
+      "explanation": "The array declarator binds before *, making each array element a pointer."
+    },
+    {
+      "id": "arrays-12",
+      "topic": "arrays",
+      "prompt": "Which parameter form receives rows of three ints?",
+      "code": "",
+      "options": [
+        "void visit(int a[][3], size_t rows);",
+        "void visit(int **a, size_t rows);",
+        "void visit(int a[][], size_t rows);",
+        "void visit(int *a[3], size_t rows);"
+      ],
+      "correct": 0,
+      "explanation": "The first dimension adjusts to a pointer; the column count supplies the row type."
+    },
+    {
+      "id": "sizeof-01",
+      "topic": "sizeof",
+      "prompt": "Obtain the byte size of the type int.",
+      "code": "",
+      "options": [
+        "sizeof(int)",
+        "sizeof int",
+        "size(int)",
+        "int.size"
+      ],
+      "correct": 0,
+      "explanation": "A type name in sizeof requires parentheses."
+    },
+    {
+      "id": "sizeof-02",
+      "topic": "sizeof",
+      "prompt": "Obtain the byte size of a declared ordinary int x.",
+      "code": "",
+      "options": [
+        "sizeof x",
+        "sizeof *x",
+        "size(x)",
+        "length(x)"
+      ],
+      "correct": 0,
+      "explanation": "sizeof may take an expression without parentheses."
+    },
+    {
+      "id": "sizeof-03",
+      "topic": "sizeof",
+      "prompt": "Count the elements of a real int array a in its declaring scope.",
+      "code": "",
+      "options": [
+        "sizeof a / sizeof a[0]",
+        "sizeof a",
+        "sizeof a * sizeof a[0]",
+        "sizeof a / sizeof &a[0]"
+      ],
+      "correct": 0,
+      "explanation": "Divide total array bytes by bytes per element; this does not work on a pointer parameter."
+    },
+    {
+      "id": "sizeof-04",
+      "topic": "sizeof",
+      "prompt": "Which standard type is the result of sizeof?",
+      "code": "",
+      "options": [
+        "size_t",
+        "int",
+        "unsigned char",
+        "ptrdiff_t"
+      ],
+      "correct": 0,
+      "explanation": "sizeof yields size_t, an unsigned integer type."
+    },
+    {
+      "id": "sizeof-05",
+      "topic": "sizeof",
+      "prompt": "Inside void f(int a[10]), what does sizeof a measure?",
+      "code": "",
+      "options": [
+        "The size of an int pointer",
+        "The size of ten ints",
+        "The number of array elements",
+        "The size of one int"
+      ],
+      "correct": 0,
+      "explanation": "An array parameter adjusts to a pointer parameter, even when a bound is written."
+    },
+    {
+      "id": "sizeof-06",
+      "topic": "sizeof",
+      "prompt": "Declare a function accepting access to an int array and its size_t element count.",
+      "code": "",
+      "options": [
+        "void f(int *a, size_t count);",
+        "void f(int a, size_t count);",
+        "void f(int **a, size_t count);",
+        "void f(size_t *a, int count);"
+      ],
+      "correct": 0,
+      "explanation": "The pointer supplies access; the separate count supplies the length."
+    },
+    {
+      "id": "sizeof-07",
+      "topic": "sizeof",
+      "prompt": "Which expression measures the entire declared char buffer?",
+      "code": "char buffer[32] = \"hi\";",
+      "options": [
+        "sizeof buffer",
+        "strlen(buffer)",
+        "sizeof &buffer[0]",
+        "sizeof buffer[0]"
+      ],
+      "correct": 0,
+      "explanation": "sizeof an actual array gives its capacity in bytes, independent of string contents."
+    },
+    {
+      "id": "sizeof-08",
+      "topic": "sizeof",
+      "prompt": "What does sizeof(char) always equal in C?",
+      "code": "",
+      "options": [
+        "1",
+        "8",
+        "sizeof(int)",
+        "It depends on pointer width"
+      ],
+      "correct": 0,
+      "explanation": "C measures sizeof in bytes, and a char occupies one byte. A byte need not universally have eight bits."
+    },
+    {
+      "id": "sizeof-09",
+      "topic": "sizeof",
+      "prompt": "Which statement about sizeof *p is correct for int *p?",
+      "code": "",
+      "options": [
+        "It uses the int type without reading *p",
+        "It always dereferences p at runtime",
+        "It measures the pointer object",
+        "It requires malloc to have run first"
+      ],
+      "correct": 0,
+      "explanation": "For this non-VLA type, sizeof does not evaluate its operand."
+    },
+    {
+      "id": "sizeof-10",
+      "topic": "sizeof",
+      "prompt": "Which parameter declaration is adjusted to char *s in a function definition?",
+      "code": "",
+      "options": [
+        "char s[]",
+        "char (*s)[8]",
+        "char **s",
+        "char s"
+      ],
+      "correct": 0,
+      "explanation": "An array parameter declaration adjusts to a pointer to its element type."
+    },
+    {
+      "id": "strings-01",
+      "topic": "strings",
+      "prompt": "Create a writable array initialized with the string cat.",
+      "code": "",
+      "options": [
+        "char s[] = \"cat\";",
+        "const char *s = \"cat\";",
+        "char s = \"cat\";",
+        "char *const s = \"cat\";"
+      ],
+      "correct": 0,
+      "explanation": "An array initialized from the literal receives its own writable characters and terminator."
+    },
+    {
+      "id": "strings-02",
+      "topic": "strings",
+      "prompt": "Write a null terminator at buffer index n, which is within capacity.",
+      "code": "",
+      "options": [
+        "buffer[n] = '\\0';",
+        "buffer[n] = '0';",
+        "buffer[n] = \"\\0\";",
+        "buffer = NULL;"
+      ],
+      "correct": 0,
+      "explanation": "Assign the null character to the element where the string should end."
+    },
+    {
+      "id": "strings-03",
+      "topic": "strings",
+      "prompt": "Which condition tests for the end of a valid string at index i?",
+      "code": "",
+      "options": [
+        "s[i] == '\\0'",
+        "s[i] == '0'",
+        "s == NULL",
+        "&s[i] == NULL"
+      ],
+      "correct": 0,
+      "explanation": "The string ends at its first character with value zero."
+    },
+    {
+      "id": "strings-04",
+      "topic": "strings",
+      "prompt": "Which condition continues while s[i] is a non-null character?",
+      "code": "",
+      "options": [
+        "s[i] != '\\0'",
+        "s[i] == '\\0'",
+        "s[i] != '0'",
+        "s[i] == EOF"
+      ],
+      "correct": 0,
+      "explanation": "EOF is an input status value, not the terminator of a C string."
+    },
+    {
+      "id": "strings-05",
+      "topic": "strings",
+      "prompt": "Declare space for at most 15 visible characters plus a string terminator.",
+      "code": "",
+      "options": [
+        "char text[16];",
+        "char text[15];",
+        "char *text[16];",
+        "char text(16);"
+      ],
+      "correct": 0,
+      "explanation": "A string needs one extra char for its null terminator."
+    },
+    {
+      "id": "strings-06",
+      "topic": "strings",
+      "prompt": "Which creates an empty C string in a writable four-byte buffer?",
+      "code": "",
+      "options": [
+        "char s[4] = \"\";",
+        "char s[4];",
+        "char s[4] = {'x'};",
+        "char *s[4] = {0};"
+      ],
+      "correct": 0,
+      "explanation": "The first character is zero, so the string’s length is zero."
+    },
+    {
+      "id": "strings-07",
+      "topic": "strings",
+      "prompt": "Replace the second character of a writable string s with X.",
+      "code": "",
+      "options": [
+        "s[1] = 'X';",
+        "s[1] = \"X\";",
+        "s = 'X';",
+        "s[2] = 'X';"
+      ],
+      "correct": 0,
+      "explanation": "Use a character constant and zero-based indexing."
+    },
+    {
+      "id": "strings-08",
+      "topic": "strings",
+      "prompt": "Given char *p pointing into a valid string, move to its next character.",
+      "code": "",
+      "options": [
+        "++p;",
+        "++*p;",
+        "*p = 0;",
+        "p = NULL;"
+      ],
+      "correct": 0,
+      "explanation": "Increment the pointer to advance; ++*p changes the character value."
+    },
+    {
+      "id": "strings-09",
+      "topic": "strings",
+      "prompt": "Given a decimal digit character ch, get its numeric digit value.",
+      "code": "",
+      "options": [
+        "ch - '0'",
+        "ch + '0'",
+        "ch - 0",
+        "(int)\"ch\""
+      ],
+      "correct": 0,
+      "explanation": "The decimal digit characters are consecutive in C’s execution character set."
+    },
+    {
+      "id": "strings-10",
+      "topic": "strings",
+      "prompt": "Given int digit in 0..9, form the corresponding character.",
+      "code": "",
+      "options": [
+        "'0' + digit",
+        "'0' - digit",
+        "digit + 0",
+        "\"0\" + digit"
+      ],
+      "correct": 0,
+      "explanation": "Adding the digit value to the character code for zero forms the desired digit character."
+    },
+    {
+      "id": "printf-01",
+      "topic": "printf",
+      "prompt": "Print an int x in decimal.",
+      "code": "",
+      "options": [
+        "printf(\"%d\", x);",
+        "printf(\"%d\", &x);",
+        "printf(\"%s\", x);",
+        "printf(\"%f\", x);"
+      ],
+      "correct": 0,
+      "explanation": "%d expects an int value, not its address."
+    },
+    {
+      "id": "printf-02",
+      "topic": "printf",
+      "prompt": "Print unsigned int flags in decimal.",
+      "code": "",
+      "options": [
+        "printf(\"%u\", flags);",
+        "printf(\"%d\", flags);",
+        "printf(\"%x\", &flags);",
+        "printf(\"%lu\", flags);"
+      ],
+      "correct": 0,
+      "explanation": "%u matches unsigned int."
+    },
+    {
+      "id": "printf-03",
+      "topic": "printf",
+      "prompt": "Print unsigned int flags in lowercase hexadecimal.",
+      "code": "",
+      "options": [
+        "printf(\"%x\", flags);",
+        "printf(\"%s\", flags);",
+        "printf(\"%x\", &flags);",
+        "printf(\"%X\", flags);"
+      ],
+      "correct": 0,
+      "explanation": "%x uses lowercase hexadecimal digits; %X uses uppercase digits."
+    },
+    {
+      "id": "printf-04",
+      "topic": "printf",
+      "prompt": "Print a size_t count in decimal.",
+      "code": "",
+      "options": [
+        "printf(\"%zu\", count);",
+        "printf(\"%d\", count);",
+        "printf(\"%u\", count);",
+        "printf(\"%size\", count);"
+      ],
+      "correct": 0,
+      "explanation": "z is the size_t length modifier; u requests unsigned decimal output."
+    },
+    {
+      "id": "printf-05",
+      "topic": "printf",
+      "prompt": "Print a valid null-terminated string s.",
+      "code": "",
+      "options": [
+        "printf(\"%s\", s);",
+        "printf(\"%s\", &s);",
+        "printf(\"%c\", s);",
+        "printf(s); /* s may contain % characters */"
+      ],
+      "correct": 0,
+      "explanation": "%s expects a pointer to the first character; a fixed format avoids treating input as a format string."
+    },
+    {
+      "id": "printf-06",
+      "topic": "printf",
+      "prompt": "Print a single char ch.",
+      "code": "",
+      "options": [
+        "printf(\"%c\", ch);",
+        "printf(\"%s\", ch);",
+        "printf(\"%c\", &ch);",
+        "printf(\"%d\", &ch);"
+      ],
+      "correct": 0,
+      "explanation": "The char is promoted to int when passed to printf; %c prints a character."
+    },
+    {
+      "id": "printf-07",
+      "topic": "printf",
+      "prompt": "Print a double value x using fixed-point notation.",
+      "code": "",
+      "options": [
+        "printf(\"%f\", x);",
+        "printf(\"%d\", x);",
+        "printf(\"%f\", &x);",
+        "printf(\"%s\", x);"
+      ],
+      "correct": 0,
+      "explanation": "printf %f expects double. A float argument would also promote to double."
+    },
+    {
+      "id": "printf-08",
+      "topic": "printf",
+      "prompt": "Print an object pointer p with the %p conversion.",
+      "code": "",
+      "options": [
+        "printf(\"%p\", (void *)p);",
+        "printf(\"%p\", *p);",
+        "printf(\"%d\", p);",
+        "printf(\"%p\", (int)p);"
+      ],
+      "correct": 0,
+      "explanation": "%p requires a void * argument; use an explicit conversion for the variadic call."
+    },
+    {
+      "id": "printf-09",
+      "topic": "printf",
+      "prompt": "Print one literal percent sign using printf.",
+      "code": "",
+      "options": [
+        "printf(\"%%\");",
+        "printf(\"%\");",
+        "printf(\"\\%\");",
+        "printf(\"%p\");"
+      ],
+      "correct": 0,
+      "explanation": "%% in a printf format emits a literal percent sign and consumes no argument."
+    },
+    {
+      "id": "printf-10",
+      "topic": "printf",
+      "prompt": "Print x followed by a newline.",
+      "code": "",
+      "options": [
+        "printf(\"%d\\n\", x);",
+        "printf(\"%d/n\", x);",
+        "printf(\"%d\\\\n\", x);",
+        "printf(\"%d\", x);"
+      ],
+      "correct": 0,
+      "explanation": "Use the newline escape inside the format string."
+    },
+    {
+      "id": "printf-11",
+      "topic": "printf",
+      "prompt": "Print a long long value x as signed decimal.",
+      "code": "",
+      "options": [
+        "printf(\"%lld\", x);",
+        "printf(\"%ld\", x);",
+        "printf(\"%d\", x);",
+        "printf(\"%llu\", x);"
+      ],
+      "correct": 0,
+      "explanation": "ll selects long long and d requests signed decimal."
+    },
+    {
+      "id": "printf-12",
+      "topic": "printf",
+      "prompt": "Print integers x then y in that order, separated by a space.",
+      "code": "",
+      "options": [
+        "printf(\"%d %d\", x, y);",
+        "printf(\"%d %d\", y, x);",
+        "printf(\"%d %d\", &x, &y);",
+        "printf(\"%d %d\", (x, y));"
+      ],
+      "correct": 0,
+      "explanation": "Conversions consume arguments in the order they appear in the argument list."
+    },
+    {
+      "id": "scanf-01",
+      "topic": "scanf",
+      "prompt": "Read decimal input into int x.",
+      "code": "",
+      "options": [
+        "scanf(\"%d\", &x);",
+        "scanf(\"%d\", x);",
+        "scanf(\"%u\", &x);",
+        "scanf(\"%f\", &x);"
+      ],
+      "correct": 0,
+      "explanation": "%d requires an int * destination."
+    },
+    {
+      "id": "scanf-02",
+      "topic": "scanf",
+      "prompt": "Read hexadecimal input into unsigned int temp.",
+      "code": "",
+      "options": [
+        "scanf(\"%x\", &temp);",
+        "scanf(\"%x\", temp);",
+        "scanf(\"%d\", &temp);",
+        "scanf(\"%s\", &temp);"
+      ],
+      "correct": 0,
+      "explanation": "%x requires unsigned int *; scanf accepts hexadecimal text with or without 0x."
+    },
+    {
+      "id": "scanf-03",
+      "topic": "scanf",
+      "prompt": "Read unsigned decimal input into unsigned int count.",
+      "code": "",
+      "options": [
+        "scanf(\"%u\", &count);",
+        "scanf(\"%d\", &count);",
+        "scanf(\"%u\", count);",
+        "scanf(\"%zu\", &count);"
+      ],
+      "correct": 0,
+      "explanation": "Use %u for an unsigned int destination."
+    },
+    {
+      "id": "scanf-04",
+      "topic": "scanf",
+      "prompt": "Read decimal input into size_t count.",
+      "code": "",
+      "options": [
+        "scanf(\"%zu\", &count);",
+        "scanf(\"%u\", &count);",
+        "scanf(\"%d\", &count);",
+        "scanf(\"%zu\", count);"
+      ],
+      "correct": 0,
+      "explanation": "%zu matches size_t * as the destination."
+    },
+    {
+      "id": "scanf-05",
+      "topic": "scanf",
+      "prompt": "Read a floating value into float x.",
+      "code": "",
+      "options": [
+        "scanf(\"%f\", &x);",
+        "scanf(\"%lf\", &x);",
+        "scanf(\"%f\", x);",
+        "scanf(\"%d\", &x);"
+      ],
+      "correct": 0,
+      "explanation": "scanf %f needs float *; this differs from printf’s promoted double argument."
+    },
+    {
+      "id": "scanf-06",
+      "topic": "scanf",
+      "prompt": "Read a floating value into double x.",
+      "code": "",
+      "options": [
+        "scanf(\"%lf\", &x);",
+        "scanf(\"%f\", &x);",
+        "scanf(\"%lf\", x);",
+        "scanf(\"%d\", &x);"
+      ],
+      "correct": 0,
+      "explanation": "scanf %lf needs double *."
+    },
+    {
+      "id": "scanf-07",
+      "topic": "scanf",
+      "prompt": "Read one char into ch while first skipping whitespace.",
+      "code": "",
+      "options": [
+        "scanf(\" %c\", &ch);",
+        "scanf(\"%c\", &ch);",
+        "scanf(\" %s\", &ch);",
+        "scanf(\" %c\", ch);"
+      ],
+      "correct": 0,
+      "explanation": "Leading whitespace in the format consumes input whitespace; %c alone does not skip it."
+    },
+    {
+      "id": "scanf-08",
+      "topic": "scanf",
+      "prompt": "Read a whitespace-delimited word safely into char word[16].",
+      "code": "",
+      "options": [
+        "scanf(\"%15s\", word);",
+        "scanf(\"%16s\", word);",
+        "scanf(\"%15s\", &word);",
+        "scanf(\"%s\", word);"
+      ],
+      "correct": 0,
+      "explanation": "A width of 15 leaves space for the null terminator. The array converts to char *."
+    },
+    {
+      "id": "scanf-09",
+      "topic": "scanf",
+      "prompt": "Verify that scanf assigned one requested int.",
+      "code": "",
+      "options": [
+        "scanf(\"%d\", &x) == 1",
+        "scanf(\"%d\", &x) == 0",
+        "scanf(\"%d\", &x) != 0",
+        "scanf(\"%d\", &x) == x"
+      ],
+      "correct": 0,
+      "explanation": "Test the number of successful assignments. EOF is also nonzero, so != 0 is insufficient."
+    },
+    {
+      "id": "scanf-10",
+      "topic": "scanf",
+      "prompt": "Verify that two requested int conversions both succeeded.",
+      "code": "",
+      "options": [
+        "scanf(\"%d %d\", &x, &y) == 2",
+        "scanf(\"%d %d\", &x, &y) == 1",
+        "scanf(\"%d %d\", x, y) == 2",
+        "scanf(\"%d %d\", &x, &y) != 0"
+      ],
+      "correct": 0,
+      "explanation": "The return value counts successful assignments, not characters or format tokens."
+    },
+    {
+      "id": "scanf-11",
+      "topic": "scanf",
+      "prompt": "Read hexadecimal input directly into unsigned char byte using the correct length modifier.",
+      "code": "",
+      "options": [
+        "scanf(\"%hhx\", &byte);",
+        "scanf(\"%x\", &byte);",
+        "scanf(\"%hx\", &byte);",
+        "scanf(\"%hhx\", byte);"
+      ],
+      "correct": 0,
+      "explanation": "hh changes the destination for x to unsigned char *. Input must be representable in that type."
+    },
+    {
+      "id": "scanf-12",
+      "topic": "scanf",
+      "prompt": "Read an integer but discard it without supplying a destination pointer.",
+      "code": "",
+      "options": [
+        "scanf(\"%*d\");",
+        "scanf(\"%d*\");",
+        "scanf(\"%d\", NULL);",
+        "scanf(\"*%d\");"
+      ],
+      "correct": 0,
+      "explanation": "An asterisk after % suppresses assignment for that conversion; it does not contribute to the assignment count."
+    },
+    {
+      "id": "input-01",
+      "topic": "input",
+      "prompt": "Read a line into the actual char array buffer[80], respecting its capacity.",
+      "code": "",
+      "options": [
+        "fgets(buffer, sizeof buffer, stdin);",
+        "fgets(stdin, buffer, sizeof buffer);",
+        "fgets(buffer, stdin, sizeof buffer);",
+        "gets(buffer);"
+      ],
+      "correct": 0,
+      "explanation": "fgets takes destination, capacity, stream; it reads at most capacity minus one characters."
+    },
+    {
+      "id": "input-02",
+      "topic": "input",
+      "prompt": "Which check detects that fgets returned a string successfully?",
+      "code": "",
+      "options": [
+        "fgets(buffer, sizeof buffer, stdin) != NULL",
+        "fgets(buffer, sizeof buffer, stdin) == 1",
+        "fgets(buffer, sizeof buffer, stdin) == EOF",
+        "fgets(buffer, sizeof buffer, stdin) == 0"
+      ],
+      "correct": 0,
+      "explanation": "fgets returns the buffer pointer on success, NULL on EOF before any characters or on error."
+    },
+    {
+      "id": "input-03",
+      "topic": "input",
+      "prompt": "Which type should hold getchar’s result so it can represent every unsigned-char value and EOF?",
+      "code": "",
+      "options": [
+        "int",
+        "char",
+        "unsigned char",
+        "size_t"
+      ],
+      "correct": 0,
+      "explanation": "Keep the result in int until after comparing it with EOF."
+    },
+    {
+      "id": "input-04",
+      "topic": "input",
+      "prompt": "Write one character ch to standard output.",
+      "code": "",
+      "options": [
+        "putchar(ch);",
+        "getchar(ch);",
+        "puts(ch);",
+        "putchar(&ch);"
+      ],
+      "correct": 0,
+      "explanation": "putchar receives the character value as an int."
+    },
+    {
+      "id": "input-05",
+      "topic": "input",
+      "prompt": "Write an error message to the standard error stream.",
+      "code": "",
+      "options": [
+        "fprintf(stderr, \"error\\n\");",
+        "printf(stderr, \"error\\n\");",
+        "fprintf(\"error\\n\", stderr);",
+        "scanf(stderr, \"error\\n\");"
+      ],
+      "correct": 0,
+      "explanation": "fprintf takes a stream before its format string."
+    },
+    {
+      "id": "input-06",
+      "topic": "input",
+      "prompt": "Parse an int from the null-terminated string text into x.",
+      "code": "",
+      "options": [
+        "sscanf(text, \"%d\", &x);",
+        "scanf(text, \"%d\", &x);",
+        "sscanf(\"%d\", text, &x);",
+        "sscanf(text, \"%d\", x);"
+      ],
+      "correct": 0,
+      "explanation": "sscanf reads from a string; its remaining format and pointer arguments follow scanf rules."
+    },
+    {
+      "id": "input-07",
+      "topic": "input",
+      "prompt": "Print a string s followed by a newline with one library call.",
+      "code": "",
+      "options": [
+        "puts(s);",
+        "putchar(s);",
+        "printf(s);",
+        "gets(s);"
+      ],
+      "correct": 0,
+      "explanation": "puts writes a string and appends a newline; it does not treat s as a format string."
+    },
+    {
+      "id": "input-08",
+      "topic": "input",
+      "prompt": "Which escape can be used with strcspn to locate a newline in a string buffer?",
+      "code": "",
+      "options": [
+        "\"\\n\"",
+        "\"/n\"",
+        "'\\n'",
+        "\"\\\\n\""
+      ],
+      "correct": 0,
+      "explanation": "strcspn expects a string of rejected characters, so use a double-quoted string containing the newline."
+    },
+    {
+      "id": "allocation-01",
+      "topic": "allocation",
+      "prompt": "Allocate storage for one object of the type pointed to by int *p.",
+      "code": "",
+      "options": [
+        "p = malloc(sizeof *p);",
+        "p = malloc(sizeof p);",
+        "p = malloc(*p);",
+        "*p = malloc(sizeof *p);"
+      ],
+      "correct": 0,
+      "explanation": "sizeof *p measures the target int without reading it."
+    },
+    {
+      "id": "allocation-02",
+      "topic": "allocation",
+      "prompt": "Allocate n int elements using int *p, assuming n > 0 and no size multiplication overflow.",
+      "code": "",
+      "options": [
+        "p = malloc(n * sizeof *p);",
+        "p = malloc(n);",
+        "p = malloc(sizeof p);",
+        "p = malloc(n * sizeof p);"
+      ],
+      "correct": 0,
+      "explanation": "Multiply the element count by the size of one element."
+    },
+    {
+      "id": "allocation-03",
+      "topic": "allocation",
+      "prompt": "Allocate n zero-initialized int elements using int *p, with valid positive n.",
+      "code": "",
+      "options": [
+        "p = calloc(n, sizeof *p);",
+        "p = calloc(n * sizeof *p);",
+        "p = malloc(n, sizeof *p);",
+        "p = calloc(sizeof p, n);"
+      ],
+      "correct": 0,
+      "explanation": "calloc takes element count and element size, and initializes every allocated bit to zero."
+    },
+    {
+      "id": "allocation-04",
+      "topic": "allocation",
+      "prompt": "In calloc(count, size), what does the second argument specify?",
+      "code": "",
+      "options": [
+        "Bytes per element",
+        "Number of elements",
+        "Total bits",
+        "The pointer to initialize"
+      ],
+      "correct": 0,
+      "explanation": "The allocation size is count multiplied by bytes per element."
+    },
+    {
+      "id": "allocation-05",
+      "topic": "allocation",
+      "prompt": "In calloc(4, 2), what does the first argument specify?",
+      "code": "",
+      "options": [
+        "Four elements",
+        "Four total bytes",
+        "A pointer address",
+        "Two elements"
+      ],
+      "correct": 0,
+      "explanation": "The arguments describe four elements of two bytes each; the returned storage has no stored C array-length metadata."
+    },
+    {
+      "id": "allocation-06",
+      "topic": "allocation",
+      "prompt": "Check malloc failure before accessing p.",
+      "code": "",
+      "options": [
+        "if (p == NULL) { return -1; }",
+        "if (*p == NULL) { return -1; }",
+        "if (&p == NULL) { return -1; }",
+        "if (p = NULL) { return -1; }"
+      ],
+      "correct": 0,
+      "explanation": "Compare the returned pointer with NULL; do not dereference it to test failure."
+    },
+    {
+      "id": "allocation-07",
+      "topic": "allocation",
+      "prompt": "Release the allocation whose original returned address is held in p.",
+      "code": "",
+      "options": [
+        "free(p);",
+        "free(*p);",
+        "delete p;",
+        "free(&p);"
+      ],
+      "correct": 0,
+      "explanation": "Pass the allocated pointer value to free, exactly once for that allocation."
+    },
+    {
+      "id": "allocation-08",
+      "topic": "allocation",
+      "prompt": "After freeing p, explicitly make this pointer variable null.",
+      "code": "",
+      "options": [
+        "p = NULL;",
+        "*p = 0;",
+        "&p = NULL;",
+        "p == NULL;"
+      ],
+      "correct": 0,
+      "explanation": "Assigning NULL changes p; free does not automatically change pointer variables or other aliases."
+    },
+    {
+      "id": "allocation-09",
+      "topic": "allocation",
+      "prompt": "Choose the resize pattern that preserves p if realloc fails; bytes is positive.",
+      "code": "",
+      "options": [
+        "int *tmp = realloc(p, bytes);\nif (tmp != NULL) p = tmp;",
+        "p = realloc(p, bytes); /* no temporary */",
+        "free(p);\np = realloc(p, bytes);",
+        "int *tmp = realloc(*p, bytes);\np = tmp;"
+      ],
+      "correct": 0,
+      "explanation": "On failure realloc leaves the old allocation intact; retain its pointer until success."
+    },
+    {
+      "id": "allocation-10",
+      "topic": "allocation",
+      "prompt": "Which argument order is correct for realloc?",
+      "code": "",
+      "options": [
+        "realloc(pointer, new_byte_count)",
+        "realloc(new_byte_count, pointer)",
+        "realloc(count, element_size, pointer)",
+        "realloc(pointer, count, element_size)"
+      ],
+      "correct": 0,
+      "explanation": "realloc accepts an existing allocation pointer and the requested new total byte size."
+    },
+    {
+      "id": "allocation-11",
+      "topic": "allocation",
+      "prompt": "Which call is defined and does nothing?",
+      "code": "",
+      "options": [
+        "free(NULL);",
+        "free(1);",
+        "free(&local); /* local is an automatic int */",
+        "free(p); free(p); /* same non-null allocation */"
+      ],
+      "correct": 0,
+      "explanation": "free(NULL) is explicitly permitted. Stack addresses and already-freed pointers are not valid arguments."
+    },
+    {
+      "id": "allocation-12",
+      "topic": "allocation",
+      "prompt": "Which condition guards n * sizeof *p from overflowing size_t before allocation?",
+      "code": "",
+      "options": [
+        "n <= SIZE_MAX / sizeof *p",
+        "n * sizeof *p <= SIZE_MAX",
+        "n <= sizeof *p / SIZE_MAX",
+        "n + sizeof *p <= SIZE_MAX"
+      ],
+      "correct": 0,
+      "explanation": "Check with division before performing the multiplication; SIZE_MAX is available from stdint.h."
+    },
+    {
+      "id": "memory-01",
+      "topic": "memory",
+      "prompt": "Set the first n bytes of valid buffer to zero.",
+      "code": "",
+      "options": [
+        "memset(buffer, 0, n);",
+        "memset(buffer, n, 0);",
+        "memset(0, buffer, n);",
+        "memset(buffer, n);"
+      ],
+      "correct": 0,
+      "explanation": "The arguments are destination, byte value, byte count."
+    },
+    {
+      "id": "memory-02",
+      "topic": "memory",
+      "prompt": "Fill every byte of an actual unsigned char array data with zero.",
+      "code": "",
+      "options": [
+        "memset(data, 0, sizeof data);",
+        "memset(data, sizeof data, 0);",
+        "memset(&data, sizeof data);",
+        "memset(data, 0, sizeof *data);"
+      ],
+      "correct": 0,
+      "explanation": "sizeof data measures the whole array here; sizeof *data measures one element."
+    },
+    {
+      "id": "memory-03",
+      "topic": "memory",
+      "prompt": "Copy n bytes from src to dst, where the regions do not overlap.",
+      "code": "",
+      "options": [
+        "memcpy(dst, src, n);",
+        "memcpy(src, dst, n);",
+        "memcpy(dst, n, src);",
+        "memcpy(dst, src);"
+      ],
+      "correct": 0,
+      "explanation": "memcpy takes destination first, source second and byte count third."
+    },
+    {
+      "id": "memory-04",
+      "topic": "memory",
+      "prompt": "Move n bytes from src to dst when the regions may overlap.",
+      "code": "",
+      "options": [
+        "memmove(dst, src, n);",
+        "memcpy(dst, src, n);",
+        "memset(dst, src, n);",
+        "strcpy(dst, src);"
+      ],
+      "correct": 0,
+      "explanation": "memmove handles overlap. memcpy’s contract requires non-overlapping regions."
+    },
+    {
+      "id": "memory-05",
+      "topic": "memory",
+      "prompt": "Test whether two valid byte regions compare equal over n bytes.",
+      "code": "",
+      "options": [
+        "memcmp(a, b, n) == 0",
+        "memcmp(a, b, n) == 1",
+        "a == b",
+        "memcmp(a, b, n) > 0"
+      ],
+      "correct": 0,
+      "explanation": "memcmp returns zero for equal compared bytes."
+    },
+    {
+      "id": "memory-06",
+      "topic": "memory",
+      "prompt": "Access generic writable storage one byte at a time through void *mem.",
+      "code": "",
+      "options": [
+        "unsigned char *p = mem;",
+        "void *p = mem; /* then use *p */",
+        "unsigned char p = mem;",
+        "unsigned char **p = mem;"
+      ],
+      "correct": 0,
+      "explanation": "C permits conversion from void * to an object pointer; character pointers provide byte access."
+    },
+    {
+      "id": "memory-07",
+      "topic": "memory",
+      "prompt": "Return the original destination pointer from a memset-like function declared void *fill(void *dst, int byte, size_t n).",
+      "code": "",
+      "options": [
+        "return dst;",
+        "return *dst;",
+        "return n;",
+        "return byte;"
+      ],
+      "correct": 0,
+      "explanation": "The return contract is a pointer, and a memset-like function returns its original destination."
+    },
+    {
+      "id": "memory-08",
+      "topic": "memory",
+      "prompt": "Convert a fill value to the unsigned-char value used for byte writes.",
+      "code": "",
+      "options": [
+        "(unsigned char)value",
+        "(unsigned char *)value",
+        "sizeof value",
+        "&value"
+      ],
+      "correct": 0,
+      "explanation": "A cast to unsigned char obtains the byte value; adding * would cast to a pointer type."
+    },
+    {
+      "id": "string-library-01",
+      "topic": "string-library",
+      "prompt": "Get the number of characters before the null terminator in valid string s.",
+      "code": "",
+      "options": [
+        "strlen(s)",
+        "sizeof s",
+        "length(s)",
+        "strlen(&s)"
+      ],
+      "correct": 0,
+      "explanation": "strlen returns size_t and counts characters before the first null character."
+    },
+    {
+      "id": "string-library-02",
+      "topic": "string-library",
+      "prompt": "Test whether strings a and b have equal contents.",
+      "code": "",
+      "options": [
+        "strcmp(a, b) == 0",
+        "a == b",
+        "strcmp(a, b) == 1",
+        "*a == *b"
+      ],
+      "correct": 0,
+      "explanation": "strcmp compares string contents; pointer equality and first-character equality are different tests."
+    },
+    {
+      "id": "string-library-03",
+      "topic": "string-library",
+      "prompt": "Copy valid string src including its terminator into sufficiently large, non-overlapping dst.",
+      "code": "",
+      "options": [
+        "strcpy(dst, src);",
+        "strcpy(src, dst);",
+        "strcpy(dst, src, n);",
+        "dst = src;"
+      ],
+      "correct": 0,
+      "explanation": "strcpy takes destination then source and requires enough capacity for the terminator."
+    },
+    {
+      "id": "string-library-04",
+      "topic": "string-library",
+      "prompt": "Append src to an existing string dst with sufficient space and no overlap.",
+      "code": "",
+      "options": [
+        "strcat(dst, src);",
+        "strcat(src, dst);",
+        "dst += src;",
+        "strcpy(dst, src);"
+      ],
+      "correct": 0,
+      "explanation": "strcat appends at the end of dst; strcpy replaces its existing contents."
+    },
+    {
+      "id": "string-library-05",
+      "topic": "string-library",
+      "prompt": "Locate the first occurrence of character ch in a valid string s.",
+      "code": "",
+      "options": [
+        "strchr(s, ch)",
+        "strchr(ch, s)",
+        "strstr(s, ch)",
+        "strcmp(s, ch)"
+      ],
+      "correct": 0,
+      "explanation": "strchr searches for one character and returns a pointer or NULL."
+    },
+    {
+      "id": "string-library-06",
+      "topic": "string-library",
+      "prompt": "Locate the first occurrence of string needle inside string haystack.",
+      "code": "",
+      "options": [
+        "strstr(haystack, needle)",
+        "strstr(needle, haystack)",
+        "strchr(haystack, needle)",
+        "strcmp(haystack, needle)"
+      ],
+      "correct": 0,
+      "explanation": "strstr searches for a substring; its first argument is the string being searched."
+    },
+    {
+      "id": "string-library-07",
+      "topic": "string-library",
+      "prompt": "Compare at most n initial characters of strings a and b.",
+      "code": "",
+      "options": [
+        "strncmp(a, b, n)",
+        "strcmp(a, b, n)",
+        "strncmp(n, a, b)",
+        "memcmp(a, b)"
+      ],
+      "correct": 0,
+      "explanation": "strncmp takes a maximum comparison count and also stops at a null character."
+    },
+    {
+      "id": "string-library-08",
+      "topic": "string-library",
+      "prompt": "For char dst[16], what must be done after strncpy(dst, src, sizeof dst - 1) to guarantee termination? ",
+      "code": "",
+      "options": [
+        "dst[sizeof dst - 1] = '\\0';",
+        "dst = NULL;",
+        "dst[sizeof dst] = '\\0';",
+        "Nothing; strncpy always terminates."
+      ],
+      "correct": 0,
+      "explanation": "strncpy may leave no null terminator when the source reaches the copy limit; explicitly terminate within bounds."
+    },
+    {
+      "id": "string-library-09",
+      "topic": "string-library",
+      "prompt": "Strip a newline from a successfully read string buffer using strcspn.",
+      "code": "",
+      "options": [
+        "buffer[strcspn(buffer, \"\\n\")] = '\\0';",
+        "buffer[strcspn(buffer, \"\\n\")] = '0';",
+        "buffer = strcspn(buffer, \"\\n\");",
+        "strcspn(buffer, \"\\n\") = 0;"
+      ],
+      "correct": 0,
+      "explanation": "strcspn yields the first newline index, or the existing terminator index if no newline occurs."
+    },
+    {
+      "id": "string-library-10",
+      "topic": "string-library",
+      "prompt": "Which header declares strlen, strcmp and strcpy?",
+      "code": "",
+      "options": [
+        "#include <string.h>",
+        "#include <stdlib.h>",
+        "#include <stdio.h>",
+        "#include <strings.h>"
+      ],
+      "correct": 0,
+      "explanation": "The standard string and byte-memory functions are declared in string.h."
+    },
+    {
+      "id": "structs-01",
+      "topic": "structs",
+      "prompt": "Define a struct type with one int member named value.",
+      "code": "",
+      "options": [
+        "struct Item { int value; };",
+        "struct Item { int value; }",
+        "struct Item ( int value; );",
+        "struct Item { value: int; };"
+      ],
+      "correct": 0,
+      "explanation": "A struct definition uses braces around member declarations and a trailing semicolon."
+    },
+    {
+      "id": "structs-02",
+      "topic": "structs",
+      "prompt": "Declare an object item using an existing tag struct Item.",
+      "code": "",
+      "options": [
+        "struct Item item;",
+        "Item item; /* no typedef exists */",
+        "struct item Item;",
+        "new struct Item item;"
+      ],
+      "correct": 0,
+      "explanation": "A structure tag uses the struct keyword unless a typedef alias has been declared."
+    },
+    {
+      "id": "structs-03",
+      "topic": "structs",
+      "prompt": "Access member value through struct Item object item.",
+      "code": "",
+      "options": [
+        "item.value",
+        "item->value",
+        "*item.value",
+        "item::value"
+      ],
+      "correct": 0,
+      "explanation": "Use the dot operator when the left operand is the structure object."
+    },
+    {
+      "id": "structs-04",
+      "topic": "structs",
+      "prompt": "Access member value through struct Item *p.",
+      "code": "",
+      "options": [
+        "p->value",
+        "p.value",
+        "p::value",
+        "&p.value"
+      ],
+      "correct": 0,
+      "explanation": "The arrow operator follows the pointer and accesses the member."
+    },
+    {
+      "id": "structs-05",
+      "topic": "structs",
+      "prompt": "Which expression is equivalent to p->value?",
+      "code": "",
+      "options": [
+        "(*p).value",
+        "*p.value",
+        "*(p.value)",
+        "p.*value"
+      ],
+      "correct": 0,
+      "explanation": "Parentheses are needed because . binds more tightly than unary *."
+    },
+    {
+      "id": "structs-06",
+      "topic": "structs",
+      "prompt": "Assign 7 to the value member through struct Item *p.",
+      "code": "",
+      "options": [
+        "p->value = 7;",
+        "p.value = 7;",
+        "*p->value = 7;",
+        "p->value == 7;"
+      ],
+      "correct": 0,
+      "explanation": "p->value names the member object, so assign directly to it."
+    },
+    {
+      "id": "structs-07",
+      "topic": "structs",
+      "prompt": "Take the address of item’s int value member.",
+      "code": "",
+      "options": [
+        "&item.value",
+        "item.&value",
+        "*item.value",
+        "item->&value"
+      ],
+      "correct": 0,
+      "explanation": "Apply address-of to the member expression."
+    },
+    {
+      "id": "structs-08",
+      "topic": "structs",
+      "prompt": "Initialize value to 7 using a designated struct initializer.",
+      "code": "",
+      "options": [
+        "struct Item item = { .value = 7 };",
+        "struct Item item = { value: 7 };",
+        "struct Item item = (.value = 7);",
+        "struct Item item.value = 7;"
+      ],
+      "correct": 0,
+      "explanation": "Designated member initializers use .member = expression inside braces."
+    },
+    {
+      "id": "structs-09",
+      "topic": "structs",
+      "prompt": "Copy all members of struct Item object b into object a.",
+      "code": "",
+      "options": [
+        "a = b;",
+        "a == b;",
+        "a = &b;",
+        "*a = *b;"
+      ],
+      "correct": 0,
+      "explanation": "Assignment between compatible structure objects is valid; pointer members copy their pointer values."
+    },
+    {
+      "id": "structs-10",
+      "topic": "structs",
+      "prompt": "Allocate storage for one struct Item object using struct Item *p.",
+      "code": "",
+      "options": [
+        "p = malloc(sizeof *p);",
+        "p = malloc(sizeof p);",
+        "*p = malloc(sizeof *p);",
+        "p = malloc(struct Item);"
+      ],
+      "correct": 0,
+      "explanation": "Use the size of the pointed-to structure, not the pointer object."
+    },
+    {
+      "id": "typedefs-01",
+      "topic": "typedefs",
+      "prompt": "Create byte as an alias for unsigned char.",
+      "code": "",
+      "options": [
+        "typedef unsigned char byte;",
+        "typedef byte unsigned char;",
+        "unsigned char typedef = byte;",
+        "#define unsigned char byte"
+      ],
+      "correct": 0,
+      "explanation": "A typedef uses a declaration with the alias in the declarator position."
+    },
+    {
+      "id": "typedefs-02",
+      "topic": "typedefs",
+      "prompt": "Create Item as an alias for struct Item.",
+      "code": "",
+      "options": [
+        "typedef struct Item Item;",
+        "typedef Item struct Item;",
+        "struct Item = Item;",
+        "typedef struct Item;"
+      ],
+      "correct": 0,
+      "explanation": "The final Item is the typedef name; the earlier Item is the struct tag."
+    },
+    {
+      "id": "typedefs-03",
+      "topic": "typedefs",
+      "prompt": "Define an enum tag Color with constants RED and BLUE.",
+      "code": "",
+      "options": [
+        "enum Color { RED, BLUE };",
+        "enum Color { RED; BLUE; };",
+        "enum Color ( RED, BLUE );",
+        "enum Color = { RED, BLUE };"
+      ],
+      "correct": 0,
+      "explanation": "Enumerators are comma-separated inside braces."
+    },
+    {
+      "id": "typedefs-04",
+      "topic": "typedefs",
+      "prompt": "Assign the explicit integer value 3 to an enumerator.",
+      "code": "",
+      "options": [
+        "enum State { READY = 3 };",
+        "enum State { READY: 3 };",
+        "enum State { READY == 3 };",
+        "enum State ( READY = 3 );"
+      ],
+      "correct": 0,
+      "explanation": "Enumerator initializers use = followed by an integer constant expression."
+    },
+    {
+      "id": "typedefs-05",
+      "topic": "typedefs",
+      "prompt": "Declare variable state using an enum tag State.",
+      "code": "",
+      "options": [
+        "enum State state;",
+        "State state; /* no typedef exists */",
+        "enum state State;",
+        "enum(State) state;"
+      ],
+      "correct": 0,
+      "explanation": "Use enum plus the tag, unless an alias was separately introduced."
+    },
+    {
+      "id": "typedefs-06",
+      "topic": "typedefs",
+      "prompt": "Given typedef int *IntPtr, declare p and q as pointers to int using that alias.",
+      "code": "",
+      "options": [
+        "IntPtr p, q;",
+        "IntPtr *p, *q;",
+        "int *p, q;",
+        "IntPtr p, **q;"
+      ],
+      "correct": 0,
+      "explanation": "Both declarators use the pointer typedef; adding another star would add a pointer layer."
+    },
+    {
+      "id": "typedefs-07",
+      "topic": "typedefs",
+      "prompt": "Which header provides bool, true and false for C17 code?",
+      "code": "",
+      "options": [
+        "#include <stdbool.h>",
+        "#include <boolean.h>",
+        "#include <bool.h>",
+        "#include <stdlib.h>"
+      ],
+      "correct": 0,
+      "explanation": "stdbool.h provides these C17 macros; _Bool is the underlying language type."
+    },
+    {
+      "id": "typedefs-08",
+      "topic": "typedefs",
+      "prompt": "Declare a Boolean flag initialized to true after including stdbool.h.",
+      "code": "",
+      "options": [
+        "bool ready = true;",
+        "boolean ready = true;",
+        "Bool ready = True;",
+        "bool ready == true;"
+      ],
+      "correct": 0,
+      "explanation": "C is case-sensitive; bool and true are lowercase C17 header macros."
+    },
+    {
+      "id": "nodes-01",
+      "topic": "nodes",
+      "prompt": "Declare next inside struct Node so it can point to another Node.",
+      "code": "",
+      "options": [
+        "struct Node *next;",
+        "struct Node next;",
+        "Node next; /* no typedef exists */",
+        "struct *Node next;"
+      ],
+      "correct": 0,
+      "explanation": "A pointer may refer to an incomplete struct type; directly containing the same structure would require infinite size."
+    },
+    {
+      "id": "nodes-02",
+      "topic": "nodes",
+      "prompt": "Move struct Node *p to the node named by its next member.",
+      "code": "",
+      "options": [
+        "p = p->next;",
+        "p = p.next;",
+        "p++;",
+        "*p = p->next;"
+      ],
+      "correct": 0,
+      "explanation": "Follow the stored link. Nodes need not be adjacent in an array."
+    },
+    {
+      "id": "nodes-03",
+      "topic": "nodes",
+      "prompt": "Stop traversal when node pointer p is null.",
+      "code": "",
+      "options": [
+        "while (p != NULL)",
+        "while (*p != NULL)",
+        "while (&p != NULL)",
+        "while (p = NULL)"
+      ],
+      "correct": 0,
+      "explanation": "Test the pointer before accessing its members."
+    },
+    {
+      "id": "nodes-04",
+      "topic": "nodes",
+      "prompt": "Initialize a new node’s next link to the current head.",
+      "code": "",
+      "options": [
+        "node->next = head;",
+        "node.next = head;",
+        "node->next = &head;",
+        "*node->next = head;"
+      ],
+      "correct": 0,
+      "explanation": "The next field and head both have pointer-to-node type."
+    },
+    {
+      "id": "nodes-05",
+      "topic": "nodes",
+      "prompt": "After node->next = head, make node the list head.",
+      "code": "",
+      "options": [
+        "head = node;",
+        "*head = *node;",
+        "head->next = node;",
+        "head = &node;"
+      ],
+      "correct": 0,
+      "explanation": "Update the head pointer to the new node."
+    },
+    {
+      "id": "nodes-06",
+      "topic": "nodes",
+      "prompt": "Update the caller’s head through struct Node **headp.",
+      "code": "",
+      "options": [
+        "*headp = node;",
+        "headp = node;",
+        "**headp = node;",
+        "&headp = node;"
+      ],
+      "correct": 0,
+      "explanation": "The caller’s pointer object is reached with one dereference of headp."
+    },
+    {
+      "id": "nodes-07",
+      "topic": "nodes",
+      "prompt": "Test whether two node pointers p and target identify the same node.",
+      "code": "",
+      "options": [
+        "p == target",
+        "p->value == target->value",
+        "*p == *target",
+        "p = target"
+      ],
+      "correct": 0,
+      "explanation": "Identity compares addresses. Equal member values do not imply the same node."
+    },
+    {
+      "id": "nodes-08",
+      "topic": "nodes",
+      "prompt": "Save a node’s successor before freeing that node.",
+      "code": "",
+      "options": [
+        "struct Node *next = p->next;\nfree(p);\np = next;",
+        "free(p);\np = p->next;",
+        "free(p->next);\np = p->next;",
+        "free(&p);\np = p->next;"
+      ],
+      "correct": 0,
+      "explanation": "Read the link before ending the current node’s lifetime."
+    },
+    {
+      "id": "bitwise-01",
+      "topic": "bitwise",
+      "prompt": "Apply bit-by-bit AND to unsigned x and mask.",
+      "code": "",
+      "options": [
+        "x & mask",
+        "x && mask",
+        "x and mask",
+        "x * mask"
+      ],
+      "correct": 0,
+      "explanation": "A single & performs bitwise AND; && computes logical truth."
+    },
+    {
+      "id": "bitwise-02",
+      "topic": "bitwise",
+      "prompt": "Apply bit-by-bit OR to unsigned x and mask.",
+      "code": "",
+      "options": [
+        "x | mask",
+        "x || mask",
+        "x or mask",
+        "x + mask"
+      ],
+      "correct": 0,
+      "explanation": "A single | performs bitwise OR."
+    },
+    {
+      "id": "bitwise-03",
+      "topic": "bitwise",
+      "prompt": "Apply bit-by-bit exclusive OR.",
+      "code": "",
+      "options": [
+        "x ^ mask",
+        "x ^^ mask",
+        "x xor mask",
+        "x ** mask"
+      ],
+      "correct": 0,
+      "explanation": "^ toggles bits where the mask contains ones."
+    },
+    {
+      "id": "bitwise-04",
+      "topic": "bitwise",
+      "prompt": "Complement every bit of unsigned int x.",
+      "code": "",
+      "options": [
+        "~x",
+        "!x",
+        "-x",
+        "x~"
+      ],
+      "correct": 0,
+      "explanation": "~ is bitwise NOT; ! is logical NOT."
+    },
+    {
+      "id": "bitwise-05",
+      "topic": "bitwise",
+      "prompt": "Shift unsigned x left by k positions.",
+      "code": "",
+      "options": [
+        "x << k",
+        "x >> k",
+        "x <<< k",
+        "x < k"
+      ],
+      "correct": 0,
+      "explanation": "<< is left shift. The count must be within the promoted type width."
+    },
+    {
+      "id": "bitwise-06",
+      "topic": "bitwise",
+      "prompt": "Shift unsigned x right by k positions.",
+      "code": "",
+      "options": [
+        "x >> k",
+        "x << k",
+        "x >>> k",
+        "x > k"
+      ],
+      "correct": 0,
+      "explanation": ">> is right shift; for unsigned values, vacated high bits are zero."
+    },
+    {
+      "id": "bitwise-07",
+      "topic": "bitwise",
+      "prompt": "Shift unsigned x left by k and store the result in x.",
+      "code": "",
+      "options": [
+        "x <<= k;",
+        "x =<< k;",
+        "x << k;",
+        "x <<== k;"
+      ],
+      "correct": 0,
+      "explanation": "<<= combines shift and assignment."
+    },
+    {
+      "id": "bitwise-08",
+      "topic": "bitwise",
+      "prompt": "Shift unsigned x right by k and store the result in x.",
+      "code": "",
+      "options": [
+        "x >>= k;",
+        "x =>> k;",
+        "x >> k;",
+        "x >>== k;"
+      ],
+      "correct": 0,
+      "explanation": ">>= combines right shift and assignment."
+    },
+    {
+      "id": "bitwise-09",
+      "topic": "bitwise",
+      "prompt": "Select an unsigned left operand when building a mask at bit k.",
+      "code": "",
+      "options": [
+        "1u << k",
+        "1 << k",
+        "1.0 << k",
+        "\"1\" << k"
+      ],
+      "correct": 0,
+      "explanation": "The u suffix makes the small literal unsigned int; a plain 1 is int."
+    },
+    {
+      "id": "bitwise-10",
+      "topic": "bitwise",
+      "prompt": "For 32-bit unsigned int, which condition makes a signed int shift count k valid?",
+      "code": "",
+      "options": [
+        "0 <= k && k < 32",
+        "0 <= k && k <= 32",
+        "k < 32",
+        "k >= 0"
+      ],
+      "correct": 0,
+      "explanation": "A shift count must be nonnegative and strictly below the promoted left operand width."
+    },
+    {
+      "id": "masks-01",
+      "topic": "masks",
+      "prompt": "Build a mask with exactly bit k set; bit 0 is the LSB and 0 <= k < 32.",
+      "code": "",
+      "options": [
+        "1u << k",
+        "k << 1u",
+        "1u >> k",
+        "~(1u << k)"
+      ],
+      "correct": 0,
+      "explanation": "Shift a single unsigned one to position k."
+    },
+    {
+      "id": "masks-02",
+      "topic": "masks",
+      "prompt": "Set bit k of unsigned int x, preserving all other bits. Bit 0 is the LSB; 0 <= k < 32.",
+      "code": "",
+      "options": [
+        "x |= 1u << k;",
+        "x &= 1u << k;",
+        "x ^= 1u << k;",
+        "x |= ~(1u << k);"
+      ],
+      "correct": 0,
+      "explanation": "OR with a one-bit mask forces only that bit to one."
+    },
+    {
+      "id": "masks-03",
+      "topic": "masks",
+      "prompt": "Clear bit k of unsigned int x, preserving all other bits. Bit 0 is the LSB; 0 <= k < 32.",
+      "code": "",
+      "options": [
+        "x &= ~(1u << k);",
+        "x |= ~(1u << k);",
+        "x &= 1u << k;",
+        "x ^= 1u << k;"
+      ],
+      "correct": 0,
+      "explanation": "The complemented mask has a zero at k and ones elsewhere; AND clears only k."
+    },
+    {
+      "id": "masks-04",
+      "topic": "masks",
+      "prompt": "Toggle bit k of unsigned int x. Bit 0 is the LSB; 0 <= k < 32.",
+      "code": "",
+      "options": [
+        "x ^= 1u << k;",
+        "x |= 1u << k;",
+        "x &= ~(1u << k);",
+        "x ^= ~(1u << k);"
+      ],
+      "correct": 0,
+      "explanation": "XOR flips the target bit and preserves bits under zero mask positions."
+    },
+    {
+      "id": "masks-05",
+      "topic": "masks",
+      "prompt": "Read bit k of unsigned int x as exactly 0 or 1. Bit 0 is the LSB; 0 <= k < 32.",
+      "code": "",
+      "options": [
+        "(x >> k) & 1u",
+        "x & (1u << k)",
+        "x >> k",
+        "(x << k) & 1u"
+      ],
+      "correct": 0,
+      "explanation": "Shift the chosen bit to bit zero, then mask away the others."
+    },
+    {
+      "id": "masks-06",
+      "topic": "masks",
+      "prompt": "Test whether bit k of unsigned int x is set. Bit 0 is the LSB; 0 <= k < 32.",
+      "code": "",
+      "options": [
+        "(x & (1u << k)) != 0u",
+        "x && (1u << k)",
+        "(x | (1u << k)) != 0u",
+        "(x & (1u << k)) == 1u"
+      ],
+      "correct": 0,
+      "explanation": "Compare the masked result with zero; a set bit above bit zero has a value other than one."
+    },
+    {
+      "id": "masks-07",
+      "topic": "masks",
+      "prompt": "Set every bit selected by unsigned mask m in x.",
+      "code": "",
+      "options": [
+        "x |= m;",
+        "x &= m;",
+        "x ^= m;",
+        "x |= ~m;"
+      ],
+      "correct": 0,
+      "explanation": "OR sets all mask-selected bits."
+    },
+    {
+      "id": "masks-08",
+      "topic": "masks",
+      "prompt": "Clear every bit selected by unsigned mask m in x.",
+      "code": "",
+      "options": [
+        "x &= ~m;",
+        "x &= m;",
+        "x |= ~m;",
+        "x ^= m;"
+      ],
+      "correct": 0,
+      "explanation": "AND with the complemented mask preserves unselected bits."
+    },
+    {
+      "id": "masks-09",
+      "topic": "masks",
+      "prompt": "Toggle every bit selected by unsigned mask m in x.",
+      "code": "",
+      "options": [
+        "x ^= m;",
+        "x |= m;",
+        "x &= ~m;",
+        "x = m;"
+      ],
+      "correct": 0,
+      "explanation": "XOR flips selected bits regardless of their prior state."
+    },
+    {
+      "id": "masks-10",
+      "topic": "masks",
+      "prompt": "Test whether every bit selected by m is set in x.",
+      "code": "",
+      "options": [
+        "(x & m) == m",
+        "(x & m) != 0u",
+        "(x | m) == m",
+        "x == m"
+      ],
+      "correct": 0,
+      "explanation": "All selected bits must survive the AND; unselected bits in x may have either value."
+    },
+    {
+      "id": "masks-11",
+      "topic": "masks",
+      "prompt": "Keep only the low eight bits of unsigned int x.",
+      "code": "",
+      "options": [
+        "x &= 0xFFu;",
+        "x |= 0xFFu;",
+        "x &= ~0xFFu;",
+        "x ^= 0xFFu;"
+      ],
+      "correct": 0,
+      "explanation": "0xFF has ones only in its low eight bit positions."
+    },
+    {
+      "id": "masks-12",
+      "topic": "masks",
+      "prompt": "Build a low-k-bit mask for unsigned int, where 0 <= k <= 31.",
+      "code": "",
+      "options": [
+        "(1u << k) - 1u",
+        "1u << k",
+        "~(1u << k)",
+        "1u << (k - 1)"
+      ],
+      "correct": 0,
+      "explanation": "Subtracting one fills the k low bits. k = 0 yields zero and does not shift by a negative count."
+    },
+    {
+      "id": "fields-01",
+      "topic": "fields",
+      "prompt": "Extract bits 7 through 4 of unsigned x into result bits 3 through 0; bit 0 is the LSB.",
+      "code": "",
+      "options": [
+        "(x >> 4) & 0xFu",
+        "(x & 0xFu) >> 4",
+        "(x << 4) & 0xFu",
+        "x & 0xF0u"
+      ],
+      "correct": 0,
+      "explanation": "Move the upper nibble down four places, then keep four bits."
+    },
+    {
+      "id": "fields-02",
+      "topic": "fields",
+      "prompt": "Extract w bits starting at LSB-based bit k of unsigned x. Assume 1 <= w <= 31 and k + w <= 32.",
+      "code": "",
+      "options": [
+        "(x >> k) & ((1u << w) - 1u)",
+        "(x << k) & ((1u << w) - 1u)",
+        "(x >> w) & ((1u << k) - 1u)",
+        "x & (1u << w)"
+      ],
+      "correct": 0,
+      "explanation": "The shift chooses the field’s starting position; the mask chooses its width."
+    },
+    {
+      "id": "fields-03",
+      "topic": "fields",
+      "prompt": "Append bit b (0 or 1) at the low end of unsigned accumulator value.",
+      "code": "",
+      "options": [
+        "value = (value << 1) | b;",
+        "value = (value >> 1) | b;",
+        "value = (value << 1) & b;",
+        "value = value | b;"
+      ],
+      "correct": 0,
+      "explanation": "Make room by shifting left, then insert the next bit with OR."
+    },
+    {
+      "id": "fields-04",
+      "topic": "fields",
+      "prompt": "Select the byte containing nonnegative global bit position p in an eight-bit-byte array.",
+      "code": "",
+      "options": [
+        "p / 8",
+        "p % 8",
+        "p * 8",
+        "7 - p % 8"
+      ],
+      "correct": 0,
+      "explanation": "Integer division gives the byte index."
+    },
+    {
+      "id": "fields-05",
+      "topic": "fields",
+      "prompt": "Obtain the offset within an eight-bit byte for nonnegative global position p.",
+      "code": "",
+      "options": [
+        "p % 8",
+        "p / 8",
+        "p * 8",
+        "p + 8"
+      ],
+      "correct": 0,
+      "explanation": "The remainder gives an offset from zero through seven."
+    },
+    {
+      "id": "fields-06",
+      "topic": "fields",
+      "prompt": "An unsigned char array data uses eight-bit bytes, with global bit 0 at data[0]’s LSB and LSB-first order in each byte. Read valid global position p as 0 or 1.",
+      "code": "",
+      "options": [
+        "(data[p / 8] >> (p % 8)) & 1u",
+        "(data[p / 8] >> (7 - p % 8)) & 1u",
+        "(data[p % 8] >> (p / 8)) & 1u",
+        "data[p / 8] & (1u << (p % 8))"
+      ],
+      "correct": 0,
+      "explanation": "LSB-first numbering uses the within-byte offset directly as the right-shift count."
+    },
+    {
+      "id": "fields-07",
+      "topic": "fields",
+      "prompt": "An unsigned char array data uses eight-bit bytes, with global bit 0 at data[0]’s MSB and MSB-first order in each byte. Read valid global position p as 0 or 1.",
+      "code": "",
+      "options": [
+        "(data[p / 8] >> (7 - p % 8)) & 1u",
+        "(data[p / 8] >> (p % 8)) & 1u",
+        "(data[p % 8] >> (7 - p / 8)) & 1u",
+        "data[p / 8] >> (7 - p % 8)"
+      ],
+      "correct": 0,
+      "explanation": "MSB-first offset zero requires a shift of seven."
+    },
+    {
+      "id": "fields-08",
+      "topic": "fields",
+      "prompt": "Given size_t pos, width and total with pos <= total, check whether width bytes fit after pos without risking arithmetic overflow.",
+      "code": "",
+      "options": [
+        "width <= total - pos",
+        "pos + width <= total",
+        "width <= pos - total",
+        "pos * width <= total"
+      ],
+      "correct": 0,
+      "explanation": "The subtraction is safe under the stated bound and avoids overflowing pos + width."
+    },
+    {
+      "id": "fields-09",
+      "topic": "fields",
+      "prompt": "Clear and replace an unsigned field selected by mask, where bits is already shifted and contains no ones outside mask.",
+      "code": "",
+      "options": [
+        "x = (x & ~mask) | bits;",
+        "x = x | bits;",
+        "x = (x & mask) | bits;",
+        "x = (x | ~mask) & bits;"
+      ],
+      "correct": 0,
+      "explanation": "Clear the old field first, then insert the replacement bits."
+    },
+    {
+      "id": "fields-10",
+      "topic": "fields",
+      "prompt": "Test the sign bit of an L-bit two’s-complement pattern stored in unsigned raw. Bit 0 is the LSB; 1 <= L <= 31.",
+      "code": "",
+      "options": [
+        "(raw & (1u << (L - 1))) != 0u",
+        "(raw & (1u << L)) != 0u",
+        "raw < 0",
+        "(raw & 1u) != 0u"
+      ],
+      "correct": 0,
+      "explanation": "The sign bit is the highest of the L stored bits, at position L - 1."
+    },
+    {
+      "id": "conversions-01",
+      "topic": "conversions",
+      "prompt": "Convert int x to double with an explicit cast.",
+      "code": "",
+      "options": [
+        "(double)x",
+        "double(x)",
+        "x as double",
+        "<double>x"
+      ],
+      "correct": 0,
+      "explanation": "C casts place a parenthesized type before an expression."
+    },
+    {
+      "id": "conversions-02",
+      "topic": "conversions",
+      "prompt": "Divide two ints a and nonzero b using floating-point division.",
+      "code": "",
+      "options": [
+        "(double)a / b",
+        "(double)(a / b)",
+        "a / b",
+        "double(a) / b"
+      ],
+      "correct": 0,
+      "explanation": "Convert an operand before division; casting the completed integer quotient is too late."
+    },
+    {
+      "id": "conversions-03",
+      "topic": "conversions",
+      "prompt": "Convert a successfully read unsigned int temp to an unsigned byte.",
+      "code": "",
+      "options": [
+        "(unsigned char)temp",
+        "(unsigned char *)temp",
+        "unsigned char(temp)",
+        "temp as byte"
+      ],
+      "correct": 0,
+      "explanation": "A cast to the scalar type converts its value; a star denotes a pointer cast."
+    },
+    {
+      "id": "conversions-04",
+      "topic": "conversions",
+      "prompt": "In C17, an eight-bit unsigned char on a machine with 32-bit int is first promoted to which type for arithmetic?",
+      "code": "",
+      "options": [
+        "int",
+        "unsigned char",
+        "unsigned int",
+        "long long"
+      ],
+      "correct": 0,
+      "explanation": "All 0..255 values fit in int in this model, so integer promotion chooses int."
+    },
+    {
+      "id": "conversions-05",
+      "topic": "conversions",
+      "prompt": "Which cast forces an operand x into unsigned int arithmetic?",
+      "code": "",
+      "options": [
+        "(unsigned int)x",
+        "(int *)x",
+        "(unsigned int *)x",
+        "unsigned(x)"
+      ],
+      "correct": 0,
+      "explanation": "The scalar cast changes x’s arithmetic type; pointer casts do not perform the same operation."
+    },
+    {
+      "id": "conversions-06",
+      "topic": "conversions",
+      "prompt": "A negative L-bit pattern is in the low L bits of unsigned raw, with 1 <= L <= 31. Select the expression guaranteed to produce the signed int value in C17 with 32-bit int, without an out-of-range unsigned-to-signed conversion.",
+      "code": "",
+      "options": [
+        "(int)((long long)raw - (1LL << L))",
+        "(int)raw - (1 << L)",
+        "(int)(raw - (1u << L))",
+        "raw - (1 << L)"
+      ],
+      "correct": 0,
+      "explanation": "Compute raw minus 2^L in a wide signed type, then convert the representable result to int."
+    },
+    {
+      "id": "conversions-07",
+      "topic": "conversions",
+      "prompt": "Select the literal whose suffix explicitly makes a small value unsigned long long.",
+      "code": "",
+      "options": [
+        "1ULL",
+        "1LLUu",
+        "ULL1",
+        "1U_L_L"
+      ],
+      "correct": 0,
+      "explanation": "U and LL combine to request unsigned long long; ULL and LLU are valid suffix orderings."
+    },
+    {
+      "id": "conversions-08",
+      "topic": "conversions",
+      "prompt": "Which statement is guaranteed about plain char in C17?",
+      "code": "",
+      "options": [
+        "Its signedness depends on the implementation",
+        "It is always signed",
+        "It is always unsigned",
+        "It is the same type as int"
+      ],
+      "correct": 0,
+      "explanation": "Use signed char or unsigned char explicitly when that distinction matters."
+    },
+    {
+      "id": "headers-01",
+      "topic": "headers",
+      "prompt": "Include the standard declarations for printf and scanf.",
+      "code": "",
+      "options": [
+        "#include <stdio.h>",
+        "#import <stdio.h>",
+        "include <stdio.h>;",
+        "#include stdio.h"
+      ],
+      "correct": 0,
+      "explanation": "A standard header name is enclosed in angle brackets after #include."
+    },
+    {
+      "id": "headers-02",
+      "topic": "headers",
+      "prompt": "Include a project header named helpers.h using the quoted form.",
+      "code": "",
+      "options": [
+        "#include \"helpers.h\"",
+        "#include helpers.h",
+        "#include (\"helpers.h\")",
+        "import \"helpers.h\";"
+      ],
+      "correct": 0,
+      "explanation": "Quoted header syntax is commonly used for project headers."
+    },
+    {
+      "id": "headers-03",
+      "topic": "headers",
+      "prompt": "Include standard declarations for malloc, calloc, realloc and free.",
+      "code": "",
+      "options": [
+        "#include <stdlib.h>",
+        "#include <malloc>",
+        "#include <stdio.h>",
+        "#include <string.h>"
+      ],
+      "correct": 0,
+      "explanation": "These allocation functions are declared in stdlib.h."
+    },
+    {
+      "id": "headers-04",
+      "topic": "headers",
+      "prompt": "Include standard declarations for memset, memcpy and memmove.",
+      "code": "",
+      "options": [
+        "#include <string.h>",
+        "#include <memory>",
+        "#include <stdlib.h>",
+        "#include <stdio.h>"
+      ],
+      "correct": 0,
+      "explanation": "The standard byte-memory functions are declared in string.h."
+    },
+    {
+      "id": "headers-05",
+      "topic": "headers",
+      "prompt": "Define an object-like macro LIMIT with replacement text 16.",
+      "code": "",
+      "options": [
+        "#define LIMIT 16",
+        "#define LIMIT = 16;",
+        "#define LIMIT(16)",
+        "define LIMIT 16;"
+      ],
+      "correct": 0,
+      "explanation": "A macro definition has no assignment sign or automatic statement semicolon."
+    },
+    {
+      "id": "headers-06",
+      "topic": "headers",
+      "prompt": "Start a guard that checks whether HELPERS_H has not been defined.",
+      "code": "",
+      "options": [
+        "#ifndef HELPERS_H",
+        "#ifdef !HELPERS_H",
+        "#ifnot HELPERS_H",
+        "#ifndef \"HELPERS_H\""
+      ],
+      "correct": 0,
+      "explanation": "#ifndef tests absence of a macro definition."
+    },
+    {
+      "id": "headers-07",
+      "topic": "headers",
+      "prompt": "Define the guard macro inside #ifndef HELPERS_H.",
+      "code": "",
+      "options": [
+        "#define HELPERS_H",
+        "#include HELPERS_H",
+        "#define \"HELPERS_H\"",
+        "define HELPERS_H;"
+      ],
+      "correct": 0,
+      "explanation": "Define the same macro so later inclusions skip the guarded content."
+    },
+    {
+      "id": "headers-08",
+      "topic": "headers",
+      "prompt": "Close a preprocessing conditional such as #ifndef.",
+      "code": "",
+      "options": [
+        "#endif",
+        "#end",
+        "#else",
+        "endif;"
+      ],
+      "correct": 0,
+      "explanation": "#endif closes the conditional preprocessing group."
+    },
+    {
+      "id": "headers-09",
+      "topic": "headers",
+      "prompt": "Which header provides size_t and NULL without also requiring an I/O API?",
+      "code": "",
+      "options": [
+        "#include <stddef.h>",
+        "#include <stdint.h>",
+        "#include <limits.h>",
+        "#include <stdbool.h>"
+      ],
+      "correct": 0,
+      "explanation": "stddef.h supplies common definitions such as size_t, ptrdiff_t and NULL."
+    },
+    {
+      "id": "headers-10",
+      "topic": "headers",
+      "prompt": "Which header provides INT_MAX and CHAR_BIT?",
+      "code": "",
+      "options": [
+        "#include <limits.h>",
+        "#include <stdint.h>",
+        "#include <stddef.h>",
+        "#include <math.h>"
+      ],
+      "correct": 0,
+      "explanation": "limits.h describes integer implementation limits and bits per byte."
+    },
+    {
+      "id": "headers-11",
+      "topic": "headers",
+      "prompt": "Which header provides uint32_t when the implementation has that exact-width type?",
+      "code": "",
+      "options": [
+        "#include <stdint.h>",
+        "#include <stddef.h>",
+        "#include <stdio.h>",
+        "#include <types.h>"
+      ],
+      "correct": 0,
+      "explanation": "stdint.h declares fixed-width integer types when the implementation supports them."
+    },
+    {
+      "id": "headers-12",
+      "topic": "headers",
+      "prompt": "Remove a macro definition for LIMIT.",
+      "code": "",
+      "options": [
+        "#undef LIMIT",
+        "#delete LIMIT",
+        "#define LIMIT NULL",
+        "undef LIMIT;"
+      ],
+      "correct": 0,
+      "explanation": "#undef removes the macro definition rather than changing its replacement text."
+    },
+    {
+      "id": "storage-build-01",
+      "topic": "storage-build",
+      "prompt": "Declare a global int defined in a different source file, without defining a new object here.",
+      "code": "",
+      "options": [
+        "extern int total;",
+        "int total = 0;",
+        "static int total;",
+        "typedef int total;"
+      ],
+      "correct": 0,
+      "explanation": "extern without an initializer declares an object whose definition may appear elsewhere."
+    },
+    {
+      "id": "storage-build-02",
+      "topic": "storage-build",
+      "prompt": "Give a file-scope int variable internal linkage.",
+      "code": "",
+      "options": [
+        "static int count;",
+        "extern int count;",
+        "auto int count;",
+        "register int count;"
+      ],
+      "correct": 0,
+      "explanation": "At file scope, static limits linkage to the translation unit."
+    },
+    {
+      "id": "storage-build-03",
+      "topic": "storage-build",
+      "prompt": "Make a local counter retain its value across calls.",
+      "code": "",
+      "options": [
+        "static int count = 0;",
+        "int count = 0;",
+        "auto int count = 0;",
+        "const int count = 0;"
+      ],
+      "correct": 0,
+      "explanation": "A static local object has static storage duration; its initializer is not rerun on each call."
+    },
+    {
+      "id": "storage-build-04",
+      "topic": "storage-build",
+      "prompt": "Make a function available only within its translation unit by name.",
+      "code": "",
+      "options": [
+        "static int helper(void);",
+        "extern int helper(void);",
+        "const int helper(void);",
+        "auto int helper(void);"
+      ],
+      "correct": 0,
+      "explanation": "static at file scope gives the function internal linkage."
+    },
+    {
+      "id": "storage-build-05",
+      "topic": "storage-build",
+      "prompt": "Compile main.c into an object file without linking, using GCC.",
+      "code": "",
+      "options": [
+        "gcc -c main.c",
+        "gcc -E main.c",
+        "gcc -S main.c",
+        "gcc main.c -o app"
+      ],
+      "correct": 0,
+      "explanation": "-c stops after producing object code; -E stops after preprocessing and -S after assembly output."
+    },
+    {
+      "id": "storage-build-06",
+      "topic": "storage-build",
+      "prompt": "Compile and link main.c and helpers.c into an executable named app.",
+      "code": "",
+      "options": [
+        "gcc main.c helpers.c -o app",
+        "gcc -c main.c helpers.c -o app",
+        "gcc main.c helpers.h -o app",
+        "gcc -E main.c helpers.c -o app"
+      ],
+      "correct": 0,
+      "explanation": "Provide both source files to the compiler driver and choose the output name with -o."
+    },
+    {
+      "id": "storage-build-07",
+      "topic": "storage-build",
+      "prompt": "Link already compiled main.o and helpers.o into app.",
+      "code": "",
+      "options": [
+        "gcc main.o helpers.o -o app",
+        "gcc -c main.o helpers.o",
+        "gcc -E main.o helpers.o",
+        "gcc main.h helpers.h -o app"
+      ],
+      "correct": 0,
+      "explanation": "The compiler driver can invoke the linker on object files."
+    },
+    {
+      "id": "storage-build-08",
+      "topic": "storage-build",
+      "prompt": "Request C17 and the common Wall/Wextra warning groups when building main.c.",
+      "code": "",
+      "options": [
+        "gcc -std=c17 -Wall -Wextra main.c -o app",
+        "gcc -C17 -warnings main.c -o app",
+        "gcc --c17 --allwarnings main.c",
+        "gcc -std=cpp17 main.c -o app"
+      ],
+      "correct": 0,
+      "explanation": "-std=c17 selects the language dialect; -Wall and -Wextra enable useful warning groups."
+    },
+    {
+      "id": "storage-build-09",
+      "topic": "storage-build",
+      "prompt": "Where should a function prototype shared by several C source files normally be placed?",
+      "code": "",
+      "options": [
+        "In a header included by those source files",
+        "Only inside a caller’s function body",
+        "In an object file edited as text",
+        "In a #define replacing the entire program"
+      ],
+      "correct": 0,
+      "explanation": "A shared header supplies a consistent declaration to every translation unit."
+    },
+    {
+      "id": "storage-build-10",
+      "topic": "storage-build",
+      "prompt": "Which declaration promises a function exists but supplies no body?",
+      "code": "",
+      "options": [
+        "int work(int x);",
+        "int work(int x) { return x; }",
+        "int work = 0;",
+        "#define work(x) (x)"
+      ],
+      "correct": 0,
+      "explanation": "A function declaration ending in a semicolon is not its implementation."
+    }
+  ]
+}

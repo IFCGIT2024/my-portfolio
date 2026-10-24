@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSCI 2122 · C Syntax Drill</title>
+  <meta name="description" content="Repeat C syntax by topic or pattern: multiple-choice practice for declarations, pointers, arrays, strings, memory, bit masks, library calls and more.">
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="syntax.css?v=1">
+  <script src="syntax-core.js?v=1" defer></script><script src="syntax.js?v=1" defer></script>
+</head>
+<body>
+  <a class="syntax-skip" href="#practice-home">Skip to drill</a>
+  <nav class="topbar"><a href="index.html">← Fall 2026 Hub</a><span>CSCI 2122</span></nav>
+  <main class="syntax-shell" id="practice-home">
+    <nav class="quiz-links" aria-label="CSCI 2122 practice"><a class="secondary-button" href="a2-recall.html">C recall</a><a class="secondary-button" href="syntax.html" aria-current="page">Syntax drill</a><a class="secondary-button" href="drill.html">Bits &amp; values</a><a class="secondary-button" href="quiz.html?course=2122&amp;quiz=a1">A1 foundations</a><a class="secondary-button" href="midterm.html">Midterm review</a></nav>
+    <header class="syntax-hero"><p class="eyebrow">C syntax · Multiple-choice repetition</p><h1>See the form.<br>Make it familiar.</h1><p>One declaration, operator, or function call at a time. Drill a topic, repeat one pattern, or mix everything until the syntax comes readily.</p><span id="bank-size" class="syntax-badge"></span></header>
+    <p id="storage-notice" class="notice" role="status" hidden></p>
+    <section id="loading" class="panel" aria-live="polite"><p id="load-message">Loading C syntax patterns…</p><button id="retry" type="button" class="secondary-button" hidden>Reload page</button></section>
+    <div id="app" hidden>
+      <section id="setup" class="panel">
+        <div id="resume-box" class="resume-box" hidden><div><strong>Pick up where you left off.</strong><p id="resume-copy"></p></div><button id="resume" class="primary-button" type="button">Resume drill →</button></div>
+        <div class="section-title"><div><p class="eyebrow">Choose what to memorize</p><h2>Your next set of repetitions</h2></div><button id="quick-start" class="secondary-button" type="button">Mix everything · endless</button></div>
+        <form id="setup-form">
+          <div class="syntax-settings"><label for="topic">Topic<select id="topic"><option value="all">All topics · mixed</option></select></label><label for="pattern">Pattern<select id="pattern"><option value="all">All patterns in this topic</option></select></label><label for="length">Round length<select id="length"><option value="10">10 questions</option><option value="25" selected>25 questions</option><option value="50">50 questions</option><option value="100">100 questions</option><option value="pass">Finish this pass</option><option value="endless">Endless repetition</option></select></label></div>
+          <p id="selection-note" class="muted"></p><p class="syntax-help">Each pass visits every selected pattern before repeating. Mixed practice rotates through topics. Your place carries into the next round, and answer choices are shuffled each time.</p>
+          <div class="actions"><button id="start" type="submit" class="primary-button">Start syntax drill →</button><button id="review-missed" type="button" class="secondary-button">Review missed</button></div><p id="setup-message" role="status" class="status-copy"></p>
+        </form>
+      </section>
+
+      <section id="practice" hidden aria-labelledby="prompt">
+        <div class="practice-bar"><div><p id="round-label" class="eyebrow"></p><p id="round-progress"></p></div><button id="pause" type="button" class="secondary-button">Pause &amp; save</button></div>
+        <div class="metrics"><span><strong id="round-correct">0</strong> correct choices</span><span><strong id="round-streak">0</strong> current streak</span><span id="pass-progress"></span></div>
+        <article class="panel question-card">
+          <div class="question-meta"><span id="question-topic" class="eyebrow"></span><span class="shortcut">Choose with keys 1–4</span></div>
+          <p class="syntax-assumptions">C17 · standard headers included unless asked · automatic local variables; valid objects and bounds unless stated. Width-dependent masks use 32-bit unsigned int and eight-bit bytes.</p>
+          <h2 id="prompt" tabindex="-1"></h2><pre id="question-code" hidden></pre>
+          <div id="choices" class="syntax-choices" role="group" aria-label="Answer choices"></div>
+          <div id="before-answer" class="actions"><button id="reveal" type="button" class="text-button">Show answer</button><button id="hint" type="button" class="text-button">Show topic reminder</button></div>
+          <p id="hint-text" class="hint-box" hidden></p>
+          <section id="feedback" class="syntax-feedback" aria-live="polite" aria-atomic="true" hidden><strong id="feedback-title"></strong><pre id="correct-answer"></pre><p id="explanation"></p><p id="review-note" class="syntax-help"></p></section>
+          <div class="next-row"><button id="next" type="button" class="primary-button" hidden>Next question →</button><label class="auto-label"><input id="auto-next" type="checkbox"> Next after correct · 1.5 seconds</label></div>
+          <p class="syntax-help">Choose once, read the rule, repeat. Enter advances after feedback. A reminder or revealed answer stays in missed review until answered without help.</p>
+        </article>
+        <div class="actions finish-actions"><button id="finish" type="button" class="text-button">Finish round</button><a href="a2-recall.html">Practise producing answers in C recall →</a></div>
+      </section>
+
+      <section id="summary" class="panel" hidden><p class="eyebrow">Round complete</p><h2 id="summary-title" tabindex="-1">Keep the syntax moving.</h2><p id="summary-copy"></p><div id="summary-metrics" class="summary-metrics"></div><p class="syntax-help">These scores measure recognition in practice. Use C recall to write expressions and functions from memory.</p><div class="actions"><button id="again" class="primary-button" type="button">Keep drilling →</button><button id="summary-missed" class="secondary-button" type="button">Review missed</button><button id="choose" class="text-button" type="button">Choose a topic</button></div></section>
+
+      <section id="coverage" class="coverage-section"><div class="section-title"><div><p class="eyebrow">Coverage &amp; repetition</p><h2>Every topic has its own practice set.</h2></div><p id="total-progress" class="muted"></p></div><p class="syntax-help">Select a topic below to drill it. Attempted counts are unique patterns; correct choices count repeated successes. Missed counts include answers shown or reached with a reminder.</p><div class="table-wrap"><table><thead><tr><th scope="col">Topic</th><th scope="col">Attempted</th><th scope="col">Correct choices</th><th scope="col">To revisit</th></tr></thead><tbody id="coverage-rows"></tbody></table></div></section>
+      <details class="syntax-details"><summary>Scope and language reference</summary><p>This drill covers the C forms used across the current 2122 foundations, recall and midterm practice: variables, expressions, control flow, functions, pointers, arrays, strings, standard I/O, memory, structures, byte operations, headers and build commands. Each question supplies its own context.</p><p>Several choices may be valid C in another context. Choose the form that fulfills the exact request. A miss does not necessarily mean the chosen text could never compile.</p><p>Language reference: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf">WG14 C committee draft</a> for the language and library rules used here; build-command reference: <a href="https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html">GCC compilation options</a>.</p></details>
+      <details class="syntax-details"><summary>Progress backup and reset</summary><p>Progress saves in this browser. Export it to keep a copy or move to another browser. Import replaces this drill’s progress after validation.</p><div class="actions"><button id="export" class="secondary-button" type="button">Export progress</button><label class="secondary-button file-label" for="import">Import progress<input id="import" type="file" accept=".json,application/json"></label><button id="reset" class="text-button" type="button">Reset syntax progress</button></div><p id="backup-message" role="status"></p></details>
+    </div>
+    <noscript><p class="panel">Enable JavaScript to use the syntax drill.</p></noscript>
+  </main>
+</body></html>

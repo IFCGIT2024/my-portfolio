@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Assignment 2 recall practice for CSCI 2122: learn each C rule, recall its syntax, connect the steps, and write the decoder methods from memory.">
+  <title>CSCI 2122 · Assignment 2 Recall</title>
+  <link rel="stylesheet" href="style.css?v=2122-a2-1">
+  <link rel="stylesheet" href="a2-recall.css?v=1">
+  <script src="a2-recall-core.js?v=1" defer></script>
+  <script src="a2-recall.js?v=1" defer></script>
+</head>
+<body class="a2-page">
+  <a class="a2-skip" href="#main">Skip to practice</a>
+  <nav class="topbar" aria-label="Site navigation"><a href="index.html">← Fall 2026 Hub</a><span>CSCI 2122</span></nav>
+  <main id="main" class="a2-shell">
+    <nav class="quiz-links" aria-label="CSCI 2122 review pages">
+      <a class="secondary-button" href="basics.html">Basics drill</a>
+      <a class="secondary-button" href="quiz.html?course=2122&amp;quiz=a1">Assignment 1</a>
+      <a class="secondary-button" href="a2-recall.html" aria-current="page">Assignment 2 recall</a>
+      <a class="secondary-button" href="midterm.html">Midterm review</a>
+    </nav>
+    <header class="a2-heading">
+      <div><p class="eyebrow">Assignment 2 · Recall lab</p><h1>Know the rule.<br>Recall the code.</h1><p class="a2-intro">Start with one idea. Recall its exact syntax. Then combine the ideas until you can write the method from memory.</p></div>
+      <div class="a2-heading-note"><span class="a2-dot" aria-hidden="true"></span><strong>Attempt → check → return later</strong><p>Short answers and blank-page coding. Your first attempt stays separate from hints and self-checks.</p></div>
+    </header>
+
+    <section id="loading-panel" class="panel a2-loading" aria-live="polite"><p id="loading-message">Loading the Assignment 2 practice bank…</p><button id="retry-load" class="secondary-button" type="button" hidden>Try loading again</button></section>
+    <p id="storage-notice" class="a2-notice" role="status" hidden></p>
+    <div id="app" hidden>
+      <section id="resume-panel" class="a2-resume" aria-labelledby="resume-heading" hidden>
+        <div><h2 id="resume-heading">Your round is ready to continue.</h2><p id="resume-description"></p></div>
+        <div class="a2-actions"><button id="resume-session" class="primary-button" type="button">Continue round</button><button id="discard-session" class="secondary-button" type="button">End saved round</button></div>
+      </section>
+
+      <section id="setup-panel" class="panel a2-setup" aria-labelledby="setup-heading">
+        <div class="a2-section-heading"><div><p class="eyebrow">Choose your practice</p><h2 id="setup-heading">Build recall, one layer at a time.</h2></div><span id="bank-count" class="a2-small-label"></span></div>
+        <ol class="a2-ladder" aria-label="Four cumulative practice stages">
+          <li><span>1</span><div><strong>Facts</strong><small>Rules &amp; meanings</small></div></li>
+          <li><span>2</span><div><strong>Syntax</strong><small>Recall an operation</small></div></li>
+          <li><span>3</span><div><strong>Connections</strong><small>Trace interacting ideas</small></div></li>
+          <li><span>4</span><div><strong>Methods</strong><small>Write from memory</small></div></li>
+        </ol>
+        <form id="setup-form">
+          <div class="a2-settings">
+            <label for="topic">Topic<select id="topic"><option value="all">All Assignment 2 topics</option></select></label>
+            <label for="mode">Practice mode<select id="mode"><option value="focus">Focused · topic cues</option><option value="mixed">Mixed · identify the idea</option><option value="due">Due review · return later</option></select></label>
+            <label for="stage">Include stages<select id="stage"><option value="1">Through 1 · facts</option><option value="2" selected>Through 2 · facts + syntax</option><option value="3">Through 3 · add connections</option><option value="4">Through 4 · add methods</option></select></label>
+            <label for="round-length">Round length<select id="round-length"><option value="10">10 questions</option><option value="20">20 questions</option><option value="40">40 questions</option></select></label>
+          </div>
+          <p id="selection-description" class="a2-help"></p>
+          <div class="a2-start-row"><button id="start-session" class="primary-button" type="submit">Start recall round →</button><p>Answer before you look. Use hints when needed; they are recorded as assistance.</p></div>
+          <p id="setup-message" class="a2-inline-message" role="status"></p>
+        </form>
+      </section>
+
+      <section id="study-panel" class="panel a2-study" aria-labelledby="question-prompt" hidden>
+        <div class="a2-study-top"><p id="round-progress" class="eyebrow"></p><button id="pause-session" class="text-button" type="button">Pause round</button></div>
+        <progress id="round-progress-bar" value="0" max="10" aria-label="Questions completed"></progress>
+        <div class="a2-question-meta"><span id="question-stage" class="a2-small-label"></span><span id="question-topic" class="a2-topic-tag"></span></div>
+        <div id="study-assumptions" class="a2-assumptions"><strong>Practice assumptions</strong><ul id="assumptions-list"></ul></div>
+        <h2 id="question-prompt" tabindex="-1"></h2>
+        <pre id="question-code" class="a2-code" hidden><code></code></pre>
+        <form id="answer-form" novalidate>
+          <label id="answer-label" for="answer-short">Your answer</label>
+          <input id="answer-short" class="a2-answer" type="text" name="short-answer" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="answer-help answer-error">
+          <textarea id="answer-long" class="a2-answer a2-answer-code" name="long-answer" rows="9" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="answer-help answer-error" hidden></textarea>
+          <div class="a2-answer-footer"><p id="answer-help" class="a2-help"></p><label class="a2-confidence" for="confidence">Confidence <span>(optional)</span><select id="confidence"><option value="">Not recorded</option><option value="unsure">Unsure</option><option value="okay">Okay</option><option value="sure">Sure</option></select></label></div>
+          <p id="answer-error" class="a2-error" role="alert"></p>
+          <div id="answer-actions" class="a2-actions"><button id="check-answer" class="primary-button" type="submit">Check answer</button><button id="show-hint" class="secondary-button" type="button">Small hint</button><button id="show-answer" class="text-button" type="button">Show answer</button></div>
+        </form>
+        <div id="hint-panel" class="a2-hint" hidden><strong>Hint · assisted attempt</strong><p id="hint-text"></p></div>
+        <details id="question-reference" class="a2-reference" hidden><summary>Open topic reference <span>· records assistance</span></summary><div id="question-reference-content"></div></details>
+        <p id="assistance-note" class="a2-help" hidden></p>
+        <section id="feedback-panel" class="a2-feedback" aria-labelledby="feedback-heading" hidden>
+          <p id="feedback-kind" class="eyebrow"></p><h3 id="feedback-heading" tabindex="-1"></h3><p id="feedback-message"></p>
+          <h4>Model answer</h4><pre id="model-answer" class="a2-code"></pre>
+          <div id="rubric-block" hidden><h4>Check each requirement</h4><ul id="rubric-list" class="a2-rubric"></ul></div>
+          <p id="feedback-explanation"></p><p id="feedback-source" class="a2-source"></p>
+          <div id="alternate-check" hidden><p>Exact matching can miss a valid alternative. If your answer uses a different valid form, compare it with the model and explain the difference to yourself.</p><button id="open-self-check" class="secondary-button" type="button">Compare as a self-check</button></div>
+          <fieldset id="self-rating" class="a2-self-rating" hidden><legend>How does your original attempt compare?</legend><p>Self-check only. This page does not compile or execute C.</p><div class="a2-actions"><button type="button" class="secondary-button" data-rating="0">Needs practice</button><button type="button" class="secondary-button" data-rating="1">Partly</button><button type="button" class="secondary-button" data-rating="2">Meets rubric</button></div></fieldset>
+          <p id="review-timing" class="a2-review-timing"></p>
+          <div class="a2-next-row"><button id="next-question" class="primary-button" type="button" hidden>Next question →</button><span id="answer-record-note" class="a2-help"></span></div>
+        </section>
+      </section>
+
+      <section id="summary-panel" class="panel a2-summary" aria-labelledby="summary-heading" hidden>
+        <p class="eyebrow">Round review</p><h2 id="summary-heading" tabindex="-1">Recall recorded. Let it settle.</h2><p id="summary-description"></p>
+        <div id="summary-stats" class="a2-metrics"></div><p id="summary-next" class="a2-help"></p>
+        <div class="a2-actions"><button id="another-round" class="primary-button" type="button">Choose another round</button><button id="review-due" class="secondary-button" type="button">Review due questions</button></div>
+      </section>
+
+      <section id="dashboard-panel" class="a2-dashboard" aria-labelledby="dashboard-heading">
+        <div class="a2-section-heading"><div><p class="eyebrow">Your recall map</p><h2 id="dashboard-heading">Keep returning to the weak spots.</h2></div><p id="dashboard-total" class="a2-small-label"></p></div>
+        <p class="a2-help">“Delayed recall” means independent successes at least 24 hours apart. It is evidence of retention in practice, not a measure of exam mastery. Due and delayed counts group alternate prompts for the same skill.</p>
+        <div class="a2-table-wrap"><table class="a2-topic-table"><caption class="a2-sr-only">Practice progress by Assignment 2 topic</caption><thead><tr><th scope="col">Topic</th><th scope="col">Unseen prompts</th><th scope="col">Due skills</th><th scope="col">Needs work prompts</th><th scope="col">Delayed recall skills</th></tr></thead><tbody id="topic-progress"></tbody></table></div>
+      </section>
+
+      <div class="a2-bottom-grid">
+        <details class="a2-info"><summary>How this recall system works</summary><div><p><strong>Focused:</strong> keep a topic cue while you learn the rule. Work through facts and syntax first, then add connected traces and methods.</p><p><strong>Mixed:</strong> choose the relevant concept yourself. Topic labels appear after your attempt. The stated C assumptions remain visible.</p><p><strong>Due review:</strong> return to skills you have already attempted when their review time arrives. A different prompt may test the same skill; fresh skills are not added to fill the round.</p><p>Hints, opened references, and revealed answers are recorded. Automatically checked answers and rubric self-checks are reported separately. A blank-page method is a self-check, never an automatic code grade.</p><p>Progress is saved only in this browser when available. Export a backup to move it to another browser.</p></div></details>
+        <details class="a2-info"><summary>Sources &amp; Assignment 2 scope</summary><div><p>This bank follows the Assignment 2 bit-stream decoder, with supporting C rules used to implement it. Questions are rewritten for practice; source PDFs are not republished here.</p><ul id="sources-list"></ul><p>C language reference: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf" target="_blank" rel="noopener noreferrer">WG14 C committee draft (PDF)</a>. Applicable rules are used with the practice assumptions shown above each question.</p></div></details>
+        <details class="a2-info a2-backup"><summary>Progress backup &amp; reset</summary><div><p>Export keeps your review history and saved round. Import replaces this page’s progress after validation.</p><div class="a2-actions"><button id="export-progress" class="secondary-button" type="button">Export backup</button><label class="secondary-button a2-file-button" for="import-progress">Import backup<input id="import-progress" type="file" accept="application/json,.json"></label><button id="reset-progress" class="text-button" type="button">Reset A2 progress</button></div><p id="backup-message" class="a2-help" role="status"></p></div></details>
+      </div>
+    </div>
+    <noscript><p class="panel">Enable JavaScript to use Assignment 2 recall practice. Answers and review history stay in your browser.</p></noscript>
+  </main>
+</body>
+</html>

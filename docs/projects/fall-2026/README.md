@@ -4,6 +4,63 @@ This directory is intentionally self-contained. `index.html` is the course hub a
 
 Each course owns one file in `data/`: `2115.json`, `2122.json`, `2134.json`, or `2141.json`.
 
+## CSCI 2122 Assignment 2 recall — 2026-10-24
+
+`a2-recall.html` is a separate Assignment 2 section linked from the Systems
+Programming card. Its 126 original practice prompts cover 12 ordered topics:
+encoding rules, I/O, pointers and arrays, buffer allocation, masks, shifts, bit
+positions, field accumulation, signed decoding, cursor boundaries, combined
+traces, and complete helper methods. The source bank is
+`data/2122-a2-recall.json`; the supplied Assignment 2 PDF and walkthrough inform
+the questions but are not republished. Lab 5 is outside this section's scope.
+
+Practice progresses through four cumulative stages: facts, syntax, connections,
+and methods. Focused rounds retain topic cues; mixed rounds hide them until the
+answer is committed. Later stages reserve space for their most advanced
+available questions while including earlier material. Rounds contain up to
+10, 20 or 40 distinct prompts, depending on the selected pool.
+
+Integer and constrained-token answers are checked automatically. Expressions,
+explanations, and full functions use a committed draft, model answer, explicit
+rubric, and self-rating. A different valid exact answer can be self-checked
+without receiving automatic correctness credit. The page never compiles or
+executes student code. Hints, opened references, and reveals are recorded
+separately from independent recall; invalid numeric input consumes no attempt.
+
+Due review operates on skill families, preferring another prompt for the same
+skill when available. A successful review starts at one day and can grow to
+3, 7 and 14 days after further successes at least 24 hours apart. Quick repeats
+do not extend the interval. Misses, partial answers, assistance and reveals
+return after ten minutes and reset spacing. Empty due rounds stay empty.
+Delayed-recall counts require automatic independent successes at least 24 hours
+apart; self-checks are never folded into that evidence. These intervals are a
+transparent practice heuristic, not a validated adaptive model or mastery score.
+
+Progress, drafts and feedback save to `csci2122-a2-recall-v1`. Export/import and
+reset affect only this section. Imports validate question revisions and session
+phases; incompatible content drops stale records or the saved round. Aggregate
+counts persist, while detailed history retains at most 5,000 attempts and about
+one million serialized characters. Drafts are limited to 12,000 characters.
+The buildless page has no runtime dependencies or network service for answers.
+
+Content corrections include safe wide subtraction for a 31-bit signed payload,
+proper `scanf("%x", &unsigned_temp)` typing, byte-count versus capacity checks,
+and the absence of a fixed Problem 2 buffer maximum. Practice assumptions are
+visible and do not reveal the encoding facts being tested.
+
+Validation:
+
+```sh
+node --test docs/projects/fall-2026/tests/*.test.cjs
+python docs/projects/fall-2026/tests/a2-verify.py
+```
+
+The A2 core and controller tests cover grading boundaries, hints and self-checks,
+nonduplicated scoring, saved drafts, reloads, malformed backups, empty due rounds,
+variant selection, delayed evidence, and storage/load failures. C model-answer
+checks compile helper functions with strict C17 warnings and undefined-behavior
+sanitization, and compare them with independent bit-string oracles.
+
 ## CSCI 2122 full-pass trainer — 2026-10-19
 
 `drill.html` complements the quick `basics.html` drill within the same hub section.

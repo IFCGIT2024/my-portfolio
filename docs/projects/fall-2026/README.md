@@ -4,18 +4,24 @@ This directory is intentionally self-contained. `index.html` is the course hub a
 
 Each course owns one file in `data/`: `2115.json`, `2122.json`, `2134.json`, or `2141.json`.
 
-## CSCI 2122 Assignment 2 recall — 2026-10-24
+## CSCI 2122 C recall (A2 section) — 2026-10-24
 
-`a2-recall.html` is a separate Assignment 2 section linked from the Systems
-Programming card. Its 126 original practice prompts cover 12 ordered topics:
-encoding rules, I/O, pointers and arrays, buffer allocation, masks, shifts, bit
-positions, field accumulation, signed decoding, cursor boundaries, combined
-traces, and complete helper methods. The source bank is
-`data/2122-a2-recall.json`; the supplied Assignment 2 PDF and walkthrough inform
-the questions but are not republished. Lab 5 is outside this section's scope.
+`a2-recall.html` is a separate C quiz preparation section linked from the Systems
+Programming card as **A2 · C recall**. The route and section label organize the
+course material; every prompt is fully self-contained. Practice targets C
+variables and types, formatted I/O, pointer and array behavior, allocation,
+integer representations, masks and shifts, bounds, connected traces, and small
+functions. Questions provide their own code, values, and conditions. They do not
+require memorizing an assignment description, packet format, decoder program,
+named helper, or walkthrough.
 
-Practice progresses through four cumulative stages: facts, syntax, connections,
-and methods. Focused rounds retain topic cues; mixed rounds hide them until the
+The bank is `data/2122-a2-recall.json`. The supplied Assignment 2 material informs
+the selection of C concepts, not the facts that students are asked to recall.
+Student-facing prompts and references teach the C concepts directly; no source
+PDF is required or republished. Lab 5 remains outside this section's scope.
+
+Practice progresses through four cumulative stages: facts, syntax, connected
+traces, and functions. Focused rounds retain topic cues; mixed rounds hide them until the
 answer is committed. Later stages reserve space for their most advanced
 available questions while including earlier material. Rounds contain up to
 10, 20 or 40 distinct prompts, depending on the selected pool.
@@ -43,10 +49,12 @@ counts persist, while detailed history retains at most 5,000 attempts and about
 one million serialized characters. Drafts are limited to 12,000 characters.
 The buildless page has no runtime dependencies or network service for answers.
 
-Content corrections include safe wide subtraction for a 31-bit signed payload,
-proper `scanf("%x", &unsigned_temp)` typing, byte-count versus capacity checks,
-and the absence of a fixed Problem 2 buffer maximum. Practice assumptions are
-visible and do not reveal the encoding facts being tested.
+Content distinguishes C guarantees from the stated practice machine. Examples
+use properly typed formatted-input arguments, distinguish allocation byte counts
+from element counts, respect bounds and shift widths, and handle signed bit
+patterns without overflowing signed integers. Any custom bit-field order, width,
+or function contract is given in the question itself. Visible practice assumptions
+provide necessary context without revealing the rule being tested.
 
 Validation:
 

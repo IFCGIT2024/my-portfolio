@@ -1,347 +1,332 @@
 {
   "schemaVersion": 1,
-  "title": "CSCI 2122 · Assignment 2 Recall Lab",
-  "description": "A separate, assignment-scoped recall bank: retrieve one rule, rebuild its syntax, trace interacting concepts, then write small decoder helpers without looking. Reveal the model only after committing an answer; treat a hint-assisted answer as more practice, not independent recall.",
+  "title": "CSCI 2122 · C Recall and Quiz Practice",
+  "description": "Self-contained C practice: recall one fact, reconstruct syntax, trace interacting expressions, then write a complete small function from its contract. Commit an answer before revealing the model. A hint-assisted answer means the skill needs another independent attempt.",
   "assumptions": [
     "C17 practice model: 8-bit bytes; 32-bit int and unsigned int; sizeof(int) = 4; two’s-complement signed integers; long long can represent 2^31.",
-    "Unless a prompt tests failure or bounds, pointers and buffers are valid, requested fields fit, numeric input is representable, and operations explicitly stated to succeed do succeed.",
-    "Relevant standard headers are included. Size and position calculations are representable unless the prompt asks you to check them. Stream positions and array indices are zero-based."
+    "Unless a question tests failure or bounds, its pointers and buffers are valid, requested fields fit, numeric input is representable, and operations explicitly stated to succeed do succeed.",
+    "Relevant standard headers are included. Size and position calculations are representable unless the question asks you to check them. Any bit-reading convention or helper behavior needed for an answer is stated in that question."
   ],
   "sources": [
     {
-      "title": "CSCI 2122 Assignment 2.pdf",
-      "detail": "Primary scope. Page 2: input counts, 5-bit length prefix, MSB-first order, Problem 1 constraints/output and examples. Page 3: Problem 2 multiple fields and termination. Page 4 recommends small helper functions and C library functions."
+      "title": "C17 language and standard-library rules",
+      "detail": "Reference: WG14 N1570, a public C draft whose relevant array, pointer, expression, formatted-I/O and allocation rules are unchanged in C17. https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf"
     },
     {
-      "title": "WALKTHROUGH.md",
-      "detail": "Supplementary helper-based explanation, especially §§3–4 and 7. Corrected here where needed: safe L = 31 subtraction, no fixed 16-byte Problem 2 guarantee, zero is nonnegative, and memset does not validate reads or remove padding written afterward."
-    },
-    {
-      "title": "WG14 N1570 C draft",
-      "detail": "Primary-language reference for supporting rules unchanged in C17: integer promotions, arrays/pointers, sizeof, shifts, scanf/printf, calloc/malloc/free and memset. https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf"
+      "title": "Self-contained exercise contracts",
+      "detail": "Each question gives its needed declarations, values, bit numbering, widths and function contracts. Evaluate the C shown or implement the stated function; no outside input format needs to be recalled."
     }
   ],
   "topics": [
     {
-      "id": "format",
-      "title": "01 · Read the encoding contract",
-      "description": "Separate input counts, header width, stream order and the two problem variants.",
+      "id": "basics",
+      "title": "01 · Binary, hexadecimal and unsigned values",
+      "description": "Recall number representations, integer division and unsigned conversions.",
       "prerequisites": [],
       "notes": [
-        "Each field has a five-bit unsigned length L followed by L signed bits.",
-        "Problem 1 has B = 0..5; an empty line prints nothing, and unused trailing bits are ignored.",
-        "Problem 2 allows more than five bytes without stating a fixed maximum B. Its termination rules are practiced in topic 10."
+        "One hexadecimal digit represents four bits. A hexadecimal literal uses the prefix 0x.",
+        "For an unsigned value with w bits, the range is 0 through 2^w − 1; arithmetic and conversions to unsigned use that modulus.",
+        "Integer division and remainder split a nonnegative index into a group number and an offset."
       ]
     },
     {
       "id": "io",
-      "title": "02 · Recall exact I/O syntax",
-      "description": "Retrieve conversion tokens, argument types, addresses and output order.",
+      "title": "02 · Exact input and output syntax",
+      "description": "Retrieve conversion tokens, destination types, addresses and argument order.",
       "prerequisites": [
-        "format"
+        "basics"
       ],
       "notes": [
-        "scanf(\"%d\", &n) requires int *; scanf(\"%x\", &temp) requires unsigned int *.",
-        "Read each byte into an unsigned int temporary, then store a successfully read value in unsigned-char storage.",
+        "scanf(\"%d\", &count) needs int *; scanf(\"%x\", &temp) needs unsigned int *.",
+        "Check how many scanf conversions succeeded before using the destination values.",
         "printf receives values in conversion order; scanf receives destination addresses."
       ]
     },
     {
       "id": "pointers",
-      "title": "03 · Distinguish arrays and pointer layers",
-      "description": "Tell the byte object, its pointer and the address of that pointer apart.",
+      "title": "03 · Arrays and pointer layers",
+      "description": "Distinguish an element, its pointer and the address of that pointer.",
       "prerequisites": [
         "io"
       ],
       "notes": [
         "p, *p and &p have different types and meanings.",
-        "An array object cannot be assigned; its individual elements can. A pointer assignment copies an address.",
-        "sizeof a real array measures the whole array. An array function parameter is adjusted to a pointer, so pass its length separately."
+        "Array objects cannot be assigned, but their elements can. Pointer assignment copies an address value.",
+        "sizeof a real array measures the whole array; an array function parameter is adjusted to a pointer. Pass the length separately."
       ]
     },
     {
       "id": "memory",
-      "title": "04 · Count bytes and allocate buffers",
-      "description": "Distinguish element count, element size, capacity, received length and initialization.",
+      "title": "04 · Allocation, byte counts and initialization",
+      "description": "Separate element count, element size, capacity, valid input and initialization.",
       "prerequisites": [
         "pointers"
       ],
       "notes": [
         "calloc(count, size) allocates count × size bytes and initializes their bits to zero; malloc does not initialize storage.",
-        "memset writes a byte value into a specified number of bytes. Clearing storage does not make invalid reads safe.",
-        "A buffer must hold B received bytes. Decode only those B bytes, regardless of spare allocated capacity. Check allocation success before use and release dynamic storage with free when finished."
+        "memset writes a byte value into a given number of bytes. Initialization does not make an out-of-bounds access valid.",
+        "Allocated capacity and the number of valid input bytes are separate quantities. Check allocation success before use and free dynamic storage when finished."
       ]
     },
     {
       "id": "masks",
-      "title": "05 · Retrieve masks and bit operators",
-      "description": "Memorize the small operations before combining them with stream positions.",
+      "title": "05 · Masks and bit operators",
+      "description": "Recall setting, clearing, toggling and isolating selected bits.",
       "prerequisites": [
         "pointers"
       ],
       "notes": [
-        "1u << k selects bit k for 0 <= k < 32 in this practice model.",
-        "Use OR to set, AND with an inverted mask to clear, and XOR to toggle.",
-        "Bitwise & and logical && are different operations."
+        "Number bits from zero at the least significant bit when building numeric masks.",
+        "1u << k selects bit k when k is within the unsigned-int width.",
+        "Use OR to set, AND with an inverted mask to clear, and XOR to toggle. Bitwise & differs from logical &&."
       ]
     },
     {
       "id": "shifts",
-      "title": "06 · Predict shift behavior precisely",
-      "description": "Recall the unsigned rules and distinguish invalid counts from valid shifts.",
+      "title": "06 · Shifts, promotions and undefined behavior",
+      "description": "Predict values precisely and recognize invalid operations.",
       "prerequisites": [
         "masks"
       ],
       "notes": [
-        "The shift count must be nonnegative and less than the promoted left operand’s width.",
-        "Use unsigned operands for bit masks. Signed 32-bit 1 << 31 has undefined behavior.",
-        "unsigned char promotes to nonnegative int in the practice model; plain char may be signed."
+        "A shift count must be nonnegative and smaller than the promoted left operand’s width.",
+        "Signed and unsigned shifts have different representability rules; signed 32-bit 1 << 31 is undefined.",
+        "unsigned char promotes to nonnegative int in this practice model; plain char may be signed."
       ]
     },
     {
       "id": "positions",
-      "title": "07 · Locate one MSB-first stream bit",
-      "description": "Translate a global position into the correct byte and right-shift count.",
+      "title": "07 · Indexing bits inside byte arrays",
+      "description": "Translate a stated numbering convention into a byte index and shift.",
       "prerequisites": [
-        "format",
+        "basics",
         "shifts"
       ],
       "notes": [
-        "byteIndex = p / 8; offset = p % 8; shift = 7 - offset.",
-        "The bit value is (data[p / 8] >> (7 - p % 8)) & 1u.",
-        "B received bytes provide valid positions 0 through 8B - 1, if B is nonzero."
+        "With eight-bit bytes, p / 8 selects the byte and p % 8 gives its within-byte offset.",
+        "The prompt specifies whether offsets begin at the MSB or LSB. For MSB-first numbering, the right shift is 7 − p % 8.",
+        "An array of count eight-bit bytes has 8 × count bits; zero-based valid positions end one before that total."
       ]
     },
     {
       "id": "fields",
-      "title": "08 · Accumulate a field in order",
-      "description": "Combine single-bit access, left shifts and a moving bit position.",
+      "title": "08 · Accumulation and changing positions",
+      "description": "Build values from bits and update cursors according to explicit widths.",
       "prerequisites": [
         "positions"
       ],
       "notes": [
-        "Start value at zero; append each next bit with value = (value << 1) | bit.",
-        "Read a field in increasing global positions even when it crosses byte boundaries.",
-        "A field beginning at p consumes 5 + L bits including its header; no byte alignment is inserted."
+        "Start at zero and append a bit with value = (value << 1) | bit.",
+        "An extraction may cross byte boundaries; the question supplies the ordering and selected range.",
+        "Advance a cursor by the number of positions actually consumed. Do not assume extra alignment or hidden increments."
       ]
     },
     {
       "id": "signed",
-      "title": "09 · Decode L-bit two’s complement",
-      "description": "Separate raw unsigned extraction from width-dependent signed interpretation.",
+      "title": "09 · Two’s complement at a given width",
+      "description": "Separate the raw unsigned pattern from its signed interpretation.",
       "prerequisites": [
         "fields",
         "shifts"
       ],
       "notes": [
-        "For 1 <= L <= 31, the sign bit is bit L - 1 of raw.",
-        "If that bit is clear, the value is raw, including zero. Otherwise the mathematical value is raw - 2^L.",
-        "A safe negative branch is (int)((long long)raw - (1LL << L)); do not use signed 32-bit 1 << 31."
+        "For an L-bit two’s-complement value, bit L − 1 carries the sign when numbered from the LSB.",
+        "A clear sign bit means the value is raw, including zero. A set sign bit means raw − 2^L.",
+        "Compute the negative case in a sufficiently wide signed type, such as (int)((long long)raw - (1LL << L)) for 1 <= L <= 31."
       ]
     },
     {
       "id": "cursor",
-      "title": "10 · Stop and advance at exact boundaries",
-      "description": "Track remaining bits, payload completeness and per-line counters.",
+      "title": "10 · Bounds, loops and counters",
+      "description": "Trace explicit conditions, cursor changes, break order and variable scope.",
       "prerequisites": [
         "fields",
-        "signed"
+        "pointers"
       ],
       "notes": [
-        "Problem 2 stops when fewer than six bits remain or a header gives L = 0.",
-        "After checking pos <= totalBits, use L <= totalBits - pos to confirm payload capacity.",
-        "Reset pos and the integer ordinal for each input line. Advance an integer ordinal only after decoding that integer."
+        "Before computing total − pos with size_t, establish pos <= total.",
+        "Compare a requested width against total − pos to avoid overflowing pos + width.",
+        "A counter initialized inside a loop resets each iteration; statement order around break changes which work is counted."
       ]
     },
     {
       "id": "traces",
-      "title": "11 · Mix the concepts in real streams",
-      "description": "Trace input bytes through extraction, signed interpretation and output sequencing.",
+      "title": "11 · Combine C concepts",
+      "description": "Trace complete code that mixes pointers, masks, signed values and lengths.",
       "prerequisites": [
         "memory",
         "io",
-        "cursor"
+        "cursor",
+        "signed"
       ],
       "notes": [
-        "Trace in the order header → width → raw payload → signed value → new cursor.",
-        "Write intermediate positions and widths before checking the final number.",
-        "Use the PDF examples as checks; then reconstruct the rule on a changed example rather than memorizing one output."
+        "Track types and values separately at each step.",
+        "Evaluate extraction before interpreting its signed value; use the width stated by the code.",
+        "A complete code snippet supplies its own operations. No external file layout or output convention needs to be remembered."
       ]
     },
     {
       "id": "methods",
-      "title": "12 · Rebuild small methods from memory",
-      "description": "Write complete helpers from explicit contracts and check every boundary.",
+      "title": "12 · Write whole functions from memory",
+      "description": "Implement small C functions from complete, self-contained contracts.",
       "prerequisites": [
         "traces",
         "masks"
       ],
       "notes": [
-        "Start from the contract and list the preconditions, result and failure behavior before writing code.",
-        "Helper tasks have explicit bounds and status conventions; these are practice contracts, not additional assignment requirements.",
-        "Self-mark code against every rubric point, including boundary cases. The exercises deliberately avoid presenting a completed assignment main."
+        "Read the parameters, result and failure behavior before writing the body. Every exercise supplies its bit order and any helper contracts it uses.",
+        "Use local temporary state until validation is complete when failure must leave output arguments unchanged.",
+        "Self-check against every rubric point, including boundary values and defined arithmetic."
       ]
     }
   ],
   "questions": [
     {
       "id": "A2-FORMAT-01",
-      "topic": "format",
-      "family": "input-count-meaning",
+      "topic": "basics",
+      "family": "hex-value",
       "stage": 1,
-      "type": "exact",
-      "prompt": "In the input format, which symbol denotes the number of input lines: N or B?",
-      "answer": "N",
-      "hint": "One count belongs to the whole communication.",
-      "explanation": "N counts input lines. Each following line begins with its own byte count B.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "type": "number",
+      "prompt": "What decimal integer is represented by the C literal `0x2a`?",
+      "answer": "42",
+      "hint": "Hexadecimal places have weights 16 and 1.",
+      "explanation": "0x2a means 2 × 16 + 10 = 42.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts."
     },
     {
       "id": "A2-FORMAT-02",
-      "topic": "format",
-      "family": "input-count-meaning",
-      "stage": 1,
-      "type": "exact",
-      "prompt": "A line begins `3 0x62 0x69 0x00`. Which input symbol is represented by the leading 3: N or B?",
-      "answer": "B",
-      "hint": "This count belongs to one line.",
-      "explanation": "B is the number of hexadecimal bytes that follow on this input line.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "topic": "basics",
+      "family": "hex-value",
+      "stage": 2,
+      "type": "number",
+      "prompt": "What decimal integer is represented by the C literal `0xa5`?",
+      "answer": "165",
+      "hint": "The digit a has value ten.",
+      "explanation": "The two hexadecimal digits give 10 × 16 + 5 = 165.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts."
     },
     {
       "id": "A2-FORMAT-03",
-      "topic": "format",
-      "family": "length-prefix-width",
+      "topic": "basics",
+      "family": "binary-value",
       "stage": 1,
       "type": "number",
-      "prompt": "How many bits encode the length L before each integer?",
-      "answer": "5",
-      "hint": "This header has a fixed width.",
-      "explanation": "Every field begins with a 5-bit unsigned length, followed by L payload bits.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "Interpret the bit pattern 101101 as an unsigned binary integer. What is its decimal value?",
+      "answer": "45",
+      "hint": "Add the powers of two at its set bits.",
+      "explanation": "101101 is 32 + 8 + 4 + 1 = 45. Leading zeros, if any, would not change its unsigned value.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts."
     },
     {
       "id": "A2-FORMAT-04",
-      "topic": "format",
-      "family": "length-prefix-width",
+      "topic": "basics",
+      "family": "binary-value",
       "stage": 2,
       "type": "number",
-      "prompt": "An integer has a 12-bit payload. Including its length header, how many stream bits does this field consume?",
-      "answer": "17",
-      "hint": "Header bits plus payload bits.",
-      "explanation": "The field consumes 5 + L = 5 + 12 = 17 bits; it need not end at a byte boundary.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "Interpret the bit pattern 00001111 as an unsigned binary integer. What is its decimal value?",
+      "answer": "15",
+      "hint": "Only the four low bits are set.",
+      "explanation": "The value is 8 + 4 + 2 + 1 = 15. The high zero bits contribute nothing.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts."
     },
     {
       "id": "A2-FORMAT-05",
-      "topic": "format",
-      "family": "length-value-range",
+      "topic": "basics",
+      "family": "hex-bit-width",
       "stage": 1,
       "type": "number",
-      "prompt": "What is the largest unsigned length representable by the 5-bit header?",
-      "answer": "31",
-      "hint": "A k-bit unsigned field has maximum 2^k − 1.",
-      "explanation": "Five header bits encode 0 through 31. A nonzero payload width is therefore at most 31.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "How many binary bits are needed to represent one hexadecimal digit?",
+      "answer": "4",
+      "hint": "One hexadecimal digit has sixteen possible values.",
+      "explanation": "Four bits give 2^4 = 16 possible patterns, matching hexadecimal digits 0 through f.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts."
     },
     {
       "id": "A2-FORMAT-06",
-      "topic": "format",
-      "family": "length-value-range",
+      "topic": "basics",
+      "family": "hex-bit-width",
       "stage": 2,
       "type": "number",
-      "prompt": "The five header bits are `11111`. What payload width L does this encode?",
-      "answer": "31",
-      "hint": "Interpret the header as unsigned binary.",
-      "explanation": "The header is a length, so 11111 is unsigned 31, not signed −1.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "How many binary bits are represented by the two hexadecimal digits in `0xff`?",
+      "answer": "8",
+      "hint": "Each hexadecimal digit represents four bits.",
+      "explanation": "Two digits represent 2 × 4 = 8 bits; ff is the bit pattern 11111111.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts."
     },
     {
       "id": "A2-FORMAT-07",
-      "topic": "format",
-      "family": "stream-order",
+      "topic": "basics",
+      "family": "unsigned-byte-range",
       "stage": 1,
-      "type": "exact",
-      "prompt": "Within each input byte, which end is read first? Answer MSB or LSB.",
-      "answer": "MSB",
-      "hint": "Bit 0 of the stream is the leftmost bit of byte 0.",
-      "explanation": "The most significant bit of data[0] is first; bytes then follow in array order.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples.",
-      "accepted": [
-        "msb"
-      ]
+      "type": "number",
+      "prompt": "For an unsigned integer with exactly eight value bits, what is the largest representable value?",
+      "answer": "255",
+      "hint": "Set all eight bits to one.",
+      "explanation": "The range is 0 through 2^8 − 1, so the maximum is 255.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts."
     },
     {
       "id": "A2-FORMAT-08",
-      "topic": "format",
-      "family": "stream-order",
+      "topic": "basics",
+      "family": "unsigned-byte-range",
       "stage": 2,
-      "type": "self",
-      "prompt": "Does moving the decoder from a little-endian host to a big-endian host reverse the prescribed stream order? Explain in one sentence.",
-      "answer": "No. Read bytes in input order and bits MSB first within each byte on either host.",
-      "hint": "Distinguish the file’s bit order from the host representation of a multi-byte integer.",
-      "explanation": "Explicit indexing and shifting of each byte implements the protocol without depending on host byte order.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples.",
-      "rubric": [
-        "Says the protocol order does not change.",
-        "States input byte order and MSB-first order within each byte."
-      ]
+      "type": "number",
+      "prompt": "What decimal value does byte receive when unsigned char has eight value bits?",
+      "answer": "44",
+      "hint": "Conversion to an unsigned integer type reduces the value modulo one more than its maximum.",
+      "explanation": "The result is 300 modulo 256 = 44. An explicit cast would give the same result; it does not prevent truncation.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
+      "code": "unsigned char byte = 300u;"
     },
     {
       "id": "A2-FORMAT-09",
-      "topic": "format",
-      "family": "empty-input-line",
+      "topic": "basics",
+      "family": "integer-division-remainder",
       "stage": 1,
       "type": "number",
-      "prompt": "For Problem 1, B is 0. How many integers should this input line produce?",
-      "answer": "0",
-      "hint": "No bytes means no header or payload.",
-      "explanation": "The specification explicitly says a zero-byte line has no integers to unpack.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "What is the value of the C integer expression `13 / 5`?",
+      "answer": "2",
+      "hint": "Both operands have integer type.",
+      "explanation": "Integer division discards the fractional part; 13 / 5 is 2, not 2.6.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts."
     },
     {
       "id": "A2-FORMAT-10",
-      "topic": "format",
-      "family": "empty-input-line",
+      "topic": "basics",
+      "family": "integer-division-remainder",
       "stage": 2,
       "type": "number",
-      "prompt": "The first input line has B = 0 and the second contains one encoded integer. What line number must appear on that integer’s output?",
-      "answer": "2",
-      "hint": "Input line numbers count empty input lines too.",
-      "explanation": "Line numbering tracks the input stream lines, not the number of previously printed integers.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "What is the value of the C integer expression `13 % 5`?",
+      "answer": "3",
+      "hint": "Find what is left after two groups of five.",
+      "explanation": "13 = 2 × 5 + 3, so the remainder is 3. This relationship is useful for translating an index into groups and an offset.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts."
     },
     {
       "id": "A2-FORMAT-11",
-      "topic": "format",
-      "family": "problem-two-capacity",
-      "stage": 1,
-      "type": "self",
-      "prompt": "Is a fixed 16-byte buffer guaranteed sufficient for every valid Problem 2 line by the assignment specification? State why.",
-      "answer": "No. Problem 2 permits more than 5 bytes and gives no fixed upper bound for B; buffer capacity must accommodate the actual B.",
-      "hint": "A largest sample is not a maximum input size.",
-      "explanation": "The walkthrough’s 16-byte suggestion is not a bound stated by the assignment. Allocate for B or use another explicitly capacity-safe strategy.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples.",
-      "rubric": [
-        "Says no fixed 16-byte guarantee exists.",
-        "Requires capacity for the actual byte count."
-      ]
+      "topic": "basics",
+      "family": "unsigned-modulo-conversion",
+      "stage": 2,
+      "type": "number",
+      "prompt": "With 32-bit unsigned int, what decimal value is stored in x?",
+      "answer": "4294967295",
+      "hint": "Converting −1 to unsigned wraps modulo 2^32.",
+      "explanation": "The result is UINT_MAX = 2^32 − 1. Conversion to unsigned is defined modulo the unsigned range, unlike an out-of-range conversion to a signed type.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
+      "code": "unsigned int x = -1;"
     },
     {
       "id": "A2-FORMAT-12",
-      "topic": "format",
-      "family": "problem-two-capacity",
+      "topic": "basics",
+      "family": "unsigned-modulo-conversion",
       "stage": 2,
-      "type": "self",
-      "prompt": "A Problem 2 sample uses 9 bytes. What bound can you infer for all future inputs from that sample alone?",
-      "answer": "No maximum B can be inferred from one sample; the implementation must support the specified input size rather than assume 9 or 16 bytes.",
-      "hint": "Examples demonstrate cases, not an unstated limit.",
-      "explanation": "Problem 1 explicitly bounds B by 5; Problem 2 removes that small bound without supplying a replacement.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples.",
-      "rubric": [
-        "Does not invent a 9- or 16-byte maximum.",
-        "Distinguishes sample size from a specified input bound."
-      ]
+      "type": "number",
+      "prompt": "With 32-bit unsigned int, what decimal value does x have afterward?",
+      "answer": "0",
+      "hint": "Unsigned arithmetic is reduced modulo 2^32.",
+      "explanation": "Adding one to the maximum unsigned int wraps to zero. This unsigned addition is defined.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
+      "code": "unsigned int x = 4294967295u;\nx += 1u;"
     },
     {
       "id": "A2-IO-01",
@@ -349,11 +334,11 @@
       "family": "scanf-decimal-format",
       "stage": 1,
       "type": "exact",
-      "prompt": "Fill the format token to read one decimal value into `int B`: `scanf(\"___\", &B);`",
+      "prompt": "Fill the format token to read one decimal value into `int count`: `scanf(\"___\", &count);`",
       "answer": "%d",
       "hint": "The destination is an int, and the input is decimal.",
-      "explanation": "scanf %d expects a pointer to int, so &B is the correct destination argument.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2."
+      "explanation": "scanf %d expects a pointer to int, so &count is the correct destination argument.",
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2."
     },
     {
       "id": "A2-IO-02",
@@ -361,11 +346,11 @@
       "family": "scanf-decimal-format",
       "stage": 2,
       "type": "exact",
-      "prompt": "Which conversion token belongs in `scanf` for the initial decimal line count `int N`?",
+      "prompt": "Which scanf conversion token reads decimal text into the variable `int length` when passed `&length`?",
       "answer": "%d",
       "hint": "Use the signed decimal integer conversion.",
-      "explanation": "The input’s initial count is decimal. The corresponding destination must be int *.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2."
+      "explanation": "The signed decimal integer conversion is %d. Its corresponding destination argument must be int *.",
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2."
     },
     {
       "id": "A2-IO-03",
@@ -377,7 +362,7 @@
       "answer": "%x",
       "hint": "Hexadecimal without a length modifier.",
       "explanation": "scanf %x reads a hexadecimal integer into unsigned int *. It accepts the optional 0x prefix.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2.",
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2.",
       "accepted": [
         "%X"
       ]
@@ -392,7 +377,7 @@
       "answer": "%x",
       "hint": "The 0x prefix is optional for this conversion.",
       "explanation": "%x accepts both forms. The conversion and destination type must agree.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2.",
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2.",
       "accepted": [
         "%X"
       ]
@@ -407,7 +392,7 @@
       "answer": "unsigned int",
       "hint": "Do not confuse a byte’s value range with scanf’s destination type.",
       "explanation": "Unmodified %x requires unsigned int *. &temp has that type when temp is unsigned int.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2.",
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2.",
       "accepted": [
         "unsigned",
         "unsigned int"
@@ -423,7 +408,7 @@
       "answer": "unsigned int temp;\nif (scanf(\"%x\", &temp) == 1) {\n    data[i] = (unsigned char)temp;\n}",
       "hint": "Read using the required destination type, then store the byte.",
       "explanation": "Passing unsigned char * to unmodified %x is a type mismatch; a cast of that pointer is not a repair. An unsigned-int temporary provides the required object.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2.",
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2.",
       "code": "unsigned char data[5];\n/* i is a valid index */\nscanf(\"%x\", &data[i]);",
       "rubric": [
         "Reads with unsigned int temp and &temp.",
@@ -437,11 +422,11 @@
       "family": "scanf-versus-printf",
       "stage": 1,
       "type": "self",
-      "prompt": "Why does reading `int B` use `scanf(\"%d\", &B)` while printing it uses `printf(\"%d\", B)`?",
-      "answer": "scanf needs B’s address to store a new int in B; printf needs the int value to display.",
+      "prompt": "Why does reading `int count` use `scanf(\"%d\", &count)` while printing it uses `printf(\"%d\", count)`?",
+      "answer": "scanf needs count’s address to store a new int in count; printf needs the int value to display.",
       "hint": "One operation writes into an object; the other consumes its value.",
       "explanation": "C passes each argument by value. For scanf that value is a pointer; for printf %d it is an int.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2.",
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2.",
       "rubric": [
         "Explains that scanf receives a destination address.",
         "Explains that printf %d receives the integer value."
@@ -453,12 +438,12 @@
       "family": "scanf-versus-printf",
       "stage": 2,
       "type": "self",
-      "prompt": "Identify and fix the wrong argument in each line. Assume `B` has already been initialized.",
-      "answer": "scanf(\"%d\", &B);\nprintf(\"%d\", B);",
+      "prompt": "Identify and fix the wrong argument in each line.",
+      "answer": "scanf(\"%d\", &count);\nprintf(\"%d\", count);",
       "hint": "Match each conversion’s expected argument type.",
       "explanation": "scanf %d expects int *, while printf %d expects int. Swapping values and addresses violates those contracts.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2.",
-      "code": "int B = 3;\nscanf(\"%d\", B);\nprintf(\"%d\", &B);",
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2.",
+      "code": "int count = 3;\nscanf(\"%d\", count);\nprintf(\"%d\", &count);",
       "rubric": [
         "Adds & for scanf.",
         "Removes & for printf."
@@ -470,11 +455,11 @@
       "family": "scanf-success-count",
       "stage": 1,
       "type": "number",
-      "prompt": "What return value from `scanf(\"%x\", &temp)` means its one requested conversion succeeded?",
+      "prompt": "Given `unsigned int temp`, what return value from `scanf(\"%x\", &temp)` means its one requested conversion succeeded?",
       "answer": "1",
       "hint": "scanf counts successful assignments.",
       "explanation": "One successful conversion gives 1. Do not use temp unless that read succeeded.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2."
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2."
     },
     {
       "id": "A2-IO-10",
@@ -482,11 +467,11 @@
       "family": "scanf-success-count",
       "stage": 2,
       "type": "number",
-      "prompt": "`scanf(\"%d %x\", &B, &temp)` successfully reads B but fails to convert the second token. What does it return?",
+      "prompt": "Given `int count` and `unsigned int temp`, `scanf(\"%d %x\", &count, &temp)` assigns count but then fails to convert the second token. What does it return?",
       "answer": "1",
       "hint": "Count assignments actually completed.",
       "explanation": "The first conversion assigned one object; the second failed, so the return value is 1. EOF before any conversion is a different case.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2."
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2."
     },
     {
       "id": "A2-IO-11",
@@ -494,15 +479,15 @@
       "family": "output-argument-order",
       "stage": 2,
       "type": "self",
-      "prompt": "Write the required printf call using `int line`, `int ordinal`, and `int value`, in that order. Include the trailing newline.",
-      "answer": "printf(\"Line %d, integer %d: %d\\n\", line, ordinal, value);",
-      "hint": "The words, punctuation and argument order are part of the output contract.",
-      "explanation": "Each %d consumes the next int argument. The first number identifies the input line; the second is the integer’s order within that line.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples. Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2.",
+      "prompt": "Write one printf call using `int row`, `int item`, and `int value`. Its output must follow the template `Row <row>, item <item>: <value>` and end with a newline. For row=2, item=4, value=-7, print `Row 2, item 4: -7`.",
+      "answer": "printf(\"Row %d, item %d: %d\\n\", row, item, value);",
+      "hint": "Place one %d at each integer position in the given template, then pass arguments in matching order.",
+      "explanation": "Each %d consumes the next int argument. A newline is represented by \\n inside the C string literal.",
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2.",
       "rubric": [
-        "Uses exactly Line, comma, integer, colon and spaces as specified.",
-        "Supplies line, ordinal, value in that order.",
-        "Terminates the output line with \\n."
+        "Matches the explicitly supplied words, punctuation and spacing.",
+        "Uses %d conversions with row, item, value in the matching order.",
+        "Ends the printed line with \\n."
       ]
     },
     {
@@ -512,13 +497,13 @@
       "stage": 3,
       "type": "self",
       "prompt": "What exact output line does this call produce?",
-      "answer": "Line 2, integer 4: -7",
+      "answer": "Row 2, item 4: -7",
       "hint": "Match conversions to arguments from left to right.",
       "explanation": "The first argument after the format fills the first %d; variable names do not change that rule.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2.",
-      "code": "int line = 4, ordinal = 2, value = -7;\nprintf(\"Line %d, integer %d: %d\\n\", ordinal, line, value);",
+      "source": "C17 formatted input/output; WG14 N1570 §§7.21.6.1–7.21.6.2.",
+      "code": "int row = 4, item = 2, value = -7;\nprintf(\"Row %d, item %d: %d\\n\", item, row, value);",
       "rubric": [
-        "Gives Line 2, integer 4: -7 with the required punctuation."
+        "Gives Row 2, item 4: -7 with the shown punctuation."
       ]
     },
     {
@@ -531,7 +516,7 @@
       "answer": "unsigned char",
       "hint": "One dereference removes one pointer layer.",
       "explanation": "p is a pointer to unsigned char; *p designates the unsigned-char object to which it points.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3."
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3."
     },
     {
       "id": "A2-POINTERS-02",
@@ -543,7 +528,7 @@
       "answer": "unsigned char **",
       "hint": "Address-of adds a pointer layer to the variable’s own type.",
       "explanation": "p is itself a pointer object. &p points to that pointer object, so its type is unsigned char **.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
       "accepted": [
         "unsigned char**",
         "unsigned char * *"
@@ -559,7 +544,7 @@
       "answer": "202",
       "hint": "&data[1] points to the second element; * reads that element.",
       "explanation": "data[1] is 0xca, which is 202. Dereferencing p reads the pointed-to byte.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
       "code": "unsigned char data[] = {0x12, 0xca, 0x38};\nunsigned char *p = &data[1];\nunsigned int x = *p;"
     },
     {
@@ -572,7 +557,7 @@
       "answer": "8",
       "hint": "Two dereferences reach the byte through the pointer object.",
       "explanation": "pp points to p; *pp is p; **pp designates data[0]. The assignment therefore writes 8 into that byte.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
       "code": "unsigned char data[] = {0x12, 0xca};\nunsigned char *p = data;\nunsigned char **pp = &p;\n**pp = 8;"
     },
     {
@@ -585,7 +570,7 @@
       "answer": "p = other is valid and redirects p. data[0] = 7 is valid and changes one byte. data = other is invalid because an array is not an assignable object.",
       "hint": "Separate an array object, a pointer variable and one array element.",
       "explanation": "In most expressions the array name converts to a pointer to its first element, but the array itself cannot be assigned another array or pointer.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
       "code": "unsigned char data[5] = {0};\nunsigned char other[5] = {1};\nunsigned char *p = data;\n/* Judge separately: */\np = other;\ndata[0] = 7;\ndata = other;",
       "rubric": [
         "Accepts p = other.",
@@ -603,7 +588,7 @@
       "answer": "No. It stores the address of data[0] in p; p then refers to the same array storage.",
       "hint": "Pointer assignment copies an address value.",
       "explanation": "No new array is created and no elements are copied. Writing p[0] subsequently changes data[0] while p points there.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
       "code": "unsigned char data[5] = {0};\nunsigned char *p;\np = data;",
       "rubric": [
         "Says no element copy occurs.",
@@ -620,7 +605,7 @@
       "answer": "5",
       "hint": "sizeof measures bytes of the actual array object.",
       "explanation": "An unsigned char occupies one C byte. This real array has five such elements.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
       "code": "unsigned char data[5];"
     },
     {
@@ -633,7 +618,7 @@
       "answer": "6",
       "hint": "Total array bytes divided by one element’s bytes.",
       "explanation": "The expression is the element count, 6. Under the practice assumptions sizeof values is 24, not 6.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
       "code": "int values[6];"
     },
     {
@@ -646,7 +631,7 @@
       "answer": "No. An array parameter is adjusted to a pointer parameter, so sizeof data is sizeof(unsigned char *).",
       "hint": "The brackets in a parameter declaration do not preserve an array object.",
       "explanation": "Pass the byte count separately. The parameter’s sizeof cannot recover the caller’s array length; pointer size is not assumed here.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
       "code": "void inspect(unsigned char data[5]) {\n    /* sizeof data ? */\n}",
       "rubric": [
         "Identifies data as a pointer parameter.",
@@ -659,12 +644,12 @@
       "family": "sizeof-array-parameter",
       "stage": 2,
       "type": "self",
-      "prompt": "Why is this function unable to obtain the input byte count reliably? Give a signature that fixes the missing information.",
-      "answer": "data is a pointer parameter, so sizeof data is pointer size. Pass the count explicitly, for example void decode(const unsigned char *data, size_t B).",
+      "prompt": "Why can this function not obtain the caller’s array length with sizeof data? Give a function signature that supplies the missing byte count.",
+      "answer": "data is a pointer parameter, so sizeof data is pointer size. Pass the count explicitly, for example void inspect(const unsigned char *data, size_t count).",
       "hint": "An array argument does not carry its length into the function.",
-      "explanation": "The count is needed for stream bounds. Using const also documents that the decoder reads the bytes without modifying them.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
-      "code": "void decode(unsigned char data[]) {\n    size_t B = sizeof data;\n}",
+      "explanation": "The caller must provide the element count separately. Here the elements are unsigned char, so the element count also equals the byte count.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "code": "void inspect(unsigned char data[]) {\n    size_t count = sizeof data;\n}",
       "rubric": [
         "Rejects sizeof data as the buffer length.",
         "Supplies an explicit length/count parameter."
@@ -680,7 +665,7 @@
       "answer": "p still points to data[0]; data[0] is 0 and data[1] is 7.",
       "hint": "The function receives a copy of the pointer, but both copies refer to shared storage.",
       "explanation": "Incrementing local p does not change the caller’s pointer. Dereferencing that local pointer after incrementing changes the second byte.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
       "code": "void change(unsigned char *p) { ++p; *p = 7; }\n/* In the caller: */\nunsigned char data[2] = {0, 0};\nunsigned char *p = data;\nchange(p);",
       "rubric": [
         "Caller p still points to data[0].",
@@ -697,7 +682,7 @@
       "answer": "p points to data[1]. pp points to the caller’s pointer object; *pp is that pointer, so incrementing *pp updates caller p.",
       "hint": "This time the function receives the address of the pointer variable.",
       "explanation": "A pointer-to-pointer can change which byte the caller’s pointer refers to. No byte value is modified by this increment.",
-      "source": "Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, pointers and sizeof; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
       "code": "void advance(unsigned char **pp) { ++(*pp); }\n/* In the caller: */\nunsigned char data[2] = {0, 0};\nunsigned char *p = data;\nadvance(&p);",
       "rubric": [
         "Identifies data[1] as the new target.",
@@ -714,7 +699,7 @@
       "answer": "8",
       "hint": "First argument counts elements; second gives bytes per element.",
       "explanation": "calloc allocates 4 elements of 2 bytes each: 4 × 2 = 8 bytes. It does not attach an array length to the returned pointer.",
-      "source": "Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1."
+      "source": "C17 storage allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1."
     },
     {
       "id": "A2-MEMORY-02",
@@ -726,7 +711,7 @@
       "answer": "4",
       "hint": "Read the signature as calloc(count, element_size).",
       "explanation": "The count argument is 4 and the element-size argument is 2 bytes. Swapping them happens to preserve this product but changes their roles.",
-      "source": "Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1."
+      "source": "C17 storage allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1."
     },
     {
       "id": "A2-MEMORY-03",
@@ -738,7 +723,7 @@
       "answer": "2",
       "hint": "Divide allocated bytes by sizeof(int).",
       "explanation": "calloc(4, 2) reserves 8 bytes, and each int occupies 4 bytes here. The call’s count of 4 does not make it room for four int objects.",
-      "source": "Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
+      "source": "C17 storage allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
       "code": "int *p = calloc(4, 2);"
     },
     {
@@ -751,7 +736,7 @@
       "answer": "24",
       "hint": "sizeof *p measures one int object.",
       "explanation": "The idiom allocates six objects of the pointed-to type: 6 × 4 = 24 bytes.",
-      "source": "Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
+      "source": "C17 storage allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
       "code": "int *p = calloc(6, sizeof *p);"
     },
     {
@@ -764,7 +749,7 @@
       "answer": "calloc",
       "hint": "The allocation and initialization contracts differ.",
       "explanation": "calloc initializes all allocated bits to zero. For unsigned char bytes that gives the numeric value zero.",
-      "source": "Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1."
+      "source": "C17 storage allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1."
     },
     {
       "id": "A2-MEMORY-06",
@@ -772,11 +757,11 @@
       "family": "allocation-initialization",
       "stage": 2,
       "type": "self",
-      "prompt": "A successful `malloc(B)` returns a buffer. May the decoder assume its unread bytes contain zero? Explain.",
-      "answer": "No. malloc does not initialize the allocated storage; only read bytes after their values have been written, and remain within the buffer bounds.",
+      "prompt": "A successful `malloc(count)` returns storage for count bytes. May code assume that its unwritten bytes contain zero? Explain.",
+      "answer": "No. malloc does not initialize the allocated storage. Write byte values before relying on their contents, and stay within the allocated bounds.",
       "hint": "Getting storage and setting its contents are separate actions.",
-      "explanation": "Even calloc or memset cannot replace checking that an input conversion succeeded or that a stream position is valid.",
-      "source": "Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
+      "explanation": "Getting storage and initializing it are separate operations. Neither allocation nor zero-filling confirms that a later input conversion succeeds.",
+      "source": "C17 storage allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
       "rubric": [
         "Says malloc does not zero the storage.",
         "Requires initialization before using byte values."
@@ -792,7 +777,7 @@
       "answer": "3",
       "hint": "The third argument is a byte count.",
       "explanation": "memset writes exactly the first 3 bytes here, not all 5 elements of the array.",
-      "source": "Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
+      "source": "C17 storage allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
       "code": "unsigned char data[5] = {1, 2, 3, 4, 5};\nmemset(data, 0, 3);"
     },
     {
@@ -805,7 +790,7 @@
       "answer": "4",
       "hint": "Indices 0, 1 and 2 are the only bytes filled.",
       "explanation": "The byte at index 3 is outside the three-byte fill and keeps its original value 4.",
-      "source": "Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
+      "source": "C17 storage allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
       "code": "unsigned char data[5] = {1, 2, 3, 4, 5};\nmemset(data, 0, 3);"
     },
     {
@@ -818,7 +803,7 @@
       "answer": "No. Valid element indices are 0 through 4; data[5] is outside the array regardless of its initialization.",
       "hint": "Initialization changes values, not object boundaries.",
       "explanation": "Bounds must be checked against the actual buffer and received stream length. memset does not enlarge either.",
-      "source": "Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1. Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 storage allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
       "rubric": [
         "Rejects reading data[5].",
         "States the valid indices and separates bounds from initialization."
@@ -827,18 +812,72 @@
     {
       "id": "A2-MEMORY-10",
       "topic": "memory",
-      "family": "zeroing-versus-bounds",
+      "family": "initialization-overwritten",
       "stage": 3,
+      "type": "number",
+      "prompt": "What decimal value is stored in data[0] after both statements?",
+      "answer": "15",
+      "hint": "The later assignment replaces the earlier byte value.",
+      "explanation": "memset first writes zero. The assignment then writes 0x0f, which is 15. Earlier zero-filling does not remove any bits from a later stored value.",
+      "source": "C17 storage allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
+      "code": "unsigned char data[1];\nmemset(data, 0, sizeof data);\ndata[0] = 0x0f;"
+    },
+    {
+      "id": "A2-MEMORY-11",
+      "topic": "memory",
+      "family": "free-storage",
+      "stage": 1,
+      "type": "exact",
+      "prompt": "p holds the non-null address returned by malloc and has not been freed. Which standard-library function releases that allocation? Give the function name.",
+      "answer": "free",
+      "hint": "Releasing allocated storage is separate from assigning a new value to the pointer variable.",
+      "explanation": "free(p) releases the allocated storage. The pointer object p is not automatically changed to NULL, and the released storage must not be accessed through it.",
+      "source": "C17 storage allocation and deallocation; WG14 N1570 §7.22.3."
+    },
+    {
+      "id": "A2-MEMORY-12",
+      "topic": "memory",
+      "family": "allocation-type-size",
+      "stage": 2,
       "type": "self",
-      "prompt": "A decoder clears its buffer, then reads a last byte 0x0f whose low four bits are padding. Are those received padding bits now zero? How should the decoder handle them?",
-      "answer": "No. Reading 0x0f overwrites the cleared byte, including its low bits. Follow the field lengths and stopping rules, ignoring padding as specified.",
-      "hint": "The input store happens after the clearing operation.",
-      "explanation": "Pre-zeroing cannot erase bits written afterward. For Problem 1, unused trailing bits are ignored; Problem 2 uses its stated termination rules.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples. Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples. Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
+      "prompt": "Write one statement assigning a malloc result to int *p so it can hold count int objects. count is a positive size_t and count <= SIZE_MAX / sizeof *p. Use sizeof *p rather than a hard-coded byte size.",
+      "answer": "p = malloc(count * sizeof *p);",
+      "hint": "malloc takes one total byte count, unlike calloc’s two arguments.",
+      "explanation": "Multiply the number of objects by the size of one pointed-to object. The supplied bound ensures that multiplication is representable. In C, assigning malloc’s void * result to int * does not require a cast; check the result before dereferencing it.",
       "rubric": [
-        "Says received padding can still contain ones.",
-        "Uses protocol boundaries rather than assuming zero padding."
-      ]
+        "Multiplies count by sizeof *p.",
+        "Passes that total byte count as malloc’s single argument.",
+        "Assigns the result to p; a cast is optional in C."
+      ],
+      "source": "C17 storage allocation and deallocation; WG14 N1570 §7.22.3."
+    },
+    {
+      "id": "A2-MEMORY-13",
+      "topic": "memory",
+      "family": "allocation-failure",
+      "stage": 2,
+      "type": "self",
+      "prompt": "In an int-returning function, p has just received malloc’s result for a positive requested size. Write a check that returns -1 on allocation failure before any access through p.",
+      "answer": "if (p == NULL) {\n    return -1;\n}",
+      "hint": "malloc reports failure with a null pointer.",
+      "explanation": "A null result supplies no allocated object to access. The equivalent condition if (!p) is valid. A non-null result can be used only within the requested allocation bounds.",
+      "rubric": [
+        "Tests whether p is null, using p == NULL or !p.",
+        "Returns -1 on that path before dereferencing p."
+      ],
+      "source": "C17 storage allocation and deallocation; WG14 N1570 §7.22.3."
+    },
+    {
+      "id": "A2-MEMORY-14",
+      "topic": "memory",
+      "family": "free-storage",
+      "stage": 2,
+      "type": "exact",
+      "prompt": "Classify the C call `free(NULL)`. Answer defined or undefined.",
+      "answer": "defined",
+      "hint": "The deallocation function explicitly handles a null pointer.",
+      "explanation": "free(NULL) is defined and has no effect. This differs from freeing the same non-null allocation twice or freeing a pointer that was not returned by an allocation function.",
+      "source": "C17 storage allocation and deallocation; WG14 N1570 §7.22.3."
     },
     {
       "id": "A2-MASKS-01",
@@ -850,7 +889,7 @@
       "answer": "&",
       "hint": "One combines bit positions; the other tests truth.",
       "explanation": "& keeps a bit set only where both operands have that bit set. && instead returns 0 or 1 from the operands’ truth values.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-MASKS-02",
@@ -862,7 +901,7 @@
       "answer": "0",
       "hint": "Compare the one-bits at corresponding positions.",
       "explanation": "2u is binary 10 and 1u is binary 01, so their bitwise AND is 00. Using && here would instead produce 1.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "code": "unsigned int x = 2u & 1u;"
     },
     {
@@ -875,7 +914,7 @@
       "answer": "1u << k",
       "hint": "Start with one at bit 0 and move it k places.",
       "explanation": "The u suffix makes the left operand unsigned int. The stated shift-count range avoids an invalid shift.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "rubric": [
         "Uses a value with exactly one initial set bit.",
         "Shifts it left by k using an unsigned operand."
@@ -891,7 +930,7 @@
       "answer": "32",
       "hint": "Bit k has weight 2^k.",
       "explanation": "Moving the unsigned one five places left yields binary 100000, which is 32.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-MASKS-05",
@@ -899,11 +938,11 @@
       "family": "set-bit",
       "stage": 2,
       "type": "self",
-      "prompt": "Write a statement that sets bit k of unsigned int x to 1 and preserves all other bits. Assume 0 <= k < 32.",
+      "prompt": "Write a statement that sets bit k of unsigned int x to 1 and preserves all other bits. Assume 0 <= k < 32. Number bits from zero at the least significant bit.",
       "answer": "x |= 1u << k;",
       "hint": "OR with a mask whose only one-bit is at k.",
       "explanation": "OR with 1 sets that bit; OR with 0 leaves every other bit unchanged.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "rubric": [
         "Builds an unsigned one-bit mask at k.",
         "Uses OR, preserving all other bits."
@@ -919,7 +958,7 @@
       "answer": "10",
       "hint": "Only bit 1 is forced to one.",
       "explanation": "8u is 1000; the mask is 0010. Their OR is 1010, or 10.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "code": "unsigned int x = 8u;\nx |= 1u << 1;"
     },
     {
@@ -928,11 +967,11 @@
       "family": "clear-bit",
       "stage": 2,
       "type": "self",
-      "prompt": "Write a statement that clears bit k of unsigned int x and preserves all other bits. Assume 0 <= k < 32.",
+      "prompt": "Write a statement that clears bit k of unsigned int x and preserves all other bits. Assume 0 <= k < 32. Number bits from zero at the least significant bit.",
       "answer": "x &= ~(1u << k);",
       "hint": "Invert a one-bit mask, then combine with AND.",
       "explanation": "The inverted mask has a zero at k and ones elsewhere. AND clears only the selected bit.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "rubric": [
         "Uses an inverted unsigned one-bit mask.",
         "Uses AND to preserve all other bits."
@@ -948,7 +987,7 @@
       "answer": "11",
       "hint": "15 is binary 1111; clear the bit of weight 4.",
       "explanation": "The mask clears bit 2, turning 1111 into 1011, which is 11.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "code": "unsigned int x = 15u;\nx &= ~(1u << 2);"
     },
     {
@@ -957,11 +996,11 @@
       "family": "toggle-bit",
       "stage": 2,
       "type": "self",
-      "prompt": "Write a statement that toggles bit k of unsigned int x while preserving the others. Assume 0 <= k < 32.",
+      "prompt": "Write a statement that toggles bit k of unsigned int x while preserving the others. Assume 0 <= k < 32. Number bits from zero at the least significant bit.",
       "answer": "x ^= 1u << k;",
       "hint": "XOR with one flips a bit.",
       "explanation": "XOR with the one-bit mask flips bit k; XOR with zero leaves the remaining bits unchanged.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "rubric": [
         "Uses XOR.",
         "Applies an unsigned mask containing only bit k."
@@ -977,7 +1016,7 @@
       "answer": "10",
       "hint": "Toggling the same bit twice restores it.",
       "explanation": "The first XOR flips bit 1 off; the second flips it back on. The final value equals the original 10.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "code": "unsigned int x = 10u;\nx ^= 1u << 1;\nx ^= 1u << 1;"
     },
     {
@@ -990,7 +1029,7 @@
       "answer": "5",
       "hint": "Unsigned right shift divides by powers of two, discarding low bits.",
       "explanation": "40 divided by 8 is 5. For unsigned values, right shift introduces zeros on the left.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-SHIFTS-02",
@@ -1002,7 +1041,7 @@
       "answer": "5",
       "hint": "Discard the low three bits.",
       "explanation": "43 / 8 has integer quotient 5. The three low bits do not round the result upward.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-SHIFTS-03",
@@ -1014,7 +1053,7 @@
       "answer": "12",
       "hint": "Two left shifts multiply this value by four.",
       "explanation": "Binary 0011 becomes 1100. No high bits are lost in this example.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-SHIFTS-04",
@@ -1026,7 +1065,7 @@
       "answer": "0",
       "hint": "Unsigned results wrap modulo 2^32.",
       "explanation": "The only set bit moves beyond the 32-bit unsigned width and is discarded. This unsigned operation is defined.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-SHIFTS-05",
@@ -1038,7 +1077,7 @@
       "answer": "undefined",
       "hint": "A shift count must be smaller than the promoted left operand’s width.",
       "explanation": "A count equal to 32 is invalid for a 32-bit operand. Unsigned arithmetic does not make an out-of-range shift count valid.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "accepted": [
         "undefined behavior",
         "UB"
@@ -1054,7 +1093,7 @@
       "answer": "undefined",
       "hint": "Check the shift count before the direction.",
       "explanation": "A negative shift count causes undefined behavior, including for unsigned operands.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "accepted": [
         "undefined behavior",
         "UB"
@@ -1070,7 +1109,7 @@
       "answer": "undefined",
       "hint": "The literal 1 has type int, not unsigned int.",
       "explanation": "The mathematical result 2^31 is not representable in signed 32-bit int. Use an appropriate unsigned or wider signed operand for the intended operation.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "accepted": [
         "undefined behavior",
         "UB"
@@ -1086,7 +1125,7 @@
       "answer": "u",
       "hint": "The fix is a type choice, not parentheses.",
       "explanation": "1u is unsigned int, making this 31-place shift valid under the 32-bit unsigned assumptions. This does not by itself make unsigned subtraction a signed-decoding formula.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "accepted": [
         "U"
       ]
@@ -1097,11 +1136,11 @@
       "family": "byte-promotion",
       "stage": 2,
       "type": "self",
-      "prompt": "In `data[i] >> shift`, data[i] is unsigned char and 0 <= shift <= 7. Is its promoted value ever negative under the practice assumptions? Explain.",
+      "prompt": "In `data[i] >> shift`, data[i] is a valid unsigned-char array element and shift is an int in 0..7. Is the promoted value of data[i] ever negative under the practice assumptions? Explain.",
       "answer": "No. unsigned char values are 0..255, all representable in 32-bit int, so promotion to int preserves a nonnegative value.",
       "hint": "Small integer operands undergo integer promotion before shifting.",
       "explanation": "Using unsigned-char storage avoids signed-char negative byte values. Right shift of these promoted nonnegative values has the intended bit-extraction result.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "rubric": [
         "States the 0..255 range.",
         "Explains promotion to int preserves that nonnegative value."
@@ -1113,11 +1152,11 @@
       "family": "byte-promotion",
       "stage": 2,
       "type": "self",
-      "prompt": "Why does this decoder prefer unsigned char over plain char for input bytes?",
-      "answer": "unsigned char guarantees values 0..255 in this practice model; plain char may be signed, so bytes with the top bit set can promote to negative int values.",
+      "prompt": "Why is unsigned char useful for bytes that will be right-shifted, compared with plain char?",
+      "answer": "unsigned char guarantees nonnegative byte values. Plain char may be signed, so a byte with its top bit set can promote to a negative int.",
       "hint": "The signedness of plain char is implementation-defined.",
-      "explanation": "For a negative signed value, right-shift behavior in C17 is implementation-defined. unsigned-char byte storage avoids that complication.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "explanation": "Under the practice model unsigned-char values are 0..255 and promote to nonnegative int. In C17, right-shifting a negative signed value is implementation-defined.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "rubric": [
         "Identifies plain char’s possible signedness.",
         "Connects unsigned-char values to predictable nonnegative shift operands."
@@ -1129,11 +1168,11 @@
       "family": "stream-byte-index",
       "stage": 1,
       "type": "number",
-      "prompt": "At global stream bit position p = 19, what byte index contains the bit?",
+      "prompt": "Number the eight bits of data[0] from its MSB to its LSB, then continue the same way through data[1], data[2], and so on, beginning at global position 0. At global stream bit position p = 19, what byte index contains the bit?",
       "answer": "2",
       "hint": "Each byte holds eight consecutive stream positions.",
       "explanation": "Integer division gives 19 / 8 = 2. The valid positions in byte 2 are 16 through 23.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-POSITIONS-02",
@@ -1141,11 +1180,11 @@
       "family": "stream-byte-index",
       "stage": 2,
       "type": "number",
-      "prompt": "A bit is at global position p = 8. What is its byte index?",
+      "prompt": "Number the eight bits of data[0] from its MSB to its LSB, then continue the same way through data[1], data[2], and so on, beginning at global position 0. A bit is at global position p = 8. What is its byte index?",
       "answer": "1",
       "hint": "The first byte ends at global position 7.",
       "explanation": "8 / 8 = 1: position 8 is the first bit of the second byte, not another bit of byte 0.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-POSITIONS-03",
@@ -1153,11 +1192,11 @@
       "family": "stream-shift-count",
       "stage": 1,
       "type": "number",
-      "prompt": "For p = 19, how many positions must data[p / 8] shift right to bring the requested bit to bit 0?",
+      "prompt": "Number the eight bits of data[0] from its MSB to its LSB, then continue the same way through data[1], data[2], and so on, beginning at global position 0. For p = 19, how many positions must data[p / 8] shift right to bring the requested bit to bit 0?",
       "answer": "4",
       "hint": "Within-byte stream offset is p % 8; reading is MSB first.",
       "explanation": "The offset is 3, so the shift is 7 − 3 = 4.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-POSITIONS-04",
@@ -1165,11 +1204,11 @@
       "family": "stream-shift-count",
       "stage": 2,
       "type": "number",
-      "prompt": "For p = 8, what right-shift count brings that stream bit to bit 0?",
+      "prompt": "Number the eight bits of data[0] from its MSB to its LSB, then continue the same way through data[1], data[2], and so on, beginning at global position 0. For p = 8, what right-shift count brings that stream bit to bit 0?",
       "answer": "7",
       "hint": "Position 8 begins a new byte.",
       "explanation": "p % 8 is 0; the first stream bit in a byte is its most significant bit, so shift by 7.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-POSITIONS-05",
@@ -1177,11 +1216,11 @@
       "family": "stream-get-bit-expression",
       "stage": 2,
       "type": "self",
-      "prompt": "Write an expression that yields 0 or 1 for global bit p in unsigned-char buffer data. Assume p is valid.",
+      "prompt": "Number the eight bits of data[0] from its MSB to its LSB, then continue the same way through data[1], data[2], and so on, beginning at global position 0. Write an expression that yields 0 or 1 for global bit p in unsigned-char buffer data. Assume p is valid.",
       "answer": "(data[p / 8] >> (7 - p % 8)) & 1u",
       "hint": "Select the byte, shift the desired bit down, then isolate it.",
       "explanation": "p / 8 chooses the byte. MSB-first indexing gives shift 7 − p % 8. & 1u removes every other bit.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "rubric": [
         "Uses p / 8 to select the byte.",
         "Uses 7 − p % 8 for the shift.",
@@ -1198,7 +1237,7 @@
       "answer": "1",
       "hint": "p = 7 selects the last bit of the first byte.",
       "explanation": "0x81 is binary 10000001. Position 7 uses shift 0; masking its low bit produces 1.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "code": "unsigned char data[] = {0x81, 0x00};\nsize_t p = 7;\n(data[p / 8] >> (7 - p % 8)) & 1u"
     },
     {
@@ -1207,11 +1246,11 @@
       "family": "stream-boundary-bits",
       "stage": 2,
       "type": "number",
-      "prompt": "For data = {0x80, 0x01}, what is the value of global bit 8?",
+      "prompt": "Number the eight bits of data[0] from its MSB to its LSB, then continue the same way through data[1], data[2], and so on, beginning at global position 0. For data = {0x80, 0x01}, what is the value of global bit 8?",
       "answer": "0",
       "hint": "Global bit 8 is the MSB of data[1].",
       "explanation": "data[1] is 00000001, whose most significant bit is 0. Its one-bit is at global position 15.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-POSITIONS-08",
@@ -1219,11 +1258,11 @@
       "family": "stream-boundary-bits",
       "stage": 2,
       "type": "number",
-      "prompt": "For data = {0x80, 0x01}, what is the value of global bit 15?",
+      "prompt": "Number the eight bits of data[0] from its MSB to its LSB, then continue the same way through data[1], data[2], and so on, beginning at global position 0. For data = {0x80, 0x01}, what is the value of global bit 15?",
       "answer": "1",
       "hint": "Global bit 15 is the final bit of the second byte.",
       "explanation": "15 / 8 = 1 and 7 − 15 % 8 = 0. The low bit of 0x01 is 1.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-POSITIONS-09",
@@ -1231,11 +1270,11 @@
       "family": "last-valid-stream-position",
       "stage": 1,
       "type": "number",
-      "prompt": "A buffer holds B = 5 bytes. What is the last valid global bit position?",
+      "prompt": "An array contains 5 eight-bit bytes. Number all its bits consecutively starting at zero. What is the last valid global bit position?",
       "answer": "39",
       "hint": "Positions begin at zero.",
       "explanation": "There are 8 × 5 = 40 bits, so positions run from 0 through 39.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-POSITIONS-10",
@@ -1243,11 +1282,11 @@
       "family": "last-valid-stream-position",
       "stage": 2,
       "type": "number",
-      "prompt": "B = 2. What is the first out-of-range global bit position?",
+      "prompt": "An array contains 2 eight-bit bytes. Number all its bits consecutively starting at zero. What is the first out-of-range global bit position?",
       "answer": "16",
       "hint": "The first invalid position equals the bit count.",
-      "explanation": "Two bytes contain positions 0 through 15. Position 16 would access data[2], beyond this buffer.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "explanation": "Two bytes contain 16 bits at positions 0 through 15. Position 16 would be outside this array.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-FIELDS-01",
@@ -1255,11 +1294,11 @@
       "family": "append-next-bit",
       "stage": 1,
       "type": "self",
-      "prompt": "The next bit b is 0 or 1. Write the update that appends b on the right of unsigned accumulator value.",
+      "prompt": "The next bit b is 0 or 1. Write the update that appends b on the right of unsigned int accumulator value. Assume a one-place left shift loses no set bits.",
       "answer": "value = (value << 1) | b;",
       "hint": "Make one low-bit space before inserting b.",
       "explanation": "Left shift moves the existing bits up one place; OR inserts b at the new least significant position. Addition of b is also equivalent here.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
       "rubric": [
         "Shifts the previous value left by one.",
         "Inserts b in the vacated low position."
@@ -1275,7 +1314,7 @@
       "answer": "11",
       "hint": "Old binary 101 becomes 1011.",
       "explanation": "The update is 2 × 5 + 1 = 11. It preserves the order of bits encountered.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-FIELDS-03",
@@ -1287,7 +1326,7 @@
       "answer": "11",
       "hint": "The first received bit becomes the most significant bit of this four-bit field.",
       "explanation": "The intermediate values are 1, 2, 5, 11. Do not reverse the received bit order.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-FIELDS-04",
@@ -1295,11 +1334,11 @@
       "family": "field-bit-order",
       "stage": 3,
       "type": "number",
-      "prompt": "Starting from zero, accumulate the five header bits 0, 1, 0, 0, 0. What unsigned L results?",
+      "prompt": "Starting from unsigned value = 0, process bits 0, 1, 0, 0, 0 in that order, updating value = (value << 1) | bit each time. What final decimal value results?",
       "answer": "8",
-      "hint": "Treat the header as the binary number 01000.",
-      "explanation": "The accumulator evolves 0, 1, 2, 4, 8. This header requests an 8-bit payload.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "hint": "Accumulate the explicitly listed bits as the binary number 01000.",
+      "explanation": "The accumulator evolves 0, 1, 2, 4, 8. Appending a bit multiplies the old value by two and adds that bit.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-FIELDS-05",
@@ -1307,11 +1346,11 @@
       "family": "cross-byte-field",
       "stage": 3,
       "type": "number",
-      "prompt": "data is {0x12, 0x34}. Read 8 bits beginning at global position 4, MSB first. What unsigned decimal value results?",
+      "prompt": "data is {0x12, 0x34}. Number bits from zero, starting at data[0]’s MSB and continuing MSB first through data[1]. Read 8 bits beginning at position 4, interpreting the first selected bit as most significant. What unsigned decimal value results?",
       "answer": "35",
       "hint": "Join the low four bits of 0x12 to the high four bits of 0x34.",
       "explanation": "The selected bits are 0010 0011, which is 0x23 = 35. The field crosses a byte boundary without resetting its accumulator.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-FIELDS-06",
@@ -1319,11 +1358,11 @@
       "family": "cross-byte-field",
       "stage": 3,
       "type": "number",
-      "prompt": "data is {0xab, 0xcd}. Read 6 bits beginning at global position 6. What unsigned decimal value results?",
+      "prompt": "data is {0xab, 0xcd}. Number bits from zero, starting at data[0]’s MSB and continuing MSB first through data[1]. Read 6 bits beginning at position 6, interpreting the first selected bit as most significant. What unsigned decimal value results?",
       "answer": "60",
       "hint": "Take the last two bits of 0xab, then the first four bits of 0xcd.",
       "explanation": "The selected bits are 11 followed by 1100: 111100 = 60.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-FIELDS-07",
@@ -1331,11 +1370,12 @@
       "family": "field-start-position",
       "stage": 2,
       "type": "number",
-      "prompt": "A field’s header begins at global position 13. At what position does its payload begin?",
-      "answer": "18",
-      "hint": "The header is always five bits.",
-      "explanation": "The payload starts at headerStart + 5 = 18. It does not start at the next byte boundary.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "What is the value of pos after this code?",
+      "answer": "16",
+      "hint": "The increment is given directly by the code.",
+      "explanation": "pos advances by 3, from 13 to 16. A cursor advances by the number of positions actually consumed; no unstated alignment is implied.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
+      "code": "size_t pos = 13;\nunsigned int consumed = 3;\npos += consumed;"
     },
     {
       "id": "A2-FIELDS-08",
@@ -1343,11 +1383,12 @@
       "family": "field-start-position",
       "stage": 3,
       "type": "number",
-      "prompt": "A header starts at position 6 and announces L = 9. At what position would the next field’s header begin?",
-      "answer": "20",
-      "hint": "Advance across both the five-bit header and the payload.",
-      "explanation": "The next position is 6 + 5 + 9 = 20. Fields can begin anywhere within a byte.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "What is the final value of pos after this code?",
+      "answer": "18",
+      "hint": "Add each consumed width exactly once.",
+      "explanation": "The two increments are 3 and 9. The final cursor is 6 + 3 + 9 = 18.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise.",
+      "code": "size_t pos = 6;\nunsigned int firstWidth = 3, secondWidth = 9;\npos += firstWidth;\npos += secondWidth;"
     },
     {
       "id": "A2-FIELDS-09",
@@ -1355,11 +1396,11 @@
       "family": "unsigned-field-maximum",
       "stage": 1,
       "type": "number",
-      "prompt": "What is the largest unsigned raw value obtainable from 4 payload bits?",
+      "prompt": "What is the largest unsigned integer representable using 4 bits?",
       "answer": "15",
       "hint": "All four raw bits can be one before signed interpretation.",
-      "explanation": "The raw bit pattern 1111 has unsigned value 15. Its later signed interpretation at L = 4 would be −1.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "explanation": "The four-bit pattern 1111 has unsigned value 2^4 − 1 = 15. Interpreting the same pattern as signed would be a different operation.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-FIELDS-10",
@@ -1370,8 +1411,8 @@
       "prompt": "What is the largest unsigned raw value obtainable from 31 bits?",
       "answer": "2147483647",
       "hint": "Compute 2^31 − 1.",
-      "explanation": "An unsigned 32-bit accumulator can hold every allowed 31-bit raw payload. Accumulating an arbitrarily long entire Problem 2 stream into one integer is a separate problem.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "explanation": "The maximum is 2^31 − 1 = 2147483647. A 32-bit unsigned int can hold every unsigned value extracted from at most 31 bits.",
+      "source": "C17 integer and bitwise expressions; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12. Any bit-reading order is specified in this exercise."
     },
     {
       "id": "A2-SIGNED-01",
@@ -1379,11 +1420,11 @@
       "family": "payload-sign-position",
       "stage": 1,
       "type": "number",
-      "prompt": "For a payload of length L = 6, what bit index in raw is its sign bit? Use LSB-based bit numbering.",
+      "prompt": "A six-bit two’s-complement integer is stored in the low 6 bits of unsigned int raw. What bit index contains its sign bit? Number bits from zero at the least significant bit.",
       "answer": "5",
       "hint": "The highest of L bits has index L − 1.",
       "explanation": "The sign bit is bit 5 of this six-bit raw field, not bit 31 of its storage type.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions."
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7."
     },
     {
       "id": "A2-SIGNED-02",
@@ -1391,11 +1432,11 @@
       "family": "payload-sign-position",
       "stage": 2,
       "type": "self",
-      "prompt": "Write an unsigned expression that tests whether an L-bit raw payload is negative. Assume 1 <= L <= 31.",
+      "prompt": "The low L bits of unsigned int raw hold an L-bit two’s-complement integer, with 1 <= L <= 31. Write an unsigned expression that tests whether this represented integer is negative. Number bits from zero at the least significant bit.",
       "answer": "(raw & (1u << (L - 1))) != 0",
       "hint": "The payload’s own most significant bit carries its sign.",
       "explanation": "A shifted-and-masked alternative is also valid. Test bit L − 1 rather than the storage type’s top bit.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions. Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7.",
       "rubric": [
         "Selects bit L − 1.",
         "Distinguishes zero from a set sign bit.",
@@ -1408,11 +1449,11 @@
       "family": "twos-complement-value",
       "stage": 2,
       "type": "number",
-      "prompt": "The L = 4 payload is 1101 (unsigned raw = 13). What signed value does it encode?",
+      "prompt": "Interpret the four-bit pattern 1101 as a two’s-complement integer. Its unsigned raw value is 13. What signed value does it represent?",
       "answer": "-3",
       "hint": "With its sign bit set, subtract 2^L.",
-      "explanation": "13 − 16 = −3. The header is not included in this signed conversion.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions."
+      "explanation": "The highest of the four bits is set, so the signed value is 13 − 2^4 = −3.",
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7."
     },
     {
       "id": "A2-SIGNED-04",
@@ -1420,11 +1461,11 @@
       "family": "twos-complement-value",
       "stage": 2,
       "type": "number",
-      "prompt": "The L = 5 payload is 11111 (unsigned raw = 31). What signed value does it encode?",
+      "prompt": "Interpret the five-bit pattern 11111 as a two’s-complement integer. Its unsigned raw value is 31. What signed value does it represent?",
       "answer": "-1",
       "hint": "Subtract the modulus for this payload width.",
       "explanation": "31 − 32 = −1. All ones encodes −1 at every nonzero two’s-complement width.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions."
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7."
     },
     {
       "id": "A2-SIGNED-05",
@@ -1432,11 +1473,11 @@
       "family": "nonnegative-payload",
       "stage": 1,
       "type": "number",
-      "prompt": "For L = 4 and raw = 0, what signed value is decoded?",
+      "prompt": "Interpret the four-bit pattern 0000 as a two’s-complement integer. What signed value does it represent?",
       "answer": "0",
       "hint": "A zero sign bit means nonnegative, not strictly positive.",
-      "explanation": "The sign bit is clear, so keep raw unchanged. Zero is a valid integer payload, distinct from a zero length header.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions."
+      "explanation": "The sign bit is clear and every value bit is zero, so the represented integer is zero. A clear sign bit means nonnegative, not strictly positive.",
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7."
     },
     {
       "id": "A2-SIGNED-06",
@@ -1444,11 +1485,11 @@
       "family": "nonnegative-payload",
       "stage": 2,
       "type": "number",
-      "prompt": "For L = 5 and raw = 15 (01111), what signed value is decoded?",
+      "prompt": "Interpret the five-bit pattern 01111 as a two’s-complement integer. Its unsigned raw value is 15. What signed value does it represent?",
       "answer": "15",
       "hint": "Only the highest of these five bits determines negativity.",
       "explanation": "The sign bit at index 4 is zero, so the signed value remains 15.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions."
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7."
     },
     {
       "id": "A2-SIGNED-07",
@@ -1456,11 +1497,11 @@
       "family": "signed-range",
       "stage": 1,
       "type": "number",
-      "prompt": "What is the minimum value representable by an L = 5 two’s-complement payload?",
+      "prompt": "What is the minimum value representable by a five-bit two’s-complement integer?",
       "answer": "-16",
       "hint": "An L-bit signed range begins at −2^(L−1).",
       "explanation": "The minimum bit pattern is 10000, raw 16. Subtracting 32 gives −16.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions."
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7."
     },
     {
       "id": "A2-SIGNED-08",
@@ -1468,11 +1509,11 @@
       "family": "signed-range",
       "stage": 2,
       "type": "number",
-      "prompt": "What is the minimum value representable by an L = 31 two’s-complement payload?",
+      "prompt": "What is the minimum value representable by a 31-bit two’s-complement integer?",
       "answer": "-1073741824",
       "hint": "Use the payload width, not the 32-bit storage width.",
-      "explanation": "The minimum is −2^30 = −1073741824. The PDF’s −1073741823 example is close to, but is not, that minimum.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions."
+      "explanation": "The minimum is −2^30 = −1073741824. The signed range has one more negative value than positive value.",
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7."
     },
     {
       "id": "A2-SIGNED-09",
@@ -1480,11 +1521,11 @@
       "family": "one-bit-signed",
       "stage": 1,
       "type": "number",
-      "prompt": "A one-bit payload is 1. What signed value does it encode?",
+      "prompt": "Interpret the one-bit pattern 1 as a two’s-complement integer. What signed value does it represent?",
       "answer": "-1",
       "hint": "Its only bit is also its sign bit.",
       "explanation": "raw = 1 and L = 1, so 1 − 2 = −1. A one-bit signed field cannot encode positive 1.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions."
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7."
     },
     {
       "id": "A2-SIGNED-10",
@@ -1492,11 +1533,11 @@
       "family": "one-bit-signed",
       "stage": 2,
       "type": "number",
-      "prompt": "What is the largest signed value representable by a one-bit payload?",
+      "prompt": "What is the largest signed value representable by a one-bit two’s-complement integer?",
       "answer": "0",
       "hint": "The two available patterns encode zero and negative one.",
       "explanation": "Pattern 0 encodes 0 and pattern 1 encodes −1; therefore the maximum is 0.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions."
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7."
     },
     {
       "id": "A2-SIGNED-11",
@@ -1504,11 +1545,11 @@
       "family": "safe-signed-subtraction",
       "stage": 2,
       "type": "self",
-      "prompt": "Repair the negative branch so it is defined even when L = 31. raw is unsigned int and contains at most L bits.",
+      "prompt": "The low L bits of unsigned int raw represent a negative L-bit two’s-complement integer, with 1 <= L <= 31 and no higher bits set. Repair this int-returning function’s negative branch so the arithmetic is defined even at L = 31.",
       "answer": "return (int)((long long)raw - (1LL << L));",
       "hint": "Do the power of two and subtraction in a signed type wide enough for 2^31.",
       "explanation": "1 << 31 is invalid for signed 32-bit int. long long safely holds raw, 2^L and their difference; the final result fits int under these assumptions.",
-      "source": "WALKTHROUGH.md, §§3–4: bit-by-bit helpers, with corrected wide signed subtraction at L = 31. Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7.",
       "code": "/* sign bit is known to be set */\nreturn (int)raw - (1 << L);",
       "rubric": [
         "Uses a type wide enough for 2^31, such as long long.",
@@ -1522,11 +1563,11 @@
       "family": "safe-signed-subtraction",
       "stage": 3,
       "type": "self",
-      "prompt": "Why is `return raw - (1u << L);` not a portable substitute for the negative branch of an int-returning decoder? Give a safe expression.",
+      "prompt": "An int-returning function must interpret the low L bits of unsigned int raw as a negative L-bit two’s-complement integer. Assume 1 <= L <= 31 and no higher bits set. Why is `return raw - (1u << L);` not a portable negative-value calculation in C17? Give a safe expression.",
       "answer": "The subtraction is unsigned, so a negative mathematical answer wraps to a large unsigned value; converting that out-of-range value to int is implementation-defined in C17. Use (int)((long long)raw - (1LL << L)).",
       "hint": "Changing the shift operand to unsigned also changes the subtraction’s arithmetic type.",
       "explanation": "An unsigned mask is useful for bit tests. Signed interpretation needs arithmetic whose negative result is representable before the final conversion.",
-      "source": "WALKTHROUGH.md, §§3–4: bit-by-bit helpers, with corrected wide signed subtraction at L = 31. Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7.",
       "rubric": [
         "Identifies unsigned subtraction and wraparound.",
         "Avoids assuming out-of-range unsigned-to-int conversion is portable.",
@@ -1539,35 +1580,37 @@
       "family": "signed-range",
       "stage": 2,
       "type": "number",
-      "prompt": "What is the maximum value representable by an L = 31 two’s-complement payload?",
+      "prompt": "What is the maximum value representable by a 31-bit two’s-complement integer?",
       "answer": "1073741823",
       "hint": "The sign bit must stay zero; the other 30 bits may all be one.",
-      "explanation": "The maximum is 2^30 − 1 = 1073741823. A 31-bit signed payload has one sign bit and 30 remaining bits; do not use the 32-bit int maximum.",
-      "source": "Assignment 2 PDF, p. 2: L-bit signed payload and positive extreme example; supporting two’s-complement arithmetic under this practice set’s assumptions."
+      "explanation": "The maximum is 2^30 − 1 = 1073741823. Of the 31 bits, the sign bit is zero and the remaining 30 bits are ones.",
+      "source": "Two’s-complement representation and C17 integer conversions under the stated practice assumptions; WG14 N1570 §§6.2.6.2, 6.3.1.3, 6.5.7."
     },
     {
       "id": "A2-CURSOR-01",
       "topic": "cursor",
-      "family": "minimum-next-field",
-      "stage": 1,
+      "family": "loop-boundary-count",
+      "stage": 2,
       "type": "number",
-      "prompt": "In Problem 2, what is the minimum number of remaining bits required to attempt another encoded integer?",
-      "answer": "6",
-      "hint": "Five header bits plus at least one payload bit.",
-      "explanation": "With 5 or fewer remaining bits, the assignment says stop. Six bits can hold a width-1 field.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples."
+      "prompt": "How many times is steps incremented?",
+      "answer": "4",
+      "hint": "Trace pos at the start of each loop iteration.",
+      "explanation": "The loop body runs at pos = 0, 2, 4 and 6. It stops after pos becomes 8, so steps is 4.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "size_t pos = 0;\nint steps = 0;\nwhile (pos < 7) {\n    ++steps;\n    pos += 2;\n}"
     },
     {
       "id": "A2-CURSOR-02",
       "topic": "cursor",
-      "family": "minimum-next-field",
+      "family": "loop-boundary-count",
       "stage": 2,
-      "type": "exact",
-      "prompt": "There are exactly 5 bits left in a Problem 2 stream. Should the decoder continue or stop?",
-      "answer": "stop",
-      "hint": "The stopping rule includes equality at five.",
-      "explanation": "Even a full five-bit length header would leave no bit for a nonzero-length payload.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples."
+      "type": "number",
+      "prompt": "How many times is count incremented?",
+      "answer": "0",
+      "hint": "Check the condition before entering the loop body.",
+      "explanation": "The initial remainder is 12 − 7 = 5, which is less than the required 6 in this code. The loop body never executes.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "size_t pos = 7, total = 12;\nint count = 0;\nwhile (total - pos >= 6) {\n    ++count;\n    pos += 6;\n}"
     },
     {
       "id": "A2-CURSOR-03",
@@ -1575,13 +1618,13 @@
       "family": "payload-fit-check",
       "stage": 2,
       "type": "self",
-      "prompt": "After reading a header, pos points to its payload. Write a safe condition that confirms L payload bits remain, assuming pos <= totalBits.",
-      "answer": "L <= totalBits - pos",
+      "prompt": "size_t pos is a cursor into totalBits bits, and pos <= totalBits. Write a condition that checks whether width further bits fit, without risking overflow in pos + width.",
+      "answer": "width <= totalBits - pos",
       "hint": "Use the remaining count rather than unchecked addition.",
-      "explanation": "Comparing against totalBits − pos avoids overflow in pos + L. This is a defensive buffer check in addition to the assignment’s termination rules.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples. Supporting C: size_t bounds arithmetic.",
+      "explanation": "Since pos <= totalBits, the subtraction is safe. Comparing width with the remaining count avoids overflowing a sum such as pos + width.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
       "rubric": [
-        "Compares L with the available payload bits.",
+        "Compares width with totalBits − pos.",
         "Uses the stated pos <= totalBits precondition."
       ]
     },
@@ -1591,11 +1634,11 @@
       "family": "payload-fit-check",
       "stage": 3,
       "type": "number",
-      "prompt": "totalBits = 16 and pos = 10 after reading a header. L = 7. How many payload bits are actually available?",
+      "prompt": "An array has 16 valid elements, indexed from zero, and its next unread element is at index 10. How many valid elements remain from that index onward?",
       "answer": "6",
-      "hint": "Subtract the current cursor from the total.",
-      "explanation": "Only 16 − 10 = 6 bits remain, so a 7-bit read would exceed the buffer. A robust helper rejects it rather than inventing missing bits.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples. Supporting C: array bounds."
+      "hint": "Subtract the next unread index from the element count.",
+      "explanation": "The remaining count is 16 − 10 = 6. A request to read 7 elements starting there would exceed the array’s valid range.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt."
     },
     {
       "id": "A2-CURSOR-05",
@@ -1603,11 +1646,12 @@
       "family": "cursor-advance",
       "stage": 2,
       "type": "number",
-      "prompt": "pos is 7 at the start of a field and L = 4. After consuming its header and payload, what is pos?",
-      "answer": "16",
-      "hint": "Advance once for five header bits and once for L payload bits.",
-      "explanation": "7 + 5 + 4 = 16. Do not add an extra byte-alignment step.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples."
+      "prompt": "What is the final value of pos?",
+      "answer": "14",
+      "hint": "Each statement advances the same variable.",
+      "explanation": "The final value is 7 + 3 + 4 = 14. Do not infer extra increments that are absent from the code.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "size_t pos = 7;\npos += 3;\npos += 4;"
     },
     {
       "id": "A2-CURSOR-06",
@@ -1615,156 +1659,159 @@
       "family": "cursor-advance",
       "stage": 3,
       "type": "number",
-      "prompt": "pos is 12 immediately after the header. L = 3. After consuming the payload, what is pos?",
+      "prompt": "This function receives a pointer to the caller’s cursor. What value does pos have after the call?",
       "answer": "15",
-      "hint": "The question starts after the header has already been consumed.",
-      "explanation": "Only L remains to be added: 12 + 3 = 15. Adding the header again would skip stream bits.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples."
+      "hint": "*cursor designates the caller’s size_t object.",
+      "explanation": "The function adds 3 directly to the caller’s pos through its pointer. pos changes from 12 to 15.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "void advanceBy(size_t *cursor, size_t amount) {\n    *cursor += amount;\n}\n/* In the caller: */\nsize_t pos = 12;\nadvanceBy(&pos, 3);"
     },
     {
       "id": "A2-CURSOR-07",
       "topic": "cursor",
-      "family": "zero-length-terminator",
-      "stage": 1,
-      "type": "exact",
-      "prompt": "A Problem 2 length header decodes to L = 0. Should the decoder print zero or stop? Answer print or stop.",
-      "answer": "stop",
-      "hint": "Length zero is a control value, not a zero-valued payload.",
-      "explanation": "A zero length terminates decoding that bitstream. Numeric zero is encoded using a nonzero L and an all-zero payload.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples."
+      "family": "break-before-count",
+      "stage": 2,
+      "type": "number",
+      "prompt": "What is count after this loop?",
+      "answer": "1",
+      "hint": "The break happens before the increment on the zero element.",
+      "explanation": "The element 3 increments count once. At the next element, 0, break exits the loop before another increment.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "int values[] = {3, 0, 4};\nint count = 0;\nfor (size_t i = 0; i < 3; ++i) {\n    if (values[i] == 0) break;\n    ++count;\n}"
     },
     {
       "id": "A2-CURSOR-08",
       "topic": "cursor",
-      "family": "zero-length-terminator",
-      "stage": 2,
+      "family": "break-before-count",
+      "stage": 3,
       "type": "number",
-      "prompt": "A stream has already produced two integers and then encounters L = 0. How many additional integer output lines does that header produce?",
-      "answer": "0",
-      "hint": "A terminator does not receive an integer ordinal.",
-      "explanation": "Stop without printing another integer or incrementing the successful-integer counter.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples."
+      "prompt": "What is count after this loop?",
+      "answer": "2",
+      "hint": "This version increments before checking the stop condition.",
+      "explanation": "The loop increments count for 3 and then for 0. It then breaks, leaving count at 2. Moving a statement across a break condition can change the result.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "int values[] = {3, 0, 4};\nint count = 0;\nfor (size_t i = 0; i < 3; ++i) {\n    ++count;\n    if (values[i] == 0) break;\n}"
     },
     {
       "id": "A2-CURSOR-09",
       "topic": "cursor",
-      "family": "per-line-counters",
-      "stage": 1,
+      "family": "counter-scope",
+      "stage": 2,
       "type": "number",
-      "prompt": "The previous input line produced four integers. What ordinal is used for the first decoded integer on the next input line?",
+      "prompt": "What is final after both outer-loop iterations?",
       "answer": "1",
-      "hint": "The integer counter belongs to one input bitstream.",
-      "explanation": "Reset the ordinal to 1 for each input line; line numbering and integer numbering are separate counters.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples."
+      "hint": "count is declared and initialized again inside each outer iteration.",
+      "explanation": "count becomes 1 separately during each iteration because it is reset to zero inside the outer loop. The last assignment stores 1 in final.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "int final = -1;\nfor (int row = 0; row < 2; ++row) {\n    int count = 0;\n    ++count;\n    final = count;\n}"
     },
     {
       "id": "A2-CURSOR-10",
       "topic": "cursor",
-      "family": "per-line-counters",
+      "family": "counter-scope",
       "stage": 3,
-      "type": "self",
-      "prompt": "At the start of each input line, what happens to pos and ordinal? What advances when a B = 0 line produces no integers?",
-      "answer": "Reset pos to 0 and ordinal to 1 for the new line. The input line number still advances; no integer is printed.",
-      "hint": "Separate byte-stream state from the outer line counter.",
-      "explanation": "pos and ordinal are local to one bitstream. Empty lines do not collapse the input’s line numbering.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples. Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples.",
-      "rubric": [
-        "Resets the stream cursor and integer ordinal for each line.",
-        "Advances input line number even when nothing is printed."
-      ]
+      "type": "number",
+      "prompt": "What is count after this code?",
+      "answer": "2",
+      "hint": "This time count is initialized outside the loop.",
+      "explanation": "Both increments affect the same count without reinitializing it. Its final value is 2.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "int count = 0;\nfor (int row = 0; row < 2; ++row) {\n    ++count;\n}"
     },
     {
       "id": "A2-TRACES-01",
       "topic": "traces",
-      "family": "single-byte-decode",
+      "family": "shift-mask-trace",
       "stage": 3,
       "type": "number",
-      "prompt": "Problem 1 receives the one-byte stream 0x08. What signed integer should be printed?",
-      "answer": "0",
-      "hint": "Write 0x08 as eight bits, then split 5 header bits from the payload.",
-      "explanation": "00001000 begins with L = 00001 = 1, followed by payload 0. The remaining two bits are ignored.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "What decimal value is stored in result?",
+      "answer": "6",
+      "hint": "First shift the byte right, then keep its low three bits.",
+      "explanation": "0xb6 is 10110110. Shifting right by 3 gives 00010110; AND with 00000111 leaves 00000110 = 6.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
+      "code": "unsigned char byte = 0xb6;\nunsigned int result = (byte >> 3) & 7u;"
     },
     {
       "id": "A2-TRACES-02",
       "topic": "traces",
-      "family": "single-byte-decode",
+      "family": "shift-mask-trace",
       "stage": 3,
       "type": "number",
-      "prompt": "Problem 1 receives the one-byte stream 0x0c. What signed integer should be printed?",
-      "answer": "-1",
-      "hint": "The header still has five bits; the one payload bit is now set.",
-      "explanation": "00001100 splits into header 00001 and payload 1. A one-bit signed 1 means −1; the final two bits are padding.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "What decimal value is stored in result?",
+      "answer": "13",
+      "hint": "Isolate the four bits selected by the shift and mask.",
+      "explanation": "0xd6 is 11010110. Its high four bits are 1101, so the result is 13.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
+      "code": "unsigned char byte = 0xd6;\nunsigned int result = (byte >> 4) & 15u;"
     },
     {
       "id": "A2-TRACES-03",
       "topic": "traces",
-      "family": "single-byte-decode",
+      "family": "extract-then-signed",
       "stage": 3,
       "type": "number",
-      "prompt": "Problem 1 receives the one-byte stream 0x12. What signed integer should be printed?",
-      "answer": "1",
-      "hint": "Split 00010010 after its first five bits.",
-      "explanation": "The header 00010 gives L = 2. The payload 01 has a clear sign bit and encodes +1; one trailing bit is ignored.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "What decimal value is stored in value?",
+      "answer": "-3",
+      "hint": "Compute raw first, then apply the conditional subtraction.",
+      "explanation": "raw is 0xd = 13. raw & 8u is nonzero, so value is 13 − 16 = −3. The code interprets the selected four bits as two’s complement.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
+      "code": "unsigned char byte = 0xd6;\nunsigned int raw = (byte >> 4) & 15u;\nint value = (raw & 8u) ? (int)raw - 16 : (int)raw;"
     },
     {
       "id": "A2-TRACES-04",
       "topic": "traces",
-      "family": "multi-byte-single-decode",
+      "family": "extract-then-signed",
       "stage": 3,
       "type": "number",
-      "prompt": "Problem 1 receives bytes {0x43, 0xd8}. What signed integer is decoded?",
-      "answer": "123",
-      "hint": "The header is 01000; read the next eight bits across the byte boundary.",
-      "explanation": "L = 8 and the payload is 01111011, raw 123. Its sign bit is zero; the last three bits are ignored.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "What decimal value is stored in value?",
+      "answer": "-6",
+      "hint": "The mask selects five bits; the sign test checks the bit of weight 16.",
+      "explanation": "raw is 0x1a = 26. Its bit 4 is set, so the conditional computes 26 − 32 = −6.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
+      "code": "unsigned char byte = 0x9a;\nunsigned int raw = byte & 31u;\nint value = (raw & 16u) ? (int)raw - 32 : (int)raw;"
     },
     {
       "id": "A2-TRACES-05",
       "topic": "traces",
-      "family": "multi-byte-single-decode",
+      "family": "combine-byte-parts",
       "stage": 3,
       "type": "number",
-      "prompt": "Problem 1 receives {0xca, 0xf1, 0x85, 0x38}. What signed integer is decoded?",
-      "answer": "12345678",
-      "hint": "The five-bit header is 11001; the 25-bit payload is positive.",
-      "explanation": "L = 25; the next 25 bits have raw value 12345678 and sign bit zero. The PDF sample’s expected value is 12345678.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples."
+      "prompt": "What decimal value is stored in raw?",
+      "answer": "35",
+      "hint": "The low four bits of data[0] become the high four bits of the result.",
+      "explanation": "data[0] & 15u is 2, shifted left four gives 32. data[1] >> 4 is 3. Their OR is 35, the value 0x23.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
+      "code": "unsigned char data[] = {0x12, 0x34};\nunsigned int raw = ((data[0] & 15u) << 4) | (data[1] >> 4);"
     },
     {
       "id": "A2-TRACES-06",
       "topic": "traces",
-      "family": "multiple-field-trace",
+      "family": "combine-byte-parts",
       "stage": 3,
-      "type": "self",
-      "prompt": "Decode Problem 2 bytes {0x08, 0x30}. Give the signed values in order and the cursor position after each integer.",
-      "answer": "Values: 0, -1. Cursor positions: 6, 12. Four bits remain, so stop.",
-      "hint": "Each of these fields uses a five-bit header and one payload bit.",
-      "explanation": "The first six bits are 00001|0; the next six are 00001|1. Ordinals are 1 and 2 on the same input line.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples.",
-      "rubric": [
-        "Gives values 0 then −1.",
-        "Gives positions 6 and 12.",
-        "Stops with 4 remaining bits."
-      ]
+      "type": "number",
+      "prompt": "What decimal value is stored in raw?",
+      "answer": "60",
+      "hint": "The low two bits of the first byte are joined to the high four bits of the second byte.",
+      "explanation": "data[0] & 3u is 3, shifted left four gives 48. data[1] >> 4 is 12. The OR is 60, binary 111100.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
+      "code": "unsigned char data[] = {0xab, 0xcd};\nunsigned int raw = ((data[0] & 3u) << 4) | (data[1] >> 4);"
     },
     {
       "id": "A2-TRACES-07",
       "topic": "traces",
-      "family": "multiple-field-trace",
+      "family": "pointer-mask-trace",
       "stage": 3,
       "type": "self",
-      "prompt": "Decode Problem 2 bytes {0x12, 0x28, 0x6c, 0x70}. Give the four signed values in order and the final cursor.",
-      "answer": "Values: 1, -2, 3, -4. Final cursor: 30; two bits remain.",
-      "hint": "Read each new length at the current bit cursor, not at the next byte.",
-      "explanation": "The payload widths are 2, 2, 3, 3; field sizes are 7, 7, 8, 8. These sum to 30 bits.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples.",
+      "prompt": "After this code, give the decimal values of data[0], data[1], and x.",
+      "answer": "data[0] = 16; data[1] = 36; x = 9.",
+      "hint": "The increment moves p before the write, and x is computed from that updated byte.",
+      "explanation": "p starts at data[0], then ++p makes it point to data[1]. OR with 4 changes 0x20 to 0x24 = 36. Shifting 36 right by 2 gives x = 9.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
+      "code": "unsigned char data[] = {0x10, 0x20};\nunsigned char *p = data;\n++p;\n*p |= 1u << 2;\nunsigned int x = *p >> 2;",
       "rubric": [
-        "Gives 1, −2, 3, −4 in order.",
-        "Gives final cursor 30.",
-        "Stops because only 2 bits remain."
+        "Leaves data[0] at 16.",
+        "Changes data[1] to 36.",
+        "Computes x as 9 after the change."
       ]
     },
     {
@@ -1773,14 +1820,14 @@
       "family": "capacity-received-data",
       "stage": 3,
       "type": "self",
-      "prompt": "A decoder allocates 16 bytes but successfully reads B = 2 bytes. Should totalBits be 128 or 16? Explain which length controls decoding.",
-      "answer": "totalBits is 16, from the two received bytes. Allocated capacity is not the length of the received stream.",
+      "prompt": "A program allocates 16 bytes, then successfully receives 2 bytes of input into that storage. It should process only the received input. How many bits may it process: 128 or 16? Explain.",
+      "answer": "16 bits. The valid input length is 2 bytes × 8 bits per byte; the extra allocated capacity is not additional input.",
       "hint": "Storage space and valid input length are different quantities.",
-      "explanation": "Decoding unused allocation would interpret unrelated bytes as part of the input. Use B for the valid stream length and separately ensure capacity is at least B.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples. Supporting C for A2 buffers: C17 allocation and byte filling; WG14 N1570 §§7.22.3, 7.24.6.1.",
+      "explanation": "Capacity and valid input length are distinct values. Spare allocation does not establish that those bytes belong to the input.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts.",
       "rubric": [
-        "Uses 8 × B = 16 bits.",
-        "Distinguishes allocated capacity from received byte count."
+        "Uses 2 × 8 = 16 valid bits.",
+        "Distinguishes storage capacity from received input length."
       ]
     },
     {
@@ -1789,11 +1836,11 @@
       "family": "capacity-received-data",
       "stage": 3,
       "type": "number",
-      "prompt": "A 10-byte allocation contains only B = 3 successfully received input bytes. What is the first global bit position that is outside this received stream?",
+      "prompt": "A 10-byte allocation contains exactly 3 received input bytes; only those bytes may be processed. Number their bits consecutively from zero. What is the first global position outside that received input?",
       "answer": "24",
       "hint": "Use received bytes, not allocated capacity, to set the stream boundary.",
-      "explanation": "The received stream contains 3 × 8 = 24 bits at positions 0 through 23. The extra allocation does not extend the input stream.",
-      "source": "Assignment 2 PDF, p. 2: B gives the received byte count; supporting C: allocation capacity and initialized input length are separate."
+      "explanation": "The input contains 3 × 8 = 24 bits at positions 0 through 23. Its first out-of-range position is 24; extra storage capacity does not extend that input.",
+      "source": "C17 language concepts; WG14 N1570: integer types, conversions, expressions and standard-library contracts."
     },
     {
       "id": "A2-METHODS-01",
@@ -1801,11 +1848,11 @@
       "family": "write-get-bit",
       "stage": 4,
       "type": "self",
-      "prompt": "Write getBit from memory. Contract: data points to a valid byte buffer; p is a valid global bit position; return exactly 0 or 1 in MSB-first stream order.",
+      "prompt": "Write getBit from memory. Contract: data is a valid byte array and p is a valid zero-based global bit position. Number bits starting at data[0]’s MSB, continue to its LSB, then continue the same way through later bytes. Return exactly 0 or 1 for position p.",
       "answer": "unsigned int getBit(const unsigned char *data, size_t p) {\n    return (data[p / 8] >> (7 - p % 8)) & 1u;\n}",
       "hint": "Recall the three steps: select byte, move bit, isolate bit.",
-      "explanation": "This helper assumes its caller has checked bounds. Its index calculation follows the assignment’s explicit stream order.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples. WALKTHROUGH.md, §§3–4: bit-by-bit helpers, with corrected wide signed subtraction at L = 31.",
+      "explanation": "Divide p by 8 to select a byte. The given MSB-first convention makes the shift 7 − p % 8. The caller guarantees p is in range.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
       "code": "unsigned int getBit(const unsigned char *data, size_t p) {\n    /* Write the body. */\n}",
       "rubric": [
         "Uses the requested signature and returns 0 or 1.",
@@ -1819,11 +1866,11 @@
       "family": "write-get-bit",
       "stage": 4,
       "type": "self",
-      "prompt": "Write getBitChecked. Return 1 on success and store the requested bit in *out; return 0 if p is outside B bytes and leave *out unchanged. Assume data and out are valid for their uses and B <= SIZE_MAX / 8.",
+      "prompt": "Write getBitChecked. Number bits from zero, starting at data[0]’s MSB, continuing to its LSB and then through subsequent bytes in the same order. The valid input has B bytes. Return 1 and store the bit in *out when p is valid; otherwise return 0 and leave *out unchanged. data and out are valid for their uses, and B <= SIZE_MAX / 8.",
       "answer": "int getBitChecked(const unsigned char *data, size_t B, size_t p, unsigned int *out) {\n    if (p >= B * 8) return 0;\n    *out = (data[p / 8] >> (7 - p % 8)) & 1u;\n    return 1;\n}",
       "hint": "Check the position before touching data or the output.",
       "explanation": "The boundary is exclusive: p equal to the bit count is already invalid. Checking p / 8 >= B is another valid approach that avoids multiplication.",
-      "source": "Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples. Supporting C for A2 buffers: C17 array, pointer and sizeof rules; WG14 N1570 §§6.3.2.1, 6.5.2.1, 6.5.3.2, 6.5.3.4, 6.7.6.3.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
       "code": "int getBitChecked(const unsigned char *data, size_t B, size_t p, unsigned int *out) {\n    /* Write the body. */\n}",
       "rubric": [
         "Rejects all out-of-range positions before reading.",
@@ -1837,12 +1884,12 @@
       "family": "write-get-bits",
       "stage": 4,
       "type": "self",
-      "prompt": "Write getBits from memory using getBit. Contract: 0 <= k <= 31; all k requested positions are valid; read from p in increasing stream order. Return the unsigned field, with k = 0 returning 0.",
+      "prompt": "Write getBits using the supplied helper `unsigned int getBit(const unsigned char *data, size_t p)`. getBit returns 0 or 1 for global position p, counting from zero through each byte MSB first in array order. Read k bits starting at p, with the first read bit becoming the result’s most significant bit. Assume 0 <= k <= 31 and all requested positions are valid. Return 0 for k = 0.",
       "answer": "unsigned int getBits(const unsigned char *data, size_t p, unsigned int k) {\n    unsigned int value = 0;\n    for (unsigned int i = 0; i < k; ++i) {\n        value = (value << 1) | getBit(data, p + i);\n    }\n    return value;\n}",
       "hint": "Initialize, repeat exactly k times, append the next bit.",
-      "explanation": "The loop invariant is that value contains exactly the bits already consumed in their original order. The 31-bit limit keeps the accumulator within unsigned int.",
-      "source": "WALKTHROUGH.md, §§3–4: bit-by-bit helpers, with corrected wide signed subtraction at L = 31.",
-      "code": "unsigned int getBits(const unsigned char *data, size_t p, unsigned int k) {\n    /* getBit is available. */\n}",
+      "explanation": "Start the result at zero and append each bit by shifting left once and inserting the new low bit. The requested width never exceeds 31, so all intermediate values fit unsigned int.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "unsigned int getBit(const unsigned char *data, size_t p);\n\nunsigned int getBits(const unsigned char *data, size_t p, unsigned int k) {\n    /* Write the body. */\n}",
       "rubric": [
         "Initializes the accumulator to zero.",
         "Consumes exactly p through p + k − 1 in order.",
@@ -1856,12 +1903,12 @@
       "family": "write-get-bits",
       "stage": 4,
       "type": "self",
-      "prompt": "Write readField using getBits. Return 1 and write *out when 0 <= k <= 31 and the entire field [p, p+k) fits in totalBits. Otherwise return 0 and leave *out unchanged. All pointers are valid for their uses.",
+      "prompt": "Write readField using `unsigned int getBits(const unsigned char *data, size_t p, unsigned int k)`. getBits returns the next k bits starting at zero-based position p, reading each byte MSB first in array order and treating the first selected bit as most significant; it returns 0 for k = 0 and does no bounds checks. readField must return 1 and write *out only when k <= 31 and the full range [p, p+k) fits in totalBits. Otherwise return 0 and leave *out unchanged. All pointers are valid for their uses; data contains totalBits valid bits.",
       "answer": "int readField(const unsigned char *data, size_t totalBits, size_t p, unsigned int k, unsigned int *out) {\n    if (k > 31 || p > totalBits || k > totalBits - p) return 0;\n    *out = getBits(data, p, k);\n    return 1;\n}",
       "hint": "Check p before subtracting it; do not rely on p + k staying in range.",
       "explanation": "The ordered bounds checks prevent unsigned subtraction underflow and addition overflow. A zero-length field at p == totalBits is permitted by this helper’s contract.",
-      "source": "WALKTHROUGH.md, §§3–4: bit-by-bit helpers, with corrected wide signed subtraction at L = 31. Supporting C: unsigned bounds arithmetic.",
-      "code": "int readField(const unsigned char *data, size_t totalBits, size_t p, unsigned int k, unsigned int *out) {\n    /* getBits is available. */\n}",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "unsigned int getBits(const unsigned char *data, size_t p, unsigned int k);\n\nint readField(const unsigned char *data, size_t totalBits, size_t p, unsigned int k, unsigned int *out) {\n    /* Write the body. */\n}",
       "rubric": [
         "Rejects k > 31 and p > totalBits.",
         "Checks remaining capacity without unsafe subtraction or addition.",
@@ -1875,11 +1922,11 @@
       "family": "write-signed-decode",
       "stage": 4,
       "type": "self",
-      "prompt": "Write decodeSigned. Contract: 1 <= L <= 31 and raw contains exactly the low L bits of a field. Return its L-bit two’s-complement value without undefined shifts or out-of-range unsigned-to-int conversion.",
+      "prompt": "Write decodeSigned. The low L bits of unsigned int raw contain an L-bit two’s-complement integer; no higher bits are set and 1 <= L <= 31. Return that represented signed value as int, without undefined shifts or out-of-range unsigned-to-int conversion.",
       "answer": "int decodeSigned(unsigned int raw, unsigned int L) {\n    if (raw & (1u << (L - 1))) {\n        return (int)((long long)raw - (1LL << L));\n    }\n    return (int)raw;\n}",
       "hint": "Test bit L − 1, then subtract 2^L in a sufficiently wide signed type if set.",
-      "explanation": "The nonnegative branch fits int. The negative branch’s long-long calculation fits and produces a result within the allowed signed payload range.",
-      "source": "WALKTHROUGH.md, §§3–4: bit-by-bit helpers, with corrected wide signed subtraction at L = 31. Assignment 2 PDF, p. 2: L-bit signed payload; supporting two’s-complement arithmetic under this practice set’s representation assumptions.",
+      "explanation": "Test bit L − 1. A clear sign bit leaves raw unchanged; a set sign bit requires subtracting 2^L in a sufficiently wide signed type. Both resulting branches fit int.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
       "code": "int decodeSigned(unsigned int raw, unsigned int L) {\n    /* Write the body. */\n}",
       "rubric": [
         "Tests the payload sign bit at L − 1.",
@@ -1897,7 +1944,7 @@
       "answer": "int readByte(unsigned char *out) {\n    unsigned int temp;\n    if (scanf(\"%x\", &temp) != 1 || temp > 255u) return 0;\n    *out = (unsigned char)temp;\n    return 1;\n}",
       "hint": "Match scanf’s destination type before checking the byte range.",
       "explanation": "A conversion check prevents use of an unassigned temporary. The range check prevents accepting a value that would be truncated to fit one byte.",
-      "source": "Supporting C for A2 input/output: C17 scanf/printf rules; WG14 N1570 §§7.21.6.1–7.21.6.2. Assignment 2 PDF, p. 2: input, bit order, Problem 1 processing and examples.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
       "code": "int readByte(unsigned char *out) {\n    /* out points to a writable byte. */\n}",
       "rubric": [
         "Uses unsigned int temporary and %x with its address.",
@@ -1911,18 +1958,18 @@
       "family": "write-next-field",
       "stage": 4,
       "type": "self",
-      "prompt": "Write nextValue using getBits and decodeSigned. Status: 1 = decoded one integer; 0 = stop (fewer than 6 bits remain or L == 0); -1 = invalid cursor or incomplete payload. On status 1, update *pos to after the field and set *out. Otherwise leave both unchanged. Assume data holds totalBits valid bits and pointer arguments are valid.",
-      "answer": "int nextValue(const unsigned char *data, size_t totalBits, size_t *pos, int *out) {\n    size_t start = *pos;\n    if (start > totalBits) return -1;\n    if (totalBits - start < 6) return 0;\n    unsigned int L = getBits(data, start, 5);\n    if (L == 0) return 0;\n    size_t payload = start + 5;\n    if (L > totalBits - payload) return -1;\n    unsigned int raw = getBits(data, payload, L);\n    *out = decodeSigned(raw, L);\n    *pos = payload + L;\n    return 1;\n}",
-      "hint": "Use a local cursor until every check succeeds; then commit the output and cursor together.",
-      "explanation": "The five-bit header bounds L at 31. Remaining-capacity checks make both additions safe. Leaving the cursor unchanged on stop/error is this helper’s chosen contract, not an extra rule imposed by the assignment.",
-      "source": "Assignment 2 PDF, p. 3: Problem 2 encoding, stopping rules and examples. WALKTHROUGH.md, §§3–4: bit-by-bit helpers, with corrected wide signed subtraction at L = 31.",
-      "code": "int nextValue(const unsigned char *data, size_t totalBits, size_t *pos, int *out) {\n    /* getBits and decodeSigned are available. */\n}",
+      "prompt": "Write nextValue using the two supplied helpers. getBits(data, p, k) returns k bits starting at zero-based position p, reading bytes in array order and bits MSB first, with the first selected bit most significant; it performs no bounds checks. decodeSigned(raw, width) returns the two’s-complement value of the low width bits. nextValue must read exactly width bits at *pos and update *out and *pos only on success. Return -1 for width outside 1..31 or *pos > totalBits; return 0 when a valid cursor equals totalBits; return -1 when too few bits remain; otherwise return 1. Check these conditions in the stated order. All pointers are valid for their uses, and data contains totalBits valid bits.",
+      "answer": "int nextValue(const unsigned char *data, size_t totalBits, size_t *pos, unsigned int width, int *out) {\n    size_t start = *pos;\n    if (width < 1 || width > 31 || start > totalBits) return -1;\n    if (start == totalBits) return 0;\n    if (width > totalBits - start) return -1;\n    unsigned int raw = getBits(data, start, width);\n    *out = decodeSigned(raw, width);\n    *pos = start + width;\n    return 1;\n}",
+      "hint": "Validate the width and cursor before subtraction. Keep changes local until every check passes.",
+      "explanation": "A capacity check against totalBits − start ensures the read and later cursor addition fit. Returning early preserves both output objects when the function does not successfully read a value.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
+      "code": "unsigned int getBits(const unsigned char *data, size_t p, unsigned int k);\nint decodeSigned(unsigned int raw, unsigned int width);\n\nint nextValue(const unsigned char *data, size_t totalBits, size_t *pos, unsigned int width, int *out) {\n    /* Write the body. */\n}",
       "rubric": [
-        "Checks cursor validity and the fewer-than-six stopping rule before reading.",
-        "Reads the five-bit header and stops on zero length.",
-        "Rejects an incomplete payload before extraction.",
-        "On success decodes the signed value and advances by 5 + L.",
-        "Preserves pos and out on stop/error."
+        "Rejects invalid widths or an invalid cursor before reading.",
+        "Returns 0 for a valid end cursor, before testing the remaining field size.",
+        "Rejects a field wider than totalBits − *pos without unsigned underflow.",
+        "On success reads width bits, interprets them using decodeSigned, and advances by width.",
+        "Leaves *pos and *out unchanged on all non-success paths."
       ]
     },
     {
@@ -1935,7 +1982,7 @@
       "answer": "unsigned int lowMask(unsigned int k) {\n    return (1u << k) - 1u;\n}",
       "hint": "A one at bit k minus one fills every lower bit.",
       "explanation": "For k = 0 the expression is 1 − 1 = 0. For k = 31 the unsigned shift is valid. Extending this unchanged to k = 32 would violate the shift-count rule.",
-      "source": "Supporting C for A2 bit operations: C17 integer promotions, shifts and bitwise operators; WG14 N1570 §§6.3.1.1, 6.5.7, 6.5.10–6.5.12.",
+      "source": "C17 arrays, integer arithmetic and functions; the complete exercise contract is stated in the prompt.",
       "code": "unsigned int lowMask(unsigned int k) {\n    /* Write the body. */\n}",
       "rubric": [
         "Uses unsigned arithmetic.",

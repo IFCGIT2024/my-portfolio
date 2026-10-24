@@ -1,11 +1,11 @@
-/* Assignment 2 browser interface. Grading and review scheduling live in A2Recall. */
+/* C recall browser interface. Grading and review scheduling live in A2Recall. */
 (function () {
   'use strict';
 
   const STORAGE_KEY = 'csci2122-a2-recall-v1';
   const BANK_URL = 'data/2122-a2-recall.json';
   const MAX_DRAFT = 12000;
-  const STAGES = ['Facts', 'Syntax', 'Connections', 'Methods'];
+  const STAGES = ['Facts', 'Syntax', 'Connected traces', 'Functions'];
   const $ = id => document.getElementById(id);
   let bank;
   let db;
@@ -59,7 +59,7 @@
   function selectionDescription() {
     const choice = settings();
     const topic = bank.topics.find(item => item.id === choice.topic);
-    const textParts = [topic ? topic.description : 'All topics used in the Assignment 2 decoder, from C rules to complete helper methods.'];
+    const textParts = [topic ? topic.description : 'C variables, types, expressions, pointers, memory, and bits: recall individual rules, trace their interactions, and write small functions.'];
     if (choice.mode === 'focus') textParts.push('Topic labels and an optional reference support your first attempts.');
     if (choice.mode === 'mixed') textParts.push('Topic labels stay hidden until you check your answer.');
     if (choice.mode === 'due') textParts.push('Review skills whose scheduled time has arrived, using a different cue when available.');
@@ -417,9 +417,9 @@
     const file = event.target.files[0];
     if (!file) return;
     try {
-      if (file.size > 5 * 1024 * 1024) throw new Error('This file is too large to be an A2 progress backup.');
+      if (file.size > 5 * 1024 * 1024) throw new Error('This file is too large to be a C recall progress backup.');
       const imported = core.restore(bank, await file.text());
-      if (!window.confirm('Replace this page’s current A2 progress with the validated backup? Export first if you want to keep both.')) return;
+      if (!window.confirm('Replace this page’s current C recall progress with the validated backup? Export first if you want to keep both.')) return;
       db = imported;
       applySettings(db.settings);
       selectionDescription();
@@ -434,12 +434,12 @@
     }
   }
   function resetProgress() {
-    if (!window.confirm('Reset only Assignment 2 recall progress in this browser, including its saved round? This cannot be undone without an exported backup.')) return;
+    if (!window.confirm('Reset only this C recall page’s progress in this browser, including its saved round? This cannot be undone without an exported backup.')) return;
     db = core.createProgress(bank, Date.now());
     persist();
     setView('setup');
     renderDashboard();
-    text('backup-message', 'Assignment 2 recall progress reset. Other review pages were not changed.');
+    text('backup-message', 'C recall progress reset. Other review pages were not changed.');
   }
   function bindEvents() {
     $('setup-form').addEventListener('submit', startRound);
@@ -502,7 +502,7 @@
   }
   async function load() {
     show('retry-load', false);
-    text('loading-message', 'Loading the Assignment 2 practice bank…');
+    text('loading-message', 'Loading the C recall practice bank…');
     try {
       core = window.A2Recall;
       if (!core) throw new Error('The recall engine did not load. Reload the page to try again.');

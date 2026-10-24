@@ -1,4 +1,4 @@
-"""Independently verify A2 model helpers and worked values.
+"""Independently verify the self-contained C models and worked values.
 
 Run: python docs/projects/fall-2026/tests/a2-verify.py
 Requires gcc. Only complete, defined model answers are executed; intentional
@@ -32,23 +32,9 @@ def signed(field):
     return -int(field[0]) * 2 ** (len(field) - 1) + int("0" + field[1:], 2)
 
 
-def decode(data):
-    stream, pos, result = bits(data), 0, []
-    while len(stream) - pos >= 6:
-        width = int(stream[pos:pos + 5], 2)
-        if not width:
-            break
-        assert pos + 5 + width <= len(stream), "Malformed oracle fixture"
-        pos += 5
-        value = signed(stream[pos:pos + width])
-        pos += width
-        result.append((value, pos))
-    return result
-
-
 def packed(fields):
-    stream = "".join(f"{width:05b}" + f"{value % 2 ** width:0{width}b}"
-                     for width, value in fields)
+    # Widths are supplied by each test case; no hidden framing or headers.
+    stream = "".join(f"{value % 2 ** width:0{width}b}" for width, value in fields)
     stream += "0" * (-len(stream) % 8)
     return bytes(int(stream[i:i + 8], 2) for i in range(0, len(stream), 8))
 
@@ -108,55 +94,50 @@ checks.extend([
     "    assert(readField(NULL, 0, 0, 0, &out) == 1 && out == 0);",
 ])
 
-# PDF P1 examples: its first field is decoded even when trailing bits remain.
-p1 = ["08", "0c", "12", "43 d8", "62 69 00", "ca f1 85 38",
-      "fb ff ff ff f0", "fc 00 00 00 10"]
-p1_values = [0, -1, 1, 123, 1234, 12345678, 1073741823, -1073741823]
-for index, (hexdata, expected) in enumerate(zip(p1, p1_values)):
-    data = bytes.fromhex(hexdata)
-    stream = bits(data)
-    width = int(stream[:5], 2)
-    assert signed(stream[5:5 + width]) == expected
-    checks.append(f"    unsigned char p1_{index}[] = {cbytes(data)};")
-    check(f"decodeSigned(getBits(p1_{index}, 5, {width}), {width}) == {expected}")
-for qid, expected in [("A2-TRACES-01", 0), ("A2-TRACES-02", -1),
-                      ("A2-TRACES-03", 1), ("A2-TRACES-04", 123),
-                      ("A2-TRACES-05", 12345678),
-                      ("A2-SIGNED-08", -1073741824),
-                      ("A2-SIGNED-13", 1073741823)]:
+# The bank's range questions are also checked against independent powers.
+for qid, expected in [("A2-SIGNED-08", -(2 ** 30)),
+                      ("A2-SIGNED-13", 2 ** 30 - 1)]:
     assert int(QUESTIONS[qid]["answer"]) == expected, qid
 
-# P2 examples, plus a long stream exceeding both 9 and 16 bytes. PDF page 3
-# omits its fourth output block; derive that block independently here.
-p2 = [bytes.fromhex(s) for s in ["08 30", "12 28 6c 70",
-       "43 db 13 4b 2b c6 14 e0", "fb ff ff ff ff c0 00 00 01"]]
-p2.append(packed([(4, (i % 16) - 8) for i in range(60)]))
-p2.append(packed([(31, -1073741824), (31, 1073741823), (1, -1), (1, 0)]))
-assert [value for value, _ in decode(p2[3])] == [1073741823, -1073741823]
-assert len(p2[4]) > 16
+# Repeated fixed-width reads use explicit widths and independent signed values.
+# Include a long buffer and fields crossing byte boundaries at every width.
+field_groups = [
+    [(1, 0), (1, -1), (2, 1), (2, -2)],
+    [(8, 123), (12, 1234), (25, 12345678)],
+    [(4, (i % 16) - 8) for i in range(60)],
+    [(31, -1073741824), (31, 1073741823), (1, -1), (1, 0)],
+    [(width, -(2 ** (width - 1))) for width in range(1, 32)],
+]
+assert len(packed(field_groups[2])) > 16
 checks.extend(["    size_t pos;", "    int decoded;"])
-for index, data in enumerate(p2):
-    checks.append(f"    unsigned char p2_{index}[] = {cbytes(data)};")
+for index, fields in enumerate(field_groups):
+    data = packed(fields)
+    total = sum(width for width, _ in fields)
+    checks.append(f"    unsigned char fields_{index}[] = {cbytes(data)};")
     checks.append("    pos = 0; decoded = 77;")
     end = 0
-    for expected, end in decode(data):
-        check(f"nextValue(p2_{index}, sizeof p2_{index} * 8, &pos, &decoded) == 1")
+    for width, expected in fields:
+        assert signed(bits(data)[end:end + width]) == expected
+        end += width
+        check(f"nextValue(fields_{index}, {total}, &pos, {width}, &decoded) == 1")
         check(f"decoded == {expected} && pos == {end}")
     checks.append("    decoded = 77;")
-    check(f"nextValue(p2_{index}, sizeof p2_{index} * 8, &pos, &decoded) == 0")
+    check(f"nextValue(fields_{index}, {total}, &pos, 1, &decoded) == 0")
     check(f"decoded == 77 && pos == {end}")
 
 checks.extend([
     "    unsigned char zero[] = {0};",
-    "    unsigned char incomplete[] = {0xf8};",
     "    pos = 0; decoded = 77;",
-    "    assert(nextValue(zero, 8, &pos, &decoded) == 0 && pos == 0 && decoded == 77);",
-    "    assert(nextValue(incomplete, 8, &pos, &decoded) == -1 && pos == 0 && decoded == 77);",
-    "    for (size_t total = 0; total <= 5; ++total) {",
-    "        assert(nextValue(zero, total, &pos, &decoded) == 0 && pos == 0 && decoded == 77);",
+    "    assert(nextValue(zero, 0, &pos, 1, &decoded) == 0 && pos == 0 && decoded == 77);",
+    "    assert(nextValue(zero, 8, &pos, 9, &decoded) == -1 && pos == 0 && decoded == 77);",
+    "    assert(nextValue(zero, 8, &pos, 0, &decoded) == -1 && pos == 0 && decoded == 77);",
+    "    assert(nextValue(zero, 8, &pos, 32, &decoded) == -1 && pos == 0 && decoded == 77);",
+    "    assert(nextValue(zero, 0, &pos, 0, &decoded) == -1 && pos == 0 && decoded == 77);",
+    "    for (size_t total = 1; total <= 7; ++total) {",
+    "        assert(nextValue(zero, total, &pos, 8, &decoded) == -1 && pos == 0 && decoded == 77);",
     "    }",
     "    pos = SIZE_MAX;",
-    "    assert(nextValue(zero, 8, &pos, &decoded) == -1 && pos == SIZE_MAX && decoded == 77);",
+    "    assert(nextValue(zero, 8, &pos, 1, &decoded) == -1 && pos == SIZE_MAX && decoded == 77);",
     "    unsigned char input = 77;",
     "    assert(readByte(&input) == 1 && input == 255);",
     "    assert(readByte(&input) == 1 && input == 255);",
@@ -178,6 +159,35 @@ _Static_assert(CHAR_BIT == 8, "8-bit byte assumption");
 _Static_assert(UINT_MAX == 4294967295u && INT_MAX == 2147483647, "32-bit int assumption");
 """
 models = "\n\n".join(QUESTIONS[f"A2-METHODS-{i:02d}"]["answer"] for i in range(1, 9))
+# Execute the actual standalone numeric snippets, rather than keeping old
+# answers from superficially similar exercises. Only defined snippets are here.
+snippet_targets = {
+    "A2-FORMAT-11": "x", "A2-FORMAT-12": "x",
+    "A2-POINTERS-03": "x", "A2-POINTERS-04": "data[0]",
+    "A2-POINTERS-07": "sizeof data",
+    "A2-POINTERS-08": "sizeof values / sizeof values[0]",
+    "A2-MEMORY-08": "data[3]", "A2-MEMORY-10": "data[0]",
+    "A2-MASKS-02": "x", "A2-MASKS-06": "x",
+    "A2-MASKS-08": "x", "A2-MASKS-10": "x",
+    "A2-FIELDS-07": "pos", "A2-FIELDS-08": "pos",
+    "A2-CURSOR-01": "steps", "A2-CURSOR-02": "count",
+    "A2-CURSOR-05": "pos", "A2-CURSOR-06": "pos",
+    "A2-CURSOR-07": "count", "A2-CURSOR-08": "count",
+    "A2-CURSOR-09": "final", "A2-CURSOR-10": "count",
+    "A2-TRACES-01": "result", "A2-TRACES-02": "result",
+    "A2-TRACES-03": "value", "A2-TRACES-04": "value",
+    "A2-TRACES-05": "raw", "A2-TRACES-06": "raw",
+}
+for qid, target in snippet_targets.items():
+    question = QUESTIONS[qid]
+    assert question["type"] == "number", qid
+    code = question["code"]
+    if "/* In the caller: */" in code:
+        function, code = code.split("/* In the caller: */", 1)
+        models += "\n" + function
+    checks.append("    { /* " + qid + " */\n" + code)
+    check(f"({target}) == {int(question['answer'])}")
+    checks.append("    }")
 program = headers + models + "\nint main(void) {\n" + "\n".join(checks) + "\n    return 0;\n}\n"
 with tempfile.TemporaryDirectory() as tmp:
     source, binary = Path(tmp) / "a2-models.c", Path(tmp) / "a2-models"
@@ -188,4 +198,4 @@ with tempfile.TemporaryDirectory() as tmp:
     run = subprocess.run([str(binary)], input="0xff ff 100 1 invalid\n", check=True,
                          capture_output=True, text=True, timeout=10)
     assert not run.stdout and not run.stderr
-print(f"PASS: {len(QUESTIONS)} prompts; 8 C17 method models; {sum('assert(' in line for line in checks)} independent assertions, including PDF samples, all widths and boundary failures.")
+print(f"PASS: {len(QUESTIONS)} prompts; 8 C17 method models; {len(snippet_targets)} standalone C snippets; {sum('assert(' in line for line in checks)} independent assertions, including all widths and boundary failures.")

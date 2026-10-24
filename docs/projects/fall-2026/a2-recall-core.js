@@ -1,4 +1,4 @@
-/* Assignment 2 recall: deterministic grading, scheduling and portable progress. */
+/* C recall: deterministic grading, scheduling and portable progress. */
 (function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -137,7 +137,7 @@
   function restore(bank,raw){
     if(typeof raw==='string'&&raw.length>12000000)throw new Error('Backup is too large.');
     let data;try{data=typeof raw==='string'?JSON.parse(raw):clone(raw);}catch(_){throw new Error('This is not a valid JSON backup.');}
-    if(!data||data.version!==1||!data.records||typeof data.records!=='object'||Array.isArray(data.records)||!data.reviews||typeof data.reviews!=='object'||!Array.isArray(data.history))throw new Error('This is not an Assignment 2 recall backup.');
+    if(!data||data.version!==1||!data.records||typeof data.records!=='object'||Array.isArray(data.records)||!data.reviews||typeof data.reviews!=='object'||!Array.isArray(data.history))throw new Error('This is not a valid C recall backup.');
     const db=createProgress();
     const days=x=>Array.isArray(x)&&x.length<=10000&&x.every(d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d));
     for(const q of bank.questions){

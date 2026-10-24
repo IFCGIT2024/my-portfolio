@@ -132,7 +132,7 @@ test('load failure and unavailable storage leave actionable states',async()=>{
 });
 
 
-test('every actual Assignment 2 prompt renders and records through its intended grading path',async()=>{
+test('every self-contained C prompt renders and records through its intended grading path',async()=>{
   const actual=JSON.parse(fs.readFileSync(path.join(root,'data/2122-a2-recall.json'),'utf8'));
   assert.deepEqual(core.validateBank(actual),[]);
   for(const q of actual.questions){

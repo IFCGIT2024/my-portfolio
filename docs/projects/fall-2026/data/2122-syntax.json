@@ -2627,7 +2627,7 @@
     {
       "id": "allocation-01",
       "topic": "allocation",
-      "prompt": "Allocate storage for one object of the type pointed to by int *p.",
+      "prompt": "Allocate exactly sizeof(int) bytes using the pointed-to type of int *p.",
       "code": "",
       "options": [
         "p = malloc(sizeof *p);",
@@ -2641,7 +2641,7 @@
     {
       "id": "allocation-02",
       "topic": "allocation",
-      "prompt": "Allocate n int elements using int *p, assuming n > 0 and no size multiplication overflow.",
+      "prompt": "Allocate exactly n times the size of the int pointed to by p, assuming n > 0 and no size multiplication overflow.",
       "code": "",
       "options": [
         "p = malloc(n * sizeof *p);",
@@ -2655,7 +2655,7 @@
     {
       "id": "allocation-03",
       "topic": "allocation",
-      "prompt": "Allocate n zero-initialized int elements using int *p, with valid positive n.",
+      "prompt": "Use calloc with element count n first and the size of the int pointed to by p second; n is valid and positive.",
       "code": "",
       "options": [
         "p = calloc(n, sizeof *p);",
@@ -3173,7 +3173,7 @@
     {
       "id": "structs-10",
       "topic": "structs",
-      "prompt": "Allocate storage for one struct Item object using struct Item *p.",
+      "prompt": "Allocate exactly the byte size of one struct Item through the pointed-to type of struct Item *p.",
       "code": "",
       "options": [
         "p = malloc(sizeof *p);",

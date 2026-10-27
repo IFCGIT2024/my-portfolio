@@ -19,6 +19,8 @@ change the Pages configuration.
 - `paper.md`: text edition for source inspection and suggested changes.
 - `style.css` and `reader.js`: reading layout and optional browser controls.
 - `build.py`: regenerates both reading pages and Markdown from the released Word documents.
+- `assets/`: 1200 × 627 Open Graph title images and a downloadable 1080 × 1080 title card.
+- `build_share_images.py`: generates the exact-text title graphics with Pillow.
 
 The browser edition does not change the academic argument. The paper is a critical
 narrative review, not a systematic review or an externally peer-reviewed publication.
@@ -32,6 +34,14 @@ narrative review, not a systematic review or an externally peer-reviewed publica
 5. Check the reading pages and downloads on desktop and mobile, then commit the full release together.
 
 The build checks that every body paragraph and table cell survives conversion.
+Sharing metadata is rendered in the HTML head, with public absolute PNG URLs,
+dimensions, image type and alternative text. To regenerate the cards, run
+`python3 build_share_images.py` with Pillow and the DejaVu fonts installed.
+The square card can also be attached as a photo in a post with the paper URL in
+the post text. LinkedIn controls the final link-preview layout, including
+compact thumbnails for some ordinary link posts. Its Post Inspector can refresh
+the metadata for new shares: https://www.linkedin.com/post-inspector/
+
 The review link opens a new GitHub issue with the version, section and evidence prompts
 prefilled; it does not submit a comment automatically. No analytics, external fonts,
 third-party scripts or comment widgets are loaded. Text-size preferences are stored

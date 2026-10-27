@@ -155,4 +155,16 @@ const PROJECTS = [
     badgeColor: "#5a42d6",
     icon: "⚙",
   },
+  {
+    id: "practice-exams-review",
+    title: "Practice Exams & Assessment Validity",
+    description:
+      "A critical narrative review of construct-irrelevant variance, Bloom’s taxonomy, and practice exams in computer science, with the full paper, downloads and source audit.",
+    path: "docs/projects/practice-exams-review/index.html",
+    tags: ["Research", "Computer Science", "Assessment", "Practice Exams"],
+    badge: "Open for review",
+    badgeColor: "#215e5e",
+    icon: "§",
+  },
 ];
+

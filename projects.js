@@ -166,5 +166,17 @@ const PROJECTS = [
     badgeColor: "#215e5e",
     icon: "§",
   },
+  {
+    id: "atlantic-space-data-sovereignty",
+    title: "Data Sovereignty & Atlantic Space Infrastructure",
+    description:
+      "A critical integrative review and proposed research agenda for Indigenous data sovereignty, community participation, and Atlantic Canadian launch and satellite supply chains, with the paper, source audit and claim register.",
+    path: "docs/projects/atlantic-space-data-sovereignty/index.html",
+    tags: ["Research", "Data Sovereignty", "Space", "Atlantic Canada"],
+    badge: "Working paper",
+    badgeColor: "#215e5e",
+    icon: "§",
+  },
 ];
+
 

@@ -9,9 +9,9 @@ from docx.oxml.ns import qn
 ROOT = Path(__file__).resolve().parent
 REPO = 'https://github.com/IFCGIT2024/my-portfolio'
 CANONICAL = 'https://ifcgit2024.github.io/my-portfolio/docs/projects/atlantic-space-data-sovereignty/'
-TITLE = 'Data Sovereignty and Community Participation in Atlantic Canadian Space Infrastructure'
-VERSION = '1.0'
-DATE = '27 October 2026'
+TITLE = 'Indigenous data sovereignty and the East Coast space sector'
+VERSION = '2.0'
+DATE = '29 October 2026'
 
 
 def slug(text):
@@ -78,7 +78,7 @@ def convert(filename, audit=False):
             if not text.strip():
                 continue
             style = styles.get(block, 'Normal')
-            if style in ('Title', 'Subtitle') or text in ('A critical integrative review and research agenda for launch and satellite supply chains', DATE):
+            if style in ('Title', 'Subtitle') or text in ('A grounded overview of the questions that need to be answered', DATE):
                 continue
             if style == 'Heading 1':
                 started = True
@@ -150,27 +150,27 @@ def convert(filename, audit=False):
     if list_open: output.append('</ul>')
     if section_open: output.append('</section>')
     if not audit:
-        assert reference_count == 34
+        assert reference_count == 13
     return '\n'.join(output), toc, '\n'.join(source), original
 
 
 def page(content, toc, audit=False):
-    page_title = 'Source Verification and Claim Audit' if audit else TITLE
+    page_title = 'Source Verification and Review Record' if audit else TITLE
     canonical = CANONICAL + ('audit.html' if audit else '')
-    share_image = CANONICAL + ('assets/audit-preview-v1.png' if audit else 'assets/paper-preview-v1.png')
-    description = ('Internal source and claim audit for the Atlantic Canadian space infrastructure working paper: 34 references, 391 review units, corrections and limits.'
-                   if audit else 'How could Atlantic Canadian launch and satellite supply chains support Indigenous data sovereignty and distinct community governance interests? A critical integrative review and proposed research agenda.')
+    share_image = CANONICAL + ('assets/audit-preview-v2.png' if audit else 'assets/paper-preview-v2.png')
+    description = ('Internal source and claim audit for the Atlantic Canadian space infrastructure working paper: 13 references, 47 review units, corrections and limits.'
+                   if audit else 'A grounded overview asking how the East Coast space sector could support Indigenous data sovereignty, who decides what support means, and what evidence could answer the question.')
     toc_links = ''.join(f'<li><a href="#{anchor}">{escape(label)}</a></li>' for anchor, label in toc)
-    hero = ('''<p class="eyebrow">COMPANION DOCUMENT · 27 OCTOBER 2026</p>
-      <h1>Source Verification<br> and Claim Audit</h1>
-      <p class="dek">An internal audit of 34 references and 391 substantive review units, recording corrections, interpretations and access limits.</p>'''
-      if audit else '''<p class="eyebrow">WORKING PAPER · 27 OCTOBER 2026</p>
-      <h1>Data Sovereignty and Community Participation in Atlantic Canadian Space Infrastructure</h1>
-      <p class="dek">A critical integrative review and research agenda for launch and satellite supply chains</p>''')
+    hero = ('''<p class="eyebrow">COMPANION DOCUMENT · 29 OCTOBER 2026</p>
+      <h1>Source Verification<br> and Review Record</h1>
+      <p class="dek">An internal audit of 13 references and 47 substantive review units, recording corrections, interpretations and access limits.</p>'''
+      if audit else '''<p class="eyebrow">WORKING PAPER · 29 OCTOBER 2026</p>
+      <h1>Indigenous data sovereignty and the East Coast space sector</h1>
+      <p class="dek">A grounded overview of the questions that need to be answered</p>''')
     intro = '' if audit else '''<div class="question"><span class="label">THE QUESTION</span>
-      <p>Under what institutional and technical conditions could Atlantic Canadian launch and satellite supply chains support Indigenous data sovereignty and distinct community and organizational data governance claims?</p>
-      <a href="#9-conclusion">Go to the conclusion <span aria-hidden="true">↗</span></a></div>'''
-    status_note = '''<p class="publication-note">This is a working paper and proposed research agenda. Its internal audit is not external peer review. No Mi’kmaw or institutional approval, exemption or endorsement is claimed; research review requirements remain to be confirmed. See <a href="audit.html">the audit’s scope and limitations</a>.</p>'''
+      <p>How could the East Coast space sector support Indigenous data sovereignty, and what would we need to establish to know whether it does?</p>
+      <a href="#conclusion">Go to the conclusion <span aria-hidden="true">↗</span></a></div>'''
+    status_note = '''<p class="publication-note">This is a working paper and documentary overview. Its internal audit is not external peer review. No Mi’kmaw or institutional approval, exemption or endorsement is claimed; research review requirements remain to be confirmed. See <a href="audit.html">the audit’s scope and limitations</a>.</p>'''
     lead_download = 'source-audit' if audit else 'paper'
     lead_label = 'audit' if audit else 'paper'
     review = escape(review_url(), quote=True)
@@ -187,7 +187,7 @@ def page(content, toc, audit=False):
 <meta property="og:image:secure_url" content="{share_image}">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="627">
-<meta property="og:image:alt" content="{escape(page_title, quote=True)} — Mizel Cluett. 34 references, October 2026.">
+<meta property="og:image:alt" content="{escape(page_title, quote=True)} — Mizel Cluett. 13 references, October 2026.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{escape(page_title, quote=True)}">
 <meta name="twitter:description" content="{escape(description, quote=True)}">
@@ -197,11 +197,11 @@ def page(content, toc, audit=False):
 <body><a class="skip-link" href="#paper">Skip to the paper</a><div id="reading-progress" aria-hidden="true"></div>
 <header class="site-header"><div class="header-inner"><a class="wordmark" href="/my-portfolio/"><span class="monogram" aria-hidden="true">MC</span><span>Mizel Cluett<small>Research &amp; education</small></span></a>
 <nav aria-label="Publication navigation"><a href="index.html" {'aria-current="page"' if not audit else ''}>Paper</a><a href="audit.html" {'aria-current="page"' if audit else ''}>Source audit</a><a href="#review">Review</a></nav></div></header>
-<main><div class="hero">{hero}<div class="publication-meta"><span>Version {VERSION}</span><span>34 references</span><span class="status">Working paper · Open for review</span></div>
+<main><div class="hero">{hero}<div class="publication-meta"><span>Version {VERSION}</span><span>13 references</span><span class="status">Working paper · Open for review</span></div>
 <div class="hero-actions"><a class="button primary" href="downloads/{lead_download}.pdf" download>Download {lead_label} PDF <span aria-hidden="true">↓</span></a><a class="button" href="downloads/{lead_download}.docx" download>Word document</a><button class="text-button" type="button" data-copy>Copy page link <span aria-hidden="true">↗</span></button></div>{status_note}{intro}</div>
-<div class="reading-layout"><aside class="sidebar"><details class="contents" open><summary>On this page</summary><nav aria-label="Table of contents"><ol>{toc_links}</ol></nav></details><div class="reader-tools"><span class="label">READING TOOLS</span><button type="button" data-font="down" aria-label="Decrease article text size">A−</button><button type="button" data-font="up" aria-label="Increase article text size">A+</button><button type="button" data-print>Print</button></div><p class="sidebar-note">A proposed diagnostic lens and research agenda. The companion audit records evidence and verification limits.</p></aside>
+<div class="reading-layout"><aside class="sidebar"><details class="contents" open><summary>On this page</summary><nav aria-label="Table of contents"><ol>{toc_links}</ol></nav></details><div class="reader-tools"><span class="label">READING TOOLS</span><button type="button" data-font="down" aria-label="Decrease article text size">A−</button><button type="button" data-font="up" aria-label="Increase article text size">A+</button><button type="button" data-print>Print</button></div><p class="sidebar-note">A question-led documentary overview. The companion audit records evidence and verification limits.</p></aside>
 <article id="paper" aria-label="{escape(page_title, quote=True)}">{content}</article></div>
-<section class="downloads-panel" id="downloads" aria-labelledby="downloads-title"><div><p class="eyebrow">KEEP A COPY</p><h2 id="downloads-title">Read, download, review.</h2><p>The web editions preserve the released document text. The spreadsheet provides the detailed claim register. Version {VERSION} · {DATE}.</p></div><div class="download-links"><a href="downloads/paper.pdf" download><span>Full paper</span><span>PDF ↓</span></a><a href="downloads/paper.docx" download><span>Editable paper</span><span>Word ↓</span></a><a href="downloads/source-audit.pdf" download><span>Source audit</span><span>PDF ↓</span></a><a href="downloads/source-audit.docx" download><span>Editable audit</span><span>Word ↓</span></a><a href="downloads/claim-register.xlsx" download><span>Detailed claim register</span><span>Excel ↓</span></a><a href="assets/paper-share-square-v1.png" download><span>Square title card for sharing</span><span>PNG ↓</span></a></div></section>
+<section class="downloads-panel" id="downloads" aria-labelledby="downloads-title"><div><p class="eyebrow">KEEP A COPY</p><h2 id="downloads-title">Read, download, review.</h2><p>The web editions preserve the released document text. The spreadsheet provides the detailed claim register. Version {VERSION} · {DATE}.</p></div><div class="download-links"><a href="downloads/paper.pdf" download><span>Full paper</span><span>PDF ↓</span></a><a href="downloads/paper.docx" download><span>Editable paper</span><span>Word ↓</span></a><a href="downloads/source-audit.pdf" download><span>Source audit</span><span>PDF ↓</span></a><a href="downloads/source-audit.docx" download><span>Editable audit</span><span>Word ↓</span></a><a href="downloads/claim-register.xlsx" download><span>Detailed claim register</span><span>Excel ↓</span></a><a href="assets/paper-share-square-v2.png" download><span>Square title card for sharing</span><span>PNG ↓</span></a></div></section>
 <section class="review-panel" id="review" aria-labelledby="review-title"><p class="eyebrow">OPEN DISCUSSION</p><h2 id="review-title">Help improve the argument.</h2><p>Comments on the evidence, interpretation, counterarguments and references are welcome. Please identify the section and passage, explain the concern, and include supporting sources where possible.</p><div class="hero-actions"><a class="button primary" href="{review}">Leave a review comment <span aria-hidden="true">↗</span></a><a class="button" href="{REPO}/issues?q=is%3Aissue%20%22%5BAtlantic%20space%20paper%20review%5D%22">Read review comments</a></div><p class="fine-print">Review comments are public and require a GitHub account to post. This working paper has received an internal research audit; it has not undergone external peer review. No interviews or outcome evaluations were conducted. Research review requirements remain unresolved; no Mi’kmaw or institutional approval, exemption or endorsement is claimed.</p></section>
 </main><footer class="site-footer"><span>Shared by Mizel Cluett · {DATE}</span><div><a href="{REPO}/tree/main/docs/projects/atlantic-space-data-sovereignty">Source &amp; version history</a><a href="#">Back to top ↑</a></div></footer><span class="toast" role="status" id="copy-status"></span></body></html>'''
 
@@ -212,7 +212,7 @@ if __name__ == '__main__':
         html = page(content, toc, audit)
         (ROOT / output).write_text(html, encoding='utf-8')
         if not audit:
-            (ROOT / 'paper.md').write_text(f'# {TITLE}\n\nA critical integrative review and research agenda for launch and satellite supply chains · Version {VERSION} · {DATE}\n\n' + markdown, encoding='utf-8')
+            (ROOT / 'paper.md').write_text(f'# {TITLE}\n\nA grounded overview of the questions that need to be answered · Version {VERSION} · {DATE}\n\n' + markdown, encoding='utf-8')
         # Every paragraph/cell from the released body must survive conversion.
         from lxml import html as lhtml
         parsed = lhtml.fromstring(html)

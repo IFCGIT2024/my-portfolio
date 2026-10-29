@@ -168,9 +168,9 @@ const PROJECTS = [
   },
   {
     id: "atlantic-space-data-sovereignty",
-    title: "Data Sovereignty & Atlantic Space Infrastructure",
+    title: "Indigenous Data Sovereignty & the Space Sector",
     description:
-      "A critical integrative review and proposed research agenda for Indigenous data sovereignty, community participation, and Atlantic Canadian launch and satellite supply chains, with the paper, source audit and claim register.",
+      "A grounded overview of how the East Coast space sector could support Indigenous data sovereignty, who decides what support means, and which questions and evidence could lead to an answer. Includes the paper and audit.",
     path: "docs/projects/atlantic-space-data-sovereignty/index.html",
     tags: ["Research", "Data Sovereignty", "Space", "Atlantic Canada"],
     badge: "Working paper",

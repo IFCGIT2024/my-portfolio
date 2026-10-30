@@ -1,6 +1,7 @@
 (() => {
   'use strict';
   const contents = document.querySelector('.contents');
+  if (!contents) return;
   const media = window.matchMedia('(max-width: 740px)');
   const setContents = () => { contents.open = !media.matches; };
   setContents();
@@ -40,7 +41,7 @@
   };
   document.querySelector('[data-copy]').addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText(location.href);
+      await navigator.clipboard.writeText(document.querySelector('link[rel=canonical]').href);
       notify('Page link copied');
     } catch {
       notify('Copy this page’s address from your browser to share it.');
@@ -49,7 +50,7 @@
   document.querySelector('[data-print]').addEventListener('click', () => window.print());
   let fontSize = 19;
   try {
-    const saved = Number(localStorage.getItem('atlantic-space-paper-text-size'));
+    const saved = Number(localStorage.getItem('papers-text-size'));
     if ([17, 19, 21, 23].includes(saved)) fontSize = saved;
   } catch { /* Reading remains available if storage is blocked. */ }
   const applySize = () => {
@@ -60,7 +61,7 @@
   document.querySelectorAll('[data-font]').forEach(button => button.addEventListener('click', () => {
     fontSize = Math.min(23, Math.max(17, fontSize + (button.dataset.font === 'up' ? 2 : -2)));
     applySize();
-    try { localStorage.setItem('atlantic-space-paper-text-size', String(fontSize)); } catch {}
+    try { localStorage.setItem('papers-text-size', String(fontSize)); } catch {}
     requestUpdate();
   }));
   applySize();

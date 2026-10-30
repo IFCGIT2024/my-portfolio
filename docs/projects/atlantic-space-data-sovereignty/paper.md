@@ -1,6 +1,8 @@
 # Indigenous data sovereignty and the East Coast space sector
 
-A grounded overview of the questions that need to be answered · Version 2.0 · 29 October 2026
+A grounded overview of the questions that need to be answered
+
+Mizel Cluett · 29 October 2026
 
 ## Abstract
 

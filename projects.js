@@ -15,6 +15,16 @@
 
 const PROJECTS = [
   {
+    id: "papers",
+    title: "Papers",
+    description:
+      "Research papers and overviews on data governance, space policy and computer science education. Read online or download the manuscripts.",
+    path: "papers/",
+    tags: ["Research", "Papers"],
+    badge: null,
+    icon: "§",
+  },
+  {
     id: "discrete-math-course",
     title: "Discrete Math for CS",
     description:
@@ -159,10 +169,10 @@ const PROJECTS = [
     id: "practice-exams-review",
     title: "Practice Exams & Assessment Validity",
     description:
-      "A critical narrative review of construct-irrelevant variance, Bloom’s taxonomy, and practice exams in computer science, with the full paper, downloads and source audit.",
+      "A critical narrative review of construct-irrelevant variance, Bloom’s taxonomy, and practice exams in computer science, with the full paper, references and downloads.",
     path: "docs/projects/practice-exams-review/index.html",
     tags: ["Research", "Computer Science", "Assessment", "Practice Exams"],
-    badge: "Open for review",
+    badge: "Working paper",
     badgeColor: "#215e5e",
     icon: "§",
   },
@@ -170,7 +180,7 @@ const PROJECTS = [
     id: "atlantic-space-data-sovereignty",
     title: "Indigenous Data Sovereignty & the Space Sector",
     description:
-      "A grounded overview of how the East Coast space sector could support Indigenous data sovereignty, who decides what support means, and which questions and evidence could lead to an answer. Includes the paper and audit.",
+      "A grounded overview of how the East Coast space sector could support Indigenous data sovereignty, who decides what support means, and which questions and evidence could lead to an answer. Read the full paper and references online.",
     path: "docs/projects/atlantic-space-data-sovereignty/index.html",
     tags: ["Research", "Data Sovereignty", "Space", "Atlantic Canada"],
     badge: "Working paper",

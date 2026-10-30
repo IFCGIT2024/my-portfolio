@@ -1,6 +1,8 @@
 # Practice Exams and Assessment Validity in Computer Science
 
-Critical narrative review and position paper · Version 1.0 · 27 October 2026
+Construct irrelevant variance and Bloom taxonomy in examination preparation
+
+Mizel Cluett · 27 October 2026
 
 ## Abstract
 

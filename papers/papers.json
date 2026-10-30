@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "atlantic-space-data-sovereignty",
+    "path": "docs/projects/atlantic-space-data-sovereignty",
+    "title": "Indigenous data sovereignty and the East Coast space sector",
+    "subtitle": "A grounded overview of the questions that need to be answered",
+    "date": "2026-10-29",
+    "display_date": "29 October 2026",
+    "kind": "Working paper",
+    "topics": "Data governance · Space policy",
+    "summary": "How could the East Coast space sector support Indigenous data sovereignty, who decides what support means, and what evidence could help answer the question?",
+    "references": 13
+  },
+  {
+    "slug": "practice-exams-review",
+    "path": "docs/projects/practice-exams-review",
+    "title": "Practice Exams and Assessment Validity in Computer Science",
+    "subtitle": "Construct irrelevant variance and Bloom taxonomy in examination preparation",
+    "date": "2026-10-27",
+    "display_date": "27 October 2026",
+    "kind": "Working paper",
+    "topics": "Education · Computer science",
+    "summary": "A critical narrative review of practice examinations, representative preparation and the evidence needed to judge assessment quality in computer science.",
+    "references": 21
+  }
+]

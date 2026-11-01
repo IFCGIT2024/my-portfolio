@@ -27,6 +27,14 @@ const PolyAPI = (() => {
     ? window.POLY_API_PROXY
     : 'https://corsproxy.io/?url=';
 
+  // Bound external requests so an unavailable feed cannot leave the UI loading forever.
+  async function request(url, options = {}) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 12000);
+    try { return await fetch(url, { ...options, signal: controller.signal }); }
+    finally { clearTimeout(timer); }
+  }
+
   /* ── Simple TTL cache so repeated renders don't spam the API ── */
   const _cache = {};
   const CACHE_TTL_MS = 60_000; // 1 minute
@@ -50,13 +58,13 @@ const PolyAPI = (() => {
     // Try direct for Gamma (has Access-Control-Allow-Origin: *)
     if (url.startsWith(GAMMA)) {
       try {
-        const r = await fetch(url, { headers: { Accept: 'application/json' } });
+        const r = await request(url, { headers: { Accept: 'application/json' } });
         if (r.ok) return r.json();
       } catch (e) { /* CORS or network error — fall through to proxy */ }
     }
     // Proxy path (required for CLOB, fallback for Gamma)
     const proxied = PROXY + encodeURIComponent(url);
-    return fetch(proxied, { headers: { Accept: 'application/json' } })
+    return request(proxied, { headers: { Accept: 'application/json' } })
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status} from ${url}`);
         return r.json();
@@ -68,14 +76,14 @@ const PolyAPI = (() => {
     // Try Gamma direct first
     if (url.startsWith(GAMMA)) {
       try {
-        const r = await fetch(url, { headers: { Accept: 'application/json' } });
+        const r = await request(url, { headers: { Accept: 'application/json' } });
         let data;
         try { data = await r.json(); } catch(e) { data = { error: 'non-JSON response' }; }
         return { status: r.status, ok: r.ok, url, data };
       } catch (e) { /* fall through */ }
     }
     const proxied = PROXY + encodeURIComponent(url);
-    return fetch(proxied, { headers: { Accept: 'application/json' } })
+    return request(proxied, { headers: { Accept: 'application/json' } })
       .then(async r => {
         let data;
         try { data = await r.json(); } catch(e) { data = { error: 'non-JSON response' }; }
@@ -94,9 +102,11 @@ const PolyAPI = (() => {
    * @param {string} opts.order   - Sort field: volume24hr | volume | liquidity | endDate
    * @param {number} opts.offset  - Pagination offset
    */
-  function getMarkets({ limit = 20, order = 'volume24hr', offset = 0 } = {}) {
+  function getMarkets({ limit = 20, order = 'volume24hr', offset = 0, refresh = false } = {}) {
     const url = `${GAMMA}/markets?active=true&closed=false&limit=${limit}&offset=${offset}&order=${order}&ascending=false`;
-    return _cached(`markets:${limit}:${order}:${offset}`, () => _get(url));
+    const key = `markets:${limit}:${order}:${offset}`;
+    if (refresh) delete _cache[key];
+    return _cached(key, () => _get(url));
   }
 
   /** Fetch a single market by conditionId */

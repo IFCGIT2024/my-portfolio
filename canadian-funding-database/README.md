@@ -1,124 +1,46 @@
-# Canadian Funding Database
+# Canadian funding database
 
-A comprehensive database of 141 funding opportunities for housing and climate initiatives across Canada.
+A searchable research directory for Canadian housing, retrofit, and climate funding.
 
-## Features
+**[Open the directory](https://ifcgit2024.github.io/my-portfolio/canadian-funding-database/funding-portal.html)**
 
-- **141 verified programs** across federal, provincial, and private sectors
-- **Advanced filtering** by status, geography, funding type, amount, and eligibility
-- **Real-time search** across program names, descriptions, and tags
-- **Responsive design** with professional UI
-- **RESTful API** for programmatic access
+## Public site
 
-## Quick Start
+The portal is a static app. It loads the adjacent `programs.json` file and filters it in the browser. It works on GitHub Pages without Python, Flask, a localhost service, or API credentials.
 
-### 1. Install Dependencies
+- 140 actual program records, with search, filters, sorting, and source links.
+- Recorded status, exact listed location, sector, funding type, and organization eligibility filters.
+- Amount filters apply to the **recorded maximum award**. Zero-valued source maximums mean unspecified amounts or non-cash support. Unknown maximums are excluded when an amount filter is active; blank limits are unbounded.
+- Expandable eligibility, timing, duration, and verification notes for each record.
+- Responsive filters and a downloadable JSON copy.
 
-```bash
+## Data provenance and limitations
+
+`funding_database.db` is the existing source database. It contains 141 rows: 140 program records and one `TEMPLATE-001` placeholder. The public export excludes that placeholder and preserves every field of each program record. The SQLite source is unchanged by the exporter.
+
+The records were marked verified on **15–16 June 2026**. These are saved research notes, not a live feed or a fresh verification of funding availability. Some records explicitly note broken provider links. The portal displays those notes, recorded deadlines, and provider URLs; it does not assert that all opportunities remain open or that every link is currently valid.
+
+The interface normalizes stray non-letter characters in status labels for filtering (including the malformed closed-status marker); original values remain in the JSON and SQLite data. Where a URL field has trailing space-separated notes, only its leading HTTP(S) URL is used as the link. Locations are offered exactly as recorded, avoiding ambiguous province or national matching.
+
+## Updating the public data
+
+After editing the source database:
+
+```sh
+python3 canadian-funding-database/export_data.py
+```
+
+Run this from the repository root. The exporter uses only Python’s standard library, reads SQLite in read-only mode, sorts records by ID, computes the recorded verification period, and writes a deterministic `programs.json`. Commit both the database changes and the JSON export. **Python is an authoring tool, not a visitor requirement.**
+
+For local preview, serve the repository with any static HTTP server and open `/canadian-funding-database/funding-portal.html`. Do not use a `file://` URL for testing JSON fetches.
+
+## Optional developer API
+
+`server.py` and `requirements.txt` are retained for existing scripts that use the Flask/SQLite API. The public portal no longer depends on it. To run the optional API from this directory:
+
+```sh
 pip install -r requirements.txt
-```
-
-Requirements:
-- Python 3.8+
-- Flask
-- Flask-CORS
-
-### 2. Run the Server
-
-```bash
 python3 server.py
 ```
 
-The portal will be available at **http://localhost:8000**
-
-### 3. Access the Portal
-
-Open http://localhost:8000 in your browser to explore funding opportunities.
-
-## API Endpoints
-
-### GET `/api/programs`
-Get all programs with optional filtering
-
-**Query Parameters:**
-- `search` - Search in name, description, tags
-- `status` - Filter by status (OPEN, ROLLING, PERIODIC, CLOSED)
-- `geography` - Filter by geography
-- `sector` - Filter by sector
-- `min_amount` - Minimum funding amount
-- `max_amount` - Maximum funding amount
-
-**Example:**
-```bash
-curl "http://localhost:8000/api/programs?status=OPEN&min_amount=100000"
-```
-
-### GET `/api/programs/:id`
-Get single program by ID
-
-### GET `/api/stats`
-Get database statistics
-
-## Database Statistics
-
-- **Total Programs:** 141
-- **By Sector:**
-  - Provincial: 46
-  - Federal: 43
-  - Private/Foundation: 21
-  - Investor/Accelerator: 16
-  - Social Finance: 7
-  - Corporate: 4
-
-- **By Status:**
-  - ROLLING: 94 (ongoing applications)
-  - PERIODIC: 18 (specific deadlines)
-  - CLOSED: 19 (temporarily closed)
-  - OPEN: 2 (currently open)
-
-## Deployment
-
-### Local Development
-```bash
-python3 server.py
-```
-
-### Production (with Gunicorn)
-```bash
-pip install gunicorn
-gunicorn -w 4 -b 0.0.0.0:8000 server:app
-```
-
-### Static Hosting
-The portal can be deployed to:
-- GitHub Pages (requires converting database to JSON)
-- Netlify / Vercel (with backend API)
-- Any cloud platform (Heroku, Railway, etc.)
-
-## File Structure
-
-```
-canadian-funding-database/
-├── funding-portal.html    # Frontend interface
-├── server.py              # Flask API backend
-├── funding_database.db    # SQLite database (141 programs)
-├── requirements.txt       # Python dependencies
-└── README.md             # This file
-```
-
-## Technologies
-
-- **Frontend:** HTML5, CSS3, Vanilla JavaScript
-- **Backend:** Python Flask with Flask-CORS
-- **Database:** SQLite
-- **API:** RESTful JSON API
-
-## License
-
-Open source - feel free to use and modify for your needs.
-
-## Updates
-
-Last verified: June 2026
-
-For questions or corrections, please submit an issue on GitHub.
+The original endpoints remain at `/api/programs`, `/api/programs/<id>`, and `/api/stats` on port 8000. The API reads the original database, so its totals can include the template row. Use the static export for the public directory.

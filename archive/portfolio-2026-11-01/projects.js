@@ -1,0 +1,192 @@
+/**
+ * projects.js — Central registry for all portfolio projects.
+ *
+ * To add a new project, append an object to the PROJECTS array below.
+ * Fields:
+ *   id          – unique slug (no spaces)
+ *   title       – display name
+ *   description – one or two sentences shown on the card
+ *   path        – relative URL to the project's index.html
+ *   tags        – array of short labels (tech / topic)
+ *   badge       – optional ribbon text, e.g. "New" | "WIP" | "Live"
+ *   badgeColor  – optional CSS color for the badge background
+ *   icon        – emoji or short SVG string used as the card icon
+ */
+
+const PROJECTS = [
+  {
+    id: "papers",
+    title: "Papers",
+    description:
+      "Research papers and overviews on data governance, space policy and computer science education. Read online or download the manuscripts.",
+    path: "papers/",
+    tags: ["Research", "Papers"],
+    badge: null,
+    icon: "§",
+  },
+  {
+    id: "discrete-math-course",
+    title: "Discrete Math for CS",
+    description:
+      "A complete 30-class course bridging discrete mathematics, formal proof, and Java programming. Every concept ships with rigorous proofs and runnable Java code.",
+    path: "docs/projects/discrete-math/index.html",
+    tags: ["Discrete Math", "Java", "Proofs", "Course"],
+    badge: "Featured",
+    badgeColor: "#6366f1",
+    icon: "∑",
+  },
+  {
+    id: "proof-practice",
+    title: "Proof Practice Exams",
+    description:
+      "Interactive proof-step arrangement tool for mastering mathematical proof structure. Drag-and-drop exercises across multiple proof types.",
+    path: "docs/projects/proofs/index.html",
+    tags: ["CSCI 1315", "Proofs", "Interactive"],
+    badge: null,
+    icon: "∴",
+  },
+  {
+    id: "csci1120-exam-prep",
+    title: "CSCI 1120 Exam Prep",
+    description:
+      "A full-featured practice exam platform with leaderboards, student profiles, statistics tracking, and timed quiz modes.",
+    path: "docs/projects/csci-1120-prep/index.html",
+    tags: ["CSCI 1120", "Practice Exams", "Quiz"],
+    badge: null,
+    icon: "🎓",
+  },
+  {
+    id: "csci2110-practice-site",
+    title: "CSCI 2110 Practice Site",
+    description:
+      "An isolated practice exam site for Data Structures with module banks for BSTs, heaps, hashing, and graph-focused review.",
+    path: "csci-2110-practice-site/index.html",
+    tags: ["CSCI 2110", "Data Structures", "Practice Exams", "Quiz"],
+    badge: "New",
+    badgeColor: "#0ea5e9",
+    icon: "🌲",
+  },
+  {
+    id: "pdf-too-big-splitter",
+    title: "PDF too big",
+    description:
+      "Browser-only PDF splitter with page/chunk modes and optional max file size per part.",
+    path: "pdf-splitter/index.html",
+    tags: ["PDF", "Utility", "File Tools", "Browser App"],
+    badge: "Utility",
+    badgeColor: "#f59e0b",
+    icon: "📄",
+  },
+  {
+    id: "real-estate-analyzer",
+    title: "RE Investment Analyzer",
+    description:
+      "A real estate investment analysis tool with cash flow projections, target price calculator, deal comparison, and saved deals — all in the browser.",
+    path: "docs/projects/re-analyzer/index.html",
+    tags: ["Real Estate", "Finance", "Calculator", "Charts"],
+    badge: "New",
+    badgeColor: "#10b981",
+    icon: "🏠",
+  },
+  {
+    id: "polymarket-dashboard",
+    title: "Polymarket Lab",
+    description:
+      "A paper trading dashboard for Polymarket prediction markets. Live market data, signal detection (arbitrage, high conviction, near resolution), $10,000 virtual account, and a Data Lab for API exploration.",
+    path: "polymarket-dashboard/index.html",
+    tags: ["Trading", "Finance", "APIs", "Prediction Markets"],
+    badge: "WIP",
+    badgeColor: "#a78bfa",
+    icon: "📈",
+  },
+  {
+    id: "bank-interview-prep",
+    title: "DataGuard Academy",
+    description:
+      "A 10-module interactive interview prep course for bank data classification roles — covering SQL, Python, cloud, compliance, DSPM, and AI/ML with quizzes, progress tracking, and a full Q&A bank.",
+    path: "bank-interview-prep/index.html",
+    tags: ["Banking", "Data Classification", "SQL", "Python", "Security", "Course"],
+    badge: "New",
+    badgeColor: "#0ea5e9",
+    icon: "🏦",
+  },
+  {
+    id: "calc-1000-prep",
+    title: "CALC 1000 Derivative Practice",
+    description:
+      "A broad memorization tool for Calculus 1 covering all standard derivative rules — power, product, quotient, chain, trig, inverse trig, exponential, logarithmic, implicit differentiation, parametric, and geometric formulas.",
+    path: "docs/projects/calc-1000-prep/index.html",
+    tags: ["CALC 1000", "Calculus", "Derivatives", "Practice Exams", "Quiz"],
+    badge: "New",
+    badgeColor: "#8b5cf6",
+    icon: "∂",
+  },
+  {
+    id: "canadian-funding-database",
+    title: "Canadian Funding Database",
+    description:
+      "A comprehensive searchable database of 141 verified funding programs for housing and climate initiatives across Canada. Features advanced filtering, status tracking, and real-time search.",
+    path: "canadian-funding-database/funding-portal.html",
+    tags: ["Database", "Flask", "Python", "SQLite", "Web App"],
+    badge: "New",
+    badgeColor: "#10b981",
+    icon: "💰",
+  },
+  {
+    id: "simply-the-best-house-sitters",
+    title: "Simply the Best House-Sitters",
+    description:
+      "Boutique in-home pet + property care site for Halifax, NS. Editorial design (Fraunces + Inter), fully navigable static demo of the production Node.js/Express + JSON-driven SPA. Includes home, services, pricing, reviews, FAQ, and a working quote form (demo mode).",
+    path: "docs/projects/simply-the-best-house-sitters/index.html",
+    tags: ["Web Design", "SPA", "Node.js", "Express", "Editorial"],
+    badge: "New",
+    badgeColor: "#C9A961",
+    icon: "🏡",
+  },
+  {
+    id: "fall-2026-practice",
+    title: "Fall 2026 Practice Hub",
+    description:
+      "Organized practice tests for CSCI 2115, 2122, 2134, and 2141, with independent JSON question banks and one shared quiz interface.",
+    path: "docs/projects/fall-2026/index.html",
+    tags: ["Fall 2026", "Practice Exams", "Quiz", "CSCI"],
+    badge: "New",
+    badgeColor: "#4f46e5",
+    icon: "📚",
+  },
+  {
+    id: "assembly-lab",
+    title: "C → x86 Assembly Lab",
+    description:
+      "Translate C into 32-bit AT&T assembly with execution-based feedback, branch and loop tests, pointer exercises, and concept questions. Runs entirely in your browser.",
+    path: "docs/projects/assembly-lab/index.html",
+    tags: ["CSCI 1120", "Assembly", "C", "Practice Exams", "Interactive"],
+    badge: "New",
+    badgeColor: "#5a42d6",
+    icon: "⚙",
+  },
+  {
+    id: "practice-exams-review",
+    title: "Practice Exams & Assessment Validity",
+    description:
+      "A critical narrative review of construct-irrelevant variance, Bloom’s taxonomy, and practice exams in computer science, with the full paper, references and downloads.",
+    path: "docs/projects/practice-exams-review/index.html",
+    tags: ["Research", "Computer Science", "Assessment", "Practice Exams"],
+    badge: "Working paper",
+    badgeColor: "#215e5e",
+    icon: "§",
+  },
+  {
+    id: "atlantic-space-data-sovereignty",
+    title: "Indigenous Data Sovereignty & the Space Sector",
+    description:
+      "A grounded overview of how the East Coast space sector could support Indigenous data sovereignty, who decides what support means, and which questions and evidence could lead to an answer. Read the full paper and references online.",
+    path: "docs/projects/atlantic-space-data-sovereignty/index.html",
+    tags: ["Research", "Data Sovereignty", "Space", "Atlantic Canada"],
+    badge: "Working paper",
+    badgeColor: "#215e5e",
+    icon: "§",
+  },
+];
+
+

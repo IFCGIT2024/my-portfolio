@@ -12,7 +12,8 @@ from pathlib import Path
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend requests
 
-DB_FILE = 'funding_database.db'
+DATA_DIR = Path(__file__).resolve().parent
+DB_FILE = DATA_DIR / 'funding_database.db'
 
 def get_db():
     """Get database connection"""
@@ -27,12 +28,22 @@ def dict_from_row(row):
 @app.route('/')
 def index():
     """Redirect to portal"""
-    return send_file('funding-portal.html')
+    return send_file(DATA_DIR / 'funding-portal.html')
 
 @app.route('/funding-portal.html')
 def portal():
     """Serve the portal HTML"""
-    return send_file('funding-portal.html')
+    return send_file(DATA_DIR / 'funding-portal.html')
+
+@app.route('/programs.json')
+def static_programs():
+    """Serve the same data snapshot used by GitHub Pages."""
+    return send_file(DATA_DIR / 'programs.json')
+
+@app.route('/funding.js')
+def static_frontend():
+    """Keep the optional developer server compatible with the static portal."""
+    return send_file(DATA_DIR / 'funding.js')
 
 @app.route('/api/health', methods=['GET'])
 def health_check():

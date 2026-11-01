@@ -8,6 +8,7 @@
 </head>
 <body>
 <div id="app">
+  <div class="portfolio-return"><a href="../index.html#fun">← Mizel Cluett / Just for fun</a><span>Paper trading · Virtual funds only</span></div>
 
   <!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
   <header id="header">
@@ -35,14 +36,14 @@
       </div>
     </div>
     <div class="header-controls">
-      <button id="btn-refresh" class="btn-icon" title="Refresh market data">⟳</button>
+      <button id="btn-refresh" aria-label="Refresh market data" class="btn-icon" title="Refresh market data">⟳</button>
       <button id="btn-reset" class="btn-danger-sm">Reset Account</button>
       <span id="last-update" class="update-time">Not loaded</span>
     </div>
   </header>
 
   <!-- ═══════════════════════════════ TAB NAV ═══════════════════════════════ -->
-  <nav id="tab-nav">
+  <nav id="tab-nav" aria-label="Dashboard views">
     <button class="tab-btn active" data-tab="markets">🌐 Markets</button>
     <button class="tab-btn" data-tab="opportunities">⚡ Opportunities</button>
     <button class="tab-btn" data-tab="portfolio">💼 Portfolio</button>
@@ -57,15 +58,15 @@
       <!-- Sidebar: market list -->
       <div class="markets-sidebar">
         <div class="sidebar-controls">
-          <input type="text" id="market-search" placeholder="Search markets..." class="search-input">
+          <input type="text" id="market-search" aria-label="Search markets" placeholder="Search markets..." class="search-input">
           <div class="filter-row">
-            <select id="market-sort" class="select-sm">
+            <select id="market-sort" aria-label="Sort markets" class="select-sm">
               <option value="volume24hr">Hot (24h Vol)</option>
               <option value="volume">All-Time Vol</option>
               <option value="liquidity">Liquidity</option>
               <option value="endDate">Closing Soon</option>
             </select>
-            <select id="market-limit" class="select-sm">
+            <select id="market-limit" aria-label="Number of markets" class="select-sm">
               <option value="20">20</option>
               <option value="50">50</option>
               <option value="100">100</option>

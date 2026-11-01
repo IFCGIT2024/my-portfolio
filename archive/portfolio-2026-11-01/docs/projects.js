@@ -1,0 +1,103 @@
+/**
+ * projects.js — Central registry for all portfolio projects.
+ *
+ * To add a new project, append an object to the PROJECTS array below.
+ * Fields:
+ *   id          – unique slug (no spaces)
+ *   title       – display name
+ *   description – one or two sentences shown on the card
+ *   path        – relative URL to the project's index.html
+ *   tags        – array of short labels (tech / topic)
+ *   badge       – optional ribbon text, e.g. "New" | "WIP" | "Live"
+ *   badgeColor  – optional CSS color for the badge background
+ *   icon        – emoji or short SVG string used as the card icon
+ */
+
+const PROJECTS = [
+  {
+    id: "discrete-math-course",
+    title: "Discrete Math for CS",
+    description:
+      "A complete 30-class course bridging discrete mathematics, formal proof, and Java programming. Every concept ships with rigorous proofs and runnable Java code.",
+    path: "projects/discrete-math/index.html",
+    tags: ["Discrete Math", "Java", "Proofs", "Course"],
+    badge: "Featured",
+    badgeColor: "#6366f1",
+    icon: "∑",
+  },
+  {
+    id: "proof-practice",
+    title: "Proof Practice Exams",
+    description:
+      "Interactive proof-step arrangement tool for mastering mathematical proof structure. Drag-and-drop exercises across multiple proof types.",
+    path: "projects/proofs/index.html",
+    tags: ["CSCI 1315", "Proofs", "Interactive"],
+    badge: null,
+    icon: "∴",
+  },
+  {
+    id: "csci1120-exam-prep",
+    title: "CSCI 1120 Exam Prep",
+    description:
+      "A full-featured practice exam platform with leaderboards, student profiles, statistics tracking, and timed quiz modes.",
+    path: "projects/csci-1120-prep/index.html",
+    tags: ["CSCI 1120", "Practice Exams", "Quiz"],
+    badge: null,
+    icon: "🎓",
+  },
+  {
+    id: "real-estate-analyzer",
+    title: "RE Investment Analyzer",
+    description:
+      "A real estate investment analysis tool with cash flow projections, target price calculator, deal comparison, and saved deals — all in the browser.",
+    path: "projects/re-analyzer/index.html",
+    tags: ["Real Estate", "Finance", "Calculator", "Charts"],
+    badge: null,
+    icon: "🏠",
+  },
+  {
+    id: "bank-interview-prep",
+    title: "DataGuard Academy",
+    description:
+      "A 10-module interactive interview prep course for bank data classification roles — covering SQL, Python, cloud, compliance, DSPM, and AI/ML with quizzes, progress tracking, and a full Q&A bank.",
+    path: "projects/bank-interview-prep/index.html",
+    tags: ["Banking", "Data Classification", "SQL", "Python", "Security", "Course"],
+    badge: "New",
+    badgeColor: "#0ea5e9",
+    icon: "🏦",
+  },
+  {
+    id: "calc-1000-prep",
+    title: "CALC 1000 Derivative Practice",
+    description:
+      "A broad memorization tool for Calculus 1 covering all standard derivative rules — power, product, quotient, chain, trig, inverse trig, exponential, logarithmic, implicit differentiation, parametric, and geometric formulas.",
+    path: "projects/calc-1000-prep/index.html",
+    tags: ["CALC 1000", "Calculus", "Derivatives", "Practice Exams", "Quiz"],
+    badge: "New",
+    badgeColor: "#8b5cf6",
+    icon: "∂",
+  },
+  {
+    id: "fall-2026-practice",
+    title: "Fall 2026 Practice Hub",
+    description:
+      "Organized practice tests for CSCI 2115, 2122, 2134, and 2141, with independent JSON question banks and one shared quiz interface.",
+    path: "projects/fall-2026/index.html",
+    tags: ["Fall 2026", "Practice Exams", "Quiz", "CSCI"],
+    badge: "New",
+    badgeColor: "#4f46e5",
+    icon: "📚",
+  },
+  {
+    id: "practice-exams-review",
+    title: "Practice Exams & Assessment Validity",
+    description:
+      "A critical narrative review of construct-irrelevant variance, Bloom’s taxonomy, and practice exams in computer science, with the full paper, downloads and source audit.",
+    path: "projects/practice-exams-review/index.html",
+    tags: ["Research", "Computer Science", "Assessment", "Practice Exams"],
+    badge: "Open for review",
+    badgeColor: "#215e5e",
+    icon: "§",
+  },
+];
+

@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 </head>
 <body>
+<div class="portfolio-return"><a href="../../../index.html#fun">← Mizel Cluett / Just for fun</a><span>Property scenario sandbox · Saved in this browser</span></div>
 
 <!-- ═══════════════════════════════════════════════════
      HEADER
@@ -43,6 +44,7 @@
      TAB 1: ANALYZE
 ═══════════════════════════════════════════════════ -->
 <section id="tab-analyze" class="tab-content active" role="tabpanel">
+    <nav class="analyze-jumps" aria-label="Analysis sections"><a href="#inputsPanel">Property inputs</a><a href="#resultsPanel">View results ↓</a></nav>
     <div class="analyze-layout">
 
         <!-- ── INPUTS PANEL ─────────────────────────── -->
@@ -54,7 +56,7 @@
                     <input type="checkbox" id="useDefaultsChk">
                     <span class="defaults-toggle-label">⚡ Apply Lender Template</span>
                 </label>
-                <select id="defaultsTemplateSelect" class="defaults-template-select">
+                <select id="defaultsTemplateSelect" aria-label="Lender template" class="defaults-template-select">
                     <option value="standard">Standard (CMHC / typical)</option>
                     <option value="conservative">Conservative (Lender-Safe)</option>
                     <option value="aggressive">Aggressive (Best-case)</option>
@@ -64,10 +66,10 @@
 
             <!-- Property Info -->
             <div class="input-section">
-                <div class="section-header" onclick="toggleSection(this)">
+                <button type="button" class="section-header" aria-expanded="true" onclick="toggleSection(this)">
                     <span class="section-title">📋 Property Info</span>
                     <span class="section-toggle">▲</span>
-                </div>
+                </button>
                 <div class="section-body">
                     <div class="field">
                         <label for="dealName">Deal Name / Nickname</label>
@@ -110,10 +112,10 @@
 
             <!-- Financing -->
             <div class="input-section">
-                <div class="section-header" onclick="toggleSection(this)">
+                <button type="button" class="section-header" aria-expanded="true" onclick="toggleSection(this)">
                     <span class="section-title">🏦 Financing</span>
                     <span class="section-toggle">▲</span>
-                </div>
+                </button>
                 <div class="section-body">
                     <div class="field-row">
                         <div class="field">
@@ -160,10 +162,10 @@
 
             <!-- Income -->
             <div class="input-section">
-                <div class="section-header" onclick="toggleSection(this)">
+                <button type="button" class="section-header" aria-expanded="true" onclick="toggleSection(this)">
                     <span class="section-title">💵 Income</span>
                     <span class="section-toggle">▲</span>
-                </div>
+                </button>
                 <div class="section-body">
                     <div class="field">
                         <label for="monthlyGrossRent">Monthly Gross Rent</label>
@@ -194,10 +196,10 @@
 
             <!-- Operating Expenses -->
             <div class="input-section">
-                <div class="section-header" onclick="toggleSection(this)">
+                <button type="button" class="section-header" aria-expanded="true" onclick="toggleSection(this)">
                     <span class="section-title">📊 Operating Expenses</span>
                     <span class="section-toggle">▲</span>
-                </div>
+                </button>
                 <div class="section-body">
                     <div class="field">
                         <label>Property Management</label>
@@ -315,10 +317,10 @@
 
             <!-- Projection Settings -->
             <div class="input-section">
-                <div class="section-header" onclick="toggleSection(this)">
+                <button type="button" class="section-header" aria-expanded="true" onclick="toggleSection(this)">
                     <span class="section-title">📈 Projection Settings</span>
                     <span class="section-toggle">▲</span>
-                </div>
+                </button>
                 <div class="section-body">
                     <div class="field">
                         <label for="holdingYears">Holding Period</label>
@@ -357,7 +359,9 @@
         </div><!-- /#inputsPanel -->
 
         <!-- ── RESULTS PANEL ────────────────────────── -->
-        <div class="results-panel">
+        <div class="results-panel" id="resultsPanel">
+            <div id="emptyAnalysis" class="empty-analysis"><h1>Start with a property.</h1><p>Enter a purchase price and your assumptions to explore the numbers, or load a sample to see how the calculator works.</p><button id="emptySampleBtn" class="btn btn-primary" type="button">Try a sample property</button></div>
+            <div id="calculatedResults" hidden>
 
             <!-- Deal Score Banner -->
             <div id="dealScoreBanner" class="deal-score-banner">
@@ -406,6 +410,7 @@
             <!-- Warnings -->
             <div id="warnings" class="warnings-list"></div>
 
+            </div><!-- /#calculatedResults -->
         </div><!-- /.results-panel -->
     </div><!-- /.analyze-layout -->
 </section>
@@ -714,6 +719,7 @@ function toggleSection(header) {
     const body  = header.nextElementSibling;
     const arrow = header.querySelector('.section-toggle');
     const collapsed = body.classList.toggle('collapsed');
+    header.setAttribute('aria-expanded', String(!collapsed));
     if (arrow) arrow.textContent = collapsed ? '▼' : '▲';
 }
 </script>

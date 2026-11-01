@@ -144,6 +144,10 @@ function updateModeVisibility() {
 // ─── Render Results ───────────────────────────────────────────────────────────
 
 function renderMetrics(result, inputs) {
+    const hasProperty = inputs.purchasePrice > 0;
+    document.getElementById('emptyAnalysis').hidden = hasProperty;
+    document.getElementById('calculatedResults').hidden = !hasProperty;
+    if (!hasProperty) return;
     const score = calcDealScore(result);
     const scoreCls = score >= 70 ? 'score-excellent' : score >= 50 ? 'score-good' : score >= 30 ? 'score-fair' : 'score-poor';
     const scoreLbl = score >= 70 ? 'Strong Deal' : score >= 50 ? 'Decent Deal' : score >= 30 ? 'Marginal Deal' : 'Weak Deal';
@@ -610,7 +614,12 @@ function recalculate() {
 // ─── Tab Switching ────────────────────────────────────────────────────────────
 
 function switchTab(name) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+        const active = b.dataset.tab === name;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', String(active));
+        b.tabIndex = active ? 0 : -1;
+    });
     document.querySelectorAll('.tab-content').forEach(s => s.classList.toggle('active', s.id === 'tab-' + name));
     if (name === 'projections') refreshProjections();
     if (name === 'saved')       renderSavedDeals();
@@ -622,7 +631,22 @@ function switchTab(name) {
 function init() {
     // Tab buttons
     document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.id = 'view-' + btn.dataset.tab;
+        btn.setAttribute('aria-controls', 'tab-' + btn.dataset.tab);
+        btn.setAttribute('aria-selected', String(btn.classList.contains('active')));
+        btn.tabIndex = btn.classList.contains('active') ? 0 : -1;
+        document.getElementById('tab-' + btn.dataset.tab)?.setAttribute('aria-labelledby', btn.id);
         btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        btn.addEventListener('keydown', event => {
+            const visible = [...document.querySelectorAll('.tab-btn')].filter(b => b.style.display !== 'none');
+            let next = visible.indexOf(btn);
+            if (event.key === 'ArrowRight') next = (next + 1) % visible.length;
+            else if (event.key === 'ArrowLeft') next = (next - 1 + visible.length) % visible.length;
+            else if (event.key === 'Home') next = 0;
+            else if (event.key === 'End') next = visible.length - 1;
+            else return;
+            event.preventDefault(); visible[next].focus(); switchTab(visible[next].dataset.tab);
+        });
     });
 
     // Live recalculation on all inputs
@@ -645,6 +669,10 @@ function init() {
         btn.textContent = 'Saved ✓';
         btn.classList.add('btn-success');
         setTimeout(() => { btn.textContent = orig; btn.classList.remove('btn-success'); }, 2000);
+    });
+
+    document.getElementById('emptySampleBtn')?.addEventListener('click', () => {
+        setInputs(SAMPLE_DEAL); recalculate();
     });
 
     // Load sample

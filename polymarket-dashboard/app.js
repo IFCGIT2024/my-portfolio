@@ -74,10 +74,11 @@ const App = (() => {
     const limit = parseInt(qs('#market-limit').value) || 20;
     const order = qs('#market-sort').value;
 
-    qs('#market-list').innerHTML = '<div class="loading-msg">⟳ Fetching live market data...</div>';
+    qs('#last-update').textContent = 'Refreshing…';
+    qs('#market-list').innerHTML = '<div class="loading-msg" role="status">Fetching market data…</div>';
 
     try {
-      const raw  = await PolyAPI.getMarkets({ limit, order });
+      const raw  = await PolyAPI.getMarkets({ limit, order, refresh: forceRefresh });
       allMarkets = (Array.isArray(raw) ? raw : []).map(PolyAPI.normalizeMarket);
 
       renderMarketList();
@@ -91,8 +92,9 @@ const App = (() => {
         if (fresh) { selectedMarket = fresh; renderMarketDetail(fresh, null); }
       }
     } catch(err) {
+      qs('#last-update').textContent = 'Market feed unavailable';
       qs('#market-list').innerHTML =
-        `<div class="error-msg">❌ Failed to load markets<br><small>${escHtml(err.message)}</small></div>`;
+        `<div class="error-msg" role="alert">Market data is unavailable right now.<br><small>This experiment depends on external feeds. Use Refresh to try again; your virtual portfolio is kept.</small></div>`;
     }
   }
 
@@ -119,7 +121,7 @@ const App = (() => {
 
       const isSelected = selectedMarket && selectedMarket.id === m.id;
 
-      return `<div class="market-item ${isSelected ? 'selected' : ''}" data-id="${escHtml(m.id)}">
+      return `<div class="market-item ${isSelected ? 'selected' : ''}" data-id="${escHtml(m.id)}" role="button" tabindex="0" aria-pressed="${Boolean(isSelected)}">
         <div class="market-question">${escHtml(m.question)}</div>
         <div class="market-metrics">
           <span class="price-tag-yes">YES ${cent(m.yesPrice)}¢</span>
@@ -131,6 +133,9 @@ const App = (() => {
     }).join('');
 
     document.querySelectorAll('.market-item').forEach(el => {
+      el.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); el.click(); }
+      });
       el.addEventListener('click', () => {
         const market = allMarkets.find(m => m.id === el.dataset.id);
         if (market) selectMarket(market);
@@ -145,7 +150,9 @@ const App = (() => {
     selectedMarket = market;
     renderMarketList();  // update sidebar selection highlight
 
-    qs('#market-detail').innerHTML = '<div class="loading-msg">⟳ Loading market detail...</div>';
+    // Show the available market immediately; the optional order book can arrive later.
+    renderMarketDetail(market, null);
+    if (window.matchMedia('(max-width: 700px)').matches) qs('#market-detail').scrollIntoView({block:'start', behavior:'auto'});
 
     /* Attempt CLOB order book (may be CORS-blocked) */
     let orderBook = null;
@@ -153,7 +160,7 @@ const App = (() => {
       orderBook = await PolyAPI.getOrderBook(market.yesTokenId);
     }
 
-    renderMarketDetail(market, orderBook);
+    if (selectedMarket?.id === market.id && orderBook) renderMarketDetail(market, orderBook);
   }
 
   function renderMarketDetail(m, orderBook) {

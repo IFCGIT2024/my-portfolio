@@ -4,3 +4,14 @@ _output/
 pipeline/
 SESSION_NOTES.md
 .github/copilot-instructions.md
+
+# Local dependencies and build/preview caches
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+*.log
+.openai/

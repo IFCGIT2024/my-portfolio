@@ -307,7 +307,8 @@ const BTCMarketTracker = (() => {
       const url = 'https://gamma-api.polymarket.com/markets?search=btc-updown-5m&order=endDate&ascending=false&limit=20';
       const data = await PolyAPI.rawFetch(url);
       if (!data.ok) throw new Error('HTTP ' + data.status);
-      const list = Array.isArray(data.data) ? data.data : [];
+      // The remote search can return unrelated markets; only accept this experiment's market family.
+      const list = (Array.isArray(data.data) ? data.data : []).filter(m => /^btc-updown-5m-/.test(String(m.slug || '')));
 
       // Parse and enrich each market
       markets = list.map(m => {
@@ -1327,7 +1328,13 @@ const BTCAlgoUI = (() => {
 
     BinanceFeed.start(
       onCandle,
-      (msg, ok) => setStatus('btc-feed-status', msg, ok)
+      (msg, ok) => {
+        setStatus('btc-feed-status', msg, ok);
+        if (!ok && /failed|error|closed/i.test(msg) && !BinanceFeed.candles.length) {
+          const price = el('btc-live-price');
+          if (price) price.textContent = 'Unavailable';
+        }
+      }
     );
 
     BTCMarketTracker.start(
@@ -1363,7 +1370,7 @@ const BTCAlgoUI = (() => {
   function checkVisibility() {
     const tab = document.getElementById(TAB_ID);
     if (!tab) return;
-    const isVisible = tab.classList.contains('active') || tab.style.display !== 'none';
+    const isVisible = tab.classList.contains('active');
     if (isVisible && !started) {
       started = true;
       BTCAlgoUI.start();

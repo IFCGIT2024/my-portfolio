@@ -9,8 +9,8 @@ const key='mizel:assembly-lab:progress:v1';
 const json=name=>JSON.parse(fs.readFileSync(path.join(root,'data',name),'utf8'));
 const bank=json('manifest.json').banks.flatMap(n=>json(n).questions);
 const course=json('lessons.json').lessons;
-async function open(saved){
- const dom=new JSDOM(html,{url:'https://example.test/docs/projects/assembly-lab/index.html',runScripts:'outside-only'});
+async function open(saved, hash=""){
+ const dom=new JSDOM(html,{url:'https://example.test/docs/projects/assembly-lab/index.html'+hash,runScripts:'outside-only'});
  const w=dom.window;
  w.fetch=async url=>({ok:true,json:async()=>JSON.parse(fs.readFileSync(path.join(root,url),'utf8'))});
  if(saved)w.localStorage.setItem(key,saved);
@@ -24,58 +24,89 @@ async function open(saved){
 (async()=>{
  const dom=await open(),w=dom.window,$=id=>w.document.getElementById(id);
  const change=(id,value)=>{$(id).value=value;$(id).dispatchEvent(new w.Event('change'));};
+ const step=id=>w.document.querySelector('[data-step="'+id+'"]').click();
+ const bankView=id=>w.document.querySelector('[data-bank="'+id+'"]').click();
+ const active=doc=>doc.querySelector('[data-step][aria-current="page"]')?.dataset.step;
+ const chapterId=doc=>doc.querySelector('.chapter.current')?.dataset.chapter;
  const input=code=>{$('assembly-input').value=code;$('assembly-input').dispatchEvent(new w.Event('input'));};
- assert.equal($('lesson-select').options.length,19);
- assert.equal($('lesson-select').value,'00-foundations');
- assert.equal($('concept-select').value,'state');
+ assert.equal(w.document.querySelectorAll('.chapter').length,17);
+ assert.equal(w.document.querySelectorAll('[data-step]').length,108);
+ assert.equal($('lesson-view').hidden,false);assert.equal($('practice-view').hidden,true);assert.equal($('reference-view').hidden,true);
+ assert.equal(chapterId(w.document),'00-foundations');
+ assert.equal(active(w.document),'state');
  assert.equal($('question-select').value,'p-state');
  assert.equal($('code-mode').disabled,true);
  assert.equal($('mcq-total').textContent,'1');
  assert.match($('lesson-content').textContent,/do not need previous assembly knowledge/);
  assert.equal($('lesson-content').querySelector('img').getAttribute('src'),'diagrams/state.svg');
  $('concept-next').click();
- assert.equal($('concept-select').value,'c-assignment');
+ assert.equal(active(w.document),'c-assignment');
  assert.equal(JSON.parse(w.localStorage.getItem(key)).readSteps.state,true);
  assert.match($('course-progress').textContent,/1 marked read/);
  // Reading is not counted as an independently solved answer.
  assert.match($('course-progress').textContent,/0 practice questions solved independently/);
+ // The sidebar, activity views and reference do not expose a second competing task.
+ $('view-practice').click();assert.equal($('practice-view').hidden,false);assert.equal($('lesson-view').hidden,true);
+ $('reference-toggle').click();assert.equal($('reference-view').hidden,false);assert.equal($('practice-view').hidden,true);
+ $('view-lesson').click();assert.equal($('lesson-view').hidden,false);
+ $('lesson-search').value='pointer';$('lesson-search').dispatchEvent(new w.Event('input'));
+ assert.ok(w.document.querySelectorAll('[data-step]').length<108);assert.ok(w.document.querySelector('[data-step="pointer-load"]'));
+ $('lesson-search').value='unfindable-question';$('lesson-search').dispatchEvent(new w.Event('input'));assert.equal($('search-empty').hidden,false);
+ $('lesson-search').value='';$('lesson-search').dispatchEvent(new w.Event('input'));assert.equal(w.document.querySelectorAll('[data-step]').length,108);
+ assert.equal(w.document.querySelectorAll('.chapter[open]').length,1,'search must not leave every chapter expanded');
+ $('menu-toggle').click();assert.equal($('menu-toggle').getAttribute('aria-expanded'),'true');assert.equal($('main-content').inert,true);
+ w.document.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape'}));assert.equal($('menu-toggle').getAttribute('aria-expanded'),'false');assert.equal($('main-content').inert,false);
+ assert.equal(w.document.activeElement,$('menu-toggle'));
+ // A shareable route overrides a different saved location; no progress is lost.
+ const linked=await open(w.localStorage.getItem(key),'#lesson=pointer-load&view=practice&scope=chapter');
+ assert.equal(active(linked.window.document),'pointer-load');assert.equal(linked.window.document.getElementById('practice-view').hidden,false);
+ assert.equal(linked.window.document.getElementById('practice-scope').value,'chapter');linked.window.close();
  // Every concept renders, and focused practice exposes exactly its own tasks plus earlier review.
  for(const l of course){
-  change('lesson-select',l.id);
-  for(const step of l.steps){
-   change('concept-select',step.id);
+
+  for(const concept of l.steps){
+   step(concept.id);
+   assert.equal($('page-title').textContent,concept.title);
+   assert.equal($('page-description').textContent,concept.goal);
+   assert.equal($('chapter-goal').textContent,l.goal);
+   for(const text of [...concept.paragraphs,concept.worked.goal,...concept.worked.reasoning,concept.teachBack.prompt,concept.teachBack.answer])
+    assert.ok($('concept-card').textContent.includes(text),`Preserve ${concept.id}: ${text}`);
+   if(concept.worked.assembly)assert.ok($('concept-card').textContent.includes(concept.worked.assembly));
    assert.match($('concept-card').textContent,/Explain it in your own words/);
    assert.equal($('practice-scope').value,'step');
-   const expected=new Set([...step.practice,...step.review]);
+   const expected=new Set([...concept.practice,...concept.review]);
    const actual=new Set();
    for(const type of ['code','mcq'])if(!$(type+'-mode').disabled){
     $(type+'-mode').click();
     for(const option of $('question-select').options)actual.add(option.value);
    }
-   assert.deepEqual(actual,expected,step.id);
-   if(step.diagram)assert.ok($('concept-card').querySelector('img[alt]'),step.id);
+   assert.deepEqual(actual,expected,concept.id);
+   if(concept.diagram)assert.ok($('concept-card').querySelector('img[alt]'),concept.id);
   }
  }
  // Whole-chapter scope does not leak other chapters or reset its selected concept.
- change('lesson-select','03-pointers');change('concept-select','pointer-load');
+ step('pointer-load');
  const chapter=course.find(l=>l.id==='03-pointers');
  change('practice-scope','chapter');$('code-mode').click();
- assert.equal($('concept-select').value,'pointer-load');
+ assert.equal(active(w.document),'pointer-load');
  assert.ok([...$('question-select').options].some(o=>o.value==='l10-swap'));
  const chapterIds=new Set(chapter.steps.flatMap(s=>[...s.practice,...s.review]));
  assert.ok([...$('question-select').options].every(o=>chapterIds.has(o.value)));
+ // Browser navigation follows the visible lesson route.
+ w.location.hash='lesson=c-assignment';await new Promise(resolve=>setTimeout(resolve,10));assert.equal(active(w.document),'c-assignment');
+ step('pointer-load');
  // A focused task button routes to the right question and mode.
  const direct=[...$('concept-card').querySelectorAll('.practice-links button')].find(b=>b.textContent.includes('Read through a pointer'));
  direct.click();assert.equal($('question-select').value,'l10-loadptr');assert.equal($('practice-scope').value,'step');
  input('movq (%rdi),%rax\nret');$('check').click();assert.ok($('feedback').classList.contains('success'));
  // Restore the exact chapter, concept, scope, question and draft.
  const snapshot=w.localStorage.getItem(key),restored=await open(snapshot),rd=restored.window.document;
- assert.equal(rd.getElementById('lesson-select').value,'03-pointers');
- assert.equal(rd.getElementById('concept-select').value,'pointer-load');
+ assert.equal(chapterId(rd),'03-pointers');
+ assert.equal(active(rd),'pointer-load');
  assert.equal(rd.getElementById('question-select').value,'l10-loadptr');
- assert.equal(rd.getElementById('assembly-input').value,'movq (%rdi),%rax\nret');restored.window.close();
+ assert.equal(rd.getElementById('assembly-input').value,'movq (%rdi),%rax\nret');assert.equal(rd.getElementById('practice-view').hidden,false);restored.window.close();
  // Original bank remains available and all answers still pass through real UI handlers.
- change('lesson-select','all');
+ bankView('all');
  assert.equal($('code-total').textContent,'103');assert.equal($('mcq-total').textContent,'188');
  $('code-mode').click();
  for(const q of bank.filter(q=>q.type==='code')){
@@ -91,27 +122,27 @@ async function open(saved){
  // v1 progress migrates to the beginning of the new path while retaining valid records.
  const old=JSON.parse(w.localStorage.getItem(key));delete old.courseVersion;delete old.steps;delete old.readSteps;old.lesson='01-machine';
  const migrated=await open(JSON.stringify(old)),md=migrated.window.document;
- assert.equal(md.getElementById('lesson-select').value,'00-foundations');
- assert.equal(md.getElementById('concept-select').value,'state');
+ assert.equal(chapterId(md),'00-foundations');
+ assert.equal(active(md),'state');
  assert.equal(JSON.parse(migrated.window.localStorage.getItem(key)).records['code-01'].passed,true);
  migrated.window.close();
  // Final traces still show aliases accurately and never falsely mark work solved.
- change('lesson-select','original');$('code-mode').click();
+ bankView('original');$('code-mode').click();
  input('movb $255,%al\nmovb %al,%dl');$('trace-button').click();$('trace-final').click();
  assert.match($('trace-state').textContent,/Final state after 2 instructions/);
  assert.match($('trace-state').textContent,/%dl\s+-1\s+\(0xff; 8 bits\)/);
  // Retry feedback and import visibility remain usable from within the new course.
- change('lesson-select','09-branches');change('concept-select','flag-lifetime');$('mcq-mode').click();change('question-select','l10-zero-shift-alias');
+ step('flag-lifetime');$('mcq-mode').click();change('question-select','l10-zero-shift-alias');
  if($('check').textContent==='Try again')$('check').click();
  $('options').querySelector('input[value="1"]').click();$('check').click();assert.match($('feedback').textContent,/Correct/);
  $('check').click();assert.equal($('options').querySelector('input:checked'),null);
  const incoming={schemaVersion:1,questions:[{id:'review-import',type:'mcq',category:'review',title:'Imported concept',question:'Pick 1',options:['1','2'],correctAnswer:0,explanation:'One.'}]};
  Object.defineProperty($('import-bank'),'files',{value:[{size:200,text:async()=>JSON.stringify(incoming)}],configurable:true});
  $('import-bank').dispatchEvent(new w.Event('change'));await new Promise(resolve=>setTimeout(resolve,0));
- assert.equal($('lesson-select').value,'all');assert.equal($('question-select').value,'review-import');
+ assert.equal(w.document.querySelector('[data-bank][aria-current="page"]').dataset.bank,'all');assert.equal($('question-select').value,'review-import');
  w.localStorage.setItem('unrelated-tool','keep');$('reset').click();
  const reset=JSON.parse(w.localStorage.getItem(key));assert.ok(Object.values(reset.records).every(r=>r.attempts===0&&!r.passed&&!r.draft));
  assert.deepEqual(reset.readSteps,{});assert.equal(w.localStorage.getItem('unrelated-tool'),'keep');
  w.close();
- console.log('DOM workflow passed: 17 chapters, 108 concepts, 291 answers, focused/chapter practice, direct task buttons, progress migration, restoration, traces, retry, imports and reset.');
+ console.log('DOM workflow passed: 17 chapters, 108 concepts, 291 answers, sidebar search, lesson/practice/reference views, routes, mobile drawer state, focused/chapter practice, direct task buttons, progress migration, restoration, traces, retry, imports and reset.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

@@ -7,6 +7,9 @@
   let lessons=[], diagrams={}, lessonId='00-foundations', stepId='state', practiceScope='step', trace=[];
   const chapterQuestions=new Map();
   let bank = [], mode = 'code', topic = 'all', currentId = null, completedView = false;
+  let view = 'lesson';
+  const expandedChapters = new Set();
+  const mobile = window.matchMedia?.('(max-width: 820px)');
   let saved = {records:{}, last:{}, steps:{}, readSteps:{}, mode:'code'};
   const fingerprints = new Map();
   function node(tag, text, className) {
@@ -28,7 +31,7 @@
     return saved.records[q.id] = {fingerprint:fingerprints.get(q.id), attempts:0, passed:false, revealed:false, draft:'', selected:null};
   }
   function persist() {
-    saved.courseVersion=2;saved.lesson=lessonId;saved.scope=practiceScope;
+    saved.courseVersion=2;saved.lesson=lessonId;saved.scope=practiceScope;saved.view=view;
     saved.steps??={};saved.readSteps??={};if(currentStep())saved.steps[lessonId]=stepId;
     saved.mode = mode; saved.last[mode] = currentId;
     try { localStorage.setItem(KEY,JSON.stringify(saved)); }
@@ -50,6 +53,7 @@
       if (['code','mcq'].includes(data.mode)) mode=data.mode;
       // Keep old answers/drafts, but introduce the new beginner path at its beginning.
       if(data.courseVersion===2) {
+        if(['lesson','practice','reference'].includes(data.view))view=data.view;
         if(['all','original',...lessons.map(l=>l.id)].includes(data.lesson)) lessonId=data.lesson;
         saved.steps={};saved.readSteps={};
         for(const l of lessons) {
@@ -90,7 +94,7 @@
   function updateFilters() {
     $('practice-scope').disabled=!currentStep();$('practice-scope').value=currentStep()?practiceScope:'chapter';
     $('topic-label').hidden=practiceScope==='step'&&!!currentStep();
-    $('practice-context').textContent=currentStep()?(practiceScope==='step'?`Practice this concept: ${currentStep().title}. Earlier review questions are included after the focused tasks.`:`Chapter review: ${currentLesson().title}. This includes all concepts in the chapter.`):'Browse the full selected practice bank.';
+    $('practice-context').textContent=currentStep()?(practiceScope==='step'?'Focused questions, followed by earlier review.':`Chapter review: ${currentLesson().title}. This includes all concepts in the chapter.`):'Browse the full selected practice bank.';
     const categories=[...new Set(bank.filter(q=>inScope(q)&&q.type===mode).map(q=>q.category))];
     if(!categories.includes(topic)) topic='all';
     $('topic').replaceChildren(...['all',...categories].map(category=>{
@@ -228,7 +232,7 @@
   }
   function changeMode(next) { saved.last[mode]=currentId;mode=next;topic='all';currentId=saved.last[mode];
     if(!bank.some(q=>inScope(q)&&q.type===mode)) mode=bank.find(inScope)?.type||'code';
-    renderLesson();updateFilters();render(); }
+    updateFilters();render(); }
   async function fetchJSON(url) {
     const response=await fetch(url,{cache:'no-cache'});
     if(!response.ok) throw Error(`Could not load ${url} (HTTP ${response.status}).`);
@@ -248,10 +252,15 @@
     for(const l of lessons)chapterQuestions.set(l.id,new Set(l.steps.flatMap(s=>[...s.practice,...s.review])));
     for(const q of bank) fingerprints.set(q.id,fingerprint(q));
     restore();
+    readRoute();
+    if(!currentStep()&&view==='lesson')view='practice';
     currentId=saved.last[mode];
     if(!bank.some(q=>inScope(q)&&q.type===mode)) mode=bank.find(inScope)?.type||'code';
     renderLesson();updateFilters();render();
     $('load-status').hidden=true;$('app').hidden=false;
+    for(const control of document.querySelectorAll('#reference-toggle,#lesson-search,[data-bank]'))control.disabled=false;
+    syncRoute(true);
+    document.querySelector('.lesson-link[aria-current="page"]')?.scrollIntoView?.({block:'nearest'});
   }
   function renderCourseProgress() {
     if(!lessons.length) return;
@@ -259,26 +268,108 @@
     const list=bank.filter(q=>ids.has(q.id)),count=counters(list),steps=lessons.flatMap(l=>l.steps);
     const read=steps.filter(s=>saved.readSteps?.[s.id]).length;
     $('course-progress').textContent=`${lessons.length} chapters · ${steps.length} small concepts · ${read} marked read · ${count.solved} practice questions solved independently. Reading progress and demonstrated understanding are separate.`;
+    $('reading-count').textContent=`${read} of ${steps.length} lessons read`;
+    $('reading-percent').textContent=`${Math.round(read/steps.length*100)}%`;
+    $('reading-progress').max=steps.length;$('reading-progress').value=read;
   }
   function setPractice(id) {
     const q=bank.find(q=>q.id===id);if(!q)return;
     practiceScope='step';topic='all';mode=q.type;currentId=id;
-    updateFilters();render();$('exercise').scrollIntoView?.({behavior:'smooth',block:'start'});$('exercise').focus({preventScroll:true});
+    updateFilters();render();setView('practice');
+  }
+  function focusPage() {
+    $('main-content').scrollIntoView?.({block:'start'});
+    $('page-title').focus({preventScroll:true});
+  }
+  function renderShell() {
+    const l=currentLesson(),s=currentStep(),steps=lessons.flatMap(l=>l.steps);
+    for(const name of ['lesson','practice','reference'])$(name+'-view').hidden=view!==name;
+    for(const name of ['lesson','practice'])$('view-'+name).setAttribute('aria-pressed',String(view===name));
+    $('view-lesson').disabled=!s;
+    $('reference-toggle').setAttribute('aria-pressed',String(view==='reference'));
+    $('page-kicker').textContent=view==='reference'?'ASSEMBLY LAB / RESOURCES':l?`Chapter ${String(lessons.indexOf(l)+1).padStart(2,'0')} / ${l.title}`:'ASSEMBLY LAB / QUESTION BANK';
+    $('page-title').textContent=view==='reference'?'Reference & study tools':s?s.title:lessonId==='original'?'32-bit refresher':'All practice questions';
+    $('page-description').textContent=view==='reference'?'Syntax, supported instructions, question imports and your study progress.':s?s.goal:lessonId==='original'?'The original practice bank, using the 32-bit teaching model.':'Review the complete question bank. Choose a type and topic to focus your practice.';
+    $('page-description').hidden=view==='practice'&&!!s;
+    $('concept-position').textContent=s&&view!=='reference'?`Lesson ${steps.indexOf(s)+1} of ${steps.length}`:'';
+    $('practice-count').textContent=scopedQuestions().length;
+    $('chapter-goal').textContent=l?.goal||'';
+    const at=steps.indexOf(s);
+    $('lesson-prev').disabled=at<=0;$('lesson-next').disabled=at<0||at===steps.length-1;
+    document.title=`${$('page-title').textContent} · Assembly Lab`;
+  }
+  function setView(next) {
+    view=next==='lesson'&&!currentStep()?'practice':next;
+    renderShell();persist();syncRoute();focusPage();
+  }
+  function renderSidebar() {
+    const outline=$('course-outline'),scroll=outline.parentElement;
+    const scrollTop=scroll.scrollTop;
+    const query=$('lesson-search').value.trim().toLowerCase();
+    outline.replaceChildren();let matches=0;
+    for(const [index,l] of lessons.entries()) {
+      const selected=l.steps.filter(s=>!query||`${l.title} ${s.title} ${s.goal} ${s.introducesInstructions.join(' ')}`.toLowerCase().includes(query));
+      if(!selected.length)continue;
+      matches+=selected.length;
+      const chapter=node('details',undefined,'chapter'+(l.id===lessonId?' current':''));chapter.dataset.chapter=l.id;
+      chapter.open=!!query||l.id===lessonId||expandedChapters.has(l.id);
+      const title=node('summary');title.append(node('span',String(index+1).padStart(2,'0'),'chapter-number'),node('span',l.title));chapter.append(title);
+      title.addEventListener('click',()=>{if(!query){if(chapter.open)expandedChapters.delete(l.id);else expandedChapters.add(l.id);}});
+      const links=node('div',undefined,'chapter-lessons');
+      for(const s of selected) {
+        const button=node('button',undefined,'lesson-link');button.dataset.step=s.id;
+        button.append(node('span',s.title));
+        if(s.id===stepId)button.setAttribute('aria-current','page');
+        if(saved.readSteps?.[s.id]){const mark=node('span','✓','read-mark');mark.setAttribute('aria-label','Marked read');button.append(mark);}
+        button.addEventListener('click',()=>jumpToStep(s.id));links.append(button);
+      }
+      if(!query){const review=node('button','Review this chapter →','lesson-link chapter-review');review.dataset.review=l.id;review.addEventListener('click',()=>{chooseLesson(l.id);practiceScope='chapter';currentId=null;updateFilters();render();closeSidebar(false);setView('practice');});links.append(review);}
+      chapter.append(links);outline.append(chapter);
+    }
+    $('search-empty').hidden=matches>0;
+    for(const button of document.querySelectorAll('[data-bank]')) {
+      if(button.dataset.bank===lessonId)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+    }
+    scroll.scrollTop=scrollTop;
+  }
+  function syncRoute(replace=false) {
+    const params=new URLSearchParams();
+    if(currentStep())params.set('lesson',stepId);else params.set('bank',lessonId);
+    if(view!=='lesson')params.set('view',view);
+    if(practiceScope==='chapter'&&currentStep())params.set('scope','chapter');
+    const hash='#'+params.toString();
+    if(location.hash!==hash)history[replace?'replaceState':'pushState'](null,'',hash);
+  }
+  function readRoute() {
+    const params=new URLSearchParams(location.hash.slice(1)),id=params.get('lesson'),l=lessons.find(l=>l.steps.some(s=>s.id===id));
+    if(l){lessonId=l.id;stepId=id;}else if(['all','original'].includes(params.get('bank'))){lessonId=params.get('bank');stepId=null;}else return false;
+    practiceScope=params.get('scope')==='chapter'?'chapter':'step';
+    view=['practice','reference'].includes(params.get('view'))?params.get('view'):l?'lesson':'practice';
+    return true;
+  }
+  function closeSidebar(restoreFocus=true) {
+    const wasOpen=document.body.classList.contains('sidebar-open');
+    document.body.classList.remove('sidebar-open');$('sidebar-backdrop').hidden=true;
+    $('menu-toggle').setAttribute('aria-expanded','false');$('menu-toggle').setAttribute('aria-label','Open course navigation');
+    $('main-content').inert=false;document.querySelector('.header-links').inert=false;
+    $('course-sidebar').removeAttribute('role');$('course-sidebar').removeAttribute('aria-modal');
+    if(wasOpen&&restoreFocus)$('menu-toggle').focus();
+  }
+  function openSidebar() {
+    document.body.classList.add('sidebar-open');$('sidebar-backdrop').hidden=false;
+    $('menu-toggle').setAttribute('aria-expanded','true');$('menu-toggle').setAttribute('aria-label','Close course navigation');
+    $('main-content').inert=true;document.querySelector('.header-links').inert=true;
+    $('course-sidebar').setAttribute('role','dialog');$('course-sidebar').setAttribute('aria-modal','true');
+    $('lesson-search').focus();
   }
   function renderLesson() {
-    $('lesson-select').replaceChildren(...[...lessons.map((l,i)=>({id:l.id,title:`${i+1}. ${l.title}`})),{id:'original',title:'Original practice — 32-bit refresher'},{id:'all',title:'All practice — the complete bank'}].map(l=>{const o=node('option',l.title);o.value=l.id;o.selected=l.id===lessonId;return o;}));
+    renderSidebar();renderShell();
     const area=$('lesson-content');area.replaceChildren();
     const l=currentLesson(),index=lessons.indexOf(l);
-    $('lesson-prev').disabled=index<=0;$('lesson-next').disabled=index<0||index===lessons.length-1;
-    if(!l) {area.append(node('p','Choose a chapter above to learn one concept at a time. The full practice banks remain available here.'));return;}
+    if(!l)return;
     const step=currentStep();if(!step)return;
     const at=l.steps.indexOf(step);
-    area.append(node('h3',l.title),node('p',l.goal,'chapter-goal'));
-    const nav=node('div',undefined,'concept-toolbar'),labelEl=node('label','Concept '),select=node('select');select.id='concept-select';
-    for(const [i,s] of l.steps.entries()){const o=node('option',`${i+1}. ${s.title}${saved.readSteps?.[s.id]?' · read':''}`);o.value=s.id;o.selected=s.id===stepId;select.append(o);}
-    select.addEventListener('change',()=>chooseStep(select.value));labelEl.append(select);nav.append(labelEl);area.append(nav);
     const card=node('article',undefined,'concept-card');card.id='concept-card';card.tabIndex=-1;
-    card.append(node('p',`Concept ${at+1} of ${l.steps.length} · one new idea`,'eyebrow'),node('h4',step.title),node('p',step.goal,'concept-goal'));
     if(step.requires.length) {
       const prior=lessons.flatMap(l=>l.steps).find(s=>s.id===step.requires[0]);
       const recap=node('p','Builds on: ','recap'),back=node('button',prior.title,'text-button');
@@ -289,19 +380,19 @@
       const d=diagrams[step.diagram],figure=node('figure',undefined,'lesson-diagram'),img=document.createElement('img');
       img.src=d.src;img.alt=d.alt;img.decoding='async';figure.append(img,node('figcaption',d.caption));card.append(figure);
     }
-    const worked=node('section',undefined,'worked-example');worked.append(node('h5','See one complete example'));
+    const worked=node('section',undefined,'worked-example');worked.append(node('h2','See one complete example'));
     if(step.worked.nativeC) worked.append(node('p','Native C example: compile with GCC. The practice below checks your understanding of the interface; this browser does not compile inline assembly.','small'));
     const columns=node('div',undefined,step.worked.assembly?'code-panels':'example-goal');
-    const goal=node('div',undefined,'panel');goal.append(node('h6','Goal / starting information'));const pre=node('pre');pre.append(node('code',step.worked.goal));goal.append(pre);columns.append(goal);
-    if(step.worked.assembly){const asm=node('div',undefined,'panel');asm.append(node('h6','Assembly'));const code=node('pre');code.append(node('code',step.worked.assembly));asm.append(code);columns.append(asm);}
+    const goal=node('div',undefined,'panel');goal.append(node('h3','Goal / starting information'));const pre=node('pre');pre.append(node('code',step.worked.goal));goal.append(pre);columns.append(goal);
+    if(step.worked.assembly){const asm=node('div',undefined,'panel');asm.append(node('h3','Assembly'));const code=node('pre');code.append(node('code',step.worked.assembly));asm.append(code);columns.append(asm);}
     worked.append(columns);const reasoning=node('ol');for(const line of step.worked.reasoning)reasoning.append(node('li',line));worked.append(reasoning);card.append(worked);
-    const teach=node('section',undefined,'teach-back');teach.append(node('h5','Explain it in your own words'),node('p',step.teachBack.prompt));
+    const teach=node('section',undefined,'teach-back');teach.append(node('h2','Explain it in your own words'),node('p',step.teachBack.prompt));
     const answer=node('details');answer.append(node('summary','Compare with an explanation'),node('p',step.teachBack.answer));teach.append(answer);card.append(teach);
-    const practice=node('section',undefined,'step-practice');practice.append(node('h5','Try it yourself'));
+    const practice=node('section',undefined,'step-practice');practice.append(node('h2','Try it yourself'));
     for(const [ids,review] of [[step.practice,false],[step.review,true]]) {
       if(review&&ids.length)practice.append(node('p','Bring back an earlier idea','small'));
       const links=node('div',undefined,'practice-links');
-      for(const id of ids){const q=bank.find(q=>q.id===id),button=node('button',`${q.type==='code'?'Code':'Concept'}: ${q.title}`);button.addEventListener('click',()=>setPractice(id));links.append(button);}practice.append(links);
+      for(const id of ids){const q=bank.find(q=>q.id===id),button=node('button');button.append(node('span',q.type==='code'?'Code':'Concept','practice-kind'),node('span',q.title));button.addEventListener('click',()=>setPractice(id));links.append(button);}practice.append(links);
     }
     card.append(practice);
     const actions=node('div',undefined,'concept-actions'),prev=node('button','← Previous concept');prev.id='concept-prev';prev.disabled=index===0&&at===0;prev.addEventListener('click',()=>moveConcept(-1));
@@ -318,14 +409,15 @@
   }
   function jumpToStep(id) {
     const l=lessons.find(l=>l.steps.some(s=>s.id===id));if(!l)return;
-    lessonId=l.id;chooseStep(id);$('concept-card').scrollIntoView?.({behavior:'smooth',block:'start'});$('concept-card').focus({preventScroll:true});
+    lessonId=l.id;view='lesson';chooseStep(id);closeSidebar(false);syncRoute();
+    document.querySelector('.lesson-link[aria-current="page"]')?.scrollIntoView?.({block:'nearest'});focusPage();
   }
   function moveConcept(delta) {
     const steps=lessons.flatMap(l=>l.steps),at=steps.findIndex(s=>s.id===stepId),next=steps[at+delta];
     if(!next)return false;jumpToStep(next.id);return true;
   }
   function chooseLesson(id) {
-    lessonId=id;topic='all';currentId=null;
+    lessonId=id;topic='all';currentId=null;view=['all','original'].includes(id)?'practice':'lesson';
     const l=currentLesson();stepId=l?(saved.steps?.[id]||l.steps[0].id):null;
     if(l){chooseStep(stepId);return;}
     if(!bank.some(q=>inScope(q)&&q.type===mode))mode=bank.find(inScope)?.type||'code';
@@ -345,9 +437,33 @@
     catch(e){trace=e.trace||[];$('trace-status').textContent=e.message+' Fix the error and rerun; any captured steps are shown below.';}
     $('trace-step').max=Math.max(0,trace.length-1);$('trace-step').value=0;$('trace-final').disabled=trace.at(-1)?.phase!=='after';showTraceStep();
   }
-  $('lesson-select').addEventListener('change',()=>chooseLesson($('lesson-select').value));
-  for(const [id,delta] of [['lesson-prev',-1],['lesson-next',1]]) $(id).addEventListener('click',()=>{const index=lessons.findIndex(l=>l.id===lessonId);if(lessons[index+delta])chooseLesson(lessons[index+delta].id);});
-  $('practice-scope').addEventListener('change',()=>{practiceScope=$('practice-scope').value;topic='all';currentId=null;if(!bank.some(q=>inScope(q)&&q.type===mode))mode=bank.find(inScope)?.type||'mcq';updateFilters();render();});
+  for(const [id,delta] of [['lesson-prev',-1],['lesson-next',1]])$(id).addEventListener('click',()=>moveConcept(delta));
+  $('lesson-search').addEventListener('input',renderSidebar);
+  for(const name of ['lesson','practice'])$('view-'+name).addEventListener('click',()=>setView(name));
+  $('reference-toggle').addEventListener('click',()=>setView(view==='reference'?(currentStep()?'lesson':'practice'):'reference'));
+  for(const button of document.querySelectorAll('[data-bank]'))button.addEventListener('click',()=>{chooseLesson(button.dataset.bank);closeSidebar(false);syncRoute();focusPage();});
+  $('menu-toggle').addEventListener('click',()=>document.body.classList.contains('sidebar-open')?closeSidebar():openSidebar());
+  $('menu-close').addEventListener('click',()=>closeSidebar());
+  $('sidebar-backdrop').addEventListener('click',()=>closeSidebar());
+  mobile?.addEventListener('change',event=>{if(!event.matches)closeSidebar(false);});
+  document.addEventListener('keydown',event=>{
+    if(!document.body.classList.contains('sidebar-open'))return;
+    if(event.key==='Escape'){event.preventDefault();closeSidebar();}
+    if(event.key==='Tab') {
+      const items=[...$('course-sidebar').querySelectorAll('button:not(:disabled),input,summary,a[href]')].filter(el=>el.getClientRects().length);
+      const first=items[0],last=items.at(-1);
+      if(!$('course-sidebar').contains(document.activeElement)){event.preventDefault();first?.focus();}
+      else if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+    }
+  });
+  window.addEventListener('hashchange',()=>{
+    if(!lessons.length||!readRoute())return;
+    topic='all';currentId=saved.last[mode];
+    if(!bank.some(q=>inScope(q)&&q.type===mode))mode=bank.find(inScope)?.type||'mcq';
+    renderLesson();updateFilters();render();closeSidebar(false);focusPage();
+  });
+  $('practice-scope').addEventListener('change',()=>{practiceScope=$('practice-scope').value;topic='all';currentId=null;if(!bank.some(q=>inScope(q)&&q.type===mode))mode=bank.find(inScope)?.type||'mcq';renderShell();updateFilters();render();syncRoute();});
   $('continue-concept').addEventListener('click',()=>moveConcept(1));
   $('trace-button').addEventListener('click',()=>{const q=current();if(!q||q.type!=='code')return;$('trace-panel').hidden=false;$('trace-case').replaceChildren(...q.cases.map((c,i)=>{const o=node('option',c.name);o.value=i;return o;}));runTrace();});
   $('trace-run').addEventListener('click',runTrace);$('trace-step').addEventListener('input',showTraceStep);
@@ -371,9 +487,9 @@
       const incoming=engine.validateBank(JSON.parse(await file.text()));
       const combined=engine.validateBank({schemaVersion:1,questions:[...bank,...incoming.questions]});
       bank=combined.questions;for(const q of incoming.questions)fingerprints.set(q.id,fingerprint(q));
-      lessonId='all';topic='all';mode=incoming.questions[0].type;currentId=incoming.questions[0].id;
+      lessonId='all';stepId=null;view='practice';topic='all';mode=incoming.questions[0].type;currentId=incoming.questions[0].id;
       $('import-status').textContent=`Added ${incoming.questions.length} questions for this session. The first imported question is open under All practice.`;
-      renderLesson();updateFilters();render();
+      renderLesson();updateFilters();render();syncRoute();focusPage();
     } catch(e){$('import-status').textContent='Bank not added: '+e.message;}
     event.target.value='';
   });

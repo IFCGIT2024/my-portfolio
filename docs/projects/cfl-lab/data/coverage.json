@@ -1,0 +1,1339 @@
+[
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 1,
+    "lessons": [],
+    "status": "cover",
+    "topic": "Title and attribution"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 2,
+    "lessons": [
+      "01",
+      "02",
+      "03",
+      "04"
+    ],
+    "status": "outcomes",
+    "topic": "Learning outcomes mapped to lessons"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 3,
+    "lessons": [
+      "01",
+      "06"
+    ],
+    "status": "concept",
+    "topic": "Limits of regular languages and nesting"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 4,
+    "lessons": [
+      "01",
+      "06"
+    ],
+    "status": "examples",
+    "topic": "Balanced structure and matching block counts"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 5,
+    "lessons": [
+      "01",
+      "05",
+      "06"
+    ],
+    "status": "intuition",
+    "topic": "Dependency intuition; clarified as design clue, not characterization"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 6,
+    "lessons": [
+      "02"
+    ],
+    "status": "concept",
+    "topic": "Grammar specifies syntax, not semantic plausibility"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 7,
+    "lessons": [
+      "02",
+      "03",
+      "07"
+    ],
+    "status": "example",
+    "topic": "Arithmetic CFG and syntax"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 8,
+    "lessons": [
+      "02"
+    ],
+    "status": "definition",
+    "topic": "Formal CFG tuple and production shape"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 9,
+    "lessons": [
+      "02",
+      "07"
+    ],
+    "status": "example",
+    "topic": "Explicit arithmetic grammar components"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 10,
+    "lessons": [
+      "02"
+    ],
+    "status": "notation",
+    "topic": "Alternatives, BNF and optional components"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 11,
+    "lessons": [
+      "03"
+    ],
+    "status": "section",
+    "topic": "Derivation divider"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 12,
+    "lessons": [
+      "03"
+    ],
+    "status": "diagram",
+    "topic": "Single-occurrence rewriting diagram"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 13,
+    "lessons": [
+      "03"
+    ],
+    "status": "definition",
+    "topic": "Derivation and sentential form"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 14,
+    "lessons": [
+      "03"
+    ],
+    "status": "repeat",
+    "topic": "Rewriting diagram with sentential-form label"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 15,
+    "lessons": [
+      "03",
+      "04"
+    ],
+    "status": "worked-example",
+    "topic": "Expression derivation"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 16,
+    "lessons": [
+      "03",
+      "04"
+    ],
+    "status": "practice",
+    "topic": "Larger expression derivation"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 17,
+    "lessons": [
+      "01",
+      "03"
+    ],
+    "status": "definition",
+    "topic": "Derivability and generated-language definition"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 18,
+    "lessons": [
+      "01",
+      "02",
+      "05",
+      "06"
+    ],
+    "status": "example",
+    "topic": "Equal-block grammar; epsilon alphabet slip corrected"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 19,
+    "lessons": [
+      "01",
+      "06"
+    ],
+    "status": "example",
+    "topic": "Even palindromes; epsilon alphabet slip corrected"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 20,
+    "lessons": [
+      "01",
+      "05"
+    ],
+    "status": "relationship",
+    "topic": "Regular languages are context-free; strict containment"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 21,
+    "lessons": [
+      "04"
+    ],
+    "status": "section",
+    "topic": "Parse-tree divider"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 22,
+    "lessons": [
+      "04"
+    ],
+    "status": "motivation",
+    "topic": "Tree representation of syntax"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 23,
+    "lessons": [
+      "04"
+    ],
+    "status": "definition",
+    "topic": "Root, children, terminals and yield"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 24,
+    "lessons": [
+      "04",
+      "07"
+    ],
+    "status": "worked-example",
+    "topic": "Expression parse tree"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 25,
+    "lessons": [
+      "03",
+      "04"
+    ],
+    "status": "practice",
+    "topic": "Larger expression parse tree"
+  },
+  {
+    "deck": "Context Free Languages.pdf",
+    "page": 26,
+    "lessons": [],
+    "status": "next-lecture",
+    "topic": "Pushdown automata preview"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 1,
+    "lessons": [],
+    "status": "cover",
+    "topic": "Title and attribution"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 2,
+    "lessons": [
+      "08"
+    ],
+    "status": "outcomes",
+    "topic": "Parser learning outcomes"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 3,
+    "lessons": [
+      "08"
+    ],
+    "status": "section",
+    "topic": "What is a parser divider"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 4,
+    "lessons": [
+      "08"
+    ],
+    "status": "diagram",
+    "topic": "Compilation phases; visually inspected"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 5,
+    "lessons": [
+      "02",
+      "04",
+      "08"
+    ],
+    "status": "example",
+    "topic": "Code to token stream"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 6,
+    "lessons": [
+      "04",
+      "08"
+    ],
+    "status": "diagram",
+    "topic": "Token stream to nested program tree; visually inspected"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 7,
+    "lessons": [
+      "03",
+      "04",
+      "08"
+    ],
+    "status": "recap",
+    "topic": "Expression derivation and tree"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 8,
+    "lessons": [
+      "03",
+      "08"
+    ],
+    "status": "concept",
+    "topic": "Parser performs a derivation"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 9,
+    "lessons": [
+      "08"
+    ],
+    "status": "section",
+    "topic": "Efficient grammars divider"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 10,
+    "lessons": [
+      "08"
+    ],
+    "status": "definition",
+    "topic": "LL(k)/LR(k); LR wording clarified as reversed rightmost derivation"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 11,
+    "lessons": [
+      "03",
+      "07"
+    ],
+    "status": "worked-example",
+    "topic": "Leftmost arithmetic derivation and precedence grammar"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 12,
+    "lessons": [
+      "03",
+      "07"
+    ],
+    "status": "worked-example",
+    "topic": "Rightmost derivation"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 13,
+    "lessons": [
+      "08"
+    ],
+    "status": "section",
+    "topic": "LL(1) divider"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 14,
+    "lessons": [
+      "08"
+    ],
+    "status": "example",
+    "topic": "Prefix grammar target"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 15,
+    "lessons": [
+      "08"
+    ],
+    "status": "worked-example",
+    "topic": "Prefix leftmost derivation"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 16,
+    "lessons": [
+      "08"
+    ],
+    "status": "comparison",
+    "topic": "Iterative versus recursive descent"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 17,
+    "lessons": [
+      "08"
+    ],
+    "status": "algorithm",
+    "topic": "Iterative parser; full end conditions supplied"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 18,
+    "lessons": [
+      "08"
+    ],
+    "status": "worked-example",
+    "topic": "Iterative parser and tree"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 19,
+    "lessons": [
+      "08"
+    ],
+    "status": "question",
+    "topic": "Choosing a production"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 20,
+    "lessons": [
+      "08"
+    ],
+    "status": "definition",
+    "topic": "Predictor sets and disjointness"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 21,
+    "lessons": [
+      "08"
+    ],
+    "status": "repeat",
+    "topic": "Iterative algorithm plus predictor table"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 22,
+    "lessons": [
+      "08"
+    ],
+    "status": "algorithm",
+    "topic": "Generic recursive descent"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 23,
+    "lessons": [
+      "08"
+    ],
+    "status": "worked-example",
+    "topic": "Grammar decomposed into operation variables"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 24,
+    "lessons": [
+      "08"
+    ],
+    "status": "worked-example",
+    "topic": "Lookahead-based parse_S"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 25,
+    "lessons": [
+      "08"
+    ],
+    "status": "worked-example",
+    "topic": "parse_Add and two recursive operands; visually inspected"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 26,
+    "lessons": [
+      "08"
+    ],
+    "status": "repeat",
+    "topic": "parse_S with complete Add subtree"
+  },
+  {
+    "deck": "Parsers .pdf",
+    "page": 27,
+    "lessons": [],
+    "status": "next-lecture",
+    "topic": "Equivalence theorem preview"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 1,
+    "lessons": [],
+    "status": "noninstructional",
+    "topic": "title"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 2,
+    "lessons": [
+      "09",
+      "10"
+    ],
+    "status": "covered",
+    "topic": "outcomes"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 3,
+    "lessons": [
+      "09"
+    ],
+    "status": "covered",
+    "topic": "motivation"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 4,
+    "lessons": [
+      "09",
+      "15"
+    ],
+    "status": "covered",
+    "topic": "transition labels and nondeterministic midpoint"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 5,
+    "lessons": [
+      "09",
+      "15"
+    ],
+    "status": "covered",
+    "topic": "animated successful trace"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 6,
+    "lessons": [
+      "09",
+      "15"
+    ],
+    "status": "covered",
+    "topic": "animated rejection trace"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 7,
+    "lessons": [
+      "09"
+    ],
+    "status": "covered",
+    "topic": "formal tuple"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 8,
+    "lessons": [
+      "09"
+    ],
+    "status": "covered",
+    "topic": "transition fields"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 9,
+    "lessons": [
+      "09"
+    ],
+    "status": "covered",
+    "topic": "repeated formal tuple"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 10,
+    "lessons": [
+      "10",
+      "16"
+    ],
+    "status": "covered",
+    "topic": "acceptance modes"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 11,
+    "lessons": [
+      "10"
+    ],
+    "status": "covered",
+    "topic": "example acceptance conversion"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 12,
+    "lessons": [
+      "10",
+      "12",
+      "16"
+    ],
+    "status": "covered",
+    "topic": "equal-block construction exercise"
+  },
+  {
+    "deck": "Pushdown Automata.pdf",
+    "page": 13,
+    "lessons": [],
+    "status": "noninstructional",
+    "topic": "next-lecture title"
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 1,
+    "lessons": [
+      "17"
+    ],
+    "status": "title",
+    "topic": "Title announces CFG/PDA equivalence and strict DPDA distinction."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 2,
+    "lessons": [
+      "17",
+      "20"
+    ],
+    "status": "outcomes",
+    "topic": "Equivalence and DPDA learning outcomes."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 3,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "Derivability and L(G) definitions."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 4,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "Three equivalent descriptions."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 5,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "CFL/CFG equivalence by definition."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 6,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "Leftmost derivation invariant; corrected top-of-stack wording to allow terminals."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 7,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "Expression derivation concept; fresh internally consistent examples."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 8,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "Horizontal stack with top at left."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 9,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "Whole-string pushes and expansion into reversed individual pushes."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 10,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "Encoding sentential forms in stack."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 11,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "One-time initialisation above protected preloaded #, preventing zero-step empty-stack acceptance."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 12,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "One loop per grammar production."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 13,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "One matching loop per terminal."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 14,
+    "lessons": [
+      "17"
+    ],
+    "status": "covered",
+    "topic": "Complete generic recognizer with protected initialization, final marker cleanup and explicit acceptance."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 15,
+    "lessons": [
+      "18"
+    ],
+    "status": "covered",
+    "topic": "Full trace connects derivation, stack, consumed terminals and remaining input; original inconsistent 42/14 and parentheses trace replaced by consistent bracket example."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 16,
+    "lessons": [
+      "18"
+    ],
+    "status": "covered",
+    "topic": "Full trace connects derivation, stack, consumed terminals and remaining input; original inconsistent 42/14 and parentheses trace replaced by consistent bracket example."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 17,
+    "lessons": [
+      "18"
+    ],
+    "status": "covered",
+    "topic": "Full trace connects derivation, stack, consumed terminals and remaining input; original inconsistent 42/14 and parentheses trace replaced by consistent bracket example."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 18,
+    "lessons": [
+      "18"
+    ],
+    "status": "covered",
+    "topic": "Full trace connects derivation, stack, consumed terminals and remaining input; original inconsistent 42/14 and parentheses trace replaced by consistent bracket example."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 19,
+    "lessons": [
+      "18"
+    ],
+    "status": "covered",
+    "topic": "Full trace connects derivation, stack, consumed terminals and remaining input; original inconsistent 42/14 and parentheses trace replaced by consistent bracket example."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 20,
+    "lessons": [
+      "18"
+    ],
+    "status": "covered",
+    "topic": "Full trace connects derivation, stack, consumed terminals and remaining input; original inconsistent 42/14 and parentheses trace replaced by consistent bracket example."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 21,
+    "lessons": [
+      "19"
+    ],
+    "status": "covered",
+    "topic": "PDA normalization, pair-state variable meaning, full generic rules, miniature nested and concatenated examples, soundness/completeness proof outline."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 22,
+    "lessons": [
+      "19"
+    ],
+    "status": "covered",
+    "topic": "PDA normalization, pair-state variable meaning, full generic rules, miniature nested and concatenated examples, soundness/completeness proof outline."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 23,
+    "lessons": [
+      "20"
+    ],
+    "status": "section divider",
+    "topic": "Deterministic PDA section."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 24,
+    "lessons": [
+      "20"
+    ],
+    "status": "covered with clarification",
+    "topic": "No enabled competing moves; standard epsilon move condition corrects blanket no-epsilon shorthand."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 25,
+    "lessons": [
+      "20",
+      "16"
+    ],
+    "status": "covered",
+    "topic": "Visible separator determines deterministic phase change; marked reverse matching in 20 and count constructions in 16."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 26,
+    "lessons": [
+      "20",
+      "16"
+    ],
+    "status": "covered with convention clarification",
+    "topic": "Independent matched blocks; explicit standard empty-stack DPDA prefix-free caveat and end-marker repair. Also independent matching in 11/12 where applicable."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 27,
+    "lessons": [
+      "20"
+    ],
+    "status": "covered",
+    "topic": "Unmarked even palindromes distinguish NPDA and DPDA; distinguish intuition from full impossibility proof."
+  },
+  {
+    "deck": "The Equivalence Theorem for CFLs and PDAs.pdf",
+    "page": 28,
+    "lessons": [
+      "21"
+    ],
+    "status": "next-topic pointer",
+    "topic": "Introduces pumping lemma, handled in later course lessons; missing pumping deck remains unreviewed."
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 1,
+    "lessons": [],
+    "status": "noninstructional",
+    "topic": "title"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 2,
+    "lessons": [
+      "11",
+      "12",
+      "13"
+    ],
+    "status": "covered",
+    "topic": "outcomes"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 3,
+    "lessons": [
+      "11"
+    ],
+    "status": "covered",
+    "topic": "independent matched-block composition"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 4,
+    "lessons": [
+      "11"
+    ],
+    "status": "covered",
+    "topic": "pattern definitions"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 5,
+    "lessons": [
+      "11"
+    ],
+    "status": "covered",
+    "topic": "grammar decomposition"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 6,
+    "lessons": [
+      "11",
+      "15"
+    ],
+    "status": "covered",
+    "topic": "alternation"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 7,
+    "lessons": [
+      "11"
+    ],
+    "status": "covered",
+    "topic": "repetition"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 8,
+    "lessons": [
+      "12",
+      "13",
+      "16"
+    ],
+    "status": "covered",
+    "topic": "weighted and inequality variants"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 9,
+    "lessons": [
+      "12",
+      "15"
+    ],
+    "status": "covered",
+    "topic": "matching ratios palindromes inequalities"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 10,
+    "lessons": [
+      "11",
+      "13"
+    ],
+    "status": "covered",
+    "topic": "nested dependency example"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 11,
+    "lessons": [
+      "11",
+      "13"
+    ],
+    "status": "covered",
+    "topic": "nested fixed-middle exercise"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 12,
+    "lessons": [
+      "11"
+    ],
+    "status": "covered",
+    "topic": "repeated pattern definitions"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 13,
+    "lessons": [
+      "10",
+      "11",
+      "13"
+    ],
+    "status": "covered",
+    "topic": "push/process/pop interpretation"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 14,
+    "lessons": [
+      "11"
+    ],
+    "status": "covered",
+    "topic": "concatenated PDA"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 15,
+    "lessons": [
+      "11",
+      "13"
+    ],
+    "status": "covered",
+    "topic": "nested PDA"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 16,
+    "lessons": [
+      "11",
+      "14",
+      "15"
+    ],
+    "status": "covered",
+    "topic": "composition"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 17,
+    "lessons": [
+      "10",
+      "11",
+      "13",
+      "14",
+      "16"
+    ],
+    "status": "covered",
+    "topic": "initial marker and different inner markers"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 18,
+    "lessons": [
+      "11",
+      "13"
+    ],
+    "status": "covered",
+    "topic": "nested fixed-middle PDA exercise"
+  },
+  {
+    "deck": "Designing Grammars and PDAs.pdf",
+    "page": 19,
+    "lessons": [],
+    "status": "noninstructional",
+    "topic": "next-lecture title"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 1,
+    "lessons": [
+      "21"
+    ],
+    "status": "title or learning objectives",
+    "topic": "Purpose and learning outcomes"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 2,
+    "lessons": [
+      "21"
+    ],
+    "status": "title or learning objectives",
+    "topic": "Purpose and learning outcomes"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 3,
+    "lessons": [
+      "21",
+      "22"
+    ],
+    "status": "covered",
+    "topic": "Non-CFL motivation and triple matching"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 4,
+    "lessons": [
+      "21"
+    ],
+    "status": "review connected to proof",
+    "topic": "Grammar and parse-tree structure"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 5,
+    "lessons": [
+      "21"
+    ],
+    "status": "review connected to proof",
+    "topic": "Grammar and parse-tree structure"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 6,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Regular vs CFL pumping lemma"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 7,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Formal CFL lemma and Greek notation"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 8,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Parse-tree proof: branching bound, depth, repeated variable, five pieces, subtree replacement, nonempty pumping and bounded window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 9,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Parse-tree proof: branching bound, depth, repeated variable, five pieces, subtree replacement, nonempty pumping and bounded window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 10,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Parse-tree proof: branching bound, depth, repeated variable, five pieces, subtree replacement, nonempty pumping and bounded window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 11,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Parse-tree proof: branching bound, depth, repeated variable, five pieces, subtree replacement, nonempty pumping and bounded window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 12,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Parse-tree proof: branching bound, depth, repeated variable, five pieces, subtree replacement, nonempty pumping and bounded window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 13,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Parse-tree proof: branching bound, depth, repeated variable, five pieces, subtree replacement, nonempty pumping and bounded window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 14,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Parse-tree proof: branching bound, depth, repeated variable, five pieces, subtree replacement, nonempty pumping and bounded window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 15,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Parse-tree proof: branching bound, depth, repeated variable, five pieces, subtree replacement, nonempty pumping and bounded window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 16,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Parse-tree proof: branching bound, depth, repeated variable, five pieces, subtree replacement, nonempty pumping and bounded window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 17,
+    "lessons": [
+      "21"
+    ],
+    "status": "covered",
+    "topic": "Necessary property is not a biconditional"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 18,
+    "lessons": [
+      "22"
+    ],
+    "status": "section title",
+    "topic": "Using the lemma"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 19,
+    "lessons": [
+      "22"
+    ],
+    "status": "covered with corrected exhaustive argument",
+    "topic": "Equal three-block proof; pure and mixed pieces; impossible three-block window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 20,
+    "lessons": [
+      "22"
+    ],
+    "status": "covered with corrected exhaustive argument",
+    "topic": "Equal three-block proof; pure and mixed pieces; impossible three-block window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 21,
+    "lessons": [
+      "22"
+    ],
+    "status": "covered with corrected exhaustive argument",
+    "topic": "Equal three-block proof; pure and mixed pieces; impossible three-block window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 22,
+    "lessons": [
+      "22"
+    ],
+    "status": "covered with corrected exhaustive argument",
+    "topic": "Equal three-block proof; pure and mixed pieces; impossible three-block window"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 23,
+    "lessons": [
+      "23"
+    ],
+    "status": "covered with explicit count changes",
+    "topic": "Chained inequalities; case-dependent exponents; all missing-symbol and mixed-piece cases"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 24,
+    "lessons": [
+      "23"
+    ],
+    "status": "covered with explicit count changes",
+    "topic": "Chained inequalities; case-dependent exponents; all missing-symbol and mixed-piece cases"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 25,
+    "lessons": [
+      "23"
+    ],
+    "status": "covered with explicit count changes",
+    "topic": "Chained inequalities; case-dependent exponents; all missing-symbol and mixed-piece cases"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 26,
+    "lessons": [
+      "23"
+    ],
+    "status": "covered with explicit count changes",
+    "topic": "Chained inequalities; case-dependent exponents; all missing-symbol and mixed-piece cases"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 27,
+    "lessons": [
+      "23"
+    ],
+    "status": "covered with explicit count changes",
+    "topic": "Chained inequalities; case-dependent exponents; all missing-symbol and mixed-piece cases"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 28,
+    "lessons": [
+      "23"
+    ],
+    "status": "covered with explicit count changes",
+    "topic": "Chained inequalities; case-dependent exponents; all missing-symbol and mixed-piece cases"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 29,
+    "lessons": [
+      "23"
+    ],
+    "status": "covered with explicit count changes",
+    "topic": "Chained inequalities; case-dependent exponents; all missing-symbol and mixed-piece cases"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 30,
+    "lessons": [
+      "24"
+    ],
+    "status": "hint completed into full direct proof",
+    "topic": "Copy language; windows in first half, second half, or crossing boundary"
+  },
+  {
+    "deck": "Pumping Lemma for CFLs.pdf",
+    "page": 31,
+    "lessons": [
+      "24"
+    ],
+    "status": "next-module announcement, no assessed mathematical content",
+    "topic": "Transition to Turing machines"
+  }
+]

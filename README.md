@@ -20,6 +20,7 @@ The [papers collection](https://ifcgit2024.github.io/my-portfolio/papers/) inclu
 | Project | About | Source |
 | --- | --- | --- |
 | [C → Assembly Lab](https://ifcgit2024.github.io/my-portfolio/docs/projects/assembly-lab/) | A course from first concepts to C translation, memory, bit operations, and function calls | [Project & tests](docs/projects/assembly-lab/) |
+| [Context-Free Languages Lab](https://ifcgit2024.github.io/my-portfolio/docs/projects/cfl-lab/) | A guided course in grammars, parsing, pushdown automata and pumping proofs, with interactive traces | [Project & tests](docs/projects/cfl-lab/) |
 | [Discrete mathematics for CS](https://ifcgit2024.github.io/my-portfolio/docs/projects/discrete-math/) | 30 classes connecting formal proof and Java | [Project](docs/projects/discrete-math/) |
 | [DataGuard Academy](https://ifcgit2024.github.io/my-portfolio/bank-interview-prep/) | Data classification, security, SQL, Python, and interview preparation | [Project](bank-interview-prep/) |
 
@@ -88,3 +89,4 @@ Commit the updated database and export together. The export retains the 140 prog
 ## Checks
 
 Assembly Lab has its own [review instructions and tests](docs/projects/assembly-lab/README.md). The property calculator’s existing formula suite is available at `docs/projects/re-analyzer/index.html?test=true`. Other projects keep their own checks and documentation alongside their source.
+

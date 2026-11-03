@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import re
 from html.parser import HTMLParser
 root=Path(__file__).resolve().parents[1]
 lessons=json.loads((root/'data/lessons.json').read_text())
@@ -11,9 +12,13 @@ class Checker(HTMLParser):
 checker=Checker()
 for l in lessons:
  assert len(l['worked']['steps'])>=4 and len(l['practice'])>=2
- assert all(l.get(k)for k in ['module','title','summary','goals','sections','check','transfer','sources'])
+ assert all(l.get(k)for k in ['module','title','summary','goals','setup','bridge','sections','check','transfer','sources'])
  serialized=json.dumps(l,ensure_ascii=False)
- assert 'assignment'not in serialized.lower(),l['id']
+ # Reference URLs may contain /Assignments/; this guard concerns lesson prose.
+ prose=re.sub(r'https?://[^\s"<>]+','',serialized)
+ assert 'assignment'not in prose.lower(),l['id']
+ checker.feed(l['setup']);checker.feed(l['worked']['intro'])
+ for key in ['prompt','answer','explanation']:checker.feed(l['check'][key])
  for s in l['sections']:checker.feed(s['html'])
  for s in l['worked']['steps']:checker.feed(s['html'])
  for p in l['practice']:

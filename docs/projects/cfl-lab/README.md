@@ -1,6 +1,8 @@
 # Context-Free Languages Lab
 
-A self-contained CSCI 2115 learning path from language notation to grammars, parse trees, pushdown automata, grammar-machine conversions, and non-context-free proofs. The interface follows the portfolio's Assembly Lab: searchable navigation, a clear reading surface, complete worked examples, one-step controls, saved written practice, and independent transfer problems.
+A self-contained CSCI 2115 learning path from language notation to grammars, parse trees, pushdown automata, grammar-machine conversions, and non-context-free proofs. Every lesson opens with a connection to the earlier material and explanations of the notation needed for its first example. Worked examples supply their starting grammar or machine; full trace solutions separate expansion, matching and acceptance. Each lesson closes with the idea carried into the next lesson. Advanced extensions and the cumulative review are optional.
+
+The interface follows the portfolio's Assembly Lab: searchable navigation, a clear reading surface, complete worked examples, one-step controls, saved written practice, and independent transfer problems.
 
 The course contains 24 lessons, 118 worked steps, 64 guided problems, 24 understanding checks and 24 independent problems. Six supplied slide decks (144 pages) informed the scope. A complete PDF-page coverage map is available in `coverage.html` and `data/coverage.json`. Fresh examples and prerequisite explanations make the lessons usable without the source slides. The uploaded source PDFs are not redistributed.
 

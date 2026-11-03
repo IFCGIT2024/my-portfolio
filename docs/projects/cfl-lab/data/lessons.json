@@ -30,7 +30,7 @@
     ],
     "worked": {
       "title": "Classify strings in a two-block language",
-      "intro": "Use L = {aⁱbʲ : i ≥ 1 and j = 2i}. Decide whether aabbbb belongs.",
+      "intro": "<p>Use <code>L = {aⁱbʲ : i ≥ 1 and j = 2i}</code>. Decide whether <code>aabbbb</code> belongs by checking alphabet, block order and both numeric conditions. We will work through the whole check before you try another string.</p>",
       "steps": [
         {
           "title": "Read the definition",
@@ -85,7 +85,9 @@
           20
         ]
       }
-    ]
+    ],
+    "setup": "<p>A <strong>string</strong> is a finite sequence of symbols, such as <code>aabbbb</code>. A <strong>language</strong> is a set of strings. This first lesson asks whether a particular string obeys a definition; no grammar or machine construction is needed yet.</p><table><thead><tr><th>Notation in the first example</th><th>Read it in words</th></tr></thead><tbody><tr><td><code>{aⁱbʲ : i ≥ 1 and j = 2i}</code></td><td>All strings made of i copies of a followed by j copies of b, such that i is at least 1 and j is twice i.</td></tr><tr><td><code>aⁱbʲ</code></td><td>Write all the as first, then all the bs. The superscripts count repetitions; they are not arithmetic powers.</td></tr><tr><td><code>:</code>, <code>≥</code>, <code>=</code></td><td>Such that; at least; equal to. The counts i and j are integers.</td></tr></tbody></table><p>For <code>aabbbb</code>, count two as and four bs, then check order and the equation separately. A count of zero means that block is absent. <code>ε</code> names the string with no symbols.</p><p>In later shorthand, <code>a*</code> means zero or more as, and <code>a*b*</code> means a block of zero or more as followed by a block of zero or more bs. A <strong>concatenation</strong> joins strings in order: ab followed by c gives abc.</p>",
+    "bridge": "Next, a grammar will generate strings rather than simply classify them. Keep the alphabet, order, count conditions and smallest cases visible when you read its rules."
   },
   {
     "id": "02",
@@ -109,16 +111,16 @@
       },
       {
         "title": "What “context-free” means",
-        "html": "<p>If <code>X → ρ</code> is a rule, an occurrence of X may be replaced by ρ regardless of what is immediately before or after it. In <code>αXβ</code>, only the chosen X changes: the result is <code>αρβ</code>.</p><p>Do not replace all identical variables at once. With <code>S → SS</code>, the sentential form <code>SS</code> contains two separate occurrences. Replacing the left occurrence using <code>S → a</code> produces <code>aS</code>, not <code>aa</code>.</p>"
+        "html": "<p>If <code>X → ρ</code> is a rule, an occurrence of X may be replaced by ρ regardless of what is immediately before or after it. In <code>αXβ</code>, only the chosen X changes: the result is <code>αρβ</code>.</p><p>Do not replace all identical variables at once. With <code>S → SS</code>, the sentential form <code>SS</code> contains two separate occurrences. Replacing the left occurrence using <code>S → a</code> produces <code>aS</code>, not <code>aa</code>.</p><p>In this general notation, α, β and ρ (alpha, beta and rho) name whole strings of symbols. They are placeholders for the surrounding parts and replacement, not additional grammar terminals. “Disjoint” in the four-part definition means no symbol is both a variable and a terminal.</p>"
       },
       {
         "title": "Tokens, spelling and meaning",
-        "html": "<p>In a programming grammar, <code>id</code> represents a token category. <code>cursor</code> and <code>result</code> may both be id tokens, with different lexemes. Punctuation such as <code>(</code>, <code>)</code>, <code>{</code> and <code>,</code> is terminal syntax.</p><p>A grammar checks structure. A syntactically valid statement need not make semantic sense: a grammar may generate an expression that refers to an undeclared name. Similarly, an English grammar can generate a grammatical but implausible sentence.</p><p>BNF often writes <code>::=</code> in place of →. Optional or repeated components in extended notation must ultimately be understood as explicit alternatives and recursion.</p>"
+        "html": "<p>In a programming grammar, <code>id</code> represents a token category. <code>cursor</code> and <code>result</code> may both be id tokens, with different <strong>lexemes</strong>, meaning their actual source text. Punctuation such as <code>(</code>, <code>)</code>, <code>{</code> and <code>,</code> is terminal syntax.</p><p>A grammar checks structure. A syntactically valid statement need not make semantic sense: a grammar may generate an expression that refers to an undeclared name. Similarly, an English grammar can generate a grammatical but implausible sentence.</p><p>BNF often writes <code>::=</code> in place of →. Optional or repeated components in extended notation must ultimately be understood as explicit alternatives and recursion.</p>"
       }
     ],
     "worked": {
       "title": "Explain every part of a small list grammar",
-      "intro": "Use S → [ L ], L → ε | id T, T → ε | , id T. The target token sequence is [ id , id ].",
+      "intro": "<p>Start with the complete supplied grammar and target:</p><pre>Start variable: S\nS → [ L ]\nL → ε | id T\nT → ε | , id T\nTarget: [ id , id ]</pre><p>Each id is one item token. We will apply rules to generate this exact sequence; the square brackets in the grammar are literal terminals, not notation for an optional component.</p>",
       "steps": [
         {
           "title": "Separate the symbols",
@@ -171,7 +173,9 @@
           18
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 1 described which strings belong to a language. A <strong>grammar</strong> supplies rules that generate them. A <strong>variable</strong> (or nonterminal) is a symbol that still needs a rule; a <strong>terminal</strong> is an output symbol that stays as it is. Choose a <strong>start variable</strong>, then replace one variable occurrence at a time.</p><table><thead><tr><th>Symbol</th><th>Meaning</th></tr></thead><tbody><tr><td><code>S → 0S1</code></td><td>A rule: S may be replaced by the three symbols 0, S, 1, in that order.</td></tr><tr><td><code>S → 0S1 | ε</code></td><td>Two alternative rules. The vertical bar means “or”; ε replaces S by no symbols.</td></tr><tr><td><code>S ⇒ 0S1</code></td><td>One actual replacement using a rule. We use → for rules and ⇒ for steps in a derivation.</td></tr><tr><td><code>id</code></td><td>One terminal token for a name or item. A multi-letter token label still counts as one symbol.</td></tr></tbody></table><p>In the list example, S is the whole list, L is its contents, and T is the remaining tail after an item. The brackets and commas are terminals. An empty tail ends the list; it does not erase punctuation already generated. You will read and apply supplied rules here. Grammar design begins in lesson 5.</p>",
+    "bridge": "Carry forward the difference between a production rule and an actual replacement. Lesson 3 records those replacements as a derivation, keeping the whole current string visible."
   },
   {
     "id": "03",
@@ -187,7 +191,7 @@
     "sections": [
       {
         "title": "Derivation, sentential form and membership",
-        "html": "<p>A derivation is a sequence of rule applications beginning with the start variable. A sentential form is any string of terminals and variables reached in that sequence. When no variables remain, it is a generated terminal string.</p><p><code>α ⇒ β</code> means one rule application takes α to β. <code>α ⇒* β</code> means zero or more applications. The star includes zero steps: <code>S ⇒* S</code> is true. Membership is defined by <code>L(G) = {w ∈ Σ* : S ⇒* w}</code>.</p><p>A derivation proves a particular string belongs. Giving several examples does not prove the grammar generates exactly a proposed language; that stronger statement needs both directions, developed in the grammar-design lesson.</p>"
+        "html": "<p>A derivation is a sequence of rule applications beginning with the start variable. A sentential form is any string of terminals and variables reached in that sequence. When no variables remain, it is a generated terminal string.</p><p><code>α ⇒ β</code> means one rule application takes α to β. <code>α ⇒* β</code> means zero or more applications. The star includes zero steps: <code>S ⇒* S</code> is true. Membership is defined by <code>L(G) = {w ∈ Σ* : S ⇒* w}</code>.</p><p>A derivation proves a particular string belongs. Giving several examples does not prove the grammar generates exactly a proposed language; that stronger statement needs both directions, developed in the grammar-design lesson.</p><p>Read the membership definition aloud: <strong>the language generated by G is the set of terminal strings w for which some derivation from S produces w.</strong> <code>G</code> is the grammar; <code>L(G)</code> is the resulting language. The condition <code>w ∈ Σ*</code> excludes unfinished strings containing variables. Thus <code>S ⇒* S</code> is true, but S itself is not a terminal word of L(G). ε belongs only if S can derive ε.</p>"
       },
       {
         "title": "Keep the whole current string visible",
@@ -204,7 +208,7 @@
     ],
     "worked": {
       "title": "Leftmost and rightmost derivations of 2 + 3 * 4",
-      "intro": "Use E → E + T | T, T → T * F | F, F → number | ( E ). Treat 2,3,4 as number tokens with their lexemes shown.",
+      "intro": "<p>Use this supplied grammar, with start variable E:</p><pre>E → E + T | T\nT → T * F | F\nF → number | ( E )\nTarget: 2 + 3 * 4</pre><p>The expression is grouped as 2 + (3 * 4). E combines terms using +; T combines factors using *; F supplies a number or a parenthesized expression. The rule F → number is shown with each token’s actual text below. We will finish the same production structure in two different orders.</p>",
       "steps": [
         {
           "title": "Identify the outer structure",
@@ -267,7 +271,9 @@
           12
         ]
       }
-    ]
+    ],
+    "setup": "<p>You can now apply a grammar rule. A <strong>derivation</strong> records those replacements in order, beginning at the start variable. Each whole intermediate string is a <strong>sentential form</strong>, which may still contain variables.</p><table><thead><tr><th>Notation or term</th><th>Meaning in this lesson</th></tr></thead><tbody><tr><td><code>α ⇒ β</code></td><td>One rule application changes the whole current string α into β. Alpha and beta are names for strings, not symbols to generate.</td></tr><tr><td><code>⇒*</code></td><td>Zero or more applications. In particular, S ⇒* S uses no rule.</td></tr><tr><td>Leftmost / rightmost</td><td>Choose the leftmost / rightmost remaining variable occurrence, ignoring terminals.</td></tr><tr><td><code>E</code>, <code>T</code>, <code>F</code></td><td>Variables for an expression, a term, and a factor. Their exact permitted replacements are supplied in the example.</td></tr></tbody></table><p>A <code>number</code> token can have actual text 2, 3 or 4. In the worked derivations we show that text directly: a step written <code>F ⇒ 2</code> uses <code>F → number</code> for the token whose text is 2. You are not inventing a new F → 2 production. Parse-tree terminology is introduced next; this lesson only needs the sequence of replacements.</p>",
+    "bridge": "A derivation shows a sequence of replacements. Lesson 4 keeps those same choices in a tree, so you can see which variable generated each part."
   },
   {
     "id": "04",
@@ -393,7 +399,9 @@
           8
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 3 showed each whole string after a rule application. Here you keep the same rule choices and draw how the replacement symbols belong under each variable. The first example repeats the familiar grammar and derivation before introducing tree terminology.</p><p>Follow the small complete tree first. The later program examples supply their own grammar and explain each new variable before practice uses it.</p>",
+    "bridge": "You now have a way to check a supplied grammar using its productions and yield. Lesson 5 asks you to choose the rules yourself from a language’s constraints."
   },
   {
     "id": "05",
@@ -426,7 +434,7 @@
     ],
     "worked": {
       "title": "Generate a smaller a block followed by a larger b block",
-      "intro": "Design a CFG for L = {aⁱbʲ : 0 ≤ i &lt; j}. This includes b and aabbb, but excludes ε and aabb.",
+      "intro": "<p>Target language: <code>L = {aⁱbʲ : 0 ≤ i &lt; j}</code>. The complete grammar we will build is:</p><pre>Start variable: S\nS → a S b | B\nB → b B | b</pre><p>S adds matched pairs; B supplies the extra bs. For the smallest allowed i = 0, the shortest word is b. For i = 2, one possible word is aabbb. The steps explain why these rules are chosen and why their base case must be nonempty.</p>",
       "steps": [
         {
           "title": "Separate equality from surplus",
@@ -446,7 +454,7 @@
         },
         {
           "title": "Justify exactness",
-          "html": "<p>Every derivation yields <code>aⁱbʳbⁱ = aⁱbⁱ⁺ʳ</code>, with r ≥ 1, so it is valid. Conversely, if i &lt; j, take r = j − i; use the matching rule i times, then generate r b symbols from B. Every valid string is covered.</p>"
+          "html": "<p>Every derivation yields <code>aⁱbʳbⁱ = aⁱbⁱ⁺ʳ</code>, with r ≥ 1, so it is valid. Conversely, if i &lt; j, take r = j − i; use the matching rule i times, then generate r b symbols from B. Every valid string is covered.</p><p>For an allowed pair i,j, the surplus is r = j − i. Generate r bs from B using B → bB exactly r − 1 times and then B → b once. This also handles r = 1: use the base immediately.</p>"
         }
       ]
     },
@@ -481,7 +489,9 @@
           20
         ]
       }
-    ]
+    ],
+    "setup": "<p>Up to now, the rules were supplied. Here you will <strong>design</strong> rules from a language definition. Start with what the shortest valid string must look like, then choose rules that add symbols without breaking its requirements.</p><table><thead><tr><th>New design term</th><th>Meaning</th></tr></thead><tbody><tr><td>Base case</td><td>A choice that ends the recursion, such as S → ε or S → ab.</td></tr><tr><td>Recursive rule</td><td>A rule that leaves a variable to expand again, such as S → aSb. Each use adds one a and one b.</td></tr><tr><td>Surplus</td><td>Extra symbols beyond the matched pairs. If j > i, write j = i + r with r ≥ 1.</td></tr><tr><td>Soundness / completeness</td><td>Every generated string is allowed / every allowed string can be generated. These are the two directions of an exact-language argument.</td></tr></tbody></table><p>The worked language has more bs than as. Make matched a/b pairs, then require at least one extra b. With i = 2 and j = 3, the surplus is r = 1. The same idea works for arbitrary counts.</p>",
+    "bridge": "The two essential questions remain: can a rule generate an invalid string, and can it miss a valid one? Lesson 6 applies the same questions to matching outer symbols and balanced components."
   },
   {
     "id": "06",
@@ -505,7 +515,7 @@
       },
       {
         "title": "Balanced means every prefix is safe",
-        "html": "<p>A parentheses string is balanced when its total number of opens equals its total number of closes and every prefix has at least as many opens as closes. The string <code>)(</code> has equal totals but fails at its first symbol.</p><pre>S → ( S ) S | ε</pre><p>For every nonempty balanced string, the first opening parenthesis has a unique matching close. The first S generates the balanced contents inside that pair; the second S generates the balanced remainder after the pair. This supports nesting and side-by-side groups.</p>"
+        "html": "<p>A parentheses string is balanced when its total number of opens equals its total number of closes and every prefix has at least as many opens as closes. The string <code>)(</code> has equal totals but fails at its first symbol.</p><pre>S → ( S ) S | ε</pre><p>For every nonempty balanced string, the first opening parenthesis has a unique matching close. The first S generates the balanced contents inside that pair; the second S generates the balanced remainder after the pair. This supports nesting and side-by-side groups.</p><p>To locate the first opening parenthesis’s matching close, start a depth count at 0. Add 1 for an open and subtract 1 for a close. The first return to 0 ends that first pair. In <code>()()</code> this happens after two symbols; in <code>(()())</code> it happens at the end.</p>"
       },
       {
         "title": "Alternative balanced grammar and its scope",
@@ -514,7 +524,7 @@
     ],
     "worked": {
       "title": "Generate (()()) and explain both S positions",
-      "intro": "Use S → ( S ) S | ε. Label variable occurrences during planning so the inside and remainder are not confused.",
+      "intro": "<p>Use <code>S → ( S ) S | ε</code>, with start variable S. The target is <code>(()())</code>. All parentheses are literal terminals; spaces around the symbols in the derivation are only for readability.</p><p>The first outer pair surrounds <code>()()</code>, and there is nothing after it. Within that contents string, the first pair is <code>()</code> and its remainder is another <code>()</code>. That gives the roles of the two S occurrences before any replacement is made.</p>",
       "steps": [
         {
           "title": "Split at the first matching close",
@@ -566,7 +576,9 @@
           19
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 5 used <code>S → aSb</code> to add related symbols on opposite sides of a variable. We now use that idea for nesting. A <strong>prefix</strong> is an initial part of a string. Parentheses are <strong>balanced</strong> when no prefix has more closes than opens and the final totals agree.</p><p>In <code>S → ( S ) S</code>, the first S generates the contents <em>inside</em> the new matching pair. The second S generates a balanced part <em>after</em> it. These are separate occurrences. The alternative S → ε lets either part be empty.</p><p>A <strong>palindrome</strong> reads the same forward and backward. It is a different condition from balanced parentheses or equal ordered blocks. <code>wᴿ</code> means reverse w: for w = 01, <code>wwᴿ = 0110</code>, whereas <code>ww = 0101</code>.</p>",
+    "bridge": "Inside/remainder structure explains how recursive rules generate a whole string. Lesson 7 asks whether one string can have more than one such structure."
   },
   {
     "id": "07",
@@ -582,7 +594,7 @@
     "sections": [
       {
         "title": "Ambiguity is about more than one tree",
-        "html": "<pre>E → E + E | E * E | number</pre><p>The token sequence <code>2 + 3 * 4</code> can have a + root, meaning 2 + (3 * 4), or a * root, meaning (2 + 3) * 4. These are different parse trees with the same yield. Therefore this grammar is ambiguous.</p><p>A leftmost and rightmost derivation of the same tree do not establish ambiguity. A reliable demonstration gives two different trees or two different leftmost derivations of one terminal string.</p><p>This lesson extends the slides’ arithmetic examples. The grammar in the initial examples describes permitted expression syntax without itself resolving all grouping choices.</p>"
+        "html": "<pre>E → E + E | E * E | number</pre><p>The token sequence <code>2 + 3 * 4</code> can have a + root, meaning 2 + (3 * 4), or a * root, meaning (2 + 3) * 4. These are different parse trees with the same yield. Therefore this grammar is ambiguous.</p><p>A leftmost and rightmost derivation of the same tree do not establish ambiguity. A reliable demonstration gives two different trees or two different leftmost derivations of one terminal string.</p><p>This lesson extends the slides’ arithmetic examples. The grammar in the initial examples describes permitted expression syntax without itself resolving all grouping choices.</p><p>Here are two <em>leftmost</em> derivations under Grammar A, with number tokens shown by their text. Their first rule choices differ:</p><pre>E ⇒ E + E ⇒ 2 + E ⇒ 2 + E * E ⇒ 2 + 3 * E ⇒ 2 + 3 * 4\nE ⇒ E * E ⇒ E + E * E ⇒ 2 + E * E ⇒ 2 + 3 * E ⇒ 2 + 3 * 4</pre><p>The common printed forms do not erase the different parent-child structures created by the first rules. One tree has addition at its root; the other has multiplication.</p>"
       },
       {
         "title": "Encode precedence in separate variable levels",
@@ -598,12 +610,12 @@
       },
       {
         "title": "Left recursion and predictive parsing",
-        "html": "<p><code>E → E + T</code> is directly left recursive because the right-hand side begins with E. A naive recursive descent procedure that immediately calls parse_E again consumes no token and can recurse forever.</p><pre>E → T E′\nE′ → + T E′ | - T E′ | ε</pre><p>This removes the direct left recursion for the addition/subtraction level. A parser should accumulate operations from left to right when building a left-associative expression tree. Merely changing the grammar’s shape is not enough to justify silently changing the meaning of subtraction.</p>"
+        "html": "<p><strong>Preview for lesson 8.</strong> Recursive descent means writing a procedure for each grammar variable. A procedure consumes tokens while following a production. If parse_E follows <code>E → E + T</code> literally, its first action is to call parse_E again, before consuming anything. That is why this is called <strong>direct left recursion</strong>.</p><p><code>E → E + T</code> is directly left recursive because the right-hand side begins with E. A naive recursive descent procedure that immediately calls parse_E again consumes no token and can recurse forever.</p><pre>E → T E′\nE′ → + T E′ | - T E′ | ε</pre><p>This removes the direct left recursion for the addition/subtraction level. A parser should accumulate operations from left to right when building a left-associative expression tree. Merely changing the grammar’s shape is not enough to justify silently changing the meaning of subtraction.</p>"
       }
     ],
     "worked": {
       "title": "Show two groupings, then choose a grammar that fixes them",
-      "intro": "Compare an unrestricted arithmetic grammar with the E/T/F grammar for the same input 2 + 3 * 4.",
+      "intro": "<p>Keep the input <code>2 + 3 * 4</code> fixed. In both grammars E is the start variable and the digits are number tokens.</p><h3>Grammar A: alternative groupings are possible</h3><pre>E → E + E | E * E | number</pre><h3>Grammar B: separate the precedence levels</h3><pre>E → E + T | E - T | T\nT → T * F | T / F | F\nF → number | id | ( E )</pre><p>E, T and F mean expression, term and factor. Grammar A lets the root choose + or *. Grammar B permits multiplication inside a term but requires parentheses to put a sum inside a factor. We will compare the resulting structures, not merely two orders for drawing one tree.</p>",
       "steps": [
         {
           "title": "Make the + root",
@@ -641,7 +653,7 @@
       "explanation": "Ambiguity requires two different parse trees, or equivalently two different leftmost derivations of one string."
     },
     "transfer": {
-      "prompt": "Design expression grammar levels for + and * where * has higher precedence, and parentheses can override it. Explain the parse of a * (b + c) + d. Identify any direct left recursion and explain what a naive recursive descent parser would do.",
+      "prompt": "<p>Design expression grammar levels for + and * where * has higher precedence and parentheses can override it. Use id for the names a,b,c,d. Explain the grouping of <code>a * (b + c) + d</code>.</p><details><summary>Follow-up after lesson 8: recursive descent</summary><p>Identify any direct left recursion in your rules and explain what a procedure that follows those rules literally would do before reading a token.</p></details>",
       "solution": "<pre>E → E + T | T\nT → T * F | F\nF → id | ( E )</pre><p>The root E combines the term a * (b + c) with d. Its multiplication is inside the left term; the parenthesized sum is an F containing an inner E. The E and T rules are directly left recursive. A naive procedure following them can call itself without consuming input; transform them to tail rules or use another suitable parsing approach.</p>"
     },
     "sources": [
@@ -661,7 +673,9 @@
           12
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lessons 3–4 showed that different replacement orders can describe the same tree. <strong>Ambiguity</strong> means something stronger: one token string has two genuinely different trees, with different groupings.</p><table><thead><tr><th>Idea</th><th>Question it answers</th></tr></thead><tbody><tr><td>Precedence</td><td>Which kinds of operations group more tightly? For example, multiplication before addition.</td></tr><tr><td>Associativity</td><td>How do equal-precedence operations group? For example, (8 − 3) − 1 versus 8 − (3 − 1).</td></tr><tr><td>Root operation</td><td>The operation joining the two largest expression parts, outside any enclosing parentheses.</td></tr></tbody></table><p>The worked example supplies both grammars being compared. Keep the string <code>2 + 3 * 4</code> fixed while changing its tree. Later in this lesson, left recursion is introduced as a preview of parsing; the actual parser algorithm comes in lesson 8.</p>",
+    "bridge": "Precedence and associativity are properties of the resulting structure. Lesson 8 uses a supplied parsing table to choose productions from the next token, and explains the recursive procedures mentioned here."
   },
   {
     "id": "08",
@@ -694,16 +708,16 @@
       },
       {
         "title": "Recursive descent makes the same decisions",
-        "html": "<pre>parse_S():\n  t = lookahead()\n  if t is integer:\n    consume(integer)\n    return node(S, t)\n  if t is one of +, -, *, /:\n    consume(t)\n    left = parse_S()\n    right = parse_S()\n    return node(S, t, left, right)\n  syntax_error()\n\nparse_program():\n  tree = parse_S()\n  require_end_of_input()\n  return tree</pre><p>The procedure call stack stores the pending expressions. An iterative parser stores them explicitly. Both select the same productions from the same lookahead information. A full tree can retain intermediate variables such as Add when the grammar has S → Add and Add → + S S.</p>"
+        "html": "<p><code>lookahead()</code> reports the next unread token. <code>consume(expected)</code> checks that it has the expected category, advances one token if so, and reports a syntax error otherwise. <code>node(...)</code> records a tree node; <code>require_end_of_input()</code> rejects leftover tokens. The code below is pseudocode, so its purpose is to describe those actions rather than prescribe a programming language.</p><pre>parse_S():\n  t = lookahead()\n  if t is integer:\n    consume(integer)\n    return node(S, t)\n  if t is one of +, -, *, /:\n    consume(t)\n    left = parse_S()\n    right = parse_S()\n    return node(S, t, left, right)\n  syntax_error()\n\nparse_program():\n  tree = parse_S()\n  require_end_of_input()\n  return tree</pre><p>The procedure call stack stores the pending expressions. An iterative parser stores them explicitly. Both select the same productions from the same lookahead information. A full tree can retain intermediate variables such as Add when the grammar has S → Add and Add → + S S.</p>"
       },
       {
         "title": "Extension: epsilon predictions, FIRST and FOLLOW",
-        "html": "<p>The slides provide predictor sets directly. To compute them in a larger grammar, FIRST(α) records which terminals can begin strings derived from α. If α can derive ε, also consider FOLLOW(A): tokens allowed immediately after A.</p><pre>List → [ Items ]\nItems → integer Tail | ε\nTail → , integer Tail | ε</pre><p>For Items, lookahead integer selects the nonempty rule; lookahead ] selects ε. For Tail, comma selects another item; ] selects ε. ε itself is not a lookahead token. If two productions for one variable predict the same lookahead, the table has a conflict and is not LL(1) as written.</p><p>A common cause is a shared prefix, as in <code>A → id | id ( Args )</code>. One token id cannot decide between them. Left factoring can expose the later decision: <code>A → id Rest</code>, <code>Rest → ( Args ) | ε</code>, provided the rest of the grammar supplies suitable, nonconflicting predictions for ε.</p>"
+        "html": "<p><strong>Optional construction detail.</strong> You can follow the supplied table and do this lesson’s core practice without computing FIRST or FOLLOW. For the list exercise, the predictions are explicitly provided below.</p><p>The slides provide predictor sets directly. To compute them in a larger grammar, FIRST(α) records which terminals can begin strings derived from α. If α can derive ε, also consider FOLLOW(A): tokens allowed immediately after A.</p><pre>List → [ Items ]\nItems → integer Tail | ε\nTail → , integer Tail | ε</pre><p>For Items, lookahead integer selects the nonempty rule; lookahead ] selects ε. For Tail, comma selects another item; ] selects ε. ε itself is not a lookahead token. If two productions for one variable predict the same lookahead, the table has a conflict and is not LL(1) as written.</p><p>A common cause is a shared prefix, as in <code>A → id | id ( Args )</code>. One token id cannot decide between them. Left factoring can expose the later decision: <code>A → id Rest</code>, <code>Rest → ( Args ) | ε</code>, provided the rest of the grammar supplies suitable, nonconflicting predictions for ε.</p>"
       }
     ],
     "worked": {
       "title": "Trace a predictive parser on + 2 * 3 4",
-      "intro": "The stack top is on the left. Input and stack both include the end marker $. Every row below records the state before the listed action.",
+      "intro": "<p>Start variable S; the complete prefix grammar is:</p><pre>S → + S S | - S S | * S S | / S S | integer</pre><p>Each operator requires two complete S expressions. Lookahead +, −, * or / chooses its corresponding rule; lookahead integer chooses S → integer. A missing choice is an error.</p><p>Target input: <code>+ 2 * 3 4</code>. Start with stack <code>S $</code> and append $ to the input. Top is on the left. Each row below records the configuration <em>before</em> its listed action; the next row shows the result.</p>",
       "steps": [
         {
           "title": "Expand the first expression",
@@ -727,7 +741,7 @@
       {
         "prompt": "<p>Trace the prefix input <code>* + 1 2 3</code> using the table. Which operator is the root, and which expression is its first operand?</p>",
         "hint": "Choose a rule from the next token each time S reaches the top.",
-        "solution": "<p>The root is *. Its first operand is + 1 2; its second operand is 3. The production sequence is S → *SS, first S → +SS, then integer for 1, integer for 2, and integer for 3. The parser alternates these expansions with terminal matches and accepts only when both end markers are reached.</p>"
+        "solution": "<p>Stack top is on the left; each action transforms the row into the next row.</p><table><thead><tr><th>Stack</th><th>Remaining input</th><th>Action</th></tr></thead><tbody><tr><td><code>S $</code></td><td><code>* + 1 2 3 $</code></td><td><code>S → * S S</code></td></tr><tr><td><code>* S S $</code></td><td><code>* + 1 2 3 $</code></td><td><code>Match *</code></td></tr><tr><td><code>S S $</code></td><td><code>+ 1 2 3 $</code></td><td><code>S → + S S</code></td></tr><tr><td><code>+ S S S $</code></td><td><code>+ 1 2 3 $</code></td><td><code>Match +</code></td></tr><tr><td><code>S S S $</code></td><td><code>1 2 3 $</code></td><td><code>S → integer</code></td></tr><tr><td><code>integer S S $</code></td><td><code>1 2 3 $</code></td><td><code>Match integer 1</code></td></tr><tr><td><code>S S $</code></td><td><code>2 3 $</code></td><td><code>S → integer</code></td></tr><tr><td><code>integer S $</code></td><td><code>2 3 $</code></td><td><code>Match integer 2</code></td></tr><tr><td><code>S $</code></td><td><code>3 $</code></td><td><code>S → integer</code></td></tr><tr><td><code>integer $</code></td><td><code>3 $</code></td><td><code>Match integer 3</code></td></tr><tr><td><code>$</code></td><td><code>$</code></td><td><code>Accept</code></td></tr></tbody></table><p>The root operator is *. Its first operand is the whole expression <code>+ 1 2</code>, and its second is 3. The parser accepts only when both end markers meet.</p>"
       },
       {
         "prompt": "<p>For the List/Items/Tail grammar, choose the production when Items sees ], when Tail sees comma, and when Tail sees integer. Explain the last case.</p>",
@@ -742,7 +756,7 @@
     },
     "transfer": {
       "prompt": "Write recursive descent pseudocode for List → [ Items ], Items → integer Tail | ε, Tail → , integer Tail | ε. Use ] as the epsilon prediction. Explain how [ integer , ] is rejected.",
-      "solution": "<pre>parse_List():\n  consume([)\n  parse_Items()\n  consume(])\n\nparse_Items():\n  if lookahead() is integer:\n    consume(integer)\n    parse_Tail()\n  else if lookahead() == ]:\n    return\n  else: syntax_error()\n\nparse_Tail():\n  if lookahead() == ,:\n    consume(,)\n    consume(integer)\n    parse_Tail()\n  else if lookahead() == ]:\n    return\n  else: syntax_error()</pre><p>After a comma, consume(integer) is mandatory. Seeing ] at that position causes an error before parse_Tail can choose its ε branch. The top-level caller also checks that no token remains after the closing ].</p>"
+      "solution": "<pre>parse_List():\n  consume([)\n  parse_Items()\n  consume(])\n\nparse_Items():\n  if lookahead() is integer:\n    consume(integer)\n    parse_Tail()\n  else if lookahead() == ]:\n    return\n  else: syntax_error()\n\nparse_Tail():\n  if lookahead() == ,:\n    consume(,)\n    consume(integer)\n    parse_Tail()\n  else if lookahead() == ]:\n    return\n  else: syntax_error()</pre><p>After a comma, consume(integer) is mandatory. Seeing ] at that position causes an error before parse_Tail can choose its ε branch. The top-level caller also checks that no token remains after the closing ].</p><pre>parse_complete_list():\n  parse_List()\n  require_end_of_input()</pre><p>This wrapper supplies the final check: a valid list followed by an extra token is rejected.</p>"
     },
     "sources": [
       {
@@ -775,7 +789,9 @@
           26
         ]
       }
-    ]
+    ],
+    "setup": "<p>A grammar can generate a string; a <strong>parser</strong> receives a token string and checks how it follows the grammar. A <strong>scanner</strong> first groups source characters into tokens. <strong>Lookahead</strong> is the next unread token’s category, used to choose a rule without consuming it yet.</p><p>A <strong>stack</strong> is an ordered list with access at one end, the top. Pushing puts symbols at the top; popping removes the top. We write the top on the <strong>left</strong>: in <code>S S $</code>, the first S is processed next. This parser stack holds grammar symbols still to check.</p><p>The worked grammar uses <strong>prefix notation</strong>: an operator comes before its two operands, so <code>+ 2 * 3 4</code> means <code>2 + (3 * 4)</code>. Digits 2, 3 and 4 are integer tokens. <code>$</code> is an added end marker, not an arithmetic operator or part of the original expression. A variable expansion changes the stack; a terminal match consumes input.</p>",
+    "bridge": "The parser stack stored grammar symbols to be processed. Lesson 9 introduces a PDA whose stack can instead store counting or matching information chosen for a language."
   },
   {
     "id": "09",
@@ -802,12 +818,12 @@
       },
       {
         "title": "Name the seven parts",
-        "html": "<p>A PDA is written <code>M = (Q, Σ, Γ, δ, q₀, Z, F)</code>. Q is the finite set of states; Σ is the input alphabet; Γ is the stack alphabet; δ is the transition relation; q₀ is the start state; Z is the initial stack symbol; F is the set of accepting states when using final-state acceptance.</p><p>An NPDA can have several possible next configurations. A string is accepted if at least one complete branch accepts. Do not combine the stack from one branch with the state from another branch.</p>"
+        "html": "<p>A PDA is written <code>M = (Q, Σ, Γ, δ, q₀, Z, F)</code>. Q is the finite set of states; Σ is the input alphabet; Γ is the stack alphabet; δ is the transition relation; q₀ is the start state; Z is the initial stack symbol; F is the set of accepting states when using final-state acceptance.</p><p>An NPDA can have several possible next configurations. A string is accepted if at least one complete branch accepts. Do not combine the stack from one branch with the state from another branch.</p><p>The parentheses in M = (…) list those seven ingredients in that order. δ is read “delta” and names the set of allowed moves; q₀ means the designated starting state. You can trace the supplied machine without memorizing the tuple notation.</p>"
       }
     ],
     "worked": {
       "title": "Trace xxyy",
-      "intro": "<p>Use states push and pop. On x, push one A. On the first y, move to pop and remove one A. Later y symbols each remove one A. Finishing acceptance is examined in the next lesson.</p>",
+      "intro": "<p>Use input <code>xxyy</code>, initial state push and initial stack Z. These are all the matching transitions:</p><table><thead><tr><th>State</th><th>Read</th><th>Required top</th><th>Replacement</th><th>Next state</th></tr></thead><tbody><tr><td><code>push</code></td><td><code>x</code></td><td><code>Z</code></td><td><code>AZ</code></td><td><code>push</code></td></tr><tr><td><code>push</code></td><td><code>x</code></td><td><code>A</code></td><td><code>AA</code></td><td><code>push</code></td></tr><tr><td><code>push</code></td><td><code>y</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>pop</code></td></tr><tr><td><code>pop</code></td><td><code>y</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>pop</code></td></tr></tbody></table><p>For example, the second row replaces the old top A by AA, adding one A. Any missing transition is forbidden. Every row in the trace below shows the configuration <em>after</em> the described move. We stop at stack Z; acceptance is added in lesson 10.</p>",
       "steps": [
         {
           "title": "Write the initial configuration",
@@ -870,7 +886,9 @@
           9
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 8 used a stack of pending grammar symbols. A <strong>pushdown automaton (PDA)</strong> combines a finite state with a stack; you choose what its stack symbols represent. This first example uses A to mean one x already read that still needs a matching y, and Z as the protected bottom marker.</p><table><thead><tr><th>What to track</th><th>How to read it</th></tr></thead><tbody><tr><td><code>(state, unread input, stack)</code></td><td>One complete configuration. These are three separate fields.</td></tr><tr><td>Top on the left</td><td><code>AAZ</code> has A on top. Removing one A gives AZ; Z is not an input character.</td></tr><tr><td><code>y,A/ε</code></td><td>Read one y, require and remove top A, and push nothing.</td></tr><tr><td><code>x,A/AA</code></td><td>Read one x and replace the top A by AA. Net effect: one additional A.</td></tr></tbody></table><p>The state names push and pop record the input phase. They are labels, not extra input symbols. This lesson traces matching up to stack Z; lesson 10 adds the precise rule for accepting the whole input.</p>",
+    "bridge": "Keep state, unread input and stack as separate fields. Lesson 10 adds the exact acceptance condition; reaching the bottom marker and emptying the stack are different endings."
   },
   {
     "id": "10",
@@ -902,7 +920,7 @@
     ],
     "worked": {
       "title": "Compare three endings",
-      "intro": "<p>Use the empty-stack NPDA described above. Track full configurations, including the finishing transition.</p>",
+      "intro": "<p>Use input alphabet {x,y}, initial state push and initial stack Z. The empty-stack NPDA has these complete transitions:</p><table><thead><tr><th>State</th><th>Read</th><th>Required top</th><th>Replacement</th><th>Next state</th></tr></thead><tbody><tr><td><code>push</code></td><td><code>x</code></td><td><code>Z</code></td><td><code>AZ</code></td><td><code>push</code></td></tr><tr><td><code>push</code></td><td><code>x</code></td><td><code>A</code></td><td><code>AA</code></td><td><code>push</code></td></tr><tr><td><code>push</code></td><td><code>y</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>pop</code></td></tr><tr><td><code>pop</code></td><td><code>y</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>pop</code></td></tr><tr><td><code>push</code></td><td><code>ε</code></td><td><code>Z</code></td><td><code>ε</code></td><td><code>done</code></td></tr><tr><td><code>pop</code></td><td><code>ε</code></td><td><code>Z</code></td><td><code>ε</code></td><td><code>done</code></td></tr></tbody></table><p>done has no outgoing transitions. Accept only when all input is consumed and the stack is empty. The two ε finishing choices allow a branch to try cleanup; an early choice cannot continue reading. We now compare accepted and rejected endings using this exact machine.</p>",
       "steps": [
         {
           "title": "Accept a positive example",
@@ -950,7 +968,7 @@
     },
     "transfer": {
       "prompt": "Design a final-state NPDA for {aⁿbⁿ : n ≥ 1}. Explain exactly how it excludes ε.",
-      "solution": "<p>Use push, pop, and accepting done. Start with Z. Push A for each a. On the first b, require A, pop it, and enter pop. Pop A on each later b. Only pop has <code>ε,Z/Z</code> to done. done has no outgoing transitions. There is no start-state finishing move, so reaching done requires at least one b and therefore at least one a. Accept only when the input is also exhausted.</p>"
+      "solution": "<p>Use push, pop, and accepting done. Start with Z. Push A for each a. On the first b, require A, pop it, and enter pop. Pop A on each later b. Only pop has <code>ε,Z/Z</code> to done. done has no outgoing transitions. There is no start-state finishing move, so reaching done requires at least one b and therefore at least one a. Accept only when the input is also exhausted.</p><p>Complete table, with initial state push and stack Z; only done is accepting:</p><table><thead><tr><th>State</th><th>Read</th><th>Required top</th><th>Replacement</th><th>Next state</th></tr></thead><tbody><tr><td><code>push</code></td><td><code>a</code></td><td><code>Z</code></td><td><code>AZ</code></td><td><code>push</code></td></tr><tr><td><code>push</code></td><td><code>a</code></td><td><code>A</code></td><td><code>AA</code></td><td><code>push</code></td></tr><tr><td><code>push</code></td><td><code>b</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>pop</code></td></tr><tr><td><code>pop</code></td><td><code>b</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>pop</code></td></tr><tr><td><code>pop</code></td><td><code>ε</code></td><td><code>Z</code></td><td><code>Z</code></td><td><code>done</code></td></tr></tbody></table><p>The matching rows push markers for as and pop them for bs. There is no finishing move from push. State names are just labels; done has no outgoing transitions.</p>"
     },
     "sources": [
       {
@@ -968,7 +986,9 @@
           17
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 9 ended with unread input ε and stack Z. That shows that the xs and ys matched, but whether the run <strong>accepts</strong> depends on the declared mode.</p><table><thead><tr><th>Mode</th><th>Required ending</th></tr></thead><tbody><tr><td>Final state</td><td>All input consumed and the state is accepting. Z may remain.</td></tr><tr><td>Empty stack</td><td>All input consumed and no stack symbols remain, including no Z.</td></tr></tbody></table><p>The worked machine uses empty-stack acceptance. It starts in push with stack Z and can move to a halt state done by <code>ε,Z/ε</code>. The move consumes no input: it is not a test that input has ended. If taken early, done leaves unread input and that branch fails.</p><p>A machine with alternative moves is <strong>nondeterministic</strong>. One complete accepting branch is sufficient. An <strong>invariant</strong> is a statement preserved through a run; here each remaining A continues to mean one unmatched x.</p>",
+    "bridge": "A complete design specifies input order, what each marker counts, and its finishing rule. The next lessons reuse those contracts while combining several requirements."
   },
   {
     "id": "11",
@@ -1000,7 +1020,7 @@
     ],
     "worked": {
       "title": "Build two independent matched blocks",
-      "intro": "<p>Construct a grammar and a PDA plan for aⁿbⁿcᵐdᵐ, allowing either count to be zero.</p>",
+      "intro": "<p>Target: <code>{aⁿbⁿcᵐdᵐ : n,m ≥ 0}</code>. The complete grammar is:</p><pre>Start variable: S\nS → X Y\nX → a X b | ε\nY → c Y d | ε</pre><p>The equality is within each pair, not across the two components. We will derive <code>aabbcd</code>, using n = 2 and m = 1, then give a PDA <em>plan</em> for the two phases. A plan states the stack meaning and safe boundaries; a complete transition table is a further representation.</p>",
       "steps": [
         {
           "title": "Mark the dependencies",
@@ -1048,7 +1068,7 @@
     },
     "transfer": {
       "prompt": "Build a grammar for aⁿ bᵐ # cᵐ dⁿ with n,m ≥ 0, and state a PDA invariant.",
-      "solution": "<pre>S → a S d | T\nT → b T c | #</pre><p>While reading the left blocks, the stack is BᵐAⁿZ. After #, each c removes B; d symbols can begin only after all Bs are gone. Each d then removes A. Finishing requires only Z to remain. The marker makes the middle visible; the nested order makes one stack sufficient.</p>"
+      "solution": "<pre>S → a S d | T\nT → b T c | #</pre><p>While reading the left blocks, the stack is BᵐAⁿZ. After #, each c removes B; d symbols can begin only after all Bs are gone. Each d then removes A. Finishing requires only Z to remain. The marker makes the middle visible; the nested order makes one stack sufficient.</p><p>For example, n = 2 and m = 1 gives:</p><pre>S ⇒ a S d ⇒ a a S d d ⇒ a a T d d\n  ⇒ a a b T c d d ⇒ a a b # c d d</pre><p>The invariant BᵐAⁿZ describes the point just before reading #, after all as and bs. After j cs it is Bᵐ⁻ʲAⁿZ; only when the Bs are gone can the ds remove the outer As.</p>"
     },
     "sources": [
       {
@@ -1070,7 +1090,9 @@
           18
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lessons 5–6 built single dependencies, and lessons 9–10 showed how a stack checks them. We will combine those parts. <strong>Independent</strong> counts can be chosen separately; <strong>nested</strong> dependencies close in reverse order, so the inner match finishes first.</p><table><thead><tr><th>Pattern name used in these slides</th><th>Meaning</th><th>Example</th></tr></thead><tbody><tr><td>Pattern 1</td><td>Concatenate independent parts.</td><td>aⁿbⁿ followed by cᵐdᵐ; n and m can differ.</td></tr><tr><td>Pattern 2</td><td>Generate a left part and its dependent right part around a middle.</td><td>aⁿ followed eventually by dⁿ, with another complete component between them.</td></tr></tbody></table><p>The Greek σ and τ below name whole substrings; they are not input symbols. These pattern numbers are labels from the course, not additional machine types. At a PDA <strong>handoff</strong>, one phase ends and the next begins. Requiring Z on top checks that the first component’s matches are complete.</p>",
+    "bridge": "Independent components finish in sequence; nested components finish from the inside outward. Lesson 12 varies the numeric relationship within one component."
   },
   {
     "id": "12",
@@ -1106,7 +1128,7 @@
     ],
     "worked": {
       "title": "Construct a strict inequality",
-      "intro": "<p>Design a grammar for xʲyᵏ with 1 ≤ j &lt; k.</p>",
+      "intro": "<p>Target: <code>{xʲyᵏ : 1 ≤ j &lt; k}</code>. Here j counts xs and k counts ys. The complete grammar we will justify is:</p><pre>Start variable: S\nS → x T y\nT → x T y | Y\nY → y Y | y</pre><p>The start rule guarantees a positive matched pair. T permits additional pairs. Y guarantees the strictly positive y surplus. Lowercase x,y are terminals; uppercase S,T,Y are variables.</p>",
       "steps": [
         {
           "title": "Force one x and its match",
@@ -1153,7 +1175,7 @@
       "explanation": "For strict inequality, a zero-surplus base would wrongly admit equal counts."
     },
     "transfer": {
-      "prompt": "Construct a grammar for {aʲbᵏ : 1 ≤ k ≤ j}. Prove both inequalities from its productions.",
+      "prompt": "<p>Construct a grammar for <code>{aʲbᵏ : 1 ≤ k ≤ j}</code>. State its start variable. Explain why there is at least one b and at least as many as as bs; then explain how to obtain every allowed pair j,k.</p>",
       "solution": "<pre>S → a S b | a X b\nX → a X | ε</pre><p>Let k be the number of matched-pair productions, counting the final aXb production. Since that production is compulsory, k ≥ 1. Let r be the number of uses of X → aX, so r ≥ 0. The generated string is aᵏ⁺ʳbᵏ, giving j = k + r ≥ k. Conversely, any allowed j,k is obtained using k − 1 recursive S steps and j − k X steps.</p>"
     },
     "sources": [
@@ -1164,7 +1186,9 @@
           9
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 5 separated matched pairs from a surplus. We now combine that idea with ratios and positive lower bounds. Keep the input order and each numeric condition as separate requirements.</p><table><thead><tr><th>Condition</th><th>Exact consequence</th></tr></thead><tbody><tr><td><code>1 ≤ j &lt; k</code></td><td>There is at least one x, and there are strictly more ys than xs.</td></tr><tr><td><code>j ≤ k</code></td><td>Equality is allowed; zero surplus is permitted.</td></tr><tr><td><code>j ≠ k</code></td><td>One of two cases holds: j > k or j &lt; k. A grammar may choose either branch.</td></tr><tr><td><code>x²ⁿy³ⁿ</code></td><td>Each recursion adds two xs and three ys, retaining block order.</td></tr></tbody></table><p>For the worked strict inequality, force one matched pair, allow more matched pairs, then supply a nonempty y surplus. The longer NPDA table later in the lesson applies the same logic to unequal counts; it states all transitions and simulator conventions explicitly.</p>",
+    "bridge": "A base case establishes lower bounds, and each recursive step preserves the intended count relation. Lesson 13 combines two such relations without mixing their stack markers."
   },
   {
     "id": "13",
@@ -1200,7 +1224,7 @@
     ],
     "worked": {
       "title": "Build and verify one nested run",
-      "intro": "<p>Generate and recognize <code>pppqqqrrss</code>, where i = 3, j = 3, k = 2, and l = 2.</p>",
+      "intro": "<p>Target input: <code>pppqqqrrss</code>, with i = 3, j = 3, k = 2 and l = 2. Use this complete grammar, with start variable S:</p><pre>S → p S s | p P T s\nP → p P | ε\nT → q T r | q Q r\nQ → q Q | ε</pre><p>The lower-case p,q,r,s are terminals. P supplies extra ps, Q supplies extra qs, and T generates the whole inner q/r component. We will first derive the word and then track its matching and surplus cleanup. Z is the initial stack marker.</p>",
       "steps": [
         {
           "title": "Choose matched pairs and extras",
@@ -1247,7 +1271,7 @@
       "explanation": "A stack accesses only its top, and the Bs represent the inner q/r dependency."
     },
     "transfer": {
-      "prompt": "Adapt the nested grammar to require equal outer counts, positive inner closing count, and j ≥ k. Explain the change.",
+      "prompt": "<p>For the same p/q/r/s block order, adapt the grammar to <code>{pⁱqʲrᵏsⁱ : i ≥ 1 and 1 ≤ k ≤ j}</code>. The outer counts must now be equal; the inner closing count stays positive and surplus qs are still allowed. Explain exactly which rule component you remove and why.</p>",
       "solution": "<pre>S → p S s | p T s\nT → q T r | q Q r\nQ → q Q | ε</pre><p>Removing P removes the source of extra ps. Each p is now paired with exactly one s. The inner grammar still allows surplus qs and forces at least one q/r pair. A corresponding PDA must reject if any A remains after the last s; it may still discard surplus Bs after the r block.</p>"
     },
     "sources": [
@@ -1264,7 +1288,9 @@
           18
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 11 introduced nested matches, and lesson 12 allowed a surplus. Here both ideas occur in one four-block language:</p><pre>{pⁱqʲrᵏsˡ : 1 ≤ l ≤ i and 1 ≤ k ≤ j}</pre><p>Read it as: at least one s and no more ss than ps; at least one r and no more rs than qs. All ps come first, then qs, then rs, then ss. Thus every block is nonempty.</p><p>The q/r match is inside the p/s match. Use B markers for qs above A markers for ps, so the inner Bs are removed first. Surplus opening symbols may be discarded only after the corresponding closing block has actually begun. An ε discard consumes no input and cannot stand in for a required first r or s.</p>",
+    "bridge": "Block order let us use separate push, match and cleanup phases. Lesson 14 changes the problem: equal counts are required even when the input symbols alternate."
   },
   {
     "id": "14",
@@ -1279,11 +1305,11 @@
     "sections": [
       {
         "title": "Order changes the required method",
-        "html": "<p><code>{aⁿbⁿ : n ≥ 0}</code> requires all as before all bs. In contrast, <code>{w ∈ {a,b}* : |w|a = |w|b}</code> includes ab, ba, abab, and bbaa. Read <code>|w|a</code> as “the number of occurrences of a in w.” It is a count, not the length of a block.</p><p>A one-way push-as-then-pop-bs machine rejects valid arbitrary-order strings such as ba. Instead maintain the difference <code>d = number of as read − number of bs read</code>.</p>"
+        "html": "<p><code>{aⁿbⁿ : n ≥ 0}</code> requires all as before all bs. In contrast, <code>{w ∈ {a,b}* : |w|a = |w|b}</code> includes ab, ba, abab, and bbaa. Read <code>|w|a</code> as “the number of occurrences of a in w.” It is a count, not the length of a block.</p><p>A one-way push-as-then-pop-bs machine rejects valid arbitrary-order strings such as ba. Instead maintain the difference <code>balance = number of as read − number of bs read</code>.</p>"
       },
       {
         "title": "Choose a signed stack invariant",
-        "html": "<p>When d &gt; 0, the stack is <code>AᵈZ</code>. When d &lt; 0, it is <code>B⁻ᵈZ</code>. When d = 0, it is Z. There are never As and Bs together above Z.</p><table><thead><tr><th>Read</th><th>Top</th><th>Replacement</th><th>Effect</th></tr></thead><tbody><tr><td>a</td><td>Z</td><td>AZ</td><td>Start positive surplus</td></tr><tr><td>a</td><td>A</td><td>AA</td><td>Increase positive surplus</td></tr><tr><td>a</td><td>B</td><td>ε</td><td>Cancel one b</td></tr><tr><td>b</td><td>Z</td><td>BZ</td><td>Start negative surplus</td></tr><tr><td>b</td><td>B</td><td>BB</td><td>Increase negative surplus</td></tr><tr><td>b</td><td>A</td><td>ε</td><td>Cancel one a</td></tr></tbody></table><p>Each row consumes exactly one input symbol. At the end, equality holds exactly when Z is visible.</p>"
+        "html": "<p>When the balance is positive, its magnitude is the number of As above Z. When it is negative, its magnitude is the number of Bs above Z. At balance zero the stack is Z. As and Bs never occur together above Z.</p><table><thead><tr><th>Read</th><th>Top</th><th>Replacement</th><th>Effect</th></tr></thead><tbody><tr><td>a</td><td>Z</td><td>AZ</td><td>Start positive surplus</td></tr><tr><td>a</td><td>A</td><td>AA</td><td>Increase positive surplus</td></tr><tr><td>a</td><td>B</td><td>ε</td><td>Cancel one b</td></tr><tr><td>b</td><td>Z</td><td>BZ</td><td>Start negative surplus</td></tr><tr><td>b</td><td>B</td><td>BB</td><td>Increase negative surplus</td></tr><tr><td>b</td><td>A</td><td>ε</td><td>Cancel one a</td></tr></tbody></table><p>Each row consumes exactly one input symbol. At the end, equality holds exactly when Z is visible.</p>"
       },
       {
         "title": "Allow neutral symbols",
@@ -1296,11 +1322,11 @@
     ],
     "worked": {
       "title": "Trace b a a c b d",
-      "intro": "<p>Recognize <code>baacbd</code> with c/d neutral and top on the left. Use a finishing ε,Z/ε move to a halt state for empty-stack NPDA acceptance.</p>",
+      "intro": "<p>Target input: <code>baacbd</code>. Start in q with stack Z, top on the left. The full update rules are:</p><table><thead><tr><th>Read</th><th>Top</th><th>Replacement</th></tr></thead><tbody><tr><td><code>a</code></td><td><code>Z</code></td><td><code>AZ</code></td></tr><tr><td><code>a</code></td><td><code>A</code></td><td><code>AA</code></td></tr><tr><td><code>a</code></td><td><code>B</code></td><td><code>ε</code></td></tr><tr><td><code>b</code></td><td><code>Z</code></td><td><code>BZ</code></td></tr><tr><td><code>b</code></td><td><code>B</code></td><td><code>BB</code></td></tr><tr><td><code>b</code></td><td><code>A</code></td><td><code>ε</code></td></tr><tr><td><code>c or d</code></td><td><code>T ∈ {A,B,Z}</code></td><td><code>T</code></td></tr></tbody></table><p>Each row consumes its input symbol and stays in q. Finish by ε,Z/ε to done, which has no outgoing transitions. This is empty-stack NPDA acceptance after full input consumption. The numeric balance changes on a/b only; the input character d is neutral.</p>",
       "steps": [
         {
           "title": "Read b",
-          "html": "<pre>(q, baacbd, Z) → (q, aacbd, BZ)</pre><p>There is one more b than a so far: d = −1.</p>"
+          "html": "<pre>(q, baacbd, Z) → (q, aacbd, BZ)</pre><p>There is one more b than a so far: balance = −1.</p>"
         },
         {
           "title": "Read a and cancel",
@@ -1308,7 +1334,7 @@
         },
         {
           "title": "Read the next a",
-          "html": "<pre>(q, acbd, Z) → (q, cbd, AZ)</pre><p>Now d = 1. The stack changes sign by first passing through Z.</p>"
+          "html": "<pre>(q, acbd, Z) → (q, cbd, AZ)</pre><p>Now balance = 1. The stack changes sign by first passing through Z.</p>"
         },
         {
           "title": "Ignore c for counting",
@@ -1344,7 +1370,7 @@
     },
     "transfer": {
       "prompt": "Construct the signed-stack rules for |w|c = |w|d over {a,b,c,d}. State what a and b do.",
-      "solution": "<p>Use C for surplus c and D for surplus d. On c: Z → CZ, C → CC, D → ε. On d: Z → DZ, D → DD, C → ε. Consume a or b while preserving the current top symbol. At the end, accept exactly when only Z remains. The corresponding grammar is <code>F → c F d F | d F c F | a F | b F | ε</code>.</p>"
+      "solution": "<p>Use C for surplus c and D for surplus d. On c: Z → CZ, C → CC, D → ε. On d: Z → DZ, D → DD, C → ε. Consume a or b while preserving the current top symbol. At the end, accept exactly when only Z remains. The corresponding grammar is <code>F → c F d F | d F c F | a F | b F | ε</code>.</p><p>To make the acceptance rule explicit, start in q with Z and use those updates as q loops. Add ε,Z/ε from q to a halt state done with no outgoing transitions. This is an NPDA with empty-stack acceptance after all input is consumed. The early cleanup branch fails if any input remains.</p>"
     },
     "sources": [
       {
@@ -1357,7 +1383,9 @@
           17
         ]
       }
-    ]
+    ],
+    "setup": "<p>Earlier count machines required blocks such as aⁿbⁿ. This language permits a and b in <strong>any order</strong>. For example, ba and abba must both be accepted. A phase that permanently switches from reading a to reading b cannot handle that.</p><p>Maintain a <strong>balance</strong>: the number of as read minus the number of bs read. Positive balance is stored as As; negative balance is stored as Bs; zero balance leaves only Z. Reading an opposite symbol cancels one stored surplus. The stack never needs As and Bs together.</p><p>c and d are <strong>neutral</strong> here: they are still consumed, but do not change the balance. The input symbol d and the numeric balance are different things. In the transition rules, T stands for any currently allowed top symbol, not a new fixed stack marker.</p>",
+    "bridge": "The signed surplus is enough to test one arbitrary-order equality. Lesson 15 combines alternative tests and uses nondeterminism when a phase boundary is hidden."
   },
   {
     "id": "15",
@@ -1389,7 +1417,7 @@
     ],
     "worked": {
       "title": "Recognize 0110 by guessing a midpoint",
-      "intro": "<p>Use A for 0, B for 1, and initial stack Z. This is an even-palindrome machine.</p>",
+      "intro": "<p>Target input: <code>0110</code>. Start in store with stack Z, top on the left. A records a stored 0 and B a stored 1. Here T is a placeholder for each of the listed top symbols:</p><table><thead><tr><th>State</th><th>Read</th><th>Required top</th><th>Replacement</th><th>Next state</th></tr></thead><tbody><tr><td><code>store</code></td><td><code>0</code></td><td><code>T ∈ {A,B,Z}</code></td><td><code>AT</code></td><td><code>store</code></td></tr><tr><td><code>store</code></td><td><code>1</code></td><td><code>T ∈ {A,B,Z}</code></td><td><code>BT</code></td><td><code>store</code></td></tr><tr><td><code>store</code></td><td><code>ε</code></td><td><code>T ∈ {A,B,Z}</code></td><td><code>T</code></td><td><code>match</code></td></tr><tr><td><code>match</code></td><td><code>0</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>match</code></td></tr><tr><td><code>match</code></td><td><code>1</code></td><td><code>B</code></td><td><code>ε</code></td><td><code>match</code></td></tr><tr><td><code>match</code></td><td><code>ε</code></td><td><code>Z</code></td><td><code>ε</code></td><td><code>done</code></td></tr></tbody></table><p>done has no outgoing transitions. Accept by empty stack only after all input is consumed. The ε move from store to match guesses the midpoint without reading or altering input. We follow the branch that guesses after two symbols.</p>",
       "steps": [
         {
           "title": "Store the first symbol",
@@ -1433,7 +1461,7 @@
     "check": {
       "prompt": "For an NPDA, must every branch accept the input?",
       "answer": "No.",
-      "explanation": "One accepting complete branch is sufficient; if all complete branches fail, the input is rejected."
+      "explanation": "One finite accepting branch is sufficient. The input is rejected when no finite branch reaches an accepting configuration; an infinite branch does not cancel an accepting one."
     },
     "transfer": {
       "prompt": "Design a PDA plan for {w # wᴿ : w ∈ {a,b}*}. Give one accepted and two rejected tests.",
@@ -1456,7 +1484,9 @@
           16
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 14 checked one count equality. <strong>Union</strong>, written ∪, combines alternatives: a string is allowed if at least one complete condition holds. Both conditions refer to the same whole input, not to two separate substrings. Equal zero counts also satisfy an equality.</p><p>A nondeterministic <strong>branch</strong> is one possible sequence of configurations. Branches keep their own state, unread input and stack. An NPDA accepts if some finite branch consumes all input and meets the acceptance rule; it is not choosing randomly.</p><p>The worked example uses a different reason for branching: an even palindrome has no visible middle marker. Store a prefix, take an ε move to guess its end, then match the rest in reverse. A for 0 and B for 1 record symbol values, rather than just counts.</p>",
+    "bridge": "One successful branch proves NPDA acceptance. Lesson 16 removes guessing for selected languages by making every next action, including the end-of-input action, explicit."
   },
   {
     "id": "16",
@@ -1471,7 +1501,7 @@
     "sections": [
       {
         "title": "State the convention before drawing",
-        "html": "<p>A deterministic PDA has at most one enabled move in each situation. In the standard definition, an ε move with a given state and stack top cannot compete with an input-consuming move for that same state and top.</p><p>For the constructions below, <strong>$ is an explicit right-end marker appended after the original input</strong>. It is a new symbol that does not occur in the language’s original alphabet. The empty-stack machine processes w$; it removes Z only when it reads $. Do not silently describe this as an unmarked-input empty-stack DPDA. The equivalent unmarked recognizer can use final-state acceptance.</p><p>Without an end marker, ordinary empty-stack DPDAs accept only prefix-free languages under the standard stack-access definition. Balanced parentheses include ε and have accepted strings that are proper prefixes of other accepted strings, so that convention needs attention. See the determinism lesson for the proof and the distinction between an explicit marker and an external “input finished” simulator rule.</p>"
+        "html": "<p>A deterministic PDA has at most one enabled move in each situation. In the standard definition, an ε move with a given state and stack top cannot compete with an input-consuming move for that same state and top.</p><p>For the constructions below, <strong>$ is an explicit right-end marker appended after the original input</strong>. It is a new symbol that does not occur in the language’s original alphabet. The empty-stack machine processes w$; it removes Z only when it reads $. Do not silently describe this as an unmarked-input empty-stack DPDA. The equivalent unmarked recognizer can use final-state acceptance.</p><details><summary>Optional: why unmarked deterministic empty-stack acceptance needs care</summary><p>Without an end marker, ordinary empty-stack DPDAs accept only prefix-free languages under the standard stack-access definition. Balanced parentheses include ε and have accepted strings that are proper prefixes of other accepted strings, so that convention needs attention. See the determinism lesson for the proof and the distinction between an explicit marker and an external “input finished” simulator rule.</p></details>"
       },
       {
         "title": "Balanced parentheses: record unmatched opens",
@@ -1492,7 +1522,7 @@
     ],
     "worked": {
       "title": "Test the deterministic ratio machine on xxyyyy$",
-      "intro": "<p>Each x adds two future y matches. Top is on the left.</p>",
+      "intro": "<p>Recognize the marked input <code>xxyyyy$</code>. Start in xphase with stack Z, top on the left. The complete DPDA table is:</p><table><thead><tr><th>State</th><th>Read</th><th>Required top</th><th>Replacement</th><th>Next state</th></tr></thead><tbody><tr><td><code>xphase</code></td><td><code>x</code></td><td><code>Z</code></td><td><code>AAZ</code></td><td><code>xphase</code></td></tr><tr><td><code>xphase</code></td><td><code>x</code></td><td><code>A</code></td><td><code>AAA</code></td><td><code>xphase</code></td></tr><tr><td><code>xphase</code></td><td><code>y</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>yphase</code></td></tr><tr><td><code>yphase</code></td><td><code>y</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>yphase</code></td></tr><tr><td><code>xphase</code></td><td><code>$</code></td><td><code>Z</code></td><td><code>ε</code></td><td><code>halt</code></td></tr><tr><td><code>yphase</code></td><td><code>$</code></td><td><code>Z</code></td><td><code>ε</code></td><td><code>halt</code></td></tr></tbody></table><p>halt has no outgoing transitions; any missing transition rejects. Each x adds two future y matches. Read $ exactly once at the true end of the input. A successful run consumes it and empties the stack. No ε move is needed in this table.</p>",
       "steps": [
         {
           "title": "Initialize and read the first x",
@@ -1558,7 +1588,9 @@
           17
         ]
       }
-    ]
+    ],
+    "setup": "<p>Previous NPDAs could guess when to switch or finish. A <strong>deterministic PDA (DPDA)</strong> has at most one enabled next move for a state and stack top. An enabled ε move cannot compete with an input-reading move for that same state and top.</p><p>This lesson makes the end visible by appending <code>$</code>. The original ratio language is <code>{xⁿy²ⁿ : n ≥ 0}</code>; the machine reads its marked form <code>w$</code>. Thus the empty original string is tested as <code>$</code>. The bottom marker Z is removed only while reading that final marker.</p><p>Each x owes two later ys. Replacing Z by AAZ adds two As; replacing A by AAA also adds two, because the old top A is removed first. The states enforce x-before-y order, while the stack enforces the ratio. Keep these two jobs separate.</p>",
+    "bridge": "A deterministic construction depends on its declared acceptance and input conventions. Lesson 17 introduces a general grammar conversion that may be nondeterministic even when another recognizer for the language is deterministic."
   },
   {
     "id": "17",
@@ -1572,8 +1604,8 @@
     ],
     "sections": [
       {
-        "title": "See the complete construction first",
-        "html": "<p>Start with this grammar:</p><pre>S → xSy | ε</pre><p>It generates <code>ε, xy, xxyy, xxxyyy, …</code>. A grammar creates one of these strings by rewriting <code>S</code>. The equivalent PDA receives a string and tries to recreate a derivation while checking the input.</p><table><thead><tr><th>Job</th><th>Transition</th></tr></thead><tbody><tr><td>Replace the preloaded bottom marker with S above that marker</td><td><code>start → work: ε, #/S#</code></td></tr><tr><td>Choose the recursive production</td><td><code>work → work: ε, S/xSy</code></td></tr><tr><td>Choose the empty production</td><td><code>work → work: ε, S/ε</code></td></tr><tr><td>Match an x</td><td><code>work → work: x, x/ε</code></td></tr><tr><td>Match a y</td><td><code>work → work: y, y/ε</code></td></tr><tr><td>Finish after removing every grammar symbol</td><td><code>work → halt: ε, #/ε</code></td></tr></tbody></table><p>The initial stack is <code>#</code>, and the halt state has no outgoing transitions. This version accepts by <strong>empty stack after all input is consumed</strong>. The marker prevents acceptance before initialisation. Its stack is written with the top at the <strong>left</strong>. The transition <code>ε, S/xSy</code> therefore replaces top <code>S</code> with <code>xSy</code> above the untouched marker, leaving <code>x</code> on top.</p>"
+        "title": "Read the grammar-generated stack correctly",
+        "html": "<p>The example’s stack alphabet contains S, x, y and #. A top S means “choose a production”; a top x or y means “match this terminal next”; # means that no grammar symbols remain above the marker.</p><p>The grammar S → xSy | ε adds one x and one y per recursion and then removes S. The machine recreates those choices while checking an already supplied input. Choosing a production and reading a terminal therefore require separate moves.</p>"
       },
       {
         "title": "The equivalence theorem, read carefully",
@@ -1593,35 +1625,35 @@
       },
       {
         "title": "If you prefer final-state acceptance",
-        "html": "<p>Keep the same initial stack <code>#</code>, initialisation <code>ε,#/S#</code>, production loops, terminal-matching loops, and cleanup <code>ε,#/ε</code>. Mark halt as a final state and still require full input consumption. Then this particular construction finishes with both a final state and empty stack.</p><p>A nullable grammar can reach halt without reading input, but it must still initialise, derive ε, and remove the marker. A nonnullable grammar cannot empty its stack immediately: # remains until all generated grammar symbols have been processed. If cleanup occurs while unread input remains, halt has no outgoing moves, so that branch fails.</p>"
+        "html": "<p>Keep the same initial stack <code>#</code>, initialisation <code>ε,#/S#</code>, production loops, terminal-matching loops, and cleanup <code>ε,#/ε</code>. Mark halt as a final state and still require full input consumption. Then this particular construction finishes with both a final state and empty stack.</p><p>A nullable grammar (one whose start variable can derive ε) can reach halt without reading input, but it must still initialise, derive ε, and remove the marker. A nonnullable grammar cannot empty its stack immediately: # remains until all generated grammar symbols have been processed. If cleanup occurs while unread input remains, halt has no outgoing moves, so that branch fails.</p>"
       }
     ],
     "worked": {
       "title": "Build the recognizer for S → xSy | ε",
-      "intro": "Use the complete transition table at the top. The input is xxyy. We will follow one successful branch.",
+      "intro": "<p>Start with this grammar:</p><pre>S → xSy | ε</pre><p>It generates <code>ε, xy, xxyy, xxxyyy, …</code>. A grammar creates one of these strings by rewriting <code>S</code>. The equivalent PDA receives a string and tries to recreate a derivation while checking the input.</p><table><thead><tr><th>Job</th><th>Transition</th></tr></thead><tbody><tr><td>Replace the preloaded bottom marker with S above that marker</td><td><code>start → work: ε, #/S#</code></td></tr><tr><td>Choose the recursive production</td><td><code>work → work: ε, S/xSy</code></td></tr><tr><td>Choose the empty production</td><td><code>work → work: ε, S/ε</code></td></tr><tr><td>Match an x</td><td><code>work → work: x, x/ε</code></td></tr><tr><td>Match a y</td><td><code>work → work: y, y/ε</code></td></tr><tr><td>Finish after removing every grammar symbol</td><td><code>work → halt: ε, #/ε</code></td></tr></tbody></table><p>The initial stack is <code>#</code>, and the halt state has no outgoing transitions. This version accepts by <strong>empty stack after all input is consumed</strong>. The marker prevents acceptance before initialisation. Its stack is written with the top at the <strong>left</strong>. The transition <code>ε, S/xSy</code> therefore replaces top <code>S</code> with <code>xSy</code> above the untouched marker, leaving <code>x</code> on top.</p><p><strong>Input to trace: xxyy.</strong> We now follow one successful branch using exactly the table just given. The initial state is start; the processing state is work.</p>",
       "steps": [
         {
-          "title": "1. Initialise the representation",
+          "title": "Initialise the representation",
           "html": "<p>Begin with stack <code>#</code> and take <code>ε,#/S#</code>. The input is still <code>xxyy</code>; the stack is <code>S#</code>. Nothing has been consumed.</p>"
         },
         {
-          "title": "2. Expand the first variable",
+          "title": "Expand the first variable",
           "html": "<p>Take <code>ε, S/xSy</code>. The stack becomes <code>xSy#</code>. The production creates a terminal to check; it does not consume the first input x yet.</p>"
         },
         {
-          "title": "3. Match and continue the leftmost derivation",
+          "title": "Match and continue the leftmost derivation",
           "html": "<p>Take <code>x, x/ε</code>. The consumed prefix is <code>x</code>, the remaining input is <code>xyy</code>, and the stack is <code>Sy#</code>. Expand that <code>S</code> to <code>xSy</code>; the stack becomes <code>xSyy#</code>. Match the next x, leaving <code>Syy#</code>.</p>"
         },
         {
-          "title": "4. End the recursive expansion",
+          "title": "End the recursive expansion",
           "html": "<p>Choose <code>ε, S/ε</code>. The stack becomes <code>yy#</code>. The consumed prefix is <code>xx</code> and the input still to check is <code>yy</code>. The represented sentential form is <code>xxyy</code>.</p>"
         },
         {
-          "title": "5. Match the remaining terminals and test acceptance",
+          "title": "Match the remaining terminals and test acceptance",
           "html": "<p>Use <code>y, y/ε</code> twice. The input is now ε and stack is #. Take <code>ε,#/ε</code> to halt; only then is the stack empty and this branch accepts. The corresponding grammar derivation is <code>S ⇒ xSy ⇒ xxSyy ⇒ xxyy</code>.</p>"
         },
         {
-          "title": "6. Check a failed input as well",
+          "title": "Check a failed input as well",
           "html": "<p>For <code>xxy</code>, the branch above eventually consumes the only y and leaves one unmatched y on the stack. No terminal-match transition can finish. Other choices of recursion also fail, so the PDA rejects.</p>"
         }
       ]
@@ -1670,7 +1702,9 @@
           14
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lessons 9–16 designed stack meanings for particular languages. Now we use a general recipe that works for any supplied CFG. The stack holds <strong>grammar symbols still to process</strong>, including both variables and terminals.</p><p>There are two distinct actions: <strong>expand</strong> a top variable using a production without reading input, or <strong>match</strong> a top terminal by reading that same terminal and removing it. Putting x on the stack does not consume an input x.</p><p>We use <code>#</code> as a fresh <em>stack</em> bottom marker here. It plays the role Z played earlier and is not an input separator. Start with #, replace it by S#, and remove # only after the grammar symbols are gone. A successful branch must also have consumed all input. The complete transition table is supplied with the worked example.</p>",
+    "bridge": "Expansion and input matching are separate transitions. Lesson 18 writes both actions in one table and connects the stack to the current grammar derivation."
   },
   {
     "id": "18",
@@ -1697,7 +1731,7 @@
       },
       {
         "title": "Why this construction has the same language",
-        "html": "<p><strong>Grammar to machine:</strong> take any leftmost derivation of a terminal string w. The PDA can choose those same productions. Whenever the derivation exposes terminals at the left, they match the next symbols of w. Eventually every grammar symbol is matched, and cleanup removes # to empty the stack.</p><p><strong>Machine to grammar:</strong> take any accepting run. Read only the steps that replace variables. Those steps are grammar productions, in leftmost order. The matching steps certify that the resulting terminal string is exactly the input. Therefore an accepting run cannot invent a string outside the grammar.</p><p>These are two separate inclusion arguments: <code>L(G) ⊆ L(M)</code> and <code>L(M) ⊆ L(G)</code>. Both are needed to establish equality.</p>"
+        "html": "<p><code>L(G) ⊆ L(M)</code> means that every string generated by the grammar is accepted by the machine. The reverse inclusion means every accepted string is generated. Proving both establishes equality.</p><p><strong>Grammar to machine:</strong> take any leftmost derivation of a terminal string w. The PDA can choose those same productions. Whenever the derivation exposes terminals at the left, they match the next symbols of w. Eventually every grammar symbol is matched, and cleanup removes # to empty the stack.</p><p><strong>Machine to grammar:</strong> take any accepting run. Read only the steps that replace variables. Those steps are grammar productions, in leftmost order. The matching steps certify that the resulting terminal string is exactly the input. Therefore an accepting run cannot invent a string outside the grammar.</p><p>These are two separate inclusion arguments: <code>L(G) ⊆ L(M)</code> and <code>L(M) ⊆ L(G)</code>. Both are needed to establish equality.</p>"
       },
       {
         "title": "A wrong choice and an infinite choice are different",
@@ -1705,28 +1739,28 @@
       }
     ],
     "worked": {
-      "title": "Explain the trace in five meaningful parts",
-      "intro": "Use the full table above, but be able to reconstruct it without copying its rows.",
+      "title": "Separate expansion from matching on []",
+      "intro": "<p>Use <code>S → [S]S | ε</code> and input <code>[]</code>. Start in start with stack #. Initialization ε,#/S# enters work. The work loops are <code>ε,S/[S]S</code>, <code>ε,S/ε</code>, <code>[,[/ε</code> and <code>],]/ε</code>. Cleanup <code>ε,#/ε</code> enters halt, which has no outgoing transitions.</p><p>The following is the complete accepting branch. Rows show the configuration <em>after</em> the action. Accept only when both unread input and stack are empty.</p><table><thead><tr><th>Action</th><th>Consumed</th><th>Remaining input</th><th>Stack, top left</th></tr></thead><tbody><tr><td>Initial configuration</td><td><code>ε</code></td><td><code>[]</code></td><td><code>#</code></td></tr><tr><td>Push S above #</td><td><code>ε</code></td><td><code>[]</code></td><td><code>S#</code></td></tr><tr><td>S → [S]S</td><td><code>ε</code></td><td><code>[]</code></td><td><code>[S]S#</code></td></tr><tr><td>Match [</td><td><code>[</code></td><td><code>]</code></td><td><code>S]S#</code></td></tr><tr><td>S → ε</td><td><code>[</code></td><td><code>]</code></td><td><code>]S#</code></td></tr><tr><td>Match ]</td><td><code>[]</code></td><td><code>ε</code></td><td><code>S#</code></td></tr><tr><td>S → ε</td><td><code>[]</code></td><td><code>ε</code></td><td><code>#</code></td></tr><tr><td>Pop # and halt</td><td><code>[]</code></td><td><code>ε</code></td><td><code>ε</code></td></tr></tbody></table>",
       "steps": [
         {
-          "title": "1. Explain the first outer pair",
-          "html": "<p>Steps 1–3 start the derivation, expand <code>S → [S]S</code>, and match the first <code>[</code>. The unmatched stack <code>S]S#</code> still describes both the contents of this pair and its following sibling group.</p>"
+          "title": "Initialize without reading input",
+          "html": "<p>The first move changes stack # to S#. The input remains []. The derivation being represented is now S. Initialization is a machine setup move, not a grammar production.</p>"
         },
         {
-          "title": "2. Generate the nested pair",
-          "html": "<p>Steps 4–7 expand the first S again, match a second opening bracket, choose ε for its inside S, and match its closing bracket. The consumed prefix is now <code>[[]</code>.</p>"
+          "title": "Expand the variable without matching [ yet",
+          "html": "<p>Use S → [S]S: stack S# becomes [S]S#. The input is still []. The first [ is now a stack terminal waiting to be checked; it has not been consumed.</p>"
         },
         {
-          "title": "3. Close the first outer pair",
-          "html": "<p>Steps 8–9 choose ε for the nested pair’s following S, then match the next closing bracket. The consumed prefix is <code>[[]]</code>. One S remains to describe any group following this complete outer pair.</p>"
+          "title": "Match the first terminal",
+          "html": "<p>The next input symbol and top stack symbol are both [. Pop [ and advance one input symbol. Consumed input is [, remaining input is ], and stack is S]S#. The represented sentential form is still [S]S.</p>"
         },
         {
-          "title": "4. Generate the following simple pair",
-          "html": "<p>Steps 10–13 expand that remaining S to <code>[S]S</code>, match <code>[</code>, choose ε for its inside S, and match <code>]</code>. All input is consumed, but stack S# remains.</p>"
+          "title": "Finish the inside, then match the close",
+          "html": "<p>Use S → ε for the inside variable: S]S# becomes ]S#, with input unchanged. Then match ]: input becomes empty and stack becomes S#. The final S describes a following balanced component; it still needs its own rule.</p>"
         },
         {
-          "title": "5. Finish the derivation and acceptance check",
-          "html": "<p>Step 14 applies <code>S → ε</code> to remove the last variable. The stack now contains only #. Step 15 removes # and halts; only now are both remaining input and stack empty. The final sentential form is precisely <code>[[]][]</code>.</p>"
+          "title": "End the remainder and remove the marker",
+          "html": "<p>Use S → ε for the remainder, leaving #. Then cleanup removes # and enters halt. The derivation is S ⇒ [S]S ⇒ []S ⇒ []. Matching transitions checked the leaves; only the two S expansions after the first recursive rule removed grammar variables.</p>"
         }
       ]
     },
@@ -1734,7 +1768,7 @@
       {
         "prompt": "Use S → [S]S | ε. Trace [] and show every expansion and match.",
         "hint": "The grammar has an S for the inside of the pair and another S after it. Both need productions.",
-        "solution": "<p>After initialisation, use stack sequence <code>S# → [S]S# → S]S# → ]S# → S# → # → ε</code>. The transitions are expansion, match [, expansion S→ε, match ], expansion S→ε, then cleanup #→ε. Remaining input is <code>[]</code>, <code>[]</code>, <code>]</code>, <code>]</code>, <code>ε</code>, <code>ε</code>, <code>ε</code>. Input exhaustion occurs before the final stack S and then # are removed.</p>"
+        "solution": "<p>Every row shows the configuration after its action:</p><table><thead><tr><th>Action</th><th>Consumed</th><th>Remaining input</th><th>Stack, top left</th></tr></thead><tbody><tr><td>Initial configuration</td><td><code>ε</code></td><td><code>[]</code></td><td><code>#</code></td></tr><tr><td>Push S above #</td><td><code>ε</code></td><td><code>[]</code></td><td><code>S#</code></td></tr><tr><td>S → [S]S</td><td><code>ε</code></td><td><code>[]</code></td><td><code>[S]S#</code></td></tr><tr><td>Match [</td><td><code>[</code></td><td><code>]</code></td><td><code>S]S#</code></td></tr><tr><td>S → ε</td><td><code>[</code></td><td><code>]</code></td><td><code>]S#</code></td></tr><tr><td>Match ]</td><td><code>[]</code></td><td><code>ε</code></td><td><code>S#</code></td></tr><tr><td>S → ε</td><td><code>[]</code></td><td><code>ε</code></td><td><code>#</code></td></tr><tr><td>Pop # and halt</td><td><code>[]</code></td><td><code>ε</code></td><td><code>ε</code></td></tr></tbody></table><p>The three S-production rows form the grammar derivation. The two matching rows consume the input. Initialization and cleanup are machine actions outside the derivation.</p>"
       },
       {
         "prompt": "A trace says consumed [, remaining []], stack S]S#. Which represented sentential form (ignoring #) does it describe? Can you match the next input symbol immediately?",
@@ -1754,7 +1788,7 @@
     },
     "transfer": {
       "prompt": "For S → [S]S | ε, make a complete trace for [[][]]. Include action, consumed input, remaining input, and stack on every row. Mark which rows actually apply grammar productions.",
-      "solution": "<p>After pushing S, the top-left stack sequence is <code>S# → [S]S# → S]S# → [S]S]S# → S]S]S# → ]S]S# → S]S# → [S]S]S# → S]S]S# → ]S]S# → S]S# → ]S# → S# → # → ε</code>. The actions in order are: expand, match [, expand, match [, S→ε, match ], expand, match [, S→ε, match ], S→ε, match ], S→ε, then remove # and halt. The matched terminals spell <code>[[][]]</code>. A production row consumes no input; a match row consumes exactly the matching next terminal. At each row, concatenate the consumed prefix and stack above # to recover the current sentential form.</p>"
+      "solution": "<p>Input <code>[[][]]</code>, initial state start and initial stack #. These are all rows of one accepting branch; each row records the result of its action.</p><table><thead><tr><th>Action</th><th>Consumed</th><th>Remaining input</th><th>Stack, top left</th></tr></thead><tbody><tr><td>Initial configuration</td><td><code>ε</code></td><td><code>[[][]]</code></td><td><code>#</code></td></tr><tr><td>Push S above #</td><td><code>ε</code></td><td><code>[[][]]</code></td><td><code>S#</code></td></tr><tr><td>S → [S]S</td><td><code>ε</code></td><td><code>[[][]]</code></td><td><code>[S]S#</code></td></tr><tr><td>Match [</td><td><code>[</code></td><td><code>[][]]</code></td><td><code>S]S#</code></td></tr><tr><td>S → [S]S</td><td><code>[</code></td><td><code>[][]]</code></td><td><code>[S]S]S#</code></td></tr><tr><td>Match [</td><td><code>[[</code></td><td><code>][]]</code></td><td><code>S]S]S#</code></td></tr><tr><td>S → ε</td><td><code>[[</code></td><td><code>][]]</code></td><td><code>]S]S#</code></td></tr><tr><td>Match ]</td><td><code>[[]</code></td><td><code>[]]</code></td><td><code>S]S#</code></td></tr><tr><td>S → [S]S</td><td><code>[[]</code></td><td><code>[]]</code></td><td><code>[S]S]S#</code></td></tr><tr><td>Match [</td><td><code>[[][</code></td><td><code>]]</code></td><td><code>S]S]S#</code></td></tr><tr><td>S → ε</td><td><code>[[][</code></td><td><code>]]</code></td><td><code>]S]S#</code></td></tr><tr><td>Match ]</td><td><code>[[][]</code></td><td><code>]</code></td><td><code>S]S#</code></td></tr><tr><td>S → ε</td><td><code>[[][]</code></td><td><code>]</code></td><td><code>]S#</code></td></tr><tr><td>Match ]</td><td><code>[[][]]</code></td><td><code>ε</code></td><td><code>S#</code></td></tr><tr><td>S → ε</td><td><code>[[][]]</code></td><td><code>ε</code></td><td><code>#</code></td></tr><tr><td>Pop # and halt</td><td><code>[[][]]</code></td><td><code>ε</code></td><td><code>ε</code></td></tr></tbody></table><p>Exactly the rows labelled <code>S → …</code> apply grammar productions. A production leaves the unread input unchanged. Each Match row consumes one matching terminal. At all work-state rows, consumed input followed by the stack above # gives the represented sentential form.</p>"
     },
     "sources": [
       {
@@ -1768,7 +1802,9 @@
           20
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 17 converted grammar rules to stack replacements. This lesson keeps four pieces of bookkeeping visible: the input already consumed, the input still unread, the stack, and the derivation represented by that stack.</p><p>Use <code>S → [S]S | ε</code>, with start variable S. The first S inside the brackets describes their contents; the last S describes a following balanced group. Top is on the left, and # is a stack bottom marker, not input. The machine starts in start with #, works in work, and finishes in halt.</p><p>On an <strong>expansion</strong> row, unread input stays fixed. On a <strong>match</strong> row, one input terminal and the matching stack terminal disappear together. At every row, consumed input followed by remaining input must still be the original target. We begin with the short input <code>[]</code> before reading the longer table.</p>",
+    "bridge": "The grammar-to-PDA argument proves the two descriptions have the same language. Lesson 19 builds the reverse conversion by giving grammar variables a precise meaning in a machine run."
   },
   {
     "id": "19",
@@ -1782,12 +1818,12 @@
     ],
     "sections": [
       {
-        "title": "See the whole conversion on a small machine",
-        "html": "<p>Consider this machine with initial state p, only accepting state f, an initially empty stack, and these four transitions:</p><table><thead><tr><th>From</th><th>To</th><th>Input</th><th>Stack action</th></tr></thead><tbody><tr><td>p</td><td>r</td><td>a</td><td>push A</td></tr><tr><td>r</td><td>s</td><td>b</td><td>pop A</td></tr><tr><td>s</td><td>t</td><td>c</td><td>push B</td></tr><tr><td>t</td><td>f</td><td>d</td><td>pop B</td></tr></tbody></table><p>There are no other transitions. The machine recognizes only <code>abcd</code>. Its stack returns to its starting height after <code>ab</code> and again after <code>cd</code>.</p><p>A grammar can describe the run like this:</p><pre>Start → Xₚ,𝒻\nXₚ,𝒻 → Xₚ,ₛ Xₛ,𝒻\nXₚ,ₛ → a Xᵣ,ᵣ b\nXₛ,𝒻 → c Xₜ,ₜ d\nXᵣ,ᵣ → ε\nXₜ,ₜ → ε</pre><p>These are the useful rules for the example. The generic construction also adds other state-pair variables and rules; unused or unproductive ones can be removed afterward.</p>"
+        "title": "Why the example splits at state s",
+        "html": "<p>The machine’s a-edge pushes A, and its b-edge pops A. At state s the stack is back at its starting height. The c/d pair then makes another balanced segment. This is why the grammar can concatenate a p-to-s variable with an s-to-f variable.</p><p>A useful variable here is one that can participate in a complete accepting derivation. The full construction produces many state-pair variables; the worked example lists only the rules needed for the unique abcd path.</p>"
       },
       {
         "title": "Prepare the machine before applying this recipe",
-        "html": "<p>This construction uses a normalized PDA with one accepting state, empty stack at the start and at acceptance, and transitions that push exactly one symbol or pop exactly one symbol. A transition does not both push and pop. It may read one input symbol or ε while performing that stack action.</p><ol><li>Introduce a fresh final state if there are several original final states.</li><li>Introduce a fresh bottom marker and a cleanup phase so an accepting branch can empty its stack before reaching the new final state. Premature cleanup cannot accept because the whole input must still be consumed.</li><li>Split a replace operation into a pop followed by single pushes, using fresh private states. Only the original step reads its input symbol; the added steps read ε.</li><li>If a step changes no stack symbol, simulate it by pushing a fresh temporary symbol and immediately popping that symbol through a private state.</li></ol><p>These transformations preserve the recognized language for a <em>nondeterministic</em> PDA. They need not preserve determinism. They are a preparation for proving the CFG–PDA theorem, not a promise that every final-state DPDA has an equivalent ordinary empty-stack DPDA.</p>"
+        "html": "<p><strong>Acceptance convention for this normal form:</strong> the run must reach its designated final state after consuming the whole input, and its stack must then be empty. An empty stack in a nonfinal state is not sufficient. This prevents an initially empty stack from accepting ε automatically.</p><p>This construction uses a normalized PDA with one accepting state, empty stack at the start and at acceptance, and transitions that push exactly one symbol or pop exactly one symbol. A transition does not both push and pop. It may read one input symbol or ε while performing that stack action.</p><ol><li>Introduce a fresh final state if there are several original final states.</li><li>Introduce a fresh bottom marker and a cleanup phase so an accepting branch can empty its stack before reaching the new final state. Premature cleanup cannot accept because the whole input must still be consumed.</li><li>Split a replace operation into a pop followed by single pushes, using fresh private states. Only the original step reads its input symbol; the added steps read ε.</li><li>If a step changes no stack symbol, simulate it by pushing a fresh temporary symbol and immediately popping that symbol through a private state.</li></ol><p>These transformations preserve the recognized language for a <em>nondeterministic</em> PDA. They need not preserve determinism. They are a preparation for proving the CFG–PDA theorem, not a promise that every final-state DPDA has an equivalent ordinary empty-stack DPDA.</p>"
       },
       {
         "title": "Give a state-pair variable a precise meaning",
@@ -1807,31 +1843,31 @@
       },
       {
         "title": "What the proof establishes",
-        "html": "<p>For soundness, show that every grammar rule describes a legal machine segment. Empty segments, concatenated segments, and a correctly matched push/pop pair are all legal. An induction on a parse tree then shows that every terminal string generated by <code>Xₚ,ᵩ</code> has the promised machine run.</p><p>For completeness, take a balanced machine run. If it is empty, use the empty rule. Otherwise inspect its stack heights. Split it at an intermediate return to the starting height if one exists. If none exists, match its first push to its last pop. Apply the corresponding rule and recurse on shorter segments. Thus every accepting run has a derivation.</p><p>The point is the meaning assigned to each variable. You do not need to memorize a long list of productions without knowing which computation each one describes.</p>"
+        "html": "<p>For soundness, show that every grammar rule describes a legal machine segment. Empty segments, concatenated segments, and a correctly matched push/pop pair are all legal. An induction on a parse tree then shows that every terminal string generated by <code>Xₚ,ᵩ</code> has the promised machine run.</p><p>For completeness, take a balanced machine run. If it is empty, use the empty rule. Otherwise inspect its stack heights. Split it at an intermediate return to the starting height if one exists. If none exists, match its first push to its last pop. Apply the corresponding rule and recurse on shorter segments. Thus every accepting run has a derivation.</p><p>The point is the meaning assigned to each variable. You do not need to memorize a long list of productions without knowing which computation each one describes.</p><p>Here, “induction on a parse tree” means checking the empty base segment, then showing that if the child subtrees describe valid smaller segments, the parent rule combines them into the promised larger segment. Repeating that reasoning reaches the start variable.</p>"
       }
     ],
     "worked": {
       "title": "Convert the four-edge machine for abcd",
-      "intro": "Use the exact machine at the top. Its initial and final stack are empty, so no normalization is needed.",
+      "intro": "<p>Use the following exact four-edge machine. It starts in p, accepts only in f, and has empty stack at the beginning and end of its accepting run. No normalization is needed for this example.</p><p>Consider this machine with initial state p, only accepting state f, an initially empty stack, and these four transitions:</p><table><thead><tr><th>From</th><th>To</th><th>Input</th><th>Stack action</th></tr></thead><tbody><tr><td>p</td><td>r</td><td>a</td><td>push A</td></tr><tr><td>r</td><td>s</td><td>b</td><td>pop A</td></tr><tr><td>s</td><td>t</td><td>c</td><td>push B</td></tr><tr><td>t</td><td>f</td><td>d</td><td>pop B</td></tr></tbody></table><p>There are no other transitions. The machine recognizes only <code>abcd</code>. Its stack returns to its starting height after <code>ab</code> and again after <code>cd</code>.</p><p>A grammar can describe the run like this:</p><pre>Start → Xₚ,𝒻\nXₚ,𝒻 → Xₚ,ₛ Xₛ,𝒻\nXₚ,ₛ → a Xᵣ,ᵣ b\nXₛ,𝒻 → c Xₜ,ₜ d\nXᵣ,ᵣ → ε\nXₜ,ₜ → ε</pre><p>These are the useful rules for the example. The generic construction also adds other state-pair variables and rules; unused or unproductive ones can be removed afterward.</p><p>Its complete stack trace is:</p><table><thead><tr><th>State</th><th>Input still unread</th><th>Stack</th></tr></thead><tbody><tr><td><code>p</code></td><td><code>abcd</code></td><td><code>ε</code></td></tr><tr><td><code>r</code></td><td><code>bcd</code></td><td><code>A</code></td></tr><tr><td><code>s</code></td><td><code>cd</code></td><td><code>ε</code></td></tr><tr><td><code>t</code></td><td><code>d</code></td><td><code>B</code></td></tr><tr><td><code>f</code></td><td><code>ε</code></td><td><code>ε</code></td></tr></tbody></table><p>We now explain the useful grammar rules above, one computation segment at a time.</p>",
       "steps": [
         {
-          "title": "1. Choose the start variable",
+          "title": "Choose the start variable",
           "html": "<p>The machine starts at p and accepts only at f. Write <code>Start → Xₚ,𝒻</code>. This variable must describe a complete empty-to-empty run.</p>"
         },
         {
-          "title": "2. Split where the stack first returns to empty",
+          "title": "Split where the stack first returns to empty",
           "html": "<p>After reading ab, the machine is in s with empty stack. Use <code>Xₚ,𝒻 → Xₚ,ₛ Xₛ,𝒻</code>. The shared state s is necessary; arbitrary incompatible endpoints would not form a run.</p>"
         },
         {
-          "title": "3. Convert the A push/pop pair",
+          "title": "Convert the A push/pop pair",
           "html": "<p>The a-edge pushes A and enters r. The b-edge leaves r and pops that same A. Therefore <code>Xₚ,ₛ → a Xᵣ,ᵣ b</code>. There is no intervening move, so <code>Xᵣ,ᵣ → ε</code>. This segment generates ab.</p>"
         },
         {
-          "title": "4. Convert the B push/pop pair",
+          "title": "Convert the B push/pop pair",
           "html": "<p>The c-edge pushes B and enters t. The d-edge leaves t and pops B. Add <code>Xₛ,𝒻 → c Xₜ,ₜ d</code> and <code>Xₜ,ₜ → ε</code>. This segment generates cd.</p>"
         },
         {
-          "title": "5. Finish and compare the languages",
+          "title": "Finish and compare the languages",
           "html": "<p>The derivation is <code>Start ⇒ Xₚ,𝒻 ⇒ Xₚ,ₛXₛ,𝒻 ⇒ aXᵣ,ᵣbXₛ,𝒻 ⇒ abXₛ,𝒻 ⇒ abcXₜ,ₜd ⇒ abcd</code>. The reduced grammar generates only abcd, exactly the input of the machine’s only accepting path.</p>"
         }
       ]
@@ -1870,7 +1906,9 @@
           22
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lessons 17–18 turned a grammar into a machine. We now go in the other direction: describe complete pieces of a PDA run with grammar variables.</p><p><code>Xₚ,ᵩ</code> is <strong>one variable indexed by two states</strong>. Read it as “a balanced run from state p to state q.” Balanced means it restores the starting stack height and never removes the stack below that height. The subscripts are state names, not characters to generate.</p><p>The small example starts with an empty stack and accepts only in its specified final state f after all input is consumed and the stack is empty. An empty stack in the initial nonfinal state does not accept ε. This is a different declared convention from ordinary empty-stack acceptance in lesson 10. Its transitions only push one symbol or pop one symbol; the longer conversion explains how to prepare other machines.</p>",
+    "bridge": "The conversion proves that PDA languages are context-free. It does not preserve or establish determinism; lesson 20 separates those claims."
   },
   {
     "id": "20",
@@ -1910,26 +1948,26 @@
     ],
     "worked": {
       "title": "Trace ab#ba and test the deterministic choices",
-      "intro": "Use the complete marked-palindrome transition table above. The bottom marker Z stays on the stack.",
+      "intro": "<p>Target input: <code>ab#ba</code>. Start in push with stack Z, top on the left. Use final-state acceptance, with accept as the only final state and no outgoing transitions from it. The complete table is:</p><table><thead><tr><th>State</th><th>Input</th><th>Top</th><th>Replacement</th><th>Next state</th></tr></thead><tbody><tr><td>push</td><td>a</td><td>T ∈ {a,b,Z}</td><td>aT</td><td>push</td></tr><tr><td>push</td><td>b</td><td>T ∈ {a,b,Z}</td><td>bT</td><td>push</td></tr><tr><td>push</td><td>#</td><td>T ∈ {a,b,Z}</td><td>T</td><td>match</td></tr><tr><td>match</td><td>a</td><td>a</td><td>ε</td><td>match</td></tr><tr><td>match</td><td>b</td><td>b</td><td>ε</td><td>match</td></tr><tr><td>match</td><td>ε</td><td>Z</td><td>Z</td><td>accept</td></tr></tbody></table><p>There is no added $ in this version. # is the one required input separator; Z remains as the bottom marker when the final state is reached. A row with T represents one row for each T in {a,b,Z}.</p>",
       "steps": [
         {
-          "title": "1. Read a in push phase",
+          "title": "Read a in push phase",
           "html": "<p>Stack <code>Z</code> becomes <code>aZ</code>. The only applicable transition reads a and pushes a above the current top.</p>"
         },
         {
-          "title": "2. Read b in push phase",
+          "title": "Read b in push phase",
           "html": "<p>Stack <code>aZ</code> becomes <code>baZ</code>. The stack now stores the prefix ab in the reverse order needed for comparison.</p>"
         },
         {
-          "title": "3. Read the visible separator",
+          "title": "Read the visible separator",
           "html": "<p>On # change from push to match, leaving stack <code>baZ</code> unchanged. There is no guess about where the first half ends.</p>"
         },
         {
-          "title": "4. Match b and then a",
+          "title": "Match b and then a",
           "html": "<p>Reading b pops b: <code>baZ → aZ</code>. Reading a pops a: <code>aZ → Z</code>. A mismatch, such as input a while top is b, has no transition.</p>"
         },
         {
-          "title": "5. Finish without introducing a competing choice",
+          "title": "Finish without introducing a competing choice",
           "html": "<p>At top Z in match state, the only enabled move is the ε transition to accept. All input has been consumed, so the run accepts. For <code>ab#baa</code>, the same transition would reach accept with a still unread, and the run rejects. For <code>ab#ab</code>, matching fails earlier.</p>"
         }
       ]
@@ -1973,7 +2011,9 @@
           27
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 16 used deterministic counting, while lesson 17’s general conversion could branch. Here we distinguish a particular machine being nondeterministic from a whole language requiring nondeterminism.</p><p>To check a machine, fix the state and top symbol. Each next input symbol must allow at most one action. If an ε action is available, no input-reading action may compete at that same state and top. ε moves can therefore be deterministic when they are forced.</p><p>The worked language has an <em>input</em> separator #, as in ab#ba, and a separate <em>stack</em> marker Z. The separator tells the machine exactly when to stop pushing and begin matching. The example uses final-state acceptance: all input must be consumed, but Z remains. It does not append $ unless that alternative convention is explicitly chosen.</p>",
+    "bridge": "A particular nondeterministic design does not prove a language impossible for all DPDAs. The next lessons make a stronger negative claim about all CFGs and PDAs, using the CFL pumping lemma."
   },
   {
     "id": "21",
@@ -2001,11 +2041,11 @@
       },
       {
         "title": "Who controls each choice?",
-        "html": "<table><thead><tr><th>Order</th><th>Choice</th><th>In a proof of non-context-freeness</th></tr></thead><tbody><tr><td>1</td><td>p</td><td>The assumed lemma supplies an arbitrary pumping length. You do not assign p = 3.</td></tr><tr><td>2</td><td>s</td><td>You choose a string in L whose length is at least p. It normally depends on p.</td></tr><tr><td>3</td><td>u, v, x, y, z</td><td>The assumed lemma may choose any split satisfying the two length conditions. Your proof must cover every such split.</td></tr><tr><td>4</td><td>i</td><td>You choose an integer i ≥ 0 that makes the pumped string leave L. Different cases may use different i.</td></tr></tbody></table><p>The exact claim you must establish is: <strong>for every possible pumping length, there is a suitable string such that every legal split fails for at least one exponent</strong>. A single bad split establishes nothing about the other splits. One good exponent also establishes nothing about the requirement that every exponent work.</p><p><code>i = 1</code> always reproduces <code>s</code>, so it cannot create the contradiction. Try <code>i = 0</code> to delete pieces and <code>i = 2</code> to duplicate them.</p>"
+        "html": "<table><thead><tr><th>Order</th><th>Choice</th><th>In a proof of non-context-freeness</th></tr></thead><tbody><tr><td>1</td><td>p</td><td>The assumed lemma supplies an arbitrary pumping length. You do not assign p = 3.</td></tr><tr><td>2</td><td>s</td><td>You choose a string in L whose length is at least p. It normally depends on p.</td></tr><tr><td>3</td><td>u, v, x, y, z</td><td>The assumed lemma may choose any split satisfying the two length conditions. Your proof must cover every such split.</td></tr><tr><td>4</td><td>i</td><td>You choose an integer i ≥ 0 that makes the pumped string leave L. Different cases may use different i.</td></tr></tbody></table><p>The exact claim you must establish is: <strong>for every possible pumping length, there is a suitable string such that every legal split fails for at least one exponent</strong>. A single bad split establishes nothing about the other splits. One good exponent also establishes nothing about the requirement that every exponent work.</p><p><code>i = 1</code> always reproduces <code>s</code>, so it cannot create the contradiction. Try <code>i = 0</code> to delete pieces and <code>i = 2</code> to duplicate them.</p><p>In logical words, a valid refutation has the order <code>for every p → choose s → for every legal split → choose i</code>. The last choice may depend on the split, but s must have been fixed before the split was considered.</p><p>Supplementary example: <a href=\"https://www.cs.cornell.edu/courses/cs381/2000FA/Assignments/note1pum.htm\" target=\"_blank\" rel=\"noopener\">Cornell’s deliberately incorrect pumping proof</a> shows why defeating one chosen split is insufficient.</p>"
       },
       {
         "title": "Why a parse tree supplies five pieces",
-        "html": "<p>A fixed grammar has finitely many variables. A sufficiently long derived string needs a sufficiently deep parse tree because every production has a finite right-hand side. Along a long enough root-to-leaf path, some variable <code>X</code> therefore appears twice.</p><ol><li>Choose a parse tree for the string with the fewest nodes.</li><li>Find two occurrences of the same variable on one deep path, sufficiently close to the leaves.</li><li>The upper X generates <code>vxy</code>. The lower X generates <code>x</code>. Everything before the upper subtree is <code>u</code>, and everything after it is <code>z</code>.</li><li>The derivation between the X occurrences has the form <code>X ⇒* vXy</code>. Repeating it adds a copy of v to the left and a copy of y to the right.</li><li>Replacing the upper subtree by the lower one produces <code>uxz</code>. Inserting another copy of the upper context produces <code>uvvxyyz</code>.</li></ol><p>If v and y were both empty, the smaller subtree would derive exactly the original string using fewer nodes. That contradicts the choice of a smallest tree. Thus <code>|vy| &gt; 0</code>. Choosing the repeated variables near the bottom bounds the size of the upper subtree, giving <code>|vxy| ≤ p</code>.</p><p>For a more explicit bound, let <code>b</code> be the larger of 2 and the maximum number of symbols on a production's right-hand side, and let <code>m</code> be the number of variables. A tree of height h has at most <code>b<sup>h</sup></code> terminal leaves. A conservative bound such as <code>p = b<sup>m+1</sup></code> forces a long path; among its last <code>m+1</code> variable nodes there is a repeated variable. The exact smallest pumping length is not needed in a non-CFL proof.</p>"
+        "html": "<p>This section explains why the theorem is true. You may return to it after practising the pumping conditions; the following non-CFL proofs use the theorem, not a calculation of its bound.</p><p>A fixed grammar has finitely many variables. A sufficiently long derived string needs a sufficiently deep parse tree because every production has a finite right-hand side. Along a long enough root-to-leaf path, some variable <code>X</code> therefore appears twice.</p><ol><li>Choose a parse tree for the string with the fewest nodes.</li><li>Find two occurrences of the same variable on one deep path, sufficiently close to the leaves.</li><li>The upper X generates <code>vxy</code>. The lower X generates <code>x</code>. Everything before the upper subtree is <code>u</code>, and everything after it is <code>z</code>.</li><li>The derivation between the X occurrences has the form <code>X ⇒* vXy</code>. Repeating it adds a copy of v to the left and a copy of y to the right.</li><li>Replacing the upper subtree by the lower one produces <code>uxz</code>. Inserting another copy of the upper context produces <code>uvvxyyz</code>.</li></ol><p>If v and y were both empty, the smaller subtree would derive exactly the original string using fewer nodes. That contradicts the choice of a smallest tree. Thus <code>|vy| &gt; 0</code>. Choosing the repeated variables near the bottom bounds the size of the upper subtree, giving <code>|vxy| ≤ p</code>.</p><details><summary>Optional: one conservative bound from the grammar</summary><p>For a more explicit bound, let <code>b</code> be the larger of 2 and the maximum number of symbols on a production's right-hand side, and let <code>m</code> be the number of variables. A tree of height h has at most <code>b<sup>h</sup></code> terminal leaves. A conservative bound such as <code>p = b<sup>m+1</sup></code> forces a long path; among its last <code>m+1</code> variable nodes there is a repeated variable. The exact smallest pumping length is not needed in a non-CFL proof.</p></details>"
       },
       {
         "title": "What the lemma can establish",
@@ -2014,7 +2054,7 @@
     ],
     "worked": {
       "title": "Read and verify a legal pumping split",
-      "intro": "Use the language {0ⁿ1ⁿ : n ≥ 0}, the string 000111, and a pumping-length bound p = 2 for this demonstration.",
+      "intro": "<p>Use <code>L = {0ⁿ1ⁿ : n ≥ 0}</code>, generated by S → 0S1 | ε. For the single string <code>000111</code>, inspect the supplied split:</p><table><thead><tr><th>u</th><th>v</th><th>x</th><th>y</th><th>z</th></tr></thead><tbody><tr><td>00</td><td>0</td><td>ε</td><td>1</td><td>11</td></tr></tbody></table><p>For this demonstration use bound p = 2. We will check the split conditions and the pumped results. This numerical illustration teaches how pumping works; the non-CFL proofs in later lessons keep p arbitrary and do not choose their own split.</p>",
       "steps": [
         {
           "title": "Write the five pieces",
@@ -2088,7 +2128,9 @@
           18
         ]
       }
-    ]
+    ],
+    "setup": "<p>Until now, you established that languages are context-free by building grammars or PDAs. We now introduce a way to prove that a language is <strong>not</strong> context-free. The pumping lemma says that every sufficiently long string in a CFL has some pair of coordinated pieces that can repeat or disappear while staying in the language.</p><table><thead><tr><th>Pieces in <code>s = u v x y z</code></th><th>What pumping does</th></tr></thead><tbody><tr><td>u and z</td><td>Keep the outside prefix and suffix unchanged.</td></tr><tr><td>v and y</td><td>Repeat both using the same exponent i. At i = 0 both disappear; at i = 2 both occur twice.</td></tr><tr><td>x</td><td>Keep this middle piece once. It may be empty.</td></tr><tr><td>p</td><td>A length bound supplied by the assumed theorem. It is not the pumping exponent i.</td></tr></tbody></table><p>A <strong>decomposition</strong> is a split into five consecutive pieces. <code>|vxy| ≤ p</code> bounds their whole consecutive window; <code>|vy| &gt; 0</code> says at least one repeated piece is nonempty. The worked numerical example explains the operation. In a non-CFL proof, p remains arbitrary and your argument must defeat every legal split.</p>",
+    "bridge": "Remember the choice order: the lemma supplies p, you choose the witness, the split remains arbitrary, and then you choose a failing exponent. Lesson 22 applies that structure to three equal blocks."
   },
   {
     "id": "22",
@@ -2125,7 +2167,7 @@
     ],
     "worked": {
       "title": "Inspect the proof on aaabbbccc",
-      "intro": "Use p = 3 only to illustrate the general proof. The actual proof keeps p arbitrary.",
+      "intro": "<p>Target language: <code>{aⁿbⁿcⁿ : n ≥ 0}</code>. Use <code>aaabbbccc</code> and p = 3 to illustrate how the window bound works. A legal split has <code>s = uvxyz</code>, <code>|vxy| ≤ p</code> and <code>|vy| &gt; 0</code>.</p><p>At i = 0, delete v and y. At i = 2, repeat each twice. The general proof is independent of these numerical examples: some count must change while another stays p.</p>",
       "steps": [
         {
           "title": "Choose a witness inside the language",
@@ -2187,7 +2229,9 @@
           22
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 21 supplied the proof structure. Here the target is <code>L = {aⁿbⁿcⁿ : n ≥ 0}</code>: three ordered blocks whose lengths all agree. We assume a pumping length p and choose <code>aᵖbᵖcᵖ</code>, which is a member of length 3p.</p><p>The key observation is about a <strong>consecutive window</strong>. To include an a and a c, it must cross all p bs plus those two endpoint symbols, so it has at least p + 2 symbols. A window of length at most p cannot do that. Some symbol count is therefore untouched by pumping.</p><p>Pumping down means choosing i = 0 and deleting v and y. It removes at least one symbol but leaves an untouched count at p, so all three counts cannot remain equal. The worked p = 3 illustration makes those facts visible; the full proof later keeps p arbitrary.</p>",
+    "bridge": "One changed count and one untouched count defeated equality. Lesson 23 shows why changing counts alone is insufficient when the definition allows inequalities."
   },
   {
     "id": "23",
@@ -2228,7 +2272,7 @@
     ],
     "worked": {
       "title": "Write the entire chained-inequality proof",
-      "intro": "Keep the block exponents r,s,t separate from the pumping exponent i. Use p only for the pumping length.",
+      "intro": "<p>Prove that <code>L = {aʳbˢcᵗ : 0 ≤ r ≤ s ≤ t}</code> is not context-free. Use the witness <code>s₀ = aᵖbᵖcᵖ</code>. The complete choice rule is:</p><table><thead><tr><th>Case for the arbitrary legal split</th><th>Exponent</th><th>Reason a required inequality fails</th></tr></thead><tbody><tr><td>No a occurs in v or y: dₐ = 0.</td><td>i = 0: pump down.</td><td>Either b decreases below unchanged a, or only c decreases below unchanged b.</td></tr><tr><td>Some a occurs in v or y: dₐ > 0.</td><td>i = 2: pump up.</td><td>No c can be in that short window. Either b rises above unchanged c, or only a rises above unchanged b.</td></tr></tbody></table><p>The counts dₐ,dᵦ,d𝒸 refer only to v and y together, not the full window vxy. The steps now turn this case plan into a complete quantified proof.</p>",
       "steps": [
         {
           "title": "Assume context-freeness",
@@ -2295,7 +2339,9 @@
           29
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 22 could defeat every split by deleting its pumped pieces. With inequalities, deletion can preserve membership. We must calculate which required inequality fails.</p><p>The target is <code>{aʳbˢcᵗ : 0 ≤ r ≤ s ≤ t}</code>. The letters r, s and t count the three blocks. We call the complete witness <code>s₀</code> to distinguish it from the middle block count s. Use <code>s₀ = aᵖbᵖcᵖ</code> so both inequalities begin at equality.</p><p><code>dₐ, dᵦ, d𝒸</code> count the as, bs and cs contained in v and y <em>together</em>. Pumping with exponent i changes an original count p to <code>p + (i−1)d</code>: subtract d at i = 0, keep p at i = 1, add d at i = 2. The window bound still prevents pumping both a and c. We choose the exponent after seeing which case the arbitrary split belongs to.</p>",
+    "bridge": "Name the exact failed condition and keep the split arbitrary. Lesson 24 applies the same discipline when membership requires identical halves rather than only a count relationship."
   },
   {
     "id": "24",
@@ -2327,16 +2373,16 @@
       },
       {
         "title": "Optional extension: filtering by a regular language",
-        "html": "<p>Context-free languages are closed under intersection with a <strong>regular</strong> language. A PDA can track the finite-state machine for the regular condition alongside its own state without adding another stack. Therefore, if L were context-free and R were regular, <code>L ∩ R</code> would be context-free.</p><p>For copying, the regular filter <code>R = 0+1+0+1+</code> keeps exactly four nonempty runs. The four-run fact shows</p><pre>C ∩ R = {0ᴬ1ᴮ0ᴬ1ᴮ : A ≥ 1, B ≥ 1}.</pre><p>The same bounded-window proof shows that this intersection is not context-free, so closure gives another route to the conclusion about C. A proof requested specifically by the pumping lemma can instead use the direct proof above; it already rules out membership in C.</p><p>Do not replace R by an arbitrary context-free language and assume the same closure rule. CFLs are not closed under general intersection. For example, the CFLs <code>{a<sup>r</sup>b<sup>r</sup>c<sup>t</sup>}</code> and <code>{a<sup>r</sup>b<sup>s</sup>c<sup>s</sup>}</code> intersect in <code>{a<sup>n</sup>b<sup>n</sup>c<sup>n</sup>}</code>, which you proved non-context-free.</p>"
+        "html": "<p><strong>Optional extension.</strong> An intersection <code>L ∩ R</code> contains strings belonging to both languages. A language class is closed under an operation when applying that operation keeps you in the class. In the regular-expression filter <code>0+1+0+1+</code> below, + means “one or more copies,” not arithmetic addition.</p><p>Context-free languages are closed under intersection with a <strong>regular</strong> language. A PDA can track the finite-state machine for the regular condition alongside its own state without adding another stack. Therefore, if L were context-free and R were regular, <code>L ∩ R</code> would be context-free.</p><p>For copying, the regular filter <code>R = 0+1+0+1+</code> keeps exactly four nonempty runs. The four-run fact shows</p><pre>C ∩ R = {0ᴬ1ᴮ0ᴬ1ᴮ : A ≥ 1, B ≥ 1}.</pre><p>The same bounded-window proof shows that this intersection is not context-free, so closure gives another route to the conclusion about C. A proof requested specifically by the pumping lemma can instead use the direct proof above; it already rules out membership in C.</p><p>Do not replace R by an arbitrary context-free language and assume the same closure rule. CFLs are not closed under general intersection. For example, the CFLs <code>{a<sup>r</sup>b<sup>r</sup>c<sup>t</sup>}</code> and <code>{a<sup>r</sup>b<sup>s</sup>c<sup>s</sup>}</code> intersect in <code>{a<sup>n</sup>b<sup>n</sup>c<sup>n</sup>}</code>, which you proved non-context-free.</p>"
       },
       {
         "title": "Choose the method that matches the claim",
-        "html": "<table><thead><tr><th>Claim or task</th><th>Useful method</th><th>What a complete answer must show</th></tr></thead><tbody><tr><td>A particular string follows a grammar</td><td>Derivation or parse tree</td><td>Every expansion is a production; the yield is exactly the input.</td></tr><tr><td>A language is context-free</td><td>CFG, PDA, or a valid closure construction</td><td>Every generated or accepted string is legal, and every legal string can be generated or accepted.</td></tr><tr><td>A particular machine accepts a string</td><td>Configuration trace</td><td>State, remaining input, stack, and the actual acceptance condition.</td></tr><tr><td>A machine is deterministic</td><td>Transition audit</td><td>No competing moves from a configuration, including conflicts between ε-moves and input-consuming moves.</td></tr><tr><td>A language is not context-free</td><td>CFL pumping lemma or another impossibility theorem</td><td>An arbitrary pumping length, a legal witness, all legal splits, and a failing exponent in every case.</td></tr></tbody></table><p>For empty-stack acceptance, the full input must also be consumed. If a deterministic construction relies on an end marker, declare that marker and the fact that the machine reads the encoded input <code>w⊣</code>. Finishing a trace with a bottom marker still present is not an empty stack.</p>"
+        "html": "<table><thead><tr><th>Claim or task</th><th>Useful method</th><th>What a complete answer must show</th></tr></thead><tbody><tr><td>A particular string follows a grammar</td><td>Derivation or parse tree</td><td>Every expansion is a production; the yield is exactly the input.</td></tr><tr><td>A language is context-free</td><td>CFG, PDA, or a valid closure construction</td><td>Every generated or accepted string is legal, and every legal string can be generated or accepted.</td></tr><tr><td>A particular machine accepts a string</td><td>Configuration trace</td><td>State, remaining input, stack, and the actual acceptance condition.</td></tr><tr><td>A machine is deterministic</td><td>Transition audit</td><td>No competing moves from a configuration, including conflicts between ε-moves and input-consuming moves.</td></tr><tr><td>A language is not context-free</td><td>CFL pumping lemma or another impossibility theorem</td><td>An arbitrary pumping length, a legal witness, all legal splits, and a failing exponent in every case.</td></tr></tbody></table><p>For empty-stack acceptance, the full input must also be consumed. If a deterministic construction relies on an end marker, declare that marker and the fact that the machine reads the encoded input <code>w$</code>. Finishing a trace with a bottom marker still present is not an empty stack.</p>"
       }
     ],
     "worked": {
       "title": "A direct copy-language proof you can reconstruct",
-      "intro": "The string has four runs of length N = 2p. The proof uses deletion, so it never creates extra runs.",
+      "intro": "<p>Target: <code>C = {ww : w ∈ {0,1}*}</code>. Assume a pumping length p, set N = 2p, and choose <code>s = 0ᴺ1ᴺ0ᴺ1ᴺ</code>. It is the copy of <code>0ᴺ1ᴺ</code>.</p><p>We use the four-run fact explained in the setup: a string <code>0ᴬ1ᴮ0ᴰ1ᴱ</code> with all four runs nonempty is a copy only when A = D and B = E. Pumping down deletes at least one but at most p symbols in at most two adjacent runs. No run disappears, and a changed run’s matching partner stays unchanged. The steps justify each part of that argument.</p>",
       "steps": [
         {
           "title": "Make the assumption and pick the witness",
@@ -2387,8 +2433,8 @@
       "explanation": "A longer legal witness simplifies the exhaustive proof; the lemma only requires its length to be at least p."
     },
     "transfer": {
-      "prompt": "Complete these independent tasks before calling the module finished: (1) derive and parse a small program containing a list, a nested block, and a call; (2) design a CFG and PDA for {aⁿbᵐcⁿ⁺ᵐ : n,m ≥ 0}; (3) convert a grammar to a PDA and trace (()(())); (4) state a deterministic balanced-parentheses machine with its acceptance convention; (5) reproduce a non-CFL proof with all quantifiers. Use the answer guide to assess the method, not just the final output.",
-      "solution": "<ol><li><p>Choose a small grammar with a start rule for the complete program, a recursive list rule with an ε base case, a statement rule for a nested block, and a rule for calls. Expand only using its productions. Check that the leaves reproduce every keyword, identifier token, comma, parenthesis, and brace in order. A parse tree must show the list and statement nonterminals rather than skip directly to the program text. Return to the earlier parse-tree lesson if any expansion lacks a rule.</p></li><li><p>One CFG is <code>S → aSc | T</code> and <code>T → bTc | ε</code>. It produces n a's, then m b's, then m+n c's. A PDA pushes one marker for each a or b, uses states to enforce a*b*c* order, and pops one marker for each c. Accept only after the complete input is read and all counting markers are gone, with the bottom-marker convention stated. Check ε, <code>abcc</code>, <code>aabccc</code>, and incorrect-order or wrong-count strings. For soundness, each accepted c matches one earlier a or b; for completeness, every legal word follows these phases and exhausts exactly the stored markers.</p></li><li><p>For <code>S → (S)S | ε</code>, initialize the stack with S. Replace a top S by the right-hand side of either rule and match top terminals against the next input symbol. With stack top on the left, use a sentential-form derivation such as <code>S ⇒ (S)S ⇒ ()S ⇒ ()(S)S ⇒ ()((S)S)S ⇒ ()(()S)S ⇒ ()(())S ⇒ ()(())</code> for a shorter rehearsal; then trace the requested longer string <code>(()(()))</code> independently. Record every rewrite and terminal match, including remaining input and stack. Both strings are balanced. A trace ending with unread input or a nonempty grammar stack is incomplete.</p></li><li><p>Push X for each opening parenthesis; pop X for each closing parenthesis; reject a close with no X available. The invariant is that the number of X markers equals opens minus closes in the consumed prefix. Accept after all input exactly when this count is zero. Final-state acceptance can leave a bottom marker. Deterministic empty-stack acceptance for all balanced strings requires a declared end-of-input mechanism, such as reading a right-end marker ⊣ and popping the bottom marker then. An unconditional ε-pop competing with an input move is not deterministic.</p></li><li><p>Use the six-line proof structure from Lesson 21 and select either the triple-equality, chained-inequality, or copy proof. Your answer must state arbitrary p; verify witness membership and length; retain an arbitrary legal decomposition; explain an exhaustive window argument; select a failing exponent after the split; and connect the failure to a precise language condition. If any one of these is missing, revise the proof before treating the skill as independent.</p></li></ol>"
+      "prompt": "<p><strong>Core problem: apply the copy proof with different terminal names.</strong> Prove <code>D = {ww : w ∈ {a,b}*}</code> is not context-free. Assume arbitrary pumping length p and use <code>s = a²ᵖb²ᵖa²ᵖb²ᵖ</code>. Explain why the four-run criterion applies after pumping down, and why some changed run must have an untouched matching partner.</p><p>Write the assumption, witness membership and length, arbitrary legal split, window argument, failed membership condition and contradiction. This uses the same method demonstrated in this lesson.</p><details><summary>Optional cumulative review of the whole course</summary><p>These tasks combine earlier lessons. Starting information is provided so you can practise the method rather than guess a missing grammar.</p><ol><li><p>Using the following grammar, with start variable Program, derive and draw a full parse tree for <code>def f(x,y) { if (x) { return f(x,y) } }</code>. All names are id tokens. This small supplied grammar permits name arguments only.</p><pre>Program → def id ( Params ) Block\nParams → id Tail | ε\nTail → , id Tail | ε\nBlock → { Stmts }\nStmts → Stmt Stmts | ε\nStmt → if ( id ) Block | return Call\nCall → id ( Args )\nArgs → id Tail | ε</pre></li><li><p>Design a CFG and PDA for <code>{aⁿbᵐcⁿ⁺ᵐ : n,m ≥ 0}</code>. State what one stack marker counts, how phase order is enforced, and the acceptance mode.</p></li><li><p>Convert <code>S → (S)S | ε</code> into the protected-marker NPDA from lessons 17–18. Preload #, initialize with ε,#/S#, and trace the exact input <code>(()(()))</code>, including all expansions, matches and cleanup.</p></li><li><p>Give a deterministic end-marked empty-stack machine for balanced parentheses. Use $ as the added right-end marker and Z at the bottom. State the invariant and test a matched pair, an unmatched close and a missing close.</p></li><li><p>Use your core proof above as the non-CFL review task. Check that p stayed arbitrary and that the argument defeated every legal split, not just one example.</p></li></ol></details>",
+      "solution": "<p><strong>Core proof.</strong> Suppose D is context-free and let p ≥ 1 be its pumping length. Put N = 2p and choose <code>s = aᴺbᴺaᴺbᴺ</code>. This is the copy of <code>aᴺbᴺ</code>, so s ∈ D, and |s| = 8p ≥ p.</p><p>Let <code>s = uvxyz</code> be any split satisfying <code>|vxy| ≤ p</code> and <code>|vy| &gt; 0</code>. Pump down with i = 0. Between 1 and p symbols are deleted, all within at most two adjacent runs, because reaching nonadjacent runs would cross an entire 2p-symbol run. Each original run retains at least p symbols, so all four remain nonempty.</p><p>At least one run becomes shorter than N. Its matching partner, two runs away, cannot be touched by the same window and stays length N. A four-run copy requires the two a-run lengths to agree and the two b-run lengths to agree, so the result uxz is not in D. The four-run criterion checks the actual new halves without keeping the old midpoint fixed.</p><p>This works for every legal split and contradicts the lemma’s requirement at i = 0. Therefore D is not context-free.</p><details><summary>Worked solutions to the optional cumulative review</summary><h3>1. Supplied program grammar</h3><p>Here is a complete leftmost derivation, shown as whole sentential forms. Each arrow applies one supplied rule; id labels are shown by category.</p><pre>Program\n⇒ def id ( Params ) Block\n⇒ def id ( id Tail ) Block\n⇒ def id ( id , id Tail ) Block\n⇒ def id ( id , id ) Block\n⇒ def id ( id , id ) { Stmts }\n⇒ def id ( id , id ) { Stmt Stmts }\n⇒ def id ( id , id ) { if ( id ) Block Stmts }\n⇒ def id ( id , id ) { if ( id ) { Stmts } Stmts }\n⇒ def id ( id , id ) { if ( id ) { Stmt Stmts } Stmts }\n⇒ def id ( id , id ) { if ( id ) { return Call Stmts } Stmts }\n⇒ def id ( id , id ) { if ( id ) { return id ( Args ) Stmts } Stmts }\n⇒ def id ( id , id ) { if ( id ) { return id ( id Tail ) Stmts } Stmts }\n⇒ def id ( id , id ) { if ( id ) { return id ( id , id Tail ) Stmts } Stmts }\n⇒ def id ( id , id ) { if ( id ) { return id ( id , id ) Stmts } Stmts }\n⇒ def id ( id , id ) { if ( id ) { return id ( id , id ) } Stmts }\n⇒ def id ( id , id ) { if ( id ) { return id ( id , id ) } }</pre><div class=\"parse-tree\" role=\"group\" aria-label=\"Complete cumulative-review program tree\"><ul><li><span>Program</span><ul><li><span>def</span></li><li><span>id: f</span></li><li><span>(</span></li><li><span>Params</span><ul><li><span>id: x</span></li><li><span>Tail</span><ul><li><span>,</span></li><li><span>id: y</span></li><li><span>Tail</span><ul><li><span>ε</span></li></ul></li></ul></li></ul></li><li><span>)</span></li><li><span>Block</span><ul><li><span>{</span></li><li><span>Stmts</span><ul><li><span>Stmt</span><ul><li><span>if</span></li><li><span>(</span></li><li><span>id: x</span></li><li><span>)</span></li><li><span>Block</span><ul><li><span>{</span></li><li><span>Stmts</span><ul><li><span>Stmt</span><ul><li><span>return</span></li><li><span>Call</span><ul><li><span>id: f</span></li><li><span>(</span></li><li><span>Args</span><ul><li><span>id: x</span></li><li><span>Tail</span><ul><li><span>,</span></li><li><span>id: y</span></li><li><span>Tail</span><ul><li><span>ε</span></li></ul></li></ul></li></ul></li><li><span>)</span></li></ul></li></ul></li><li><span>Stmts</span><ul><li><span>ε</span></li></ul></li></ul></li><li><span>}</span></li></ul></li></ul></li><li><span>Stmts</span><ul><li><span>ε</span></li></ul></li></ul></li><li><span>}</span></li></ul></li></ul></li></ul></div><p>The terminal yield is <code>def id ( id , id ) { if ( id ) { return id ( id , id ) } }</code>. Reading the id labels restores the exact program text. Both lists end through Tail → ε, and each block’s statement list has its own final Stmts → ε.</p><h3>2. One count shared by two opening blocks</h3><pre>Start variable: S\nS → a S c | T\nT → b T c | ε\nS ⇒ a S c ⇒ a T c ⇒ a b T c c ⇒ a b c c</pre><p>After n recursive S steps and m recursive T steps, the result is aⁿbᵐcᵐ⁺ⁿ. Thus it has the required form. Conversely, choose those two step counts for any allowed n,m.</p><p>A complete NPDA starts in state a with stack Z, top on the left, and uses empty-stack acceptance after consuming all input. done has no outgoing transitions. The state letters a,b,c name phases as well as the input block being processed; the Read column says which input is consumed.</p><table><thead><tr><th>State</th><th>Read</th><th>Required top</th><th>Replacement</th><th>Next state</th></tr></thead><tbody><tr><td><code>a</code></td><td><code>a</code></td><td><code>T ∈ {A,Z}</code></td><td><code>AT</code></td><td><code>a</code></td></tr><tr><td><code>a</code></td><td><code>ε</code></td><td><code>T ∈ {A,Z}</code></td><td><code>T</code></td><td><code>b</code></td></tr><tr><td><code>b</code></td><td><code>b</code></td><td><code>T ∈ {A,Z}</code></td><td><code>AT</code></td><td><code>b</code></td></tr><tr><td><code>b</code></td><td><code>ε</code></td><td><code>T ∈ {A,Z}</code></td><td><code>T</code></td><td><code>c</code></td></tr><tr><td><code>c</code></td><td><code>c</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>c</code></td></tr><tr><td><code>c</code></td><td><code>ε</code></td><td><code>Z</code></td><td><code>ε</code></td><td><code>done</code></td></tr></tbody></table><p>Each a or b adds one A; each c removes one. ε phase changes preserve the stack. In the c phase, the number of As is the number of earlier as and bs minus the number of cs read. The phase order permits only a*b*c*. Accept ε, abcc and aabccc; reject abc for one missing c, abccc for an extra c, and baccc for wrong order. The intended branch exists for all allowed n,m, including zero-length blocks.</p><h3>3. Exact grammar-derived trace</h3><p>Use states start, work and halt; initial stack #. Initialize by ε,#/S#. In work, use ε,S/(S)S and ε,S/ε for productions, and (,(/ε and ),)/ε for terminal matches. Cleanup ε,#/ε enters halt with no outgoing transitions. Every row below shows the result after its action.</p><table><thead><tr><th>Action</th><th>Consumed</th><th>Remaining input</th><th>Stack, top left</th></tr></thead><tbody><tr><td>Initial configuration</td><td><code>ε</code></td><td><code>(()(()))</code></td><td><code>#</code></td></tr><tr><td>Push S above #</td><td><code>ε</code></td><td><code>(()(()))</code></td><td><code>S#</code></td></tr><tr><td>S → (S)S</td><td><code>ε</code></td><td><code>(()(()))</code></td><td><code>(S)S#</code></td></tr><tr><td>Match (</td><td><code>(</code></td><td><code>()(()))</code></td><td><code>S)S#</code></td></tr><tr><td>S → (S)S</td><td><code>(</code></td><td><code>()(()))</code></td><td><code>(S)S)S#</code></td></tr><tr><td>Match (</td><td><code>((</code></td><td><code>)(()))</code></td><td><code>S)S)S#</code></td></tr><tr><td>S → ε</td><td><code>((</code></td><td><code>)(()))</code></td><td><code>)S)S#</code></td></tr><tr><td>Match )</td><td><code>(()</code></td><td><code>(()))</code></td><td><code>S)S#</code></td></tr><tr><td>S → (S)S</td><td><code>(()</code></td><td><code>(()))</code></td><td><code>(S)S)S#</code></td></tr><tr><td>Match (</td><td><code>(()(</code></td><td><code>()))</code></td><td><code>S)S)S#</code></td></tr><tr><td>S → (S)S</td><td><code>(()(</code></td><td><code>()))</code></td><td><code>(S)S)S)S#</code></td></tr><tr><td>Match (</td><td><code>(()((</code></td><td><code>)))</code></td><td><code>S)S)S)S#</code></td></tr><tr><td>S → ε</td><td><code>(()((</code></td><td><code>)))</code></td><td><code>)S)S)S#</code></td></tr><tr><td>Match )</td><td><code>(()(()</code></td><td><code>))</code></td><td><code>S)S)S#</code></td></tr><tr><td>S → ε</td><td><code>(()(()</code></td><td><code>))</code></td><td><code>)S)S#</code></td></tr><tr><td>Match )</td><td><code>(()(())</code></td><td><code>)</code></td><td><code>S)S#</code></td></tr><tr><td>S → ε</td><td><code>(()(())</code></td><td><code>)</code></td><td><code>)S#</code></td></tr><tr><td>Match )</td><td><code>(()(()))</code></td><td><code>ε</code></td><td><code>S#</code></td></tr><tr><td>S → ε</td><td><code>(()(()))</code></td><td><code>ε</code></td><td><code>#</code></td></tr><tr><td>Pop # and halt</td><td><code>(()(()))</code></td><td><code>ε</code></td><td><code>ε</code></td></tr></tbody></table><p>Only S-production rows apply grammar rules. Matching rows consume exactly the displayed terminal. Initialization and cleanup are not derivation steps. At the final row both unread input and stack are empty.</p><h3>4. Deterministic bracket machine</h3><p>Start in q with stack Z, top on the left. Input is the original string followed by exactly one $. Use this complete transition table; halt has no outgoing transitions:</p><table><thead><tr><th>State</th><th>Read</th><th>Required top</th><th>Replacement</th><th>Next state</th></tr></thead><tbody><tr><td><code>q</code></td><td><code>(</code></td><td><code>Z</code></td><td><code>AZ</code></td><td><code>q</code></td></tr><tr><td><code>q</code></td><td><code>(</code></td><td><code>A</code></td><td><code>AA</code></td><td><code>q</code></td></tr><tr><td><code>q</code></td><td><code>)</code></td><td><code>A</code></td><td><code>ε</code></td><td><code>q</code></td></tr><tr><td><code>q</code></td><td><code>$</code></td><td><code>Z</code></td><td><code>ε</code></td><td><code>halt</code></td></tr></tbody></table><p>The number of As equals opens minus closes in the consumed original input. A close on Z has no transition; $ on A has no transition. There are no ε choices, so the machine is deterministic. Accept $ and ()$; reject )$ for an unmatched close and (()$ for a missing close. The accepted original language consists of w for which w$ is accepted.</p><h3>5. Quantifier check</h3><p>The core proof above keeps p arbitrary, chooses its witness before the split, treats every legal split with the window argument, and chooses i = 0 afterward. Its contradiction is a specific failed equality of corresponding run lengths.</p></details>"
     },
     "sources": [
       {
@@ -2398,6 +2444,8 @@
           31
         ]
       }
-    ]
+    ],
+    "setup": "<p>Lesson 6 generated a word followed by its reversal. Here we test <strong>same-order copying</strong>, <code>C = {ww : w ∈ {0,1}*}</code>. For w = 01, copying gives 0101 and reversal gives 0110. Counting totals is not enough to tell them apart.</p><p>A <strong>run</strong> is a maximal consecutive group of the same symbol. The witness <code>0ᴺ1ᴺ0ᴺ1ᴺ</code> has four nonempty runs. Choose <code>N = 2p</code>; deleting at most p symbols cannot erase any run.</p><p>We need this four-run fact before using it: <code>0ᴬ1ᴮ0ᴰ1ᴱ</code>, with all exponents positive, is a copy exactly when <code>A = D</code> and <code>B = E</code>. To see why, a proposed half begins in 0 and ends in 1. If it has t internal symbol changes, two identical halves have 2t + 1 changes in total, including their join. Four runs mean three changes, so t = 1. Each half is therefore one 0-run followed by one 1-run, and the corresponding lengths agree.</p><p>The proof uses that fact to check the actual halves after deletion; it does not assume the old midpoint stays fixed. The regular-language intersection argument later on is optional.</p>",
+    "bridge": "For a positive CFL claim, give a grammar, PDA or valid closure construction. For a negative claim, rule out every legal pumping split. In either direction, connect each step to the precise language definition."
   }
 ]

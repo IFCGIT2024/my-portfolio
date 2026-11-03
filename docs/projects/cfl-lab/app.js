@@ -125,7 +125,7 @@
   $('#lesson-search').addEventListener('input',e=>{search=e.target.value.trim().toLowerCase();renderOutline();});
   window.addEventListener('hashchange',()=>{if(lessons.length)render();});
   window.addEventListener('pagehide',save);
-  fetch('data/lessons.json?v=20261102').then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json();}).then(data=>{
+  fetch('data/lessons.json?v=20261103').then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json();}).then(data=>{
     if(!Array.isArray(data)||!data.length)throw new Error('No lessons found');lessons=data;$('#load-status').hidden=true;$('#lesson-search').disabled=false;render(false);
   }).catch(()=>{$('#load-status').innerHTML='The course could not load. <button id="retry-load">Reload course</button>';$('#retry-load').onclick=()=>location.reload();});
 })();

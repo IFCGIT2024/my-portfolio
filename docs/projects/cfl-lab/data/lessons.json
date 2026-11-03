@@ -156,8 +156,8 @@
       "explanation": "Only the occurrence of S is removed. The surrounding terminals remain unchanged."
     },
     "transfer": {
-      "prompt": "Write a CFG for a bracketed, comma-separated list of zero or more integer tokens. Explain why [ , integer ] and [ integer , ] are excluded.",
-      "solution": "<pre>List → [ Items ]\nItems → ε | integer Tail\nTail → ε | , integer Tail</pre><p>A comma appears only through Tail → , integer Tail, so every comma must have a preceding item and a following integer. The empty option belongs to the complete list content or the remaining tail.</p>"
+      "prompt": "<p>Use the same grammar from the worked example:</p><pre>S → [ L ]\nL → ε | id T\nT → ε | , id T</pre><p>Here <code>id</code> is one item token. Starting from <code>S</code>, generate <code>[ id , id , id ]</code>. Write the whole string after each replacement, and name the rule you used. Finish with no variables remaining.</p>",
+      "solution": "<p>Start with <code>S</code>. Apply one rule to one variable at each step:</p><table><thead><tr><th>Rule used</th><th>Whole string after the replacement</th></tr></thead><tbody><tr><td><code>S → [ L ]</code></td><td><code>[ L ]</code></td></tr><tr><td><code>L → id T</code></td><td><code>[ id T ]</code></td></tr><tr><td><code>T → , id T</code></td><td><code>[ id , id T ]</code></td></tr><tr><td><code>T → , id T</code> again</td><td><code>[ id , id , id T ]</code></td></tr><tr><td><code>T → ε</code></td><td><code>[ id , id , id ]</code></td></tr></tbody></table><p>The rule <code>L → id T</code> supplies the first item. Each use of <code>T → , id T</code> adds a comma and one more item, leaving a new T that can be replaced again. After three items, <code>T → ε</code> removes only T; the closing bracket stays. The result contains only terminals, so the generation is complete.</p>"
     },
     "sources": [
       {

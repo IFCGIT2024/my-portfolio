@@ -3,7 +3,7 @@
   const $ = s => document.querySelector(s);
   const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const storageKey = 'cfl-lab-progress-v1';
-  let lessons = [], state = {read: {}, ready: {}, drafts: {}}, currentId = null, search = '', saveTimer;
+  let assignmentTags = {lessons:{}}, lessons = [], state = {read: {}, ready: {}, drafts: {}}, currentId = null, search = '', saveTimer;
   let storageAvailable = true;
   const view = $('#view');
   function storageWarning() {
@@ -56,14 +56,28 @@
   function pager(index) { return `<nav class="lesson-pager" aria-label="Previous and next lesson">${index>0?`<a href="#lesson-${lessons[index-1].id}">← Previous lesson</a>`:'<a href="#home">← Course overview</a>'}${index<lessons.length-1?`<a class="next" href="#lesson-${lessons[index+1].id}">Next lesson →</a>`:'<a class="next" href="#tools">Open workbench →</a>'}</nav>`; }
   function draft(id,key,label) { const name = `${id}-${key}`; return `<label class="draft-label" for="draft-${name}">${label}</label><textarea id="draft-${name}" data-draft="${name}" spellcheck="false" placeholder="Write your reasoning here…">${escapeHTML(state.drafts[name] || '')}</textarea>`; }
   function html(value) { return String(value ?? ''); }
+  function questionBadge(l, part, index) {
+    const mapping = assignmentTags.lessons?.[l.id];
+    const refs = part === 'sections' ? mapping?.sections?.[index] : mapping?.[part];
+    if (!Array.isArray(refs) || !refs.length) return '';
+    const grouped = new Map();
+    refs.forEach(ref => {
+      const match = /^([1-5])(?:\(([a-c])\))?$/.exec(ref);
+      if (!match) return;
+      if (!grouped.has(match[1])) grouped.set(match[1], []);
+      if (match[2] && !grouped.get(match[1]).includes(match[2])) grouped.get(match[1]).push(match[2]);
+    });
+    const label = [...grouped].map(([q,parts]) => 'Q'+q+(parts.length?'('+parts.join(',')+')':'')).join(', ');
+    return label ? '<span class="assignment-tag" title="Module 2 assignment">Used for '+escapeHTML(label)+'</span>' : '';
+  }
   function lesson(l) {
     const index = lessons.indexOf(l), w = l.worked;
-    return heading(`${l.module} · Lesson ${l.id} of ${lessons.length}`,l.title,l.summary)+pager(index)+
+    return heading(`${l.module} · Lesson ${l.id} of ${lessons.length}`,l.title,l.summary)+questionBadge(l,'questions')+pager(index)+
       `<nav class="lesson-jump" aria-label="In this lesson"><a href="#start-here" data-scroll="start-here">Start here</a><a href="#worked-example" data-scroll="worked-example">Worked example</a><a href="#concepts" data-scroll="concepts">Understand it</a><a href="#practice" data-scroll="practice">Practise</a><a href="#independent" data-scroll="independent">Try independently</a></nav>
       <section class="goals" aria-labelledby="goals-title"><h2 id="goals-title">By the end, you can</h2><ul>${l.goals.map(g=>`<li>${escapeHTML(g)}</li>`).join('')}</ul></section>
       ${l.setup?`<section id="start-here" class="lesson-section lesson-setup" aria-labelledby="setup-title"><p class="eyebrow">CONNECT THE IDEAS</p><h2 id="setup-title">Before the example</h2>${html(l.setup)}</section>`:""}
-      <section id="worked-example" class="worked-example" aria-labelledby="worked-title"><p class="eyebrow">SEE THE COMPLETE EXAMPLE</p><h2 id="worked-title">${escapeHTML(w.title)}</h2><div class="example-intro">${html(w.intro)}</div><div class="step-controls" role="group" aria-label="Worked example display"><button id="show-all" aria-pressed="true">Show all steps</button><button id="show-one" aria-pressed="false">One step at a time</button><button id="step-prev" hidden>← Back</button><button id="step-next" hidden>Next step →</button><span id="step-position" class="step-position">${w.steps.length} steps</span></div><ol class="worked-steps">${w.steps.map((s,i)=>`<li class="worked-step" data-step="${i}" style="counter-reset:worked ${i}"><h3>${escapeHTML(s.title)}</h3><div class="step-content">${html(s.html)}</div></li>`).join('')}</ol></section>
-      <div id="concepts" class="lesson-content">${l.sections.map((s,i)=>`<section class="lesson-section" id="section-${i+1}"><h2>${escapeHTML(s.title)}</h2>${html(s.html)}</section>`).join('')}</div>
+      <section id="worked-example" class="worked-example" aria-labelledby="worked-title"><p class="eyebrow">SEE THE COMPLETE EXAMPLE</p><h2 id="worked-title">${escapeHTML(w.title)} ${questionBadge(l,'worked')}</h2><div class="example-intro">${html(w.intro)}</div><div class="step-controls" role="group" aria-label="Worked example display"><button id="show-all" aria-pressed="true">Show all steps</button><button id="show-one" aria-pressed="false">One step at a time</button><button id="step-prev" hidden>← Back</button><button id="step-next" hidden>Next step →</button><span id="step-position" class="step-position">${w.steps.length} steps</span></div><ol class="worked-steps">${w.steps.map((s,i)=>`<li class="worked-step" data-step="${i}" style="counter-reset:worked ${i}"><h3>${escapeHTML(s.title)}</h3><div class="step-content">${html(s.html)}</div></li>`).join('')}</ol></section>
+      <div id="concepts" class="lesson-content">${l.sections.map((s,i)=>`<section class="lesson-section" id="section-${i+1}"><h2>${escapeHTML(s.title)} ${questionBadge(l,'sections',i)}</h2>${html(s.html)}</section>`).join('')}</div>
       <section id="practice" class="practice-section" aria-labelledby="practice-title"><p class="eyebrow">BUILD YOUR OWN ANSWER</p><h2 id="practice-title">Guided practice</h2><p class="section-intro">Try each problem before revealing help. Compare your reasoning as well as your final answer.</p>${l.practice.map((p,i)=>`<article class="exercise"><h3>Practice ${i+1}</h3><div class="exercise-prompt">${html(p.prompt)}</div>${draft(l.id,`practice-${i}`,'Your attempt · saved on this device')}<details><summary>Show a hint</summary><div class="answer">${html(p.hint)}</div></details><details><summary>Show the worked solution</summary><div class="answer">${html(p.solution)}</div></details></article>`).join('')}</section>
       <section class="self-check exercise" aria-labelledby="check-title"><p class="eyebrow">EXPLAIN IT IN YOUR OWN WORDS</p><h2 id="check-title">Check your understanding</h2><div class="exercise-prompt">${html(l.check.prompt)}</div>${draft(l.id,'check','Your explanation')}<details><summary>Compare with an explanation</summary><div class="answer"><div>${html(l.check.answer)}</div><div>${html(l.check.explanation)}</div></div></details></section>
       <section id="independent" class="exercise transfer" aria-labelledby="transfer-title"><p class="eyebrow">USE THE IDEA IN A NEW PROBLEM</p><h2 id="transfer-title">Try independently</h2><div class="exercise-prompt">${html(l.transfer.prompt)}</div>${draft(l.id,'transfer','Your complete answer')}<details><summary>Check the solution after your attempt</summary><div class="answer">${html(l.transfer.solution)}</div></details></section>
@@ -127,7 +141,10 @@
   $('#lesson-search').addEventListener('input',e=>{search=e.target.value.trim().toLowerCase();renderOutline();});
   window.addEventListener('hashchange',()=>{if(lessons.length)render();});
   window.addEventListener('pagehide',save);
-  fetch('data/lessons.json?v=20261103-continuity').then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json();}).then(data=>{
+  const tagData = fetch('data/assignment-tags.json?v=20261104').then(r=>{if(!r.ok)throw new Error('Tags unavailable');return r.json();}).catch(()=>({lessons:{}}));
+  const lessonData = fetch('data/lessons.json?v=20261103-continuity').then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json();});
+  Promise.all([lessonData,tagData]).then(([data,tags])=>{
+    assignmentTags = tags && typeof tags.lessons === 'object' && tags.lessons ? tags : {lessons:{}};
     if(!Array.isArray(data)||!data.length)throw new Error('No lessons found');lessons=data;$('#load-status').hidden=true;$('#lesson-search').disabled=false;render(false);
   }).catch(()=>{$('#load-status').innerHTML='The course could not load. <button id="retry-load">Reload course</button>';$('#retry-load').onclick=()=>location.reload();});
 })();

@@ -1,6 +1,6 @@
 # Java Testing Lab
 
-A progressive, static Java and JUnit Jupiter course in the portfolio. Open `index.html` through an HTTP server. The course has 30 lessons, 129 practice tasks, a 16-pattern syntax workshop, a coverage explorer, mixed practice, and a runnable Java project.
+A progressive, static Java and JUnit Jupiter course in the portfolio. Open `index.html` through an HTTP server. The course has 30 lessons, 327 small teaching steps with matching practice, a 16-pattern syntax workshop, a coverage explorer, mixed practice, and a runnable Java project.
 
 ## Intended outcome
 
@@ -21,11 +21,13 @@ The learner-facing **What you will be able to do** page maps the competencies to
 
 ## Learning design
 
-Lessons 01–02 use a rebuilt opening: one short explanation and one immediate exercise per screen. Lesson 01 uses the add-one rule throughout; lesson 02 carries that context into reading Java calls. Back and Continue preserve answers, and the current step is saved. Later lessons use complete examples, guided and independent practice, prerequisite links, teach-back prompts, and bridges. Their worked examples can be viewed whole or one step at a time.
+Every lesson uses one short explanation and one immediately related exercise per screen. Back and Continue preserve answers, and the current step is saved. Lesson 01 stays with the add-one rule; lesson 02 carries it into Java calls. Later lessons gradually construct complete tests from the pieces already practised. A familiar Counter connects state, validation, exception testing, test review, and regression; the condition-coverage example also appears in the interactive workshop.
+
+Each step has one teaching focus. Reading, predicting, writing, explaining, and repairing are introduced where they serve that focus. Larger synthesis tasks come after the smaller decisions they require. Old lesson-wide worked examples and separate practice dumps are no longer part of the lesson renderer.
 
 An exercise must use concepts already explained before that exercise, or provide and explain the additional API or scaffolding it needs. The opening starts with expected versus actual results before showing Java notation. New notation is introduced at the step where it is used. Transfer tasks change the situation while retaining the skill just practised. The syntax workshop follows prerequisite order and links to the relevant lessons; whole-course mixed practice is explicitly identified as cumulative.
 
-There are **65 automatically checked choice tasks and 64 written tasks**. Written tasks ask for tests, repairs, traces, diagnoses, case tables, or explanations. Every written task includes a model answer and specific review criteria. Every objective option has explanatory feedback. The 28 teach-back prompts in later lessons and 16 syntax patterns are separate from the 129-task count.
+There are **167 automatically checked choice tasks and 160 written tasks**. Written tasks ask for tests, repairs, traces, diagnoses, case tables, or explanations. Every written task includes a model answer and specific review criteria. Every objective option has explanatory feedback. Explain-in-your-own-words tasks are integrated into the relevant steps. The 16 syntax workshop patterns remain separate from the lesson task count.
 
 Mixed practice samples six objective and six written questions, hides lesson titles and help until submission, and reports an objective score separately from written self-review. Prompts carry their own method signatures, contracts, or setup rather than relying on a preceding lesson. Practice mode can filter by lesson, unattempted work, missed/reviewed choices, or written work.
 
@@ -36,7 +38,7 @@ The examples are general-purpose teaching material and do not depend on a partic
 - Written Java and prose are **not compiled or automatically graded in the webpage**. The learner compares against criteria and can compile Java in the downloadable project.
 - The syntax workshop checks tokens in the missing pieces of a displayed, fixed example. It is not a general compiler. Whitespace inside a String or identifier is not silently removed.
 - The coverage explorer evaluates one shown Boolean expression and distinguishes decision outcomes from independently evaluated condition outcomes, including short-circuit skips. Its percentages do not establish correctness.
-- Reading, confidence, historical unaided successes, latest answer status, and written self-review are distinct. Editing a reviewed answer clears its current review mark. Rebuilt lessons use new exercise IDs; revision changes clear only their reading/confidence/step markers, while prior drafts and other lessons’ progress remain stored.
+- Reading, confidence, historical unaided successes, latest answer status, and written self-review are distinct. Editing a reviewed answer clears its current review mark. Rebuilt lessons use new exercise IDs; revision changes clear only their reading/confidence/step markers, while prior drafts remain stored. The full-course rewrite preserves the already approved lessons 01–02 and their current progress. Importing an older backup applies the same revision checks.
 - A repeated correct answer after feedback is recorded as reviewed. A later mistake remains visible even when the question was previously solved independently.
 
 ## Files and maintenance
@@ -67,6 +69,8 @@ node --test tests/core.test.cjs
 
 The runnable Java project targets Java 11+ syntax and JUnit Jupiter 5.10.5. Its README documents Maven, IDE, shell, and PowerShell workflows. The initial reference suite contains **40 active tests and one explicitly disabled writing placeholder**. The separate fault-finding suite contains six tests that expose the six intended defects; five produce assertion failures and one exposes an unexpected null dereference. All six pass against corrected implementations.
 
-Before publication, the complete worked test classes and executable lesson examples were checked with Java/JUnit, including the intended compiler errors, incorrect assertions, and false-passing tests. All 16 completed workshop patterns and their three alternative completions compiled and passed. The application logic suite passed, and browser review covered desktop and 390px layouts, lesson navigation, step controls, feedback, draft persistence, self-review invalidation, syntax checking, coverage, and mixed submission.
+The original project and 16 completed workshop patterns (plus three alternative completions) were verified with Java/JUnit. The full incremental rewrite passed all 11 application checks, including lesson structure, answer keys, prerequisite links, and progress migration. The Java validation groups ran 37, 30, and 29 representative passing tests across lessons 03–10, 11–20, and 21–30 respectively, using complete model answers and exact model fragments with supplied fixtures. Seventeen deliberately invalid fragments were rejected by the compiler; separate faulty examples produced their intended failures or demonstrated false passes. These checks used Java 11 source/target syntax on the available JDK 21 with JUnit 5.10.5.
+
+Browser review covered representative lessons across the course, one visible step and exercise, feedback, saved drafts and position after reload, the final transition to mixed practice, and a narrow viewport. When maintaining the course, repeat the checks affected by the change. Written answers in the website remain self-reviewed; a passing structural check is not a Java compilation result.
 
 Use the official Java and JUnit references linked in the course when changing technical claims. Preserve the distinction between a deliberately invalid example, a complete executable example, and a fragment that explicitly assumes surrounding setup.

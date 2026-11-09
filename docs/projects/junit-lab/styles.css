@@ -67,3 +67,7 @@ pre code{background:none!important;font-size:inherit!important;overflow-wrap:nor
 .flow-reading input{accent-color:var(--accent);width:17px;height:17px}
 .flow-finish>.primary-link{margin-top:12px}
 @media(max-width:540px){.flow-stage-title{font-size:1.23rem}.flow-controls{gap:12px}.flow-controls button{min-height:42px}.flow-stage .exercise{margin-top:21px;padding-top:20px}}
+
+.flow-references{margin-top:22px;font-size:.85rem;color:var(--muted)}
+.flow-references summary{cursor:pointer}
+.flow-references p{line-height:1.8}

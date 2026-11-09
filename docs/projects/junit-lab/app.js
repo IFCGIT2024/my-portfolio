@@ -41,11 +41,10 @@
     `<section class="home-lead"><p>A good test starts before the assertion. You need to understand the input types, the method’s promise, and the difference between the result you expect and the result the code actually produces. Build those decisions one at a time.</p><a class="primary-link" href="#lesson-${next.id}">${Object.values(state.read).some(Boolean)?'Continue learning':'Start from the beginning'} <span aria-hidden="true">→</span></a><a class="secondary-link" href="#outcomes">See the skills you are building</a></section>
     <div class="learning-sequence" aria-label="The testing workflow"><div><span>01</span><strong>Read the contract</strong><p>Types, rules, and promises.</p></div><div><span>02</span><strong>Choose the case</strong><p>An input with a reason.</p></div><div><span>03</span><strong>Predict the result</strong><p>Before reading the output.</p></div><div><span>04</span><strong>Write the test</strong><p>Valid Java and assertions.</p></div><div><span>05</span><strong>Explain the evidence</strong><p>What passes, fails, or breaks.</p></div></div>
     <section class="study-method"><h2>Three questions to keep separate</h2><div class="decision-strip"><div><strong>Will it compile?</strong><p>Does each argument match the declared type? Does the test method have valid Java syntax?</p></div><div><strong>What does the contract say?</strong><p>Is this a normal input, a documented error, or an input whose behaviour is not specified?</p></div><div><strong>What should I observe?</strong><p>A returned value, changed state, object identity, or a particular exception?</p></div></div></section>
-    <section class="study-method"><h2>Learn one idea, then use it</h2><ol><li>Begin with one short explanation and its practice. Later, study complete worked examples at your own pace.</li><li>Check your understanding with short questions and feedback about every option.</li><li>Write or repair code yourself. Compare it with a model answer and a concrete checklist.</li><li>Explain the idea in your own words, then revisit it in a mixed set.</li></ol><p class="small">Choice questions are checked automatically. Written code and explanations use model answers and self-review; Java runs in the downloadable practice project.</p></section>
-    <section aria-labelledby="curriculum-title"><h2 id="curriculum-title">Your learning path</h2><p class="section-intro">${lessons.length} lessons · ${questions.length} practice tasks · practice at every stage</p>${groups().map((g,i)=>`<section class="curriculum-module"><header><span>${String(i+1).padStart(2,'0')}</span><h3>${esc(g.name)}</h3></header><div class="curriculum-lessons">${g.lessons.map(l=>`<a href="#lesson-${l.id}"><span>${l.id}</span>${esc(l.title)}</a>`).join('')}</div></section>`).join('')}</section>
+    <section class="study-method"><h2>Learn one idea, then use it</h2><ol><li>Work through one small explanation and its matching exercise at a time.</li><li>Check your understanding with short questions and feedback about every option.</li><li>Write or repair code yourself. Compare it with a model answer and a concrete checklist.</li><li>Explain the idea in your own words, then revisit it in a mixed set.</li></ol><p class="small">Choice questions are checked automatically. Written code and explanations use model answers and self-review; Java runs in the downloadable practice project.</p></section>
+    <section aria-labelledby="curriculum-title"><h2 id="curriculum-title">Your learning path</h2><p class="section-intro">${lessons.length} lessons · ${questions.length} small steps with practice</p>${groups().map((g,i)=>`<section class="curriculum-module"><header><span>${String(i+1).padStart(2,'0')}</span><h3>${esc(g.name)}</h3></header><div class="curriculum-lessons">${g.lessons.map(l=>`<a href="#lesson-${l.id}"><span>${l.id}</span>${esc(l.title)}</a>`).join('')}</div></section>`).join('')}</section>
     <section class="lesson-bridge"><h2>Already know part of this?</h2><p>Use the <a href="#reference">syntax reference</a>, practise specific mistakes in the <a href="#workbench">workshop</a>, or try a <a href="#exam">mixed practice test</a>. The full sequence remains available whenever a question exposes a missing prerequisite.</p></section>`;
   }
-  function pager(i){return `<nav class="lesson-pager" aria-label="Previous and next lesson"><a href="${i?'#lesson-'+lessons[i-1].id:'#home'}">← ${i?'Previous lesson':'Course overview'}</a><a class="next" href="${i<lessons.length-1?'#lesson-'+lessons[i+1].id:'#exam'}">${i<lessons.length-1?'Next lesson':'Mixed practice test'} →</a></nav>`;}
   function draft(id,label,starter=''){return `<label class="draft-label" for="draft-${esc(id)}">${label}</label><textarea id="draft-${esc(id)}" data-draft="${esc(id)}" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Write your attempt before opening the answer…">${esc(state.drafts[id]??starter)}</textarea>`;}
   function exercise(q,mode='lesson',number=null){
     const exam=mode==='exam', submitted=exam&&state.exam.submitted;
@@ -86,8 +85,9 @@
           <section id="flow-finish" class="flow-finish" aria-labelledby="flow-finish-title" hidden>
             <h2 id="flow-finish-title" class="flow-stage-title" tabindex="-1">End of this lesson</h2>
             <p>${esc(l.bridge)}</p>
+            ${(l.sourceIds||[]).length?`<details class="flow-references"><summary>References for this lesson</summary><p>${l.sourceIds.map(id=>window.TestingPages.sourceLink(id)).join(' · ')}</p></details>`:''}
             <label class="flow-reading"><input id="mark-read" type="checkbox" ${state.read[l.id]?'checked':''}> I have read this lesson</label>
-            <p><a class="primary-link" href="${next?'#lesson-'+next.id:'#home'}">${next?'Next lesson':'Course overview'} <span aria-hidden="true">→</span></a></p>
+            <p><a class="primary-link" href="${next?'#lesson-'+next.id:'#exam'}">${next?'Next lesson':'Mixed practice'} <span aria-hidden="true">→</span></a></p>
           </section>
         </div>
         <nav class="flow-controls" aria-label="Concept navigation">
@@ -96,20 +96,7 @@
         </nav>
       </section>`;
   }
-  function lesson(l){
-    if(Array.isArray(l.flow)&&l.flow.length)return flowLesson(l,lessons.indexOf(l));
-    const i=lessons.indexOf(l), w=l.worked;
-    return heading(`${l.module} · Lesson ${l.id} of ${lessons.length}`,l.title,l.summary)+pager(i)+
-      `<nav class="lesson-jump" aria-label="In this lesson"><a href="#start-here" data-scroll="start-here">Connect the ideas</a><a href="#worked-example" data-scroll="worked-example">Complete example</a><a href="#concepts" data-scroll="concepts">Understand it</a><a href="#practice" data-scroll="practice">Practise</a></nav>
-      <section class="goals"><h2>By the end, you can</h2><ul>${l.goals.map(g=>`<li>${esc(g)}</li>`).join('')}</ul></section>
-      <section id="start-here" class="lesson-section lesson-setup"><p class="eyebrow">CONNECT THE IDEAS</p>${l.setup}${l.prerequisites.length?`<p class="small">Builds on ${l.prerequisites.map(id=>{const p=lessons.find(x=>x.id===id);return `<a href="#lesson-${id}">${esc(p?.title||id)}</a>`;}).join(' · ')}</p>`:''}</section>
-      <section id="worked-example" class="worked-example"><p class="eyebrow">SEE THE COMPLETE EXAMPLE</p><h2>${esc(w.title)}</h2><div class="example-intro">${w.intro}</div><div class="step-controls" role="group" aria-label="Worked example display"><button id="show-all" aria-pressed="true">Show all steps</button><button id="show-one" aria-pressed="false">One step at a time</button><button id="step-prev" hidden>← Back</button><button id="step-next" hidden>Next step →</button><span id="step-position" class="step-position"></span></div><ol class="worked-steps">${w.steps.map((s,i)=>`<li class="worked-step" style="counter-reset:worked ${i}"><h3>${esc(s.title.replace(/^\d+[.)]\s*/,''))}</h3><div class="step-content">${s.html}</div></li>`).join('')}</ol></section>
-      <div id="concepts" class="lesson-content">${l.sections.map(s=>`<section class="lesson-section"><h2>${esc(s.title)}</h2>${s.html}</section>`).join('')}</div>
-      <section id="practice" class="practice-section"><p class="eyebrow">DO IT YOURSELF</p><h2>From recognition to an independent answer</h2><p class="section-intro">Try before revealing help. A correct answer should come with a reason.</p>${l.practice.map(q=>exercise({...q,lessonId:l.id})).join('')}</section>
-      <section class="lesson-section teach-back"><h2>Explain it in your own words</h2><p>${esc(l.teachBack.prompt)}</p>${draft(l.id+'-teachback','Your explanation')}<details><summary>Compare the reasoning</summary><div class="answer">${l.teachBack.answer}</div></details></section>
-      <section class="reading-actions"><label><input id="mark-read" type="checkbox" ${state.read[l.id]?'checked':''}> I have read this lesson</label><label><input id="mark-ready" type="checkbox" ${state.ready[l.id]?'checked':''}> I can solve a new problem using this idea</label><p class="small progress-explanation">Reading and confidence are your own assessments, separate from checked practice.</p></section>
-      <section class="lesson-bridge"><h2>Connect this to what comes next</h2><p>${esc(l.bridge)}</p></section><p class="small">Technical references: ${(l.sourceIds||[]).map(id=>window.TestingPages.sourceLink(id)).join(' · ')}</p>${pager(i)}`;
-  }
+  function lesson(l){return flowLesson(l,lessons.indexOf(l));}
   function bindExercises(){
     view.querySelectorAll('[data-question]').forEach(card=>{
       const q=questions.find(q=>q.id===card.dataset.question), exam=card.dataset.mode==='exam';
@@ -165,15 +152,7 @@
   }
   function bindLesson(l){
     $('#mark-read')?.addEventListener('change',e=>{state.read[l.id]=e.target.checked;save();outline();});
-    $('#mark-ready')?.addEventListener('change',e=>{state.ready[l.id]=e.target.checked;save();});
-    if(Array.isArray(l.flow)&&l.flow.length){bindFlowLesson(l);return;}
-    let one=false,step=0;const update=()=>{
-      view.querySelectorAll('.worked-step').forEach((el,i)=>el.hidden=one&&step!==i);
-      $('#show-all').setAttribute('aria-pressed',String(!one));$('#show-one').setAttribute('aria-pressed',String(one));
-      $('#step-prev').hidden=!one;$('#step-next').hidden=!one;$('#step-prev').disabled=step===0;$('#step-next').disabled=step===l.worked.steps.length-1;
-      $('#step-position').textContent=one?`Step ${step+1} of ${l.worked.steps.length}`:`${l.worked.steps.length} steps`;
-    };
-    $('#show-all').onclick=()=>{one=false;update();};$('#show-one').onclick=()=>{one=true;update();};$('#step-prev').onclick=()=>{step--;update();};$('#step-next').onclick=()=>{step++;update();};update();
+    bindFlowLesson(l);
   }
   function practice(){
     return heading('CHOOSE A SKILL · REVISIT A MISTAKE','Practice with a purpose','While learning, choose the lesson you have reached. All lessons draws from the entire course; use it when you are ready to combine skills.')+
@@ -231,12 +210,12 @@
     $('#export-progress').onclick=()=>download('java-testing-progress.json',JSON.stringify({app:'java-testing-lab',...state},null,2));
     $('#import-progress').onchange=async e=>{
       const file=e.target.files[0];if(!file)return;
-      try{const v=JSON.parse(await file.text());if(v.app!=='java-testing-lab'||v.version!==1)throw Error('Choose a Java Testing Lab progress export.');state=C.normalizeState(v);validateExam();save();outline();$('#settings-status').textContent='Your saved progress and written drafts have been restored.';}
+      try{const v=JSON.parse(await file.text());if(v.app!=='java-testing-lab'||v.version!==1)throw Error('Choose a Java Testing Lab progress export.');state=C.applyLessonRevisions(C.normalizeState(v),lessons);validateExam();save();outline();$('#settings-status').textContent='Your saved progress and written drafts have been restored.';}
       catch(err){$('#settings-status').textContent='Could not import: '+err.message;}
     };
     $('#reset-request').onclick=()=>{$('#reset-panel').hidden=false;$('#reset-cancel').focus();};
     $('#reset-cancel').onclick=()=>{$('#reset-panel').hidden=true;$('#reset-request').focus();};
-    $('#reset-confirm').onclick=()=>{state=C.emptyState();save();outline();$('#reset-panel').hidden=true;$('#settings-status').textContent='Only Java Testing Lab progress and drafts were cleared.';$('#reset-request').focus();};
+    $('#reset-confirm').onclick=()=>{state=C.applyLessonRevisions(C.emptyState(),lessons);save();outline();$('#reset-panel').hidden=true;$('#settings-status').textContent='Only Java Testing Lab progress and drafts were cleared.';$('#reset-request').focus();};
   }
   function bindDrafts(){view.querySelectorAll('[data-draft]').forEach(el=>{
     if(el.dataset.bound)return;el.dataset.bound='true';
@@ -278,11 +257,10 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('sidebar-open'))closeMenu(true);});
   $('#lesson-search').oninput=e=>{query=e.target.value.trim().toLowerCase();outline();};
   window.addEventListener('hashchange',()=>{if(lessons.length)render();});window.addEventListener('pagehide',save);
-  Promise.all(['01-10','11-20','21-30'].map(async part=>{const response=await fetch(`data/lessons-${part}.json?v=20261109-small-steps`);if(!response.ok)throw Error(`Lesson file could not be loaded (${response.status}).`);return response.json();})).then(parts=>{
+  Promise.all(['01-10','11-20','21-30'].map(async part=>{const response=await fetch(`data/lessons-${part}.json?v=20261109-incremental-course`);if(!response.ok)throw Error(`Lesson file could not be loaded (${response.status}).`);return response.json();})).then(parts=>{
     lessons=parts.flat().sort((a,b)=>a.id.localeCompare(b.id));
     questions=lessons.flatMap(l=>l.practice.map(q=>({...q,lessonId:l.id,lessonTitle:l.title})));
-    C.applyLessonRevisions(state,lessons);save();
-    validateExam();
+    C.applyLessonRevisions(state,lessons);validateExam();save();
     $('#load-status').hidden=true;$('#lesson-search').disabled=false;render(false);
   }).catch(err=>{$('#load-status').textContent='The course could not load. Refresh this page to try again. '+err.message;});
 })();

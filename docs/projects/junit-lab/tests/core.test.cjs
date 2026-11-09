@@ -4,6 +4,10 @@ const C=require('../core.js');
 const W=require('../workbench.js');
 const fs=require('node:fs');
 const path=require('node:path');
+const vm=require('node:vm');
+const pageScope={window:{}};
+vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../pages.js'),'utf8'),pageScope);
+const Pages=pageScope.window.TestingPages;
 const lessons=['01-10','11-20','21-30'].flatMap(part=>JSON.parse(fs.readFileSync(path.join(__dirname,`../data/lessons-${part}.json`),'utf8')));
 const questions=lessons.flatMap(l=>l.practice.map(q=>({...q,lessonId:l.id})));
 
@@ -37,17 +41,23 @@ test('a later mistake remains visible after a historical success',()=>{
   assert.equal(C.classifyQuestion({correct:true,helpUsed:true}),'reviewed');
   assert.equal(C.classifyQuestion({selfChecked:true}),'reviewed');
 });
-test('rebuilt lessons restart their reading and step marks without discarding other work',()=>{
-  const state=C.normalizeState({read:{'01':true,'02':true,'03':true},ready:{'01':true,'03':true},lessonRevisions:{'01':1,'02':1},flowSteps:{'01':3},drafts:{'01-3':'old answer','03-3':'keep this'}});
+test('new lesson revisions preserve the approved opening and saved drafts',()=>{
+  const state=C.normalizeState({read:{'01':true,'02':true,'03':true,'15':true},ready:{'01':true,'03':true},lessonRevisions:{'01':2,'02':2,'03':1,'15':1},flowSteps:{'01':2,'02':4,'03':3},drafts:{'03-3':'old answer','01-r2-compare':'keep this'}});
   C.applyLessonRevisions(state,lessons);
-  assert.equal(state.read['01'],undefined);assert.equal(state.read['02'],undefined);
-  assert.equal(state.flowSteps['01'],undefined);assert.equal(state.ready['01'],undefined);
-  assert.equal(state.read['03'],true);assert.equal(state.ready['03'],true);
-  assert.equal(state.drafts['01-3'],'old answer');assert.equal(state.drafts['03-3'],'keep this');
-  state.read['01']=true;state.flowSteps['01']=2;
+  assert.equal(state.read['01'],true);assert.equal(state.read['02'],true);
+  assert.equal(state.flowSteps['01'],2);assert.equal(state.flowSteps['02'],4);
+  assert.equal(state.ready['01'],true);
+  assert.equal(state.read['03'],undefined);assert.equal(state.read['15'],undefined);
+  assert.equal(state.flowSteps['03'],undefined);assert.equal(state.ready['03'],undefined);
+  assert.equal(state.drafts['03-3'],'old answer');assert.equal(state.drafts['01-r2-compare'],'keep this');
+  state.read['03']=true;state.flowSteps['03']=2;
   C.applyLessonRevisions(state,lessons);
   const restored=C.normalizeState(state);
-  assert.equal(restored.read['01'],true);assert.equal(restored.flowSteps['01'],2);
+  assert.equal(restored.read['03'],true);assert.equal(restored.flowSteps['03'],2);
+  const fresh=C.applyLessonRevisions(C.emptyState(),lessons);
+  fresh.read['03']=true;
+  C.applyLessonRevisions(fresh,lessons);
+  assert.equal(fresh.read['03'],true,'A fresh record must not lose subsequent work when reloaded.');
 });
 test('short circuiting skips later operands',()=>{
   assert.deepEqual(C.coverageTrace(null,1),{a:false,b:null,c:null,result:false});
@@ -84,19 +94,27 @@ test('syntax checking preserves tokens and literal contents',()=>{
   assert.deepEqual(W.gradeDrill(W.drills.find(d=>d.id==='throws'),['NumberFormatException.class','() - >']),[true,false]);
   assert.deepEqual(W.gradeDrill(W.drills.find(d=>d.id==='throws'),['NumberFormatException . class','( ) ->']),[true,true]);
 });
-test('course references and prerequisite graph resolve, with a written transfer task in every lesson',()=>{
+test('every lesson pairs ordered steps with practice and resolved prerequisites',()=>{
   const ids=new Set(),qids=new Set();
   for(const l of lessons){
     assert.ok(!ids.has(l.id));for(const p of l.prerequisites)assert.ok(ids.has(p),`${l.id} prerequisite ${p}`);ids.add(l.id);
     assert.ok(l.setup&&l.bridge);
-    if(l.flow){
-      assert.ok(l.flow.length>0);
-      assert.deepEqual(l.flow.map(s=>s.questionId),l.practice.map(q=>q.id));
-      for(const stage of l.flow)assert.ok(stage.title&&stage.html);
-      assert.ok(!l.worked,'Opening flow must not contain the old full-example lesson.');
-    }else assert.ok(l.worked.intro&&l.worked.steps.length>=3);
+    assert.ok(Array.isArray(l.flow)&&l.flow.length>0,`${l.id} must use incremental steps`);
+    assert.deepEqual(l.flow.map(s=>s.questionId),l.practice.map(q=>q.id));
+    for(const stage of l.flow)assert.ok(stage.title&&stage.html);
+    assert.ok(!l.worked&&!l.sections,`${l.id} must not retain the previous lesson dump`);
+    if(Number(l.id)>=3)assert.ok(!l.teachBack,`${l.id} explanations belong beside their practice`);
+    assert.ok(l.revision>=2);
     assert.ok(l.practice.filter(q=>q.type==='write').length>=2);
-    for(const q of l.practice){assert.ok(!qids.has(q.id));qids.add(q.id);assert.ok(q.prompt&&q.hint&&q.solution);if(q.type==='write')assert.ok(q.rubric.length>=2);else for(const o of q.options)assert.ok(o.feedback);}
+    for(const source of l.sourceIds)assert.ok(Pages.sourceLink(source),`${l.id} source ${source}`);
+    for(const q of l.practice){
+      assert.ok(!qids.has(q.id));qids.add(q.id);
+      assert.ok(q.id.startsWith(l.id+'-r2-'),`${q.id} must belong to the rewritten lesson`);
+      assert.ok(['choice','multi','write'].includes(q.type));
+      assert.ok(q.prompt&&q.hint&&q.solution);
+      if(q.type==='write')assert.ok(q.rubric.length>=2);else for(const o of q.options)assert.ok(o.feedback);
+    }
   }
-  assert.equal(lessons.length,30);assert.equal(questions.length,129);
+  assert.equal(lessons.length,30);
+  assert.equal(questions.length,lessons.reduce((sum,l)=>sum+l.flow.length,0));
 });

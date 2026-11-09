@@ -567,7 +567,7 @@
         "id": "03-r2-06",
         "type": "choice",
         "title": "A boolean answers a yes-or-no question",
-        "prompt": "<p>Counter starts at zero. Its supplied <code>boolean isZero()</code> returns true exactly when the count is zero. What does this fragment store in actual?</p><pre><code class=\"language-java\">Counter counter = new Counter();\ncounter.set(3);\nboolean actual = counter.isZero();</code></pre>",
+        "prompt": "<p>Counter starts at zero. <code>set(int)</code> replaces its stored count. Its supplied <code>boolean isZero()</code> returns true exactly when the count is zero. What does this fragment store in actual?</p><pre><code class=\"language-java\">Counter counter = new Counter();\ncounter.set(3);\nboolean actual = counter.isZero();</code></pre>",
         "hint": "Answer the yes-or-no question, not the count question.",
         "solution": "<p>actual contains false.</p>",
         "options": [
@@ -1676,7 +1676,7 @@
   },
   {
     "id": "07",
-    "revision": 2,
+    "revision": 3,
     "module": "Write a JUnit test",
     "title": "Build your first JUnit test",
     "summary": "Write the comparison, then build its surrounding test structure one piece at a time.",
@@ -1717,12 +1717,12 @@
       },
       {
         "title": "Mark the method with @Test",
-        "html": "<p>JUnit needs to know which methods are tests. Put the annotation <code>@Test</code> immediately before this method. An annotation is a marker attached to the following declaration. The method name can describe the case; it does not need a special test prefix. The marker identifies this ordinary Jupiter test.</p><pre><code class=\"language-java\">@Test\nvoid addOne_four_returnsFive() {\n    assertEquals(5, Numbers.addOne(4));\n}</code></pre>",
+        "html": "<p>JUnit needs to know which methods are tests. Put the annotation <code>@Test</code> immediately before this method. An annotation is a marker attached to the following declaration. The method name can describe the case; it does not need a special test prefix. The marker identifies this ordinary Jupiter test.</p><pre><code class=\"language-java\">@Test\nvoid addOne_four_returnsFive() {\n    int actual = Numbers.addOne(4);\n    assertEquals(5, actual);\n}</code></pre>",
         "questionId": "07-r2-06"
       },
       {
         "title": "Enclose the test method in a class",
-        "html": "<p>A Java class body contains its methods. The outer braces below belong to NumbersTest; the inner braces belong to its test method. NumbersTest is our test class. Numbers is the separate supplied production class being called. Keeping those names distinct helps you see which code performs the operation and which code checks it.</p><pre><code class=\"language-java\">class NumbersTest {\n    @Test\n    void addOne_four_returnsFive() {\n        assertEquals(5, Numbers.addOne(4));\n    }\n}</code></pre>",
+        "html": "<p>A Java class body contains its methods. The outer braces below belong to NumbersTest; the inner braces belong to its test method. NumbersTest is our test class. Numbers is the separate supplied production class being called. Keeping those names distinct helps you see which code performs the operation and which code checks it.</p><pre><code class=\"language-java\">class NumbersTest {\n    @Test\n    void addOne_four_returnsFive() {\n        int actual = Numbers.addOne(4);\n        assertEquals(5, actual);\n    }\n}</code></pre>",
         "questionId": "07-r2-07"
       },
       {
@@ -1737,12 +1737,17 @@
       },
       {
         "title": "Assemble the complete file",
-        "html": "<p>Now combine the pieces you have already written. Imports go first, followed by the test class. Inside the class is the marked void method, and inside that method is the assertion. This complete file assumes Numbers is supplied in the same package and JUnit Jupiter is available in the project.</p><pre><code class=\"language-java\">import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass NumbersTest {\n    @Test\n    void addOne_four_returnsFive() {\n        assertEquals(5, Numbers.addOne(4));\n    }\n}</code></pre>",
+        "html": "<p>Now combine the pieces you have already written. Imports go first, followed by the test class. Inside the class is the marked void method, and inside that method are the call and assertion. This complete file assumes Numbers is supplied in the same package and JUnit Jupiter is available in the project.</p><pre><code class=\"language-java\">import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass NumbersTest {\n    @Test\n    void addOne_four_returnsFive() {\n        int actual = Numbers.addOne(4);\n        assertEquals(5, actual);\n    }\n}</code></pre>",
         "questionId": "07-r2-10"
       },
       {
+        "title": "Use a returned value directly",
+        "html": "<p>A method call can occupy another method’s argument slot when its returned type fits. In the one-line form below, Java calls addOne first, then supplies its returned int as the actual value. This combines the two familiar statements without changing the expected result or the comparison.</p><pre><code class=\"language-java\">int actual = Numbers.addOne(4);\nassertEquals(5, actual);</code></pre><p>The same check can be written as:</p><pre><code class=\"language-java\">assertEquals(5, Numbers.addOne(4));</code></pre>",
+        "questionId": "07-r3-inline"
+      },
+      {
         "title": "Keep the test’s return type separate",
-        "html": "<p>The method under test can return int while its test returns void. A Jupiter test succeeds by finishing without a failed assertion or unexpected failure; it does not report success by returning true. The ordinary test methods used here are nonstatic and not private, with no parameters. Use the plain void header you have practised.</p><pre><code class=\"language-java\">@Test\nvoid addOne_four_returnsFive() {\n    assertEquals(5, Numbers.addOne(4));\n}</code></pre>",
+        "html": "<p>The method under test can return int while its test returns void. A Jupiter test succeeds by finishing without a failed assertion or unexpected failure; it does not report success by returning true. Use the plain void header shown here, with no parameters and without static or private. The private keyword restricts access to the declaring class; ordinary Jupiter tests must be accessible to the test runner.</p><pre><code class=\"language-java\">@Test\nvoid addOne_four_returnsFive() {\n    assertEquals(5, Numbers.addOne(4));\n}</code></pre>",
         "questionId": "07-r2-11"
       },
       {
@@ -1828,9 +1833,9 @@
         "id": "07-r2-06",
         "type": "write",
         "title": "Mark the method with @Test",
-        "prompt": "<p>Add the marker that identifies this as an ordinary JUnit Jupiter test. Assume the library names are available.</p><pre><code class=\"language-java\">void addOne_four_returnsFive() {\n    assertEquals(5, Numbers.addOne(4));\n}</code></pre>",
+        "prompt": "<p>Add the marker that identifies this as an ordinary JUnit Jupiter test. Assume the library names are available.</p><pre><code class=\"language-java\">void addOne_four_returnsFive() {\n    int actual = Numbers.addOne(4);\n    assertEquals(5, actual);\n}</code></pre>",
         "hint": "The marker begins with @ and uses the name Test.",
-        "solution": "<pre><code class=\"language-java\">@Test\nvoid addOne_four_returnsFive() {\n    assertEquals(5, Numbers.addOne(4));\n}</code></pre>",
+        "solution": "<pre><code class=\"language-java\">@Test\nvoid addOne_four_returnsFive() {\n    int actual = Numbers.addOne(4);\n    assertEquals(5, actual);\n}</code></pre>",
         "rubric": [
           "Places @Test before the method declaration.",
           "Preserves the void method and correct assertion."
@@ -1840,7 +1845,7 @@
         "id": "07-r2-07",
         "type": "choice",
         "title": "Enclose the test method in a class",
-        "prompt": "<p>In the shown code, which class is the test class and which supplied class performs addOne?</p><pre><code class=\"language-java\">class NumbersTest {\n    @Test\n    void addOne_four_returnsFive() {\n        assertEquals(5, Numbers.addOne(4));\n    }\n}</code></pre>",
+        "prompt": "<p>In the shown code, which class is the test class and which supplied class performs addOne?</p><pre><code class=\"language-java\">class NumbersTest {\n    @Test\n    void addOne_four_returnsFive() {\n        int actual = Numbers.addOne(4);\n        assertEquals(5, actual);\n    }\n}</code></pre>",
         "hint": "Look at the outer class declaration and the receiver before .addOne.",
         "solution": "<p>NumbersTest is the test class; Numbers supplies the method being tested.</p>",
         "options": [
@@ -1888,13 +1893,26 @@
         "title": "Assemble the complete file",
         "prompt": "<p>Numbers.addOne(int number) is supplied in the same package and returns number plus one. JUnit Jupiter is available. Write a complete test class named NumbersTest containing one test of input 2, including imports.</p>",
         "hint": "Build the same pieces in their file order.",
-        "solution": "<pre><code class=\"language-java\">import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass NumbersTest {\n    @Test\n    void addOne_two_returnsThree() {\n        assertEquals(3, Numbers.addOne(2));\n    }\n}</code></pre>",
+        "solution": "<pre><code class=\"language-java\">import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass NumbersTest {\n    @Test\n    void addOne_two_returnsThree() {\n        int actual = Numbers.addOne(2);\n        assertEquals(3, actual);\n    }\n}</code></pre>",
         "rubric": [
           "Includes both required Jupiter imports.",
           "Encloses the test in NumbersTest.",
           "Uses @Test and a nonstatic void method with no parameters.",
           "Checks input 2 against independent expected value 3.",
           "Balances braces and ends statements with semicolons."
+        ]
+      },
+      {
+        "id": "07-r3-inline",
+        "type": "write",
+        "title": "Use a returned value directly",
+        "prompt": "<p>Numbers supplies <code>static int addOne(int number)</code>, which returns number plus one. Rewrite these two statements as one <code>assertEquals</code> statement, placing the production call directly in the actual-value slot. Jupiter assertions are imported.</p><pre><code class=\"language-java\">int actual = Numbers.addOne(7);\nassertEquals(8, actual);</code></pre>",
+        "hint": "Replace the actual variable in the assertion with the expression that produced its int value.",
+        "solution": "<pre><code class=\"language-java\">assertEquals(8, Numbers.addOne(7));</code></pre><p>The inner call supplies the actual int; the expected value remains 8.</p>",
+        "rubric": [
+          "Keeps expected value 8 as the first argument.",
+          "Places Numbers.addOne(7) as the second argument.",
+          "Balances both pairs of parentheses and ends with a semicolon."
         ]
       },
       {

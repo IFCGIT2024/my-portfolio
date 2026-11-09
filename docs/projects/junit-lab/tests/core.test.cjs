@@ -42,13 +42,16 @@ test('a later mistake remains visible after a historical success',()=>{
   assert.equal(C.classifyQuestion({selfChecked:true}),'reviewed');
 });
 test('new lesson revisions preserve the approved opening and saved drafts',()=>{
-  const state=C.normalizeState({read:{'01':true,'02':true,'03':true,'15':true},ready:{'01':true,'03':true},lessonRevisions:{'01':2,'02':2,'03':1,'15':1},flowSteps:{'01':2,'02':4,'03':3},drafts:{'03-3':'old answer','01-r2-compare':'keep this'}});
+  const state=C.normalizeState({read:{'01':true,'02':true,'03':true,'07':true,'15':true},ready:{'01':true,'03':true},lessonRevisions:{'01':2,'02':2,'03':1,'07':2,'15':1},flowSteps:{'01':2,'02':4,'03':3,'07':10},drafts:{'03-3':'old answer','01-r2-compare':'keep this','07-r2-06':'existing annotation answer'},questions:{'07-r2-06':{selfChecked:true}}});
   C.applyLessonRevisions(state,lessons);
   assert.equal(state.read['01'],true);assert.equal(state.read['02'],true);
   assert.equal(state.flowSteps['01'],2);assert.equal(state.flowSteps['02'],4);
   assert.equal(state.ready['01'],true);
   assert.equal(state.read['03'],undefined);assert.equal(state.read['15'],undefined);
   assert.equal(state.flowSteps['03'],undefined);assert.equal(state.ready['03'],undefined);
+  assert.equal(state.read['07'],undefined);assert.equal(state.flowSteps['07'],undefined);
+  assert.equal(state.drafts['07-r2-06'],'existing annotation answer');
+  assert.equal(state.questions['07-r2-06'].selfChecked,true);
   assert.equal(state.drafts['03-3'],'old answer');assert.equal(state.drafts['01-r2-compare'],'keep this');
   state.read['03']=true;state.flowSteps['03']=2;
   C.applyLessonRevisions(state,lessons);
@@ -109,7 +112,7 @@ test('every lesson pairs ordered steps with practice and resolved prerequisites'
     for(const source of l.sourceIds)assert.ok(Pages.sourceLink(source),`${l.id} source ${source}`);
     for(const q of l.practice){
       assert.ok(!qids.has(q.id));qids.add(q.id);
-      assert.ok(q.id.startsWith(l.id+'-r2-'),`${q.id} must belong to the rewritten lesson`);
+      assert.match(q.id,new RegExp('^'+l.id+'-r[1-9][0-9]*-'),`${q.id} must belong to the rewritten lesson`);
       assert.ok(['choice','multi','write'].includes(q.type));
       assert.ok(q.prompt&&q.hint&&q.solution);
       if(q.type==='write')assert.ok(q.rubric.length>=2);else for(const o of q.options)assert.ok(o.feedback);

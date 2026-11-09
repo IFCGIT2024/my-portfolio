@@ -987,7 +987,7 @@
         "id": "14-r2-08",
         "type": "choice",
         "title": "Choose a concrete implementation",
-        "prompt": "<p>Assume these imports. In <code>Deque&lt;String&gt; queue = new ArrayDeque&lt;String&gt;();</code>, which class actually constructs the object?</p>",
+        "prompt": "<p>Assume <code>java.util.Deque</code> and <code>java.util.ArrayDeque</code> are imported. In <code>Deque&lt;String&gt; queue = new ArrayDeque&lt;String&gt;();</code>, which class actually constructs the object?</p>",
         "hint": "Look immediately after new.",
         "solution": "<p>new ArrayDeque&lt;String&gt;() constructs the collection.</p>",
         "options": [
@@ -1135,7 +1135,7 @@
       },
       {
         "title": "Test the opposite ordering direction",
-        "html": "<p>The same sign rule works in the other direction. Give the receiver a larger priority and the argument a smaller one. Expect a positive result. You now have three separate ordering cases: lower, equal and higher. Write the expected relation first, then choose a comparison that expresses it.</p><pre><code class=\"language-java\">assertTrue(high.compareTo(low) &gt; 0);</code></pre>",
+        "html": "<p>This Ticket contract orders priorities in ascending order. The same sign rule works in the other direction. Give the receiver a larger priority and the argument a smaller one. Expect a positive result. You now have three separate ordering cases: lower, equal and higher. Write the expected relation first, then choose a comparison that expresses it.</p><pre><code class=\"language-java\">assertTrue(high.compareTo(low) &gt; 0);</code></pre>",
         "questionId": "15-r2-08"
       }
     ],
@@ -1169,7 +1169,7 @@
         "id": "15-r2-02",
         "type": "choice",
         "title": "Check the exact object",
-        "prompt": "<p>An existing String reference original is assigned with <code>String saved = original;</code>. Which property is guaranteed immediately afterward?</p>",
+        "prompt": "<p>An existing non-null String reference original is assigned with <code>String saved = original;</code>. Which property is guaranteed immediately afterward?</p>",
         "hint": "Reference assignment does not construct an object.",
         "solution": "<p>They identify the same String object.</p>",
         "options": [
@@ -1848,7 +1848,9 @@
     "goals": [
       "Link every selected test to a requirement or plausible fault.",
       "Isolate parameter failures before combining invalid inputs.",
-      "Describe limitations and assumptions without weakening the test oracle."
+      "Describe limitations and assumptions without weakening the test oracle.",
+      "Distinguish feasible complete paths from branch outcomes and select a simple basis of paths.",
+      "Trace definitions to uses in data flow and choose an input that exposes a missing update."
     ],
     "prerequisites": [
       "11",
@@ -1991,7 +1993,7 @@
         "id": "18-r2-04",
         "type": "choice",
         "title": "State why you chose the case",
-        "prompt": "<p>Shipping.canShip requires a non-null name and positive count. A test was selected from that contract and uses (null,1). Which description accurately states its design basis?</p>",
+        "prompt": "<p>Shipping.canShip returns true exactly when name is non-null and non-empty and count is positive; otherwise it returns false. A test was selected from that contract and uses (null,1). Which description accurately states its design basis?</p>",
         "hint": "Name the information used to select the input.",
         "solution": "<p>The case is a black-box check of the documented null-name restriction.</p>",
         "options": [
@@ -2171,7 +2173,7 @@
       "10",
       "18"
     ],
-    "setup": "<p>An <strong>exception</strong> is an object describing an exceptional event. <code>throw</code> transfers control away from the current point. A matching <code>catch</code> can handle that event. These are language statements and blocks, not functions. Before testing an exception, be able to predict which lines execute and which lines are skipped.</p><p>In the trace, <code>System.out.print(\"A \");</code> writes A followed by a space; it does not start a new line. The letters only mark which statements ran. The <code>try</code> body is the attempted normal path, a matching <code>catch</code> is a handler, and <code>finally</code> contains exit work. The complete example below shows how they fit together before we trace each step.</p>",
+    "setup": "<p>Follow the familiar Counter validation helper through normal completion, throw, try, catch, and finally. Introduce each control-flow statement before combining them in a trace.</p>",
     "bridge": "Now express “this exact call must throw this kind of exception” as a JUnit assertion.",
     "sourceIds": [
       "java-exceptions",
@@ -2550,7 +2552,7 @@
       "09",
       "19"
     ],
-    "setup": "<p>An exception test succeeds when the required exceptional behaviour occurs. JUnit must run the target operation itself so it can observe the outcome. A lambda such as <code>() -&gt; Limits.requirePositive(0)</code> supplies that operation for later execution. It does not call the method before assertThrows starts.</p>",
+    "setup": "<p>Use Counter.set to build a JUnit exception check from a delayed action and an exception type. Then inspect the documented message and unchanged state.</p>",
     "bridge": "Next, read and repair manual try/catch tests, then apply the same contract discipline to defensive code and defect reports.",
     "sourceIds": [
       "junit-guide",
@@ -2561,7 +2563,7 @@
     "flow": [
       {
         "title": "Describe an operation to run later",
-        "html": "<p>For an exception test, JUnit must invoke the operation while observing it. A <strong>lambda</strong> supplies an operation to run later. The empty parentheses mean it takes no input of its own; the arrow introduces its action. This fragment describes the call without performing it immediately. Counter is already a valid object here.</p><pre><code class=\"language-java\">() -&gt; counter.set(-1)</code></pre>",
+        "html": "<p>For an exception test, JUnit must invoke the operation while observing it. A <strong>lambda</strong> supplies an operation to run later. The empty parentheses mean it takes no input of its own; the arrow introduces its action. This fragment describes the call without performing it immediately. counter already refers to a valid Counter object here.</p><pre><code class=\"language-java\">() -&gt; counter.set(-1)</code></pre>",
         "questionId": "20-r2-01"
       },
       {

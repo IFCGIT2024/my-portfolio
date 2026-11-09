@@ -62,7 +62,11 @@ class TrainingApiTest {
         BigInteger valid = BigInteger.ONE;
         assertThrows(NullPointerException.class, () -> TrainingApi.add(valid, null));
     }
-    @Test void counter_startsAtZero() { assertEquals(0, counter.get()); }
+    @Test void counter_startsAtZero() {
+        assertEquals(0, counter.get());
+        assertTrue(counter.isZero());
+        TrainingApi.Counter.requireNonnegative(0);
+    }
     @Test void counter_set_replacesPreviousValue() {
         counter.set(3);
         counter.set(5);
@@ -72,10 +76,13 @@ class TrainingApiTest {
         counter.set(3);
         counter.increment();
         assertEquals(4, counter.get());
+        assertFalse(counter.isZero());
     }
     @Test void counter_negative_leavesStateUnchanged() {
         counter.set(3);
-        assertThrows(IllegalArgumentException.class, () -> counter.set(-1));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+            () -> counter.set(-1));
+        assertEquals("value must be nonnegative", ex.getMessage());
         assertEquals(3, counter.get());
     }
     @Test void counter_overflow_leavesStateUnchanged() {

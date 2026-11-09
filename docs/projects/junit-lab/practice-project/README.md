@@ -61,6 +61,14 @@ If `javac` is not found, configure your JDK's `bin` directory in PATH or use you
 
 Use a fresh object in each test, or create one in `@BeforeEach`. Put valid setup outside `assertThrows`. Keep expected values independent from the implementation.
 
+## Use the course's Counter examples here
+
+`YourPracticeTest.java` already imports `practice.TrainingApi.Counter`, so the course's short name `Counter` works in that file. This Counter starts at zero and provides `get()`, `set(int)`, `increment()`, `isZero()`, and the static `requireNonnegative(int)` helper. A negative value is rejected with `IllegalArgumentException("value must be nonnegative")`; a rejected `set` leaves the previous count unchanged.
+
+Paste a Counter test method inside `YourPracticeTest`, below the existing imports and inside its class braces. Keep the `package practice;` line. When copying only a method, do not paste another class declaration around it. The supplied imports cover `@Test` and assertions; add `org.junit.jupiter.api.BeforeEach` if your copied test uses that setup annotation.
+
+Other lesson APIs such as `Numbers`, `Searches`, and `NameRules` are supplied hypothetical APIs for those exercises; they are not all implemented in this download. For additional runnable practice, use the documented methods in `TrainingApi.java`, adapting the call and its expected result to that method's own contract.
+
 ## Files
 
 - `src/main/java/practice/TrainingApi.java`: contract-based example methods, a counter, and a fixed-capacity stack.

@@ -315,7 +315,7 @@
       },
       {
         "title": "Guard both ends of an index range",
-        "html": "<p>An array of length three has indexes 0, 1, and 2. A valid index satisfies <code>0 &lt;= index &lt; length</code>. A rejection guard checks the opposite: below zero <em>or</em> at least length. The null guard must already have succeeded before this range guard reads length.</p><pre><code class=\"language-java\">if (index &lt; 0 || index &gt;= values.length) {\n    throw new IndexOutOfBoundsException(\"index outside array\");\n}</code></pre>",
+        "html": "<p>An array of length three has indexes 0, 1, and 2. A valid index is at least zero and less than the array length. A rejection guard checks the opposite: below zero <em>or</em> at least length. The null guard must already have succeeded before this range guard reads length.</p><pre><code class=\"language-java\">if (index &lt; 0 || index &gt;= values.length) {\n    throw new IndexOutOfBoundsException(\"index outside array\");\n}</code></pre>",
         "questionId": "22-r2-06"
       },
       {
@@ -445,7 +445,7 @@
         "id": "22-r2-06",
         "type": "write",
         "title": "Guard both ends of an index range",
-        "prompt": "<p><code>ArrayRules.at(int[] values, int index)</code> has already rejected null. It must reject indexes below 0 or at least <code>values.length</code> with <code>IndexOutOfBoundsException(\"index outside array\")</code>. Write the if guard, before <code>return values[index];</code>.</p>",
+        "prompt": "<p><code>static int ArrayRules.at(int[] values, int index)</code> has already rejected null. It must reject indexes below 0 or at least <code>values.length</code> with <code>IndexOutOfBoundsException(\"index outside array\")</code>. Write the if guard, before <code>return values[index];</code>.</p>",
         "hint": "Join the two invalid regions with ||, not &&.",
         "solution": "<pre><code class=\"language-java\">if (index &lt; 0 || index &gt;= values.length) {\n    throw new IndexOutOfBoundsException(\"index outside array\");\n}</code></pre>",
         "rubric": [
@@ -458,7 +458,7 @@
         "id": "22-r2-07",
         "type": "choice",
         "title": "Isolate one invalid obligation",
-        "prompt": "<p><code>ArrayRules.at(int[] values, int index)</code> rejects null with <code>IllegalArgumentException</code> and an out-of-range index with <code>IndexOutOfBoundsException</code>. Priority for two invalid arguments is unspecified. Which call cleanly tests the negative-index rule?</p>",
+        "prompt": "<p><code>static int ArrayRules.at(int[] values, int index)</code> rejects null with <code>IllegalArgumentException</code> and an out-of-range index with <code>IndexOutOfBoundsException</code>. Priority for two invalid arguments is unspecified. Which call cleanly tests the negative-index rule?</p>",
         "hint": "Keep values valid while making only index invalid.",
         "solution": "<p><code>at(new int[]{7}, -1)</code> isolates an invalid index with an otherwise usable one-element array.</p>",
         "options": [
@@ -578,7 +578,7 @@
     "flow": [
       {
         "title": "Read the search result type",
-        "html": "<p>Use a familiar array in a new operation: <code>firstIndex</code> searches from left to right. Its <code>int</code> result is an index, with -1 meaning no match. The return type rules out returning null. Check whether a method can compile before trying to explain what it does at runtime.</p><pre><code class=\"language-java\">static int firstIndex(int[] values, int target) {\n    return null;\n}</code></pre>",
+        "html": "<p>Return to <code>firstIndex</code>, the left-to-right search introduced earlier. Its <code>int</code> result is an index, with -1 meaning no match. The return type rules out returning null. Check whether a method can compile before trying to explain what it does at runtime.</p><pre><code class=\"language-java\">static int firstIndex(int[] values, int target) {\n    return null;\n}</code></pre>",
         "questionId": "23-r2-01"
       },
       {
@@ -593,7 +593,7 @@
       },
       {
         "title": "Choose an exposing witness",
-        "html": "<p>A <strong>witness</strong> is a concrete input that demonstrates a mismatch. Merely executing a faulty line is not enough; its effect must become visible. The early-return search needs a first mismatch followed by a later match. A first-element match can make this defective method look correct.</p><pre><code class=\"language-java\">Search.firstIndex(new int[]{4, 9}, 9); // reveals it</code></pre>",
+        "html": "<p>A <strong>witness</strong> is a concrete input that demonstrates a mismatch. Merely executing a faulty line is not enough; its effect must become visible. The early-return search needs a first mismatch followed by a later match. A first-element match can make this defective method look correct.</p><pre><code class=\"language-java\">Searches.firstIndex(new int[]{4, 9}, 9); // reveals it</code></pre>",
         "questionId": "23-r2-04"
       },
       {
@@ -613,12 +613,12 @@
       },
       {
         "title": "Turn the witness into an assertion",
-        "html": "<p>Once the contract and trace disagree, preserve that input as a test. The expected value comes from the contract, even while the current implementation returns something else. This assertion stays red until the early-return defect is corrected; changing the expected value to match the defect would erase the evidence.</p><pre><code class=\"language-java\">assertEquals(1, Search.firstIndex(new int[]{4, 9}, 9));</code></pre>",
+        "html": "<p>Once the contract and trace disagree, preserve that input as a test. The expected value comes from the contract, even while the current implementation returns something else. This assertion stays red until the early-return defect is corrected; changing the expected value to match the defect would erase the evidence.</p><pre><code class=\"language-java\">assertEquals(1, Searches.firstIndex(new int[]{4, 9}, 9));</code></pre>",
         "questionId": "23-r2-08"
       },
       {
         "title": "Give the witness its own test method",
-        "html": "<p>A named test makes the purpose of the witness visible in a test report. The method name can describe the missed behavior: finding a match after an initial mismatch. Use the same assertion you just built inside a complete <code>@Test</code> method. No exception assertion belongs in this ordinary successful-search case.</p><pre><code class=\"language-java\">@Test\nvoid findsMatchAfterFirstMismatch() {\n    assertEquals(1, Search.firstIndex(new int[]{4, 9}, 9));\n}</code></pre>",
+        "html": "<p>A named test makes the purpose of the witness visible in a test report. The method name can describe the missed behavior: finding a match after an initial mismatch. Use the same assertion you just built inside a complete <code>@Test</code> method. No exception assertion belongs in this ordinary successful-search case.</p><pre><code class=\"language-java\">@Test\nvoid findsMatchAfterFirstMismatch() {\n    assertEquals(1, Searches.firstIndex(new int[]{4, 9}, 9));\n}</code></pre>",
         "questionId": "23-r2-09"
       },
       {
@@ -647,7 +647,7 @@
         "id": "23-r2-01",
         "type": "choice",
         "title": "Read the search result type",
-        "prompt": "<p><code>static int Search.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>Classify this implementation before attempting to run it.</p><pre><code class=\"language-java\">static int firstIndex(int[] values, int target) {\n    return null;\n}</code></pre>",
+        "prompt": "<p><code>static int Searches.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>Classify this implementation before attempting to run it.</p><pre><code class=\"language-java\">static int firstIndex(int[] values, int target) {\n    return null;\n}</code></pre>",
         "hint": "int is a primitive type and cannot hold null.",
         "solution": "<p>This is a compile-time type error: the declared primitive int result cannot be null. There is no runtime return value to trace.</p>",
         "options": [
@@ -672,7 +672,7 @@
         "id": "23-r2-02",
         "type": "choice",
         "title": "Set the expected result before tracing",
-        "prompt": "<p><code>static int Search.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>For <code>new int[]{7, 3, 7}</code> and target 7, what is the expected result?</p>",
+        "prompt": "<p><code>static int Searches.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>For <code>new int[]{7, 3, 7}</code> and target 7, what is the expected result?</p>",
         "hint": "The first element has index zero.",
         "solution": "<p>The first 7 is at index 0. A later match does not change the required first-match result.</p>",
         "options": [
@@ -697,7 +697,7 @@
         "id": "23-r2-03",
         "type": "choice",
         "title": "Trace an early return",
-        "prompt": "<p><code>static int Search.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>For values <code>new int[]{4, 9}</code> and target 9, what does this faulty body actually return?</p><pre><code class=\"language-java\">for (int i = 0; i &lt; values.length; i++) {\n    if (values[i] == target) {\n        return i;\n    }\n    return -1;\n}\nreturn -1;</code></pre>",
+        "prompt": "<p><code>static int Searches.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>For values <code>new int[]{4, 9}</code> and target 9, what does this faulty body actually return?</p><pre><code class=\"language-java\">for (int i = 0; i &lt; values.length; i++) {\n    if (values[i] == target) {\n        return i;\n    }\n    return -1;\n}\nreturn -1;</code></pre>",
         "hint": "At i = 0, 4 does not equal 9. Which statement executes next?",
         "solution": "<p>It returns -1 immediately after the first mismatch. The expected result is 1, but index 1 is never examined.</p>",
         "options": [
@@ -722,27 +722,27 @@
         "id": "23-r2-04",
         "type": "multi",
         "title": "Choose an exposing witness",
-        "prompt": "<p><code>static int Search.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>A faulty implementation returns -1 immediately after its first mismatching element; otherwise it returns the matching index, or -1 for an empty array. Select every call that exposes this specific defect.</p>",
+        "prompt": "<p><code>static int Searches.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>A faulty implementation returns -1 immediately after its first mismatching element; otherwise it returns the matching index, or -1 for an empty array. Select every call that exposes this specific defect.</p>",
         "hint": "Look for a first mismatch and a match later in the array.",
         "solution": "<p>The arrays <code>{4, 9}</code> and <code>{2, 3, 9}</code> both require searching past an initial mismatch to find 9.</p>",
         "options": [
           {
-            "text": "Search.firstIndex(new int[]{4, 9}, 9)",
+            "text": "Searches.firstIndex(new int[]{4, 9}, 9)",
             "correct": true,
             "feedback": "Expected 1, but the faulty method returns -1 after inspecting 4."
           },
           {
-            "text": "Search.firstIndex(new int[]{9, 4}, 9)",
+            "text": "Searches.firstIndex(new int[]{9, 4}, 9)",
             "correct": false,
             "feedback": "The first element matches, so this method returns the correct index 0."
           },
           {
-            "text": "Search.firstIndex(new int[]{2, 3, 9}, 9)",
+            "text": "Searches.firstIndex(new int[]{2, 3, 9}, 9)",
             "correct": true,
             "feedback": "Expected 2, but the first mismatch incorrectly ends the search."
           },
           {
-            "text": "Search.firstIndex(new int[]{}, 9)",
+            "text": "Searches.firstIndex(new int[]{}, 9)",
             "correct": false,
             "feedback": "Both the correct and faulty versions return -1 for this empty case."
           }
@@ -752,7 +752,7 @@
         "id": "23-r2-05",
         "type": "write",
         "title": "Repair the return’s location",
-        "prompt": "<p><code>static int Search.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>Repair the method below by removing the incorrectly placed return. Keep a valid return for an empty array and an exhausted search.</p><pre><code class=\"language-java\">static int firstIndex(int[] values, int target) {\n    for (int i = 0; i &lt; values.length; i++) {\n        if (values[i] == target) {\n            return i;\n        }\n        return -1;\n    }\n    return -1;\n}</code></pre>",
+        "prompt": "<p><code>static int Searches.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>Repair the method below by removing the incorrectly placed return. Keep a valid return for an empty array and an exhausted search.</p><pre><code class=\"language-java\">static int firstIndex(int[] values, int target) {\n    for (int i = 0; i &lt; values.length; i++) {\n        if (values[i] == target) {\n            return i;\n        }\n        return -1;\n    }\n    return -1;\n}</code></pre>",
         "hint": "The failed search result belongs after the loop.",
         "solution": "<pre><code class=\"language-java\">static int firstIndex(int[] values, int target) {\n    for (int i = 0; i &lt; values.length; i++) {\n        if (values[i] == target) {\n            return i;\n        }\n    }\n    return -1;\n}</code></pre>",
         "rubric": [
@@ -765,7 +765,7 @@
         "id": "23-r2-06",
         "type": "choice",
         "title": "Expose an off-by-one bound",
-        "prompt": "<p><code>static int Search.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>The body below receives an empty non-null array and target 9. What is the observed failure?</p><pre><code class=\"language-java\">for (int i = 0; i &lt;= values.length; i++) {\n    if (values[i] == target) {\n        return i;\n    }\n}\nreturn -1;</code></pre>",
+        "prompt": "<p><code>static int Searches.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>The body below receives an empty non-null array and target 9. What is the observed failure?</p><pre><code class=\"language-java\">for (int i = 0; i &lt;= values.length; i++) {\n    if (values[i] == target) {\n        return i;\n    }\n}\nreturn -1;</code></pre>",
         "hint": "For length zero, 0 <= 0 is true, but index zero does not exist.",
         "solution": "<p>The first array access throws <code>ArrayIndexOutOfBoundsException</code>; the contract expected -1. Change the loop bound to <code>i &lt; values.length</code>.</p>",
         "options": [
@@ -803,12 +803,12 @@
         "id": "23-r2-08",
         "type": "write",
         "title": "Turn the witness into an assertion",
-        "prompt": "<p><code>static int Search.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>Write one Jupiter assertion for the revealing input <code>new int[]{4, 9}</code>, target 9. A faulty implementation currently returns -1; the assertion must preserve the contractual expectation. Assertion imports are present.</p>",
+        "prompt": "<p><code>static int Searches.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>Write one Jupiter assertion for the revealing input <code>new int[]{4, 9}</code>, target 9. A faulty implementation currently returns -1; the assertion must preserve the contractual expectation. Assertion imports are present.</p>",
         "hint": "Index 1 contains the first 9. Put that expected index first.",
-        "solution": "<pre><code class=\"language-java\">assertEquals(1, Search.firstIndex(new int[]{4, 9}, 9));</code></pre>",
+        "solution": "<pre><code class=\"language-java\">assertEquals(1, Searches.firstIndex(new int[]{4, 9}, 9));</code></pre>",
         "rubric": [
           "Uses expected 1, derived from the first-match contract.",
-          "Calls Search.firstIndex with the stated int[] and int.",
+          "Calls Searches.firstIndex with the stated int[] and int.",
           "Uses assertEquals(expected, actual) and a semicolon."
         ]
       },
@@ -816,9 +816,9 @@
         "id": "23-r2-09",
         "type": "write",
         "title": "Give the witness its own test method",
-        "prompt": "<p><code>static int Search.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>Assume the Jupiter <code>@Test</code> and assertion imports are present. Write the method inside an ordinary test class.</p><p>Write a complete test method named <code>findsLastPosition()</code> for values <code>new int[]{2, 4, 9}</code> and target 9.</p>",
+        "prompt": "<p><code>static int Searches.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>Assume the Jupiter <code>@Test</code> and assertion imports are present. Write the method inside an ordinary test class.</p><p>Write a complete test method named <code>findsLastPosition()</code> for values <code>new int[]{2, 4, 9}</code> and target 9.</p>",
         "hint": "The third element has index 2. The method returns an int normally.",
-        "solution": "<pre><code class=\"language-java\">@Test\nvoid findsLastPosition() {\n    assertEquals(2, Search.firstIndex(new int[]{2, 4, 9}, 9));\n}</code></pre>",
+        "solution": "<pre><code class=\"language-java\">@Test\nvoid findsLastPosition() {\n    assertEquals(2, Searches.firstIndex(new int[]{2, 4, 9}, 9));\n}</code></pre>",
         "rubric": [
           "Uses @Test with void findsLastPosition() and a body.",
           "Passes the supplied array and target.",
@@ -829,7 +829,7 @@
         "id": "23-r2-10",
         "type": "write",
         "title": "Explain the mechanism precisely",
-        "prompt": "<p><code>static int Search.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>Explain the defect for input <code>new int[]{4, 9}</code>, target 9, using expected result, actual result, and cause. This is the complete faulty body:</p><pre><code class=\"language-java\">for (int i = 0; i &lt; values.length; i++) {\n    if (values[i] == target) {\n        return i;\n    }\n    return -1;\n}\nreturn -1;</code></pre>",
+        "prompt": "<p><code>static int Searches.firstIndex(int[] values, int target)</code> accepts a non-null array. It returns the first matching index, or -1 if no element matches. An empty array has no match.</p><p>Explain the defect for input <code>new int[]{4, 9}</code>, target 9, using expected result, actual result, and cause. This is the complete faulty body:</p><pre><code class=\"language-java\">for (int i = 0; i &lt; values.length; i++) {\n    if (values[i] == target) {\n        return i;\n    }\n    return -1;\n}\nreturn -1;</code></pre>",
         "hint": "Trace i = 0, then identify the statement that prevents i = 1.",
         "solution": "<p>The first matching 9 is at index 1, so the expected result is 1. The implementation returns -1 after comparing 4 with 9 at index 0. Its no-match return is inside the loop, so it exits before checking index 1; move that return after the loop.</p>",
         "rubric": [
@@ -1424,7 +1424,7 @@
         "id": "25-r2-04",
         "type": "choice",
         "title": "Match the assertion to the expression type",
-        "prompt": "<p><code>int Counter.get()</code> should return 5 here. Which assertion directly checks that exact value and compiles with Jupiter?</p>",
+        "prompt": "<p>An existing, non-null <code>Counter counter</code> is available. <code>int Counter.get()</code> should return 5 here. Which assertion directly checks that exact value and compiles with Jupiter?</p>",
         "hint": "An int value is not itself a boolean.",
         "solution": "<p><code>assertEquals(5, counter.get())</code> compares the expected int with the actual int.</p>",
         "options": [
@@ -2456,7 +2456,7 @@
         "responseKind": "explanation"
       }
     ],
-    "bridge": "You have built tests from promised behavior alone. Next, compare those decisions with the paths and statements of an actual implementation.",
+    "bridge": "You have built tests from promised behavior alone. Next, apply the same contract-first process to a counting method whose implementation is visible.",
     "sourceIds": [
       "junit-guide",
       "java-types",

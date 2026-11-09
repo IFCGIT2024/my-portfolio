@@ -1,5 +1,6 @@
 package practice;
 
+import practice.TrainingApi.Counter;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

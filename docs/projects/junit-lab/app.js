@@ -257,7 +257,7 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('sidebar-open'))closeMenu(true);});
   $('#lesson-search').oninput=e=>{query=e.target.value.trim().toLowerCase();outline();};
   window.addEventListener('hashchange',()=>{if(lessons.length)render();});window.addEventListener('pagehide',save);
-  Promise.all(['01-10','11-20','21-30'].map(async part=>{const response=await fetch(`data/lessons-${part}.json?v=20261109-incremental-course`);if(!response.ok)throw Error(`Lesson file could not be loaded (${response.status}).`);return response.json();})).then(parts=>{
+  Promise.all(['01-10','11-20','21-30'].map(async part=>{const response=await fetch(`data/lessons-${part}.json?v=20261109-coherence`);if(!response.ok)throw Error(`Lesson file could not be loaded (${response.status}).`);return response.json();})).then(parts=>{
     lessons=parts.flat().sort((a,b)=>a.id.localeCompare(b.id));
     questions=lessons.flatMap(l=>l.practice.map(q=>({...q,lessonId:l.id,lessonTitle:l.title})));
     C.applyLessonRevisions(state,lessons);validateExam();save();

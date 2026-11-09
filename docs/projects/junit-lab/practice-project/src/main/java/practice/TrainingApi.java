@@ -73,9 +73,22 @@ public final class TrainingApi {
         /** Starts at 0. */
         public Counter() { }
         public int get() { return value; }
-        /** @throws IllegalArgumentException if next < 0; state remains unchanged. */
+        /** Returns true exactly when the stored count is zero. */
+        public boolean isZero() { return value == 0; }
+        /**
+         * Checks the value without changing any Counter.
+         * @throws IllegalArgumentException if next < 0, with message "value must be nonnegative"
+         */
+        public static void requireNonnegative(int next) {
+            if (next < 0) throw new IllegalArgumentException("value must be nonnegative");
+        }
+        /**
+         * Replaces the stored value.
+         * @throws IllegalArgumentException if next < 0, with message "value must be nonnegative";
+         * state remains unchanged
+         */
         public void set(int next) {
-            if (next < 0) throw new IllegalArgumentException("count must be nonnegative");
+            requireNonnegative(next);
             value = next;
         }
         /**

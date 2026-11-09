@@ -1,0 +1,1540 @@
+[
+  {
+    "id": "21",
+    "module": "Exceptions and defensive code",
+    "title": "Read and repair try/catch tests",
+    "summary": "Trace both outcomes of an exception test, then preserve useful information when an exception crosses a boundary.",
+    "goals": [
+      "Explain why a manual exception test needs a no-exception failure path.",
+      "Trace which catch runs and whether execution continues or propagates.",
+      "Rethrow with context while preserving the original cause."
+    ],
+    "prerequisites": [
+      "19",
+      "20"
+    ],
+    "setup": "<p>You can already use <code>assertThrows</code>. Now read the older manual form: the call runs inside <code>try</code>, and a matching <code>catch</code> handles the exception. A test must check what happens if the expected exception is missing as well as when it appears.</p>",
+    "worked": {
+      "title": "A complete manual exception test",
+      "intro": "<p>This self-contained example puts the small production helper and its test in the same class so every name is visible. The helper is the code under test; the test returns <code>void</code>.</p><pre><code>import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass PositiveAmountTest {\n    static void requirePositive(int amount) {\n        if (amount &lt;= 0) {\n            throw new IllegalArgumentException(&quot;amount must be positive&quot;);\n        }\n    }\n\n    @Test\n    void zeroAmount_isRejected() {\n        try {\n            requirePositive(0);\n            fail(&quot;Expected an IllegalArgumentException for zero&quot;);\n        } catch (IllegalArgumentException ex) {\n            assertEquals(&quot;amount must be positive&quot;, ex.getMessage());\n        }\n    }\n}</code></pre>",
+      "steps": [
+        {
+          "title": "Follow the correct implementation",
+          "html": "<p><code>requirePositive(0)</code> throws. Control skips <code>fail</code> and enters the matching catch. The assertion checks the promised message.</p>"
+        },
+        {
+          "title": "Follow a broken implementation",
+          "html": "<p>Suppose the helper returns normally for zero. Execution reaches <code>fail</code>, so the test fails. Without that line, the test would finish successfully without checking anything.</p>"
+        },
+        {
+          "title": "Follow an unexpected exception",
+          "html": "<p>If the helper throws <code>NullPointerException</code>, the narrow catch does not handle it. The test ends with that unexpected exception; it does not silently pass.</p>"
+        },
+        {
+          "title": "Read the shorter equivalent",
+          "html": "<pre><code>IllegalArgumentException ex = assertThrows(\n    IllegalArgumentException.class, () -&gt; requirePositive(0));\nassertEquals(&quot;amount must be positive&quot;, ex.getMessage());</code></pre><p>Both forms reject normal completion and check the message. The lambda keeps the action inside the assertion.</p>"
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": "Handling, propagating and translating are different decisions",
+        "html": "<p>Handling means the current method has a defined response and can continue. Propagating means letting a caller decide. Translating means throwing a different exception that describes the higher-level operation. When translating, keep the cause instead of discarding the original evidence.</p><pre><code>static int readCount(String text) {\n    try {\n        return Integer.parseInt(text);\n    } catch (NumberFormatException ex) {\n        throw new IllegalArgumentException(&quot;Count must be an integer&quot;, ex);\n    }\n}</code></pre><p><code>ex</code> becomes the cause of the new exception. A caller can inspect <code>getCause()</code>, and a stack trace can show both layers. A <code>throws</code> declaration documents or declares propagation; it does not itself throw anything.</p>"
+      },
+      {
+        "title": "Avoid catches that make a test meaningless",
+        "html": "<p>A catch that merely prints an exception can turn a failed operation into a passing test. Catch the expected type and assert the promised information. Do not catch <code>Throwable</code> around assertions: it can also catch assertion failures. A plain <code>catch (Exception ex)</code> is already too broad for a test intended to expect one particular runtime exception.</p>"
+      }
+    ],
+    "practice": [
+      {
+        "id": "21-1",
+        "type": "choice",
+        "title": "What does the missing fail allow?",
+        "prompt": "<pre><code>// Contract: amount must be positive. Nonpositive amounts throw\n// IllegalArgumentException with message &quot;amount must be positive&quot;.\nstatic void requirePositive(int amount) {\n    if (amount &lt;= 0) {\n        throw new IllegalArgumentException(&quot;amount must be positive&quot;);\n    }\n}</code></pre><pre><code>@Test\nvoid rejectsZero() {\n    try { requirePositive(0); }\n    catch (IllegalArgumentException ex) { /* expected */ }\n}</code></pre><p>If a faulty implementation accepts zero and returns normally, what happens?</p>",
+        "hint": "Trace the path when no exception is thrown.",
+        "solution": "<p>It passes. Add <code>fail(...)</code> after the call, or use <code>assertThrows</code>.</p>",
+        "options": [
+          {
+            "text": "The test passes without detecting the defect.",
+            "correct": true,
+            "feedback": "The try completes, the catch is skipped, and no assertion fails."
+          },
+          {
+            "text": "The test fails because a catch was skipped.",
+            "correct": false,
+            "feedback": "Skipping a catch is normal when no exception is thrown."
+          },
+          {
+            "text": "The test does not compile because try needs fail.",
+            "correct": false,
+            "feedback": "Java permits this structure; the defect is in the test’s reasoning."
+          }
+        ]
+      },
+      {
+        "id": "21-2",
+        "type": "multi",
+        "title": "Preserve the cause",
+        "prompt": "<p>This snippet is the body of <code>static int readCount(String text)</code>.</p><pre><code>try {\n    return Integer.parseInt(text);\n} catch (NumberFormatException ex) {\n    throw new IllegalArgumentException(&quot;Invalid count&quot;, ex);\n}</code></pre><p>Which statements are correct?</p>",
+        "hint": "Distinguish the exception object from the result the method normally returns.",
+        "solution": "<p>The first two statements are correct. Translation adds context while preserving the lower-level exception.</p>",
+        "options": [
+          {
+            "text": "The thrown exception has the message \"Invalid count\".",
+            "correct": true,
+            "feedback": "That is the message passed to the new exception."
+          },
+          {
+            "text": "The original NumberFormatException is available through getCause().",
+            "correct": true,
+            "feedback": "The two-argument constructor records ex as the cause."
+          },
+          {
+            "text": "The caller receives a normal integer result after the catch.",
+            "correct": false,
+            "feedback": "The catch throws, so the method does not return normally on this path."
+          },
+          {
+            "text": "The catch retries parseInt automatically.",
+            "correct": false,
+            "feedback": "A catch runs its body; no retry occurs unless explicitly programmed."
+          }
+        ]
+      },
+      {
+        "id": "21-3",
+        "type": "write",
+        "title": "Repair a manual test",
+        "prompt": "<pre><code>// Contract: amount must be positive. Nonpositive amounts throw\n// IllegalArgumentException with message &quot;amount must be positive&quot;.\nstatic void requirePositive(int amount) {\n    if (amount &lt;= 0) {\n        throw new IllegalArgumentException(&quot;amount must be positive&quot;);\n    }\n}</code></pre><pre><code>@Test\nvoid rejectsNegative() {\n    try {\n        requirePositive(-2);\n    } catch (Exception ex) {\n        System.out.println(ex.getMessage());\n    }\n}</code></pre><p>Rewrite this as a reliable manual try/catch test. Assume Jupiter imports are present.</p>",
+        "hint": "Reject normal completion, catch the promised type, and check the documented message.",
+        "solution": "<pre><code>@Test\nvoid rejectsNegative() {\n    try {\n        requirePositive(-2);\n        fail(&quot;Expected a rejection for -2&quot;);\n    } catch (IllegalArgumentException ex) {\n        assertEquals(&quot;amount must be positive&quot;, ex.getMessage());\n    }\n}</code></pre>",
+        "rubric": [
+          "The test is a void @Test method with a well-typed call.",
+          "fail occurs immediately after the action in the try block.",
+          "The catch expects IllegalArgumentException rather than every Exception.",
+          "The expected message is the first assertEquals argument."
+        ]
+      },
+      {
+        "id": "21-4",
+        "type": "write",
+        "title": "Explain all three paths",
+        "prompt": "<p>Assume <code>load()</code> can return normally, throw <code>IllegalArgumentException</code>, or throw <code>IllegalStateException</code>. No other code throws.</p><pre><code>String trace = &quot;A&quot;;\ntry {\n    load();\n    trace += &quot;B&quot;;\n} catch (IllegalArgumentException ex) {\n    trace += &quot;C&quot;;\n} finally {\n    trace += &quot;D&quot;;\n}\ntrace += &quot;E&quot;;</code></pre><p>Give the final trace for normal return and the handled exception. For the unhandled exception, give the trace just before it leaves this code and say whether E is appended.</p>",
+        "hint": "finally runs during both normal completion and propagation here.",
+        "solution": "<table><thead><tr><th>Outcome</th><th>Trace</th><th>Reason</th></tr></thead><tbody><tr><td>Normal return</td><td>ABDE</td><td>The try finishes, then finally and the following statement run.</td></tr><tr><td>IllegalArgumentException</td><td>ACDE</td><td>B is skipped; catch, finally and E run.</td></tr><tr><td>IllegalStateException</td><td>AD before propagation</td><td>No matching catch; finally runs, then the exception leaves. E is skipped.</td></tr></tbody></table>",
+        "rubric": [
+          "Normal result is ABDE.",
+          "Handled result is ACDE.",
+          "Unhandled path runs finally, has AD, and does not reach E."
+        ]
+      }
+    ],
+    "teachBack": {
+      "prompt": "Why does a manual exception test need to reason about the path where no exception happens?",
+      "answer": "<p>That is exactly the path a missing validation bug produces. A test must fail on that path; otherwise the absence of the required exception becomes a false pass.</p>"
+    },
+    "bridge": "Next, place validation in production code and distinguish it from assertions used inside tests.",
+    "sourceIds": [
+      "junit-guide",
+      "java-exceptions"
+    ]
+  },
+  {
+    "id": "22",
+    "module": "Exceptions and defensive code",
+    "title": "Validate before you depend on an input",
+    "summary": "Turn a contract into ordered guards, and distinguish Java assert from JUnit assertions.",
+    "goals": [
+      "Order guards so invalid inputs are rejected before dereferencing or mutation.",
+      "Write separate tests for independent invalid conditions and preserved state.",
+      "Explain when Java assert can disappear and why JUnit assertions differ."
+    ],
+    "prerequisites": [
+      "05",
+      "12",
+      "20",
+      "21"
+    ],
+    "setup": "<p>An input can have the right Java type and still violate a method’s rules. Defensive code checks the documented conditions before using the input. An invariant is a condition the object must preserve; a guard is ordinary code that rejects a specific invalid call.</p>",
+    "worked": {
+      "title": "A safe array update and its tests",
+      "intro": "<pre><code>import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass ArrayUpdateTest {\n    // Throws NPE for null values, then IndexOutOfBoundsException\n    // for index outside [0, values.length). Invalid calls change nothing.\n    static void replace(int[] values, int index, int replacement) {\n        if (values == null) {\n            throw new NullPointerException(&quot;values must not be null&quot;);\n        }\n        if (index &lt; 0 || index &gt;= values.length) {\n            throw new IndexOutOfBoundsException(&quot;invalid index&quot;);\n        }\n        values[index] = replacement;\n    }\n\n    @Test\n    void indexAtLength_isRejected_withoutChangingArray() {\n        int[] values = {4, 9};\n        assertThrows(IndexOutOfBoundsException.class,\n            () -&gt; replace(values, 2, 7));\n        assertArrayEquals(new int[]{4, 9}, values);\n    }\n}</code></pre>",
+      "steps": [
+        {
+          "title": "Read the type separately from the range",
+          "html": "<p><code>2</code> is an <code>int</code>, so the call compiles. Its value is invalid for this two-element array, whose legal indexes are 0 and 1.</p>"
+        },
+        {
+          "title": "Check null before reading length",
+          "html": "<p><code>values.length</code> needs a real array. The null guard comes first, which also implements the stated precedence when both arguments are invalid.</p>"
+        },
+        {
+          "title": "Check both ends before writing",
+          "html": "<p>The second guard rejects negatives and indexes at or beyond the length. Only a valid index reaches the assignment.</p>"
+        },
+        {
+          "title": "Observe the whole promise",
+          "html": "<p>The test checks the exception and the unchanged array. Both observations belong to one scenario: rejecting this update without modifying state. A test can contain more than one assertion when they check related effects.</p>"
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": "Three different meanings of “assert”",
+        "html": "<table><thead><tr><th>Form</th><th>Where it belongs</th><th>What to remember</th></tr></thead><tbody><tr><td><code>assert condition;</code></td><td>Java language statement for internal assumptions</td><td>May be disabled; enabled with -ea. Do not depend on it for required public argument validation.</td></tr><tr><td><code>assertEquals(expected, actual)</code></td><td>JUnit test</td><td>Runs as a normal library call; does not depend on -ea.</td></tr><tr><td><code>if (bad) throw ...;</code></td><td>Production validation</td><td>Runs normally whether Java assertions are enabled or disabled.</td></tr></tbody></table><p>Calling an input check “defensive” does not choose its exception class. The method’s contract determines whether the response is an exception, a return value, or another documented result.</p>"
+      },
+      {
+        "title": "Isolate conditions, then consider interactions",
+        "html": "<p>For an index guard, use a valid non-null array while testing the lower and upper limits. Test null separately. If the contract gives precedence for multiple invalid arguments, add an interaction case. If it says nothing about precedence, do not invent an exact exception choice for a call violating several conditions.</p>"
+      }
+    ],
+    "practice": [
+      {
+        "id": "22-1",
+        "type": "choice",
+        "title": "Which check must happen first?",
+        "prompt": "<p>Contract: <code>size(String text)</code> throws <code>IllegalArgumentException</code> with message <code>\"missing text\"</code> for null; otherwise returns its length. Which implementation meets it?</p>",
+        "hint": "Which operation first needs an actual String object?",
+        "solution": "<p>Check for null first with ordinary control flow, then call <code>length()</code>.</p>",
+        "options": [
+          {
+            "text": "if (text == null) throw new IllegalArgumentException(\"missing text\"); return text.length();",
+            "correct": true,
+            "feedback": "The null check uses no dereference and throws the documented type before reading length."
+          },
+          {
+            "text": "int n = text.length(); if (text == null) throw new IllegalArgumentException(\"missing text\"); return n;",
+            "correct": false,
+            "feedback": "Null fails at text.length() with NullPointerException before the intended guard."
+          },
+          {
+            "text": "assert text != null; return text.length();",
+            "correct": false,
+            "feedback": "A disabled assertion does not validate input, and an enabled one throws AssertionError rather than the promised type."
+          }
+        ]
+      },
+      {
+        "id": "22-2",
+        "type": "multi",
+        "title": "Select independent boundary tests",
+        "prompt": "<p>For a three-element array, <code>replace(int[] a, int index, int value)</code> requires <code>0 ≤ index &lt; 3</code>. Which cases separately check both nearest invalid boundaries while keeping the array valid?</p>",
+        "hint": "The final valid index is one less than the length.",
+        "solution": "<p>Use -1 and 3 with a non-null three-element array. Also test valid indexes 0 and 2 in the normal-behavior suite.</p>",
+        "options": [
+          {
+            "text": "replace(new int[]{2, 4, 6}, -1, 8)",
+            "correct": true,
+            "feedback": "-1 is the nearest value below the legal range."
+          },
+          {
+            "text": "replace(new int[]{2, 4, 6}, 3, 8)",
+            "correct": true,
+            "feedback": "3 equals the length and is the nearest value above the valid indexes."
+          },
+          {
+            "text": "replace(null, -1, 8)",
+            "correct": false,
+            "feedback": "This violates both nullability and the index rule; it does not isolate the index guard."
+          },
+          {
+            "text": "replace(new int[]{2, 4, 6}, 2, 8)",
+            "correct": false,
+            "feedback": "This is an important valid upper-boundary test, but it is not an invalid boundary."
+          }
+        ]
+      },
+      {
+        "id": "22-3",
+        "type": "write",
+        "title": "Replace a disappearing guard",
+        "prompt": "<p>Contract: <code>setLimit(int n)</code> accepts zero or positive values; negative values throw <code>IllegalArgumentException</code> and leave the old limit unchanged. The class starts with <code>private int limit = 5;</code> and has <code>int getLimit()</code>.</p><pre><code>void setLimit(int n) {\n    assert n &gt;= 0;\n    limit = n;\n}</code></pre><p>Repair the method, then write a Jupiter test for the rejected update. The class is named <code>Limit</code> and has a no-argument constructor.</p><p>Assume <code>org.junit.jupiter.api.Test</code> and the static <code>org.junit.jupiter.api.Assertions.*</code> imports are present. Write the test methods inside a test class in the same package as the supplied API.</p>",
+        "hint": "Use an if guard before assignment; observe both the exception and state.",
+        "solution": "<pre><code>void setLimit(int n) {\n    if (n &lt; 0) {\n        throw new IllegalArgumentException(&quot;limit must be nonnegative&quot;);\n    }\n    limit = n;\n}\n\n@Test\nvoid negativeLimit_preservesPreviousValue() {\n    Limit limit = new Limit();\n    assertThrows(IllegalArgumentException.class, () -&gt; limit.setLimit(-1));\n    assertEquals(5, limit.getLimit());\n}</code></pre>",
+        "rubric": [
+          "Ordinary if/throw enforces the contract without -ea.",
+          "The assignment happens only after validation.",
+          "The test uses -1, checks the specified exception and observes the old value 5.",
+          "No exception-message requirement is invented."
+        ]
+      },
+      {
+        "id": "22-4",
+        "type": "write",
+        "title": "Find the guard that cannot protect anything",
+        "prompt": "<pre><code>// Contract: reject null with IllegalArgumentException.\n// Otherwise return true for an empty String and false for a nonempty String.\nstatic boolean isEmpty(String value) {\n    if (value.length() == 0 || value == null) {\n        return true;\n    }\n    return false;\n}</code></pre><p>Give a revealing input, the expected and actual behavior, and a corrected implementation.</p>",
+        "hint": "Short-circuit evaluation goes from left to right. Also read the specified null response.",
+        "solution": "<p>Input <code>null</code> should throw <code>IllegalArgumentException</code>. It actually throws <code>NullPointerException</code> while evaluating <code>value.length()</code>. Simply swapping the operands still returns true for null, which contradicts the contract.</p><pre><code>static boolean isEmpty(String value) {\n    if (value == null) {\n        throw new IllegalArgumentException(&quot;value must not be null&quot;);\n    }\n    return value.length() == 0;\n}</code></pre>",
+        "rubric": [
+          "Identifies the dereference before the null test.",
+          "States the correct expected exception from the contract.",
+          "Does not “repair” the code by returning true for null."
+        ]
+      }
+    ],
+    "teachBack": {
+      "prompt": "Why can a JUnit test still fail when Java assertions are disabled?",
+      "answer": "<p>JUnit assertion methods are ordinary method calls that report test failures. They are different from the optional Java <code>assert</code> statement.</p>"
+    },
+    "bridge": "Next, use concrete inputs to explain production defects precisely.",
+    "sourceIds": [
+      "java-assertions",
+      "junit-guide",
+      "java-exceptions"
+    ]
+  },
+  {
+    "id": "23",
+    "module": "Find and explain defects",
+    "title": "Explain a bug with a revealing input",
+    "summary": "Connect the contract, one execution trace and the faulty operation instead of naming a suspicious line alone.",
+    "goals": [
+      "Distinguish compile-time, unexpected-exception and logical defects.",
+      "Choose a small input that reaches and exposes the faulty operation.",
+      "Explain a repair in terms of required behavior."
+    ],
+    "prerequisites": [
+      "04",
+      "10",
+      "16",
+      "17",
+      "22"
+    ],
+    "setup": "<p>A suspicious expression is the start of an investigation. A convincing explanation gives a witness: a concrete input that makes required and actual behavior differ. First decide whether the code compiles. A method that cannot compile has no runtime trace to test.</p>",
+    "worked": {
+      "title": "The return that ends the search too soon",
+      "intro": "<pre><code>// Return the first index containing target, or -1 if absent.\n// values must be non-null.\nstatic int find(int[] values, int target) {\n    for (int i = 0; i &lt; values.length; i++) {\n        if (values[i] == target) {\n            return i;\n        }\n        return -1; // suspect line\n    }\n    return -1;\n}</code></pre><p>Witness: <code>values = {4, 9}</code> and <code>target = 9</code>. Expected index: 1. Actual return: -1.</p>",
+      "steps": [
+        {
+          "title": "Read the promise",
+          "html": "<p>The method must search for the first occurrence anywhere in the array. “Absent” means no element matches, not merely that the first element differs.</p>"
+        },
+        {
+          "title": "Trace the witness",
+          "html": "<p>At <code>i = 0</code>, the comparison <code>4 == 9</code> is false. The inner <code>return -1</code> immediately exits the method. The loop never reaches index 1.</p>"
+        },
+        {
+          "title": "Classify the defect",
+          "html": "<p>The code compiles and does not throw for this input. It returns a wrong value, so this is a logical defect. The test <code>assertEquals(1, find(new int[]{4, 9}, 9))</code> fails.</p>"
+        },
+        {
+          "title": "Repair the cause",
+          "html": "<p>Remove the inner <code>return -1</code>. The return after the loop handles absence only after every candidate has been examined. Keep successful early return inside the matching branch.</p>"
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": "Common patterns require different witnesses",
+        "html": "<table><thead><tr><th>Pattern</th><th>Useful witness</th><th>Why it helps</th></tr></thead><tbody><tr><td><code>i &lt;= a.length</code></td><td>An empty array, or an absent target</td><td>Execution reaches the illegal index equal to length. An early successful return might hide it.</td></tr><tr><td>Replacement uses <code>old + new</code></td><td>Start with a nonzero old value</td><td>Starting from zero makes addition look like replacement.</td></tr><tr><td><code>x &gt; bound</code> instead of <code>x &gt;= bound</code></td><td>Use x exactly equal to bound</td><td>Ordinary values on either side do not distinguish these operators.</td></tr><tr><td>Integer division where a fraction is promised</td><td>Use 5 divided by 2</td><td>Evenly divisible inputs can hide truncation.</td></tr><tr><td>Missing loop progress</td><td>An input that enters the repeating path</td><td>Explain which state should move toward termination but does not.</td></tr></tbody></table><p>A witness must satisfy documented preconditions unless invalid-input handling is the subject. Otherwise the contract may provide no expected behavior.</p>"
+      },
+      {
+        "title": "Separate illegal Java from incorrect behavior",
+        "html": "<pre><code>static int count() { return null; } // does not compile\nstatic int first(int[] a) { return a[0]; } // compiles; needs a contract\nstatic int doubleValue(int x) { return x + 1; } // compiles; likely wrong contract</code></pre><p>The first returns a reference value where an <code>int</code> is required. Whether the second is defective depends on its preconditions and promised handling of empty arrays. For the third, compare its behavior to the actual promise; the name alone is not a complete specification.</p>"
+      }
+    ],
+    "practice": [
+      {
+        "id": "23-1",
+        "type": "choice",
+        "title": "Choose the witness that reaches the defect",
+        "prompt": "<pre><code>// Return the first index containing target, or -1 if absent.\n// values must be non-null.\nstatic int find(int[] values, int target) {\n    for (int i = 0; i &lt; values.length; i++) {\n        if (values[i] == target) {\n            return i;\n        }\n        return -1; // suspect line\n    }\n    return -1;\n}</code></pre><p>Which test exposes the premature return?</p>",
+        "hint": "Make the first comparison false but a later comparison true.",
+        "solution": "<p>The second-position match is the revealing case. First-position and absent cases remain useful regression cases, but they do not expose this bug.</p>",
+        "options": [
+          {
+            "text": "assertEquals(1, find(new int[]{4, 9}, 9));",
+            "correct": true,
+            "feedback": "The target is after a nonmatching first element, so the premature return hides it."
+          },
+          {
+            "text": "assertEquals(0, find(new int[]{9, 4}, 9));",
+            "correct": false,
+            "feedback": "The first element matches and returns correctly before the defect matters."
+          },
+          {
+            "text": "assertEquals(-1, find(new int[]{4}, 9));",
+            "correct": false,
+            "feedback": "The returned -1 happens to be correct for an absent target."
+          }
+        ]
+      },
+      {
+        "id": "23-2",
+        "type": "multi",
+        "title": "Classify the evidence",
+        "prompt": "<p>Select the statements that correctly describe the shown Java.</p>",
+        "hint": "Ask separately whether the statement is legal Java and what execution would do.",
+        "solution": "<p>The first two classifications are correct. A logical defect need not throw, and passing without observations provides no behavioral evidence.</p>",
+        "options": [
+          {
+            "text": "int result = \"4\"; is a compile-time type error.",
+            "correct": true,
+            "feedback": "A String cannot be assigned directly to an int."
+          },
+          {
+            "text": "For int[] a = {3}, evaluating a[1] produces an out-of-bounds exception.",
+            "correct": true,
+            "feedback": "The array has one element, at index 0."
+          },
+          {
+            "text": "Returning 7 when the contract requires 8 must produce an exception.",
+            "correct": false,
+            "feedback": "A wrong result can return normally; an assertion can detect it."
+          },
+          {
+            "text": "An empty test method proves the production method is correct.",
+            "correct": false,
+            "feedback": "An empty body may pass without calling or checking the production code."
+          }
+        ]
+      },
+      {
+        "id": "23-3",
+        "type": "write",
+        "title": "Repair a boundary condition",
+        "prompt": "<pre><code>// Returns the number of positive elements in a non-null array.\nstatic int positives(int[] values) {\n    int count = 0;\n    for (int i = 0; i &lt;= values.length; i++) {\n        if (values[i] &gt; 0) count++;\n    }\n    return count;\n}</code></pre><p>Give the smallest allowed revealing input. Explain expected versus actual behavior, identify the repair, and write one regression assertion.</p>",
+        "hint": "An empty array is non-null and requires zero loop iterations.",
+        "solution": "<p>Use <code>new int[0]</code>. The expected count is 0. The loop enters with <code>i = 0</code> because <code>0 &lt;= 0</code>, then attempts index 0 and throws. Change the guard to <code>i &lt; values.length</code>.</p><pre><code>assertEquals(0, positives(new int[0]));</code></pre>",
+        "rubric": [
+          "Uses a non-null input that satisfies the contract.",
+          "Explains the exact out-of-bounds access.",
+          "Changes <= to < and states why.",
+          "Expected count appears first in the assertion."
+        ]
+      },
+      {
+        "id": "23-4",
+        "type": "write",
+        "title": "Explain a replacement bug",
+        "prompt": "<p>A <code>Score</code> starts at 3. <code>void set(int value)</code> must replace the score with value; <code>int get()</code> returns it. The implementation is:</p><pre><code>void set(int value) {\n    score += value;\n}</code></pre><p>Write a full Jupiter test method using <code>new Score()</code>, then explain why starting at zero would be a weaker witness.</p><p>Assume <code>org.junit.jupiter.api.Test</code> and the static <code>org.junit.jupiter.api.Assertions.*</code> imports are present. Write the test methods inside a test class in the same package as the supplied API.</p>",
+        "hint": "Use different nonzero old and new values.",
+        "solution": "<pre><code>@Test\nvoid set_replacesExistingScore() {\n    Score score = new Score();\n    score.set(5);\n    assertEquals(5, score.get());\n}</code></pre><p>The faulty implementation returns 8. If the old score were zero, adding 5 would also yield 5, so that setup would not distinguish replacement from accumulation.</p>",
+        "rubric": [
+          "Creates the stated fixture and calls set with an int.",
+          "Asserts replacement value 5 rather than accumulated 8.",
+          "Connects the nonzero initial state to the fault’s visibility."
+        ]
+      }
+    ],
+    "teachBack": {
+      "prompt": "What makes “the return is in the wrong place” an incomplete bug explanation?",
+      "answer": "<p>It gives neither a required behavior nor evidence of a violation. Add a specific input, trace where execution ends, and show the expected result that was missed.</p>"
+    },
+    "bridge": "Next, inspect defects that appear across several operations because an object’s representation becomes inconsistent.",
+    "sourceIds": [
+      "java-types",
+      "junit-guide"
+    ]
+  },
+  {
+    "id": "24",
+    "module": "Find and explain defects",
+    "title": "Keep the representation consistent",
+    "summary": "Use ADT behavior and representation invariants to uncover state defects, copying errors and cascades.",
+    "goals": [
+      "Explain an invariant as a relationship that every public operation preserves.",
+      "Test empty, singleton and multi-element transitions through public operations.",
+      "Distinguish independent copies from aliases and design a mutation witness."
+    ],
+    "prerequisites": [
+      "14",
+      "15",
+      "17",
+      "23"
+    ],
+    "setup": "<p>An ADT describes allowed operations and behavior. Its implementation chooses a representation, such as linked nodes plus a stored count. A representation invariant connects those pieces. If <code>size</code> claims there are two nodes while the chain contains one, several public methods can become wrong at once.</p>",
+    "worked": {
+      "title": "One missing update, several symptoms",
+      "intro": "<p><code>IntQueue</code> is a first-in, first-out queue. A new queue is empty. <code>void add(int)</code> appends; <code>int remove()</code> returns and removes the oldest value, throwing <code>NoSuchElementException</code> when empty. <code>int size()</code> counts stored values, and <code>boolean isEmpty()</code> is true exactly when no values remain.</p><pre><code>// Inside IntQueue; head/tail reference linked nodes and size counts them.\nint remove() {\n    if (head == null) throw new java.util.NoSuchElementException();\n    int result = head.value;\n    head = head.next;\n    if (head == null) tail = null;\n    return result; // size was never decreased\n}</code></pre><pre><code>@Test\nvoid removeOnlyElement_leavesEmptyQueue() {\n    IntQueue queue = new IntQueue();\n    queue.add(7);\n    assertEquals(7, queue.remove());\n    assertEquals(0, queue.size());\n    assertTrue(queue.isEmpty());\n}</code></pre><p>Assume <code>size()</code> returns the stored size and <code>isEmpty()</code> evaluates <code>size == 0</code>. Jupiter imports are present.</p>",
+      "steps": [
+        {
+          "title": "State the invariant",
+          "html": "<p><code>size</code> must equal the number of reachable nodes. An empty queue has <code>head == null</code>, <code>tail == null</code> and <code>size == 0</code>. For a nonempty queue, tail identifies the last reachable node.</p>"
+        },
+        {
+          "title": "Trace the singleton removal",
+          "html": "<p>After adding 7, size is 1 and both ends refer to that node. Removing it makes head and tail null. The missing decrement leaves size equal to 1.</p>"
+        },
+        {
+          "title": "Connect symptoms to one cause",
+          "html": "<p>The returned value is correct. The size assertion fails; <code>isEmpty()</code> would also be false if checked separately. These observations point to one omitted state update, not automatically two independent defects.</p>"
+        },
+        {
+          "title": "Repair and check another transition",
+          "html": "<p>Add <code>size--;</code> after removing a node. Also test a two-element queue: removing the first element must leave size 1 and the second value available. After emptying, add again to check that the end pointers still work.</p>"
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": "Which invariants matter depends on the representation",
+        "html": "<table><thead><tr><th>Representation</th><th>Possible invariant</th><th>Revealing operation</th></tr></thead><tbody><tr><td>Linked queue</td><td>Count equals reachable nodes; tail is last</td><td>Remove only element, then add again.</td></tr><tr><td>Sorted collection</td><td>Every adjacent key is in order</td><td>Insert before first, between two, and after last.</td></tr><tr><td>Sparse counts</td><td>Absent means zero; stored entries are nonzero</td><td>Set an existing count to zero, and set zero for an absent key.</td></tr><tr><td>Independent copy</td><td>Mutable representation is not shared</td><td>Mutate the copy and inspect the original.</td></tr></tbody></table><p>Do not assume every ADT uses these rules. They are stated design choices. White-box reasoning uses the actual representation; black-box tests still observe the public promises.</p>"
+      },
+      {
+        "title": "Equal contents do not prove an independent copy",
+        "html": "<pre><code>int[] original = {2, 5};\nint[] alias = original;\nint[] copy = original.clone();\nalias[0] = 9; // original[0] also becomes 9\ncopy[1] = 8;  // original[1] remains 5</code></pre><p>A reference assignment copies the reference, so alias and original name the same array. An array clone makes a new array. For arrays containing mutable objects, cloning the array alone still shares its element objects; a deeper independence promise needs additional copying. Choose tests based on the documented depth of copying.</p>"
+      }
+    ],
+    "practice": [
+      {
+        "id": "24-1",
+        "type": "choice",
+        "title": "Find the inconsistent state",
+        "prompt": "<p><code>IntQueue</code> is a first-in, first-out queue. A new queue is empty. <code>void add(int)</code> appends; <code>int remove()</code> returns and removes the oldest value, throwing <code>NoSuchElementException</code> when empty. <code>int size()</code> counts stored values, and <code>boolean isEmpty()</code> is true exactly when no values remain.</p><pre><code>// Inside IntQueue; head/tail reference linked nodes and size counts them.\nint remove() {\n    if (head == null) throw new java.util.NoSuchElementException();\n    int result = head.value;\n    head = head.next;\n    if (head == null) tail = null;\n    return result; // size was never decreased\n}</code></pre><p>Start with one node containing 7 and size 1. After remove returns, which state does the shown code leave?</p>",
+        "hint": "Track each field independently; do not assume the invariant maintains itself.",
+        "solution": "<p>The pointer representation is empty while the stored count remains 1.</p>",
+        "options": [
+          {
+            "text": "head = null, tail = null, size = 1",
+            "correct": true,
+            "feedback": "The pointers change, but size is never decremented."
+          },
+          {
+            "text": "head = null, tail = null, size = 0",
+            "correct": false,
+            "feedback": "That is the desired state; the missing update prevents it."
+          },
+          {
+            "text": "head still points to 7 and size = 1",
+            "correct": false,
+            "feedback": "head is explicitly moved to head.next, which is null for the only node."
+          }
+        ]
+      },
+      {
+        "id": "24-2",
+        "type": "multi",
+        "title": "Choose evidence for copy independence",
+        "prompt": "<p><code>IntStore copy()</code> promises an independent copy of an integer collection. <code>get(int)</code> reads and <code>set(int,int)</code> replaces a value. Which observations directly check parts of that promise?</p>",
+        "hint": "Equality now and independence after mutation answer different questions.",
+        "solution": "<p>Check initial values and a later mutation. Identity checks alone cannot establish whether internal mutable storage is shared.</p>",
+        "options": [
+          {
+            "text": "The copy initially contains the same integer values.",
+            "correct": true,
+            "feedback": "A copy must preserve the original values initially."
+          },
+          {
+            "text": "Changing a value in the copy leaves the original value unchanged.",
+            "correct": true,
+            "feedback": "This reveals shared mutable storage if the promise is violated."
+          },
+          {
+            "text": "The copy has the same toString output before either object is changed, so no other checks are needed.",
+            "correct": false,
+            "feedback": "Equal initial output does not establish independent storage."
+          },
+          {
+            "text": "assertSame(original, copy) proves independence.",
+            "correct": false,
+            "feedback": "assertSame requires the same object, which contradicts a distinct independent copy."
+          }
+        ]
+      },
+      {
+        "id": "24-3",
+        "type": "write",
+        "title": "Test a state sequence",
+        "prompt": "<p><code>IntQueue</code> is a first-in, first-out queue. A new queue is empty. <code>void add(int)</code> appends; <code>int remove()</code> returns and removes the oldest value, throwing <code>NoSuchElementException</code> when empty. <code>int size()</code> counts stored values, and <code>boolean isEmpty()</code> is true exactly when no values remain.</p><p>Write a Jupiter test that adds 4 then 9, removes 4, checks size 1, removes 9, checks emptiness, adds 6, then removes 6. Explain what the final add/remove can reveal.</p><p>Assume <code>org.junit.jupiter.api.Test</code> and the static <code>org.junit.jupiter.api.Assertions.*</code> imports are present. Write the test methods inside a test class in the same package as the supplied API.</p>",
+        "hint": "Each operation changes the state used by the next observation.",
+        "solution": "<pre><code>@Test\nvoid queue_reusesStorageAfterBecomingEmpty() {\n    IntQueue queue = new IntQueue();\n    queue.add(4);\n    queue.add(9);\n    assertEquals(4, queue.remove());\n    assertEquals(1, queue.size());\n    assertEquals(9, queue.remove());\n    assertTrue(queue.isEmpty());\n    queue.add(6);\n    assertEquals(6, queue.remove());\n    assertEquals(0, queue.size());\n}</code></pre><p>Reusing the emptied queue can expose a stale tail or a broken empty-to-nonempty transition. The sequence also checks FIFO order and count updates.</p>",
+        "rubric": [
+          "Uses a fresh queue and observes the stated order.",
+          "Checks the intermediate size after only one removal.",
+          "Reuses the empty queue and checks the final state.",
+          "Explains an invariant or transition rather than merely saying “edge case.”"
+        ]
+      },
+      {
+        "id": "24-4",
+        "type": "write",
+        "title": "Expose an aliasing copy",
+        "prompt": "<p><code>new IntStore(new int[]{2,5})</code> creates a collection with those values. Its <code>copy()</code> promises a separate collection whose changes cannot affect the original. <code>set(index,value)</code> and <code>get(index)</code> use zero-based indexes. A faulty <code>copy()</code> returns a new wrapper sharing the same internal array. Write a test that catches this, even though <code>assertNotSame(original, copy)</code> passes.</p><p>Assume <code>org.junit.jupiter.api.Test</code> and the static <code>org.junit.jupiter.api.Assertions.*</code> imports are present. Write the test methods inside a test class in the same package as the supplied API.</p>",
+        "hint": "Change the copied collection and read the original through its public API.",
+        "solution": "<pre><code>@Test\nvoid copyMutation_doesNotChangeOriginal() {\n    IntStore original = new IntStore(new int[]{2, 5});\n    IntStore copy = original.copy();\n    copy.set(0, 9);\n    assertEquals(9, copy.get(0));\n    assertEquals(2, original.get(0));\n}</code></pre><p>A new wrapper is not enough: shared internal storage still makes the original report 9. The second assertion observes the violated promise.</p>",
+        "rubric": [
+          "Creates distinct initial and replacement values.",
+          "Mutates only the copy.",
+          "Observes the original’s unchanged value, not merely wrapper identity."
+        ]
+      }
+    ],
+    "teachBack": {
+      "prompt": "Why can several failing tests describe one underlying bug?",
+      "answer": "<p>Several operations may depend on one invariant or shared helper. A missing count update can make size, emptiness and iteration disagree. Trace the common state before treating each symptom as a separate cause.</p>"
+    },
+    "bridge": "Next, apply the same scrutiny to the tests themselves.",
+    "sourceIds": [
+      "java-collections",
+      "junit-guide"
+    ]
+  },
+  {
+    "id": "25",
+    "module": "Find and explain defects",
+    "title": "Debug the test before blaming the method",
+    "summary": "Identify false passes, wrong expected values, invalid fixtures and assertions that ask the wrong question.",
+    "goals": [
+      "Separate an invalid test from a production failure.",
+      "Repair missing or weak assertions using an independent expected result.",
+      "Spot shared state, aliasing and exception-source mistakes."
+    ],
+    "prerequisites": [
+      "07",
+      "08",
+      "09",
+      "10",
+      "20",
+      "24"
+    ],
+    "setup": "<p>A test is code and can contain defects. A red result can mean the production code violates its contract, but it can also mean the test calls the API incorrectly or expects the wrong result. A green result can be weak evidence when the test never checks the promised behavior.</p>",
+    "worked": {
+      "title": "A test that agrees with every returned answer",
+      "intro": "<p>Contract: <code>static int capAtTen(int n)</code> returns n when n ≤ 10 and returns 10 otherwise. Negative integers are allowed. Assume the method is available in the test class and Jupiter imports are present.</p><pre><code>@Test\nvoid largeInput_isCapped() {\n    int result = capAtTen(14);\n    assertEquals(result, result);\n}</code></pre><p>Corrected test:</p><pre><code>@Test\nvoid largeInput_isCapped() {\n    int result = capAtTen(14);\n    assertEquals(10, result, &quot;Inputs above 10 must be capped at 10&quot;);\n}</code></pre>",
+      "steps": [
+        {
+          "title": "Read what the original actually compares",
+          "html": "<p>Both assertion arguments are the same local variable. Whether the method returns 10, 14 or -200, this equality succeeds. The test could still end with an unexpected exception, but it cannot detect a wrong integer result.</p>"
+        },
+        {
+          "title": "Derive the oracle independently",
+          "html": "<p>The contract says any input above 10 returns 10. Compute that expectation from the rule before examining the implementation’s answer.</p>"
+        },
+        {
+          "title": "Check types and roles",
+          "html": "<p><code>14</code> is an allowed int argument; <code>result</code> is an int return value. <code>assertEquals(10, result)</code> checks the value. <code>assertTrue(result)</code> does not compile because an int is not a boolean.</p>"
+        },
+        {
+          "title": "Check whether this is a useful case",
+          "html": "<p>Input 14 distinguishes capping from returning every input unchanged. Add 10 for the boundary and a value below 10 for the other behavior. A correct assertion still needs a useful input.</p>"
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": "Audit a test in a fixed order",
+        "html": "<ul><li>Fixture: is the receiver real, and is the starting state the one the test needs?</li><li>Call: do argument types, order and count match the signature?</li><li>Expected result: does it follow the current contract, independently of the implementation?</li><li>Observation: does the assertion inspect the relevant return value, exception or state?</li><li>Isolation: could another test or an earlier setup failure determine this result?</li></ul><p>Reversing <code>assertEquals(expected, actual)</code> often still compares the same values and compiles, but it mislabels a failure report. That is different from using the wrong expected value or an assertion with the wrong parameter type.</p>"
+      },
+      {
+        "title": "Common false-positive patterns",
+        "html": "<pre><code>assertEquals(actual, actual);              // compares a value to itself\nassertTrue(result &gt;= 0);                   // too weak if exact value is promised\nint[] expected = actual;                  // aliases the produced array\nassertArrayEquals(expected, actual);       // same array on both sides\n\nassertThrows(IllegalArgumentException.class, () -&gt; {\n    Service service = new Service(-1);     // setup itself might throw\n    service.run();                        // intended action may never run\n});</code></pre><p>Set up a valid <code>Service</code> outside the lambda and place only the intended action inside it. A test of “no exception” can legitimately use <code>assertDoesNotThrow</code> when that is the complete promise, but it does not establish a return value or state change.</p>"
+      }
+    ],
+    "practice": [
+      {
+        "id": "25-1",
+        "type": "choice",
+        "title": "Does this compile, and what does it check?",
+        "prompt": "<p>Contract: <code>static int capAtTen(int n)</code> returns n when n ≤ 10 and returns 10 otherwise. Negative integers are allowed. Assume the method is available in the test class and Jupiter imports are present.</p><pre><code>@Test\nvoid capsLargeNumber() {\n    assertTrue(capAtTen(12));\n}</code></pre>",
+        "hint": "Read the production return type before choosing the assertion.",
+        "solution": "<pre><code>assertEquals(10, capAtTen(12));</code></pre>",
+        "options": [
+          {
+            "text": "It does not compile: assertTrue requires a boolean expression.",
+            "correct": true,
+            "feedback": "capAtTen returns int, which Java does not treat as true or false."
+          },
+          {
+            "text": "It passes when the returned int is nonzero.",
+            "correct": false,
+            "feedback": "Java has no implicit int-to-boolean conversion here."
+          },
+          {
+            "text": "It checks that the returned int equals 10.",
+            "correct": false,
+            "feedback": "No equality comparison or expected value is present."
+          }
+        ]
+      },
+      {
+        "id": "25-2",
+        "type": "multi",
+        "title": "What is wrong with these tests?",
+        "prompt": "<p>Select the correct diagnoses.</p>",
+        "hint": "Separate language rules, test-design choices and conventions.",
+        "solution": "<p>The first, second and fourth statements are correct. JUnit does not require exactly one assertion.</p>",
+        "options": [
+          {
+            "text": "assertEquals(actual, expected) may still compare correctly, but reverses failure-report labels.",
+            "correct": true,
+            "feedback": "Expected-first order is needed for trustworthy diagnostics."
+          },
+          {
+            "text": "A test that uses the implementation itself to calculate the expected value can repeat the same defect.",
+            "correct": true,
+            "feedback": "The expected result should come from the contract or another independent oracle."
+          },
+          {
+            "text": "Any test containing two assertions is invalid JUnit.",
+            "correct": false,
+            "feedback": "Several related assertions are valid; separate scenarios when that improves diagnosis."
+          },
+          {
+            "text": "A test that relies on another test having run first can be order-dependent.",
+            "correct": true,
+            "feedback": "Use fresh setup or an explicit single scenario, rather than hidden dependencies."
+          }
+        ]
+      },
+      {
+        "id": "25-3",
+        "type": "write",
+        "title": "Repair the expected value and its source",
+        "prompt": "<p>Contract: <code>static int capAtTen(int n)</code> returns n when n ≤ 10 and returns 10 otherwise. Negative integers are allowed. Assume the method is available in the test class and Jupiter imports are present.</p><pre><code>@Test\nvoid inputAboveTen() {\n    int expected = capAtTen(13);\n    assertEquals(expected, capAtTen(13));\n}</code></pre><p>Rewrite the test. Then describe a faulty implementation that the original would accept but your correction would reject.</p>",
+        "hint": "A method that returns n unchanged produces identical wrong answers on both calls.",
+        "solution": "<pre><code>@Test\nvoid inputAboveTen_returnsTen() {\n    assertEquals(10, capAtTen(13));\n}</code></pre><p>An implementation <code>return n;</code> makes the original compare 13 to 13. The repaired test compares the contract’s 10 with the incorrect 13 and fails.</p>",
+        "rubric": [
+          "Derives expected 10 from the contract.",
+          "Calls the intended method with a well-typed case.",
+          "Explains a concrete faulty implementation and the original false pass."
+        ]
+      },
+      {
+        "id": "25-4",
+        "type": "write",
+        "title": "Repair a test of the wrong exception source",
+        "prompt": "<p><code>new Counter(start)</code> throws <code>IllegalArgumentException</code> for a negative start. <code>void subtract(int amount)</code> separately promises that a negative amount throws <code>IllegalArgumentException</code>. <code>int get()</code> reads the count; a rejected subtraction changes nothing.</p><pre><code>@Test\nvoid subtractNegative_throws() {\n    assertThrows(IllegalArgumentException.class, () -&gt; {\n        Counter counter = new Counter(-1);\n        counter.subtract(-3);\n    });\n}</code></pre><p>Explain why this test can pass without exercising subtract. Rewrite it to isolate that operation and check the preserved state.</p><p>Assume <code>org.junit.jupiter.api.Test</code> and the static <code>org.junit.jupiter.api.Assertions.*</code> imports are present. Write the test methods inside a test class in the same package as the supplied API.</p>",
+        "hint": "Create a valid counter outside the executable.",
+        "solution": "<pre><code>@Test\nvoid subtractNegative_preservesCount() {\n    Counter counter = new Counter(5);\n    assertThrows(IllegalArgumentException.class,\n        () -&gt; counter.subtract(-3));\n    assertEquals(5, counter.get());\n}</code></pre><p>The original constructor throws first. The repaired constructor is valid and outside the lambda, so only the intended subtraction can satisfy the exception assertion.</p>",
+        "rubric": [
+          "Identifies the constructor as the original exception source.",
+          "Uses a valid initial count outside assertThrows.",
+          "Places only subtract(-3) inside the lambda.",
+          "Checks the documented unchanged count."
+        ]
+      }
+    ],
+    "teachBack": {
+      "prompt": "What must you check before saying “the failed assertion proves a production bug”?",
+      "answer": "<p>Confirm the setup, call and expected result agree with the current contract. Then inspect whether the observed difference can come from a test defect or unintended setup failure.</p>"
+    },
+    "bridge": "Next, turn verified evidence into a concise, reproducible defect report.",
+    "sourceIds": [
+      "junit-guide",
+      "java-types"
+    ]
+  },
+  {
+    "id": "26",
+    "module": "Find and explain defects",
+    "title": "Write a defect report someone can reproduce",
+    "summary": "Record the exact trigger, expectation and observation, then separate the symptom from the diagnosed cause.",
+    "goals": [
+      "Write a defect record with a reproducible fixture and precise expected/actual result.",
+      "Read a stack trace as an execution location, not automatically a root cause.",
+      "Distinguish test messages, exception logging and a human-readable defect log."
+    ],
+    "prerequisites": [
+      "21",
+      "23",
+      "24",
+      "25"
+    ],
+    "setup": "<p>A useful report lets another person reproduce the failure and understand which promise it violates. “Does not work” leaves every decision to the reader. Start with the input and observation; state the root cause only when the code and trace support it.</p>",
+    "worked": {
+      "title": "From a failed test to a clear error record",
+      "intro": "<p>Contract: <code>Score.set(int)</code> replaces the current score. <code>new Score(3)</code> starts at 3 and <code>get()</code> reads it. The production method currently uses <code>score += value;</code>.</p><pre><code>@Test\nvoid set_replacesExistingScore() {\n    Score score = new Score(3);\n    score.set(5);\n    assertEquals(5, score.get(), &quot;set must replace the old score&quot;);\n}</code></pre><pre><code>ID: SCORE-01\nLocation: Score.set(int)\nContract: set(value) replaces the current score with value.\nReproduce: new Score(3); call set(5); observe get().\nExpected: 5\nActual: 8\nDetecting test: set_replacesExistingScore\nFailure: expected &lt;5&gt; but was &lt;8&gt;\nCause: score += value adds the old score to the requested value.\nSuggested correction: assign score = value.\nRegression: keep this test; also test replacement with 0 and a negative int.\nStatus: reproduced; correction proposed, not yet verified.</code></pre>",
+      "steps": [
+        {
+          "title": "Make the fixture reproducible",
+          "html": "<p>Both the initial 3 and replacement 5 matter. Without the starting state, someone could use zero and miss the defect. Record the class, method and operation sequence.</p>"
+        },
+        {
+          "title": "Keep expected and actual separate",
+          "html": "<p>Expected comes from “replaces.” Actual is the observed 8. Include the test name and assertion message so the evidence can be located quickly.</p>"
+        },
+        {
+          "title": "Explain the causal operation",
+          "html": "<p>The <code>+=</code> uses the old field value, so 3 + 5 produces 8. This ties the implementation to the symptom. “Wrong answer” describes the symptom only.</p>"
+        },
+        {
+          "title": "Describe verification honestly",
+          "html": "<p>A suggested fix is not a verified fix. After applying it, rerun the reproducing test and relevant regression tests, then update the status with the observed outcome.</p>"
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": "Read a stack trace from the throw outward",
+        "html": "<pre><code>java.lang.ArrayIndexOutOfBoundsException: Index 2 out of bounds for length 2\n    at Grid.get(Grid.java:18)\n    at GridTest.lastCell_isReadable(GridTest.java:27)</code></pre><p>The first frame identifies where this exception was thrown; the next shows the call from the test. It does not, by itself, establish why index 2 was reached. Check the test input and contract. If public indexes are one-based, a missing conversion may be the cause. If they are zero-based, the test might be invalid. Record actual line information from the current source, because line numbers can change.</p>"
+      },
+      {
+        "title": "Three records with different jobs",
+        "html": "<table><thead><tr><th>Record</th><th>Purpose</th><th>Example</th></tr></thead><tbody><tr><td>JUnit failure message</td><td>Explain one violated expectation</td><td>“set must replace the old score”</td></tr><tr><td>Defect log entry</td><td>Reproduce, diagnose and track a problem</td><td>Input, expected/actual, test name, cause and verification status.</td></tr><tr><td>Application exception log</td><td>Retain execution evidence for operation failures</td><td>Operation context, exception object and stack trace.</td></tr></tbody></table><pre><code>// When this layer is responsible for reporting the failed operation:\nlogger.log(java.util.logging.Level.WARNING,\n    &quot;Could not load item counts&quot;, ex);</code></pre><p>Passing the exception object retains stack/cause information; logging only <code>ex.getMessage()</code> loses it. Logging does not repair a failure or satisfy a test assertion. Choose one appropriate layer to report a propagated failure, avoid duplicating the same log at every layer, and avoid sensitive input in messages.</p>"
+      }
+    ],
+    "practice": [
+      {
+        "id": "26-1",
+        "type": "choice",
+        "title": "Choose a reproducible report",
+        "prompt": "<p>Contract: <code>set(5)</code> replaces the current score. Which report best supports investigation?</p>",
+        "hint": "Could a second person reproduce the issue from the entry alone?",
+        "solution": "<p>The first report supplies the minimum concrete evidence. Add a confirmed cause and proposed repair once inspected.</p>",
+        "options": [
+          {
+            "text": "Score.set: starting at 3, set(5) leaves 8; expected 5. Test set_replacesExistingScore reproduces it.",
+            "correct": true,
+            "feedback": "It names the operation, fixture, expected result, actual result and detecting test."
+          },
+          {
+            "text": "The setter is broken sometimes.",
+            "correct": false,
+            "feedback": "There is no reproducible input or observed difference."
+          },
+          {
+            "text": "Change line 18. All tests fail.",
+            "correct": false,
+            "feedback": "A line suggestion without the violated contract or trigger does not explain the defect."
+          }
+        ]
+      },
+      {
+        "id": "26-2",
+        "type": "multi",
+        "title": "What does the trace establish?",
+        "prompt": "<pre><code>java.lang.NullPointerException\n    at NameList.longest(NameList.java:42)\n    at NameListTest.emptyList_hasNoLongest(NameListTest.java:18)</code></pre><p>Select only what this trace directly establishes.</p>",
+        "hint": "A trace records execution, not the complete specification.",
+        "solution": "<p>It establishes the locations and call path. Root cause and responsibility require the contract, fixture and source.</p>",
+        "options": [
+          {
+            "text": "The exception arose at the indicated location in NameList.longest.",
+            "correct": true,
+            "feedback": "The first frame identifies the throw location in this trace."
+          },
+          {
+            "text": "The indicated test called the operation along this stack.",
+            "correct": true,
+            "feedback": "The next frame shows the test’s call site."
+          },
+          {
+            "text": "The implementation must be wrong even if the test violates a precondition.",
+            "correct": false,
+            "feedback": "The contract and supplied fixture still need examination."
+          },
+          {
+            "text": "Changing every null to an empty String is the correct fix.",
+            "correct": false,
+            "feedback": "No such repair follows from the trace; it may violate the ADT contract."
+          }
+        ]
+      },
+      {
+        "id": "26-3",
+        "type": "write",
+        "title": "Write the defect entry",
+        "prompt": "<p>Contract: <code>int countPositive(int[] a)</code> counts values strictly above zero; a is non-null. For <code>{-1,0,2}</code>, a test named <code>zeroIsNotPositive</code> expects 1 but observes 2. The method uses <code>if (value &gt;= 0) count++;</code>. Write a compact report containing location, reproduction, expected/actual, test, cause, proposed fix and verification status.</p>",
+        "hint": "State that the correction is proposed unless you actually have a rerun result.",
+        "solution": "<pre><code>Location: countPositive(int[])\nReproduce: call countPositive(new int[]{-1, 0, 2}).\nExpected: 1, because only 2 is strictly positive.\nActual: 2.\nTest: zeroIsNotPositive; expected &lt;1&gt; but was &lt;2&gt;.\nCause: &gt;= 0 incorrectly counts zero as positive.\nProposed fix: change the comparison to &gt; 0.\nRegression: retain the zero case and check empty/all-negative/all-positive arrays.\nStatus: reproduced; proposed fix not yet verified.</code></pre>",
+        "rubric": [
+          "Contains the exact array and expected/actual values.",
+          "Names the method and test.",
+          "Links >= to including zero.",
+          "Gives a proposed correction and an honest status."
+        ]
+      },
+      {
+        "id": "26-4",
+        "type": "write",
+        "title": "Separate symptom and cause",
+        "prompt": "<p>A linked collection’s remove operation disconnects a node but forgets to decrease its stored count. Later <code>toArray()</code> allocates using that count and exposes a trailing default zero. A size test also reports the wrong number of stored values. Write one report explaining why these can be related symptoms. Then state the first regression test you would add.</p>",
+        "hint": "Start at the operation that first breaks the invariant, rather than patching each observer.",
+        "solution": "<p>The removal leaves the stored count larger than the reachable-node count. Allocation and traversal then disagree in <code>toArray()</code>; consumers inherit the inconsistent representation. Report removal as the confirmed cause when tracing verifies it, with each failing observer as supporting evidence. A first regression test removes the sole nonzero element, asserts size 0, and asserts an empty array. A second transition should remove one of two nodes and check the remaining value.</p>",
+        "rubric": [
+          "States count == reachable nodes as the broken invariant.",
+          "Distinguishes the original state defect from downstream observations.",
+          "Proposes a concrete removal-and-observation test.",
+          "Does not assume multiple failed tests always mean multiple root causes."
+        ]
+      }
+    ],
+    "teachBack": {
+      "prompt": "Why should a report preserve the original failure even after a fix makes the test pass?",
+      "answer": "<p>The original trigger and expected/actual values explain the defect and justify the regression test. Record the new verification result alongside that history rather than erasing the evidence.</p>"
+    },
+    "bridge": "Next, choose what to rerun and when a test expectation should legitimately change.",
+    "sourceIds": [
+      "java-exceptions",
+      "junit-guide"
+    ]
+  },
+  {
+    "id": "27",
+    "module": "Find and explain defects",
+    "title": "Fix the cause and keep the evidence",
+    "summary": "Use regression tests to protect behavior, and revise expectations only when the contract changes.",
+    "goals": [
+      "Use a red test, focused correction and regression checks as a debugging sequence.",
+      "Distinguish a defect fix from an intentional contract change.",
+      "Choose neighboring cases that could be affected by the correction."
+    ],
+    "prerequisites": [
+      "18",
+      "22",
+      "25",
+      "26"
+    ],
+    "setup": "<p>A regression test preserves evidence of a behavior that must keep working. A fix should make that test pass because the implementation meets the contract. Changing the expected value to whatever the current code returns removes the evidence instead of repairing the behavior.</p>",
+    "worked": {
+      "title": "Fix an equality boundary, then check its neighbors",
+      "intro": "<pre><code>// Contract: eligible ages are 18 and above.\nstatic boolean eligible(int age) {\n    return age &gt; 18; // defect: excludes 18\n}</code></pre><pre><code>@Test\nvoid minimumAge_isEligible() {\n    assertTrue(eligible(18));\n}</code></pre><p>Correction and neighboring tests:</p><pre><code>static boolean eligible(int age) {\n    return age &gt;= 18;\n}\n\n@Test void belowMinimum_isIneligible() {\n    assertFalse(eligible(17));\n}\n@Test void aboveMinimum_isEligible() {\n    assertTrue(eligible(19));\n}</code></pre>",
+      "steps": [
+        {
+          "title": "Reproduce before correcting",
+          "html": "<p>The test for 18 fails against the original implementation. This shows it can detect this defect; a test that was never run against the defect gives less direct evidence.</p>"
+        },
+        {
+          "title": "Change the operation responsible",
+          "html": "<p>The contract includes equality. Changing <code>&gt;</code> to <code>&gt;=</code> includes exactly that boundary without changing the promise.</p>"
+        },
+        {
+          "title": "Rerun the reproducer and related cases",
+          "html": "<p>The 18 case should pass, while 17 stays false and 19 stays true. These neighbors help detect a repair that shifts the threshold or reverses the condition.</p>"
+        },
+        {
+          "title": "Run the established regression suite",
+          "html": "<p>Other callers may rely on the same helper. Run the relevant existing suite and investigate new failures. Record observed results; do not infer “all correct” from one green test.</p>"
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": "A new contract can require new tests",
+        "html": "<p>Suppose <code>lookup(String key)</code> previously returned null for an absent key. An explicit new contract now requires <code>NoSuchElementException</code>. The old absent-key test is no longer the right oracle. Update it, update documentation and implementation together, and keep tests for unchanged valid behavior.</p><pre><code>// Old requirement:\nassertNull(store.lookup(&quot;missing&quot;));\n\n// New requirement:\nassertThrows(java.util.NoSuchElementException.class,\n    () -&gt; store.lookup(&quot;missing&quot;));</code></pre><p>This revision is justified by the changed requirement. A failing implementation alone is not a reason to change an expected result. Keep the key’s type and all unrelated setup valid.</p>"
+      },
+      {
+        "title": "Rerun checks that answer a concrete question",
+        "html": "<ul><li>Reproducing test: did this exact defect disappear?</li><li>Boundary neighbors: did the correction shift or reverse a decision?</li><li>Other users of a helper: did shared behavior change?</li><li>State sequence: is an invariant still valid after later operations?</li><li>Established suite: did a previously covered behavior regress?</li></ul><p>If a new failure appears, identify whether it reflects a wrong test, an intentional contract change, or an unintended behavior change. A large collection of green tests cannot decide those questions for you.</p>"
+      }
+    ],
+    "practice": [
+      {
+        "id": "27-1",
+        "type": "choice",
+        "title": "Which change is a repair?",
+        "prompt": "<p>Contract: <code>eligible(18)</code> must return true. The test expects true; the implementation returns false. Which response is justified by this information?</p>",
+        "hint": "Which source establishes the expected behavior?",
+        "solution": "<p>Keep the contract-based expectation and fix the implementation.</p>",
+        "options": [
+          {
+            "text": "Correct the implementation and keep the boundary test.",
+            "correct": true,
+            "feedback": "The expected true follows the stated contract."
+          },
+          {
+            "text": "Change the test to expect false because that is the current output.",
+            "correct": false,
+            "feedback": "That encodes the defect as the new expectation."
+          },
+          {
+            "text": "Delete the test so the suite can pass.",
+            "correct": false,
+            "feedback": "Deleting the observation hides the defect."
+          }
+        ]
+      },
+      {
+        "id": "27-2",
+        "type": "multi",
+        "title": "When should tests change?",
+        "prompt": "<p>Select justified reasons to revise a test.</p>",
+        "hint": "An expectation needs a reason independent of convenience.",
+        "solution": "<p>A changed contract or a verified test defect justifies revising the test. Matching unexplained implementation output does not.</p>",
+        "options": [
+          {
+            "text": "The documented contract intentionally changes from returning null to throwing a specific exception.",
+            "correct": true,
+            "feedback": "The oracle must track the approved requirement."
+          },
+          {
+            "text": "The test’s expected value is proven inconsistent with the unchanged contract.",
+            "correct": true,
+            "feedback": "Tests are code and can need correction."
+          },
+          {
+            "text": "The implementation fails the test, so any expectation matching its output is acceptable.",
+            "correct": false,
+            "feedback": "Failure alone does not show that the test is wrong."
+          },
+          {
+            "text": "The test’s constructor arguments do not compile against the supplied API.",
+            "correct": true,
+            "feedback": "The fixture must use the actual API before behavior can be tested."
+          }
+        ]
+      },
+      {
+        "id": "27-3",
+        "type": "write",
+        "title": "Choose a regression set",
+        "prompt": "<pre><code>// Return true exactly when 0 &lt;= n &amp;&amp; n &lt;= 5.\nstatic boolean allowed(int n) {\n    return n &gt;= 0 &amp;&amp; n &lt; 5;\n}</code></pre><p>Give the correction and a compact boundary-focused set of input/expected pairs. Explain which case detects the original defect and which cases guard against overcorrection.</p>",
+        "hint": "Use just outside, at and just inside the endpoints.",
+        "solution": "<p>Change <code>n &lt; 5</code> to <code>n &lt;= 5</code>. A useful boundary set is:</p><table><thead><tr><th>n</th><th>Expected</th></tr></thead><tbody><tr><td>-1</td><td>false</td></tr><tr><td>0</td><td>true</td></tr><tr><td>1</td><td>true</td></tr><tr><td>4</td><td>true</td></tr><tr><td>5</td><td>true</td></tr><tr><td>6</td><td>false</td></tr></tbody></table><p>The 5 case detects the original defect. The 6 case rejects an overly broad upper boundary; -1 and 0 preserve the lower boundary. Values 1 and 4 give nearby interior evidence.</p>",
+        "rubric": [
+          "Correctly includes both endpoints.",
+          "Includes the original witness n=5.",
+          "Includes values outside both ends with false expectations.",
+          "Explains why neighboring cases add distinct evidence."
+        ]
+      },
+      {
+        "id": "27-4",
+        "type": "write",
+        "title": "Update a changed exception contract",
+        "prompt": "<p>An <code>ItemStore</code> starts empty. Previously <code>Item find(String key)</code> returned null for an absent key. Its new contract throws <code>NoSuchElementException</code> for an absent non-null key; null still throws <code>NullPointerException</code>. Write two independent Jupiter test methods for the new invalid cases, then name one existing kind of test that should remain.</p><p>Assume <code>org.junit.jupiter.api.Test</code> and the static <code>org.junit.jupiter.api.Assertions.*</code> imports are present. Write the test methods inside a test class in the same package as the supplied API.</p>",
+        "hint": "Do not combine a null key with the absent-key case.",
+        "solution": "<pre><code>@Test\nvoid absentKey_throwsNoSuchElement() {\n    ItemStore store = new ItemStore();\n    assertThrows(java.util.NoSuchElementException.class,\n        () -&gt; store.find(&quot;absent&quot;));\n}\n\n@Test\nvoid nullKey_stillThrowsNullPointer() {\n    ItemStore store = new ItemStore();\n    assertThrows(NullPointerException.class, () -&gt; store.find(null));\n}</code></pre><p>Keep successful lookup tests for existing keys, including the required returned item or identity if the contract specifies it.</p>",
+        "rubric": [
+          "Uses separate fresh fixtures.",
+          "Absent key is a real String, not null.",
+          "Each assertion expects the documented exception type.",
+          "Preserves normal lookup coverage."
+        ]
+      }
+    ],
+    "teachBack": {
+      "prompt": "What does “all tests passed after my fix” establish, and what does it leave open?",
+      "answer": "<p>The executed tests observed their specified expectations on those fixtures. It does not establish that the suite is complete, that every expected value is correct, or that untested paths meet the contract.</p>"
+    },
+    "bridge": "Next, build a complete suite from comments alone, without reading an implementation.",
+    "sourceIds": [
+      "junit-guide",
+      "java-exceptions"
+    ]
+  },
+  {
+    "id": "28",
+    "module": "Combine the skills",
+    "title": "Design tests from comments alone",
+    "summary": "Build a black-box test table, choose representatives, and translate the table into complete Jupiter tests.",
+    "goals": [
+      "Extract types, normal behavior and invalid behavior from an unseen method’s contract.",
+      "Choose concrete representatives for each relevant class and boundary.",
+      "Write complete, well-typed tests with independent expected results."
+    ],
+    "prerequisites": [
+      "05",
+      "08",
+      "11",
+      "12",
+      "13",
+      "18",
+      "20",
+      "25"
+    ],
+    "setup": "<p>This lesson combines the whole workflow. Read the comment before selecting any assertion. A class of inputs such as “too long” is a design idea; an executable test also needs a concrete String and the expected result. Use the public promise to make both decisions.</p>",
+    "worked": {
+      "title": "From one contract to a useful test table",
+      "intro": "<p>Only this public contract is available. Do not assume how the method is implemented.</p><pre><code>/**\n * Returns true exactly when text has 2 through 8 characters inclusive\n * and every character is an ASCII letter A-Z or a-z.\n * Does not trim whitespace or modify the input.\n * Returns false for every other non-null String.\n * @throws NullPointerException if text is null\n */\npublic static boolean isValid(String text)</code></pre><p>The method belongs to <code>NameRules</code>. The signature above is an API description; its implementation is intentionally hidden.</p><table><thead><tr><th>Reason</th><th>Input</th><th>Expected</th></tr></thead><tbody><tr><td>Null handling</td><td><code>null</code></td><td>NullPointerException</td></tr><tr><td>Below minimum</td><td><code>\"A\"</code></td><td>false</td></tr><tr><td>Minimum valid length</td><td><code>\"Ab\"</code></td><td>true</td></tr><tr><td>Interior valid length</td><td><code>\"Mira\"</code></td><td>true</td></tr><tr><td>Maximum valid length</td><td><code>\"Abcdefgh\"</code></td><td>true</td></tr><tr><td>Above maximum</td><td><code>\"Abcdefghi\"</code></td><td>false</td></tr><tr><td>Disallowed character at a valid length</td><td><code>\"A1\"</code></td><td>false</td></tr><tr><td>Whitespace is not trimmed</td><td><code>\" Ab\"</code></td><td>false</td></tr></tbody></table><pre><code>import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass NameRulesTest {\n    @Test\n    void minimumLength_lettersAreAccepted() {\n        assertTrue(NameRules.isValid(&quot;Ab&quot;));\n    }\n\n    @Test\n    void maximumPlusOne_isRejected() {\n        assertFalse(NameRules.isValid(&quot;Abcdefghi&quot;));\n    }\n\n    @Test\n    void nullText_throws() {\n        assertThrows(NullPointerException.class,\n            () -&gt; NameRules.isValid(null));\n    }\n}</code></pre>",
+      "steps": [
+        {
+          "title": "Read the signature",
+          "html": "<p>The argument must be a <code>String</code> reference, and the method returns boolean. <code>null</code> is type-compatible but has a special documented response. A char such as <code>'A'</code> is not a String argument.</p>"
+        },
+        {
+          "title": "Separate independent requirements",
+          "html": "<p>Length and character membership are separate rules. To test the character rule, use a valid length; to test length, use only allowed letters. This keeps the reason for rejection clear.</p><p>The whitespace case uses <code>\" Ab\"</code>: the contract rejects it, but incorrectly trimming first would turn it into the valid name <code>\"Ab\"</code>. A space followed by only one letter would remain too short after trimming and would not expose that fault.</p>"
+        },
+        {
+          "title": "Cover transitions, not just typical values",
+          "html": "<p>The pairs 1/2 and 8/9 distinguish inclusive from exclusive endpoints. Null and empty are different cases. The empty String is also below minimum and can be added as its own structural case.</p>"
+        },
+        {
+          "title": "Translate each observation",
+          "html": "<p>Valid names use <code>assertTrue</code>; non-null rejected names use <code>assertFalse</code>; null uses <code>assertThrows</code>. The same general idea of “invalid” therefore needs different assertions.</p>"
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": "Explain why a case belongs",
+        "html": "<p>A useful test comment records purpose, basis and assumptions. For example: “Black-box boundary test: eight allowed letters must be accepted because 8 is the documented inclusive maximum. Assumes the published contract applies; no implementation details are used.” The label black-box follows how you selected the case, not the assertion method you used.</p>"
+      },
+      {
+        "title": "Do not invent promises",
+        "html": "<p>The comment does not promise a particular exception message, speed or implementation strategy. Do not assert an invented message or demand a certain loop. It explicitly rejects spaces, so assuming automatic trimming would create a wrong test. For a missing rule, record the uncertainty rather than silently deciding the API’s behavior.</p>"
+      }
+    ],
+    "practice": [
+      {
+        "id": "28-1",
+        "type": "multi",
+        "title": "Which are valid contract-based cases?",
+        "prompt": "<p>Only this public contract is available. Do not assume how the method is implemented.</p><pre><code>/**\n * Returns true exactly when text has 2 through 8 characters inclusive\n * and every character is an ASCII letter A-Z or a-z.\n * Does not trim whitespace or modify the input.\n * Returns false for every other non-null String.\n * @throws NullPointerException if text is null\n */\npublic static boolean isValid(String text)</code></pre><p>The method belongs to <code>NameRules</code>. The signature above is an API description; its implementation is intentionally hidden.</p><p>Select all correct input/expected pairs.</p>",
+        "hint": "Use only the written promise, including the null exception.",
+        "solution": "<p>The valid pairs are <code>\"Ab\" → true</code>, <code>\"A1\" → false</code>, and <code>\"\" → false</code>.</p>",
+        "options": [
+          {
+            "text": "\"Ab\" → true",
+            "correct": true,
+            "feedback": "Two ASCII letters meet both requirements."
+          },
+          {
+            "text": "\"A1\" → false",
+            "correct": true,
+            "feedback": "Length is valid, but 1 is not an ASCII letter."
+          },
+          {
+            "text": "null → false",
+            "correct": false,
+            "feedback": "Null has the separate promised exception response."
+          },
+          {
+            "text": "\" Ab \" → true because names should be trimmed",
+            "correct": false,
+            "feedback": "The contract explicitly says no trimming; spaces are disallowed."
+          },
+          {
+            "text": "\"\" → false",
+            "correct": true,
+            "feedback": "An empty non-null String is below the minimum length."
+          }
+        ]
+      },
+      {
+        "id": "28-2",
+        "type": "choice",
+        "title": "Isolate a character violation",
+        "prompt": "<p>Only this public contract is available. Do not assume how the method is implemented.</p><pre><code>/**\n * Returns true exactly when text has 2 through 8 characters inclusive\n * and every character is an ASCII letter A-Z or a-z.\n * Does not trim whitespace or modify the input.\n * Returns false for every other non-null String.\n * @throws NullPointerException if text is null\n */\npublic static boolean isValid(String text)</code></pre><p>The method belongs to <code>NameRules</code>. The signature above is an API description; its implementation is intentionally hidden.</p><p>Which rejected String best isolates the disallowed-character rule while satisfying the length rule?</p>",
+        "hint": "Hold unrelated requirements valid.",
+        "solution": "<p>Use <code>\"A1\"</code>. A rejection then directly checks the character restriction.</p>",
+        "options": [
+          {
+            "text": "\"A1\"",
+            "correct": true,
+            "feedback": "It has a valid length of 2 and one non-letter."
+          },
+          {
+            "text": "\"1\"",
+            "correct": false,
+            "feedback": "It violates both the minimum length and the character rule."
+          },
+          {
+            "text": "\"ABCDEFGHI1\"",
+            "correct": false,
+            "feedback": "It violates both maximum length and the character rule."
+          }
+        ]
+      },
+      {
+        "id": "28-3",
+        "type": "write",
+        "title": "Write the missing boundary tests",
+        "prompt": "<p>Only this public contract is available. Do not assume how the method is implemented.</p><pre><code>/**\n * Returns true exactly when text has 2 through 8 characters inclusive\n * and every character is an ASCII letter A-Z or a-z.\n * Does not trim whitespace or modify the input.\n * Returns false for every other non-null String.\n * @throws NullPointerException if text is null\n */\npublic static boolean isValid(String text)</code></pre><p>The method belongs to <code>NameRules</code>. The signature above is an API description; its implementation is intentionally hidden.</p><p>Write two complete Jupiter test methods: one for eight letters and one for a single letter. Then add one sentence explaining why each case is useful. Assume imports are present.</p>",
+        "hint": "Count the characters before choosing the expected boolean.",
+        "solution": "<pre><code>@Test\nvoid eightLetters_areAccepted() {\n    assertTrue(NameRules.isValid(&quot;Abcdefgh&quot;));\n}\n\n@Test\nvoid oneLetter_isRejected() {\n    assertFalse(NameRules.isValid(&quot;A&quot;));\n}</code></pre><p>Eight letters test the inclusive upper endpoint. One letter tests the nearest value below the legal minimum. Both use allowed characters so only length varies.</p>",
+        "rubric": [
+          "Uses Strings of exactly 8 and 1 characters.",
+          "Uses @Test void methods and the correct static receiver.",
+          "Chooses assertTrue and assertFalse according to the contract.",
+          "Explains which boundaries the cases check."
+        ]
+      },
+      {
+        "id": "28-4",
+        "type": "write",
+        "title": "Transfer to object-valued counts",
+        "prompt": "<p>Public API: <code>CountMap()</code> creates an empty map. <code>void set(String key, BigInteger value)</code> replaces a key’s count. Zero removes it; positive values store it; negatives throw <code>IllegalArgumentException</code>. Null key or value throws <code>NullPointerException</code>. <code>BigInteger get(String key)</code> returns the count, or <code>BigInteger.ZERO</code> when absent. Write a test that sets <code>\"pens\"</code> to 3 then 5 and checks 5, plus a separate test that removes an existing count by setting zero. Include the needed BigInteger import.</p>",
+        "hint": "Both parameter and expected value need BigInteger objects; int literals alone are not BigInteger.",
+        "solution": "<pre><code>import java.math.BigInteger;\nimport org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass CountMapTest {\n    @Test\n    void set_replacesExistingCount() {\n        CountMap map = new CountMap();\n        map.set(&quot;pens&quot;, BigInteger.valueOf(3));\n        map.set(&quot;pens&quot;, BigInteger.valueOf(5));\n        assertEquals(BigInteger.valueOf(5), map.get(&quot;pens&quot;));\n    }\n\n    @Test\n    void zero_removesExistingCount() {\n        CountMap map = new CountMap();\n        map.set(&quot;pens&quot;, BigInteger.valueOf(3));\n        map.set(&quot;pens&quot;, BigInteger.ZERO);\n        assertEquals(BigInteger.ZERO, map.get(&quot;pens&quot;));\n    }\n}</code></pre>",
+        "rubric": [
+          "Constructs BigInteger arguments instead of passing raw int values.",
+          "Uses a nonzero prior count to distinguish replacing from adding.",
+          "The zero case starts with an existing entry.",
+          "Expected values match the return type and precede actual values."
+        ]
+      }
+    ],
+    "teachBack": {
+      "prompt": "Why does the word “invalid” not determine which JUnit assertion to use?",
+      "answer": "<p>Different contracts reject inputs differently. A method may return false, return a sentinel, preserve state or throw a specific exception. Read the promised response for that input category.</p>"
+    },
+    "bridge": "Next, reveal an implementation and combine branch reasoning with defect and test review.",
+    "sourceIds": [
+      "junit-guide",
+      "java-biginteger",
+      "java-types"
+    ]
+  },
+  {
+    "id": "29",
+    "module": "Combine the skills",
+    "title": "Review the implementation and its tests together",
+    "summary": "Use a small trace to find a defect, repair a misleading test, and explain exactly what coverage does and does not show.",
+    "goals": [
+      "Trace an implementation against its contract and choose a distinguishing witness.",
+      "Repair a weak test without changing the required behavior.",
+      "Connect branch evidence, a regression test and a defect report."
+    ],
+    "prerequisites": [
+      "16",
+      "17",
+      "18",
+      "23",
+      "25",
+      "26",
+      "28"
+    ],
+    "setup": "<p>You now have both a contract and an implementation. Use the contract for the expected result, and the code to understand which decisions the input exercises. These are complementary sources of evidence. A test can execute every branch and still miss a wrong boundary comparison.</p>",
+    "worked": {
+      "title": "Full branch outcomes can still miss equality",
+      "intro": "<pre><code>// Return the number of elements &gt;= minimum.\n// Empty arrays return 0. Null throws NullPointerException.\nstatic int countAtLeast(int[] values, int minimum) {\n    if (values == null) throw new NullPointerException(&quot;values&quot;);\n    int count = 0;\n    for (int i = 0; i &lt; values.length; i++) {\n        if (values[i] &gt; minimum) { // defect\n            count++;\n        }\n    }\n    return count;\n}</code></pre><pre><code>@Test\nvoid valuesOnBothSides_areCounted() {\n    assertEquals(1, countAtLeast(new int[]{2, 8}, 5));\n}</code></pre><p>This test sees both outcomes of the inner decision. It also enters and exits the loop and takes the non-null path. It does not test equality to 5.</p><pre><code>@Test\nvoid valueEqualToMinimum_isCounted() {\n    assertEquals(1, countAtLeast(new int[]{5}, 5));\n}</code></pre>",
+      "steps": [
+        {
+          "title": "Check the API first",
+          "html": "<p>The inputs are <code>int[]</code> and <code>int</code>, and the result is <code>int</code>. <code>new int[]{5}</code> and <code>5</code> are valid arguments. Null is permitted as a Java reference value but must trigger the documented exception.</p>"
+        },
+        {
+          "title": "Compare the promise to the decision",
+          "html": "<p>“At least” includes equality. The code uses strict <code>&gt;</code>, so an element equal to the minimum is not counted.</p>"
+        },
+        {
+          "title": "Use the smallest distinguishing witness",
+          "html": "<p>The single-element array {5} with minimum 5 should return 1. The loop runs once; the comparison is false; count stays 0. Changing the comparison to <code>&gt;=</code> repairs this boundary.</p>"
+        },
+        {
+          "title": "Keep the other cases",
+          "html": "<p>Retain below/above values, empty input and null handling. The new equality test fills a behavioral gap; it does not make every other case redundant.</p>"
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": "Coverage needs a stated denominator",
+        "html": "<p>For the shown code, if you count the null guard, loop condition and element comparison as three decisions with two outcomes each, the {2,8} case exercises five of the six outcomes: null=false, loop=true/false, comparison=true/false. A null case adds the sixth. Even then, equality can remain untested. Other tools may define or report branch counts differently; always state the decision set you are counting.</p>"
+      },
+      {
+        "title": "A complete diagnosis has three parts",
+        "html": "<table><thead><tr><th>Part</th><th>Evidence here</th></tr></thead><tbody><tr><td>Contract violation</td><td>An equal element must be counted but is omitted.</td></tr><tr><td>Implementation explanation</td><td>The strict comparison is false on equality.</td></tr><tr><td>Test improvement</td><td>Add an equality case with an independent expected count.</td></tr></tbody></table><p>A test that merely asserts the result is nonnegative would pass whether the answer is 0 or 1. Repairing the test and repairing production code are separate edits with separate reasons.</p>"
+      }
+    ],
+    "practice": [
+      {
+        "id": "29-1",
+        "type": "choice",
+        "title": "Which case distinguishes > from >=?",
+        "prompt": "<pre><code>// Return the number of elements &gt;= minimum.\n// Empty arrays return 0. Null throws NullPointerException.\nstatic int countAtLeast(int[] values, int minimum) {\n    if (values == null) throw new NullPointerException(&quot;values&quot;);\n    int count = 0;\n    for (int i = 0; i &lt; values.length; i++) {\n        if (values[i] &gt; minimum) { // defect\n            count++;\n        }\n    }\n    return count;\n}</code></pre><p>Which input isolates the difference between the current comparison and the required comparison?</p>",
+        "hint": "Find a value for which the two boolean expressions disagree.",
+        "solution": "<p>Use an element exactly equal to the minimum, expecting it to count.</p>",
+        "options": [
+          {
+            "text": "values = {5}, minimum = 5",
+            "correct": true,
+            "feedback": "Equality is false for > and true for >=."
+          },
+          {
+            "text": "values = {8}, minimum = 5",
+            "correct": false,
+            "feedback": "Both comparisons count 8."
+          },
+          {
+            "text": "values = {2}, minimum = 5",
+            "correct": false,
+            "feedback": "Both comparisons reject 2."
+          }
+        ]
+      },
+      {
+        "id": "29-2",
+        "type": "multi",
+        "title": "Read the weak test",
+        "prompt": "<pre><code>// Return the number of elements &gt;= minimum.\n// Empty arrays return 0. Null throws NullPointerException.\nstatic int countAtLeast(int[] values, int minimum) {\n    if (values == null) throw new NullPointerException(&quot;values&quot;);\n    int count = 0;\n    for (int i = 0; i &lt; values.length; i++) {\n        if (values[i] &gt; minimum) { // defect\n            count++;\n        }\n    }\n    return count;\n}</code></pre><pre><code>@Test\nvoid countIsValid() {\n    int actual = countAtLeast(new int[]{5}, 5);\n    assertTrue(actual &gt;= 0);\n}</code></pre><p>Which diagnoses are correct?</p>",
+        "hint": "Separate syntax validity from how much behavior the assertion checks.",
+        "solution": "<p>The first three statements are correct. The current condition is legal but insufficient for this expected count.</p>",
+        "options": [
+          {
+            "text": "The test compiles: actual >= 0 is a boolean expression.",
+            "correct": true,
+            "feedback": "The integer comparison produces a boolean suitable for assertTrue."
+          },
+          {
+            "text": "The test passes for both the wrong 0 and the required 1.",
+            "correct": true,
+            "feedback": "Both results satisfy the weak condition."
+          },
+          {
+            "text": "Replacing the assertion with assertEquals(1, actual) checks the documented result.",
+            "correct": true,
+            "feedback": "The expected count follows the contract for this concrete input."
+          },
+          {
+            "text": "The only defect is using assertTrue; assertTrue is always bad for testing counts.",
+            "correct": false,
+            "feedback": "assertTrue is appropriate for a genuinely boolean property. Here the issue is the weak property selected."
+          }
+        ]
+      },
+      {
+        "id": "29-3",
+        "type": "write",
+        "title": "Write the focused regression and report",
+        "prompt": "<pre><code>// Return the number of elements &gt;= minimum.\n// Empty arrays return 0. Null throws NullPointerException.\nstatic int countAtLeast(int[] values, int minimum) {\n    if (values == null) throw new NullPointerException(&quot;values&quot;);\n    int count = 0;\n    for (int i = 0; i &lt; values.length; i++) {\n        if (values[i] &gt; minimum) { // defect\n            count++;\n        }\n    }\n    return count;\n}</code></pre><p>Write a complete Jupiter test for equality, then a compact defect explanation with input, expected, actual, cause and correction. Assume the static method is in <code>IntStats</code> and imports are present.</p>",
+        "hint": "The implementation should supply the actual result; the comment supplies the expected 1.",
+        "solution": "<pre><code>@Test\nvoid equalElement_countsTowardMinimum() {\n    assertEquals(1, IntStats.countAtLeast(new int[]{5}, 5));\n}</code></pre><p>Input {5}, minimum 5; expected 1, actual 0. The implementation uses strict <code>&gt;</code>, excluding equality although “at least” includes it. Change the comparison to <code>&gt;=</code>, then rerun this and the existing null, empty, below and above cases.</p>",
+        "rubric": [
+          "Uses the stated static class and well-typed arguments.",
+          "Tests equality with expected count 1.",
+          "Explains the actual 0 through the branch condition.",
+          "Names the correction and relevant regression cases."
+        ]
+      },
+      {
+        "id": "29-4",
+        "type": "write",
+        "title": "Transfer: early return inside a validator",
+        "prompt": "<pre><code>// Return true if every element is positive. Empty arrays return true.\n// values must be non-null.\nstatic boolean allPositive(int[] values) {\n    for (int value : values) {\n        if (value &lt;= 0) return false;\n        return true;\n    }\n    return true;\n}</code></pre><p>Choose a valid input revealing the defect, write the expected assertion, and describe the repair. Explain why a first element equal to zero does not expose this particular defect.</p>",
+        "hint": "The first element must let execution reach the premature true return, while a later element violates the requirement.",
+        "solution": "<p>Use {2, 0}. The method wrongly returns true after inspecting 2, although 0 makes the required result false.</p><pre><code>assertFalse(allPositive(new int[]{2, 0}));</code></pre><p>Remove the <code>return true</code> inside the loop. Keep the final true after all elements have been checked. A first zero already returns false correctly, so it does not expose the premature success path.</p>",
+        "rubric": [
+          "Chooses a positive first element and a later nonpositive element.",
+          "Uses assertFalse for the required result.",
+          "Moves success to the point where all elements have been checked.",
+          "Explains why a first-element rejection misses this defect."
+        ]
+      }
+    ],
+    "teachBack": {
+      "prompt": "Why is branch coverage useful even though it does not guarantee correct results?",
+      "answer": "<p>It exposes decisions that the suite never exercised. That helps choose additional cases. It does not verify the contract’s boundaries or the correctness of assertions, so combine it with contract-based expectations and distinguishing inputs.</p>"
+    },
+    "bridge": "Next, work through a mixed set without topic labels choosing the technique for you.",
+    "sourceIds": [
+      "junit-guide",
+      "java-types"
+    ]
+  },
+  {
+    "id": "30",
+    "module": "Combine the skills",
+    "title": "Choose the method, write the test, explain the result",
+    "summary": "Complete a mixed independent check: types, contracts, assertions, exceptions, state, production defects and defective tests.",
+    "goals": [
+      "Choose a suitable testing approach without a chapter label giving it away.",
+      "Write compiling test methods with meaningful cases and correct assertions.",
+      "Explain defects and defend the expected behavior with evidence."
+    ],
+    "prerequisites": [
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
+      "29"
+    ],
+    "setup": "<p>Try the problems before opening hints or solutions. Work from a blank answer: identify the signature, extract the promise, choose a case, write the test, then explain what it detects. The written questions have checklists for comparison; they are not automatically compiled or graded. Run your Java in a real Jupiter project when checking compilation and execution.</p>",
+    "worked": {
+      "title": "A short routine to use on any new method",
+      "intro": "<p>Use this checklist before answering the mixed practice. It is a decision routine, not a replacement for reading the supplied contract.</p><table><thead><tr><th>Question</th><th>What to write down</th></tr></thead><tbody><tr><td>What is available?</td><td>Signature and comments only, or implementation too?</td></tr><tr><td>Will my call compile?</td><td>Receiver, argument types/order/count, return type and imports.</td></tr><tr><td>What is promised?</td><td>Return value, state change, exception and unchanged state.</td></tr><tr><td>Why this input?</td><td>Partition, boundary, branch, state transition or concrete fault witness.</td></tr><tr><td>How will I observe it?</td><td>The assertion and independent expected result.</td></tr><tr><td>What could fool this test?</td><td>Weak oracle, invalid setup, aliasing, broad catch or wrong exception source.</td></tr></tbody></table>",
+      "steps": [
+        {
+          "title": "Design before writing syntax",
+          "html": "<p>Write one input/expected pair in plain language. If you cannot state what should happen, pause at the contract instead of guessing an assertion.</p>"
+        },
+        {
+          "title": "Translate into a test method",
+          "html": "<p>Use <code>@Test</code>, a non-private <code>void</code> method, a valid fixture, the intended action and an assertion matching its result. Keep production return types separate from the test method’s return type.</p>"
+        },
+        {
+          "title": "Challenge your own test",
+          "html": "<p>Imagine one plausible faulty implementation. Would your test reject it? If it would still pass, decide whether the chosen property is too weak or whether another case is needed.</p>"
+        },
+        {
+          "title": "Explain with evidence",
+          "html": "<p>For a defect, provide input, expected, actual and the faulty operation. For an unclear requirement, identify what is unspecified. Do not convert uncertainty into an invented promise.</p>"
+        }
+      ]
+    },
+    "sections": [
+      {
+        "title": "How to review your written answers",
+        "html": "<p>Use the solution as one valid answer, then check the criteria. Equivalent names and well-typed alternative assertions can be valid. A test may be logically sound but fail to compile, or compile while checking the wrong property; assess both. For explanations, insist on the causal link between the code and the observed behavior.</p>"
+      },
+      {
+        "title": "What to do with a missed question",
+        "html": "<p>If you chose an illegal argument, revisit types and signatures. If the expected result was wrong, revisit contracts and boundaries. If the assertion was wrong, revisit result types and Jupiter syntax. If you could not find a witness, revisit tracing and defect patterns. Then attempt a fresh case without the solution open. Reading a model answer and constructing one independently are different forms of practice.</p>"
+      }
+    ],
+    "practice": [
+      {
+        "id": "30-1",
+        "type": "multi",
+        "title": "Problem 1: valid calls",
+        "prompt": "<p>Available method: <code>void setCount(String key, java.math.BigInteger count)</code>. Assume <code>store</code> is a valid receiver. No overloads exist. Select every call that is type-correct; this question does not ask whether the values satisfy the contract.</p>",
+        "hint": "Decide Java type compatibility without inventing value restrictions.",
+        "solution": "<p>The first, third and fifth calls compile against the signature. Passing compilation does not establish contract validity.</p>",
+        "options": [
+          {
+            "text": "store.setCount(\"x\", java.math.BigInteger.ONE);",
+            "correct": true,
+            "feedback": "String and BigInteger match the signature."
+          },
+          {
+            "text": "store.setCount(\"x\", 1);",
+            "correct": false,
+            "feedback": "An int is not automatically converted to BigInteger."
+          },
+          {
+            "text": "store.setCount(null, null);",
+            "correct": true,
+            "feedback": "Both parameters have reference types. The contract may still reject these values."
+          },
+          {
+            "text": "store.setCount(1, \"x\");",
+            "correct": false,
+            "feedback": "Both argument types and their roles are wrong."
+          },
+          {
+            "text": "store.setCount(\"x\", java.math.BigInteger.valueOf(-1));",
+            "correct": true,
+            "feedback": "The negative value is still a BigInteger; value validity is a separate question."
+          }
+        ]
+      },
+      {
+        "id": "30-2",
+        "type": "choice",
+        "title": "Problem 2: read a contract",
+        "prompt": "<p><code>int remove(String key)</code> removes all matching entries and returns the number removed. For a null key it returns 0 and changes nothing. Which test checks the documented null behavior? Assume <code>bag</code> is a valid fixture.</p>",
+        "hint": "Null does not universally mean an exception.",
+        "solution": "<p><code>assertEquals(0, bag.remove(null))</code> checks the return promise. Add an observation of the contents when checking the unchanged-state promise.</p>",
+        "options": [
+          {
+            "text": "assertEquals(0, bag.remove(null));",
+            "correct": true,
+            "feedback": "The method returns an int count; the contract promises zero for null."
+          },
+          {
+            "text": "assertThrows(NullPointerException.class, () -> bag.remove(null));",
+            "correct": false,
+            "feedback": "This invents a null rejection that the contract does not promise."
+          },
+          {
+            "text": "assertTrue(bag.remove(null));",
+            "correct": false,
+            "feedback": "The result is an int, not a boolean; this does not compile."
+          }
+        ]
+      },
+      {
+        "id": "30-3",
+        "type": "write",
+        "title": "Problem 3: construct the test",
+        "prompt": "<p><code>RangeRules.allowed(int n)</code> is a static method returning true exactly when 3 ≤ n ≤ 7. Write two complete Jupiter test methods: one for the inclusive upper endpoint, and one for the nearest integer above it. Include imports and a test class.</p>",
+        "hint": "Use 7 and 8 and select assertions from their promised boolean outcomes.",
+        "solution": "<pre><code>import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass RangeRulesTest {\n    @Test\n    void upperEndpoint_isAllowed() {\n        assertTrue(RangeRules.allowed(7));\n    }\n\n    @Test\n    void aboveUpperEndpoint_isRejected() {\n        assertFalse(RangeRules.allowed(8));\n    }\n}</code></pre>",
+        "rubric": [
+          "Uses Jupiter imports consistently.",
+          "Uses @Test void methods inside a class.",
+          "Tests 7→true and 8→false with valid int calls.",
+          "Keeps each distinct scenario understandable."
+        ]
+      },
+      {
+        "id": "30-4",
+        "type": "write",
+        "title": "Problem 4: audit an exception test",
+        "prompt": "<p><code>new Balance(5)</code> creates balance 5. <code>withdraw(int amount)</code> throws <code>IllegalArgumentException</code> for negative amounts and otherwise subtracts amount; there are no other restrictions in this example. Rejected calls leave the balance unchanged. <code>int get()</code> reads it.</p><pre><code>@Test\nvoid rejectsNegativeWithdrawal() {\n    Balance balance = new Balance(5);\n    try {\n        balance.withdraw(-1);\n    } catch (IllegalArgumentException ex) {\n        assertEquals(5, balance.get());\n    }\n}</code></pre><p>Explain a false-pass path, then rewrite using assertThrows and check the state.</p><p>Assume <code>org.junit.jupiter.api.Test</code> and the static <code>org.junit.jupiter.api.Assertions.*</code> imports are present. Write the test methods inside a test class in the same package as the supplied API.</p>",
+        "hint": "What happens when withdraw wrongly accepts -1?",
+        "solution": "<p>If no exception is thrown, the catch is skipped and the method ends without an assertion. The test can pass even if the balance changes.</p><pre><code>@Test\nvoid negativeWithdrawal_preservesBalance() {\n    Balance balance = new Balance(5);\n    assertThrows(IllegalArgumentException.class,\n        () -&gt; balance.withdraw(-1));\n    assertEquals(5, balance.get());\n}</code></pre>",
+        "rubric": [
+          "Explains the no-exception false pass.",
+          "Keeps valid setup outside the lambda.",
+          "Checks the required exception and unchanged state."
+        ]
+      },
+      {
+        "id": "30-5",
+        "type": "write",
+        "title": "Problem 5: diagnose the implementation",
+        "prompt": "<pre><code>// Return the sum of all elements. values is non-null.\nstatic int sum(int[] values) {\n    int total = 0;\n    for (int i = 1; i &lt; values.length; i++) {\n        total += values[i];\n    }\n    return total;\n}</code></pre><p>Give a small valid witness, expected versus actual, one regression assertion and the correction. Then explain why testing only an empty array would miss this defect.</p>",
+        "hint": "The loop starts at index 1.",
+        "solution": "<p>Use {7}. Expected sum is 7; actual is 0 because the loop never visits index 0. Start the loop at 0.</p><pre><code>assertEquals(7, sum(new int[]{7}));</code></pre><p>The empty array has the correct sum 0 even in the faulty code, so it does not reveal the skipped first element.</p>",
+        "rubric": [
+          "Uses a valid array containing a nonzero first element.",
+          "Traces the skipped index 0.",
+          "States independent expected and actual values.",
+          "Uses expected-first assertEquals and corrects the initializer."
+        ]
+      },
+      {
+        "id": "30-6",
+        "type": "write",
+        "title": "Problem 6: observe an ADT transition",
+        "prompt": "<p>A new <code>StringStack</code> is empty. <code>push(String)</code> adds a non-null value. <code>String pop()</code> removes and returns the newest value; empty pop throws <code>NoSuchElementException</code>. <code>int size()</code> returns the count. Write a test that pushes <code>\"a\"</code> then <code>\"b\"</code>, removes both in the correct order, checks size zero and checks one further pop.</p><p>Assume <code>org.junit.jupiter.api.Test</code> and the static <code>org.junit.jupiter.api.Assertions.*</code> imports are present. Write the test methods inside a test class in the same package as the supplied API.</p>",
+        "hint": "The stack is last-in, first-out. The final pop is an exception observation.",
+        "solution": "<pre><code>@Test\nvoid stack_returnsNewestFirst_thenRejectsEmptyPop() {\n    StringStack stack = new StringStack();\n    stack.push(&quot;a&quot;);\n    stack.push(&quot;b&quot;);\n    assertEquals(&quot;b&quot;, stack.pop());\n    assertEquals(&quot;a&quot;, stack.pop());\n    assertEquals(0, stack.size());\n    assertThrows(java.util.NoSuchElementException.class, () -&gt; stack.pop());\n}</code></pre>",
+        "rubric": [
+          "Uses LIFO order b then a.",
+          "Checks count after removals.",
+          "Places the empty pop inside assertThrows.",
+          "Uses String and int expectations for their corresponding results."
+        ]
+      },
+      {
+        "id": "30-7",
+        "type": "multi",
+        "title": "Problem 7: interpret coverage and evidence",
+        "prompt": "<p>A suite exercises true and false for every counted decision in a method, and every test passes. Select the conclusions supported by that information.</p>",
+        "hint": "Coverage describes execution; assertions compare selected observations.",
+        "solution": "<p>The first, third and fifth statements are supported. Keep contract-based boundaries and test review alongside coverage evidence.</p>",
+        "options": [
+          {
+            "text": "Both outcomes of each decision in the stated coverage model were exercised.",
+            "correct": true,
+            "feedback": "That is what the supplied coverage statement establishes."
+          },
+          {
+            "text": "Every input and every possible path has been tested.",
+            "correct": false,
+            "feedback": "Branch outcomes do not enumerate all values or path combinations."
+          },
+          {
+            "text": "The executed assertions accepted the observed results in those runs.",
+            "correct": true,
+            "feedback": "That is the direct meaning of passing test executions."
+          },
+          {
+            "text": "The expected results and test setup must all be correct.",
+            "correct": false,
+            "feedback": "A test can have a wrong or weak oracle and still pass."
+          },
+          {
+            "text": "An equality-boundary defect may still remain.",
+            "correct": true,
+            "feedback": "Tests on either side can cover both outcomes without testing equality."
+          }
+        ]
+      },
+      {
+        "id": "30-8",
+        "type": "write",
+        "title": "Problem 8: write the error record",
+        "prompt": "<p>Contract: <code>int boundedCount(int n)</code> returns 0 for negative n and returns n otherwise. Test <code>zeroRemainsZero</code> passes. Test <code>negativeBecomesZero</code> calls <code>boundedCount(-2)</code>, expects 0 and observes -2. Implementation: <code>return n;</code>. Write a clear defect report and propose two further tests with expected results. Explain why the passing zero case did not establish correctness.</p>",
+        "hint": "Use the report structure from lesson 26 and cover a different negative value plus a normal positive one.",
+        "solution": "<pre><code>Location: boundedCount(int)\nContract: negative inputs become 0; other inputs are unchanged.\nReproduce: boundedCount(-2).\nExpected: 0.\nActual: -2.\nTest: negativeBecomesZero.\nCause: return n performs no negative-value check.\nProposed fix: return n &lt; 0 ? 0 : n;\nRegression: -1 -&gt; 0; 4 -&gt; 4; retain 0 -&gt; 0 and -2 -&gt; 0.\nStatus: reproduced; proposed fix not yet verified.</code></pre><p>The faulty implementation happens to return the correct value for zero. One passing case did not exercise the negative-input behavior.</p>",
+        "rubric": [
+          "Provides method, exact trigger, expected/actual and test name.",
+          "Connects the unchanged negative value to the missing condition.",
+          "Suggests a contract-preserving repair and nonredundant tests.",
+          "Does not claim the unrun repair was verified."
+        ]
+      }
+    ],
+    "teachBack": {
+      "prompt": "Can you justify the input, expected result and assertion in every test you wrote, without opening its solution?",
+      "answer": "<p>Use that question to identify the next practice target. If the input is sound but syntax is uncertain, practise construction. If syntax is sound but the case is weak, practise test selection. Repeat a fresh mixed set after revisiting the specific gap.</p>"
+    },
+    "bridge": "Return to a lesson where a decision was difficult, then retry mixed practice with a fresh case.",
+    "sourceIds": [
+      "junit-guide",
+      "java-types",
+      "java-exceptions",
+      "java-collections"
+    ]
+  }
+]

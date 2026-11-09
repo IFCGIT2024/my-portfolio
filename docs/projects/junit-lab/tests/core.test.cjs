@@ -37,6 +37,18 @@ test('a later mistake remains visible after a historical success',()=>{
   assert.equal(C.classifyQuestion({correct:true,helpUsed:true}),'reviewed');
   assert.equal(C.classifyQuestion({selfChecked:true}),'reviewed');
 });
+test('rebuilt lessons restart their reading and step marks without discarding other work',()=>{
+  const state=C.normalizeState({read:{'01':true,'02':true,'03':true},ready:{'01':true,'03':true},lessonRevisions:{'01':1,'02':1},flowSteps:{'01':3},drafts:{'01-3':'old answer','03-3':'keep this'}});
+  C.applyLessonRevisions(state,lessons);
+  assert.equal(state.read['01'],undefined);assert.equal(state.read['02'],undefined);
+  assert.equal(state.flowSteps['01'],undefined);assert.equal(state.ready['01'],undefined);
+  assert.equal(state.read['03'],true);assert.equal(state.ready['03'],true);
+  assert.equal(state.drafts['01-3'],'old answer');assert.equal(state.drafts['03-3'],'keep this');
+  state.read['01']=true;state.flowSteps['01']=2;
+  C.applyLessonRevisions(state,lessons);
+  const restored=C.normalizeState(state);
+  assert.equal(restored.read['01'],true);assert.equal(restored.flowSteps['01'],2);
+});
 test('short circuiting skips later operands',()=>{
   assert.deepEqual(C.coverageTrace(null,1),{a:false,b:null,c:null,result:false});
   assert.deepEqual(C.coverageTrace('',1),{a:true,b:false,c:null,result:false});
@@ -76,9 +88,15 @@ test('course references and prerequisite graph resolve, with a written transfer 
   const ids=new Set(),qids=new Set();
   for(const l of lessons){
     assert.ok(!ids.has(l.id));for(const p of l.prerequisites)assert.ok(ids.has(p),`${l.id} prerequisite ${p}`);ids.add(l.id);
-    assert.ok(l.worked.intro&&l.worked.steps.length>=3&&l.setup&&l.bridge);
+    assert.ok(l.setup&&l.bridge);
+    if(l.flow){
+      assert.ok(l.flow.length>0);
+      assert.deepEqual(l.flow.map(s=>s.questionId),l.practice.map(q=>q.id));
+      for(const stage of l.flow)assert.ok(stage.title&&stage.html);
+      assert.ok(!l.worked,'Opening flow must not contain the old full-example lesson.');
+    }else assert.ok(l.worked.intro&&l.worked.steps.length>=3);
     assert.ok(l.practice.filter(q=>q.type==='write').length>=2);
     for(const q of l.practice){assert.ok(!qids.has(q.id));qids.add(q.id);assert.ok(q.prompt&&q.hint&&q.solution);if(q.type==='write')assert.ok(q.rubric.length>=2);else for(const o of q.options)assert.ok(o.feedback);}
   }
-  assert.equal(lessons.length,30);assert.equal(questions.length,124);
+  assert.equal(lessons.length,30);assert.equal(questions.length,129);
 });

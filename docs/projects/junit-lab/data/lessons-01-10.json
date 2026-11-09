@@ -1,285 +1,378 @@
 [
   {
     "id": "01",
+    "revision": 2,
     "module": "Read Java and contracts",
-    "title": "The whole testing picture",
-    "summary": "Read the promise, make a valid call, observe what happened, and compare it with what should happen.",
+    "title": "What does a test check?",
+    "summary": "Check whether a result matches what should happen.",
     "goals": [
-      "Explain the four decisions in a useful test.",
-      "Separate expected behavior from observed behavior.",
-      "Identify what a test proves and what it leaves untested."
+      "Compare the result you expected with the result you observed."
     ],
     "prerequisites": [],
-    "setup": "<p>A method is a named operation. Its contract describes what callers may give it and what it promises in return. A test is a small, repeatable experiment: choose a situation, perform the operation, then check the result. Begin with this complete example. You will learn each piece of syntax in the following lessons.</p><p>For this first lesson, the Java class, imports and <code>@Test</code> are supplied scaffolding. You only need to identify the input, promised result, observation and check; writing that full structure comes in lesson 07.</p>",
-    "worked": {
-      "title": "A complete test of a boundary",
-      "intro": "<p>The contract below says that a temperature of zero counts as freezing. Save the production class as <code>Temperatures.java</code>; its behavior is deliberately simple. The text between <code>/**</code> and <code>*/</code> is a comment describing the promise; comments explain code and are not executed.</p><pre><code class=\"language-java\">public class Temperatures {\n    /** Returns true when celsius is zero or below. */\n    public static boolean isFreezing(int celsius) {\n        return celsius &lt;= 0;\n    }\n}</code></pre><p>This is a complete JUnit 5 test class, <code>TemperaturesTest.java</code>. JUnit is the test library; <code>assertTrue</code> reports a failure unless its argument is true.</p><pre><code class=\"language-java\">import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass TemperaturesTest {\n    @Test\n    void isFreezing_atZero_returnsTrue() {\n        boolean actual = Temperatures.isFreezing(0);\n        assertTrue(actual);\n    }\n}</code></pre>",
-      "steps": [
-        {
-          "title": "1. Read the promise",
-          "html": "<p>“Zero or below” includes zero. Decide this before looking at the implementation. The expected answer comes from the contract, not from copying the method’s calculation.</p>"
-        },
-        {
-          "title": "2. Make a valid call",
-          "html": "<p><code>isFreezing</code> receives an <code>int</code>, a whole-number value. The argument <code>0</code> fits that type. <code>Temperatures.isFreezing(0)</code> calls the operation.</p>"
-        },
-        {
-          "title": "3. Observe the result",
-          "html": "<p>The method returns a <code>boolean</code>: true or false. The variable <code>actual</code> stores the observed result. A test must observe the promised behavior, which might instead be a changed object or an exception.</p>"
-        },
-        {
-          "title": "4. Compare with the promise",
-          "html": "<p><code>assertTrue(actual)</code> checks the expectation. If an incorrect implementation used <code>celsius &lt; 0</code>, this test would fail at zero and reveal the missing equality case.</p>"
-        }
-      ]
-    },
-    "sections": [
+    "setup": "<p>We will use one small program throughout this lesson. Its rule is simple: add one to the number it is given.</p>",
+    "flow": [
       {
-        "title": "Three separate questions",
-        "html": "<table><thead><tr><th>Question</th><th>Example</th></tr></thead><tbody><tr><td>Will the call compile?</td><td>A String such as <code>\"cold\"</code> is not an int.</td></tr><tr><td>What does the contract promise?</td><td>Zero must produce true.</td></tr><tr><td>What happened when it ran?</td><td>The observed Boolean must match that promise.</td></tr></tbody></table><p>A call that cannot compile never reaches the method. A valid call can still reveal incorrect behavior. Keep those judgments separate.</p><p>A <code>String</code> is text written in double quotes, such as <code>\"cat\"</code>. The String <code>\"\"</code> has no characters. A <code>boolean</code> is one of the two values <code>true</code> and <code>false</code>. Keep a text value, a whole-number value and a Boolean result distinct.</p>"
+        "title": "What should happen?",
+        "html": "<p>We have a small program with one rule:</p><blockquote><strong>Add one to the number you are given.</strong></blockquote><p>If we give it <strong>4</strong>, it should give back <strong>5</strong>.</p><p>The answer it <em>should</em> produce is called the <strong>expected result</strong>.</p>",
+        "questionId": "01-r2-expected"
       },
       {
-        "title": "One case is evidence about one situation",
-        "html": "<p>The zero case is useful because it distinguishes <code>&lt;</code> from <code>&lt;=</code>. It does not check a positive temperature or every negative temperature. Useful testing combines cases with different reasons for existing. A passing test means its checked expectation was met for that execution; it is not a proof that every possible behavior is correct.</p>"
+        "title": "What actually happened?",
+        "html": "<p>We tried the same program with <strong>4</strong>. This time it gave back <strong>6</strong>.</p><p>The answer we actually got is called the <strong>actual result</strong>. Here, the actual result is 6—even though the rule tells us to expect 5.</p>",
+        "questionId": "01-r2-actual"
+      },
+      {
+        "title": "Compare the two results",
+        "html": "<p>Now put the two results side by side.</p><table><thead><tr><th>Expected result</th><th>Actual result</th></tr></thead><tbody><tr><td>5</td><td>6</td></tr></tbody></table><p>They do not match. This check <strong>fails</strong>.</p><p>If the actual result were 5, the two would match and the check would <strong>pass</strong>. This comparison is the basic idea of a test.</p>",
+        "questionId": "01-r2-compare"
+      },
+      {
+        "title": "Try the same check with another number",
+        "html": "<p>Keep the same rule: <strong>add one</strong>.</p><p>This time, give the program <strong>8</strong>. It gives back <strong>9</strong>.</p><p>First work out what it should give back. Then compare that with what it actually gave back.</p>",
+        "questionId": "01-r2-repeat"
       }
     ],
     "practice": [
       {
-        "id": "01-1",
+        "id": "01-r2-expected",
         "type": "choice",
-        "title": "Where does the expected answer come from?",
-        "prompt": "<p>A contract says “return true when the supplied count is at least 3.” The implementation currently returns false for count 3. What should a test expect?</p>",
+        "title": "Choose the expected result",
+        "prompt": "<p>The rule is “add one.” We give the program <strong>6</strong>. What result should we expect?</p>",
         "options": [
           {
-            "text": "true",
+            "text": "6",
+            "correct": false,
+            "feedback": "That leaves the number unchanged."
+          },
+          {
+            "text": "7",
             "correct": true,
-            "feedback": "“At least 3” includes 3. The incorrect implementation should make this test fail."
+            "feedback": "6 plus one is 7. That is the expected result."
           },
           {
-            "text": "false",
+            "text": "8",
             "correct": false,
-            "feedback": "This copies the implementation’s observed mistake into the expectation."
-          },
-          {
-            "text": "Either answer",
-            "correct": false,
-            "feedback": "The stated contract determines the answer at 3."
+            "feedback": "That adds two instead of one."
           }
         ],
-        "hint": "Translate “at least” into a comparison.",
-        "solution": "<p>Expect <code>true</code>. The contract includes the boundary value 3.</p>"
+        "hint": "Apply the rule: 6 + 1.",
+        "solution": "<p>The expected result is <strong>7</strong>, because 6 + 1 = 7.</p>"
       },
       {
-        "id": "01-2",
-        "type": "multi",
-        "title": "What does the worked test establish?",
-        "prompt": "<p>Temperatures declares <code>public static boolean isFreezing(int celsius)</code>. Assume this test fragment passes. Select every justified statement.</p><pre><code class=\"language-java\">boolean actual = Temperatures.isFreezing(0);\nassertTrue(actual);</code></pre>",
+        "id": "01-r2-actual",
+        "type": "choice",
+        "title": "Identify the actual result",
+        "prompt": "<p>The program should add one. We give it <strong>4</strong>, and it gives back <strong>6</strong>. What is the actual result?</p>",
         "options": [
           {
-            "text": "The call with 0 returned true during this execution.",
-            "correct": true,
-            "feedback": "That is the result the assertion checked."
-          },
-          {
-            "text": "Every possible input is handled correctly.",
+            "text": "4",
             "correct": false,
-            "feedback": "Only the chosen case was exercised."
+            "feedback": "4 is the number we gave the program."
           },
           {
-            "text": "The test would reject an implementation that returns false at 0.",
-            "correct": true,
-            "feedback": "assertTrue fails on false."
-          },
-          {
-            "text": "A String argument would also work.",
+            "text": "5",
             "correct": false,
-            "feedback": "The test says nothing of that kind; the declared parameter is int."
+            "feedback": "5 is what we expected, not what we observed."
+          },
+          {
+            "text": "6",
+            "correct": true,
+            "feedback": "6 is the result the program actually gave back."
           }
         ],
-        "hint": "Separate the observed case from claims about untested inputs.",
-        "solution": "<p>The test establishes the observed result at zero and can reject a false result there. It makes no exhaustive correctness claim.</p>"
+        "hint": "Look for the result we got, even if it was wrong.",
+        "solution": "<p>The actual result is <strong>6</strong>. “Actual” means observed, not necessarily correct.</p>"
       },
       {
-        "id": "01-3",
+        "id": "01-r2-compare",
         "type": "write",
-        "title": "Repair the test’s reasoning",
-        "prompt": "<p>Contract: <code>Limits.isFull(int count)</code> returns true when count is 5 or more. A learner tests count 5 but writes “expected: false, because the current code uses count &gt; 5.” Rewrite the expected result and its reason.</p>",
-        "hint": "Use the promise, independently of the current implementation.",
-        "solution": "<p>Expected: true. The contract says 5 or more, so 5 is included. A false result is evidence of an implementation defect.</p>",
+        "responseKind": "explanation",
+        "title": "Does this check pass?",
+        "prompt": "<p>A program should add one. Given 4, its expected result is <strong>5</strong>, but its actual result is <strong>6</strong>. Write one sentence saying whether this check passes or fails, and why.</p>",
+        "hint": "Compare 5 with 6.",
+        "solution": "<p>The check fails because the actual result, 6, does not match the expected result, 5.</p>",
         "rubric": [
-          "States true.",
-          "Justifies the answer from the contract.",
-          "Explains that the current code can be wrong."
+          "Says the check fails.",
+          "Explains that 6 does not match 5."
         ]
       },
       {
-        "id": "01-4",
+        "id": "01-r2-repeat",
         "type": "write",
-        "title": "Design an experiment in words",
-        "prompt": "<p>Contract: <code>TextRules.isEmpty(String text)</code> returns true for <code>\"\"</code> and false for any nonempty String. Use a quoted String value for this exercise. Choose one nonempty input and write the input, expected result, observed result you would capture, and check you would perform. You do not need JUnit syntax yet.</p>",
-        "hint": "A nonempty String has at least one character.",
-        "solution": "<p>Example: input <code>\"cat\"</code>; expected false; capture the Boolean returned by <code>TextRules.isEmpty(\"cat\")</code>; check that it is false. Other nonempty Strings are equally valid choices.</p>",
+        "responseKind": "explanation",
+        "title": "Make the comparison yourself",
+        "prompt": "<p>The rule is “add one.” We give the program <strong>8</strong>, and its actual result is <strong>9</strong>. State the expected result, then say whether the check passes or fails.</p>",
+        "hint": "Work out 8 + 1 before comparing it with 9.",
+        "solution": "<p>Expected result: <strong>9</strong>. The check passes because the actual result is also 9.</p>",
         "rubric": [
-          "Uses a nonempty String.",
-          "Expects false.",
-          "Observes the method result.",
-          "Compares the observation with the expectation."
+          "Uses the rule to get an expected result of 9.",
+          "Says the check passes because expected and actual match."
         ]
       }
     ],
-    "teachBack": {
-      "prompt": "Explain contract → call → observe → assert using the zero-temperature example.",
-      "answer": "<p>The contract includes zero. The call passes the int value 0. The returned Boolean is the observation. assertTrue checks that observation against the expected true result.</p>"
-    },
-    "bridge": "Next, learn to read a method signature so that your chosen experiment is a call Java can actually make.",
+    "bridge": "You have compared an expected result with an actual result. Next, we will give this same add-one program a name and read the small Java instruction that asks it to run.",
     "sourceIds": [
-      "junit-guide",
-      "java-types"
+      "junit-guide"
     ]
   },
   {
     "id": "02",
     "module": "Read Java and contracts",
-    "title": "Read types before choosing inputs",
-    "summary": "Distinguish primitive values, object references, null, boxing, and unboxing.",
+    "title": "Read a call, then check its types",
+    "summary": "Read one small Java instruction at a time.",
     "goals": [
-      "Read parameter and return types from a signature.",
-      "Decide whether an argument can be passed to a parameter.",
-      "Explain the difference between int, Integer, and null."
+      "Read inputs and the returned type from a method header.",
+      "Write a call and store its returned int.",
+      "Distinguish int, String, Integer and an absent Integer value."
     ],
     "prerequisites": [
       "01"
     ],
-    "setup": "<p>A signature tells you which calls Java accepts. A contract then tells you which accepted calls have promised behavior. Learn the type gate first: an invalid value and an incompatible type are different problems.</p><p>The implementation below is provided. Focus on reading the parameter slots and deciding which argument expressions fit; you are not expected to write its class or control flow from memory yet.</p>",
-    "worked": {
-      "title": "An int and an Integer in the same call",
-      "intro": "<p>Here is a complete class. The first parameter requires an int value. The second is an Integer reference and explicitly allows null.</p><pre><code class=\"language-java\">public class Scores {\n    /** Returns base plus extra; a null extra contributes zero. */\n    public static int total(int base, Integer extra) {\n        if (extra == null) {\n            return base;\n        }\n        return base + extra;\n    }\n}</code></pre><pre><code class=\"language-java\">int a = Scores.total(4, Integer.valueOf(3)); // 7\nint b = Scores.total(4, null);               // 4\nint c = Scores.total(4, 3);                  // 7: boxing\n// Scores.total(null, 3);                   // does not compile</code></pre>",
-      "steps": [
-        {
-          "title": "1. Find the return type",
-          "html": "<p>The <code>int</code> before <code>total</code> means the method returns a whole-number value. It is different from the two parameter types inside the parentheses.</p>"
-        },
-        {
-          "title": "2. Match the parameter slots",
-          "html": "<p>In <code>total(int base, Integer extra)</code>, the first argument belongs to base and the second to extra. Names help you understand roles; declared types determine compatibility.</p>"
-        },
-        {
-          "title": "3. Interpret null",
-          "html": "<p><code>Integer</code> is a reference type. Its reference may be null, meaning no object. An <code>int</code> is a primitive value and cannot itself be null. Whether a reference parameter permits null behavior is a separate contract question.</p><p>In the supplied body, <code>extra == null</code> asks whether that reference is absent. The <code>if</code> takes that case when the answer is true, and <code>return base;</code> ends the method with base as its result.</p>"
-        },
-        {
-          "title": "4. Notice the conversion",
-          "html": "<p>Java can box the int argument <code>3</code> into an Integer for the second slot. In <code>base + extra</code>, Java unboxes extra into an int. The preceding null check makes that unboxing safe here.</p><p><code>Integer.valueOf(3)</code> explicitly supplies an Integer representing 3. It is another way to fill the wrapper slot. In the examples, <code>//</code> begins an explanatory comment that lasts to the end of its line.</p>"
-        }
-      ]
-    },
-    "sections": [
+    "setup": "<p>Continue with the add-one operation. Read one small Java step, then practise that same step.</p>",
+    "flow": [
       {
-        "title": "Primitive and reference are categories",
-        "html": "<table><thead><tr><th>Declaration</th><th>What it holds</th><th>Can the variable contain null?</th></tr></thead><tbody><tr><td><code>int count</code></td><td>An integer value</td><td>No</td></tr><tr><td><code>boolean ready</code></td><td>true or false</td><td>No</td></tr><tr><td><code>Integer count</code></td><td>An Integer reference</td><td>Yes</td></tr><tr><td><code>String name</code></td><td>A String reference</td><td>Yes</td></tr><tr><td><code>int[] values</code></td><td>An array reference</td><td>Yes</td></tr></tbody></table><p>A String such as <code>\"4\"</code> is not automatically parsed into the int 4. Boxing is the specific primitive/wrapper conversion; it is not a general conversion between unrelated types.</p>"
+        "title": "Read one method call",
+        "html": "<p>Think of <code>Numbers</code> as a named group of number operations. <code>addOne</code> is one operation in that group. It returns one more than the number you supply. In this call, the dot selects addOne from Numbers, and the parentheses hold its input, 4. The returned number is 5.</p><pre><code class=\"language-java\">Numbers.addOne(4)</code></pre>",
+        "questionId": "02-r2-1"
       },
       {
-        "title": "A compiling expression can fail while running",
-        "html": "<pre><code class=\"language-java\">Integer count = null;\nint copy = count; // Compiles; unboxing throws NullPointerException.</code></pre><p>This is a runtime failure caused by attempting to obtain an int from a null wrapper reference. Do not describe it as a compile error. Likewise, <code>check(-1)</code> may compile for an int parameter while violating a documented nonnegative range. The contract decides the required response to that value.</p><p>The same unboxing happens when a wrapper is used in arithmetic: <code>+</code> adds values and <code>*</code> multiplies them. Thus <code>count * 2</code> needs an int value from count before it can multiply; a null Integer fails at that step.</p>"
+        "title": "Distinguish a number from text",
+        "html": "<p><code>addOne</code> expects an <code>int</code>: a whole-number value. The expression <code>4</code> is an int, while <code>\"4\"</code> is a String containing text. The matching digit does not make them the same type. Java rejects the quoted input for this method before the method can run.</p><pre><code class=\"language-java\">Numbers.addOne(4)</code></pre>",
+        "questionId": "02-r2-2"
+      },
+      {
+        "title": "Read the method header",
+        "html": "<p>This header describes the same addOne operation. <code>static</code> lets us call it through the group name Numbers. The <code>int</code> before addOne says the returned result is a whole number. Inside the parentheses, <code>int number</code> says the input is a whole number called number. The header describes the operation; it does not run it.</p><pre><code class=\"language-java\">static int addOne(int number)</code></pre>",
+        "questionId": "02-r2-3"
+      },
+      {
+        "title": "Store the returned number",
+        "html": "<p>A variable gives a value a name. <code>int actual</code> declares a whole-number variable named actual. The <code>=</code> stores the result of the call in it. The semicolon ends the statement. After this statement, actual contains 5 because addOne received 4 and returned one more.</p><pre><code class=\"language-java\">int actual = Numbers.addOne(4);</code></pre>",
+        "questionId": "02-r2-4"
+      },
+      {
+        "title": "Match two inputs to two slots",
+        "html": "<p>Numbers also provides a sum operation with header <code>static int total(int base, int extra)</code>. A comma separates its two input slots. The first supplied value goes to base; the second goes to extra. This call gives base the value 4 and extra the value 1, so total returns 5.</p><pre><code class=\"language-java\">Numbers.total(4, 1)</code></pre>",
+        "questionId": "02-r2-5"
+      },
+      {
+        "title": "Change the second parameter to Integer",
+        "html": "<p>We now revise total: its second parameter changes from <code>int extra</code> to <code>Integer extra</code>. Base and the return type remain int. Integer is an object form of a whole number, allowing an optional value. <code>Integer.valueOf(1)</code> supplies an Integer representing one. Use this revised header for the remaining steps.</p><pre><code class=\"language-java\">Numbers.total(4, Integer.valueOf(1))</code></pre>",
+        "questionId": "02-r2-6"
+      },
+      {
+        "title": "Represent an absent optional value",
+        "html": "<p><code>null</code> means that no Integer object is supplied. The revised total contract says a null extra contributes zero. Therefore the call below returns 4. Null can occupy the Integer slot, but it cannot be passed directly to the int base slot: that slot still requires a whole-number value.</p><pre><code class=\"language-java\">Numbers.total(4, null)</code></pre>",
+        "questionId": "02-r2-7"
+      },
+      {
+        "title": "Let Java box the argument",
+        "html": "<p>Java can convert an int argument into Integer when the parameter requires Integer. This automatic conversion is called <strong>boxing</strong>. In the call below, base receives the int 4. The second int, 1, is automatically wrapped for extra. The result is still 5; you have shortened the way the second argument is written.</p><pre><code class=\"language-java\">Numbers.total(4, 1)</code></pre>",
+        "questionId": "02-r2-8"
+      },
+      {
+        "title": "Recognize unboxing and a missing value",
+        "html": "<p>The reverse conversion, from Integer to int, is <strong>unboxing</strong>. Inside total, this statement asks for the number held by extra. It compiles. If extra is null, however, there is no number to extract: execution stops with NullPointerException. To meet the null-means-zero contract, total must handle that case before trying to unbox it.</p><pre><code class=\"language-java\">int copiedExtra = extra;</code></pre>",
+        "questionId": "02-r2-9"
       }
     ],
     "practice": [
       {
-        "id": "02-1",
+        "id": "02-r2-1",
         "type": "choice",
-        "title": "Which call cannot compile?",
-        "prompt": "<p>The method is <code>public static int total(int base, Integer extra)</code> in <code>Scores</code>. It accepts any int base and permits null extra. Choose the call rejected because of its argument type.</p>",
+        "title": "Find the supplied input",
+        "prompt": "<p><code>Numbers.addOne</code> returns one more than the supplied number. In <code>Numbers.addOne(4)</code>, which part is the input value?</p>",
         "options": [
           {
-            "text": "Scores.total(2, null)",
-            "correct": false,
-            "feedback": "The second parameter is Integer, so null is type-compatible and the contract handles it."
-          },
-          {
-            "text": "Scores.total(null, Integer.valueOf(2))",
+            "text": "4",
             "correct": true,
-            "feedback": "The first parameter is int. The null literal cannot supply an int value."
+            "feedback": "The value inside the parentheses is the input supplied to addOne."
           },
           {
-            "text": "Scores.total(2, 5)",
+            "text": "Numbers",
             "correct": false,
-            "feedback": "Java boxes 5 for the Integer parameter."
+            "feedback": "Numbers names the group containing the operation."
           },
           {
-            "text": "Scores.total(-2, Integer.valueOf(5))",
+            "text": "addOne",
             "correct": false,
-            "feedback": "A negative number is still an int, and this contract does not forbid it."
+            "feedback": "addOne names the operation being called."
           }
         ],
-        "hint": "Inspect the type of the first parameter.",
-        "solution": "<p>The call with null in the first slot cannot compile.</p>"
+        "hint": "Look inside the parentheses.",
+        "solution": "<p>The input is <code>4</code>. The operation returns <code>5</code>.</p>"
       },
       {
-        "id": "02-2",
-        "type": "multi",
-        "title": "Classify these type statements",
-        "prompt": "<p>Select every correct statement.</p>",
+        "id": "02-r2-2",
+        "type": "choice",
+        "title": "Choose the required type",
+        "prompt": "<p><code>Numbers.addOne</code> requires an int input. Which call supplies the whole-number value four in that type?</p>",
         "options": [
           {
-            "text": "Integer can hold a null reference.",
+            "text": "Numbers.addOne(4)",
             "correct": true,
-            "feedback": "Integer is a reference type."
+            "feedback": "The unquoted 4 is an int value."
           },
           {
-            "text": "int can hold null if the value will be checked later.",
+            "text": "Numbers.addOne(\"4\")",
             "correct": false,
-            "feedback": "A later check cannot make null an int value."
-          },
-          {
-            "text": "Unboxing a null Integer can throw at runtime.",
-            "correct": true,
-            "feedback": "The program compiles, but no int value can be extracted from null."
-          },
-          {
-            "text": "A method accepting int automatically parses \"12\".",
-            "correct": false,
-            "feedback": "String-to-int parsing requires an explicit operation; it is not boxing."
+            "feedback": "The quotes make \"4\" a String, not an int argument."
           }
         ],
-        "hint": "Separate compile-time type compatibility from runtime conversion.",
-        "solution": "<p>Integer may be null, and unboxing a null Integer throws NullPointerException. Neither fact makes null a primitive value.</p>"
+        "hint": "Double quotes make a text value.",
+        "solution": "<pre><code class=\"language-java\">Numbers.addOne(4)</code></pre>"
       },
       {
-        "id": "02-3",
+        "id": "02-r2-3",
+        "type": "choice",
+        "title": "Identify the returned type",
+        "prompt": "<p>Read this header from Numbers. Which part says what type of result the method returns?</p><pre><code class=\"language-java\">static int addOne(int number)</code></pre>",
+        "options": [
+          {
+            "text": "The int immediately before addOne",
+            "correct": true,
+            "feedback": "That position declares the return type."
+          },
+          {
+            "text": "The name number",
+            "correct": false,
+            "feedback": "number names the input parameter inside the parentheses."
+          },
+          {
+            "text": "The name Numbers",
+            "correct": false,
+            "feedback": "Numbers identifies the group containing the method, not its returned type."
+          }
+        ],
+        "hint": "The returned type appears before the method name.",
+        "solution": "<p>The <code>int</code> immediately before <code>addOne</code> declares the returned type.</p>"
+      },
+      {
+        "id": "02-r2-4",
         "type": "write",
-        "title": "Repair the argument types",
-        "prompt": "<p>The declaration is <code>public static boolean allowed(int age, Integer sponsor)</code>. Assume age 18 and sponsor 7 are valid values. Repair <code>EntryRules.allowed(\"18\", \"7\")</code> so both arguments have suitable types. Show one corrected call.</p>",
-        "hint": "Remove the String form of age and construct or box the wrapper value.",
-        "solution": "<pre><code class=\"language-java\">EntryRules.allowed(18, Integer.valueOf(7));</code></pre><p><code>EntryRules.allowed(18, 7)</code> also works because Java boxes the second argument.</p>",
+        "title": "Write one storing statement",
+        "prompt": "<p>Numbers provides <code>static int addOne(int number)</code>, returning one more than its input. Write one statement that calls it with <code>7</code> and stores the returned result in an int variable named <code>actual</code>. Use the method call, rather than writing its answer directly.</p>",
+        "hint": "Use the pattern: int variableName = methodCall;",
+        "solution": "<pre><code class=\"language-java\">int actual = Numbers.addOne(7);</code></pre><p>The statement stores the returned value <code>8</code> in actual.</p>",
         "rubric": [
-          "First argument is an int expression.",
-          "Second argument is Integer-compatible.",
-          "Preserves the requested values 18 and 7."
+          "Declares int actual.",
+          "Calls Numbers.addOne(7).",
+          "Assigns the returned result and ends the statement with a semicolon."
         ]
       },
       {
-        "id": "02-4",
+        "id": "02-r2-5",
+        "type": "choice",
+        "title": "Match the input order",
+        "prompt": "<p>Numbers currently provides <code>static int total(int base, int extra)</code>, returning base plus extra. For <code>Numbers.total(4, 1)</code>, which parameter receives the value 4?</p>",
+        "options": [
+          {
+            "text": "base",
+            "correct": true,
+            "feedback": "base is the first parameter, so it receives the first supplied value."
+          },
+          {
+            "text": "extra",
+            "correct": false,
+            "feedback": "extra is second and receives 1 in this call."
+          },
+          {
+            "text": "Both parameters",
+            "correct": false,
+            "feedback": "Each supplied value goes to its corresponding parameter slot."
+          }
+        ],
+        "hint": "Match positions from left to right.",
+        "solution": "<p><code>base</code> receives 4; <code>extra</code> receives 1.</p>"
+      },
+      {
+        "id": "02-r2-6",
+        "type": "choice",
+        "title": "Supply the revised parameter type",
+        "prompt": "<p>The revised header is <code>static int total(int base, Integer extra)</code> in Numbers. It adds the supplied values. Which call explicitly supplies an Integer representing 1 for extra, while supplying the int value 4 for base?</p>",
+        "options": [
+          {
+            "text": "Numbers.total(4, Integer.valueOf(1))",
+            "correct": true,
+            "feedback": "Integer.valueOf(1) supplies the Integer value for the second slot."
+          },
+          {
+            "text": "Numbers.total(4, \"1\")",
+            "correct": false,
+            "feedback": "The second argument is a String, not an Integer."
+          },
+          {
+            "text": "Numbers.total(\"4\", Integer.valueOf(1))",
+            "correct": false,
+            "feedback": "The second argument fits, but the first is a String where base requires int."
+          }
+        ],
+        "hint": "Keep base as an int and use Integer.valueOf for extra.",
+        "solution": "<pre><code class=\"language-java\">Numbers.total(4, Integer.valueOf(1))</code></pre><p>This call returns <code>5</code>.</p>"
+      },
+      {
+        "id": "02-r2-7",
+        "type": "choice",
+        "title": "Leave only extra absent",
+        "prompt": "<p>Numbers provides <code>static int total(int base, Integer extra)</code>. It returns base plus extra, treating a null extra as zero. Which call correctly supplies base 4 and no Integer object for extra?</p>",
+        "options": [
+          {
+            "text": "Numbers.total(4, null)",
+            "correct": true,
+            "feedback": "The int base is 4 and the nullable Integer slot receives null; the result is 4."
+          },
+          {
+            "text": "Numbers.total(null, 4)",
+            "correct": false,
+            "feedback": "The null literal cannot be supplied directly to the int base parameter."
+          },
+          {
+            "text": "Numbers.total(\"4\", null)",
+            "correct": false,
+            "feedback": "The optional value is absent, but the first argument is a String rather than an int."
+          }
+        ],
+        "hint": "The optional Integer is the second parameter.",
+        "solution": "<pre><code class=\"language-java\">Numbers.total(4, null)</code></pre><p>The contract requires the returned value <code>4</code>.</p>"
+      },
+      {
+        "id": "02-r2-8",
         "type": "write",
-        "title": "Explain compile time versus runtime",
-        "prompt": "<p>Read this complete fragment inside a method. Does it fail to compile, return normally, or throw while running? Explain the operation responsible.</p><pre><code class=\"language-java\">Integer number = null;\nint doubled = number * 2;</code></pre>",
-        "hint": "Multiplication needs numeric primitive values here.",
-        "solution": "<p>It compiles, then throws NullPointerException while unboxing number for multiplication. The declaration of an Integer reference as null is legal; trying to use that null reference as an int value is the failing operation.</p>",
+        "title": "Simplify the explicit conversion",
+        "prompt": "<p>Numbers provides <code>static int total(int base, Integer extra)</code>. Rewrite this call using automatic int-to-Integer boxing for extra. Preserve the input values and end your statement with a semicolon.</p><pre><code class=\"language-java\">Numbers.total(7, Integer.valueOf(2));</code></pre>",
+        "hint": "The Integer parameter lets Java box an int argument automatically.",
+        "solution": "<pre><code class=\"language-java\">Numbers.total(7, 2);</code></pre><p>Base receives 7. Java boxes 2 for the Integer extra parameter. The returned sum is 9.</p>",
         "rubric": [
-          "Says the fragment compiles.",
-          "Identifies runtime NullPointerException.",
-          "Explains unboxing rather than claiming null is an int."
+          "Keeps Numbers.total and the two inputs in the same order.",
+          "Replaces Integer.valueOf(2) with the int expression 2.",
+          "Ends the call statement with a semicolon."
         ]
+      },
+      {
+        "id": "02-r2-9",
+        "type": "write",
+        "title": "Explain what happens before a result is returned",
+        "prompt": "<p>Numbers provides <code>static int total(int base, Integer extra)</code>, promising that null extra contributes zero. A caller uses <code>Numbers.total(4, null)</code>. A proposed implementation begins with this statement. Does the statement fail to compile, or fail when it runs? Name the operation responsible and explain whether it meets the promised null behaviour.</p><pre><code class=\"language-java\">int copiedExtra = extra;</code></pre>",
+        "hint": "The declared Integer type can be unboxed, but the current value is null.",
+        "solution": "<p>The statement compiles, then throws <code>NullPointerException</code> while unboxing the null extra. It does not store an int in copiedExtra or produce the promised total of 4. The implementation must handle the absent extra as zero before attempting to extract an int from it.</p>",
+        "rubric": [
+          "Says the statement compiles.",
+          "Identifies runtime NullPointerException caused by unboxing null.",
+          "Explains that the promised null-as-zero behaviour has not been implemented."
+        ],
+        "responseKind": "explanation"
       }
     ],
     "teachBack": {
-      "prompt": "Why can passing null to an Integer parameter compile while passing null directly to an int parameter cannot?",
-      "answer": "<p>Integer is a reference type and null is a compatible reference value. int is a primitive type that needs a value. A separate Integer expression can be unboxed for an int parameter, but a null wrapper then fails at runtime.</p>"
+      "prompt": "In the revised total method, why can extra be null while base cannot be supplied as null?",
+      "answer": "<p>Extra has type Integer, which can represent an absent object. Base has type int and requires a whole-number value. The contract says an absent extra contributes zero; extracting an int from null without handling that case throws NullPointerException.</p>"
     },
-    "bridge": "Next, construct the exact Strings, arrays, and objects that method parameters require.",
+    "bridge": "Next, practise building the exact values that other method parameters require.",
     "sourceIds": [
       "java-types",
       "java-autoboxing"
-    ]
+    ],
+    "revision": 2
   },
   {
     "id": "03",

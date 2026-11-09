@@ -1,6 +1,6 @@
 (function (root) {
   'use strict';
-  const emptyState = () => ({version:1, read:{}, ready:{}, drafts:{}, questions:{}, syntax:{}, report:{}, exam:null});
+  const emptyState = () => ({version:1, read:{}, ready:{}, drafts:{}, questions:{}, syntax:{}, report:{}, lessonRevisions:{}, flowSteps:{}, exam:null});
   function normalizeState(value) {
     const state = emptyState();
     if (!value || typeof value !== 'object' || Array.isArray(value)) return state;
@@ -12,6 +12,7 @@
         if(['drafts','report'].includes(key)&&typeof entry==='string')state[key][id]=entry;
       }
     }
+    for(const key of ['lessonRevisions','flowSteps'])if(object(value[key]))for(const [id,entry] of Object.entries(value[key]))if(safeKey(id)&&Number.isInteger(entry)&&entry>=0)state[key][id]=entry;
     function attempt(entry){
       if(!object(entry))return {};
       const result={};
@@ -27,6 +28,13 @@
       const ids=[...new Set(value.exam.ids.filter(id=>typeof id==='string'&&safeKey(id)))];
       const answers={};for(const id of ids)answers[id]=attempt(value.exam.answers[id]);
       state.exam={ids,answers,submitted:value.exam.submitted===true,started:typeof value.exam.started==='string'?value.exam.started:''};
+    }
+    return state;
+  }
+  function applyLessonRevisions(state, lessons) {
+    for(const lesson of lessons)if(lesson.revision && state.lessonRevisions[lesson.id]!==lesson.revision){
+      delete state.read[lesson.id];delete state.ready[lesson.id];delete state.flowSteps[lesson.id];
+      state.lessonRevisions[lesson.id]=lesson.revision;
     }
     return state;
   }
@@ -84,7 +92,7 @@
     }
     return shuffle([...pick(objective,6),...pick(written,6)]).map(q=>q.id);
   }
-  const api={emptyState,normalizeState,grade,classifyQuestion,coverageTrace,coverageCases,coverage,chooseExam};
+  const api={emptyState,normalizeState,applyLessonRevisions,grade,classifyQuestion,coverageTrace,coverageCases,coverage,chooseExam};
   root.TestingCore=api;
   if(typeof module==='object' && module.exports) module.exports=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

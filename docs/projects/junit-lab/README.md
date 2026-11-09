@@ -1,6 +1,6 @@
 # Java Testing Lab
 
-A progressive, static Java and JUnit Jupiter course in the portfolio. Open `index.html` through an HTTP server. The course has 30 lessons, 124 practice tasks, a 16-pattern syntax workshop, a coverage explorer, mixed practice, and a runnable Java project.
+A progressive, static Java and JUnit Jupiter course in the portfolio. Open `index.html` through an HTTP server. The course has 30 lessons, 129 practice tasks, a 16-pattern syntax workshop, a coverage explorer, mixed practice, and a runnable Java project.
 
 ## Intended outcome
 
@@ -21,11 +21,11 @@ The learner-facing **What you will be able to do** page maps the competencies to
 
 ## Learning design
 
-Each lesson supplies an explicit goal, prerequisite links, a bridge from the preceding ideas, a complete worked example, a step-by-step explanation, short recognition practice, written practice, a teach-back prompt, and a bridge to the next idea. Worked examples can be viewed whole or one step at a time.
+Lessons 01–02 use a rebuilt opening: one short explanation and one immediate exercise per screen. Lesson 01 uses the add-one rule throughout; lesson 02 carries that context into reading Java calls. Back and Continue preserve answers, and the current step is saved. Later lessons use complete examples, guided and independent practice, prerequisite links, teach-back prompts, and bridges. Their worked examples can be viewed whole or one step at a time.
 
-An exercise must use concepts already explained before that exercise, or provide and explain the additional API or scaffolding it needs. Early complete examples preview the whole task while identifying which syntax is supplied for now. Transfer tasks change the situation while retaining the skill just practised. The syntax workshop follows prerequisite order and links to the relevant lessons; whole-course mixed practice is explicitly identified as cumulative.
+An exercise must use concepts already explained before that exercise, or provide and explain the additional API or scaffolding it needs. The opening starts with expected versus actual results before showing Java notation. New notation is introduced at the step where it is used. Transfer tasks change the situation while retaining the skill just practised. The syntax workshop follows prerequisite order and links to the relevant lessons; whole-course mixed practice is explicitly identified as cumulative.
 
-There are **61 automatically checked choice tasks and 63 written tasks**. Written tasks ask for tests, repairs, traces, diagnoses, case tables, or explanations. Every written task includes a model answer and specific review criteria. Every objective option has explanatory feedback. The 30 additional teach-back prompts and 16 syntax patterns are separate from the 124-task count.
+There are **65 automatically checked choice tasks and 64 written tasks**. Written tasks ask for tests, repairs, traces, diagnoses, case tables, or explanations. Every written task includes a model answer and specific review criteria. Every objective option has explanatory feedback. The 28 teach-back prompts in later lessons and 16 syntax patterns are separate from the 129-task count.
 
 Mixed practice samples six objective and six written questions, hides lesson titles and help until submission, and reports an objective score separately from written self-review. Prompts carry their own method signatures, contracts, or setup rather than relying on a preceding lesson. Practice mode can filter by lesson, unattempted work, missed/reviewed choices, or written work.
 
@@ -36,7 +36,7 @@ The examples are general-purpose teaching material and do not depend on a partic
 - Written Java and prose are **not compiled or automatically graded in the webpage**. The learner compares against criteria and can compile Java in the downloadable project.
 - The syntax workshop checks tokens in the missing pieces of a displayed, fixed example. It is not a general compiler. Whitespace inside a String or identifier is not silently removed.
 - The coverage explorer evaluates one shown Boolean expression and distinguishes decision outcomes from independently evaluated condition outcomes, including short-circuit skips. Its percentages do not establish correctness.
-- Reading, confidence, historical unaided successes, latest answer status, and written self-review are distinct. Editing a reviewed answer clears its current review mark.
+- Reading, confidence, historical unaided successes, latest answer status, and written self-review are distinct. Editing a reviewed answer clears its current review mark. Rebuilt lessons use new exercise IDs; revision changes clear only their reading/confidence/step markers, while prior drafts and other lessons’ progress remain stored.
 - A repeated correct answer after feedback is recorded as reviewed. A later mistake remains visible even when the question was previously solved independently.
 
 ## Files and maintenance

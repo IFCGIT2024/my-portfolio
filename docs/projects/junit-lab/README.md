@@ -23,6 +23,8 @@ The learner-facing **What you will be able to do** page maps the competencies to
 
 Each lesson supplies an explicit goal, prerequisite links, a bridge from the preceding ideas, a complete worked example, a step-by-step explanation, short recognition practice, written practice, a teach-back prompt, and a bridge to the next idea. Worked examples can be viewed whole or one step at a time.
 
+An exercise must use concepts already explained before that exercise, or provide and explain the additional API or scaffolding it needs. Early complete examples preview the whole task while identifying which syntax is supplied for now. Transfer tasks change the situation while retaining the skill just practised. The syntax workshop follows prerequisite order and links to the relevant lessons; whole-course mixed practice is explicitly identified as cumulative.
+
 There are **61 automatically checked choice tasks and 63 written tasks**. Written tasks ask for tests, repairs, traces, diagnoses, case tables, or explanations. Every written task includes a model answer and specific review criteria. Every objective option has explanatory feedback. The 30 additional teach-back prompts and 16 syntax patterns are separate from the 124-task count.
 
 Mixed practice samples six objective and six written questions, hides lesson titles and help until submission, and reports an objective score separately from written self-review. Prompts carry their own method signatures, contracts, or setup rather than relying on a preceding lesson. Practice mode can filter by lesson, unattempted work, missed/reviewed choices, or written work.

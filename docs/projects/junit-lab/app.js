@@ -123,7 +123,7 @@
     $('#mark-read').onchange=e=>{state.read[l.id]=e.target.checked;save();outline();};$('#mark-ready').onchange=e=>{state.ready[l.id]=e.target.checked;save();};
   }
   function practice(){
-    return heading('CHOOSE A SKILL · REVISIT A MISTAKE','Practice with a purpose','Work on one lesson, mix the course, or return to questions you have not yet solved independently.')+
+    return heading('CHOOSE A SKILL · REVISIT A MISTAKE','Practice with a purpose','While learning, choose the lesson you have reached. All lessons draws from the entire course; use it when you are ready to combine skills.')+
       `<div class="practice-controls"><label>Lesson<select id="practice-lesson"><option value="all">All lessons</option>${lessons.map(l=>`<option value="${l.id}">${l.id} · ${esc(l.title)}</option>`).join('')}</select></label><label>Focus<select id="practice-filter"><option value="all">All tasks</option><option value="missed">Missed or reviewed checks</option><option value="new">Not attempted</option><option value="write">Write & repair code</option><option value="objective">Choice checks</option></select></label><button id="practice-shuffle">Shuffle this set</button></div><p id="practice-position" class="small" aria-live="polite"></p><div id="practice-task"></div><div class="lesson-pager"><button id="practice-prev">← Previous task</button><button id="practice-next">Next task →</button></div><p class="small">For a test without lesson cues or immediate feedback, use <a href="#exam">mixed practice</a>.</p>`;
   }
   function bindPractice(){
@@ -150,7 +150,7 @@
   }
   function exam(){
     let html=heading('TRANSFER · CHOOSE THE TECHNIQUE YOURSELF','Mixed practice test','Twelve tasks: six checked questions and six written answers. Feedback appears only after you submit.');
-    if(!state.exam)return html+`<section class="home-lead"><p>Use unfamiliar prompts to decide which technique applies. Read the types and contract first, then choose cases and write or diagnose tests. The written part includes model answers and a criterion checklist after submission.</p><p>Lesson titles, hints, and solutions are hidden during the attempt. Your work is saved in this browser. You can still consult other course pages if you choose; this is practice, not a locked examination.</p><button id="start-exam" class="primary">Start a mixed set</button></section>`;
+    if(!state.exam)return html+`<section class="home-lead"><p>This set draws from all 30 lessons. Use it after completing the sequence, or deliberately to check which topics need review. For practice at your current stage, <a href="#practice">choose one lesson in practice mode</a>.</p><p>Use unfamiliar prompts to decide which technique applies. Read the types and contract first, then choose cases and write or diagnose tests. The written part includes model answers and a criterion checklist after submission.</p><p>Lesson titles, hints, and solutions are hidden during the attempt. Your work is saved in this browser. You can still consult other course pages if you choose; this is practice, not a locked examination.</p><button id="start-exam" class="primary">Start a mixed set</button></section>`;
     const items=state.exam.ids.map(id=>questions.find(q=>q.id===id)).filter(Boolean), submitted=state.exam.submitted;
     if(submitted){
       const objective=items.filter(q=>q.type!=='write'), score=objective.filter(q=>C.grade(q,state.exam.answers[q.id]?.selected||[])).length;
@@ -225,7 +225,7 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('sidebar-open'))closeMenu(true);});
   $('#lesson-search').oninput=e=>{query=e.target.value.trim().toLowerCase();outline();};
   window.addEventListener('hashchange',()=>{if(lessons.length)render();});window.addEventListener('pagehide',save);
-  Promise.all(['01-10','11-20','21-30'].map(async part=>{const response=await fetch(`data/lessons-${part}.json?v=20261109`);if(!response.ok)throw Error(`Lesson file could not be loaded (${response.status}).`);return response.json();})).then(parts=>{
+  Promise.all(['01-10','11-20','21-30'].map(async part=>{const response=await fetch(`data/lessons-${part}.json?v=20261109-sequence`);if(!response.ok)throw Error(`Lesson file could not be loaded (${response.status}).`);return response.json();})).then(parts=>{
     lessons=parts.flat().sort((a,b)=>a.id.localeCompare(b.id));
     questions=lessons.flatMap(l=>l.practice.map(q=>({...q,lessonId:l.id,lessonTitle:l.title})));
     validateExam();

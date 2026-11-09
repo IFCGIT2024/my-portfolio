@@ -10,10 +10,10 @@
       "Identify what a test proves and what it leaves untested."
     ],
     "prerequisites": [],
-    "setup": "<p>A method is a named operation. Its contract describes what callers may give it and what it promises in return. A test is a small, repeatable experiment: choose a situation, perform the operation, then check the result. Begin with this complete example. You will learn each piece of syntax in the following lessons.</p>",
+    "setup": "<p>A method is a named operation. Its contract describes what callers may give it and what it promises in return. A test is a small, repeatable experiment: choose a situation, perform the operation, then check the result. Begin with this complete example. You will learn each piece of syntax in the following lessons.</p><p>For this first lesson, the Java class, imports and <code>@Test</code> are supplied scaffolding. You only need to identify the input, promised result, observation and check; writing that full structure comes in lesson 07.</p>",
     "worked": {
       "title": "A complete test of a boundary",
-      "intro": "<p>The contract below says that a temperature of zero counts as freezing. Save the production class as <code>Temperatures.java</code>; its behavior is deliberately simple.</p><pre><code class=\"language-java\">public class Temperatures {\n    /** Returns true when celsius is zero or below. */\n    public static boolean isFreezing(int celsius) {\n        return celsius &lt;= 0;\n    }\n}</code></pre><p>This is a complete JUnit 5 test class, <code>TemperaturesTest.java</code>. JUnit is the test library; <code>assertTrue</code> reports a failure unless its argument is true.</p><pre><code class=\"language-java\">import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass TemperaturesTest {\n    @Test\n    void isFreezing_atZero_returnsTrue() {\n        boolean actual = Temperatures.isFreezing(0);\n        assertTrue(actual);\n    }\n}</code></pre>",
+      "intro": "<p>The contract below says that a temperature of zero counts as freezing. Save the production class as <code>Temperatures.java</code>; its behavior is deliberately simple. The text between <code>/**</code> and <code>*/</code> is a comment describing the promise; comments explain code and are not executed.</p><pre><code class=\"language-java\">public class Temperatures {\n    /** Returns true when celsius is zero or below. */\n    public static boolean isFreezing(int celsius) {\n        return celsius &lt;= 0;\n    }\n}</code></pre><p>This is a complete JUnit 5 test class, <code>TemperaturesTest.java</code>. JUnit is the test library; <code>assertTrue</code> reports a failure unless its argument is true.</p><pre><code class=\"language-java\">import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass TemperaturesTest {\n    @Test\n    void isFreezing_atZero_returnsTrue() {\n        boolean actual = Temperatures.isFreezing(0);\n        assertTrue(actual);\n    }\n}</code></pre>",
       "steps": [
         {
           "title": "1. Read the promise",
@@ -36,7 +36,7 @@
     "sections": [
       {
         "title": "Three separate questions",
-        "html": "<table><thead><tr><th>Question</th><th>Example</th></tr></thead><tbody><tr><td>Will the call compile?</td><td>A String such as <code>\"cold\"</code> is not an int.</td></tr><tr><td>What does the contract promise?</td><td>Zero must produce true.</td></tr><tr><td>What happened when it ran?</td><td>The observed Boolean must match that promise.</td></tr></tbody></table><p>A call that cannot compile never reaches the method. A valid call can still reveal incorrect behavior. Keep those judgments separate.</p>"
+        "html": "<table><thead><tr><th>Question</th><th>Example</th></tr></thead><tbody><tr><td>Will the call compile?</td><td>A String such as <code>\"cold\"</code> is not an int.</td></tr><tr><td>What does the contract promise?</td><td>Zero must produce true.</td></tr><tr><td>What happened when it ran?</td><td>The observed Boolean must match that promise.</td></tr></tbody></table><p>A call that cannot compile never reaches the method. A valid call can still reveal incorrect behavior. Keep those judgments separate.</p><p>A <code>String</code> is text written in double quotes, such as <code>\"cat\"</code>. The String <code>\"\"</code> has no characters. A <code>boolean</code> is one of the two values <code>true</code> and <code>false</code>. Keep a text value, a whole-number value and a Boolean result distinct.</p>"
       },
       {
         "title": "One case is evidence about one situation",
@@ -116,7 +116,7 @@
         "id": "01-4",
         "type": "write",
         "title": "Design an experiment in words",
-        "prompt": "<p>Contract: <code>TextRules.isEmpty(String text)</code> returns true for <code>\"\"</code> and false for any nonempty String. Null is outside the stated precondition. Choose one nonempty input and write the input, expected result, observed result you would capture, and check you would perform. You do not need JUnit syntax yet.</p>",
+        "prompt": "<p>Contract: <code>TextRules.isEmpty(String text)</code> returns true for <code>\"\"</code> and false for any nonempty String. Use a quoted String value for this exercise. Choose one nonempty input and write the input, expected result, observed result you would capture, and check you would perform. You do not need JUnit syntax yet.</p>",
         "hint": "A nonempty String has at least one character.",
         "solution": "<p>Example: input <code>\"cat\"</code>; expected false; capture the Boolean returned by <code>TextRules.isEmpty(\"cat\")</code>; check that it is false. Other nonempty Strings are equally valid choices.</p>",
         "rubric": [
@@ -150,7 +150,7 @@
     "prerequisites": [
       "01"
     ],
-    "setup": "<p>A signature tells you which calls Java accepts. A contract then tells you which accepted calls have promised behavior. Learn the type gate first: an invalid value and an incompatible type are different problems.</p>",
+    "setup": "<p>A signature tells you which calls Java accepts. A contract then tells you which accepted calls have promised behavior. Learn the type gate first: an invalid value and an incompatible type are different problems.</p><p>The implementation below is provided. Focus on reading the parameter slots and deciding which argument expressions fit; you are not expected to write its class or control flow from memory yet.</p>",
     "worked": {
       "title": "An int and an Integer in the same call",
       "intro": "<p>Here is a complete class. The first parameter requires an int value. The second is an Integer reference and explicitly allows null.</p><pre><code class=\"language-java\">public class Scores {\n    /** Returns base plus extra; a null extra contributes zero. */\n    public static int total(int base, Integer extra) {\n        if (extra == null) {\n            return base;\n        }\n        return base + extra;\n    }\n}</code></pre><pre><code class=\"language-java\">int a = Scores.total(4, Integer.valueOf(3)); // 7\nint b = Scores.total(4, null);               // 4\nint c = Scores.total(4, 3);                  // 7: boxing\n// Scores.total(null, 3);                   // does not compile</code></pre>",
@@ -165,11 +165,11 @@
         },
         {
           "title": "3. Interpret null",
-          "html": "<p><code>Integer</code> is a reference type. Its reference may be null, meaning no object. An <code>int</code> is a primitive value and cannot itself be null. Whether a reference parameter permits null behavior is a separate contract question.</p>"
+          "html": "<p><code>Integer</code> is a reference type. Its reference may be null, meaning no object. An <code>int</code> is a primitive value and cannot itself be null. Whether a reference parameter permits null behavior is a separate contract question.</p><p>In the supplied body, <code>extra == null</code> asks whether that reference is absent. The <code>if</code> takes that case when the answer is true, and <code>return base;</code> ends the method with base as its result.</p>"
         },
         {
           "title": "4. Notice the conversion",
-          "html": "<p>Java can box the int argument <code>3</code> into an Integer for the second slot. In <code>base + extra</code>, Java unboxes extra into an int. The preceding null check makes that unboxing safe here.</p>"
+          "html": "<p>Java can box the int argument <code>3</code> into an Integer for the second slot. In <code>base + extra</code>, Java unboxes extra into an int. The preceding null check makes that unboxing safe here.</p><p><code>Integer.valueOf(3)</code> explicitly supplies an Integer representing 3. It is another way to fill the wrapper slot. In the examples, <code>//</code> begins an explanatory comment that lasts to the end of its line.</p>"
         }
       ]
     },
@@ -180,7 +180,7 @@
       },
       {
         "title": "A compiling expression can fail while running",
-        "html": "<pre><code class=\"language-java\">Integer count = null;\nint copy = count; // Compiles; unboxing throws NullPointerException.</code></pre><p>This is a runtime failure caused by attempting to obtain an int from a null wrapper reference. Do not describe it as a compile error. Likewise, <code>check(-1)</code> may compile for an int parameter while violating a documented nonnegative range. The contract decides the required response to that value.</p>"
+        "html": "<pre><code class=\"language-java\">Integer count = null;\nint copy = count; // Compiles; unboxing throws NullPointerException.</code></pre><p>This is a runtime failure caused by attempting to obtain an int from a null wrapper reference. Do not describe it as a compile error. Likewise, <code>check(-1)</code> may compile for an int parameter while violating a documented nonnegative range. The contract decides the required response to that value.</p><p>The same unboxing happens when a wrapper is used in arithmetic: <code>+</code> adds values and <code>*</code> multiplies them. Thus <code>count * 2</code> needs an int value from count before it can multiply; a null Integer fails at that step.</p>"
       }
     ],
     "practice": [
@@ -294,14 +294,14 @@
     "prerequisites": [
       "02"
     ],
-    "setup": "<p>A test fixture is the starting data and objects for a test. Before choosing a surprising value, make sure you can build the required kind of value. A whole-number concept may be represented by an int, an Integer, a String, or a BigInteger; the signature tells you which representation to use.</p>",
+    "setup": "<p>A test fixture is the starting data and objects for a test. Before choosing a surprising value, make sure you can build the required kind of value. A whole-number concept may be represented by an int, an Integer, a String, or a BigInteger; the signature tells you which representation to use.</p><p>The Balance implementation is supplied so you can see what the calls mean. Your practice is to construct and use the required values; implementing a new class is not required here.</p>",
     "worked": {
       "title": "Construct an object, then pass an object argument",
       "intro": "<p>This complete class stores an arbitrary-size integer balance. Its constructor and add method both require BigInteger objects. The contract promises that add changes the balance by the supplied amount; null amounts are not permitted.</p><pre><code class=\"language-java\">import java.math.BigInteger;\n\npublic class Balance {\n    private BigInteger amount;\n\n    public Balance(BigInteger initial) {\n        amount = initial;\n    }\n\n    public void add(BigInteger extra) {\n        amount = amount.add(extra);\n    }\n\n    public BigInteger value() {\n        return amount;\n    }\n}</code></pre><pre><code class=\"language-java\">Balance balance = new Balance(BigInteger.valueOf(8));\nbalance.add(BigInteger.valueOf(2));\nBigInteger actual = balance.value(); // value is ten</code></pre>",
       "steps": [
         {
           "title": "1. Construct the receiver",
-          "html": "<p><code>new Balance(...)</code> creates a Balance object. The constructor takes a BigInteger, so <code>BigInteger.valueOf(8)</code> supplies the correct type.</p>"
+          "html": "<p><code>new Balance(...)</code> creates a Balance object. The constructor takes a BigInteger, so <code>BigInteger.valueOf(8)</code> supplies the correct type.</p><p>Read <code>Balance balance = new Balance(...);</code> as “declare a Balance reference named balance, construct an object, and store its reference.” The general pattern is <code>Type variable = new Type(arguments);</code>. The constructor’s arguments must match the declaration that was supplied.</p>"
         },
         {
           "title": "2. Construct the argument",
@@ -309,11 +309,11 @@
         },
         {
           "title": "3. Call the instance method",
-          "html": "<p><code>balance.add(...)</code> calls add on the object referenced by balance. The method is not static; it operates on that particular object’s state.</p>"
+          "html": "<p><code>balance.add(...)</code> calls add on the object referenced by balance. The method is not static; it operates on that particular object’s state.</p><p>The field <code>private BigInteger amount;</code> stores that object’s balance. <code>private</code> means outside callers do not access that field directly. <code>void</code> means Balance.add returns no value; the following value() call is how the example observes the change.</p><p>The two add calls have different receivers. <code>amount.add(extra)</code> asks BigInteger for a new sum object, and <code>amount = ...</code> saves it in the field. <code>balance.add(...)</code> is the Balance operation that performs that update. Read the receiver before deciding which method is being called.</p>"
         },
         {
           "title": "4. Observe using the correct type",
-          "html": "<p><code>value()</code> returns BigInteger. A later equality assertion should compare it with <code>BigInteger.TEN</code> or another BigInteger with value ten, not an int expected value.</p>"
+          "html": "<p><code>value()</code> returns BigInteger. <code>BigInteger.TEN</code> is a named BigInteger value representing ten. For now, identify the result’s type and numeric value. Lesson 08 will turn that observation into an equality assertion with a BigInteger expected value.</p>"
         }
       ]
     },
@@ -332,7 +332,7 @@
         "id": "03-1",
         "type": "choice",
         "title": "Pass a BigInteger",
-        "prompt": "<p>For <code>void add(BigInteger extra)</code> on a valid Balance object named <code>b</code>, which call supplies the positive value five with the required type?</p>",
+        "prompt": "<p>For <code>void add(BigInteger extra)</code> on a valid Balance object named <code>b</code>, which call supplies the positive value five with the required type?</p><p>Assume <code>java.math.BigInteger</code> is imported.</p>",
         "options": [
           {
             "text": "b.add(5);",
@@ -439,14 +439,14 @@
     "prerequisites": [
       "03"
     ],
-    "setup": "<p>Reading code is a sequence of small questions: what is the current value, is the condition true, and which statement happens next? Write down changing values instead of trying to hold the whole execution in your head. This skill later lets you select white-box test cases.</p>",
+    "setup": "<p>Reading code is a sequence of small questions: what is the current value, is the condition true, and which statement happens next? Write down changing values instead of trying to hold the whole execution in your head. This skill later lets you select white-box test cases.</p><p>The loop is supplied. You will trace and repair its individual parts, rather than invent a loop from a blank page.</p>",
     "worked": {
       "title": "Stop adding at the first zero",
       "intro": "<p>This complete method accepts a non-null int array. It returns the sum of the elements before the first zero, or the sum of all elements if there is no zero. Assume the sum fits in an int.</p><pre><code class=\"language-java\">public class Totals {\n    public static int beforeZero(int[] values) {\n        int total = 0;\n        for (int i = 0; i &lt; values.length; i++) {\n            if (values[i] == 0) {\n                return total;\n            }\n            total = total + values[i];\n        }\n        return total;\n    }\n}</code></pre><p>Trace <code>Totals.beforeZero(new int[]{3, 2, 0, 9})</code>.</p>",
       "steps": [
         {
           "title": "1. Start with the initial state",
-          "html": "<p>The array length is 4. total starts at 0 and i starts at 0. Array indexes begin at zero, so values[0] is 3.</p>"
+          "html": "<p>The array length is 4. total starts at 0 and i starts at 0. Array indexes begin at zero, so values[0] is 3.</p><p>The <code>for</code> header has three parts: <code>int i = 0</code> initializes the index once; <code>i &lt; values.length</code> is checked before each iteration; <code>i++</code> runs after a body finishes normally. <code>values[i]</code> reads the element at index i. Inside the body, an <code>if</code> runs its block only when its condition is true.</p>"
         },
         {
           "title": "2. Follow each iteration",
@@ -465,11 +465,11 @@
     "sections": [
       {
         "title": "Symbols tell you different operations",
-        "html": "<table><thead><tr><th>Code</th><th>Meaning</th></tr></thead><tbody><tr><td><code>total = 4;</code></td><td>Assign 4 to total.</td></tr><tr><td><code>total == 4</code></td><td>Ask whether total equals 4.</td></tr><tr><td><code>i &lt; values.length</code></td><td>Allow indexes below the length.</td></tr><tr><td><code>i++</code></td><td>Increase i by one.</td></tr></tbody></table><p>The array’s last valid index is length minus one. A loop using <code>i &lt;= values.length</code> may attempt to read one position past the array. Trace the equality boundary to explain the problem concretely.</p>"
+        "html": "<table><thead><tr><th>Code</th><th>Meaning</th></tr></thead><tbody><tr><td><code>total = 4;</code></td><td>Assign 4 to total.</td></tr><tr><td><code>total == 4</code></td><td>Ask whether total equals 4.</td></tr><tr><td><code>i &lt; values.length</code></td><td>Allow indexes below the length.</td></tr><tr><td><code>i++</code></td><td>Increase i by one.</td></tr><tr><td><code>total += values[i];</code></td><td>Add the current element to total; here it means <code>total = total + values[i];</code>.</td></tr><tr><td><code>text != null</code></td><td>Ask whether text is not null.</td></tr></tbody></table><p>The array’s last valid index is length minus one. A loop using <code>i &lt;= values.length</code> may attempt to read one position past the array. Trace the equality boundary to explain the problem concretely.</p>"
       },
       {
         "title": "Short-circuiting can skip an expression",
-        "html": "<pre><code class=\"language-java\">boolean hasText = text != null &amp;&amp; text.length() &gt; 0;</code></pre><p>Assume text is a String reference. For <code>&amp;&amp;</code>, Java evaluates the right side only if the left side is true. If text is null, the left side is false and length() is skipped. For <code>||</code>, Java skips the right side when the left side is already true. Order matters when an expression could dereference null.</p>"
+        "html": "<pre><code class=\"language-java\">boolean hasText = text != null &amp;&amp; text.length() &gt; 0;</code></pre><p>Assume text is a String reference. <code>text.length()</code> returns its number of characters, and <code>&gt; 0</code> asks whether that number is positive. An array uses the field <code>values.length</code>, without parentheses; String uses the method <code>length()</code>. For <code>&amp;&amp;</code>, Java evaluates the right side only if the left side is true. If text is null, the left side is false and length() is skipped. For <code>||</code>, Java skips the right side when the left side is already true. Order matters when an expression could dereference null.</p>"
       }
     ],
     "practice": [
@@ -584,7 +584,7 @@
     "prerequisites": [
       "04"
     ],
-    "setup": "<p>A contract is the basis for deciding whether behavior is correct. Read it before the implementation. Javadoc is the comment format often used to state that contract, with tags such as @param, @return, and @throws. Tags organize information; the actual words determine the promise.</p>",
+    "setup": "<p>A contract is the basis for deciding whether behavior is correct. Read it before the implementation. Javadoc is the comment format often used to state that contract, with tags such as @param, @return, and @throws. Tags organize information; the actual words determine the promise.</p><p>At this stage, describe the required outcomes in words. “Throws IllegalArgumentException” means normal execution is interrupted by that named exception. You will learn how to catch and assert exceptions in lessons 19–20; those syntax skills are not needed for these contract-reading questions.</p>",
     "worked": {
       "title": "Read a reservation operation without its body",
       "intro": "<p><code>new TicketPool(n)</code> starts with n available tickets (n ≥ 0). <code>int remaining()</code> returns the current count. Here is reserve’s Javadoc and signature; its implementation is hidden.</p><pre><code class=\"language-java\">/**\n * Reserves amount tickets by reducing the remaining count.\n * If the request is rejected, the remaining count is unchanged.\n *\n * @param amount the number of tickets to reserve\n * @throws IllegalArgumentException if amount &lt;= 0 or\n *         amount is greater than the remaining count\n */\npublic void reserve(int amount)</code></pre><p>Consider a fresh pool with 5 tickets and a call <code>pool.reserve(2)</code>.</p>",
@@ -651,7 +651,7 @@
       {
         "id": "05-2",
         "type": "multi",
-        "title": "Which assertions have a contract basis?",
+        "title": "Which expected properties have a contract basis?",
         "prompt": "<p>Contract: <code>void reserve(int amount)</code> in TicketPool subtracts amount from the remaining count when <code>1 &lt;= amount &lt;= remaining</code>. Otherwise it throws IllegalArgumentException and leaves the count unchanged. <code>int remaining()</code> observes that count. No message text or private representation is specified.</p><p>A fresh pool starts with 5 tickets, then receives a request for 6. Select every property required by the contract.</p>",
         "options": [
           {
@@ -729,7 +729,7 @@
     "prerequisites": [
       "05"
     ],
-    "setup": "<p>A test case is a specific situation with a justified expected outcome. You can design it before writing Java or seeing the implementation. This lesson introduces boundaries; later lessons extend the method into systematic black-box test design.</p>",
+    "setup": "<p>A test case is a specific situation with a justified expected outcome. You can design it before writing Java or seeing the implementation. This lesson introduces boundaries; later lessons extend the method into systematic black-box test design.</p><p>Keep your answers as concrete calls or case tables with expected observations. Record a documented exception by its name; do not try to write an exception assertion yet.</p>",
     "worked": {
       "title": "Build cases from a threshold contract",
       "intro": "<p>The method is <code>public static int deliveryFee(int itemCount)</code> in <code>Delivery</code>. Contract: itemCount must be at least 1; counts from 1 through 4 have fee 6; counts of 5 or more have fee 0; nonpositive counts throw IllegalArgumentException. The method does not modify any objects. Its implementation is hidden.</p>",
@@ -875,7 +875,7 @@
     "prerequisites": [
       "06"
     ],
-    "setup": "<p>You already know how to choose an input and expected outcome. Now place that case inside a form JUnit can discover and run. This course uses JUnit 5’s Jupiter API. The project must have JUnit available; the import lines name classes from that dependency rather than installing it.</p>",
+    "setup": "<p>You already know how to choose an input and expected outcome. Now place that case inside a form JUnit can discover and run. This course uses JUnit 5’s Jupiter API. The project must have JUnit available; the import lines name classes from that dependency rather than installing it.</p><p>This is the point where you start producing the full test-file structure yourself. The earlier supplied classes gave you the whole picture; now the imports, annotation, method declaration and braces become practice targets.</p>",
     "worked": {
       "title": "Two files: the method and its test",
       "intro": "<p>This production file, <code>RangeRules.java</code>, contains a static method. Its contract accepts any int and returns true exactly for values from 0 through 10, inclusive.</p><pre><code class=\"language-java\">public class RangeRules {\n    public static boolean isInside(int value) {\n        return value &gt;= 0 &amp;&amp; value &lt;= 10;\n    }\n}</code></pre><p>The complete test file, <code>RangeRulesTest.java</code>, checks the upper boundary.</p><pre><code class=\"language-java\">import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass RangeRulesTest {\n    @Test\n    void isInside_atUpperBoundary_returnsTrue() {\n        boolean actual = RangeRules.isInside(10);\n        assertTrue(actual);\n    }\n}</code></pre>",
@@ -1025,7 +1025,7 @@
     "setup": "<p>An assertion is a question with an expected answer. Start with the contract: is it promising a number, true or false, the absence of an object, the same object, or array contents? The assertion’s name should match that question.</p>",
     "worked": {
       "title": "A copy must have matching contents and a different identity",
-      "intro": "<p>Contract: <code>Copies.copy(int[] source)</code> accepts a non-null array, returns a new array with the same elements in the same order, and leaves source unchanged. Here are the complete production and test classes.</p><pre><code class=\"language-java\">public class Copies {\n    public static int[] copy(int[] source) {\n        return source.clone();\n    }\n}</code></pre><pre><code class=\"language-java\">import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass CopiesTest {\n    @Test\n    void copy_twoElements_hasEqualContentsAndNewIdentity() {\n        int[] source = {2, 7};\n        int[] actual = Copies.copy(source);\n\n        assertArrayEquals(new int[]{2, 7}, actual);\n        assertNotSame(source, actual);\n    }\n}</code></pre>",
+      "intro": "<p>Contract: <code>Copies.copy(int[] source)</code> accepts a non-null array, returns a new array with the same elements in the same order, and leaves source unchanged. Here are the complete production and test classes. For an int array, <code>source.clone()</code> returns a separate array containing the same primitive int values. That implementation detail is supplied; your task is to choose checks for the documented promises.</p><pre><code class=\"language-java\">public class Copies {\n    public static int[] copy(int[] source) {\n        return source.clone();\n    }\n}</code></pre><pre><code class=\"language-java\">import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass CopiesTest {\n    @Test\n    void copy_twoElements_hasEqualContentsAndNewIdentity() {\n        int[] source = new int[]{2, 7};\n        int[] actual = Copies.copy(source);\n\n        assertArrayEquals(new int[]{2, 7}, actual);\n        assertNotSame(source, actual);\n        assertArrayEquals(new int[]{2, 7}, source);\n    }\n}</code></pre>",
       "steps": [
         {
           "title": "1. Ask the content question",
@@ -1037,18 +1037,18 @@
         },
         {
           "title": "3. Keep the questions separate",
-          "html": "<p>Two arrays can have equal contents while being different objects. Conversely, two references to the same array share one object. Select the check for the property promised, rather than treating all forms of “same” as interchangeable.</p>"
+          "html": "<p>Two arrays can have equal contents while being different objects. Conversely, two references to the same array share one object. Select the check for the property promised, rather than treating all forms of “same” as interchangeable.</p><p>The final assertion also checks that source still contains 2 and 7, as its contract promises. The three observations are returned contents, distinct identity and unchanged input.</p>"
         }
       ]
     },
     "sections": [
       {
         "title": "The assertion menu",
-        "html": "<table><thead><tr><th>Promise</th><th>Assertion form</th></tr></thead><tbody><tr><td>A Boolean is true</td><td><code>assertTrue(actual);</code></td></tr><tr><td>A Boolean is false</td><td><code>assertFalse(actual);</code></td></tr><tr><td>An expected value equals the result</td><td><code>assertEquals(expected, actual);</code></td></tr><tr><td>No object was returned</td><td><code>assertNull(actual);</code></td></tr><tr><td>An object was returned</td><td><code>assertNotNull(actual);</code></td></tr><tr><td>Exactly the same object</td><td><code>assertSame(expectedReference, actual);</code></td></tr><tr><td>Different objects</td><td><code>assertNotSame(first, second);</code></td></tr><tr><td>Equal array contents</td><td><code>assertArrayEquals(expectedArray, actualArray);</code></td></tr></tbody></table><p><code>assertTrue</code> needs a Boolean expression. For a count of 3, prefer <code>assertEquals(3, actualCount)</code> over a general true/false check: the failure can show both values. For approximate double results, a form such as <code>assertEquals(0.3, actual, 1e-9)</code> specifies an allowed absolute difference.</p>"
+        "html": "<table><thead><tr><th>Promise</th><th>Assertion form</th></tr></thead><tbody><tr><td>A Boolean is true</td><td><code>assertTrue(actual);</code></td></tr><tr><td>A Boolean is false</td><td><code>assertFalse(actual);</code></td></tr><tr><td>An expected value equals the result</td><td><code>assertEquals(expected, actual);</code></td></tr><tr><td>No object was returned</td><td><code>assertNull(actual);</code></td></tr><tr><td>An object was returned</td><td><code>assertNotNull(actual);</code></td></tr><tr><td>Exactly the same object</td><td><code>assertSame(expectedReference, actual);</code></td></tr><tr><td>Different objects</td><td><code>assertNotSame(first, second);</code></td></tr><tr><td>Equal array contents</td><td><code>assertArrayEquals(expectedArray, actualArray);</code></td></tr></tbody></table><p>In the two-value forms, write the independently known <strong>expected value first</strong> and the observed <strong>actual result second</strong>. For example, <code>assertEquals(\"ready\", status)</code> compares the promised String with the returned String stored in status.</p><p><code>assertTrue</code> needs a Boolean expression. For a count of 3, prefer <code>assertEquals(3, actualCount)</code> over a general true/false check: the failure can show both values. For a decimal result stored as <code>double</code>, binary floating-point may introduce a small rounding difference. <code>assertEquals(0.3, actual, 1e-9)</code> accepts an absolute difference of at most <code>0.000000001</code>: <code>1e-9</code> means one times ten to the power −9, or one billionth. Choose that tolerance from the required accuracy. This is an additional assertion form; these lesson exercises use exact values and do not require floating-point calculations.</p>"
       },
       {
         "title": "Type and equality still matter",
-        "html": "<p>For Strings, assertEquals checks value equality. For objects generally, the object overload depends on equals; it does not automatically compare every field. A class that inherits Object.equals normally has identity-based equality. Use documented observers if value equality is not defined. Compare a BigInteger result with a BigInteger expected value, such as <code>assertEquals(BigInteger.valueOf(5), actual)</code>. Reversing expected and actual can reverse the diagnostic message even when equality itself is symmetric.</p>"
+        "html": "<p>For Strings, assertEquals checks value equality. When you pass objects, assertEquals uses their equals method; it does not automatically compare every field. If a class uses Java’s default Object.equals rule, that rule checks whether both references identify the same object. A class can supply its own value-equality rule, as String does. Use documented observers if value equality is not defined. Compare a BigInteger result with a BigInteger expected value, such as <code>assertEquals(BigInteger.valueOf(5), actual)</code>. Reversing expected and actual can reverse the diagnostic message even when equality itself is symmetric.</p>"
       }
     ],
     "practice": [
@@ -1194,7 +1194,7 @@
       },
       {
         "title": "Avoid accidental extra actions",
-        "html": "<p>An assertion that calls a mutating method can perform an action a second time. Store a returned result or observe state deliberately. Multiple assertions can check different promises of the same action, such as size and element order. What matters is that every observation has a reason and that the test has a clear scenario.</p>"
+        "html": "<p>An assertion that calls a mutating method can perform an action a second time. Store a returned result or observe state deliberately. Multiple assertions can check different promises of the same action, such as size and element order. What matters is that every observation has a reason and that the test has a clear scenario.</p><p>For example, <code>assertTrue(true)</code> checks a constant and never observes the counter. To check an increment, perform it and then assert the value reported by the observer.</p>"
       }
     ],
     "practice": [
@@ -1202,7 +1202,7 @@
         "id": "09-1",
         "type": "choice",
         "title": "Test a void method",
-        "prompt": "<p>Counter.increment returns void and increases the stored value by one. A Counter named c starts at 2. Which fragment correctly checks one increment?</p>",
+        "prompt": "<p>Counter has <code>void increment()</code>, which increases the stored value by one, and <code>int value()</code>, which returns that stored value. A Counter named c starts at 2. Which fragment correctly checks one increment?</p>",
         "options": [
           {
             "text": "c.increment(); assertEquals(3, c.value());",
@@ -1337,11 +1337,11 @@
     "sections": [
       {
         "title": "Four outcomes to recognize",
-        "html": "<table><thead><tr><th>Outcome</th><th>What it means</th><th>Example</th></tr></thead><tbody><tr><td>Compile error</td><td>The affected code cannot be executed as written.</td><td>Passing <code>\"10\"</code> to an int parameter.</td></tr><tr><td>Assertion failure</td><td>A check rejected the observed result.</td><td>Expected true, observed false.</td></tr><tr><td>Unexpected exception</td><td>An exception escaped the test’s expected handling.</td><td>A null reference is dereferenced before the assertion.</td></tr><tr><td>Pass</td><td>No uncaught failure occurred in the executed test.</td><td>An expectation was met—or no useful expectation was checked.</td></tr></tbody></table><p>An expected exception checked correctly can make a test pass; its syntax comes later. A failed assertion can come from a wrong expectation or fixture. Compare both the test and implementation with the contract.</p>"
+        "html": "<table><thead><tr><th>Outcome</th><th>What it means</th><th>Example</th></tr></thead><tbody><tr><td>Compile error</td><td>The affected code cannot be executed as written.</td><td>Passing <code>\"10\"</code> to an int parameter.</td></tr><tr><td>Assertion failure</td><td>A check rejected the observed result.</td><td>Expected true, observed false.</td></tr><tr><td>Unexpected exception</td><td>An exception escaped the test’s expected handling.</td><td>A null reference is dereferenced before the assertion.</td></tr><tr><td>Pass</td><td>No uncaught failure occurred in the executed test.</td><td>An expectation was met—or no useful expectation was checked.</td></tr></tbody></table><p>An expected exception checked correctly can make a test pass; its syntax comes later. A failed assertion can come from a wrong expectation or fixture. Compare both the test and implementation with the contract.</p><p>Calling an instance method on a null reference throws NullPointerException: for example, <code>text.length()</code> cannot run when text is null. This happens before a later assertion can compare a returned value.</p>"
       },
       {
         "title": "A green mark needs a meaningful check",
-        "html": "<pre><code class=\"language-java\">@Test\nvoid doesNothing() {\n}\n\n@Test\nvoid alwaysTrue() {\n    assertTrue(true);\n}</code></pre><p>Both can pass without observing production behavior. A method lacking @Test may not run at all. Check test counts as well as colors. Inspect the stack trace for unexpected exceptions, and expected/actual values plus the fixture for assertion failures.</p>"
+        "html": "<pre><code class=\"language-java\">@Test\nvoid doesNothing() {\n}\n\n@Test\nvoid alwaysTrue() {\n    assertTrue(true);\n}</code></pre><p>Both can pass without observing production behavior. A method lacking @Test may not run at all. Check test counts as well as colors. Inspect the stack trace for unexpected exceptions, and expected/actual values plus the fixture for assertion failures.</p><p>A <strong>stack trace</strong> lists the calls involved when an exception occurred. For now, identify the operation that failed in the small example; a later defect-report lesson explains how to use a full trace.</p>"
       }
     ],
     "practice": [

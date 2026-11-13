@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Little Room — make space for good things</title>
+<meta name="description" content="A playful, private little room planner.">
+<style>
+:root{--ink:#283a34;--muted:#89938a;--green:#345d4a;--green2:#749780;--cream:#f8f7f1;--line:#e8ebe1;--peach:#f1ddd0;--paper:#fffefa;--serif:Georgia,'Times New Roman',serif;--sans:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}*{box-sizing:border-box}body{margin:0;font-family:var(--sans);color:var(--ink);background:#f6f7f1;font-size:14px}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:3px solid #d8a381;outline-offset:2px}.app{min-height:100vh}.topbar{height:76px;background:#fffefa;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 29px;gap:25px}.brand{display:flex;align-items:center;gap:10px;min-width:250px}.brand-mark{width:39px;height:39px;border-radius:14px;background:#3e684f;color:white;display:grid;place-items:center;font-size:27px;box-shadow:inset 0 -3px #244c39}.brand strong{display:block;font-family:var(--serif);font-weight:700;font-size:21px;letter-spacing:-1.1px;line-height:1}.brand small{display:block;font-size:9px;color:#91a097;margin-top:5px;letter-spacing:.07em}.top-center{font-size:12px;color:#61756b;flex:1}.status-dot,.green-dot{display:inline-block;width:7px;height:7px;background:#a6be97;border-radius:100%;margin-right:7px}.top-divider{color:#d8dfd6;margin:0 12px}.muted{color:#a7b0a8}.top-actions{display:flex;align-items:center;gap:12px}.saved{font-size:11px;color:#82958a;margin-right:5px}.saved span{font-size:16px;color:#6f9b7c}.icon-btn{width:34px;height:34px;border:1px solid #e6eae1;background:#fff;border-radius:11px;font-weight:700;color:#6e8075}.export-btn{border:0;background:#345d4a;color:#fff;padding:11px 16px;border-radius:10px;font-weight:600;font-size:11px;box-shadow:0 3px 0 #254536}.export-btn span{font-size:16px;margin-right:5px}.workspace{display:grid;grid-template-columns:260px minmax(460px,1fr) 277px;min-height:calc(100vh - 76px)}.sidebar{background:#fffefa;border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0}.sidebar-head{padding:32px 23px 21px}.eyebrow{font-size:9px;font-weight:800;letter-spacing:.14em;color:#91a197}.sidebar h2,.insight-panel h2{font-family:var(--serif);font-weight:500;letter-spacing:-.8px}.sidebar h2{font-size:25px;margin:9px 0 6px}.spark{font-family:var(--sans);font-size:16px;color:#d9a686;margin-left:7px}.sidebar-head p,.side-intro{font-size:11px;color:#95a298;line-height:1.65;margin:0}.tabs{display:grid;grid-template-columns:1fr 1fr;background:#f2f5ee;padding:4px;border-radius:10px;margin:0 17px 25px;gap:3px}.tab{border:0;background:transparent;border-radius:8px;padding:10px 3px;color:#899b8c;font-size:11px;font-weight:700}.tab span{font-size:15px;margin-right:5px}.tab.active{background:#fff;color:#3e6850;box-shadow:0 2px 8px #536c5720}.side-content{padding:0 20px;flex:1}.hidden{display:none!important}.section-line{display:flex;justify-content:space-between;align-items:end}.section-line h3{font-family:var(--serif);font-size:19px;letter-spacing:-.5px;font-weight:500;margin:7px 0 0}.count-pill{color:#8ca38e;background:#edf4e9;border-radius:20px;padding:5px 9px;font-size:9px;font-weight:700}.side-intro{margin:9px 0 15px}.category-scroll{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px}.category-scroll::-webkit-scrollbar{display:none}.category{white-space:nowrap;border:0;background:#f4f5ef;color:#89988c;border-radius:7px;padding:7px 10px;font-weight:700;font-size:10px}.category.active{background:#dceadc;color:#426a50}.furniture-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.furniture-card{background:#fafbf6;border:1px solid #eef1e9;border-radius:13px;padding:8px 8px 9px;text-align:left;transition:transform .18s,box-shadow .18s,border-color .18s;min-width:0}.furniture-card:hover{transform:translateY(-3px);box-shadow:0 8px 18px #768a7022;border-color:#c8dcc8}.furniture-card:active{transform:translateY(0)}.furniture-art{height:68px;display:grid;place-items:center;background:#f1f4ea;border-radius:9px;margin-bottom:8px;overflow:hidden}.furniture-card:nth-child(4n + 2) .furniture-art{background:#f7eee7}.furniture-card:nth-child(4n + 3) .furniture-art{background:#f4f0e7}.furniture-art svg{width:68px;height:56px;filter:drop-shadow(1px 4px 2px #876f5c26)}.furniture-card strong{font-size:10px;display:block}.furniture-card small{font-size:9px;color:#a1ada2;display:block;margin-top:3px}.sidebar-note{display:flex;gap:10px;background:#f5f8ef;border-radius:11px;padding:12px;margin:19px 0;color:#819487}.note-icon{color:#b1c99e;font-size:22px;line-height:1}.sidebar-note p{margin:0;font-size:10px;line-height:1.55}.sidebar-note strong{color:#58735e;font-size:10px}.sidebar-footer{display:flex;justify-content:space-between;padding:20px 22px;color:#b9c4ba;font-size:9px}.main-area{padding:32px 30px 22px;min-width:0}.heading-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px}.breadcrumb{display:flex;gap:9px;align-items:center;font-size:9px;font-weight:800;letter-spacing:.13em;color:#a2b3a6}.breadcrumb span:nth-child(2){color:#d8ac8e;font-size:13px}.heading-row h1{font-family:var(--serif);font-size:34px;font-weight:500;letter-spacing:-1.3px;margin:10px 0 7px}.heading-row h1 span{font-family:var(--sans);font-size:20px;color:#dbac8f}.heading-row p{margin:0;color:#97a59b;font-size:12px}.heading-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.tiny-label{font-size:8px;color:#b5c2b7;letter-spacing:.12em;font-weight:800}.view-pill{background:#fffefa;border:1px solid #e9ede4;border-radius:9px;padding:8px 11px;font-size:10px;font-weight:700;color:#738b7a}.view-pill span{color:#89ad8d;margin-right:5px}.canvas-card{background:#fffefa;border:1px solid #e8ede4;border-radius:17px;box-shadow:0 10px 35px #617a6110;overflow:hidden}.canvas-top{height:69px;display:flex;justify-content:space-between;align-items:center;padding:0 18px}.canvas-title{display:flex;align-items:center;gap:10px}.room-icon{display:grid;place-items:center;width:37px;height:37px;background:#edf5e9;color:#76967b;border-radius:11px;font-size:23px}.canvas-title strong{display:block;font-size:11px}.canvas-title small{display:block;font-size:9px;color:#a6b2a7;margin-top:4px}.canvas-controls{display:flex;align-items:center;gap:5px}.control{border:0;background:transparent;border-radius:8px;padding:8px 9px;color:#adb8ae;font-size:14px}.control span{font-size:10px;font-weight:700}.control.active{color:#6c9476;background:#f1f7ee}.control.icon-only{font-size:19px}.vertical-rule{width:1px;height:20px;background:#e8ece6;margin:0 3px}.canvas-wrap{position:relative;background:#eff3e9;height:min(57vh,620px);min-height:410px;overflow:hidden}.canvas-wrap canvas{display:block;width:100%;height:100%;touch-action:none}.mode-hint{position:absolute;left:17px;bottom:15px;background:#fffef9eF;border:1px solid #fff;border-radius:10px;padding:9px 12px;color:#819386;font-size:10px;box-shadow:0 4px 15px #68836a1a;pointer-events:none}.hint-icon{color:#799a7d;font-size:14px;margin-right:6px}.mode-hint b{padding:0 5px;color:#c5d0c5}.selection-tools{position:absolute;right:15px;bottom:15px;background:#fffefa;border-radius:10px;padding:5px;box-shadow:0 4px 20px #54715733;display:flex;align-items:center;gap:3px}.selection-tools>span{font-size:10px;font-weight:700;padding:0 6px 0 9px}.selection-tools button{border:0;background:#f1f6ed;border-radius:7px;padding:8px;color:#55785d;font-size:11px}.selection-tools button:last-child{background:#faf0eb;color:#a8796d}.canvas-bottom{height:43px;display:flex;justify-content:space-between;align-items:center;padding:0 19px;color:#9dac9f;font-size:9px;font-weight:700;letter-spacing:.04em}.canvas-bottom span:last-child{letter-spacing:.08em}.below-canvas{display:flex;align-items:center;justify-content:space-between;margin:18px 3px;color:#a2aea4;font-size:10px}.below-canvas>div{display:flex;align-items:center;gap:8px}.below-canvas strong{color:#7d9181}.hand-icon{font-size:18px}.below-canvas button{border:0;background:transparent;color:#92a397;font-size:10px}.insight-panel{padding:32px 22px 25px 0}.insight-inner{background:#fdfef9;border:1px solid #e8eee5;border-radius:17px;min-height:630px;padding:23px 20px;box-shadow:0 10px 35px #617a610c}.insight-top{display:flex;align-items:center;justify-content:space-between}.glow-icon{width:39px;height:39px;background:#f8eee2;border-radius:13px;color:#d5a37a;display:grid;place-items:center;font-size:25px}.mini-badge{font-size:8px;font-weight:800;color:#b7a78e;letter-spacing:.1em}.insight-panel h2{font-size:27px;line-height:1.1;margin:19px 0 12px}.insight-panel h2 em{color:#7e9e7c;font-weight:400}.insight-panel p{color:#9aa89b;font-size:11px;line-height:1.7}.illustration{height:135px;position:relative;margin:10px 0 17px;background:radial-gradient(ellipse,#f4f4e7 0%,transparent 70%);overflow:hidden}.illu-floor{position:absolute;width:160px;height:52px;background:#ecf1df;border-radius:50%;left:36px;bottom:14px}.illu-bed{position:absolute;width:83px;height:56px;left:67px;top:45px;background:#d4e5ce;border:5px solid #809f7f;border-radius:7px;box-shadow:3px 6px 0 #aec1a7;transform:rotate(-9deg)}.illu-bed div{position:absolute;top:-6px;left:-5px;width:83px;height:11px;border-radius:4px;background:#678a6c}.illu-bed span{position:absolute;top:9px;left:8px;width:25px;height:15px;background:#fffef4;border-radius:4px}.illu-bed span:last-child{left:39px}.sun{position:absolute;right:33px;top:9px;font-size:30px;color:#e8c58c}.plant-illus{position:absolute;left:29px;top:47px;font-size:32px;color:#89ad80}.illu-table{position:absolute;right:34px;bottom:23px;background:#d3a77f;color:#fff6df;border:4px solid #be8b69;border-radius:50%;width:32px;height:32px;display:grid;place-items:center}.illus-stars{position:absolute;left:51px;top:17px;color:#e1bb92}.magic-button{background:#456f54;border:0;color:white;border-radius:10px;padding:13px 13px;width:100%;font-size:11px;font-weight:700;text-align:left;box-shadow:0 4px 0 #325a41}.magic-button>span:first-child{font-size:16px;margin-right:6px}.magic-button .arrow,.magic-button>span:last-child{float:right;font-size:15px}.magic-button:hover{background:#365d44}.magic-caption{text-align:center;font-size:9px!important;margin:9px 0 0}.insight-divider{height:1px;background:#eef0e9;margin:22px 0}.tips-heading{display:flex;justify-content:space-between;color:#d8ac90}.suggestions{margin-top:14px}.suggestion{display:flex;gap:9px;margin:0 0 14px}.suggestion-icon{flex:none;width:27px;height:27px;background:#eff5e9;border-radius:9px;display:grid;place-items:center;color:#8cac8b;font-size:14px}.suggestion p{margin:0;color:#8c9e90;font-size:10px;line-height:1.55}.suggestion strong{display:block;color:#607d67;font-size:10px;margin-bottom:2px}.soft-note{background:#f9f4ec;padding:12px;border-radius:10px;color:#b2a391;font-size:9px;line-height:1.5}.build-list{display:grid;gap:8px}.build-tool{display:flex;align-items:center;text-align:left;gap:10px;border:1px solid #ebf0e8;background:#fbfcf8;border-radius:11px;padding:10px 9px;color:#a0b2a2}.build-tool.active{border-color:#a7c9a6;background:#f1f8ee}.build-tool>span:nth-child(2){flex:1}.build-tool strong{display:block;font-size:10px;color:#526c5a}.build-tool small{display:block;font-size:9px;color:#a2b0a4;margin-top:3px}.build-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:#eaf3e7;color:#799c7e;font-size:18px}.build-icon.peach{background:#f8ece3;color:#c59071}.build-icon.lavender{background:#efedf5;color:#9991b4}.build-icon.yellow{background:#f7f1dd;color:#c7a95f}.build-icon.blue{background:#e8f2f1;color:#7da7a5}.build-subhead{font-size:9px;letter-spacing:.1em;color:#a7b7a9;font-weight:800;margin:11px 0 3px}.toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);background:#345d4a;color:white;padding:12px 17px;border-radius:11px;box-shadow:0 8px 25px #273e2d55;font-size:12px;opacity:0;pointer-events:none;transition:.2s;z-index:5}.toast.show{opacity:1;transform:translate(-50%,0)}dialog{border:0;border-radius:19px;padding:26px;width:min(440px,calc(100vw - 30px));color:#40594a;box-shadow:0 25px 70px #273e2d55}dialog::backdrop{background:#2b4138aa;backdrop-filter:blur(3px)}.dialog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.brand-mark.small{width:35px;height:35px;font-size:23px}dialog h2{font-family:var(--serif);font-weight:500;font-size:28px;margin:10px 0}dialog p,dialog li{font-size:12px;line-height:1.65;color:#819185}dialog ol{padding-left:20px}dialog li{padding:0 0 11px 6px}dialog strong{color:#4f6b56}.dialog-note{background:#f2f7ed;padding:12px;border-radius:10px}.dialog-top button{font-size:20px} @media(max-width:1150px){.workspace{grid-template-columns:235px minmax(420px,1fr)}.insight-panel{grid-column:2;padding:0 30px 25px}.insight-inner{min-height:0;display:grid;grid-template-columns:1fr 1fr;column-gap:25px}.insight-top,.insight-inner h2,.insight-inner>p,.illustration,.magic-button,.magic-caption{grid-column:1}.insight-divider{display:none}.tips-heading,.suggestions,.soft-note{grid-column:2}.tips-heading{grid-row:1}.suggestions{grid-row:2 / span 3}.soft-note{grid-row:5}.illustration{display:none}.top-center{display:none}.brand{flex:1}}@media(max-width:700px){.topbar{height:65px;padding:0 16px}.brand small,.saved{display:none}.brand{min-width:0}.export-btn{padding:10px}.workspace{display:flex;flex-direction:column}.sidebar{order:2;border:0}.main-area{order:1;padding:22px 15px}.insight-panel{order:3;padding:0 15px 20px}.sidebar-head{padding:20px 18px 10px}.sidebar-head h2{font-size:22px}.sidebar-head p{display:none}.tabs{margin-bottom:15px}.side-content{padding:0 17px}.furniture-grid{grid-template-columns:repeat(3,1fr)}.sidebar-footer{padding:13px 18px}.heading-row h1{font-size:27px}.heading-right{display:none}.canvas-wrap{height:50vh;min-height:330px}.canvas-controls .control span{display:none}.canvas-top{height:60px}.mode-hint{font-size:9px}.selection-tools{bottom:53px}.insight-inner{margin-top:10px;display:block;min-height:0}.illustration{display:none}.insight-inner h2 br{display:none}.suggestions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sidebar-note{margin:15px 0}.top-actions{gap:6px}}
+.under-actions{display:flex;gap:12px}.under-actions button:disabled{opacity:.4;cursor:default}.furniture-card{width:100%}.furniture-card:focus-visible{outline:3px solid #d8a381}.furniture-card:after{content:'+';float:right;font-size:13px;color:#a2b9a1;margin-top:-16px}.build-tool:hover,.control:hover{filter:brightness(.97)}.selection-tools button span{font-size:10px}.toast{max-width:min(90vw,550px);text-align:center} @media(max-width:450px){.furniture-grid{grid-template-columns:repeat(2,1fr)}.mode-hint{max-width:calc(100% - 30px)}.selection-tools{bottom:52px}.heading-row h1{font-size:24px}}
+/* Keep the small studio labels comfortable to read. */
+.eyebrow,.breadcrumb,.tiny-label{font-size:10px}.sidebar-head p,.side-intro,.insight-panel p{font-size:12px}.furniture-card strong,.build-tool strong,.suggestion strong{font-size:11px}.furniture-card small,.build-tool small,.sidebar-note p,.suggestion p,.soft-note,.magic-caption,.canvas-bottom,.saved{font-size:10px!important}.furniture-card{cursor:grab}.furniture-card:active{cursor:grabbing}
+
+
+.portfolio-link{font-size:11px;font-weight:700;color:#648373;text-decoration:none;white-space:nowrap}.portfolio-link:hover{text-decoration:underline}@media(max-width:700px){.portfolio-link{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><span class="brand-mark"><span>✳</span></span><div><strong>little room</strong><small>A space to make space</small></div></div>
+  <div class="top-center"><span class="status-dot"></span> Your cozy corner <span class="top-divider">/</span> <span class="muted">Room planner</span></div>
+  <div class="top-actions"><a class="portfolio-link" href="../../../index.html#fun">← Portfolio</a><span class="saved"><span>✧</span> Saved on this device</span><button class="icon-btn" id="helpButton" title="How to use" aria-label="How to use">?</button><button class="icon-btn import-btn" id="importButton" title="Open a saved plan" aria-label="Open a saved plan">↥</button><button class="export-btn" id="exportButton"><span>↗</span> Export plan</button></div>
+</header>
+<main class="workspace">
+<aside class="sidebar">
+  <div class="sidebar-head"><div><span class="eyebrow">YOUR LITTLE TOOLBOX</span><h2>Make it yours<span class="spark">✳</span></h2><p>Every good space starts somewhere.</p></div></div>
+  <div class="tabs" role="tablist"><button class="tab active" data-tab="furnish" role="tab" aria-selected="true"><span>✿</span> Furnish</button><button class="tab" data-tab="build" role="tab" aria-selected="false"><span>▧</span> Build room</button></div>
+  <div class="side-content" id="furnishPanel">
+    <div class="section-line"><div><span class="eyebrow">THE FUN PART</span><h3>Find your pieces</h3></div><span class="count-pill">＋ add</span></div>
+    <p class="side-intro">Drag a piece into your room, or tap to add it.</p>
+    <div class="category-scroll" id="categories"></div>
+    <div class="furniture-grid" id="furnitureGrid"></div>
+    <div class="sidebar-note"><span class="note-icon">✺</span><p><strong>A little tip</strong><br>Choose a piece to rotate it, move it, or make a little more room.</p></div>
+  </div>
+  <div class="side-content hidden" id="buildPanel">
+    <div class="section-line"><div><span class="eyebrow">START WITH YOUR SPACE</span><h3>Shape your room</h3></div></div>
+    <p class="side-intro">Draw sections on the grid. Sections join when they touch.</p>
+    <div class="build-list">
+      <button data-tool="select" class="build-tool active"><span class="build-icon">↖</span><span><strong>Move things</strong><small>Select and drag furniture</small></span><span>↗</span></button>
+      <button data-tool="add-room" class="build-tool"><span class="build-icon peach">⊞</span><span><strong>Add floor</strong><small>Click and drag to draw a section</small></span><span>＋</span></button>
+      <button data-tool="erase-room" class="build-tool"><span class="build-icon lavender">▧</span><span><strong>Remove floor</strong><small>Click and drag to reshape</small></span><span>−</span></button>
+      <div class="build-subhead">ADD TO YOUR WALLS</div>
+      <button data-tool="door" class="build-tool"><span class="build-icon yellow">◔</span><span><strong>Door</strong><small>Click an outside wall</small></span><span>＋</span></button>
+      <button data-tool="window" class="build-tool"><span class="build-icon blue">▥</span><span><strong>Window</strong><small>Click an outside wall</small></span><span>＋</span></button>
+    </div>
+    <div class="sidebar-note"><span class="note-icon">✺</span><p><strong>Make it fit</strong><br>Each little square represents 0.5 × 0.5 metres.</p></div>
+  </div>
+  <div class="sidebar-footer"><span>Made for making room</span><span>♡</span></div>
+</aside>
+<section class="main-area">
+  <div class="heading-row"><div><div class="breadcrumb"><span>YOUR SPACE</span><span>✳</span><span>FLOOR PLAN</span></div><h1>A little room to dream <span>✳</span></h1><p>Move things around until your space feels just right.</p></div><div class="heading-right"><span class="tiny-label">CURRENT VIEW</span><span class="view-pill"><span>▦</span> Top down</span></div></div>
+  <div class="canvas-card">
+    <div class="canvas-top"><div class="canvas-title"><span class="room-icon">⌂</span><div><strong>My room</strong><small id="roomMeta">Your space, your rules</small></div></div><div class="canvas-controls"><button id="gridButton" class="control active" title="Toggle grid">▦ <span>Grid</span></button><button id="lightButton" class="control active" title="Toggle sunlight">☼ <span>Sunlight</span></button><span class="vertical-rule"></span><button id="fitButton" class="control icon-only" title="Fit room in view" aria-label="Fit room in view">⛶</button></div></div>
+    <div class="canvas-wrap" id="canvasWrap"><canvas id="roomCanvas" aria-label="Room floor plan. Use the toolbox to edit your room."></canvas><div class="mode-hint" id="modeHint"><span class="hint-icon">↖</span><span>Drag furniture to move it <b>·</b> Click to select</span></div><div class="selection-tools hidden" id="selectionTools"><span id="selectionLabel">Selected</span><button id="rotateButton" title="Rotate selected item">↻ <span>Rotate</span></button><button id="deleteButton" title="Delete selected item">⌫ <span>Remove</span></button></div></div>
+    <div class="canvas-bottom"><span><span class="green-dot"></span> <span id="bottomStatus">Ready when you are</span></span><span>ONE SQUARE = 0.5 M</span></div>
+  </div>
+  <div class="below-canvas"><div><span class="hand-icon">✋</span><span><strong>Go on, play a little.</strong> There’s no wrong place to start.</span></div><div class="under-actions"><button id="undoButton" disabled>↶ &nbsp; Undo</button><button id="resetButton">↺ &nbsp; Reset room</button></div></div>
+</section>
+<aside class="insight-panel"><div class="insight-inner"><div class="insight-top"><div class="glow-icon">✧</div><span class="mini-badge">A LITTLE GUIDANCE</span></div><h2>Make room<br>for <em>good energy.</em></h2><p>A few thoughtful shifts can change how a room feels. Let’s find a layout that works for you.</p><div class="illustration"><div class="sun">✷</div><div class="plant-illus">✿</div><div class="illu-floor"></div><div class="illu-bed"><div></div><span></span><span></span></div><div class="illu-table">✺</div><div class="illus-stars">✦</div></div><button class="magic-button" id="arrangeButton"><span>✧</span> Find my flow <span class="arrow">↗</span></button><p class="magic-caption">A little feng shui-inspired rearranging</p><div class="insight-divider"></div><div class="tips-heading"><span class="eyebrow">SOMETHING TO THINK ABOUT</span><span>✳</span></div><div id="suggestions" class="suggestions"></div><div class="soft-note">✧ &nbsp; These are gentle ideas, not rules. Your space should feel like <em>you.</em></div></div></aside>
+</main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<dialog id="helpDialog"><div class="dialog-top"><span class="brand-mark small">✳</span><button id="closeHelp" class="icon-btn" aria-label="Close">×</button></div><span class="eyebrow">A LITTLE INTRODUCTION</span><h2>Welcome to your little room.</h2><p>Think of this as a miniature floor plan you can play with.</p><ol><li><strong>Build your space.</strong> Choose Build room, then draw floor sections on the grid. Add a door and windows by clicking an outside wall.</li><li><strong>Add the fun bits.</strong> Choose Furnish and drag a piece in, or tap to add it. Move it around; select it to rotate or remove it.</li><li><strong>Find your flow.</strong> Try the feng shui-inspired arrangement, then move anything to make it your own.</li></ol><p class="dialog-note">Your room is saved in this browser. Export a backup to move it to another device.</p><button class="magic-button" id="gotIt">Let’s make some room <span>↗</span></button></dialog>
+<input type="file" id="importFile" accept="application/json" hidden>
+<script>
+(function(){
+const CATALOG = {
+  bed: {label:'Bed',w:4,h:4,category:'Bedroom'},
+  sofa: {label:'Sofa',w:5,h:2,category:'Living'},
+  armchair: {label:'Armchair',w:2,h:2,category:'Living'},
+  coffeeTable: {label:'Coffee table',w:3,h:2,category:'Living'},
+  diningTable: {label:'Dining table',w:4,h:3,category:'Living'},
+  desk: {label:'Desk',w:3,h:2,category:'Living'},
+  counter: {label:'Counter',w:4,h:1,category:'Kitchen'},
+  sink: {label:'Sink counter',w:2,h:1,category:'Kitchen'},
+  stove: {label:'Stove',w:2,h:1,category:'Kitchen'},
+  fridge: {label:'Fridge',w:2,h:2,category:'Kitchen'},
+  plant: {label:'Plant',w:1,h:1,category:'Decor'},
+  rug: {label:'Rug',w:5,h:4,category:'Decor'},
+  bookshelf: {label:'Bookshelf',w:3,h:1,category:'Decor'}
+};
+const copy = o => JSON.parse(JSON.stringify(o));
+const id = () => Math.random().toString(36).slice(2,10);
+const key = (x,y) => `${x},${y}`;
+const SIDES = ['top','right','bottom','left'];
+const N = {top:[0,-1],right:[1,0],bottom:[0,1],left:[-1,0]};
+function getDefaultState(){
+ const cells=[]; for(let y=0;y<12;y++) for(let x=0;x<16;x++) cells.push([x,y]);
+ return {cells, items:[
+  {id:id(),type:'rug',x:8,y:6,rotation:0},
+  {id:id(),type:'bed',x:3,y:2,rotation:0},
+  {id:id(),type:'sofa',x:10.5,y:8.5,rotation:0},
+  {id:id(),type:'coffeeTable',x:10.5,y:6,rotation:0},
+  {id:id(),type:'plant',x:15,y:10.5,rotation:0},
+  {id:id(),type:'counter',x:12,y:.5,rotation:0},
+  {id:id(),type:'sink',x:9,y:.5,rotation:0},
+  {id:id(),type:'desk',x:3,y:10.5,rotation:0}
+ ],openings:[{id:id(),type:'window',x:6,y:0,side:'top'}, {id:id(),type:'window',x:7,y:0,side:'top'}, {id:id(),type:'door',x:0,y:8,side:'left'}]};
+}
+function rr(c,x,y,w,h,r,fill,stroke,lw=.04){
+ c.beginPath(); c.roundRect(x,y,w,h,r); if(fill){c.fillStyle=fill;c.fill()} if(stroke){c.lineWidth=lw;c.strokeStyle=stroke;c.stroke()}
+}
+function line(c,x1,y1,x2,y2,color,width){ c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.strokeStyle=color;c.lineWidth=width;c.lineCap='round';c.stroke(); }
+function circle(c,x,y,r,fill,stroke,lw=.04){c.beginPath();c.arc(x,y,r,0,Math.PI*2);if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.strokeStyle=stroke;c.lineWidth=lw;c.stroke()}}
+function itemDrawing(c,item,selected){
+ const t=CATALOG[item.type]; if(!t)return;
+ const w=t.w,h=t.h; c.save(); c.translate(item.x,item.y); c.rotate(item.rotation*Math.PI/180); c.translate(-w/2,-h/2);
+ if(item.type !== 'rug') {c.shadowColor='rgba(63,43,32,.2)'; c.shadowBlur=.18; c.shadowOffsetY=.11;}
+ const outline='#9b8678';
+ switch(item.type){
+ case 'bed':
+  rr(c,0,0,w,h,.16,'#ba9a83',outline);c.shadowColor='transparent';rr(c,.12,.35,w-.24,h-.48,.12,'#fffaf1','#d5c5b4');
+  rr(c,.22,.12,w-.44,.38,.1,'#a9836c'); rr(c,.34,.57,1.45,.73,.15,'#fffdf8','#e4d9cb');rr(c,2.18,.57,1.45,.73,.15,'#fffdf8','#e4d9cb');
+  rr(c,.17,1.48,w-.34,h-1.68,.08,'#e7a996','#cd8d7c');line(c,.35,1.68,3.65,1.68,'#f2c7b7',.05);break;
+ case 'sofa':
+  rr(c,0,.12,w,h-.12,.24,'#cc826b','#a86655');c.shadowColor='transparent';rr(c,.12,0,w-.24,.54,.18,'#e8a58d','#c7826e');
+  rr(c,.28,.55,2.12,1.04,.16,'#e6a58e','#c98573');rr(c,2.6,.55,2.12,1.04,.16,'#e6a58e','#c98573');
+  rr(c,.05,.48,.35,1.28,.16,'#eeb7a1');rr(c,w-.4,.48,.35,1.28,.16,'#eeb7a1');break;
+ case 'armchair':
+  rr(c,.04,.15,w-.08,h-.18,.25,'#c9826c','#aa715f');c.shadowColor='transparent';rr(c,.14,.03,w-.28,.48,.15,'#efb5a1');rr(c,.25,.52,1.5,1.1,.2,'#eaa991','#c98573');break;
+ case 'coffeeTable':
+  rr(c,.09,.08,w-.18,h-.16,.45,'#d8b08b','#ae896d');c.shadowColor='transparent';rr(c,.26,.23,w-.52,h-.46,.35,'#e9c8a6','#ceaa88');circle(c,1.72,1,.23,'#f6f2df');circle(c,1.72,1,.14,'#a17459');break;
+ case 'diningTable':
+  rr(c,.14,.18,w-.28,h-.36,.32,'#d0a27b','#ab8064');c.shadowColor='transparent';rr(c,.3,.31,w-.6,h-.62,.22,'#efd2ae','#cfa984');
+  for(let i=0;i<3;i++) circle(c,1+i,1.5,.27,'#faf4e4','#d9c6ab'); break;
+ case 'desk':
+  rr(c,0,0,w,h,.13,'#c29672','#9d775e');c.shadowColor='transparent';rr(c,.12,.1,w-.24,h-.22,.08,'#ebc9a4','#cfa888');rr(c,.85,.33,1.3,.75,.05,'#677d78','#526a66');rr(c,1,.45,1,.49,.02,'#c8ddd2');circle(c,2.48,.55,.16,'#f7f0dc');break;
+ case 'counter': case 'sink': case 'stove':
+  rr(c,0,0,w,h,.07,'#c49578','#a57f67'); c.shadowColor='transparent';rr(c,.08,.08,w-.16,h-.19,.04,'#f3e3ca','#d4b89d');
+  if(item.type==='counter') for(let x=1;x<w;x++)line(c,x,.1,x,.9,'#dfccb5',.035);
+  if(item.type==='sink'){rr(c,.35,.22,1.25,.58,.14,'#c4d4cd','#91aaa1');rr(c,.48,.29,.99,.43,.09,'#e7efdf','#aabcb2');circle(c,.98,.52,.06,'#a4b7ae');}
+  if(item.type==='stove'){for(const [x,y] of [[.55,.3],[1.35,.3],[.55,.7],[1.35,.7]]){circle(c,x,y,.16,'#8d9690');circle(c,x,y,.08,'#d9ded2')}} break;
+ case 'fridge':
+  rr(c,.03,.03,1.94,1.94,.14,'#f7eee0','#c9b7a4');c.shadowColor='transparent';line(c,.12,.7,1.88,.7,'#d6c7b7',.05);line(c,.27,.23,.27,.52,'#b6a99a',.07);line(c,.27,1,.27,1.56,'#b6a99a',.07);break;
+ case 'plant':
+  circle(c,.5,.5,.43,'#b6c89a','#94aa80');c.shadowColor='transparent';circle(c,.5,.5,.24,'#be8b6b');
+  for(let i=0;i<7;i++){let a=i*Math.PI*2/7;circle(c,.5+Math.cos(a)*.23,.5+Math.sin(a)*.23,.16,i%2?'#5e8969':'#789d73')}circle(c,.5,.5,.12,'#88a879');break;
+ case 'rug':
+  c.shadowColor='transparent';rr(c,.02,.02,w-.04,h-.04,.12,'#eedcc7','#d8bea4');rr(c,.22,.22,w-.44,h-.44,.04,null,'#cfae97',.06);
+  for(let x=.48;x<w-.3;x+=.35){line(c,x,.02,x,-.08,'#cfb99f',.045);line(c,x,h-.02,x,h+.08,'#cfb99f',.045)}
+  for(let x=.65;x<w-.4;x+=.65) for(let y=.6;y<h-.4;y+=.65)circle(c,x,y,.035,'#d8b8a2');break;
+ case 'bookshelf':
+  rr(c,0,0,w,h,.07,'#ba8e6d','#9f775d');c.shadowColor='transparent';rr(c,.1,.13,w-.2,.72,.03,'#e0b88f');
+  for(let x=.18;x<2.8;x+=.22){rr(c,x,.2,.15,.48,.02,['#bd816c','#e4c29f','#809a83','#ece1c9'][Math.floor(x*10)%4])} break;
+ }
+ c.shadowColor='transparent'; if(selected){c.setLineDash([.12,.09]);rr(c,-.13,-.13,w+.26,h+.26,.13,null,'#527d65',.075);c.setLineDash([]);circle(c,w+.12,-.12,.12,'#527d65','#fff',.045)}
+ c.restore();
+}
+class RoomCanvas {
+ constructor(canvas, options={}) {
+  this.canvas=canvas; this.ctx=canvas.getContext('2d'); this.options=options; this.state=getDefaultState();this.tool='select';this.selected=null;this.grid=true;this.light=true;this.drag=null;this.view=null;
+  this.onPointerDown=this.onPointerDown.bind(this);this.onPointerMove=this.onPointerMove.bind(this);this.onPointerUp=this.onPointerUp.bind(this);
+  canvas.style.touchAction='none';canvas.addEventListener('pointerdown',this.onPointerDown);canvas.addEventListener('pointermove',this.onPointerMove);canvas.addEventListener('pointerup',this.onPointerUp);canvas.addEventListener('pointercancel',this.onPointerUp);
+  this.resizeObserver=new ResizeObserver(()=>{this.fit();});this.resizeObserver.observe(canvas.parentElement||canvas);this.fit();
+ }
+ emit(){this.options.onChange?.(this.getState())}
+ selectedChanged(){this.options.onSelect?.(this.state.items.find(i=>i.id===this.selected)||this.state.openings.find(i=>i.id===this.selected)||null)}
+ setTool(tool){this.tool=tool;this.canvas.style.cursor=tool==='select'?'default':'crosshair';this.draw()}
+ getState(){return copy(this.state)}
+ setState(state){if(!state || !Array.isArray(state.cells) || !state.cells.length)return;this.state=copy(state);this.state.items ||= [];this.state.openings ||= [];this.selected=null;this.fit();this.selectedChanged();this.emit()}
+ reset(){this.setState(getDefaultState())}
+ setGrid(v){this.grid=!!v;this.draw()}
+ setLight(v){this.light=!!v;this.draw()}
+ selectItem(itemId){this.selected=itemId||null;this.selectedChanged();this.draw()}
+ addItem(type,position=null){const def=CATALOG[type];if(!def)return;const b=this.bounds();const x=position?.x??(b.minX+b.maxX+1)/2,y=position?.y??(b.minY+b.maxY+1)/2;const o={id:id(),type,x:Math.round(x*2)/2,y:Math.round(y*2)/2,rotation:0};if(type==='rug')this.state.items.unshift(o);else this.state.items.push(o);this.selected=o.id;this.tool='select';this.selectedChanged();this.draw();this.emit();return o}
+ rotateSelected(){const item=this.state.items.find(i=>i.id===this.selected);if(item){item.rotation=(item.rotation+90)%360;this.draw();this.emit();this.selectedChanged()}}
+ deleteSelected(){if(!this.selected)return;this.state.items=this.state.items.filter(i=>i.id!==this.selected);this.state.openings=this.state.openings.filter(i=>i.id!==this.selected);this.selected=null;this.selectedChanged();this.draw();this.emit()}
+ bounds(){let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;for(const [x,y] of this.state.cells){minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y)}return {minX,minY,maxX,maxY}}
+ fit(){const rect=this.canvas.getBoundingClientRect();const width=rect.width||700,height=rect.height||500,dpr=window.devicePixelRatio||1;this.canvas.width=Math.round(width*dpr);this.canvas.height=Math.round(height*dpr);const b=this.bounds(),rw=b.maxX-b.minX+1,rh=b.maxY-b.minY+1;const scale=Math.max(8,Math.min((width-100)/(rw+2),(height-90)/(rh+2),38));this.view={width,height,dpr,scale,ox:(width-rw*scale)/2-b.minX*scale,oy:(height-rh*scale)/2-b.minY*scale};this.draw()}
+ point(e){const r=this.canvas.getBoundingClientRect();return {x:(e.clientX-r.left-this.view.ox)/this.view.scale,y:(e.clientY-r.top-this.view.oy)/this.view.scale}}
+ edgeAt(p){let best=null;const cells=new Set(this.state.cells.map(([x,y])=>key(x,y)));for(const [x,y] of this.state.cells){for(const side of SIDES){const [dx,dy]=N[side];if(cells.has(key(x+dx,y+dy)))continue;let px,py;if(side==='top'||side==='bottom'){px=Math.max(x,Math.min(x+1,p.x));py=y+(side==='bottom'?1:0)}else{px=x+(side==='right'?1:0);py=Math.max(y,Math.min(y+1,p.y))}const d=Math.hypot(p.x-px,p.y-py);if(d<.7&&(!best||d<best.distance))best={x,y,side,distance:d}}}return best}
+ onPointerDown(e){if(e.button!==0)return;const p=this.point(e);this.canvas.setPointerCapture(e.pointerId);
+  if(this.tool==='add-room'||this.tool==='erase-room'){this.drag={kind:this.tool,start:{x:Math.floor(p.x),y:Math.floor(p.y)},end:{x:Math.floor(p.x),y:Math.floor(p.y)}};this.draw();return}
+  if(this.tool==='window'||this.tool==='door'){const edge=this.edgeAt(p);if(edge){const opening={id:id(),type:this.tool,x:edge.x,y:edge.y,side:edge.side};this.state.openings=this.state.openings.filter(o=>!(o.x===edge.x&&o.y===edge.y&&o.side===edge.side));this.state.openings.push(opening);this.selected=opening.id;this.selectedChanged();this.draw();this.emit()}return}
+  // Openings are selectable on their edge.
+  const edge=this.edgeAt(p);let opening=edge&&this.state.openings.find(o=>o.x===edge.x&&o.y===edge.y&&o.side===edge.side);
+  if(opening){this.selected=opening.id;this.selectedChanged();this.draw();return}
+  let found=null;for(let i=this.state.items.length-1;i>=0;i--){const o=this.state.items[i],d=CATALOG[o.type];if(!d)continue;const rot=o.rotation%180!==0;const w=rot?d.h:d.w,h=rot?d.w:d.h;if(Math.abs(p.x-o.x)<=w/2&&Math.abs(p.y-o.y)<=h/2){found=o;break}}
+  this.selected=found?.id||null;this.selectedChanged();if(found){this.drag={kind:'item',id:found.id,dx:p.x-found.x,dy:p.y-found.y,moved:false};this.canvas.style.cursor='grabbing'}this.draw();
+ }
+ onPointerMove(e){const p=this.point(e);if(!this.drag){this.canvas.style.cursor=this.tool==='select'?(this.edgeAt(p)?'pointer':'default'):'crosshair';return}
+  if(this.drag.kind==='item'){const o=this.state.items.find(i=>i.id===this.drag.id);if(!o)return;o.x=Math.round((p.x-this.drag.dx)*2)/2;o.y=Math.round((p.y-this.drag.dy)*2)/2;this.drag.moved=true;this.draw()}
+  else{this.drag.end={x:Math.floor(p.x),y:Math.floor(p.y)};this.draw()}
+ }
+ onPointerUp(e){if(!this.drag)return;const d=this.drag;this.drag=null;this.canvas.style.cursor=this.tool==='select'?'default':'crosshair';if(d.kind==='item'){if(d.moved)this.emit();this.draw();return}
+  const minX=Math.max(-50,Math.min(d.start.x,d.end.x)),maxX=Math.min(50,Math.max(d.start.x,d.end.x));const minY=Math.max(-50,Math.min(d.start.y,d.end.y)),maxY=Math.min(50,Math.max(d.start.y,d.end.y));
+  if(maxX-minX>40||maxY-minY>40){this.draw();return}
+  const cells=new Set(this.state.cells.map(([x,y])=>key(x,y)));for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++){if(d.kind==='add-room')cells.add(key(x,y));else cells.delete(key(x,y))}
+  if(cells.size){this.state.cells=[...cells].map(s=>s.split(',').map(Number));this.state.openings=this.state.openings.filter(o=>{const n=N[o.side];return cells.has(key(o.x,o.y))&&!cells.has(key(o.x+n[0],o.y+n[1]))});this.fit();this.emit()}else this.draw();
+ }
+ draw(){if(!this.view)return;const c=this.ctx,v=this.view;c.setTransform(v.dpr,0,0,v.dpr,0,0);c.clearRect(0,0,v.width,v.height);
+  // A quiet dotted work surface around the floor plan.
+  c.fillStyle='#f2eee7';c.fillRect(0,0,v.width,v.height);c.fillStyle='#dcd5c9';for(let x=15;x<v.width;x+=22)for(let y=15;y<v.height;y+=22){c.beginPath();c.arc(x,y,1,0,Math.PI*2);c.fill()}
+  c.save();c.translate(v.ox,v.oy);c.scale(v.scale,v.scale);const cells=new Set(this.state.cells.map(([x,y])=>key(x,y)));
+  c.shadowColor='rgba(88,70,55,.13)';c.shadowBlur=.35;c.shadowOffsetY=.15;for(const [x,y] of this.state.cells){c.fillStyle='#e7c9a9';c.fillRect(x,y,1.01,1.01)}c.shadowColor='transparent';
+  for(const [x,y] of this.state.cells){c.fillStyle=(y%2===0?'#efd7b9':'#efd2b1');c.fillRect(x+.015,y+.015,.97,.97);c.fillStyle='rgba(169,121,81,.09)';c.fillRect(x,y+.96,1,.025);if((x+Math.floor(y/2))%3===0){c.fillRect(x+.48,y+.03,.015,.9)}if(this.grid){c.strokeStyle='rgba(166,126,92,.10)';c.lineWidth=.015;c.strokeRect(x,y,1,1)}}
+  if(this.light){c.save();c.beginPath();for(const [x,y] of this.state.cells)c.rect(x,y,1,1);c.clip();for(const o of this.state.openings.filter(o=>o.type==='window')){c.save();c.translate(o.x+.5,o.y+.5);const a={top:0,right:90,bottom:180,left:270}[o.side];c.rotate(a*Math.PI/180);c.beginPath();c.moveTo(-.48,-.5);c.lineTo(.48,-.5);c.lineTo(2.6,4);c.lineTo(1.4,4);c.closePath();c.fillStyle='rgba(255,250,202,.24)';c.fill();c.restore()}c.restore()}
+  for(const o of this.state.items)itemDrawing(c,o,o.id===this.selected);
+  // Walls sit just outside the floor, keeping furnishings easy to see.
+  for(const [x,y] of this.state.cells){for(const side of SIDES){const [dx,dy]=N[side];if(cells.has(key(x+dx,y+dy)))continue;let x1=x,y1=y,x2=x,y2=y;if(side==='top'){x2=x+1}else if(side==='bottom'){y1=y2=y+1;x2=x+1}else if(side==='left'){y2=y+1}else{x1=x2=x+1;y2=y+1}line(c,x1,y1+.045,x2,y2+.045,'#a28e7a',.22);line(c,x1,y1,x2,y2,'#fffaf0',.18)}}
+  for(const o of this.state.openings){c.save();c.translate(o.x+.5,o.y+.5);const a={top:0,right:90,bottom:180,left:270}[o.side];c.rotate(a*Math.PI/180);if(o.type==='window'){line(c,-.46,-.5,.46,-.5,'#a7cfca',.22);line(c,-.46,-.5,.46,-.5,'#e8fbf1',.08);line(c,0,-.58,0,-.42,'#fffdf4',.07)}else{line(c,-.47,-.5,.47,-.5,'#e9cfad',.23);line(c,-.47,-.5,-.47,.35,'#b99575',.07);c.beginPath();c.arc(-.47,-.5,.85,0,Math.PI/2);c.setLineDash([.06,.07]);c.lineWidth=.025;c.strokeStyle='#b99575';c.stroke();c.setLineDash([])}if(o.id===this.selected){rr(c,-.53,-.62,1.06,.24,.08,null,'#527d65',.06)}c.restore()}
+  if(this.drag && this.drag.kind!=='item'){const a=this.drag.start,b=this.drag.end,x=Math.min(a.x,b.x),y=Math.min(a.y,b.y),w=Math.abs(a.x-b.x)+1,h=Math.abs(a.y-b.y)+1;c.fillStyle=this.drag.kind==='add-room'?'rgba(112,160,122,.35)':'rgba(215,125,108,.32)';c.fillRect(x,y,w,h);c.strokeStyle=this.drag.kind==='add-room'?'#699576':'#c7786e';c.lineWidth=.08;c.setLineDash([.18,.12]);c.strokeRect(x,y,w,h);c.setLineDash([])}
+  c.restore();
+ }
+ destroy(){this.resizeObserver.disconnect();this.canvas.removeEventListener('pointerdown',this.onPointerDown);this.canvas.removeEventListener('pointermove',this.onPointerMove);this.canvas.removeEventListener('pointerup',this.onPointerUp);this.canvas.removeEventListener('pointercancel',this.onPointerUp)}
+}
+
+window.RoomModule={CATALOG,getDefaultState,RoomCanvas};
+})();
+(function(){
+/* A playful, local-only layout helper. These are simple spatial heuristics,
+   not a complete or universal interpretation of feng shui. */
+const key = (x, y) => `${x},${y}`;
+const DIR = { top: [0, -1], right: [1, 0], bottom: [0, 1], left: [-1, 0] };
+const SIDES = ['top', 'right', 'bottom', 'left'];
+const WALL_PREFERRED = new Set(['bed', 'sofa', 'desk', 'counter', 'sink', 'stove', 'fridge', 'bookshelf']);
+const KITCHEN = new Set(['counter', 'sink', 'stove', 'fridge']);
+const LOW_PROFILE = new Set(['rug']);
+
+function geometry(item, catalog) {
+  const def = catalog[item.type];
+  if (!def) return null;
+  const rotation = ((Math.round((item.rotation || 0) / 90) % 4) + 4) % 4;
+  const w = rotation % 2 ? def.h : def.w;
+  const h = rotation % 2 ? def.w : def.h;
+  return { w, h, left: item.x - w / 2, right: item.x + w / 2,
+    top: item.y - h / 2, bottom: item.y + h / 2, rotation };
+}
+function containsRoom(rect, cells) {
+  // Enumerating all covered cells also works for irregular room shapes.
+  const epsilon = 1e-7;
+  for (let y = Math.floor(rect.top + epsilon); y < Math.ceil(rect.bottom - epsilon); y++) {
+    for (let x = Math.floor(rect.left + epsilon); x < Math.ceil(rect.right - epsilon); x++) {
+      if (!cells.has(key(x, y))) return false;
+    }
+  }
+  return true;
+}
+function overlaps(a, b) {
+  return a.left < b.right - 1e-7 && a.right > b.left + 1e-7 &&
+    a.top < b.bottom - 1e-7 && a.bottom > b.top + 1e-7;
+}
+function openingPoint(opening) {
+  const v = DIR[opening.side] || [0, -1];
+  return { x: opening.x + .5 + v[0] * .5, y: opening.y + .5 + v[1] * .5 };
+}
+function distance(x1, y1, x2, y2) { return Math.hypot(x1 - x2, y1 - y2); }
+function wallAt(cells, x, y, side) {
+  const d = DIR[side];
+  return cells.has(key(x, y)) && !cells.has(key(x + d[0], y + d[1]));
+}
+function edgeCells(rect, side) {
+  const result = [];
+  if (side === 'top' || side === 'bottom') {
+    const y = side === 'top' ? Math.floor(rect.top + 1e-7) : Math.ceil(rect.bottom - 1e-7) - 1;
+    for (let x = Math.floor(rect.left + 1e-7); x < Math.ceil(rect.right - 1e-7); x++) result.push([x, y]);
+  } else {
+    const x = side === 'left' ? Math.floor(rect.left + 1e-7) : Math.ceil(rect.right - 1e-7) - 1;
+    for (let y = Math.floor(rect.top + 1e-7); y < Math.ceil(rect.bottom - 1e-7); y++) result.push([x, y]);
+  }
+  return result;
+}
+function edgeWallRatio(rect, side, cells) {
+  const coordinate = rect[side];
+  if (Math.abs(coordinate - Math.round(coordinate)) > 1e-7) return 0;
+  const edges = edgeCells(rect, side);
+  return edges.length ? edges.filter(([x, y]) => wallAt(cells, x, y, side)).length / edges.length : 0;
+}
+function edgeHasOpening(rect, side, openings, type) {
+  const edges = edgeCells(rect, side);
+  return openings.some(o => o.side === side && (!type || o.type === type) && edges.some(([x,y]) => x === o.x && y === o.y));
+}
+function adjacentDoorRect(o) {
+  // Reserve the door's interior cell as breathing room when scoring.
+  return {left:o.x, right:o.x+1, top:o.y, bottom:o.y+1};
+}
+function doorAligned(rect, door) {
+  const p = openingPoint(door);
+  return (door.side === 'top' || door.side === 'bottom')
+    ? p.x > rect.left - .5 && p.x < rect.right + .5
+    : p.y > rect.top - .5 && p.y < rect.bottom + .5;
+}
+function nearestOpenDistance(item, openings, type) {
+  const ds = openings.filter(o => o.type === type).map(o => {
+    const p = openingPoint(o); return distance(item.x, item.y, p.x, p.y);
+  });
+  return ds.length ? Math.min(...ds) : Infinity;
+}
+function roomContext(state) {
+  const cells = new Set((state.cells || []).map(([x,y]) => key(x,y)));
+  return { cells, openings: state.openings || [] };
+}
+function score(item, rect, ctx, placed) {
+  const {cells, openings} = ctx;
+  const back = SIDES[rect.rotation];
+  const backWall = edgeWallRatio(rect, back, cells);
+  const onWindow = edgeHasOpening(rect, back, openings, 'window');
+  const onDoor = edgeHasOpening(rect, back, openings, 'door');
+  const anyWall = Math.max(...SIDES.map(s => edgeWallRatio(rect,s,cells)));
+  let result = 0;
+  if (WALL_PREFERRED.has(item.type)) result += backWall * (item.type === 'bed' ? 35 : 18);
+  if (WALL_PREFERRED.has(item.type)) result += anyWall * 4;
+  if (onDoor) result -= 80;
+  if (item.type === 'bed' && onWindow) result -= 18;
+  if ((item.type === 'plant' || item.type === 'desk') && Number.isFinite(nearestOpenDistance(item, openings, 'window'))) {
+    result += Math.max(0, 12 - nearestOpenDistance(item, openings, 'window') * 1.4);
+  }
+  for (const door of openings.filter(o => o.type === 'door')) {
+    const p = openingPoint(door), dist = distance(item.x, item.y, p.x, p.y);
+    if (!LOW_PROFILE.has(item.type) && overlaps(rect, adjacentDoorRect(door))) result -= 55;
+    if (dist < 2) result -= 15;
+    if ((item.type === 'bed' || item.type === 'desk') && doorAligned(rect, door)) result -= 9;
+    if (item.type === 'bed') result += Math.min(dist, 10) * 1.1;
+    // For a desk the person's view points toward the back; for a bed it points
+    // away from the headboard. Favor a door on that side of the furniture.
+    if (item.type === 'bed' || item.type === 'desk') {
+      const v = DIR[back], sign = item.type === 'bed' ? -1 : 1;
+      if ((p.x-item.x)*v[0]*sign + (p.y-item.y)*v[1]*sign > 0) result += 6;
+    }
+  }
+  if (KITCHEN.has(item.type)) {
+    const neighbors = placed.filter(p => KITCHEN.has(p.item.type));
+    if (neighbors.length) result += Math.max(0, 8 - Math.min(...neighbors.map(p => distance(item.x,item.y,p.item.x,p.item.y))));
+  }
+  // Gentle preference for not moving a piece far away when alternatives score similarly.
+  if (item._original) result -= Math.min(12, distance(item.x,item.y,item._original.x,item._original.y) * .12);
+  return result;
+}
+
+/** Returns an explanation of the current arrangement, using light, practical heuristics. */
+function inspectRoom(state, catalog) {
+  const {cells, openings} = roomContext(state);
+  const items = state.items || [];
+  const beds = items.filter(i => i.type === 'bed');
+  const doors = openings.filter(o => o.type === 'door');
+  const windows = openings.filter(o => o.type === 'window');
+  const notes = [];
+  if (!doors.length) notes.push('Add a door so the layout can account for how you enter the room.');
+  if (!windows.length) notes.push('Add a window to bring natural light into your plan.');
+  for (const bed of beds.slice(0, 1)) {
+    const r = geometry(bed, catalog); if (!r) continue;
+    const head = SIDES[r.rotation];
+    if (edgeWallRatio(r, head, cells) < .75) notes.push('Try placing the head of the bed against a solid wall for a supported feeling.');
+    else if (edgeHasOpening(r, head, openings, 'window')) notes.push('Try a solid wall behind the headboard if your room allows it.');
+    else notes.push('The bed has a wall behind the headboard, giving it a supported position.');
+    if (doors.some(d => doorAligned(r,d))) notes.push('If you can, move the bed out of the door’s direct line while keeping the entrance in view.');
+  }
+  if (doors.length && items.some(item => {
+    const r = geometry(item,catalog);
+    return r && !LOW_PROFILE.has(item.type) && doors.some(d => overlaps(r,adjacentDoorRect(d)));
+  })) notes.push('Give the doorway a little breathing room so the entrance feels open.');
+  if (windows.length && items.some(i => i.type === 'plant')) notes.push('Consider placing your plant near natural light, according to its needs.');
+  if (!items.length) notes.push('Add a few pieces, then try an arrangement.');
+  if (notes.length === 0) notes.push('Leave comfortable paths through the room and arrange things to suit your daily life.');
+  return notes;
+}
+
+/** Create one possible arrangement. Returns no changes if every piece cannot fit. */
+function arrangeRoom(state, catalog) {
+  const sourceItems = state.items || [];
+  if (!sourceItems.length) return {ok:false, items:[], messages:['Add some furniture first, then try again.']};
+  const ctx = roomContext(state), {cells} = ctx;
+  if (!cells.size) return {ok:false, items:sourceItems, messages:['Draw a room before arranging your furniture.']};
+  for (const item of sourceItems) {
+    if (!geometry(item,catalog)) return {ok:false, items:sourceItems, messages:['One of the furniture pieces is not recognized.']};
+  }
+  const coords = state.cells;
+  const minX = Math.min(...coords.map(c => c[0])), minY = Math.min(...coords.map(c => c[1]));
+  const maxX = Math.max(...coords.map(c => c[0])) + 1, maxY = Math.max(...coords.map(c => c[1])) + 1;
+  const priority = {bed: 0, sofa: 1, counter: 2, sink: 3, stove: 4, fridge: 5, desk: 6, diningTable: 7, bookshelf: 8, armchair: 9, coffeeTable: 10, plant: 11, rug: 12};
+  const ordered = [...sourceItems].sort((a,b) => (priority[a.type] ?? 10) - (priority[b.type] ?? 10));
+  const placed = [];
+  for (const original of ordered) {
+    const def = catalog[original.type];
+    let best = null;
+    for (const rotation of [0, 90, 180, 270]) {
+      const swap = rotation % 180 !== 0, w = swap ? def.h : def.w, h = swap ? def.w : def.h;
+      for (let y = minY; y + h <= maxY; y++) for (let x = minX; x + w <= maxX; x++) {
+        const item = {...original, x:x+w/2, y:y+h/2, rotation, _original:original};
+        const rect = geometry(item,catalog);
+        if (!containsRoom(rect,cells)) continue;
+        if (!LOW_PROFILE.has(item.type) && placed.some(p => !LOW_PROFILE.has(p.item.type) && overlaps(rect,p.rect))) continue;
+        const value = score(item,rect,ctx,placed);
+        if (!best || value > best.value) best = {item,rect,value};
+      }
+    }
+    if (!best) return {ok:false, items:sourceItems, messages:[`I couldn’t find a place for ${def.label || original.type}. Try a larger room or fewer pieces.`]};
+    delete best.item._original;
+    placed.push(best);
+  }
+  const positions = new Map(placed.map(p => [p.item.id,p.item]));
+  const items = sourceItems.map(i => positions.get(i.id));
+  return {ok:true, items, messages:inspectRoom({...state,items},catalog)};
+}
+
+window.FengModule={inspectRoom,arrangeRoom};
+})();
+(function(){
+'use strict';
+const {CATALOG,RoomCanvas} = window.RoomModule;
+const {arrangeRoom,inspectRoom} = window.FengModule;
+const $ = id => document.getElementById(id);
+const STORE='little-room-plan-v1';
+let category='All', activeTool='select', grid=true, light=true, restoring=false, history=[];
+let currentSelection=null, toastTimer;
+const illustrations = {
+ bed:`<rect x="14" y="7" width="44" height="46" rx="5" fill="#b98670"/><rect x="17" y="13" width="38" height="37" rx="3" fill="#fff8ed"/><rect x="19" y="16" width="15" height="9" rx="3" fill="#fff"/><rect x="38" y="16" width="15" height="9" rx="3" fill="#fff"/><rect x="17" y="28" width="38" height="22" rx="2" fill="#eaa793"/><path d="M18 31h36" stroke="#f5cabc"/>`,
+ sofa:`<rect x="5" y="18" width="62" height="27" rx="7" fill="#c47762"/><rect x="7" y="13" width="58" height="12" rx="6" fill="#ecab93"/><rect x="10" y="24" width="25" height="17" rx="5" fill="#e8a38a"/><rect x="37" y="24" width="25" height="17" rx="5" fill="#e8a38a"/><rect x="5" y="23" width="7" height="21" rx="3" fill="#edb39b"/><rect x="60" y="23" width="7" height="21" rx="3" fill="#edb39b"/>`,
+ armchair:`<rect x="17" y="14" width="38" height="33" rx="8" fill="#c67d68"/><rect x="19" y="10" width="34" height="11" rx="5" fill="#eab29c"/><rect x="23" y="22" width="26" height="20" rx="6" fill="#e8a68f"/>`,
+ coffeeTable:`<rect x="10" y="14" width="52" height="32" rx="15" fill="#bc8d69"/><rect x="12" y="12" width="48" height="31" rx="15" fill="#e7c7a5"/><circle cx="38" cy="27" r="5" fill="#fbf6e7"/><circle cx="38" cy="27" r="3" fill="#aa795e"/>`,
+ diningTable:`<rect x="8" y="10" width="56" height="38" rx="8" fill="#b88c69"/><rect x="10" y="8" width="52" height="37" rx="7" fill="#ead0ae"/><circle cx="24" cy="26" r="6" fill="#f9f4e8"/><circle cx="36" cy="26" r="6" fill="#f9f4e8"/><circle cx="48" cy="26" r="6" fill="#f9f4e8"/>`,
+ desk:`<rect x="9" y="15" width="54" height="30" rx="4" fill="#b88b6e"/><rect x="11" y="12" width="50" height="29" rx="3" fill="#e4bf9c"/><rect x="24" y="17" width="24" height="15" rx="2" fill="#688479"/><rect x="27" y="20" width="18" height="9" fill="#c7dace"/><circle cx="54" cy="21" r="3" fill="#f9f1df"/>`,
+ counter:`<rect x="6" y="19" width="60" height="20" rx="2" fill="#bb8e71"/><rect x="8" y="16" width="56" height="19" rx="2" fill="#f1e2cd"/><path d="M23 17v17m13-17v17m13-17v17" stroke="#d9c4a9"/>`,
+ sink:`<rect x="13" y="16" width="46" height="25" rx="3" fill="#bd9074"/><rect x="15" y="13" width="42" height="23" rx="2" fill="#f1e2cd"/><rect x="22" y="17" width="28" height="15" rx="5" fill="#b6ccc4"/><rect x="25" y="19" width="22" height="11" rx="4" fill="#e6eee3"/>`,
+ stove:`<rect x="14" y="13" width="44" height="31" rx="3" fill="#d7baa0"/><rect x="17" y="11" width="38" height="29" rx="3" fill="#f3e7d7"/><g fill="#86928b"><circle cx="27" cy="19" r="5"/><circle cx="45" cy="19" r="5"/><circle cx="27" cy="32" r="5"/><circle cx="45" cy="32" r="5"/></g>`,
+ fridge:`<rect x="19" y="6" width="34" height="44" rx="5" fill="#d7c4b1"/><rect x="20" y="4" width="32" height="43" rx="4" fill="#f8f0e3"/><path d="M21 20h30M25 9v6M25 26v13" stroke="#cab9a8" stroke-width="2"/>`,
+ plant:`<circle cx="36" cy="30" r="18" fill="#b9cfa9"/><circle cx="36" cy="30" r="12" fill="#b98669"/><g fill="#648e70"><circle cx="36" cy="18" r="7"/><circle cx="47" cy="26" r="7"/><circle cx="44" cy="37" r="7"/><circle cx="29" cy="40" r="7"/><circle cx="24" cy="27" r="7"/></g><circle cx="36" cy="29" r="7" fill="#89a985"/>`,
+ rug:`<rect x="8" y="9" width="56" height="39" rx="2" fill="#e3cdb5"/><rect x="11" y="12" width="50" height="33" rx="2" fill="#f3e3d0" stroke="#cba98d"/><path d="M15 17h42M15 40h42" stroke="#dbbea5" stroke-dasharray="2 3"/><circle cx="25" cy="27" r="2" fill="#d0ae98"/><circle cx="36" cy="27" r="2" fill="#d0ae98"/><circle cx="47" cy="27" r="2" fill="#d0ae98"/>`,
+ bookshelf:`<rect x="9" y="15" width="54" height="25" rx="3" fill="#b58666"/><rect x="12" y="18" width="48" height="18" fill="#e1b994"/><path d="M17 20v13m5-13v13m5-13v13m7-13v13m5-13v13m5-13v13m7-13v13m5-13v13" stroke="#8b9c86" stroke-width="3"/>`
+};
+function art(type){return `<svg viewBox="0 0 72 56" aria-hidden="true">${illustrations[type]||''}</svg>`}
+function renderCatalog(){
+ $('categories').innerHTML=['All','Bedroom','Living','Kitchen','Decor'].map(c=>`<button class="category ${category===c?'active':''}" data-category="${c}">${c}</button>`).join('');
+ $('furnitureGrid').innerHTML=Object.entries(CATALOG).filter(([,v])=>category==='All'||v.category===category).map(([type,v])=>`<button class="furniture-card" draggable="true" data-item="${type}" aria-label="Add ${v.label}"><span class="furniture-art">${art(type)}</span><strong>${v.label}</strong><small>${v.w*.5} × ${v.h*.5} m</small></button>`).join('');
+}
+function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),4200)}
+function safeState(state){return state&&Array.isArray(state.cells)&&state.cells.length>0&&state.cells.length<=3000&&state.cells.every(c=>Array.isArray(c)&&c.length===2&&c.every(n=>Number.isInteger(n)&&Math.abs(n)<=100))&&Array.isArray(state.items)&&state.items.length<=200&&state.items.every(i=>i&&typeof i.id==='string'&&CATALOG[i.type]&&Number.isFinite(i.x)&&Number.isFinite(i.y)&&[0,90,180,270].includes(i.rotation))&&Array.isArray(state.openings)&&state.openings.length<=200&&state.openings.every(o=>o&&typeof o.id==='string'&&['door','window'].includes(o.type)&&Number.isInteger(o.x)&&Number.isInteger(o.y)&&['top','right','bottom','left'].includes(o.side))}
+function persist(state){try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){toast('Your browser could not save this room. Export a backup to keep it.')}}
+function update(state){
+ persist(state);
+ let xs=state.cells.map(c=>c[0]),ys=state.cells.map(c=>c[1]);
+ $('roomMeta').textContent=`${((Math.max(...xs)-Math.min(...xs)+1)*.5).toFixed(1)} × ${((Math.max(...ys)-Math.min(...ys)+1)*.5).toFixed(1)} m overall · ${state.items.length} pieces`;
+ let notes=inspectRoom(state,CATALOG).slice(0,3);
+ $('suggestions').innerHTML=notes.map((note,i)=>`<div class="suggestion"><span class="suggestion-icon">${['⌂','☼','✿'][i%3]}</span><p>${escapeHtml(note)}</p></div>`).join('');
+ if(!restoring){const str=JSON.stringify(state);if(history[history.length-1]!==str){history.push(str);if(history.length>40)history.shift()}}
+ $('undoButton').disabled=history.length<2;
+}
+function escapeHtml(s){const div=document.createElement('div');div.textContent=s;return div.innerHTML}
+const room=new RoomCanvas($('roomCanvas'),{onChange:update,onSelect:item=>{
+ currentSelection=item; $('selectionTools').classList.toggle('hidden',!item);
+ if(item){$('selectionLabel').textContent=CATALOG[item.type]?.label|| (item.type==='door'?'Door':'Window');$('rotateButton').style.display=CATALOG[item.type]?'':'none'}
+}});
+try{const saved=JSON.parse(localStorage.getItem(STORE)||'null');if(safeState(saved))room.setState(saved);else update(room.getState())}catch(e){update(room.getState())}
+function setTool(tool){activeTool=tool;room.setTool(tool);document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===tool));const hints={select:'Drag furniture to move it · Click to select', 'add-room':'Click and drag to add floor · Join sections by touching', 'erase-room':'Click and drag to remove floor', door:'Click an outside wall to place a door',window:'Click an outside wall to place a window'}; $('modeHint').innerHTML=`<span class="hint-icon">${tool==='select'?'↖':'✳'}</span><span>${hints[tool]}</span>`;$('bottomStatus').textContent=tool==='select'?'Ready when you are':tool==='add-room'?'Drawing floor':tool==='erase-room'?'Removing floor':`Placing a ${tool}`}
+function setTab(tab){document.querySelectorAll('.tab').forEach(b=>{let selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-selected',String(selected))});$('furnishPanel').classList.toggle('hidden',tab!=='furnish');$('buildPanel').classList.toggle('hidden',tab!=='build');if(tab==='furnish')setTool('select')}
+renderCatalog();
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+$('categories').addEventListener('click',e=>{const b=e.target.closest('[data-category]');if(b){category=b.dataset.category;renderCatalog()}});
+$('furnitureGrid').addEventListener('dragstart',e=>{const b=e.target.closest('[data-item]');if(b){e.dataTransfer.setData('text/plain',b.dataset.item);e.dataTransfer.effectAllowed='copy'}});
+$('roomCanvas').addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='copy'});
+$('roomCanvas').addEventListener('drop',e=>{e.preventDefault();const type=e.dataTransfer.getData('text/plain');if(!CATALOG[type])return;setTool('select');room.addItem(type,room.point(e));toast(`${CATALOG[type].label} added — drag it into place.`)});
+$('furnitureGrid').addEventListener('click',e=>{const b=e.target.closest('[data-item]');if(!b)return;setTool('select');room.addItem(b.dataset.item);toast(`${CATALOG[b.dataset.item].label} added — drag it into place.`)});
+document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
+$('rotateButton').addEventListener('click',()=>room.rotateSelected());$('deleteButton').addEventListener('click',()=>{room.deleteSelected();toast('Piece removed.')});
+$('gridButton').addEventListener('click',()=>{grid=!grid;room.setGrid(grid);$('gridButton').classList.toggle('active',grid)});
+$('lightButton').addEventListener('click',()=>{light=!light;room.setLight(light);$('lightButton').classList.toggle('active',light)});
+$('fitButton').addEventListener('click',()=>room.fit());
+$('undoButton').addEventListener('click',()=>{if(history.length<2)return;history.pop();const state=JSON.parse(history[history.length-1]);restoring=true;room.setState(state);restoring=false;$('undoButton').disabled=history.length<2;toast('Last change undone.')});
+$('resetButton').addEventListener('click',()=>{if(confirm('Start over with the sample room? You can undo this afterwards.')){room.reset();setTool('select');toast('Sample room restored.')}});
+$('arrangeButton').addEventListener('click',()=>{const state=room.getState(),result=arrangeRoom(state,CATALOG);if(!result.ok){toast(result.messages[0]);return}state.items=result.items;room.setState(state);setTool('select');toast('Here’s one way to find your flow. Use Undo to go back.')});
+$('exportButton').addEventListener('click',()=>{const data=JSON.stringify({format:'little-room',version:1,state:room.getState()},null,2);const url=URL.createObjectURL(new Blob([data],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='my-little-room.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Your room plan was exported.')});
+$('importButton').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>1000000)throw Error();const parsed=JSON.parse(await file.text()),state=parsed.state||parsed;if(!safeState(state))throw Error();room.setState(state);setTool('select');toast('Your room plan is open.')}catch(err){toast('That file could not be opened. Choose a Little Room plan.')}finally{e.target.value=''}});
+$('helpButton').addEventListener('click',()=>$('helpDialog').showModal());$('closeHelp').addEventListener('click',()=>$('helpDialog').close());$('gotIt').addEventListener('click',()=>$('helpDialog').close());
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea')||$('helpDialog').open)return;if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='z'){e.preventDefault();$('undoButton').click()}else if((e.key==='Delete'||e.key==='Backspace')&&currentSelection){e.preventDefault();room.deleteSelected()}else if(e.key.toLowerCase()==='r'&&currentSelection&&CATALOG[currentSelection.type])room.rotateSelected();else if(e.key==='Escape')room.selectItem(null)});
+})();
+
+</script>
+</body></html>

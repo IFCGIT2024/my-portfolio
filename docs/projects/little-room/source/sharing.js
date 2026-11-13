@@ -115,6 +115,16 @@
         const { x1, y1, x2, y2 } = wall;
         if (![x1, y1, x2, y2].every(n => typeof n === 'number' && Number.isFinite(n) && Math.abs(n) <= 100)) fail();
         if (Math.hypot(x2 - x1, y2 - y1) < .05) fail();
+        if (wall.curve !== undefined) {
+          const curve = wall.curve;
+          if (!curve || typeof curve !== 'object' || Array.isArray(curve) ||
+              !Array.isArray(curve.center) || curve.center.length !== 2 ||
+              !curve.center.every(n => typeof n === 'number' && Number.isFinite(n) && Math.abs(n) <= 1000000) ||
+              (curve.direction !== 1 && curve.direction !== -1) ||
+              (curve.group !== undefined && (typeof curve.group !== 'string' || !curve.group || curve.group.length > 100)) ||
+              Math.hypot(x1 - curve.center[0], y1 - curve.center[1]) < .01 ||
+              Math.hypot(x2 - curve.center[0], y2 - curve.center[1]) < .01) fail();
+        }
         ids.add(wall.id);
       }
     }

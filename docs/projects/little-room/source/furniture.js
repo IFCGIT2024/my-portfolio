@@ -212,6 +212,16 @@ function insertShapePoint(item,catalog,index,point){
  const a=world[index],b=world[(index+1)%world.length],q=nearestPoint(point,[a.x,a.y],[b.x,b.y]);if(q.t<=.001||q.t>=.999)return false;
  const k=(index+1)%p.length,u=p[index],v=p[k],candidate=p.map(x=>x.slice());candidate.splice(index+1,0,[u[0]+(v[0]-u[0])*q.t,u[1]+(v[1]-u[1])*q.t]);if(!validShapeOutline(candidate))return false;item.shapeOutline=candidate;return true;
 }
+// Remove a single editable point without changing the object's transform or
+// existing room-fit mask. Never replace a complex legacy shape with a box.
+function removeShapePoint(item,catalog,index){
+ if(!item||typeof item!=='object'||!catalog||typeof catalog!=='object')return false;
+ const points=shapePoints(item,catalog);
+ if(!points||points.length<=3||!Number.isInteger(index)||index<0||index>=points.length)return false;
+ const candidate=points.map(point=>point.slice());candidate.splice(index,1);
+ if(!validShapeOutline(candidate))return false;
+ item.shapeOutline=candidate;return true;
+}
 function moveShapePoint(item,catalog,index,point){
  if(!point||!Number.isFinite(point.x)||!Number.isFinite(point.y))return false;const poly=shapePoints(item,catalog),old=itemSize(item,catalog);if(!poly||!Number.isInteger(index)||index<0||index>=poly.length)return false;
  const local=toLocal(item,point),absolute=poly.map(([x,y])=>[x*old.w,y*old.h]);absolute[index]=[local.x,local.y];const xs=absolute.map(p=>p[0]),ys=absolute.map(p=>p[1]),minX=Math.min(-old.w/2,...xs),maxX=Math.max(old.w/2,...xs),minY=Math.min(-old.h/2,...ys),maxY=Math.max(old.h/2,...ys),w=maxX-minX,h=maxY-minY;if(w<.1||h<.1||w>100||h>100)return false;
@@ -236,5 +246,5 @@ function fitToRoom(item,catalog,poly){
  if(!overlaps)return null;
  return {...item,clipPolygon:local.map(([x,y])=>[Math.round(x*1e6)/1e6,Math.round(y*1e6)/1e6])};
 }
-root.Furniture={itemSize,toWorld,toLocal,corners,draw,hitItem,drawHandles,hitHandle,startTransform,moveTransform,createFromBox,createFromPoints,snapToGrid,snapToWall,fitToRoom,waitForImages,validShapeOutline,shapePoints,hitShapeVertex,hitShapeEdge,insertShapePoint,moveShapePoint,resetShape,drawShapeHandles};
+root.Furniture={itemSize,toWorld,toLocal,corners,draw,hitItem,drawHandles,hitHandle,startTransform,moveTransform,createFromBox,createFromPoints,snapToGrid,snapToWall,fitToRoom,waitForImages,validShapeOutline,shapePoints,hitShapeVertex,hitShapeEdge,insertShapePoint,removeShapePoint,moveShapePoint,resetShape,drawShapeHandles};
 })(typeof window==='undefined'?globalThis:window);

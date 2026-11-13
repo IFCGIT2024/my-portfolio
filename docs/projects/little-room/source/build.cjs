@@ -5,7 +5,7 @@ const dir = __dirname;
 const read = name => fs.readFileSync(path.join(dir, name), 'utf8');
 const canvas = read('canvas.js').replace('export const CATALOG', 'const CATALOG').replace('export function getDefaultState', 'function getDefaultState').replace('export class RoomCanvas', 'class RoomCanvas');
 const feng = read('feng.js').replace('export function inspectRoom', 'function inspectRoom').replace('export function arrangeRoom', 'function arrangeRoom');
-const script = [read('furniture.js'), `(function(){\n${canvas}\nwindow.RoomModule={CATALOG,getDefaultState,RoomCanvas};\n})();`, `(function(){\n${feng}\nwindow.FengModule={inspectRoom,arrangeRoom};\n})();`, read('sharing.js'), read('radial.js'), read('custom-studio.js'), read('generator.js'), read('ui.js')].join('\n');
+const script = [read('furniture.js'), `(function(){\n${canvas}\nwindow.RoomModule={CATALOG,getDefaultState,RoomCanvas};\n})();`, `(function(){\n${feng}\nwindow.FengModule={inspectRoom,arrangeRoom};\n})();`, read('sharing.js'), read('radial.js'), read('custom-studio.js'), read('generator.js'), read('local-plans.js'), read('ui.js')].join('\n');
 const names = ['style.css', 'mobile.css', 'radial.css', 'custom-studio.css'];
 const links = names.map(name => `<link rel="stylesheet" href="${name}">`).join('\n');
 const styles = names.map(read).join('\n');

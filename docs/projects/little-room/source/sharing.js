@@ -79,6 +79,20 @@
     const fail = () => { throw new Error('This room plan contains unsupported or excessive data.'); };
     if (!Array.isArray(state.items) || state.items.length > 300 || !Array.isArray(state.openings) || state.openings.length > 500) fail();
     if (state.cells != null && (!Array.isArray(state.cells) || state.cells.length > 50000)) fail();
+    if (state.interiorWalls !== undefined) {
+      if (!Array.isArray(state.interiorWalls) || state.interiorWalls.length > 300) fail();
+      // Walls share the selection/delete namespace with existing objects.
+      // Existing legacy item/opening IDs are left alone unless a wall collides.
+      const ids = new Set([...state.items, ...state.openings].filter(x => x && typeof x.id === 'string').map(x => x.id));
+      for (const wall of state.interiorWalls) {
+        if (!wall || typeof wall !== 'object' || Array.isArray(wall) || typeof wall.id !== 'string' || !wall.id || ids.has(wall.id) || wall.type !== 'interior-wall') fail();
+        const { x1, y1, x2, y2 } = wall;
+        if (![x1, y1, x2, y2].every(n => typeof n === 'number' && Number.isFinite(n) && Math.abs(n) <= 100)) fail();
+        if (x1 !== x2 && y1 !== y2) fail();
+        if (Math.hypot(x2 - x1, y2 - y1) < .05) fail();
+        ids.add(wall.id);
+      }
+    }
     for (const key of ['polygon', 'roomPolygon']) {
       if (state[key] != null && (!Array.isArray(state[key]) || state[key].length > 1000)) fail();
     }

@@ -75,9 +75,35 @@
     if (!state || typeof state !== 'object' || Array.isArray(state)) throw new Error('No room plan was available to save.');
     return { format: 'little-room', version: 2, title: String(title || 'My room').slice(0, 160), state };
   }
+  // A shape outline is item-local and bounded by its item's dimensions. Legacy
+  // clipPolygon is deliberately not subject to these rules: fitting an item to
+  // a room stores room coordinates that may extend beyond the item's bounds.
+  function validShapeOutline(points) {
+    if (!Array.isArray(points) || points.length < 3 || points.length > 64 ||
+        points.some(p => !Array.isArray(p) || p.length !== 2 || p.some(v => typeof v !== 'number' || !Number.isFinite(v) || Math.abs(v) > .500001))) return false;
+    const n = points.length;
+    const cross = (a, b, c) => (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+    const intersects = (a,b,c,d) => {
+      const p=cross(a,b,c),q=cross(a,b,d),r=cross(c,d,a),s=cross(c,d,b),eps=1e-10;
+      if((p>eps&&q>eps)||(p< -eps&&q< -eps)||(r>eps&&s>eps)||(r< -eps&&s< -eps))return false;
+      return Math.max(Math.min(a[0],b[0]),Math.min(c[0],d[0]))<=Math.min(Math.max(a[0],b[0]),Math.max(c[0],d[0]))+eps && Math.max(Math.min(a[1],b[1]),Math.min(c[1],d[1]))<=Math.min(Math.max(a[1],b[1]),Math.max(c[1],d[1]))+eps;
+    };
+    let area=0;
+    for(let i=0;i<n;i++) {
+      const a=points[i],b=points[(i+1)%n];
+      if(Math.hypot(a[0]-b[0],a[1]-b[1])<1e-6)return false;
+      area+=a[0]*b[1]-b[0]*a[1];
+      for(let j=i+1;j<n;j++) {
+        if(j===i+1||(i===0&&j===n-1))continue;
+        if(intersects(a,b,points[j],points[(j+1)%n]))return false;
+      }
+    }
+    return Math.abs(area) >= 1e-6;
+  }
   function validateState(state) {
     const fail = () => { throw new Error('This room plan contains unsupported or excessive data.'); };
     if (!Array.isArray(state.items) || state.items.length > 300 || !Array.isArray(state.openings) || state.openings.length > 500) fail();
+    for (const item of state.items) if (item && Object.prototype.hasOwnProperty.call(item, 'shapeOutline') && !validShapeOutline(item.shapeOutline)) fail();
     if (state.cells != null && (!Array.isArray(state.cells) || state.cells.length > 50000)) fail();
     if (state.interiorWalls !== undefined) {
       if (!Array.isArray(state.interiorWalls) || state.interiorWalls.length > 300) fail();
@@ -88,7 +114,6 @@
         if (!wall || typeof wall !== 'object' || Array.isArray(wall) || typeof wall.id !== 'string' || !wall.id || ids.has(wall.id) || wall.type !== 'interior-wall') fail();
         const { x1, y1, x2, y2 } = wall;
         if (![x1, y1, x2, y2].every(n => typeof n === 'number' && Number.isFinite(n) && Math.abs(n) <= 100)) fail();
-        if (x1 !== x2 && y1 !== y2) fail();
         if (Math.hypot(x2 - x1, y2 - y1) < .05) fail();
         ids.add(wall.id);
       }

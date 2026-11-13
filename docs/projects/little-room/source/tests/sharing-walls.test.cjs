@@ -36,7 +36,7 @@ test('damaged wall data is rejected before it reaches the editor', async () => {
   const invalid = [
     null, {}, [{ ...wall, id: '' }], [{ ...wall, type: 'window' }],
     [{ ...wall, x1: '2' }], [{ ...wall, x1: 101 }],
-    [{ ...wall, x2: 3 }], [{ ...wall, x2: 2, y2: 1 }],
+    [{ ...wall, x2: 2, y2: 1 }],
     [wall, { ...wall }], Array.from({ length: 301 }, (_, i) => ({ ...wall, id: String(i) }))
   ];
   for (const interiorWalls of invalid) {
@@ -45,4 +45,11 @@ test('damaged wall data is rejected before it reaches the editor', async () => {
   for (const key of ['items', 'openings']) {
     await assert.rejects(() => sharing.readPlan(asJsonFile({ ...state, [key]: [{ id: wall.id }] })), /unsupported or excessive data/);
   }
+});
+
+test('diagonal interior walls remain editable after JSON and PNG import', async () => {
+  const diagonal = { ...wall, x2: 4, y2: 5 };
+  const room = { ...state, interiorWalls: [diagonal] };
+  assert.deepEqual(plain((await sharing.readPlan(asJsonFile(room))).state.interiorWalls), [diagonal]);
+  assert.deepEqual(plain((await sharing.readPlan(asFile(sharing.embedMetadata(png, envelope(room))))).state.interiorWalls), [diagonal]);
 });

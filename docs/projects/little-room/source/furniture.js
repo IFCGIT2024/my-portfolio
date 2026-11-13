@@ -21,9 +21,10 @@ function corners(item,catalog){
  return [toWorld(item,{x:-w/2,y:-h/2}),toWorld(item,{x:w/2,y:-h/2}),toWorld(item,{x:w/2,y:h/2}),toWorld(item,{x:-w/2,y:h/2})];
 }
 function customPath(ctx,item,w,h){
-  const points=Array.isArray(item.points)?item.points:[];
+  const edited=Array.isArray(item.shapeOutline)&&item.shapeOutline.length>=3;
+  const points=edited?item.shapeOutline:(Array.isArray(item.points)?item.points:[]);
   ctx.beginPath();
-  if((item.shape==='polygon'||item.shape==='freehand')&&points.length>=3){
+  if((edited||item.shape==='polygon'||item.shape==='freehand')&&points.length>=3){
     points.forEach((p,i)=>{const x=p[0]*w,y=p[1]*h;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.closePath();
   }else if(item.shape==='ellipse'||item.shape==='pillar'){
     ctx.ellipse(0,0,w/2,h/2,0,0,TAU);
@@ -51,6 +52,10 @@ function clipToStoredShape(ctx,item,w,h){
  if(!Array.isArray(item.clipPolygon)||item.clipPolygon.length<3)return;
  ctx.beginPath();item.clipPolygon.forEach((p,i)=>{if(i===0)ctx.moveTo(p[0]*w,p[1]*h);else ctx.lineTo(p[0]*w,p[1]*h)});ctx.closePath();ctx.clip();
 }
+function clipToEditedShape(ctx,item,w,h){
+ if(!Array.isArray(item.shapeOutline)||item.shapeOutline.length<3)return;
+ ctx.beginPath();item.shapeOutline.forEach((p,i)=>{if(i===0)ctx.moveTo(p[0]*w,p[1]*h);else ctx.lineTo(p[0]*w,p[1]*h)});ctx.closePath();ctx.clip();
+}
 function makeTinted(cacheKey,w,h,color,render){
  if(!validColor(color)||typeof document==='undefined')return null;
  const key=cacheKey+'|'+color,known=tintCache.get(key);if(known)return known;
@@ -63,6 +68,7 @@ function makeTinted(cacheKey,w,h,color,render){
 function draw(ctx,item,catalog,drawOriginal,requestRedraw){
  const {w,h}=itemSize(item,catalog),def=catalog[item.type];
  ctx.save();ctx.translate(item.x,item.y);ctx.rotate(radians(item.rotation));clipToStoredShape(ctx,item,w,h);
+ if(item.type!=='custom'||item.shape==='image')clipToEditedShape(ctx,item,w,h);
  if(item.type==='custom'&&item.shape==='image'){
    const img=localImage(item.imageData,requestRedraw);
    if(img){const tinted=makeTinted(item.imageData,1,1,item.color,tc=>tc.drawImage(img,0,0,1,1));ctx.drawImage(tinted||img,-w/2,-h/2,w,h)}
@@ -82,6 +88,7 @@ function hitItem(item,catalog,point){
  const p=toLocal(item,point),{w,h}=itemSize(item,catalog),nx=p.x/w,ny=p.y/h;
  if(Math.abs(nx)>.5||Math.abs(ny)>.5)return false;
  if(Array.isArray(item.clipPolygon)&&item.clipPolygon.length>=3&&!pointInPath({x:nx,y:ny},item.clipPolygon))return false;
+ if(Array.isArray(item.shapeOutline)&&item.shapeOutline.length>=3)return pointInPath({x:nx,y:ny},item.shapeOutline);
  if(item.type==='custom'&&(item.shape==='ellipse'||item.shape==='pillar'))return nx*nx*4+ny*ny*4<=1;
  if(item.type==='custom'&&(item.shape==='polygon'||item.shape==='freehand')&&Array.isArray(item.points)&&item.points.length>=3){
    let inside=false;const ps=item.points;
@@ -170,6 +177,56 @@ function segmentIntersects(a,b,c,d){
  if((p>eps&&q>eps)||(p< -eps&&q< -eps)||(r>eps&&s>eps)||(r< -eps&&s< -eps))return false;
  return Math.max(Math.min(a[0],b[0]),Math.min(c[0],d[0]))<=Math.min(Math.max(a[0],b[0]),Math.max(c[0],d[0]))+eps && Math.max(Math.min(a[1],b[1]),Math.min(c[1],d[1]))<=Math.min(Math.max(a[1],b[1]),Math.max(c[1],d[1]))+eps;
 }
+// The outline is stored in object-local coordinates; moving a point can also
+// grow the object, so furniture artwork stays editable and scales with it.
+function validShapeOutline(poly){
+ if(!Array.isArray(poly)||poly.length<3||poly.length>64||!poly.every(p=>Array.isArray(p)&&p.length===2&&p.every(v=>Number.isFinite(v)&&Math.abs(v)<=.500001)))return false;
+ let area=0;for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length];if(Math.hypot(b[0]-a[0],b[1]-a[1])<1e-6)return false;area+=a[0]*b[1]-b[0]*a[1]}
+ if(Math.abs(area)<1e-6)return false;
+ for(let i=0;i<poly.length;i++)for(let j=i+1;j<poly.length;j++){if(j===i+1||(i===0&&j===poly.length-1))continue;if(segmentIntersects(poly[i],poly[(i+1)%poly.length],poly[j],poly[(j+1)%poly.length]))return false}
+ return true;
+}
+function simplifyDrawnOutline(points){
+ // Retain a hand-drawn contour accurately; refuse especially detailed shapes
+ // rather than silently converting them into a different object.
+ const simplify=(part,tolerance)=>{if(part.length<=2)return part;const a=part[0],b=part[part.length-1],dx=b[0]-a[0],dy=b[1]-a[1],length=dx*dx+dy*dy;let index=0,best=0;for(let i=1;i<part.length-1;i++){const p=part[i],t=length?Math.max(0,Math.min(1,((p[0]-a[0])*dx+(p[1]-a[1])*dy)/length)):0,d=Math.hypot(p[0]-(a[0]+t*dx),p[1]-(a[1]+t*dy));if(d>best){best=d;index=i}}if(best<=tolerance)return [a,b];return simplify(part.slice(0,index+1),tolerance).slice(0,-1).concat(simplify(part.slice(index),tolerance))};
+ const middle=Math.floor(points.length/2),a=simplify(points.slice(0,middle+1),.002),b=simplify(points.slice(middle).concat([points[0]]),.002);return a.slice(0,-1).concat(b.slice(0,-1));
+}
+function shapePoints(item,catalog){
+ // A room-fit mask can have thousands of points, extend past the item, or
+ // describe disconnected pieces. Do not replace it with a misleading box.
+ if(Array.isArray(item.clipPolygon)&&item.clipPolygon.length>=3)return null;
+ if(validShapeOutline(item.shapeOutline))return item.shapeOutline.map(p=>p.slice());
+ if(item.type==='custom'&&(item.shape==='polygon'||item.shape==='freehand')&&Array.isArray(item.points)&&item.points.length>=3){
+  const source=item.points,points=(source.length>64?simplifyDrawnOutline(source):source).map(p=>p.slice());
+  return validShapeOutline(points)?points:null;
+ }
+ if(item.type==='custom'&&(item.shape==='ellipse'||item.shape==='pillar'))return Array.from({length:16},(_,i)=>[Math.cos(i*TAU/16)*.5,Math.sin(i*TAU/16)*.5]);
+ return [[-.5,-.5],[.5,-.5],[.5,.5],[-.5,.5]];
+}
+function shapeWorldPoints(item,catalog){const {w,h}=itemSize(item,catalog),points=shapePoints(item,catalog);return points?points.map(([x,y])=>toWorld(item,{x:x*w,y:y*h})):[]}
+function hitShapeVertex(item,catalog,point,scale){const pts=shapeWorldPoints(item,catalog),radius=15/Math.max(scale,1);let hit=-1,best=radius;pts.forEach((p,i)=>{const d=Math.hypot(p.x-point.x,p.y-point.y);if(d<=best){best=d;hit=i}});return hit}
+function hitShapeEdge(item,catalog,point,scale){const pts=shapeWorldPoints(item,catalog);let best=null;for(let i=0;i<pts.length;i++){const a=pts[i],b=pts[(i+1)%pts.length],q=nearestPoint(point,[a.x,a.y],[b.x,b.y]);if(q.len>1e-6&&(!best||q.distance<best.distance))best={index:i,point:{x:q.x,y:q.y},distance:q.distance,t:q.t}}return best&&best.distance<=15/Math.max(scale,1)?best:null}
+function insertShapePoint(item,catalog,index,point){
+ const p=shapePoints(item,catalog),world=shapeWorldPoints(item,catalog);if(!p||!Number.isInteger(index)||index<0||index>=p.length||p.length>=64||!point||!Number.isFinite(point.x)||!Number.isFinite(point.y))return false;
+ const a=world[index],b=world[(index+1)%world.length],q=nearestPoint(point,[a.x,a.y],[b.x,b.y]);if(q.t<=.001||q.t>=.999)return false;
+ const k=(index+1)%p.length,u=p[index],v=p[k],candidate=p.map(x=>x.slice());candidate.splice(index+1,0,[u[0]+(v[0]-u[0])*q.t,u[1]+(v[1]-u[1])*q.t]);if(!validShapeOutline(candidate))return false;item.shapeOutline=candidate;return true;
+}
+function moveShapePoint(item,catalog,index,point){
+ if(!point||!Number.isFinite(point.x)||!Number.isFinite(point.y))return false;const poly=shapePoints(item,catalog),old=itemSize(item,catalog);if(!poly||!Number.isInteger(index)||index<0||index>=poly.length)return false;
+ const local=toLocal(item,point),absolute=poly.map(([x,y])=>[x*old.w,y*old.h]);absolute[index]=[local.x,local.y];const xs=absolute.map(p=>p[0]),ys=absolute.map(p=>p[1]),minX=Math.min(-old.w/2,...xs),maxX=Math.max(old.w/2,...xs),minY=Math.min(-old.h/2,...ys),maxY=Math.max(old.h/2,...ys),w=maxX-minX,h=maxY-minY;if(w<.1||h<.1||w>100||h>100)return false;
+ const cx=(minX+maxX)/2,cy=(minY+maxY)/2,candidate=absolute.map(([x,y])=>[(x-cx)/w,(y-cy)/h]);if(!validShapeOutline(candidate))return false;
+ const center=toWorld(item,{x:cx,y:cy}),mapPoints=points=>points.map(([x,y])=>[(x*old.w-cx)/w,(y*old.h-cy)/h]);
+ if(Array.isArray(item.clipPolygon))item.clipPolygon=mapPoints(item.clipPolygon);
+ if(item.type==='custom'&&Array.isArray(item.points))item.points=mapPoints(item.points);
+ item.x=center.x;item.y=center.y;item.w=w;item.h=h;item.shapeOutline=candidate;return true;
+}
+function resetShape(item){if(!Array.isArray(item.shapeOutline))return false;delete item.shapeOutline;return true}
+function drawShapeHandles(ctx,item,catalog,scale){
+ const pts=shapeWorldPoints(item,catalog),unit=Math.max(scale,1);if(!pts.length)return;ctx.save();ctx.shadowColor='transparent';ctx.lineWidth=1.5/unit;ctx.strokeStyle='#527d65';ctx.setLineDash([5/unit,4/unit]);ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.stroke();ctx.setLineDash([]);
+ for(let i=0;i<pts.length;i++){const p=pts[i],q=pts[(i+1)%pts.length],m={x:(p.x+q.x)/2,y:(p.y+q.y)/2};ctx.beginPath();ctx.arc(m.x,m.y,4/unit,0,TAU);ctx.fillStyle='#fffefa';ctx.fill();ctx.lineWidth=1.2/unit;ctx.strokeStyle='#6f9c79';ctx.stroke()}
+ for(const p of pts){ctx.beginPath();ctx.arc(p.x,p.y,7/unit,0,TAU);ctx.fillStyle='#527d65';ctx.fill();ctx.lineWidth=1.5/unit;ctx.strokeStyle='#fffefa';ctx.stroke()}ctx.restore();
+}
 function fitToRoom(item,catalog,poly){
  if(!validPolygon(poly))return null;const size=itemSize(item,catalog);
  const local=poly.map(([x,y])=>{const p=toLocal(item,{x,y});return [p.x/size.w,p.y/size.h]});
@@ -179,5 +236,5 @@ function fitToRoom(item,catalog,poly){
  if(!overlaps)return null;
  return {...item,clipPolygon:local.map(([x,y])=>[Math.round(x*1e6)/1e6,Math.round(y*1e6)/1e6])};
 }
-root.Furniture={itemSize,toWorld,toLocal,corners,draw,hitItem,drawHandles,hitHandle,startTransform,moveTransform,createFromBox,createFromPoints,snapToGrid,snapToWall,fitToRoom,waitForImages};
+root.Furniture={itemSize,toWorld,toLocal,corners,draw,hitItem,drawHandles,hitHandle,startTransform,moveTransform,createFromBox,createFromPoints,snapToGrid,snapToWall,fitToRoom,waitForImages,validShapeOutline,shapePoints,hitShapeVertex,hitShapeEdge,insertShapePoint,moveShapePoint,resetShape,drawShapeHandles};
 })(typeof window==='undefined'?globalThis:window);

@@ -11,6 +11,8 @@
 .eyebrow,.breadcrumb,.tiny-label{font-size:10px}.sidebar-head p,.side-intro,.insight-panel p{font-size:12px}.furniture-card strong,.build-tool strong,.suggestion strong{font-size:11px}.furniture-card small,.build-tool small,.sidebar-note p,.suggestion p,.soft-note,.magic-caption,.canvas-bottom,.saved{font-size:10px!important}.furniture-card{cursor:grab}.furniture-card:active{cursor:grabbing}
 .portfolio-link{font-size:11px;font-weight:700;color:#648373;text-decoration:none;white-space:nowrap}.portfolio-link:hover{text-decoration:underline}.mobile-nav,.mobile-sheet-close,.mobile-insight-close{display:none}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.room-name{display:block;min-width:50px;max-width:170px;width:100%;padding:3px 4px;margin-left:-4px;border:1px solid transparent;background:transparent;border-radius:5px;color:#344b3c;font-size:12px;font-weight:700}.room-name:hover,.room-name:focus{border-color:#c9ddc9;background:white;outline:none}.canvas-controls{gap:3px}.object-inspector{display:flex;align-items:center;gap:10px;padding:10px 18px;border-top:1px solid #eff2eb;flex-wrap:wrap}.inspector-name{min-width:100px;flex:1}.inspector-name span{display:block;color:#a3b2a4;font-size:8px;letter-spacing:.1em;font-weight:800}.inspector-name strong{font-size:11px;display:block;margin-top:4px}.object-inspector label{color:#7e9182;font-size:10px;font-weight:700}.field-unit{display:flex;align-items:center;gap:3px;margin-top:3px;background:#f4f7f1;border-radius:7px;color:#819487;padding:4px 6px}.field-unit input{width:45px;border:0;background:transparent;color:#3b5943;font:600 12px var(--sans);outline:none}.object-inspector button{border:0;border-radius:8px;padding:9px;color:#a27569;background:#fbefea;font-size:10px;font-weight:700}.sun-controls{border-bottom:1px solid #edf0e8;padding-bottom:18px;margin-bottom:20px}.sun-title{display:flex;align-items:center;gap:10px;margin-bottom:14px}.sun-title>span{height:36px;width:36px;border-radius:11px;display:grid;place-items:center;color:#b18753;background:#fbefdb;font-size:23px}.sun-title strong,.sun-title small{display:block}.sun-title strong{font-family:var(--serif);font-size:17px;font-weight:500}.sun-title small,.sun-footnote{color:#a0afa1;font-size:10px}.sun-controls label{display:flex;justify-content:space-between;margin-top:10px;color:#6f8673;font-size:10px;font-weight:700}.sun-controls output{color:#ad8d64}.sun-controls input[type=range]{width:100%;accent-color:#739777;margin:8px 0 0}.sun-compass{display:flex;justify-content:space-between;color:#b3bdb1;font-size:9px;font-weight:700}.sun-footnote{display:block;margin-top:10px;line-height:1.5}.save-actions{display:grid;gap:8px;margin:20px 0}.save-option{display:flex;align-items:center;gap:12px;text-align:left;padding:13px;border:1px solid #e6eee3;background:#f8fbf5;border-radius:11px}.save-option>span:first-child{font-size:20px;color:#789a7e;width:28px;text-align:center}.save-option>span:nth-child(2){flex:1}.save-option strong,.save-option small{display:block}.save-option strong{font-size:12px;color:#4a6b51}.save-option small{font-size:10px;color:#95a697;margin-top:4px}.save-option:hover{background:#eef7eb}.save-option>span:last-child{color:#88a68d}@media(min-width:701px) and (max-width:1150px){.sun-controls{grid-column:1/-1}.insight-top{grid-row:auto}.tips-heading,.suggestions,.soft-note{grid-row:auto}}
 .snap-choice{display:flex;align-items:center;gap:5px;color:#839787;font-size:10px}.snap-choice select{border:0;background:#f2f7ef;border-radius:5px;color:#5b7c62;padding:4px;font-size:10px}.canvas-bottom>span:first-of-type{flex:1;margin-left:12px}
+.add-custom{border:0;cursor:pointer;white-space:nowrap}.add-custom:hover{background:#dcebdc;color:#345d4a}.add-custom:focus-visible{outline:3px solid #d8a381;outline-offset:2px}.selection-tools #objectOptions{background:#ecf2ea;color:#50705a}.under-actions{flex-wrap:wrap;justify-content:flex-end}.under-actions button{white-space:nowrap}
+.curve-finish{position:absolute;z-index:4;top:13px;right:13px;border:0;border-radius:10px;background:#436e51;color:white;padding:11px 14px;font-size:11px;font-weight:700;box-shadow:0 4px 10px #3e58432d}.curve-finish:hover{background:#315a40}
 
 /* The planner keeps its desktop workspace. The dock and sheets are for touch screens. */
 .mobile-nav,.mobile-sheet-close,.mobile-insight-close{display:none}
@@ -67,6 +69,36 @@
 }
 @media (max-width:400px){.canvas-controls{max-width:100%}}
 
+/* Little radial menus keep their hit targets large while staying near a touch. */
+.room-menu-overlay{position:fixed;z-index:5000;inset:0;background:rgba(35,51,40,.36);backdrop-filter:blur(2px);-webkit-tap-highlight-color:transparent}
+.room-radial{position:absolute;width:0;height:0;isolation:isolate}
+.room-radial:before{content:'';position:absolute;left:0;top:0;transform:translate(-50%,-50%);width:calc(var(--radial-radius)*2 + 74px);height:calc(var(--radial-radius)*2 + 74px);border-radius:50%;background:rgba(250,253,246,.97);box-shadow:0 12px 40px #253d2b4a;border:1px solid #e3ecdd;pointer-events:none}
+.room-radial-caption{position:absolute;top:calc(-1 * var(--radial-radius) - 48px);left:50%;transform:translateX(-50%);white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;color:#3e624a;font:700 12px var(--sans,system-ui);margin:0;text-align:center}
+.room-radial-center,.room-radial-action{position:absolute;transform:translate(-50%,-50%);border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.room-radial-center{top:0;left:0;width:46px;height:46px;border-radius:50%;background:#e8f0e4;color:#67856a;font:400 24px/1 system-ui;box-shadow:inset 0 0 0 1px #d9e9d5}
+.room-radial-action{width:86px;min-height:55px;padding:5px 3px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;border-radius:13px;background:transparent;color:#486a51;font:700 10px/1.15 var(--sans,system-ui);text-align:center}
+.room-radial-action:hover,.room-radial-action:focus-visible{background:#e5f0e1;outline:none;box-shadow:0 0 0 2px #91b692}
+.room-radial-action:active{transform:translate(-50%,-50%) scale(.95)}
+.room-radial-action:disabled{opacity:.38;cursor:not-allowed}.room-radial-icon{font:400 21px/1 system-ui;color:#719876}.room-radial-label{display:block;max-width:84px}
+.room-menu-modal{display:flex;align-items:center;justify-content:center;padding:16px}.room-menu-prompt{box-sizing:border-box;width:min(390px,100%);padding:22px;border:1px solid #e1eadd;border-radius:18px;background:#fffefa;box-shadow:0 20px 60px #203b293d;color:#3f5949;font-family:var(--sans,system-ui)}
+.room-menu-prompt h2{margin:0 0 8px;font:500 25px/1.1 Georgia,serif;letter-spacing:-.5px}.room-menu-prompt p{margin:0 0 18px;color:#829789;font-size:12px;line-height:1.5}.room-menu-prompt label{display:block;margin:0 0 7px;color:#5f7964;font-size:11px;font-weight:700}.room-menu-input{box-sizing:border-box;width:100%;min-height:46px;border:1px solid #d9e6d7;border-radius:10px;background:#fbfdf9;padding:9px 11px;color:#385444;font:500 16px var(--sans,system-ui)}.room-menu-input[type=color]{padding:4px;cursor:pointer}.room-menu-input:focus-visible{outline:3px solid #bdd4b5;outline-offset:1px}.room-menu-swatches{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:12px 0}.room-menu-swatch{aspect-ratio:1;border:1px solid #8d9a8d60;border-radius:50%;min-width:0;padding:0;cursor:pointer}.room-menu-prompt-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.room-menu-prompt-actions button{min-height:43px;padding:10px 16px;border:0;border-radius:9px;font-size:12px;font-weight:700}.room-menu-cancel{background:#edf3ea;color:#5d7b62}.room-menu-save{background:#416c50;color:#fff}
+@media(max-width:380px){.room-radial-action{width:78px;min-height:52px;font-size:9px}.room-radial-caption{max-width:160px}.room-menu-swatch{min-height:0}}
+@media(max-height:320px){.room-radial-caption{display:none}}
+@media(prefers-reduced-motion:reduce){.room-radial-action{transition:none}}
+@media(max-width:380px){.room-radial-action{width:76px}}
+.room-radial-compact{left:50%!important;top:50%!important;transform:translate(-50%,-50%);width:min(330px,calc(100vw - 20px));max-height:calc(100dvh - 20px);overflow:auto;box-sizing:border-box;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;padding:12px;border:1px solid #e3ecdd;border-radius:16px;background:#fafdf6;box-shadow:0 12px 40px #253d2b4a}
+.room-radial-compact:before{display:none}.room-radial-compact .room-radial-caption{display:block;position:static;transform:none;grid-column:1/-1;max-width:100%;padding:2px 32px 5px}.room-radial-compact .room-radial-center{top:7px;left:auto;right:7px;transform:none;width:30px;height:30px;font-size:18px}.room-radial-compact .room-radial-action{position:relative;left:auto!important;top:auto!important;transform:none;width:100%;min-height:48px}
+
+.custom-studio{width:min(880px,calc(100vw - 28px));max-width:none;max-height:min(92vh,900px);padding:0;overflow:auto;border:0;border-radius:20px;background:#fffefa;color:#344d3c;box-shadow:0 30px 80px #20362b66;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.custom-studio::backdrop{background:#233b30a8;backdrop-filter:blur(3px)}
+.custom-studio *{box-sizing:border-box}.custom-studio button,.custom-studio input{font:inherit}.custom-studio button{cursor:pointer}.custom-studio button:focus-visible,.custom-studio input:focus-visible{outline:3px solid #d8a381;outline-offset:2px}
+.custom-studio .studio-head{display:flex;justify-content:space-between;gap:15px;padding:24px 26px 17px;border-bottom:1px solid #e9eee6}.custom-studio .studio-kicker{font-size:9px;font-weight:800;letter-spacing:.14em;color:#91a197}.custom-studio h2{font-family:Georgia,serif;font-size:27px;letter-spacing:-.6px;font-weight:500;margin:7px 0}.custom-studio .studio-head p{font-size:12px;color:#8b9d90;line-height:1.5;margin:0}.custom-studio .studio-close{flex:none;width:38px;height:38px;border:1px solid #e6eae1;border-radius:11px;color:#65836c;background:white;font-size:23px;line-height:1}
+.custom-studio .studio-body{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:22px;padding:22px 26px}.custom-studio .studio-image-area{display:flex;align-items:center;justify-content:center;min-height:270px;padding:14px;background:#f1f5ec;border:1px solid #e2ebdd;border-radius:15px;overflow:auto}.custom-studio .studio-canvas{display:block;width:100%;max-width:440px;height:auto;max-height:420px;object-fit:contain;touch-action:none;background-color:#fff;background-image:linear-gradient(45deg,#eef1e9 25%,transparent 25%),linear-gradient(-45deg,#eef1e9 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#eef1e9 75%),linear-gradient(-45deg,transparent 75%,#eef1e9 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;box-shadow:0 4px 15px #6e7a6e26;cursor:crosshair}.custom-studio .studio-canvas-help{margin:9px 2px 0;font-size:10px;line-height:1.45;color:#99a89b}
+.custom-studio .studio-settings{display:flex;flex-direction:column;gap:8px}.custom-studio .studio-settings label{display:block;font-size:10px;color:#738d79;font-weight:700}.custom-studio .studio-name-label input,.custom-studio .studio-size-row input{display:block;width:100%;margin-top:5px;border:1px solid #dfe9dd;border-radius:8px;background:#fafcf8;padding:9px;color:#35533e;font-size:12px}.custom-studio .studio-section-title{font-size:9px;font-weight:800;color:#9bada0;letter-spacing:.1em;margin-top:6px}.custom-studio .studio-upload{width:100%;min-height:40px;text-align:left;border:1px dashed #bbd3bb;border-radius:10px;background:#f6faf3;color:#5c7f63;font-size:11px;font-weight:700;padding:8px 12px}.custom-studio .studio-upload span{font-size:17px;padding-right:5px}.custom-studio .studio-dimension-title{display:flex;justify-content:space-between;align-items:baseline}.custom-studio .studio-dimension-title>span:last-child{font-size:10px;color:#a2b0a2}.custom-studio .studio-size-row{display:flex;align-items:end;gap:7px}.custom-studio .studio-size-row label{flex:1;min-width:0}.custom-studio .studio-size-row>span{padding-bottom:9px;color:#a3b5a3}.custom-studio .studio-size-row button,.custom-studio .studio-edit-row button{border:0;border-radius:8px;background:#eaf3e7;color:#577b5e;padding:9px;font-size:11px;font-weight:700;min-height:35px}
+.custom-studio .studio-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.custom-studio .studio-tools button{border:1px solid #e6eee4;background:#f9fbf7;border-radius:8px;color:#8aa08e;padding:8px 2px;font-size:12px;font-weight:700;white-space:nowrap}.custom-studio .studio-tools button.is-active{border-color:#9fbea2;background:#eaf4e7;color:#52795b}.custom-studio .studio-brush-row{display:grid;grid-template-columns:60px 1fr;gap:10px;align-items:end}.custom-studio input[type=color]{display:block;width:44px;height:35px;border:0;padding:2px;border-radius:7px;background:#eef4eb;cursor:pointer}.custom-studio input[type=range]{display:block;width:100%;accent-color:#719777;margin:8px 0}.custom-studio output{float:right;color:#a2b4a3}.custom-studio .studio-edit-row{display:flex;gap:7px}.custom-studio .studio-edit-row button:disabled{opacity:.45;cursor:default}
+.custom-studio .studio-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 26px 20px;border-top:1px solid #edf1ea}.custom-studio .studio-footer p{margin:0;color:#8ca091;font-size:11px;line-height:1.4}.custom-studio .studio-footer p.studio-error{color:#a3574e}.custom-studio .studio-add{flex:none;border:0;border-radius:10px;background:#456f54;color:#fff;padding:12px 16px;box-shadow:0 3px 0 #325a41;font-size:11px;font-weight:700}
+@media(max-width:700px){.custom-studio{max-height:94dvh;width:calc(100vw - 16px);border-radius:17px}.custom-studio .studio-head{padding:16px 16px 12px}.custom-studio h2{font-size:23px}.custom-studio .studio-head p{font-size:11px}.custom-studio .studio-close{min-width:42px;min-height:42px}.custom-studio .studio-body{display:flex;flex-direction:column;gap:12px;padding:12px 16px}.custom-studio .studio-image-area{min-height:180px;max-height:42dvh;padding:10px}.custom-studio .studio-canvas{max-height:36dvh;width:auto;max-width:100%}.custom-studio .studio-settings{gap:8px}.custom-studio .studio-settings label{font-size:11px}.custom-studio .studio-name-label input,.custom-studio .studio-size-row input{font-size:16px;min-height:42px}.custom-studio .studio-upload,.custom-studio .studio-tools button,.custom-studio .studio-edit-row button,.custom-studio .studio-size-row button{min-height:44px}.custom-studio .studio-footer{position:sticky;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:#fffefa}.custom-studio .studio-add{min-height:44px;font-size:12px}}
+
 </style>
 </head>
 <body>
@@ -81,7 +113,7 @@
   <button class="mobile-sheet-close" aria-label="Close toolbox">×</button><div class="sidebar-head"><div><span class="eyebrow">YOUR LITTLE TOOLBOX</span><h2>Make it yours<span class="spark">✳</span></h2><p>Every good space starts somewhere.</p></div></div>
   <div class="tabs" role="tablist"><button class="tab active" data-tab="furnish" role="tab" aria-selected="true"><span>✿</span> Furnish</button><button class="tab" data-tab="build" role="tab" aria-selected="false"><span>▧</span> Build room</button></div>
   <div class="side-content" id="furnishPanel">
-    <div class="section-line"><div><span class="eyebrow">THE FUN PART</span><h3>Find your pieces</h3></div><span class="count-pill">＋ add</span></div>
+    <div class="section-line"><div><span class="eyebrow">THE FUN PART</span><h3>Find your pieces</h3></div><button class="count-pill add-custom" id="addCustom" type="button">＋ Add your own</button></div>
     <p class="side-intro">Drag a piece into your room, or tap to add it.</p>
     <div class="category-scroll" id="categories"></div>
     <div class="furniture-grid" id="furnitureGrid"></div>
@@ -113,17 +145,17 @@
   <div class="heading-row"><div><div class="breadcrumb"><span>YOUR SPACE</span><span>✳</span><span>FLOOR PLAN</span></div><h1>A little room to dream <span>✳</span></h1><p>Move things around until your space feels just right.</p></div><div class="heading-right"><span class="tiny-label">CURRENT VIEW</span><span class="view-pill"><span>▦</span> Top down</span></div></div>
   <div class="canvas-card">
     <div class="canvas-top"><div class="canvas-title"><span class="room-icon">⌂</span><div><label class="sr-only" for="roomName">Room name</label><input id="roomName" class="room-name" type="text" maxlength="80" placeholder="Name your room" aria-label="Room name"><small id="roomMeta">Your space, your rules</small></div></div><div class="canvas-controls"><button id="gridButton" class="control active" title="Toggle grid">▦ <span>Grid</span></button><button id="lightButton" class="control active" title="Toggle sunlight">☼ <span>Sunlight</span></button><span class="vertical-rule"></span><button id="zoomOut" class="control icon-only" title="Zoom out" aria-label="Zoom out">−</button><button id="zoomIn" class="control icon-only" title="Zoom in" aria-label="Zoom in">＋</button><button id="fitButton" class="control icon-only" title="Fit room in view" aria-label="Fit room in view">⛶</button></div></div>
-    <div class="canvas-wrap" id="canvasWrap"><canvas id="roomCanvas" aria-label="Room floor plan. Use the toolbox to edit your room."></canvas><div class="mode-hint" id="modeHint"><span class="hint-icon">↖</span><span>Drag furniture to move it <b>·</b> Click to select</span></div><div class="selection-tools hidden" id="selectionTools"><span id="selectionLabel">Selected</span><button id="rotateButton" title="Rotate selected item">↻ <span>Rotate</span></button><button id="deleteButton" title="Delete selected item">⌫ <span>Remove</span></button></div></div>
+    <div class="canvas-wrap" id="canvasWrap"><canvas id="roomCanvas" aria-label="Room floor plan. Use the toolbox to edit your room."></canvas><button class="curve-finish hidden" id="finishCurve" type="button">✓ Done curving</button><div class="mode-hint" id="modeHint"><span class="hint-icon">↖</span><span>Drag a corner to shape the room <b>·</b> Hold a piece or wall for options</span></div><div class="selection-tools hidden" id="selectionTools"><span id="selectionLabel">Selected</span><button id="objectOptions" title="More object options" aria-label="More object options">⋯ <span>Options</span></button><button id="rotateButton" title="Rotate selected item">↻ <span>Rotate</span></button><button id="deleteButton" title="Delete selected item">⌫ <span>Remove</span></button></div></div>
     <div class="object-inspector hidden" id="objectInspector"><div class="inspector-name"><span>SELECTED PIECE</span><strong id="objectName">Furniture</strong></div><label>Width <span class="field-unit"><input id="objectWidth" type="number" min="0.1" max="50" step="0.05" inputmode="decimal"> m</span></label><label>Depth <span class="field-unit"><input id="objectHeight" type="number" min="0.1" max="50" step="0.05" inputmode="decimal"> m</span></label><label>Angle <span class="field-unit"><input id="objectAngle" type="number" min="0" max="359" step="1" inputmode="numeric"> °</span></label><button id="inspectorDelete" title="Remove selected piece">Remove</button></div><div class="canvas-bottom"><label class="snap-choice">Snap <select id="snapSize" aria-label="Grid snapping"><option value="1">50 cm</option><option value="0.25" selected>12.5 cm</option><option value="0.05">2.5 cm</option></select></label><span><span class="green-dot"></span> <span id="bottomStatus">Ready when you are</span></span><span>GRID = 0.5 M</span></div>
   </div>
-  <div class="below-canvas"><div><span class="hand-icon">✋</span><span><strong>Go on, play a little.</strong> There’s no wrong place to start.</span></div><div class="under-actions"><button id="undoButton" disabled>↶ &nbsp; Undo</button><button id="resetButton">↺ &nbsp; Reset room</button></div></div>
+  <div class="below-canvas"><div><span class="hand-icon">✋</span><span><strong>Go on, play a little.</strong> There’s no wrong place to start.</span></div><div class="under-actions"><button id="undoButton" disabled>↶ &nbsp; Undo</button><button id="clearButton">✕ &nbsp; Clear furniture</button><button id="resetButton">↺ &nbsp; Reset room</button></div></div>
 </section>
 <aside class="insight-panel"><button class="mobile-insight-close" aria-label="Close light and guidance">×</button><div class="insight-inner"><div class="sun-controls"><div class="sun-title"><span>☼</span><div><strong>Chase the light</strong><small>Explore sunlight direction</small></div></div><label for="sunAngle">Direction <output id="sunValue">180°</output></label><input id="sunAngle" type="range" min="0" max="359" step="1" value="180"><div class="sun-compass"><span>N</span><span>E</span><span>S</span><span>W</span><span>N</span></div><label for="sunTime">Time of day <output id="timeValue">12:00</output></label><input id="sunTime" type="range" min="6" max="18" step="0.25" value="12"><small class="sun-footnote">A visual illustration; actual sunlight depends on location and date.</small></div><div class="insight-top"><div class="glow-icon">✧</div><span class="mini-badge">A LITTLE GUIDANCE</span></div><h2>Make room<br>for <em>good energy.</em></h2><p>A few thoughtful shifts can change how a room feels. Let’s find a layout that works for you.</p><div class="illustration"><div class="sun">✷</div><div class="plant-illus">✿</div><div class="illu-floor"></div><div class="illu-bed"><div></div><span></span><span></span></div><div class="illu-table">✺</div><div class="illus-stars">✦</div></div><button class="magic-button" id="arrangeButton"><span>✧</span> Find my flow <span class="arrow">↗</span></button><p class="magic-caption">A little feng shui-inspired rearranging</p><div class="insight-divider"></div><div class="tips-heading"><span class="eyebrow">SOMETHING TO THINK ABOUT</span><span>✳</span></div><div id="suggestions" class="suggestions"></div><div class="soft-note">✧ &nbsp; These are gentle ideas, not rules. Your space should feel like <em>you.</em></div></div></aside>
 </main>
 <nav class="mobile-nav" aria-label="Room planner tools"><button data-mobile="furnish"><span>✿</span> Furnish</button><button data-mobile="build"><span>▧</span> Build</button><button data-mobile="sun"><span>☼</span> Light &amp; flow</button><button data-mobile="share"><span>↗</span> Save</button></nav>
 </div>
 <div class="toast" id="toast" role="status"></div>
-<dialog id="helpDialog"><div class="dialog-top"><span class="brand-mark small">✳</span><button id="closeHelp" class="icon-btn" aria-label="Close">×</button></div><span class="eyebrow">A LITTLE INTRODUCTION</span><h2>Welcome to your little room.</h2><p>Think of this as a miniature floor plan you can play with.</p><ol><li><strong>Build your space.</strong> Choose Build, then Edit room shape. Drag a corner or tap a wall to add a corner. Add doors and windows by tapping a wall.</li><li><strong>Add the fun bits.</strong> Choose Furnish and drag a piece in, or tap to add it. Move it around. Select it and drag its corner handles to rotate or resize it.</li><li><strong>Find your flow.</strong> Try the feng shui-inspired arrangement, then move anything to make it your own.</li></ol><p class="dialog-note">Your room is saved in this browser. Save an editable PNG or a JSON backup to share it or move it to another device.</p><button class="magic-button" id="gotIt">Let’s make some room <span>↗</span></button></dialog>
+<dialog id="helpDialog"><div class="dialog-top"><span class="brand-mark small">✳</span><button id="closeHelp" class="icon-btn" aria-label="Close">×</button></div><span class="eyebrow">A LITTLE INTRODUCTION</span><h2>Welcome to your little room.</h2><p>Think of this as a miniature floor plan you can play with.</p><ol><li><strong>Build your space.</strong> Drag a corner to adjust your room. Hold a wall for curve controls. Choose Build to add doors, windows, or wall corners.</li><li><strong>Add the fun bits.</strong> Choose Furnish and drag a piece in, or tap to add it. Move it around. Select it to reveal its handles and delete button; hold it for more options.</li><li><strong>Find your flow.</strong> Try the feng shui-inspired arrangement, then move anything to make it your own.</li></ol><p class="dialog-note">Your room is saved in this browser. Save an editable PNG or a JSON backup to share it or move it to another device.</p><button class="magic-button" id="gotIt">Let’s make some room <span>↗</span></button></dialog>
 <dialog id="saveDialog"><div class="dialog-top"><div><span class="eyebrow">KEEP YOUR LITTLE ROOM</span><h2>Save or share your plan.</h2></div><button id="closeSave" class="icon-btn" aria-label="Close">×</button></div><p>Save an image that opens as an editable plan, or keep a JSON backup.</p><div class="save-actions"><button id="savePng" class="save-option"><span>▧</span><span><strong>Save editable image</strong><small>PNG image with your room inside</small></span><span>↓</span></button><button id="sharePng" class="save-option"><span>↗</span><span><strong>Share editable image</strong><small>Send the original PNG to someone</small></span><span>↗</span></button><button id="saveJson" class="save-option"><span>◇</span><span><strong>Save plan backup</strong><small>Download a JSON file</small></span><span>↓</span></button><button id="openPlan" class="save-option"><span>↥</span><span><strong>Open a saved plan</strong><small>Choose an editable PNG or JSON</small></span><span>↗</span></button></div><p class="dialog-note">Keep the original image file: some messaging apps remove the data when they resize or compress images. A JSON backup is handy too.</p></dialog>
 <input type="file" id="importFile" accept="image/png,application/json,.png,.json" hidden>
 <script>
@@ -159,18 +191,50 @@ function customPath(ctx,item,w,h){
   }else if(typeof ctx.roundRect==='function') ctx.roundRect(-w/2,-h/2,w,h,Math.min(.12,w/5,h/5));
   else ctx.rect(-w/2,-h/2,w,h);
 }
-function draw(ctx,item,catalog,drawOriginal){
+// Only embedded, locally supplied raster images are accepted. No network requests.
+const imageCache=new Map(),tintCache=new Map();
+function localImage(data,redraw){
+ if(typeof data!=='string'||data.length>12_000_000||!/^data:image\/(png|jpeg|webp);base64,[a-z0-9+/=\s]+$/i.test(data)||typeof Image==='undefined')return null;
+ let entry=imageCache.get(data);
+ if(!entry){const image=new Image();entry={image,ready:false,failed:false,listeners:new Set()};imageCache.set(data,entry);image.onload=()=>{entry.ready=true;for(const callback of entry.listeners)callback();entry.listeners.clear()};image.onerror=()=>{entry.failed=true;entry.listeners.clear()};image.src=data}
+ if(!entry.ready&&!entry.failed&&typeof redraw==='function')entry.listeners.add(redraw);
+ return entry.ready?entry.image:null;
+}
+async function waitForImages(items){
+ await Promise.all((items||[]).filter(item=>item&&item.type==='custom'&&item.shape==='image').map(item=>new Promise((resolve,reject)=>{
+   const ready=localImage(item.imageData,resolve);if(ready){resolve();return}
+   const entry=imageCache.get(item.imageData);if(!entry||entry.failed){reject(new Error('An image in this room could not be loaded.'));return}
+   entry.image.addEventListener('error',()=>reject(new Error('An image in this room could not be loaded.')),{once:true});
+ })));
+}
+function pointInPath(point,ps){let inside=false;for(let i=0,j=ps.length-1;i<ps.length;j=i++){const [xi,yi]=ps[i],[xj,yj]=ps[j];if(((yi>point.y)!==(yj>point.y))&&(point.x<(xj-xi)*(point.y-yi)/(yj-yi)+xi))inside=!inside}return inside}
+function clipToStoredShape(ctx,item,w,h){
+ if(!Array.isArray(item.clipPolygon)||item.clipPolygon.length<3)return;
+ ctx.beginPath();item.clipPolygon.forEach((p,i)=>{if(i===0)ctx.moveTo(p[0]*w,p[1]*h);else ctx.lineTo(p[0]*w,p[1]*h)});ctx.closePath();ctx.clip();
+}
+function makeTinted(cacheKey,w,h,color,render){
+ if(!validColor(color)||typeof document==='undefined')return null;
+ const key=cacheKey+'|'+color,known=tintCache.get(key);if(known)return known;
+ const canvas=document.createElement('canvas'),scale=Math.min(160,Math.max(18,320/Math.max(w,h)));
+ canvas.width=Math.max(1,Math.ceil(w*scale));canvas.height=Math.max(1,Math.ceil(h*scale));
+ const tc=canvas.getContext('2d');tc.setTransform(scale,0,0,scale,0,0);render(tc);
+ tc.globalCompositeOperation='source-atop';tc.globalAlpha=.48;tc.fillStyle=color;tc.fillRect(0,0,w,h);tc.globalAlpha=1;tc.globalCompositeOperation='source-over';
+ if(tintCache.size>=40)tintCache.delete(tintCache.keys().next().value);tintCache.set(key,canvas);return canvas;
+}
+function draw(ctx,item,catalog,drawOriginal,requestRedraw){
  const {w,h}=itemSize(item,catalog),def=catalog[item.type];
- ctx.save();ctx.translate(item.x,item.y);ctx.rotate(radians(item.rotation));
- if(item.type==='custom' || !def){
+ ctx.save();ctx.translate(item.x,item.y);ctx.rotate(radians(item.rotation));clipToStoredShape(ctx,item,w,h);
+ if(item.type==='custom'&&item.shape==='image'){
+   const img=localImage(item.imageData,requestRedraw);
+   if(img){const tinted=makeTinted(item.imageData,1,1,item.color,tc=>tc.drawImage(img,0,0,1,1));ctx.drawImage(tinted||img,-w/2,-h/2,w,h)}
+   else {ctx.fillStyle='#eee9df';ctx.fillRect(-w/2,-h/2,w,h);ctx.strokeStyle='#bdab9d';ctx.lineWidth=.04;ctx.strokeRect(-w/2,-h/2,w,h)}
+ }else if(item.type==='custom' || !def){
    ctx.shadowColor='rgba(63,43,32,.18)';ctx.shadowBlur=.12;ctx.shadowOffsetY=.1;
    customPath(ctx,item,w,h);ctx.fillStyle=validColor(item.color)?item.color:(item.shape==='pillar'?'#cbbcab':'#cfac9c');ctx.fill();ctx.shadowColor='transparent';ctx.lineWidth=.045;ctx.strokeStyle=item.shape==='pillar'?'#a68d79':'#a47c6f';ctx.stroke();
-   if(item.shape==='pillar'){
-     ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=.05;ctx.beginPath();ctx.ellipse(-w*.1,-h*.1,w*.22,h*.18,0,Math.PI,Math.PI*1.85);ctx.stroke();
-   }
- } else {
-   ctx.scale(w/def.w,h/def.h);
-   drawOriginal(ctx,{...item,x:0,y:0,rotation:0},false);
+   if(item.shape==='pillar'){ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=.05;ctx.beginPath();ctx.ellipse(-w*.1,-h*.1,w*.22,h*.18,0,Math.PI,Math.PI*1.85);ctx.stroke()}
+ }else {
+   const tinted=makeTinted(item.type,def.w,def.h,item.color,tc=>drawOriginal(tc,{...item,x:def.w/2,y:def.h/2,rotation:0},false));
+   if(tinted)ctx.drawImage(tinted,-w/2,-h/2,w,h);else{ctx.scale(w/def.w,h/def.h);drawOriginal(ctx,{...item,x:0,y:0,rotation:0},false)}
  }
  ctx.restore();
 }
@@ -178,6 +242,7 @@ function validColor(s){return typeof s==='string' && /^#[0-9a-f]{6}$/i.test(s)}
 function hitItem(item,catalog,point){
  const p=toLocal(item,point),{w,h}=itemSize(item,catalog),nx=p.x/w,ny=p.y/h;
  if(Math.abs(nx)>.5||Math.abs(ny)>.5)return false;
+ if(Array.isArray(item.clipPolygon)&&item.clipPolygon.length>=3&&!pointInPath({x:nx,y:ny},item.clipPolygon))return false;
  if(item.type==='custom'&&(item.shape==='ellipse'||item.shape==='pillar'))return nx*nx*4+ny*ny*4<=1;
  if(item.type==='custom'&&(item.shape==='polygon'||item.shape==='freehand')&&Array.isArray(item.points)&&item.points.length>=3){
    let inside=false;const ps=item.points;
@@ -189,22 +254,23 @@ function hitItem(item,catalog,point){
  }
  return true;
 }
+function handlePoints(item,catalog,scale){
+ const points=corners(item,catalog),a=points[0],dx=a.x-item.x,dy=a.y-item.y,l=Math.hypot(dx,dy)||1;
+ return {delete:{x:a.x+dx/l*8/scale,y:a.y+dy/l*8/scale},rotate:points[1],resize:points[2]};
+}
 function drawHandles(ctx,item,catalog,scale){
- const [a,b,c,d]=corners(item,catalog), line=1.5/scale, radius=7/scale;
+ const [a,b,c,d]=corners(item,catalog),handles=handlePoints(item,catalog,scale),line=1.5/scale,radius=8/scale;
  ctx.save();ctx.shadowColor='transparent';ctx.lineWidth=line;ctx.strokeStyle='#527d65';ctx.setLineDash([5/scale,4/scale]);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.lineTo(c.x,c.y);ctx.lineTo(d.x,d.y);ctx.closePath();ctx.stroke();ctx.setLineDash([]);
- // Top-right rotates, bottom-right resizes. The icons remain a constant screen size.
- for(const [p,fill,symbol] of [[b,'#527d65','↻'],[c,'#fffefa','↘']]){
-   ctx.beginPath();ctx.arc(p.x,p.y,radius,0,TAU);ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle='#527d65';ctx.lineWidth=1.5/scale;ctx.stroke();
-   ctx.fillStyle=symbol==='↻'?'#fffefa':'#527d65';ctx.font=`bold ${11/scale}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(symbol,p.x,p.y+.2/scale);
+ for(const [key,p,fill,symbol] of [['delete',handles.delete,'#d65555',''],['rotate',handles.rotate,'#527d65','↻'],['resize',handles.resize,'#fffefa','↘']]){
+   ctx.beginPath();ctx.arc(p.x,p.y,radius,0,TAU);ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=key==='delete'?'#fffefa':'#527d65';ctx.lineWidth=1.5/scale;ctx.stroke();
+   if(key==='delete'){const t=3/scale;ctx.strokeStyle='#fff';ctx.lineWidth=1.8/scale;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(p.x-t,p.y-t);ctx.lineTo(p.x+t,p.y+t);ctx.moveTo(p.x+t,p.y-t);ctx.lineTo(p.x-t,p.y+t);ctx.stroke()}
+   else {ctx.fillStyle=key==='rotate'?'#fffefa':'#527d65';ctx.font=`bold ${11/scale}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(symbol,p.x,p.y+.2/scale)}
  }
  ctx.restore();
 }
 function hitHandle(item,catalog,point,scale){
- const points=corners(item,catalog), tolerance=16/Math.max(scale,1);
- const distance=p=>Math.hypot(point.x-p.x,point.y-p.y);
- const rotate=distance(points[1]),resize=distance(points[2]);
- if(Math.min(rotate,resize)>tolerance)return null;
- return rotate<=resize?'rotate':'resize';
+ const points=handlePoints(item,catalog,scale),tolerance=13/Math.max(scale,1),ranked=Object.entries(points).map(([name,p])=>[name,Math.hypot(point.x-p.x,point.y-p.y)]).sort((a,b)=>a[1]-b[1]);
+ return ranked[0][1]<=tolerance?ranked[0][0]:null;
 }
 function startTransform(kind,item,catalog,point){
  if(!['rotate','resize'].includes(kind))return null;
@@ -244,7 +310,37 @@ function createFromPoints(points,options={}){
     points:sample.map(p=>[Math.round((p.x-x)/w*10000)/10000,Math.round((p.y-y)/h*10000)/10000]),
     name:options.name||'Custom shape',color:validColor(options.color)?options.color:'#cfac9c'};
 }
-root.Furniture={itemSize,toWorld,toLocal,corners,draw,hitItem,drawHandles,hitHandle,startTransform,moveTransform,createFromBox,createFromPoints};
+// Snap and clip use item-local coordinates so edited outlines travel with the piece.
+function snapToGrid(item,step){
+ const n=Number(step);if(!Number.isFinite(n)||n<=0)return {...item};
+ return {...item,x:Math.round(item.x/n)*n,y:Math.round(item.y/n)*n};
+}
+function validPolygon(poly){return Array.isArray(poly)&&poly.length>=3&&poly.length<=5000&&poly.every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite))}
+function nearestPoint(p,a,b){const dx=b[0]-a[0],dy=b[1]-a[1],len=dx*dx+dy*dy,t=len?Math.max(0,Math.min(1,((p.x-a[0])*dx+(p.y-a[1])*dy)/len)):0;const x=a[0]+dx*t,y=a[1]+dy*t;return{x,y,t,distance:Math.hypot(p.x-x,p.y-y),dx,dy,len:Math.sqrt(len)}}
+function snapToWall(item,catalog,poly){
+ if(!validPolygon(poly))return null;let best=null;
+ for(let i=0;i<poly.length;i++){const q=nearestPoint(item,poly[i],poly[(i+1)%poly.length]);if(q.len>1e-6&&(!best||q.distance<best.distance))best=q}
+ if(!best)return null;let nx=-best.dy/best.len,ny=best.dx/best.len;
+ const midpoint={x:best.x+nx*.01,y:best.y+ny*.01};if(!pointInPath(midpoint,poly)){nx=-nx;ny=-ny}
+ const size=itemSize(item,catalog),angle=Math.atan2(best.dy,best.dx)*180/Math.PI;
+ return {...item,x:best.x+nx*size.h/2,y:best.y+ny*size.h/2,rotation:(angle+360)%360};
+}
+function segmentIntersects(a,b,c,d){
+ const cross=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);
+ const p=cross(a,b,c),q=cross(a,b,d),r=cross(c,d,a),s=cross(c,d,b),eps=1e-10;
+ if((p>eps&&q>eps)||(p< -eps&&q< -eps)||(r>eps&&s>eps)||(r< -eps&&s< -eps))return false;
+ return Math.max(Math.min(a[0],b[0]),Math.min(c[0],d[0]))<=Math.min(Math.max(a[0],b[0]),Math.max(c[0],d[0]))+eps && Math.max(Math.min(a[1],b[1]),Math.min(c[1],d[1]))<=Math.min(Math.max(a[1],b[1]),Math.max(c[1],d[1]))+eps;
+}
+function fitToRoom(item,catalog,poly){
+ if(!validPolygon(poly))return null;const size=itemSize(item,catalog);
+ const local=poly.map(([x,y])=>{const p=toLocal(item,{x,y});return [p.x/size.w,p.y/size.h]});
+ const box=[[-.5,-.5],[.5,-.5],[.5,.5],[-.5,.5]],within=([x,y])=>x>=-.5&&x<=.5&&y>=-.5&&y<=.5;
+ let overlaps=local.some(within)||box.some(([x,y])=>pointInPath({x,y},local));
+ if(!overlaps)for(let i=0;i<local.length&&!overlaps;i++)for(let j=0;j<4&&!overlaps;j++)overlaps=segmentIntersects(local[i],local[(i+1)%local.length],box[j],box[(j+1)%4]);
+ if(!overlaps)return null;
+ return {...item,clipPolygon:local.map(([x,y])=>[Math.round(x*1e6)/1e6,Math.round(y*1e6)/1e6])};
+}
+root.Furniture={itemSize,toWorld,toLocal,corners,draw,hitItem,drawHandles,hitHandle,startTransform,moveTransform,createFromBox,createFromPoints,snapToGrid,snapToWall,fitToRoom,waitForImages};
 })(typeof window==='undefined'?globalThis:window);
 
 (function(){
@@ -346,14 +442,42 @@ function cellOutlines(cells){
 }
 function validPolygon(poly){if(!Array.isArray(poly)||poly.length<3||poly.length>300||poly.some(p=>!Array.isArray(p)||p.length!==2||p.some(v=>!Number.isFinite(v)||Math.abs(v)>100))||Math.abs(polygonArea(poly))<.25)return false;
  const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
- for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length];if(Math.hypot(b[0]-a[0],b[1]-a[1])<.2)return false;for(let j=i+1;j<poly.length;j++){if(j===i||j===(i+1)%poly.length||(j+1)%poly.length===i)continue;const c=poly[j],d=poly[(j+1)%poly.length],u=cross(a,b,c),v=cross(a,b,d),w=cross(c,d,a),z=cross(c,d,b);if(u*v<=0&&w*z<=0&&Math.max(Math.min(a[0],b[0]),Math.min(c[0],d[0]))<=Math.min(Math.max(a[0],b[0]),Math.max(c[0],d[0]))&&Math.max(Math.min(a[1],b[1]),Math.min(c[1],d[1]))<=Math.min(Math.max(a[1],b[1]),Math.max(c[1],d[1])))return false}}
+ for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length];if(Math.hypot(b[0]-a[0],b[1]-a[1])<.008)return false;for(let j=i+1;j<poly.length;j++){if(j===i||j===(i+1)%poly.length||(j+1)%poly.length===i)continue;const c=poly[j],d=poly[(j+1)%poly.length],u=cross(a,b,c),v=cross(a,b,d),w=cross(c,d,a),z=cross(c,d,b);if(u*v<=0&&w*z<=0&&Math.max(Math.min(a[0],b[0]),Math.min(c[0],d[0]))<=Math.min(Math.max(a[0],b[0]),Math.max(c[0],d[0]))&&Math.max(Math.min(a[1],b[1]),Math.min(c[1],d[1]))<=Math.min(Math.max(a[1],b[1]),Math.max(c[1],d[1])))return false}}
  return rasterizePolygon(poly).length>0;
 }
 function openingPosition(o,poly){if(poly&&Number.isInteger(o.edgeIndex)&&poly[o.edgeIndex]){let a=poly[o.edgeIndex],b=poly[(o.edgeIndex+1)%poly.length],t=Math.max(0,Math.min(1,o.t??.5));return {x:a[0]+(b[0]-a[0])*t,y:a[1]+(b[1]-a[1])*t,angle:Math.atan2(b[1]-a[1],b[0]-a[0])}}const n=N[o.side]||N.top;return{x:o.x+.5+n[0]*.5,y:o.y+.5+n[1]*.5,angle:{top:0,right:Math.PI/2,bottom:Math.PI,left:-Math.PI/2}[o.side]||0}}
 function openingForPolygon(o,poly){const p=openingPosition(o),edge=nearestPolygonEdge(p,poly);return {...o,edgeIndex:edge.index,t:edge.t}}
+// Curved edges are sampled into the same polygon used by the floor, openings,
+// export and layout engine. roomVertices retains the draggable wall endpoints.
+function curvePoints(a,b,curve){
+ const center=curve&&curve.center;if(!center||!center.every(Number.isFinite))return [];
+ const [cx,cy]=center,r0=Math.hypot(a[0]-cx,a[1]-cy),r1=Math.hypot(b[0]-cx,b[1]-cy);if(r0<.01||r1<.01)return [];
+ const t0=Math.atan2(a[1]-cy,a[0]-cx),t1=Math.atan2(b[1]-cy,b[0]-cx);let delta=((t1-t0+Math.PI*3)%(Math.PI*2))-Math.PI;
+ if(curve.direction>0&&delta<0)delta+=Math.PI*2;if(curve.direction<0&&delta>0)delta-=Math.PI*2;
+ if(Math.abs(delta)>Math.PI*1.9)return [];
+ const count=Math.max(4,Math.min(22,Math.ceil(Math.abs(delta)*7))),out=[];
+ for(let j=1;j<count;j++){const t=j/count,r=r0+(r1-r0)*t,angle=t0+delta*t;out.push([cx+Math.cos(angle)*r,cy+Math.sin(angle)*r])}return out;
+}
+function outlineFromWalls(vertices,curves){const points=[],edgeMap=[];for(let i=0;i<vertices.length;i++){points.push(vertices[i].slice());edgeMap.push(i);const extra=curvePoints(vertices[i],vertices[(i+1)%vertices.length],curves?.[i]);for(const p of extra){points.push(p);edgeMap.push(i)}}return {points,edgeMap}}
+// The true curve center can be far beyond the viewport for a shallow arc.
+// Keep a draggable proxy at the canvas edge while retaining the true center.
+function curveCenterProxy(center,view){
+ const x=center[0]*view.scale+view.ox,y=center[1]*view.scale+view.oy,m=Math.min(24,view.width/4,view.height/4),px=Math.max(m,Math.min(view.width-m,x)),py=Math.max(m,Math.min(view.height-m,y));
+ return {point:[(px-view.ox)/view.scale,(py-view.oy)/view.scale],clipped:px!==x||py!==y,dx:x-px,dy:y-py};
+}
+function arrowForOffset(dx,dy){const arrows=['→','↘','↓','↙','←','↖','↑','↗'];return arrows[(Math.round(Math.atan2(dy,dx)/(Math.PI/4))+8)%8]}
+function circleFromBulge(a,b,p){
+ const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy);if(length<.1)return null;
+ const nx=-dy/length,ny=dx/length,sag=(p.x-mx)*nx+(p.y-my)*ny;if(Math.abs(sag)<.08)return null;
+ const h=(sag*sag-length*length/4)/(2*sag),center=[mx+nx*h,my+ny*h],start=Math.atan2(a[1]-center[1],a[0]-center[0]),end=Math.atan2(b[1]-center[1],b[0]-center[0]);
+ let short=((end-start+Math.PI*3)%(Math.PI*2))-Math.PI;const candidates=[short,short+Math.PI*2,short-Math.PI*2].filter(x=>Math.abs(x)<Math.PI*1.9);
+ const mid=[mx+nx*sag,my+ny*sag],r=Math.hypot(a[0]-center[0],a[1]-center[1]);let best=candidates[0],dist=Infinity;
+ for(const d of candidates){let x=center[0]+Math.cos(start+d/2)*r,y=center[1]+Math.sin(start+d/2)*r,v=Math.hypot(x-mid[0],y-mid[1]);if(v<dist){dist=v;best=d}}
+ return {center,direction:Math.sign(best)||1};
+}
 class RoomCanvas {
  constructor(canvas,options={}){
-  this.canvas=canvas;this.ctx=canvas.getContext('2d');this.options=options;this.state=getDefaultState();this.tool='select';this.selected=null;this.grid=true;this.light=true;this.drag=null;this.view=null;this.snap=.25;this.pointers=new Map();this.pinch=null;
+  this.canvas=canvas;this.ctx=canvas.getContext('2d');this.options=options;this.state=getDefaultState();this.tool='select';this.selected=null;this.grid=true;this.light=true;this.drag=null;this.view=null;this.snap=.25;this.pointers=new Map();this.pinch=null;this.curveMode=null;this.hold=null;
   this.onPointerDown=this.onPointerDown.bind(this);this.onPointerMove=this.onPointerMove.bind(this);this.onPointerUp=this.onPointerUp.bind(this);this.onWheel=this.onWheel.bind(this);
   canvas.style.touchAction='none';canvas.addEventListener('pointerdown',this.onPointerDown);canvas.addEventListener('pointermove',this.onPointerMove);canvas.addEventListener('pointerup',this.onPointerUp);canvas.addEventListener('pointercancel',this.onPointerUp);canvas.addEventListener('wheel',this.onWheel,{passive:false});
   this.resizeObserver=new ResizeObserver(()=>this.fit());this.resizeObserver.observe(canvas.parentElement||canvas);this.fit();
@@ -361,13 +485,22 @@ class RoomCanvas {
  emit(){this.options.onChange?.(this.getState())}
  notice(message){this.options.onNotice?.(message)}
  selectedChanged(){this.options.onSelect?.(this.state.items.find(i=>i.id===this.selected)||this.state.openings.find(i=>i.id===this.selected)||null)}
+ getRoomPolygon(){if(this.state.polygon)return copy(this.state.polygon);const outlines=cellOutlines(this.state.cells);return outlines.length===1?copy(outlines[0]):null}
+ ensurePolygon(){if(this.state.polygon)return true;const outlines=cellOutlines(this.state.cells);if(outlines.length!==1){this.notice('The room needs one connected outline before its corners can be edited.');return false}this.state.polygon=outlines[0];this.state.openings=this.state.openings.map(o=>openingForPolygon(o,this.state.polygon));return true}
+ baseWalls(){return this.state.roomVertices||this.state.polygon||this.getRoomPolygon()||[]}
+ mappedEdge(index){if(!this.state.roomVertices)return index;return outlineFromWalls(this.state.roomVertices,this.state.wallCurves||{}).edgeMap[index]}
+ refreshOutline(oldPoly){if(!this.state.roomVertices)return true;const old=oldPoly||this.state.polygon,positions=this.state.openings.map(o=>openingPosition(o,old));const next=outlineFromWalls(this.state.roomVertices,this.state.wallCurves||{}).points;if(!validPolygon(next))return false;this.state.polygon=next;this.state.openings=this.state.openings.map((o,i)=>{const e=nearestPolygonEdge(positions[i],next);return {...o,edgeIndex:e.index,t:e.t}});this.syncCells();return true}
+ setCurveMode(edgeIndex){if(!this.ensurePolygon())return false;if(!this.state.roomVertices)this.state.roomVertices=copy(this.state.polygon);this.state.wallCurves||={};if(!Number.isInteger(edgeIndex)||edgeIndex<0||edgeIndex>=this.state.roomVertices.length)return false;this.curveMode=edgeIndex;this.tool='curve-room';this.selected=null;this.selectedChanged();this.options.onToolChange?.('curve-room');this.notice('Drag the highlighted wall to bend it. Drag the dotted center to adjust it.');this.draw();this.emit();return true}
+ straightenCurve(edgeIndex=this.curveMode){if(!this.state.roomVertices||!Number.isInteger(edgeIndex))return false;const old=copy(this.state.polygon),saved=copy(this.state.wallCurves||{});delete this.state.wallCurves[edgeIndex];if(!this.refreshOutline(old)){this.state.wallCurves=saved;return false}this.curveMode=edgeIndex;this.draw();this.emit();return true}
+ finishCurve(){this.curveMode=null;this.tool='select';this.options.onToolChange?.('select');this.draw()}
  setTool(tool){
   if((tool==='add-room'||tool==='erase-room')&&this.state.polygon){this.notice('This room has angled walls. Use Edit corners to change its shape.');return false}
-  if(tool==='shape-room'&&!this.state.polygon){const outlines=cellOutlines(this.state.cells);if(outlines.length!==1){this.notice('The room needs one connected outline before its corners can be edited.');return false}this.state.polygon=outlines[0];this.state.openings=this.state.openings.map(o=>openingForPolygon(o,this.state.polygon));this.emit()}
+  if(tool==='shape-room'&&!this.state.polygon){if(!this.ensurePolygon())return false;this.emit()}
+  if(tool!=='curve-room')this.curveMode=null;
   this.tool=tool;this.canvas.style.cursor=tool==='select'?'default':tool==='pan'?'grab':'crosshair';this.draw();return true
  }
  getState(){return copy(this.state)}
- setState(state){if(!state||!Array.isArray(state.cells)||!state.cells.length)return false;if(state.polygon&&!validPolygon(state.polygon))return false;this.state=copy(state);this.state.items||=[];this.state.openings||=[];this.selected=null;if(this.tool==='shape-room'&&!this.state.polygon){this.tool='select';this.options.onToolChange?.('select')}this.fit();this.selectedChanged();this.emit();return true}
+ setState(state){if(!state||!Array.isArray(state.cells)||!state.cells.length)return false;if(state.polygon&&!validPolygon(state.polygon))return false;this.state=copy(state);this.state.items||=[];this.state.openings||=[];this.selected=null;this.curveMode=null;if(this.tool==='curve-room'||(this.tool==='shape-room'&&!this.state.polygon)){this.tool='select';this.options.onToolChange?.('select')}this.fit();this.selectedChanged();this.emit();return true}
  reset(){this.setState(getDefaultState())}
  setGrid(v){this.grid=!!v;this.draw()}
  setLight(v){this.light=!!v;this.draw()}
@@ -385,33 +518,39 @@ class RoomCanvas {
  screenPoint(e){const r=this.canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
  onWheel(e){e.preventDefault();this.zoomBy(Math.exp(-e.deltaY*.0015),this.screenPoint(e))}
  edgeAt(p){if(this.state.polygon){let e=nearestPolygonEdge(p,this.state.polygon);return e&&e.distance<Math.max(.4,14/this.view.scale)?e:null}let best=null;const cells=new Set(this.state.cells.map(([x,y])=>key(x,y)));for(const [x,y] of this.state.cells){for(const side of SIDES){const [dx,dy]=N[side];if(cells.has(key(x+dx,y+dy)))continue;let px,py;if(side==='top'||side==='bottom'){px=Math.max(x,Math.min(x+1,p.x));py=y+(side==='bottom'?1:0)}else{px=x+(side==='right'?1:0);py=Math.max(y,Math.min(y+1,p.y))}const d=Math.hypot(p.x-px,p.y-py);if(d<Math.max(.4,14/this.view.scale)&&(!best||d<best.distance))best={x,y,side,distance:d}}}return best}
- cornerAt(p){const poly=this.state.polygon||[];let best=null;for(let i=0;i<poly.length;i++){let d=Math.hypot(p.x-poly[i][0],p.y-poly[i][1]);if(d<Math.max(.28,16/this.view.scale)&&(!best||d<best.distance))best={index:i,distance:d}}return best}
+ cornerAt(p){const poly=this.baseWalls();let best=null;for(let i=0;i<poly.length;i++){let d=Math.hypot(p.x-poly[i][0],p.y-poly[i][1]);if(d<Math.max(.28,16/this.view.scale)&&(!best||d<best.distance))best={index:i,distance:d}}return best}
  syncCells(){if(this.state.polygon){const c=rasterizePolygon(this.state.polygon);if(c.length)this.state.cells=c}}
+ cancelHold(){if(this.hold){clearTimeout(this.hold.timer);this.hold=null}}
+ armHold(e,item,edge){if(!item&&!edge)return;this.cancelHold();const screen=this.screenPoint(e),pointer=e.pointerId;this.hold={pointer,screen,timer:setTimeout(()=>{if(!this.hold||this.hold.pointer!==pointer||this.pointers.size!==1)return;this.hold=null;this.drag=null;if(item){this.selected=item.id;this.selectedChanged();this.draw();this.options.onObjectMenu?.(copy(item),screen)}else{if(!this.ensurePolygon())return;const closest=this.edgeAt(this.point(e));if(!closest)return;const index=this.mappedEdge(closest.index);this.options.onWallMenu?.({x:screen.x,y:screen.y,edgeIndex:index,curved:!!this.state.wallCurves?.[index]})}},600)}}
  onPointerDown(e){if(e.button!==0)return;this.pointers.set(e.pointerId,this.screenPoint(e));this.canvas.setPointerCapture(e.pointerId);
-  if(this.pointers.size===2){if(this.drag?.kind==='vertex'||this.drag?.kind==='edge'){this.state.polygon=this.drag.original;if(this.drag.originalOpenings)this.state.openings=this.drag.originalOpenings}const [a,b]=[...this.pointers.values()],mid={x:(a.x+b.x)/2,y:(a.y+b.y)/2},v=this.view;this.pinch={distance:Math.hypot(a.x-b.x,a.y-b.y),scale:v.scale,wx:(mid.x-v.ox)/v.scale,wy:(mid.y-v.oy)/v.scale};this.drag=null;return}if(this.pointers.size>1)return;
+  if(this.pointers.size===2){this.cancelHold();if(this.drag?.kind==='vertex'||this.drag?.kind==='edge'){this.state.polygon=this.drag.originalPoly;if(this.state.roomVertices)this.state.roomVertices=this.drag.original;if(this.drag.originalOpenings)this.state.openings=this.drag.originalOpenings}else if(this.drag?.kind==='curve-center'||this.drag?.kind==='curve-bend')this.state=copy(this.drag.original);const [a,b]=[...this.pointers.values()],mid={x:(a.x+b.x)/2,y:(a.y+b.y)/2},v=this.view;this.pinch={distance:Math.hypot(a.x-b.x,a.y-b.y),scale:v.scale,wx:(mid.x-v.ox)/v.scale,wy:(mid.y-v.oy)/v.scale};this.drag=null;return}if(this.pointers.size>1)return;
   const p=this.point(e),snap=n=>Math.round(n/this.snap)*this.snap;
   if(this.tool==='pan'){this.drag={kind:'pan',start:this.screenPoint(e),ox:this.view.ox,oy:this.view.oy};return}
   if(['draw-rect','draw-ellipse','draw-freehand','draw-pillar'].includes(this.tool)){this.drag={kind:'shape',shape:this.tool.slice(5),start:p,end:p,points:[p]};this.draw();return}
-  if(this.tool==='shape-room'){const corner=this.cornerAt(p);if(corner){this.drag={kind:'vertex',index:corner.index,original:copy(this.state.polygon),moved:false};return}const edge=this.edgeAt(p);if(edge&&edge.t>.025&&edge.t<.975){this.drag={kind:'edge',edge,original:copy(this.state.polygon),start:p,moved:false};this.draw()}return}
+  if(this.tool==='curve-room'&&this.curveMode!==null){const i=this.curveMode,vertices=this.baseWalls(),a=vertices[i],b=vertices[(i+1)%vertices.length],curve=this.state.wallCurves?.[i];if(curve){const proxy=curveCenterProxy(curve.center,this.view).point;if(Math.hypot(p.x-proxy[0],p.y-proxy[1])<Math.max(.3,18/this.view.scale)){this.drag={kind:'curve-center',index:i,original:copy(this.state),start:p,moved:false};return}}const edge=this.edgeAt(p);if(edge&&this.mappedEdge(edge.index)===i){this.armHold(e,null,edge);this.drag={kind:'curve-bend',index:i,original:copy(this.state),start:p,moved:false};return}return}
+  if(this.tool==='shape-room'){const corner=this.cornerAt(p);if(corner){this.drag={kind:'vertex',index:corner.index,original:copy(this.baseWalls()),originalPoly:copy(this.state.polygon),originalOpenings:copy(this.state.openings),moved:false};return}const edge=this.edgeAt(p);if(edge&&edge.t>.025&&edge.t<.975){edge.baseIndex=this.mappedEdge(edge.index);this.armHold(e,null,edge);this.drag={kind:'edge',edge,original:copy(this.baseWalls()),originalPoly:copy(this.state.polygon),originalOpenings:copy(this.state.openings),start:p,moved:false};this.draw()}return}
   if(this.tool==='add-room'||this.tool==='erase-room'){if(this.state.polygon){this.notice('Use Edit corners to reshape this room.');return}this.drag={kind:this.tool,start:{x:Math.floor(p.x),y:Math.floor(p.y)},end:{x:Math.floor(p.x),y:Math.floor(p.y)}};this.draw();return}
   if(this.tool==='window'||this.tool==='door'){const edge=this.edgeAt(p);if(edge){let opening;if(this.state.polygon){const a=this.state.polygon[edge.index],b=this.state.polygon[(edge.index+1)%this.state.polygon.length],ang=Math.atan2(b[1]-a[1],b[0]-a[0]),side=Math.abs(Math.cos(ang))>Math.abs(Math.sin(ang))?(Math.cos(ang)>0?'top':'bottom'):(Math.sin(ang)>0?'right':'left');opening={id:id(),type:this.tool,edgeIndex:edge.index,t:edge.t,x:Math.floor(edge.x),y:Math.floor(edge.y),side}}
    else opening={id:id(),type:this.tool,x:edge.x,y:edge.y,side:edge.side};this.state.openings.push(opening);this.selected=opening.id;this.selectedChanged();this.draw();this.emit()}return}
-  const selectedItem=this.state.items.find(o=>o.id===this.selected);if(selectedItem&&window.Furniture){const handle=window.Furniture.hitHandle(selectedItem,CATALOG,p,this.view.scale);if(handle){this.drag={kind:'transform',id:selectedItem.id,transform:window.Furniture.startTransform(handle,selectedItem,CATALOG,p),moved:false};return}}
+  const selectedItem=this.state.items.find(o=>o.id===this.selected);if(selectedItem&&window.Furniture){const handle=window.Furniture.hitHandle(selectedItem,CATALOG,p,this.view.scale);if(handle==='delete'){this.deleteSelected();return}if(handle){this.drag={kind:'transform',id:selectedItem.id,transform:window.Furniture.startTransform(handle,selectedItem,CATALOG,p),moved:false};return}}
+  // Corners can be dragged directly in the ordinary select tool.
+  if(this.tool==='select'){const corner=this.cornerAt(p);if(corner&&this.ensurePolygon()){this.drag={kind:'vertex',index:corner.index,original:copy(this.baseWalls()),originalPoly:copy(this.state.polygon),originalOpenings:copy(this.state.openings),moved:false};return}}
   let opening=null;for(const o of this.state.openings){const v=openingPosition(o,this.state.polygon);if(Math.hypot(p.x-v.x,p.y-v.y)<Math.max(.35,12/this.view.scale)){opening=o;break}}if(opening){this.selected=opening.id;this.selectedChanged();this.draw();return}
   let found=null;for(let i=this.state.items.length-1;i>=0;i--){const o=this.state.items[i];if(window.Furniture?.hitItem(o,CATALOG,p)){found=o;break}}
-  this.selected=found?.id||null;this.selectedChanged();if(found){this.drag={kind:'item',id:found.id,dx:p.x-found.x,dy:p.y-found.y,moved:false};this.canvas.style.cursor='grabbing'}this.draw()
+  this.selected=found?.id||null;this.selectedChanged();if(found){this.armHold(e,found,null);this.drag={kind:'item',id:found.id,dx:p.x-found.x,dy:p.y-found.y,moved:false};this.canvas.style.cursor='grabbing'}else{const edge=this.edgeAt(p);if(edge)this.armHold(e,null,edge)}this.draw()
  }
- onPointerMove(e){if(this.pointers.has(e.pointerId))this.pointers.set(e.pointerId,this.screenPoint(e));if(this.pinch&&this.pointers.size>=2){const [a,b]=[...this.pointers.values()],mid={x:(a.x+b.x)/2,y:(a.y+b.y)/2},d=Math.hypot(a.x-b.x,a.y-b.y);this.view.scale=Math.max(5,Math.min(240,this.pinch.scale*d/Math.max(1,this.pinch.distance)));this.view.ox=mid.x-this.pinch.wx*this.view.scale;this.view.oy=mid.y-this.pinch.wy*this.view.scale;this.draw();return}
+ onPointerMove(e){if(this.hold&&this.hold.pointer===e.pointerId){const q=this.screenPoint(e);if(Math.hypot(q.x-this.hold.screen.x,q.y-this.hold.screen.y)>8)this.cancelHold()}if(this.pointers.has(e.pointerId))this.pointers.set(e.pointerId,this.screenPoint(e));if(this.pinch&&this.pointers.size>=2){const [a,b]=[...this.pointers.values()],mid={x:(a.x+b.x)/2,y:(a.y+b.y)/2},d=Math.hypot(a.x-b.x,a.y-b.y);this.view.scale=Math.max(5,Math.min(240,this.pinch.scale*d/Math.max(1,this.pinch.distance)));this.view.ox=mid.x-this.pinch.wx*this.view.scale;this.view.oy=mid.y-this.pinch.wy*this.view.scale;this.draw();return}
   const p=this.point(e);if(!this.drag){this.canvas.style.cursor=this.tool==='select'?(this.edgeAt(p)?'pointer':'default'):this.tool==='pan'?'grab':'crosshair';return}
   if(this.drag.kind==='shape'){this.drag.end=p;if(this.drag.shape==='freehand'){const last=this.drag.points[this.drag.points.length-1];if(Math.hypot(p.x-last.x,p.y-last.y)>.04)this.drag.points.push(p)}this.draw();return}
   if(this.drag.kind==='transform'){const o=this.state.items.find(i=>i.id===this.drag.id);if(o){window.Furniture.moveTransform(this.drag.transform,o,CATALOG,p,this.snap);this.drag.moved=true;this.draw();this.selectedChanged()}return}
   if(this.drag.kind==='pan'){const q=this.screenPoint(e);this.view.ox=this.drag.ox+q.x-this.drag.start.x;this.view.oy=this.drag.oy+q.y-this.drag.start.y;this.draw();return}
-  if(this.drag.kind==='edge'){let dx=Math.round((p.x-this.drag.start.x)/this.snap)*this.snap,dy=Math.round((p.y-this.drag.start.y)/this.snap)*this.snap;if(dx||dy){let poly=copy(this.drag.original),i=this.drag.edge.index,j=(i+1)%poly.length;poly[i]=[poly[i][0]+dx,poly[i][1]+dy];poly[j]=[poly[j][0]+dx,poly[j][1]+dy];if(validPolygon(poly)){this.state.polygon=poly;this.drag.moved=true;this.draw()}}return}
-  if(this.drag.kind==='vertex'){const poly=copy(this.state.polygon);poly[this.drag.index]=[Math.round(p.x/this.snap)*this.snap,Math.round(p.y/this.snap)*this.snap];if(validPolygon(poly)){this.state.polygon=poly;this.drag.moved=true;this.draw()}return}
+  if(this.drag.kind==='curve-bend'||this.drag.kind==='curve-center'){const d=this.drag,i=d.index,base=d.original.roomVertices,a=base[i],b=base[(i+1)%base.length];let curve;if(d.kind==='curve-bend')curve=circleFromBulge(a,b,p);else{const original=d.original.wallCurves[i];if(!original)return;let center=[original.center[0]+p.x-d.start.x,original.center[1]+p.y-d.start.y];for(const [j,other] of Object.entries(d.original.wallCurves)){if(Number(j)!==i&&other?.center&&Math.hypot(center[0]-other.center[0],center[1]-other.center[1])<16/this.view.scale){center=other.center.slice();break}}curve={...original,center}}d.proxyPoint=[p.x,p.y];this.state=copy(d.original);if(curve)this.state.wallCurves[i]=curve;else delete this.state.wallCurves[i];if(this.refreshOutline(d.original.polygon)){d.moved=true;this.draw()}else this.state=copy(d.original);return}
+  if(this.drag.kind==='edge'){let dx=Math.round((p.x-this.drag.start.x)/this.snap)*this.snap,dy=Math.round((p.y-this.drag.start.y)/this.snap)*this.snap;if(dx||dy){let poly=copy(this.drag.original),i=this.drag.edge.baseIndex,j=(i+1)%poly.length;poly[i]=[poly[i][0]+dx,poly[i][1]+dy];poly[j]=[poly[j][0]+dx,poly[j][1]+dy];this.state.openings=copy(this.drag.originalOpenings);if(this.state.roomVertices){this.state.roomVertices=poly;if(this.refreshOutline(this.drag.originalPoly)){this.drag.moved=true;this.draw()}else{this.state.roomVertices=copy(this.drag.original);this.state.polygon=copy(this.drag.originalPoly);this.state.openings=copy(this.drag.originalOpenings)}}else if(validPolygon(poly)){this.state.polygon=poly;this.drag.moved=true;this.draw()}}return}
+  if(this.drag.kind==='vertex'){const poly=copy(this.drag.original);poly[this.drag.index]=[Math.round(p.x/this.snap)*this.snap,Math.round(p.y/this.snap)*this.snap];this.state.openings=copy(this.drag.originalOpenings);if(this.state.roomVertices){this.state.roomVertices=poly;if(this.refreshOutline(this.drag.originalPoly)){this.drag.moved=true;this.draw()}else{this.state.roomVertices=copy(this.drag.original);this.state.polygon=copy(this.drag.originalPoly);this.state.openings=copy(this.drag.originalOpenings)}}else if(validPolygon(poly)){this.state.polygon=poly;this.drag.moved=true;this.draw()}return}
   if(this.drag.kind==='item'){const o=this.state.items.find(i=>i.id===this.drag.id);if(!o)return;o.x=Math.round((p.x-this.drag.dx)/this.snap)*this.snap;o.y=Math.round((p.y-this.drag.dy)/this.snap)*this.snap;this.drag.moved=true;this.draw()}
   else{this.drag.end={x:Math.floor(p.x),y:Math.floor(p.y)};this.draw()}
  }
- onPointerUp(e){this.pointers.delete(e.pointerId);if(this.pinch){if(this.pointers.size<2)this.pinch=null;return}if(!this.drag)return;const d=this.drag;this.drag=null;this.canvas.style.cursor=this.tool==='select'?'default':this.tool==='pan'?'grab':'crosshair';if(d.kind==='pan')return;if(d.kind==='edge'){if(d.moved){this.syncCells();this.emit()}else{let edge=d.edge,q=[Math.round(edge.x/this.snap)*this.snap,Math.round(edge.y/this.snap)*this.snap],i=edge.index,poly=copy(this.state.polygon);poly.splice(i+1,0,q);if(validPolygon(poly)){for(const o of this.state.openings){if(o.edgeIndex===i){if(o.t<=edge.t)o.t=o.t/edge.t;else{o.edgeIndex++;o.t=(o.t-edge.t)/(1-edge.t)}}else if(o.edgeIndex>i)o.edgeIndex++}this.state.polygon=poly;this.syncCells();this.emit()}else this.notice('Choose a spot farther from the corner.')}this.draw();return}if(d.kind==='transform'){if(d.moved)this.emit();this.draw();return}if(d.kind==='shape'){let shape=d.shape==='freehand'?window.Furniture.createFromPoints(d.points):window.Furniture.createFromBox(d.shape,d.start,d.end);if(shape){shape.id=id();this.state.items.push(shape);this.selected=shape.id;this.tool='select';this.selectedChanged();this.emit();this.options.onToolChange?.('select');this.notice('Custom piece added. Select it to adjust its size or angle.')}else this.notice('Drag a little farther to draw a shape.');this.draw();return}if(d.kind==='vertex'){if(d.moved){this.syncCells();this.emit()}this.draw();return}if(d.kind==='item'){if(d.moved)this.emit();this.draw();return}
+ onPointerUp(e){this.cancelHold();this.pointers.delete(e.pointerId);if(this.pinch){if(this.pointers.size<2)this.pinch=null;return}if(!this.drag)return;const d=this.drag;this.drag=null;this.canvas.style.cursor=this.tool==='select'?'default':this.tool==='pan'?'grab':'crosshair';if(d.kind==='pan')return;if(d.kind==='curve-bend'||d.kind==='curve-center'){if(d.moved)this.emit();this.draw();return}if(d.kind==='edge'){if(d.moved){this.syncCells();this.emit()}else{let edge=d.edge,q=[Math.round(edge.x/this.snap)*this.snap,Math.round(edge.y/this.snap)*this.snap],i=edge.baseIndex,poly=copy(this.baseWalls());if(this.state.wallCurves?.[i]){this.notice('Straighten this curved wall before adding a corner.');this.draw();return}poly.splice(i+1,0,q);if(this.state.roomVertices){const old=copy(this.state.polygon),curves=this.state.wallCurves||{},shifted={};for(const [k,c] of Object.entries(curves))shifted[Number(k)>i?Number(k)+1:k]=c;this.state.wallCurves=shifted;this.state.roomVertices=poly;if(this.refreshOutline(old))this.emit();else{this.state.wallCurves=curves;this.state.roomVertices=d.original;this.notice('Choose a spot farther from the corner.')}}else if(validPolygon(poly)){for(const o of this.state.openings){if(o.edgeIndex===i){if(o.t<=edge.t)o.t=o.t/edge.t;else{o.edgeIndex++;o.t=(o.t-edge.t)/(1-edge.t)}}else if(o.edgeIndex>i)o.edgeIndex++}this.state.polygon=poly;this.syncCells();this.emit()}else this.notice('Choose a spot farther from the corner.')}this.draw();return}if(d.kind==='transform'){if(d.moved)this.emit();this.draw();return}if(d.kind==='shape'){let shape=d.shape==='freehand'?window.Furniture.createFromPoints(d.points):window.Furniture.createFromBox(d.shape,d.start,d.end);if(shape){shape.id=id();this.state.items.push(shape);this.selected=shape.id;this.tool='select';this.selectedChanged();this.emit();this.options.onToolChange?.('select');this.notice('Custom piece added. Select it to adjust its size or angle.')}else this.notice('Drag a little farther to draw a shape.');this.draw();return}if(d.kind==='vertex'){if(d.moved){this.syncCells();this.emit()}this.draw();return}if(d.kind==='item'){if(d.moved)this.emit();this.draw();return}
   const minX=Math.max(-50,Math.min(d.start.x,d.end.x)),maxX=Math.min(50,Math.max(d.start.x,d.end.x)),minY=Math.max(-50,Math.min(d.start.y,d.end.y)),maxY=Math.min(50,Math.max(d.start.y,d.end.y));if(maxX-minX>40||maxY-minY>40){this.draw();return}
   const cells=new Set(this.state.cells.map(([x,y])=>key(x,y)));for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++){if(d.kind==='add-room')cells.add(key(x,y));else cells.delete(key(x,y))}if(cells.size){this.state.cells=[...cells].map(s=>s.split(',').map(Number));this.state.openings=this.state.openings.filter(o=>{const n=N[o.side];return cells.has(key(o.x,o.y))&&!cells.has(key(o.x+n[0],o.y+n[1]))});this.fit();this.emit()}else this.draw()
  }
@@ -424,15 +563,17 @@ class RoomCanvas {
   if(this.grid){let sub=v.scale>=50?this.snap:1;c.lineWidth=(sub===1?.015:.009);c.strokeStyle='rgba(146,109,80,.17)';for(let x=Math.floor(x0/sub)*sub;x<x1;x+=sub)line(c,x,y0,x,y1,'rgba(146,109,80,.15)',sub===1?.015:.009);for(let y=Math.floor(y0/sub)*sub;y<y1;y+=sub)line(c,x0,y,x1,y,'rgba(146,109,80,.15)',sub===1?.015:.009)}
   if(this.light){const angle=(this.state.sunAngle??180)*Math.PI/180,dx=Math.sin(angle)*8,dy=-Math.cos(angle)*8;for(const o of this.state.openings.filter(o=>o.type==='window')){const z=openingPosition(o,poly),ex=Math.cos(z.angle)*.48*(o.width||1),ey=Math.sin(z.angle)*.48*(o.width||1);c.beginPath();c.moveTo(z.x-ex,z.y-ey);c.lineTo(z.x+ex,z.y+ey);c.lineTo(z.x+ex+dx,z.y+ey+dy);c.lineTo(z.x-ex+dx,z.y-ey+dy);c.closePath();c.fillStyle='rgba(255,250,202,.28)';c.fill()}}
   c.restore();
-  for(const o of this.state.items){if(window.Furniture)window.Furniture.draw(c,o,CATALOG,itemDrawing);else itemDrawing(c,o,o.id===this.selected)}
+  for(const o of this.state.items){if(window.Furniture)window.Furniture.draw(c,o,CATALOG,itemDrawing,()=>this.draw());else itemDrawing(c,o,o.id===this.selected)}
   if(poly){for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length];line(c,a[0],a[1]+.045,b[0],b[1]+.045,'#a28e7a',.22);line(c,a[0],a[1],b[0],b[1],'#fffaf0',.18)}}else for(const [x,y] of this.state.cells){for(const side of SIDES){const [dx,dy]=N[side];if(cells.has(key(x+dx,y+dy)))continue;let x1=x,y1=y,x2=x,y2=y;if(side==='top')x2=x+1;else if(side==='bottom'){y1=y2=y+1;x2=x+1}else if(side==='left')y2=y+1;else{x1=x2=x+1;y2=y+1}line(c,x1,y1+.045,x2,y2+.045,'#a28e7a',.22);line(c,x1,y1,x2,y2,'#fffaf0',.18)}}
   for(const o of this.state.openings){const z=openingPosition(o,poly),width=o.width||1;c.save();c.translate(z.x,z.y);c.rotate(z.angle);if(o.type==='window'){line(c,-.46*width,0,.46*width,0,'#a7cfca',.22);line(c,-.46*width,0,.46*width,0,'#e8fbf1',.08);line(c,0,-.08,0,.08,'#fffdf4',.07)}else{line(c,-.47*width,0,.47*width,0,'#e9cfad',.23);line(c,-.47*width,0,-.47*width,.85*width,'#b99575',.07);c.beginPath();c.arc(-.47*width,0,.85*width,0,Math.PI/2);c.setLineDash([.06,.07]);c.lineWidth=.025;c.strokeStyle='#b99575';c.stroke();c.setLineDash([])}if(o.id===this.selected)rr(c,-.53*width,-.12,1.06*width,.24,.08,null,'#527d65',.06);c.restore()}
   const selectedItem=this.state.items.find(o=>o.id===this.selected);if(selectedItem&&this.tool==='select'&&window.Furniture)window.Furniture.drawHandles(c,selectedItem,CATALOG,v.scale);
-  if(this.tool==='shape-room'&&poly){for(let i=0;i<poly.length;i++){const p=poly[i],q=poly[(i+1)%poly.length];circle(c,(p[0]+q[0])/2,(p[1]+q[1])/2,Math.max(.08,4/v.scale),'#ffffff','#6e9a78',Math.max(.035,1/v.scale));circle(c,p[0],p[1],Math.max(.14,7/v.scale),'#588368','#fff',Math.max(.04,2/v.scale))}}
+  if(this.tool==='shape-room'||this.tool==='select'){const anchors=this.baseWalls();for(let i=0;i<anchors.length;i++){const p=anchors[i],q=anchors[(i+1)%anchors.length];if(this.tool==='shape-room'&&!this.state.wallCurves?.[i])circle(c,(p[0]+q[0])/2,(p[1]+q[1])/2,Math.max(.08,4/v.scale),'#ffffff','#6e9a78',Math.max(.035,1/v.scale));circle(c,p[0],p[1],Math.max(.11,(this.tool==='shape-room'?7:5)/v.scale),'#588368','#fff',Math.max(.04,2/v.scale))}}
+  if(this.tool==='curve-room'&&this.curveMode!==null){const i=this.curveMode,anchors=this.baseWalls(),a=anchors[i],b=anchors[(i+1)%anchors.length],curve=this.state.wallCurves?.[i];if(a&&b){const points=[a,...curvePoints(a,b,curve),b];c.save();c.strokeStyle='#599571';c.lineWidth=Math.max(.08,3/v.scale);c.setLineDash([.12,.11]);c.beginPath();points.forEach((p,j)=>j?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.stroke();c.setLineDash([]);const mid=points[Math.floor(points.length/2)];circle(c,mid[0],mid[1],Math.max(.13,7/v.scale),'#599571','#fff',Math.max(.04,2/v.scale));if(curve){const [cx,cy]=curve.center,r=Math.hypot(a[0]-cx,a[1]-cy),rEnd=Math.hypot(b[0]-cx,b[1]-cy);c.setLineDash([4/v.scale,5/v.scale]);c.strokeStyle='rgba(75,126,94,.65)';c.lineWidth=1.2/v.scale;if(r<500&&Math.abs(r-rEnd)<.02){c.beginPath();c.arc(cx,cy,r,0,Math.PI*2);c.stroke()}line(c,cx,cy,a[0],a[1],'rgba(75,126,94,.6)',1/v.scale);line(c,cx,cy,b[0],b[1],'rgba(75,126,94,.6)',1/v.scale);const proxy=curveCenterProxy(curve.center,v);if(this.drag?.kind==='curve-center'&&this.drag.proxyPoint)proxy.point=this.drag.proxyPoint;const [px,py]=proxy.point;if(proxy.clipped)line(c,px,py,cx,cy,'rgba(75,126,94,.8)',1.5/v.scale);c.setLineDash([]);circle(c,px,py,Math.max(.14,8/v.scale),'#eea881','#fff',Math.max(.04,2/v.scale));c.fillStyle='#496b55';c.font=`${11/v.scale}px sans-serif`;const text=proxy.clipped?'center '+arrowForOffset(proxy.dx,proxy.dy):'curve center';c.textAlign=px>(v.width/2-v.ox)/v.scale?'right':'left';c.fillText(text,px+(c.textAlign==='right'?-10:10)/v.scale,py-8/v.scale)}c.restore()}}
+
   if(this.drag&&this.drag.kind==='shape'){const d=this.drag;c.save();c.strokeStyle='#537e64';c.fillStyle='rgba(180,143,126,.35)';c.lineWidth=Math.max(.04,2/v.scale);c.setLineDash([.15,.1]);c.beginPath();if(d.shape==='freehand'){d.points.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.lineTo(d.end.x,d.end.y)}else if(d.shape==='ellipse'||d.shape==='pillar'){c.ellipse((d.start.x+d.end.x)/2,(d.start.y+d.end.y)/2,Math.max(.001,Math.abs(d.end.x-d.start.x)/2),Math.max(.001,Math.abs(d.end.y-d.start.y)/2),0,0,Math.PI*2)}else c.rect(Math.min(d.start.x,d.end.x),Math.min(d.start.y,d.end.y),Math.abs(d.end.x-d.start.x),Math.abs(d.end.y-d.start.y));c.fill();c.stroke();c.restore()}
   if(this.drag&&(this.drag.kind==='add-room'||this.drag.kind==='erase-room')){const a=this.drag.start,b=this.drag.end,x=Math.min(a.x,b.x),y=Math.min(a.y,b.y),w=Math.abs(a.x-b.x)+1,h=Math.abs(a.y-b.y)+1;c.fillStyle=this.drag.kind==='add-room'?'rgba(112,160,122,.35)':'rgba(215,125,108,.32)';c.fillRect(x,y,w,h);c.strokeStyle=this.drag.kind==='add-room'?'#699576':'#c7786e';c.lineWidth=.08;c.setLineDash([.18,.12]);c.strokeRect(x,y,w,h);c.setLineDash([])}c.restore()
  }
- destroy(){this.resizeObserver.disconnect();this.canvas.removeEventListener('pointerdown',this.onPointerDown);this.canvas.removeEventListener('pointermove',this.onPointerMove);this.canvas.removeEventListener('pointerup',this.onPointerUp);this.canvas.removeEventListener('pointercancel',this.onPointerUp);this.canvas.removeEventListener('wheel',this.onWheel)}
+ destroy(){this.cancelHold();this.resizeObserver.disconnect();this.canvas.removeEventListener('pointerdown',this.onPointerDown);this.canvas.removeEventListener('pointermove',this.onPointerMove);this.canvas.removeEventListener('pointerup',this.onPointerUp);this.canvas.removeEventListener('pointercancel',this.onPointerUp);this.canvas.removeEventListener('wheel',this.onWheel)}
 }
 
 window.RoomModule={CATALOG,getDefaultState,RoomCanvas};
@@ -542,7 +683,7 @@ window.FengModule={inspectRoom,arrangeRoom};
   const PNG_SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10];
   const KEYWORD = 'LittleRoomPlan';
   const MAX_IMAGE_BYTES = 30 * 1024 * 1024;
-  const MAX_PLAN_BYTES = 2 * 1024 * 1024;
+  const MAX_PLAN_BYTES = 10 * 1024 * 1024;
   const encoder = new TextEncoder();
   const decoder = new TextDecoder('utf-8', { fatal: true });
 
@@ -619,16 +760,16 @@ window.FengModule={inspectRoom,arrangeRoom};
       if (state[key] != null && (!Array.isArray(state[key]) || state[key].length > 1000)) fail();
     }
     let count = 0;
-    function walk(value, depth) {
+    function walk(value, depth, field) {
       if (++count > 250000 || depth > 14) fail();
       if (value === null || typeof value === 'boolean') return;
       if (typeof value === 'number') { if (!Number.isFinite(value) || Math.abs(value) > 1000000000) fail(); return; }
-      if (typeof value === 'string') { if (value.length > 20000) fail(); return; }
+      if (typeof value === 'string') { if (field === 'imageData') { if (value.length > 2500000 || !/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(value)) fail(); } else if (value.length > 20000) fail(); return; }
       if (Array.isArray(value)) { if (value.length > 50000) fail(); for (const item of value) walk(item, depth + 1); return; }
       if (typeof value !== 'object') fail();
       const keys = Object.keys(value);
       if (keys.length > 100 || keys.some(key => key === '__proto__' || key === 'constructor' || key === 'prototype')) fail();
-      for (const key of keys) walk(value[key], depth + 1);
+      for (const key of keys) walk(value[key], depth + 1, key);
     }
     walk(state, 0);
   }
@@ -728,6 +869,289 @@ window.FengModule={inspectRoom,arrangeRoom};
   root.RoomSharing = { makePng, readPlan, downloadPng, downloadJson, sharePng, embedMetadata, extractMetadata };
 })(typeof window !== 'undefined' ? window : globalThis);
 
+/* Context menus for Little Room. UI only; the planner owns all changes. */
+(function (root) {
+  'use strict';
+  let active = null;
+  function make(tag, className, text) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text !== undefined) el.textContent = text;
+    return el;
+  }
+  function closeMenu(restore = true) {
+    if (!active) return;
+    const { overlay, previous, keyHandler } = active;
+    document.removeEventListener('keydown', keyHandler, true);
+    overlay.remove(); active = null;
+    if (restore && previous && typeof previous.focus === 'function' && previous.isConnected) previous.focus({preventScroll:true});
+  }
+  function dialogInput(options) {
+    closeMenu(false);
+    const previous = document.activeElement;
+    const overlay = make('div', 'room-menu-overlay room-menu-modal');
+    const panel = make('form', 'room-menu-prompt');
+    panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal','true');
+    const title=make('h2',null,options.title); const id='room-menu-input-'+Math.random().toString(36).slice(2);
+    title.id=id+'-title'; panel.setAttribute('aria-labelledby',title.id); panel.appendChild(title);
+    const description=make('p',null,options.description); panel.appendChild(description);
+    const label=make('label',null,options.label); label.htmlFor=id; panel.appendChild(label);
+    const input=make('input','room-menu-input'); input.id=id; input.name='value'; input.type=options.type; input.value=options.value || '';
+    if(options.type==='text'){input.maxLength=80;input.required=true;input.autocomplete='off'}
+    panel.appendChild(input);
+    if(options.type==='color'){
+      const colors=make('div','room-menu-swatches'); colors.setAttribute('aria-label','Suggested colours');
+      for(const color of ['#cfac9c','#e9a892','#d9b78f','#e8d9b3','#a8c7a0','#6f9a80','#8cb7bc','#a6a0c7','#f1e8da','#5f6e62']){
+        const swatch=make('button','room-menu-swatch');swatch.type='button';swatch.style.backgroundColor=color;swatch.title=color;swatch.setAttribute('aria-label','Use '+color);swatch.addEventListener('click',()=>{input.value=color});colors.appendChild(swatch)
+      }
+      panel.appendChild(colors);
+    }
+    const actions=make('div','room-menu-prompt-actions');
+    const cancel=make('button','room-menu-cancel','Cancel');cancel.type='button';
+    const save=make('button','room-menu-save',options.confirm || 'Save');save.type='submit';
+    actions.append(cancel,save); panel.appendChild(actions); overlay.appendChild(panel);document.body.appendChild(overlay);
+    const keyHandler=e=>{if(e.key==='Escape'){e.preventDefault();closeMenu()}};
+    document.addEventListener('keydown',keyHandler,true);active={overlay,previous,keyHandler};
+    cancel.addEventListener('click',()=>closeMenu()); overlay.addEventListener('pointerdown',e=>{if(e.target===overlay)closeMenu()});
+    panel.addEventListener('submit',e=>{e.preventDefault();let value=input.value;if(options.type==='text')value=value.trim();if(!value)return;closeMenu();options.onSave(value)});
+    if(options.type==='text')input.focus({preventScroll:true});else save.focus({preventScroll:true});
+  }
+  function circleMenu({x,y,title,description,actions}) {
+    closeMenu(); const previous=document.activeElement;
+    const overlay=make('div','room-menu-overlay');
+    const panel=make('div','room-radial');panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label',title);
+    const caption=make('p','room-radial-caption',title); panel.appendChild(caption);
+    if(description)panel.setAttribute('aria-description',description);
+    const center=make('button','room-radial-center');center.type='button';center.setAttribute('aria-label','Close menu');center.textContent='×';center.addEventListener('click',()=>closeMenu());panel.appendChild(center);
+    const radius=window.innerWidth<380?90:100;
+    if(window.innerHeight<340||window.innerWidth<300)panel.classList.add('room-radial-compact');
+    const insetX=radius+51,insetY=radius+52;
+    const cx=Math.max(insetX,Math.min(window.innerWidth-insetX,Number.isFinite(x)?x:window.innerWidth/2));
+    const cy=Math.max(insetY+20,Math.min(window.innerHeight-insetY,Number.isFinite(y)?y:window.innerHeight/2));
+    panel.style.left=`${cx}px`;panel.style.top=`${cy}px`;panel.style.setProperty('--radial-radius',`${radius}px`);
+    const buttons=[];
+    actions.forEach((action,index)=>{
+      const angle=(-90+index*360/actions.length)*Math.PI/180;
+      const button=make('button','room-radial-action');button.type='button';button.setAttribute('aria-label',action.label);
+      button.style.left=`${Math.cos(angle)*radius}px`;button.style.top=`${Math.sin(angle)*radius}px`;
+      const icon=make('span','room-radial-icon',action.icon), label=make('span','room-radial-label',action.label);button.append(icon,label);
+      if(action.disabled){button.disabled=true;button.title=action.disabledReason||'Unavailable'}
+      button.addEventListener('click',()=>{closeMenu();action.run()});panel.appendChild(button);buttons.push(button);
+    });
+    overlay.appendChild(panel);document.body.appendChild(overlay);
+    const keyHandler=e=>{
+      if(e.key==='Escape'){e.preventDefault();closeMenu();return}
+      if(e.key==='Tab'){
+        const enabled=[center,...buttons.filter(b=>!b.disabled)];const at=enabled.indexOf(document.activeElement);
+        if(e.shiftKey&&at<=0){e.preventDefault();enabled[enabled.length-1].focus()}else if(!e.shiftKey&&at===enabled.length-1){e.preventDefault();enabled[0].focus()}
+      }
+    };
+    document.addEventListener('keydown',keyHandler,true);active={overlay,previous,keyHandler};overlay.addEventListener('pointerdown',e=>{if(e.target===overlay)closeMenu()});center.focus({preventScroll:true});
+  }
+  const isColor=s=>typeof s==='string' && /^#[0-9a-f]{6}$/i.test(s);
+  const ObjectMenu={
+    open({x,y,item,onAction}) {
+      if(!item || typeof onAction!=='function') return;
+      const display=String(item.name||item.label||'Your piece').slice(0,80);
+      const send=(action,value)=>onAction(action,value);
+      const actions=[
+        {label:'Rename',icon:'✎',run:()=>dialogInput({title:'Name this piece',description:'Give it a name that makes sense to you.',label:'Piece name',type:'text',value:display,onSave:value=>send('rename',value)})},
+        {label:'Change color',icon:'◉',run:()=>dialogInput({title:'Pick a color',description:item.shape==='image'?'Add a tint to your image.':'Choose a color for this piece.',label:'Color',type:'color',value:isColor(item.color)?item.color:'#cfac9c',onSave:value=>send('color',value)})},
+        {label:'Duplicate',icon:'⧉',run:()=>send('duplicate')},
+        {label:'Snap to grid',icon:'▦',run:()=>send('snap-grid')},
+        {label:'Snap to wall',icon:'⊣',run:()=>send('snap-wall')},
+        {label:'Fit to room',icon:'⌂',run:()=>send('fit-room')}
+      ];
+      if(item.type==='custom')actions.splice(2,0,{label:'Paint',icon:'✿',run:()=>send('paint')});
+      circleMenu({x,y,title:display,description:'Choose an action, tap outside, or press Escape to close.',actions});
+    },
+    close:closeMenu
+  };
+  const WallMenu={
+    open({x,y,curved,onAction}) {
+      if(typeof onAction!=='function')return;
+      const actions=[
+        {label:curved?'Adjust curve':'Curve wall',icon:'⌒',run:()=>onAction('curve')},
+        {label:'Straighten',icon:'╱',disabled:!curved,disabledReason:'This wall is already straight.',run:()=>onAction('straighten')},
+        {label:'Finish editing',icon:'✓',run:()=>onAction('done')}
+      ];
+      circleMenu({x,y,title:'Wall options',description:'Choose how to shape this wall.',actions});
+    },
+    close:closeMenu
+  };
+  root.ObjectMenu=ObjectMenu;root.WallMenu=WallMenu;
+})(typeof window!=='undefined'?window:globalThis);
+
+/* Little Room: draw or import a custom piece entirely on this device. */
+(function (root) {
+  'use strict';
+  const MAX_SIDE = 1024, MIN_SIDE = 16, MAX_INPUT = 12 * 1024 * 1024, MAX_PIXELS = 40 * 1000 * 1000, MAX_ENCODED = 850000;
+  let dialog, canvas, context, callback = null, initialItem = null, tool = 'pencil', drawing = null, undoStack = [], created = false, loading = false, openSeq = 0;
+  const find = selector => dialog.querySelector(selector);
+  function message(text, isError = false) { const status = find('[data-studio-status]'); status.textContent = text; status.classList.toggle('studio-error', isError); }
+  function makeUI() {
+    dialog = document.createElement('dialog');
+    dialog.className = 'custom-studio';
+    dialog.setAttribute('aria-labelledby', 'studio-title');
+    dialog.innerHTML = `
+      <div class="studio-head"><div><span class="studio-kicker">YOUR OWN LITTLE CREATION</span><h2 id="studio-title">Make a custom piece</h2><p>Draw something or bring in a picture. Everything stays on this device.</p></div><button type="button" class="studio-close" aria-label="Close custom piece editor">×</button></div>
+      <div class="studio-body"><div class="studio-workspace">
+        <div class="studio-image-area"><canvas class="studio-canvas" aria-label="Drawing canvas. Draw with your finger or mouse."></canvas></div>
+        <p class="studio-canvas-help">Draw right on the canvas. Use a transparent PNG for a cutout.</p>
+      </div><div class="studio-settings">
+        <label class="studio-name-label">Piece name<input data-studio-name type="text" maxlength="60" placeholder="e.g. My favorite chair" value="My custom piece"></label>
+        <div class="studio-section-title">START WITH AN IMAGE</div>
+        <button type="button" class="studio-upload" data-studio-upload><span>↥</span> Choose PNG, JPG or WebP</button><input data-studio-file type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" hidden>
+        <div class="studio-dimension-title"><span class="studio-section-title">CANVAS SIZE</span><span>pixels</span></div>
+        <div class="studio-size-row"><label>Width<input data-studio-width type="number" min="16" max="1024" step="1" inputmode="numeric" value="256"></label><span>×</span><label>Height<input data-studio-height type="number" min="16" max="1024" step="1" inputmode="numeric" value="256"></label><button type="button" data-studio-resize>Apply</button></div>
+        <div class="studio-section-title">DRAWING TOOLS</div>
+        <div class="studio-tools" role="group" aria-label="Drawing tool"><button type="button" data-tool="pencil" class="is-active" aria-pressed="true">✎ <span>Pen</span></button><button type="button" data-tool="marker" aria-pressed="false">● <span>Marker</span></button><button type="button" data-tool="eraser" aria-pressed="false">◩ <span>Eraser</span></button></div>
+        <div class="studio-brush-row"><label>Color<input data-studio-color type="color" value="#6c9271" aria-label="Brush color"></label><label>Brush size <output data-studio-size-output>10 px</output><input data-studio-size type="range" min="1" max="80" value="10" aria-label="Brush size"></label></div>
+        <div class="studio-edit-row"><button type="button" data-studio-undo disabled>↶ Undo</button><button type="button" data-studio-clear>Clear canvas</button></div>
+      </div></div>
+      <div class="studio-footer"><p role="status" aria-live="polite" data-studio-status>Ready to create.</p><button type="button" class="studio-add" data-studio-add>＋ Add to my room</button></div>`;
+    document.body.appendChild(dialog);
+    canvas = find('.studio-canvas'); context = canvas.getContext('2d', { willReadFrequently: true }); canvas.width = 256; canvas.height = 256;
+    find('.studio-close').addEventListener('click', () => dialog.close());
+    find('[data-studio-upload]').addEventListener('click', () => find('[data-studio-file]').click());
+    find('[data-studio-file]').addEventListener('change', loadFile);
+    find('[data-studio-resize]').addEventListener('click', resizeCanvas);
+    find('[data-studio-size]').addEventListener('input', event => { find('[data-studio-size-output]').textContent = `${event.target.value} px`; });
+    find('.studio-tools').addEventListener('click', event => {
+      const button = event.target.closest('[data-tool]'); if (!button) return;
+      tool = button.dataset.tool;
+      find('.studio-tools').querySelectorAll('[data-tool]').forEach(b => { const active = b === button; b.classList.toggle('is-active', active); b.setAttribute('aria-pressed', String(active)); });
+    });
+    find('[data-studio-undo]').addEventListener('click', undo);
+    find('[data-studio-clear]').addEventListener('click', () => { pushUndo(); context.clearRect(0, 0, canvas.width, canvas.height); created = true; message('Canvas cleared. You can undo this.'); });
+    find('[data-studio-add]').addEventListener('click', addToRoom);
+    canvas.addEventListener('pointerdown', pointerDown); canvas.addEventListener('pointermove', pointerMove);
+    canvas.addEventListener('pointerup', pointerUp); canvas.addEventListener('pointercancel', pointerUp);
+    dialog.addEventListener('close', () => { drawing = null; openSeq++; });
+    window.addEventListener('resize', updateCanvasDisplay);
+  }
+  function updateCanvasDisplay() {
+    if (!dialog || !dialog.open) return;
+    const area = find('.studio-image-area'); const availableWidth = Math.max(50, area.clientWidth - 28);
+    const availableHeight = Math.max(110, Math.min(420, window.innerWidth <= 700 ? window.innerHeight * .36 : 420));
+    const scale = Math.min(availableWidth / canvas.width, availableHeight / canvas.height);
+    canvas.style.width = `${Math.floor(canvas.width * scale)}px`; canvas.style.height = `${Math.floor(canvas.height * scale)}px`;
+  }
+  function clampSize(raw) { const n = Number(raw); return Number.isInteger(n) && n >= MIN_SIDE && n <= MAX_SIDE ? n : null; }
+  function pushUndo() {
+    try { undoStack.push({width:canvas.width, height:canvas.height, pixels:context.getImageData(0,0,canvas.width,canvas.height)}); if (undoStack.length > 8) undoStack.shift(); find('[data-studio-undo]').disabled = false; }
+    catch (_) { message('Undo is unavailable for this canvas.', true); }
+  }
+  function undo() {
+    const state = undoStack.pop(); if (!state) return;
+    canvas.width = state.width; canvas.height = state.height; context = canvas.getContext('2d', {willReadFrequently:true}); context.putImageData(state.pixels,0,0);
+    find('[data-studio-width]').value = state.width; find('[data-studio-height]').value = state.height; updateCanvasDisplay();
+    find('[data-studio-undo]').disabled = !undoStack.length; created = true; message('Last change undone.');
+  }
+  function resizeCanvas() {
+    const width = clampSize(find('[data-studio-width]').value), height = clampSize(find('[data-studio-height]').value);
+    if (!width || !height) { message(`Choose whole-number dimensions from ${MIN_SIDE} to ${MAX_SIDE} pixels.`, true); return; }
+    if (canvas.width === width && canvas.height === height) { message('That canvas size is already in use.'); return; }
+    pushUndo(); const old = document.createElement('canvas'); old.width = canvas.width; old.height = canvas.height; old.getContext('2d').drawImage(canvas,0,0);
+    canvas.width = width; canvas.height = height; context = canvas.getContext('2d', {willReadFrequently:true}); context.imageSmoothingEnabled = true; context.drawImage(old,0,0,width,height);
+    created = true; updateCanvasDisplay(); message(`Canvas resized to ${width} × ${height} pixels.`);
+  }
+  function getPoint(event) {
+    const rect = canvas.getBoundingClientRect(); return {x:(event.clientX-rect.left)*canvas.width/rect.width, y:(event.clientY-rect.top)*canvas.height/rect.height};
+  }
+  function beginBrush() {
+    context.save(); context.globalCompositeOperation = tool === 'eraser' ? 'destination-out' : 'source-over'; context.globalAlpha = tool === 'marker' ? .35 : 1;
+    context.strokeStyle = find('[data-studio-color]').value; context.fillStyle = context.strokeStyle;
+    context.lineWidth = Number(find('[data-studio-size]').value); context.lineCap = 'round'; context.lineJoin = 'round';
+  }
+  function pointerDown(event) {
+    if (event.button !== 0 || drawing) return;
+    event.preventDefault(); pushUndo(); const point = getPoint(event); drawing = {id:event.pointerId, point}; canvas.setPointerCapture(event.pointerId); beginBrush();
+    context.beginPath(); context.arc(point.x,point.y,context.lineWidth/2,0,Math.PI*2); context.fill(); context.restore(); created = true;
+  }
+  function pointerMove(event) {
+    if (!drawing || drawing.id !== event.pointerId) return;
+    event.preventDefault(); const point = getPoint(event); beginBrush(); context.beginPath(); context.moveTo(drawing.point.x,drawing.point.y); context.lineTo(point.x,point.y); context.stroke(); context.restore(); drawing.point = point;
+  }
+  function pointerUp(event) { if (drawing && drawing.id === event.pointerId) { drawing = null; message('Looking good. Keep drawing or add it to your room.'); } }
+  async function loadFile(event) {
+    const file = event.target.files && event.target.files[0]; event.target.value = ''; if (!file) return; const activeSeq=openSeq;
+    try {
+      if (file.size > MAX_INPUT) throw new Error('Choose an image smaller than 12 MB.');
+      const head = new Uint8Array(await file.slice(0, 16).arrayBuffer());
+      const png = head[0]===137 && head[1]===80 && head[2]===78 && head[3]===71 && head[4]===13 && head[5]===10 && head[6]===26 && head[7]===10;
+      const jpeg = head[0]===255 && head[1]===216 && head[2]===255;
+      const webp = String.fromCharCode(...head.slice(0,4))==='RIFF' && String.fromCharCode(...head.slice(8,12))==='WEBP';
+      if (!png && !jpeg && !webp) throw new Error('Choose a PNG, JPG, or WebP image.');
+      const url = URL.createObjectURL(file); let image;
+      try { image = await new Promise((resolve,reject) => { const candidate = new Image(); candidate.onload = () => resolve(candidate); candidate.onerror = () => reject(new Error('That image could not be opened.')); candidate.src = url; }); }
+      finally { URL.revokeObjectURL(url); }
+      if (!dialog.open || activeSeq!==openSeq) return;
+      const iw = image.naturalWidth, ih = image.naturalHeight;
+      if (!iw || !ih || iw * ih > MAX_PIXELS) throw new Error('That image is too large. Try a smaller image.');
+      const factor = Math.min(1, MAX_SIDE / iw, MAX_SIDE / ih), width = Math.max(MIN_SIDE,Math.round(iw*factor)), height = Math.max(MIN_SIDE,Math.round(ih*factor));
+      pushUndo(); canvas.width = width; canvas.height = height; context = canvas.getContext('2d', {willReadFrequently:true}); context.drawImage(image,0,0,width,height);
+      find('[data-studio-width]').value = width; find('[data-studio-height]').value = height; created = true; updateCanvasDisplay();
+      message(factor < 1 ? `Image loaded at ${width} × ${height} pixels to fit the editor.` : `Image loaded at ${width} × ${height} pixels. You can paint over it.`);
+    } catch (error) { if(dialog.open && activeSeq===openSeq) message(error && error.message || 'That image could not be opened.', true); }
+  }
+  function hasVisiblePixel() {
+    const pixels=context.getImageData(0,0,canvas.width,canvas.height).data;
+    for (let i=3;i<pixels.length;i+=4) if (pixels[i]!==0) return true;
+    return false;
+  }
+  function encodedImage() {
+    let data = canvas.toDataURL('image/png');
+    if (data.length > 400000) {
+      const smaller = canvas.toDataURL('image/webp', .86);
+      if (smaller.startsWith('data:image/webp;base64,') && smaller.length < data.length) data = smaller;
+    }
+    if (data.length > MAX_ENCODED) throw new Error('This image is too detailed to save at this size. Use a smaller canvas, such as 512 × 512 pixels.');
+    return data;
+  }
+  function addToRoom() {
+    try {
+      if (loading) throw new Error('Please wait while the image opens.');
+      if (!hasVisiblePixel()) throw new Error('Draw something or choose an image first.');
+      const imageData=encodedImage(), longSide=4, ratio=canvas.width/canvas.height;
+      const width = ratio>=1 ? longSide : Math.max(.4,longSide*ratio), height = ratio>=1 ? Math.max(.4,longSide/ratio) : longSide;
+      const item = {...(initialItem || {}), type:'custom', shape:'image', imageData, name:(find('[data-studio-name]').value.trim() || 'My custom piece').slice(0,60), w:initialItem?.w || width, h:initialItem?.h || height, rotation:initialItem?.rotation || 0};
+      if (initialItem && initialItem.shape !== 'image') delete item.color;
+      if (typeof callback !== 'function') throw new Error('The room is not ready yet. Please try again.');
+      callback(item); dialog.close(); message('Added to your room.');
+    } catch (error) { message(error && error.message || 'This piece could not be added.', true); }
+  }
+  function open(options = {}) {
+    if (!dialog) makeUI(); if (dialog.open) return;
+    const activeSeq=++openSeq; initialItem = options.item || null; callback = initialItem ? (options.onSave || options.onAdd) : options.onAdd;
+    find('[data-studio-add]').textContent = initialItem ? '✓ Save changes' : '＋ Add to my room';
+    undoStack=[];find('[data-studio-undo]').disabled=true;
+    if (!initialItem) {
+      canvas.width=256;canvas.height=256;context=canvas.getContext('2d',{willReadFrequently:true});
+      find('[data-studio-width]').value=256;find('[data-studio-height]').value=256;find('[data-studio-name]').value='My custom piece';created=false;message('Ready to create.');
+    }
+    dialog.showModal(); updateCanvasDisplay();
+    if (initialItem) {
+      const data = initialItem.imageData;
+      find('[data-studio-name]').value=typeof initialItem.name==='string'?initialItem.name:'My custom piece';
+      if (initialItem.type === 'custom' && initialItem.shape !== 'image') {
+        const itemW=Number(initialItem.w)>0?Number(initialItem.w):2,itemH=Number(initialItem.h)>0?Number(initialItem.h):2;
+        const scale=256/Math.max(itemW,itemH);canvas.width=Math.max(MIN_SIDE,Math.round(itemW*scale));canvas.height=Math.max(MIN_SIDE,Math.round(itemH*scale));context=canvas.getContext('2d',{willReadFrequently:true});
+        context.fillStyle=typeof initialItem.color==='string'&&/^#[0-9a-f]{6}$/i.test(initialItem.color)?initialItem.color:'#cfac9c';context.beginPath();
+        if((initialItem.shape==='freehand'||initialItem.shape==='polygon')&&Array.isArray(initialItem.points)&&initialItem.points.length>=3){initialItem.points.forEach((p,i)=>{const x=(p[0]+.5)*canvas.width,y=(p[1]+.5)*canvas.height;if(i)context.lineTo(x,y);else context.moveTo(x,y)});context.closePath()}
+        else if(initialItem.shape==='ellipse'||initialItem.shape==='pillar')context.ellipse(canvas.width/2,canvas.height/2,canvas.width/2,canvas.height/2,0,0,Math.PI*2);
+        else context.rect(0,0,canvas.width,canvas.height);
+        context.fill();find('[data-studio-width]').value=canvas.width;find('[data-studio-height]').value=canvas.height;loading=false;created=true;find('[data-studio-add]').disabled=false;updateCanvasDisplay();message('Paint on your piece, then save your changes.');return;
+      }
+      if(typeof data !== 'string' || data.length>2500000 || !/^data:image\/(png|jpeg|webp);base64,[a-z0-9+/=]+$/i.test(data)) { find('[data-studio-add]').disabled=true;message('This image could not be opened for painting.',true);return; }
+      loading=true;find('[data-studio-add]').disabled=true;message('Opening your image…');
+      const image=new Image();image.onload=()=>{if(!dialog.open || activeSeq!==openSeq)return;const iw=image.naturalWidth,ih=image.naturalHeight;if(!iw||!ih||iw*ih>MAX_PIXELS){loading=false;find('[data-studio-add]').disabled=true;message('This image is too large to edit.',true);return}const factor=Math.min(1,MAX_SIDE/iw,MAX_SIDE/ih);canvas.width=Math.max(MIN_SIDE,Math.round(iw*factor));canvas.height=Math.max(MIN_SIDE,Math.round(ih*factor));context=canvas.getContext('2d',{willReadFrequently:true});context.drawImage(image,0,0,canvas.width,canvas.height);find('[data-studio-width]').value=canvas.width;find('[data-studio-height]').value=canvas.height;created=true;loading=false;find('[data-studio-add]').disabled=false;updateCanvasDisplay();message('Paint on your piece, then save your changes.')};
+      image.onerror=()=>{if(activeSeq!==openSeq)return;loading=false;find('[data-studio-add]').disabled=true;message('This image could not be opened for painting.',true)};image.src=data;
+    } else { loading=false;find('[data-studio-add]').disabled=false; }
+  }
+  root.CustomStudio = {open};
+})(typeof window !== 'undefined' ? window : globalThis);
+
 (function(){
 'use strict';
 const {CATALOG,RoomCanvas} = window.RoomModule;
@@ -761,9 +1185,9 @@ function safeState(state){
  if(!state || typeof state!=='object' || !Array.isArray(state.items) || state.items.length>200 || !Array.isArray(state.openings) || state.openings.length>300)return false;
  const points=state.polygon||state.cells;
  if(!Array.isArray(points)||points.length<3||points.length>10000||!points.every(p=>Array.isArray(p)&&p.length===2&&p.every(n=>Number.isFinite(n)&&Math.abs(n)<=1000)))return false;
- return state.items.every(i=>i&&typeof i.id==='string'&&(CATALOG[i.type]||i.type==='custom')&&Number.isFinite(i.x)&&Number.isFinite(i.y)&&Math.abs(i.x)<=1000&&Math.abs(i.y)<=1000&&Number.isFinite(i.rotation||0)&&['w','h'].every(k=>i[k]===undefined||(Number.isFinite(i[k])&&i[k]>0&&i[k]<=200))&&(!i.points||(Array.isArray(i.points)&&i.points.length<=1000&&i.points.every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite))))) && state.openings.every(o=>o&&typeof o.id==='string'&&['door','window'].includes(o.type));
+ return state.items.every(i=>i&&typeof i.id==='string'&&(CATALOG[i.type]||i.type==='custom')&&Number.isFinite(i.x)&&Number.isFinite(i.y)&&Math.abs(i.x)<=1000&&Math.abs(i.y)<=1000&&Number.isFinite(i.rotation||0)&&['w','h'].every(k=>i[k]===undefined||(Number.isFinite(i[k])&&i[k]>0&&i[k]<=200))&&(!i.points||(Array.isArray(i.points)&&i.points.length<=1000&&i.points.every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite))))&&(!i.clipPolygon||(Array.isArray(i.clipPolygon)&&i.clipPolygon.length<=5000&&i.clipPolygon.every(p=>Array.isArray(p)&&p.length===2&&p.every(Number.isFinite))))&&(i.shape!=='image'||(typeof i.imageData==='string'&&i.imageData.length<=2500000&&/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(i.imageData)))) && state.openings.every(o=>o&&typeof o.id==='string'&&['door','window'].includes(o.type));
 }
-function persist(state){try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){toast('Your browser could not save this room. Export a backup to keep it.')}}
+function persist(state){try{localStorage.setItem(STORE,JSON.stringify(state));document.querySelector('.saved').textContent='✧  Saved on this device'}catch(e){document.querySelector('.saved').textContent='Not saved — export a backup';toast('Your browser could not save this room. Export a backup to keep it.')}}
 function escapeHtml(s){const div=document.createElement('div');div.textContent=String(s);return div.innerHTML}
 function update(state){
  persist(state);
@@ -780,14 +1204,14 @@ function update(state){
 function updateInspector(item){
  currentSelection=item;const isItem=!!item&&(!!CATALOG[item.type]||item.type==='custom');const opening=!!item&&!isItem;
  $('selectionTools').classList.toggle('hidden',!item);$('objectInspector').classList.toggle('hidden',!item);$('objectHeight').closest('label').classList.toggle('hidden',opening);$('objectAngle').closest('label').classList.toggle('hidden',opening);
- if(item){const label=(item.type==='custom'?item.name:CATALOG[item.type]?.label)||(item.type==='door'?'Door':'Window');$('selectionLabel').textContent=label;$('objectName').textContent=label;$('rotateButton').style.display=isItem?'':'none';
+ if(item){const label=item.name||CATALOG[item.type]?.label||(item.type==='door'?'Door':'Window');$('selectionLabel').textContent=label;$('objectName').textContent=label;$('rotateButton').style.display=isItem?'':'none';$('objectOptions').style.display=isItem?'':'none';
  if(isItem){const size=window.Furniture.itemSize(item,CATALOG);$('objectWidth').value=Number((size.w*.5).toFixed(3));$('objectHeight').value=Number((size.h*.5).toFixed(3));$('objectAngle').value=Number(((item.rotation||0)%360).toFixed(1));}else $('objectWidth').value=Number(((item.width||1)*.5).toFixed(3));}
 }
-const room=new RoomCanvas($('roomCanvas'),{onChange:update,onSelect:updateInspector,onNotice:toast,onToolChange:tool=>setTool(tool)});
+const room=new RoomCanvas($('roomCanvas'),{onChange:update,onSelect:updateInspector,onNotice:toast,onToolChange:tool=>setTool(tool),onObjectMenu:(item,point)=>openObjectMenu(item,point),onWallMenu:info=>openWallMenu(info)});
 try{const saved=JSON.parse(localStorage.getItem(STORE)||'null');if(safeState(saved))room.setState(saved);else update(room.getState())}catch(e){update(room.getState())}
 function setTool(tool){
- if(room.setTool(tool)===false)return;activeTool=tool;document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===tool));
- const hints={select:'Drag a piece to move · Use its corner handles',pan:'Drag to move around your plan','shape-room':'Drag corners · Tap a wall to add a corner','add-room':'Drag to add floor · Join sections by touching','erase-room':'Drag to remove floor',door:'Tap an outside wall to place a door',window:'Tap an outside wall to place a window','draw-rect':'Drag to draw a rectangle','draw-pillar':'Drag to draw a pillar','draw-ellipse':'Drag to draw an oval','draw-freehand':'Draw a shape with your finger or mouse'};
+ if(room.setTool(tool)===false)return;activeTool=tool;$('finishCurve').classList.toggle('hidden',tool!=='curve-room');document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===tool));
+ const hints={select:'Drag a corner to shape the room · Hold a piece or wall for options',pan:'Drag to move around your plan','shape-room':'Drag corners · Tap a wall to add a corner','curve-room':'Drag the highlighted wall · Drag the center guide to adjust','add-room':'Drag to add floor · Join sections by touching','erase-room':'Drag to remove floor',door:'Tap an outside wall to place a door',window:'Tap an outside wall to place a window','draw-rect':'Drag to draw a rectangle','draw-pillar':'Drag to draw a pillar','draw-ellipse':'Drag to draw an oval','draw-freehand':'Draw a shape with your finger or mouse'};
  $('modeHint').innerHTML=`<span class="hint-icon">${tool==='select'?'↖':'✳'}</span><span>${hints[tool]||'Ready to edit'}</span>`;$('bottomStatus').textContent=tool==='select'?'Ready when you are':hints[tool]||'Editing';
 }
 function setTab(tab){document.querySelectorAll('.tab').forEach(b=>{let selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-selected',String(selected))});$('furnishPanel').classList.toggle('hidden',tab!=='furnish');$('buildPanel').classList.toggle('hidden',tab!=='build');if(tab==='furnish')setTool('select')}
@@ -795,6 +1219,25 @@ function closeSheets(){document.body.classList.remove('mobile-sheet-open','mobil
 function isMobile(){return matchMedia('(max-width:700px)').matches}
 renderCatalog();
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+function viewportPoint(point){const r=$('roomCanvas').getBoundingClientRect();return {x:r.left+point.x,y:r.top+point.y}}
+function openObjectMenu(item,point){
+ if(!item)return;const location=viewportPoint(point);room.selectItem(item.id);
+ ObjectMenu.open({...location,item:{...item,name:item.name||CATALOG[item.type]?.label||'Custom piece'},onAction:(action,value)=>performObjectAction(item.id,action,value)});
+}
+function commitObject(item){const i=room.state.items.findIndex(o=>o.id===item.id);if(i<0)return;room.state.items[i]=item;room.selected=item.id;room.selectedChanged();room.draw();room.emit()}
+function performObjectAction(id,action,value){
+ const item=room.state.items.find(o=>o.id===id);if(!item)return;
+ if(action==='paint'){CustomStudio.open({item,onSave:updated=>{const current=room.state.items.find(o=>o.id===id);if(current){const changed={...current,imageData:updated.imageData,name:updated.name||current.name,shape:'image'};if(item.shape!=='image')delete changed.color;commitObject(changed)}}});return}
+ if(action==='rename'){commitObject({...item,name:String(value).slice(0,80)});toast('Piece renamed.');return}
+ if(action==='color'){commitObject({...item,color:value});toast('Color updated.');return}
+ if(action==='duplicate'){const clone=JSON.parse(JSON.stringify(item));clone.id=Math.random().toString(36).slice(2,12);clone.x+=room.snap||.25;clone.y+=room.snap||.25;room.state.items.push(clone);room.selectItem(clone.id);room.draw();room.emit();toast('Piece duplicated — drag the copy into place.');return}
+ let result=null;if(action==='snap-grid')result=Furniture.snapToGrid(item,room.snap||.25);else if(action==='snap-wall')result=Furniture.snapToWall(item,CATALOG,room.getRoomPolygon());else if(action==='fit-room')result=Furniture.fitToRoom(item,CATALOG,room.getRoomPolygon());
+ if(result){commitObject(result);toast(action==='fit-room'?'Piece trimmed to the room.':action==='snap-wall'?'Piece snapped to the nearest wall.':'Piece snapped to the grid.')}else toast(action==='fit-room'?'Move the piece so it overlaps the room first.':'A wall could not be found.');
+}
+function openWallMenu(info){const location=viewportPoint(info);WallMenu.open({...location,curved:info.curved,onAction:action=>{if(action==='curve'){if(room.setCurveMode(info.edgeIndex)!==false)toast('Drag the wall to bend it. Drag its center guide to move or align it.')}else if(action==='straighten'){room.straightenCurve(info.edgeIndex);toast('Wall straightened.')}else room.finishCurve()}})}
+$('finishCurve').addEventListener('click',()=>room.finishCurve());
+$('objectOptions').addEventListener('click',()=>{if(!currentSelection)return;const r=$('objectOptions').getBoundingClientRect(),canvas=$('roomCanvas').getBoundingClientRect();openObjectMenu(currentSelection,{x:r.left+r.width/2-canvas.left,y:r.top+r.height/2-canvas.top})});
+$('addCustom').addEventListener('click',()=>{if(isMobile())closeSheets();CustomStudio.open({onAdd:piece=>{const b=room.bounds(),id=Math.random().toString(36).slice(2,12);const item={...piece,id,x:(b.minX+b.maxX+1)/2,y:(b.minY+b.maxY+1)/2};room.state.items.push(item);room.selectItem(id);room.draw();room.emit();setTool('select');toast('Your custom piece is ready to move.')}})});
 $('categories').addEventListener('click',e=>{const b=e.target.closest('[data-category]');if(b){category=b.dataset.category;renderCatalog()}});
 $('furnitureGrid').addEventListener('dragstart',e=>{const b=e.target.closest('[data-item]');if(b){e.dataTransfer.setData('text/plain',b.dataset.item);e.dataTransfer.effectAllowed='copy'}});
 $('roomCanvas').addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='copy'});
@@ -815,9 +1258,11 @@ $('snapSize').addEventListener('change',e=>room.setSnap(Number(e.target.value)))
 $('sunAngle').addEventListener('input',e=>{const angle=Number(e.target.value);$('sunValue').textContent=`${angle}°`;room.state.sunTime=null;room.setSunAngle(angle)});
 $('sunTime').addEventListener('input',e=>{const value=Number(e.target.value),hh=Math.floor(value),mm=Math.round((value-hh)*60);$('timeValue').textContent=`${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;const angle=Math.round(90+(value-6)*15)%360;$('sunAngle').value=angle;$('sunValue').textContent=`${angle}°`;room.state.sunTime=value;room.setSunAngle(angle)});
 $('undoButton').addEventListener('click',()=>{if(history.length<2)return;history.pop();const state=JSON.parse(history[history.length-1]);restoring=true;room.setState(state);restoring=false;$('undoButton').disabled=history.length<2;toast('Last change undone.')});
+$('clearButton').addEventListener('click',()=>{if(!room.state.items.length){toast('The room is already empty.');return}if(confirm('Remove all furniture and custom objects? You can undo this afterwards.')){room.state.items=[];room.selected=null;room.selectedChanged();room.draw();room.emit();toast('Furniture cleared. Use Undo to bring it back.')}});
 $('resetButton').addEventListener('click',()=>{if(confirm('Start over with the sample room? You can undo this afterwards.')){room.reset();setTool('select');toast('Sample room restored.')}});
 $('arrangeButton').addEventListener('click',()=>{const state=room.getState(),result=arrangeRoom(state,CATALOG);if(!result.ok){toast(result.messages[0]);return}state.items=result.items;room.setState(state);setTool('select');if(isMobile())closeSheets();toast('Here’s one way to find your flow. Use Undo to go back.')});
-function exportCanvas(){
+async function exportCanvas(){
+ await Furniture.waitForImages(room.getState().items);
  const host=document.createElement('div');host.style.cssText='position:fixed;left:-10000px;top:0;width:900px;height:640px;pointer-events:none';const clean=document.createElement('canvas');clean.style.cssText='display:block;width:100%;height:100%';host.appendChild(clean);document.body.appendChild(host);
  const snapshot=new RoomCanvas(clean,{});snapshot.setState(room.getState());snapshot.setGrid(grid);snapshot.setLight(light);snapshot.fit();
  const out=document.createElement('canvas'),band=Math.max(60,Math.round(clean.width*.08));out.width=clean.width;out.height=clean.height+band;const c=out.getContext('2d');c.fillStyle='#fffefa';c.fillRect(0,0,out.width,out.height);c.fillStyle='#345d4a';c.font=`600 ${Math.max(20,Math.round(band*.32))}px Georgia`;c.fillText($('roomName').value.trim()||'My room',Math.round(band*.35),Math.round(band*.62));c.drawImage(clean,0,band);snapshot.destroy();host.remove();return out
@@ -825,8 +1270,8 @@ function exportCanvas(){
 function title(){return $('roomName').value.trim()||'My room'}
 function showSave(){closeSheets();$('saveDialog').showModal()}
 $('exportButton').addEventListener('click',showSave);$('closeSave').addEventListener('click',()=>$('saveDialog').close());
-$('savePng').addEventListener('click',async()=>{try{await RoomSharing.downloadPng(exportCanvas(),room.getState(),title());$('saveDialog').close();toast('Your editable image has been saved.')}catch(e){toast(e.message)}});
-$('sharePng').addEventListener('click',async()=>{try{const result=await RoomSharing.sharePng(exportCanvas(),room.getState(),title());if(result==='downloaded')toast('Your editable image was downloaded — share the original file.');else if(result==='shared')toast('Your editable image is ready to share.')}catch(e){toast(e.message)}});
+$('savePng').addEventListener('click',async()=>{try{await RoomSharing.downloadPng(await exportCanvas(),room.getState(),title());$('saveDialog').close();toast('Your editable image has been saved.')}catch(e){toast(e.message)}});
+$('sharePng').addEventListener('click',async()=>{try{const result=await RoomSharing.sharePng(await exportCanvas(),room.getState(),title());if(result==='downloaded')toast('Your editable image was downloaded — share the original file.');else if(result==='shared')toast('Your editable image is ready to share.')}catch(e){toast(e.message)}});
 $('saveJson').addEventListener('click',()=>{try{RoomSharing.downloadJson(room.getState(),title());$('saveDialog').close();toast('Your room backup was saved.')}catch(e){toast(e.message)}});
 $('openPlan').addEventListener('click',()=>{$('saveDialog').close();$('importFile').click()});$('importButton').addEventListener('click',()=>$('importFile').click());
 $('importFile').addEventListener('change',async e=>{try{const file=e.target.files[0];if(!file)return;const parsed=await RoomSharing.readPlan(file),state=parsed.state;if(!safeState(state))throw new Error('That file does not contain a supported room plan.');state.title=(parsed.title||state.title||'My room').slice(0,80);if(!room.setState(state))throw new Error('This room shape could not be opened.');setTool('select');toast('Your editable room is open.')}catch(err){toast(err.message||'That room could not be opened.')}finally{e.target.value=''}});

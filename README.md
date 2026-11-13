@@ -46,6 +46,7 @@ The [papers collection](https://ifcgit2024.github.io/my-portfolio/papers/) inclu
 
 | Project | About | Source |
 | --- | --- | --- |
+| [Little Room](https://ifcgit2024.github.io/my-portfolio/docs/projects/little-room/) | A cozy room planner with feng shui-inspired layout suggestions | [Project](docs/projects/little-room/) |
 | [Polymarket Lab](https://ifcgit2024.github.io/my-portfolio/polymarket-dashboard/) | Paper trading and API experiments with virtual funds; market data depends on external feeds | [Dashboard](polymarket-dashboard/) |
 | [RE Investment Analyzer](https://ifcgit2024.github.io/my-portfolio/docs/projects/re-analyzer/) | A browser-based property scenario calculator | [App & formula tests](docs/projects/re-analyzer/) |
 

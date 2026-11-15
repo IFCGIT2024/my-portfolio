@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f8f8f1">
+  <title>Little Room — make space for good things</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="." aria-label="Little Room home"><span class="brand-mark" aria-hidden="true">✳</span><span><strong>little room</strong><small>A space to make space</small></span></a>
+    <div class="header-note"><span class="status-dot"></span> Your cozy corner <span class="divider">/</span> Room planner</div>
+    <div class="header-actions"><span class="save-status" id="save-status" role="status">✧ Saved on this device</span><button class="button ghost compact" id="import-button" type="button">Open</button><input type="file" id="import-file" accept=".json,.png,application/json,image/png" hidden><button class="button primary compact" id="export-button" type="button">↗ <span>Save &amp; share</span></button></div>
+  </header>
+  <div class="preview-banner" role="note"><strong>Rebuild preview · in progress</strong><span>We’re building a fresh foundation for Little Room. Some tools are still being developed.</span></div>
+
+  <main class="workspace">
+    <aside class="toolbox" aria-label="Room tools">
+      <div class="toolbox-intro"><p class="eyebrow">YOUR LITTLE TOOLBOX</p><h1>Make it yours <span>✳</span></h1><p>Every good space starts somewhere.</p></div>
+      <div class="mode-switch" role="group" aria-label="Editing mode">
+        <button type="button" class="mode active" data-mode="plan" aria-pressed="true"><span aria-hidden="true">▧</span> Plan</button>
+        <button type="button" class="mode" data-mode="furnish" aria-pressed="false"><span aria-hidden="true">✿</span> Furnish</button>
+      </div>
+      <section class="panel" data-panel="plan">
+        <div class="panel-heading"><div><p class="eyebrow">THE FOUNDATION</p><h2>Build your room</h2></div><span class="little-tag">01</span></div>
+        <p class="description">Start with dimensions, then draw walls and add openings.</p>
+        <div class="dimension-card"><label for="room-width">Room width <span>m</span><input id="room-width" type="number" min="0.5" max="100" step="0.1" value="6"></label><span class="times" aria-hidden="true">×</span><label for="room-height">Room depth <span>m</span><input id="room-height" type="number" min="0.5" max="100" step="0.1" value="4"></label><button class="button light full" id="apply-dimensions" type="button">Apply dimensions</button></div>
+        <h3 class="section-label">DRAW &amp; EDIT</h3>
+        <div class="tool-grid"><button class="tool active" type="button" data-tool="select" aria-pressed="true"><span>↖</span><strong>Select</strong><small>Move &amp; adjust</small></button><button class="tool" type="button" data-tool="wall" aria-pressed="false"><span>╱</span><strong>Wall</strong><small>Click &amp; drag</small></button><button class="tool" type="button" data-tool="door" aria-pressed="false"><span>◩</span><strong>Door</strong><small>Add to wall</small></button><button class="tool" type="button" data-tool="window" aria-pressed="false"><span>▤</span><strong>Window</strong><small>Add to wall</small></button></div>
+        <h3 class="section-label">FLOOR FINISH</h3><div class="field"><label for="floor-finish">Choose a surface</label><select id="floor-finish"><option value="wood">Warm wood</option><option value="tile">Soft tile</option><option value="stone">Pale stone</option><option value="plain">Plain</option></select></div>
+        <p class="tip"><span>✺</span><span><strong>A little tip</strong><br>Drag from one point to another to draw a wall. Switch to Furnish when your room is ready.</span></p>
+      </section>
+      <section class="panel" data-panel="furnish" hidden>
+        <div class="panel-heading"><div><p class="eyebrow">THE FUN PART</p><h2>Find your pieces</h2></div><span class="little-tag">02</span></div>
+        <p class="description">Drag a piece into your room, or tap to add it.</p>
+        <div class="tool-row"><button class="tool small active" type="button" data-tool="select" aria-pressed="true">↖ <strong>Select</strong></button><button class="tool small" type="button" data-tool="draw-object" aria-pressed="false">▱ <strong>Draw a piece</strong></button></div>
+        <div id="catalog" class="catalog" aria-label="Furniture catalog"></div>
+        <p class="tip"><span>✿</span><span><strong>Make it fit</strong><br>Select a piece to change its size, angle, and layer.</span></p>
+      </section>
+    </aside>
+
+    <section class="canvas-section" aria-labelledby="workspace-title">
+      <div class="page-heading"><div><p class="eyebrow">YOUR SPACE <span>✳</span> FLOOR PLAN</p><h2 id="workspace-title">A little room to dream <span>✳</span></h2><p>Move things around until your space feels just right.</p></div><div class="view-label"><span>CURRENT VIEW</span><strong>▦ &nbsp; Top down</strong></div></div>
+      <div class="canvas-card">
+        <div class="canvas-heading"><div class="room-identity"><span class="room-icon">⌂</span><label for="room-name"><span class="sr-only">Room name</span><input id="room-name" value="My little room" maxlength="100"></label><small id="room-summary">A place to make your own</small></div><div class="canvas-actions"><button class="icon-button" id="grid-toggle" type="button" aria-label="Toggle grid" aria-pressed="true">▦</button><button class="icon-button" id="zoom-out" type="button" aria-label="Zoom out">−</button><button class="icon-button" id="zoom-in" type="button" aria-label="Zoom in">＋</button><button class="icon-button" id="fit-view" type="button" aria-label="Fit room in view">⛶</button></div></div>
+        <div class="canvas-wrap" id="canvas-wrap"><canvas id="room-canvas" aria-label="Room floor plan. Select an editing tool, then draw or move objects." tabindex="0"></canvas><div class="canvas-hint" id="canvas-hint" role="status"><span>✳</span> Draw a wall or select something to get started</div></div>
+        <div class="canvas-foot"><div><span class="eyebrow">SNAP</span><select id="snap-size" aria-label="Grid snapping"><option value="0">Off</option><option value="0.5">50 cm</option><option value="0.125" selected>12.5 cm</option><option value="0.025">2.5 cm</option></select><span class="status-line" id="workspace-status"><i></i> Ready when you are</span></div><span class="grid-key">GRID = 0.5 M</span></div>
+      </div>
+      <div class="bottom-actions"><p>✋ <strong>Go on, play a little.</strong> <span>There’s no wrong place to start.</span></p><div><button class="text-button" id="undo" type="button">↶ Undo</button><button class="text-button" id="redo" type="button">↷ Redo</button><button class="text-button" id="select-all" type="button">▧ Select all</button><button class="text-button danger" id="clear-all" type="button">× Clear all</button></div></div>
+    </section>
+
+    <aside class="details" aria-label="Selection, layers and atmosphere">
+      <section class="detail-card" id="selection-panel"><div class="detail-title"><span class="detail-icon peach">◇</span><div><p class="eyebrow">YOUR SELECTION</p><h2>Make it fit</h2></div></div><p class="description" id="selection-empty">Select something in your room to adjust it.</p><div id="selection-controls" hidden><label class="field" for="selected-name">Name<input id="selected-name" type="text" maxlength="100"></label><div class="inline-fields"><label class="field" for="selected-width">Width <span>m</span><input id="selected-width" type="number" min="0.05" step="0.1"></label><label class="field" for="selected-height">Depth <span>m</span><input id="selected-height" type="number" min="0.05" step="0.1"></label><label class="field" for="selected-rotation">Angle <span>°</span><input id="selected-rotation" type="number" step="1"></label></div><div class="action-grid"><button class="button light" data-action="duplicate" type="button">Duplicate</button><button class="button light" data-action="mirror-x" type="button">Mirror ↔</button><button class="button light" data-action="mirror-y" type="button">Mirror ↕</button><button class="button light danger" data-action="delete" type="button">Remove</button></div></div></section>
+      <section class="detail-card"><div class="detail-title"><span class="detail-icon sage">▤</span><div><p class="eyebrow">IN YOUR ROOM</p><h2>Layers</h2></div></div><p class="description">Choose what sits in front or behind.</p><div id="layers" class="layers" aria-label="Layers in your room"></div><div class="layer-actions"><button class="button light" type="button" data-action="layer-up">↑ Bring forward</button><button class="button light" type="button" data-action="layer-down">↓ Send back</button></div></section>
+      <section class="detail-card environment"><div class="detail-title"><span class="detail-icon peach">☼</span><div><p class="eyebrow">SET THE SCENE</p><h2>Chase the light</h2></div></div><p class="description">Explore how the sun moves through your space.</p><label class="switch-line" for="sun-enabled"><span>Sunlight</span><input id="sun-enabled" type="checkbox"></label><div class="inline-fields"><label class="field" for="latitude">Latitude<input id="latitude" type="number" min="-90" max="90" step="any" value="44.6488"></label><label class="field" for="longitude">Longitude<input id="longitude" type="number" min="-180" max="180" step="any" value="-63.5752"></label></div><div class="inline-fields"><label class="field" for="sun-date">Date<input id="sun-date" type="date"></label><label class="field" for="sun-time">Time<input id="sun-time" type="time" value="12:00"></label></div><label class="field" for="sun-zone">Location time zone<input id="sun-zone" type="text" placeholder="e.g. America/Halifax" autocomplete="off"></label><p class="microcopy">Sample coordinates: Halifax. Enter your own coordinates and location time zone. Shadows are illustrative and do not yet pass through windows.</p><label class="field" for="scene">Soundscape<select id="scene"><option value="quiet">A quiet place</option><option value="forest">Forest</option><option value="city">High-rise city</option><option value="garden">Ground-floor garden</option><option value="desert">Desert</option><option value="jungle">Jungle</option></select></label><label class="switch-line" for="sound-enabled"><span>Atmospheric sounds</span><input id="sound-enabled" type="checkbox"></label></section>
+      <p class="aside-note">✧ &nbsp;Your space should feel like <em>you.</em></p>
+    </aside>
+  </main>
+
+  <dialog id="export-dialog" aria-labelledby="export-title"><form method="dialog"><div class="dialog-top"><div><p class="eyebrow">KEEP YOUR SPACE</p><h2 id="export-title">Save &amp; share</h2></div><button class="icon-button" aria-label="Close" value="close">×</button></div><p class="description">The image includes editable room data, location settings, and a render prompt in its metadata. Some apps remove metadata, so keep a JSON backup too.</p><div class="dialog-actions"><button class="button primary" id="export-png" type="button">↗ Save image</button><button class="button light" id="export-json" type="button">↓ Save editable plan</button></div></form></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

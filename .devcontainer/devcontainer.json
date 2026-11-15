@@ -1,0 +1,11 @@
+{
+  "name": "Portfolio and Little Room",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22-bookworm",
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "Portfolio preview",
+      "onAutoForward": "notify"
+    }
+  }
+}

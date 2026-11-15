@@ -2,6 +2,8 @@
 
 An independent, early browser-local prototype of the Little Room rebuild. It is being developed separately from the [current portfolio app](https://ifcgit2024.github.io/my-portfolio/docs/projects/little-room/index.html). The current app and its saved data remain the production experience; the prototype is not yet a replacement.
 
+Work through the rebuild one segment at a time using the [work tracker](docs/WORK_TRACKER.md). To open both versions in a cloud development environment, see the [Codespaces guide](docs/CODESPACES.md).
+
 ## Run locally
 
 Use a current browser and serve this directory over HTTP; ES modules may not load reliably by opening the HTML file directly. For example, with Python installed:
